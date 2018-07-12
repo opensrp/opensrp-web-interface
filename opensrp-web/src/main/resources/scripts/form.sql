@@ -1,0 +1,12 @@
+insert into form (id,formName) SELECT 1,'ancrv_1' WHERE NOT EXISTS (SELECT formName FROM form WHERE formName = 'ancrv_1');
+insert into form (id,formName) SELECT 2,'ancrv_2' WHERE NOT EXISTS (SELECT formName FROM form WHERE formName = 'ancrv_2');
+insert into form (id,formName) SELECT 3,'ancrv_3' WHERE NOT EXISTS (SELECT formName FROM form WHERE formName = 'ancrv_3');
+insert into form (id,formName) SELECT 4,'ancrv_4' WHERE NOT EXISTS (SELECT formName FROM form WHERE formName = 'ancrv_4');
+insert into form (id,formName) SELECT 5,'pncrv_1' WHERE NOT EXISTS (SELECT formName FROM form WHERE formName = 'pncrv_1');
+insert into form (id,formName) SELECT 6,'pncrv_2' WHERE NOT EXISTS (SELECT formName FROM form WHERE formName = 'pncrv_2');
+insert into form (id,formName) SELECT 7,'pncrv_3' WHERE NOT EXISTS (SELECT formName FROM form WHERE formName = 'pncrv_3');
+insert into form (id,formName) SELECT 8,'enccrv_1' WHERE NOT EXISTS (SELECT formName FROM form WHERE formName = 'enccrv_1');
+insert into form (id,formName) SELECT 9,'enccrv_2' WHERE NOT EXISTS (SELECT formName FROM form WHERE formName = 'enccrv_2');
+insert into form (id,formName) SELECT 10,'enccrv_3' WHERE NOT EXISTS (SELECT formName FROM form WHERE formName = 'enccrv_3');
+insert into form (id,formName) SELECT 11,'BirthNotificationPregnancyStatusFollowUp' WHERE NOT EXISTS (SELECT formName FROM form WHERE formName = 'BirthNotificationPregnancyStatusFollowUp');
+insert into form (id,formName) SELECT 12,'ELCO PSRF' WHERE NOT EXISTS (SELECT formName FROM form WHERE formName = 'ELCO PSRF');

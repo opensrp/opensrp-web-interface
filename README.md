@@ -34,7 +34,7 @@ Upcoming features:
 
 ## Technologies
 
-springframework version:4.0.3
+Springframework version:4.0.3
 
 JSTL:1.2
 
@@ -46,7 +46,7 @@ Javascript
 
 Jquery:1.12.4
 
-magicsuggest
+MagicSuggest
 
 CSS
 
