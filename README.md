@@ -33,13 +33,21 @@ Upcoming features:
 12. Provider activity monitoring dashboard
 
 #Technologies
+
 springframework version:4.0.3
+
 JSTL:1.2
+
 PostgresSQL:9.4
+
 Hibernate:4.3.5.Final
+
 Javascript
+
 Jquery:1.12.4
+
 magicsuggest
+
 CSS
 
 #Build
