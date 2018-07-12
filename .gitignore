@@ -1,0 +1,15 @@
+target/
+.project
+.classpath
+.settings/
+*.metadata/
+.DS_Store
+.idea/
+*.iml
+*.ipr
+*.iws
+logfile
+*.log*
+.springBeans
+assets/multimedia/
+
