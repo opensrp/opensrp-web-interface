@@ -32,7 +32,7 @@ Upcoming features:
 11. Provider performance report
 12. Provider activity monitoring dashboard
 
-#Technologies
+## Technologies
 
 springframework version:4.0.3
 
@@ -50,8 +50,8 @@ magicsuggest
 
 CSS
 
-#Build
+## Build
 
 
-#Install
+## Install
 
