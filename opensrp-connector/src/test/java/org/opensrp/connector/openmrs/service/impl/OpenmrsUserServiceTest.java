@@ -104,13 +104,13 @@ public class OpenmrsUserServiceTest {
 	
 	public String female = "F";
 	
-	String fn = "testPerso";
+	String fn = "testPersov";
 	
 	String mn = "deshd";
 	
 	String ln = "asia";
 	
-	String userName = "testPerso";
+	String userName = "testPersov";
 	
 	String password = "newPerson@34";
 	
@@ -231,8 +231,8 @@ public class OpenmrsUserServiceTest {
 		 */
 		
 		JSONObject returnUser = createUser(userName, password);
-		
-		System.err.println("returnUser" + returnUser);
+		JSONObject person = (JSONObject) returnUser.get("person");
+		System.err.println("uuID" + person.get("uuid"));
 		String userUuid = (String) returnUser.get("uuid");
 		String returnUserName = (String) returnUser.get("username");
 		Assert.assertEquals(userName, returnUserName);

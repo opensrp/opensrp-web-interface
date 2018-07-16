@@ -89,11 +89,20 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<User> {
 		JSONObject createdPerson = openMRSAPIServiceImpl.add(PAYLOAD, generatePersonObject(user), PERSON_URL);
 		logger.info("createdPerson::" + createdPerson);
 		if (createdPerson.has("uuid")) {
-			user.setPersonUUid(createdPerson.getString("uuid"));
+			
 			JSONObject createdUser = openMRSAPIServiceImpl.add(PAYLOAD, generateUserJsonObject(user, isUpdate), USER_URL);
-			logger.info("createdUole:" + createdUser);
-			userUuid = (String) createdUser.get("uuid");
-			user.setUuid(userUuid);
+			
+			if(createdUser.has("uuid")){
+				JSONObject person = (JSONObject) createdUser.get("person");
+				if(person.has("uuid")){
+					user.setPersonUUid(person.getString("uuid"));
+				}
+				logger.info("createdUole:" + createdUser);
+				
+				userUuid = (String) createdUser.get("uuid");
+				user.setUuid(userUuid);
+				personDelete(createdPerson.getString("uuid"));
+			}
 		} else {
 			// need to handle exception....
 		}
@@ -126,6 +135,10 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<User> {
 	public String delete(String uuid) throws JSONException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private JSONObject personDelete(String uuid) throws JSONException{
+		return openMRSAPIServiceImpl.delete(PAYLOAD, uuid, PERSON_URL);
 	}
 	
 }
