@@ -13,25 +13,25 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PaginationUtil {
-	
-	private static final int RESULT_SIZE = 10;
-	
+
+	private static final int RESULT_SIZE = 2;
+
 	@Autowired
 	private DatabaseServiceImpl databaseServiceImpl;
-	
+
 	@Autowired
 	private SearchBuilder searchBuilder;
-	
+
 	@Autowired
 	private PaginationHelperUtil paginationHelperUtil;
-	
+
 	@Autowired
 	private SearchUtil searchUtil;
-	
+
 	public PaginationUtil() {
-		
+
 	}
-	
+
 	public <T> void createPagination(HttpServletRequest request, HttpSession session, Class<T> entityClassName) {
 		String search = "";
 		search = (String) request.getParameter("search");
@@ -41,17 +41,17 @@ public class PaginationUtil {
 			searchBuilder = searchBuilder.clear();
 		}
 		PaginationHelperUtil.getPaginationLink(request, session);
-		
+
 		pagination(request, session, searchBuilder, entityClassName);
 	}
-	
+
 	public <T> void pagination(HttpServletRequest request, HttpSession session, SearchBuilder searchBuilder,
-	                           Class<?> entityClassName) {
-		
+			Class<?> entityClassName) {
+
 		String offset = (String) request.getParameter("offSet");
 		int size = 0;
 		List<Object> data;
-		
+
 		if (offset != null) {
 			int offsetReal = Integer.parseInt(offset);
 			offsetReal = offsetReal * RESULT_SIZE;
@@ -60,7 +60,7 @@ public class PaginationUtil {
 				size = databaseServiceImpl.countBySearch(searchBuilder, entityClassName);
 				session.setAttribute("size", size / RESULT_SIZE);
 			}
-			
+
 		} else {
 			data = databaseServiceImpl.search(searchBuilder, RESULT_SIZE, 0, entityClassName);
 			size = databaseServiceImpl.countBySearch(searchBuilder, entityClassName);
@@ -72,15 +72,61 @@ public class PaginationUtil {
 		}
 		System.err.println("DataSize:" + data.size());
 		session.setAttribute("dataList", data);
-		
+
 		createPageList(session, offset);
 	}
-	
+
+	public <T> void createPagination(HttpServletRequest request, HttpSession session, String viewName, String entityType) {
+		String search = "";
+		search = (String) request.getParameter("search");
+		if (search != null) {
+			searchBuilder = paginationHelperUtil.setParams(request, session);
+		} else {
+			searchBuilder = searchBuilder.clear();
+		}
+		PaginationHelperUtil.getPaginationLink(request, session);
+
+		pagination(request, session, searchBuilder, viewName, entityType);
+	}
+
+	public <T> void pagination(HttpServletRequest request, HttpSession session, SearchBuilder searchBuilder,
+			String viewName, String entityType) {
+		
+		searchUtil.setDivisionAttribute(session);
+
+		String offset = (String) request.getParameter("offSet");
+		int size = 0;
+		List<Object> data;
+
+		if (offset != null) {
+			int offsetReal = Integer.parseInt(offset);
+			offsetReal = offsetReal * RESULT_SIZE;
+			data = databaseServiceImpl.getDataFromView(searchBuilder, RESULT_SIZE, offsetReal, viewName, entityType);
+			if (session.getAttribute("size") == null) {
+				size = databaseServiceImpl.getViewDataSize(searchBuilder, viewName, entityType);
+				session.setAttribute("size", size / RESULT_SIZE);
+			}
+
+		} else {
+			data = databaseServiceImpl.getDataFromView(searchBuilder, RESULT_SIZE, 0, viewName, entityType);
+			size = databaseServiceImpl.getViewDataSize(searchBuilder, viewName, entityType);
+			if ((size % RESULT_SIZE) == 0) {
+				session.setAttribute("size", (size / RESULT_SIZE) - 1);
+			} else {
+				session.setAttribute("size", size / RESULT_SIZE);
+			}
+		}
+		System.err.println("DataSize:" + data.size());
+		session.setAttribute("dataList", data);
+
+		createPageList(session, offset);
+	}
+
 	private void createPageList(HttpSession session, String offset) {
 		/*when user click on any page number then this part will be executed. 
 		 * else part will be executed on load i.e first time on page*/
 		List<Integer> pageList = new ArrayList<Integer>();
-		
+
 		if (offset != null) {
 			int listsize = Integer.parseInt(session.getAttribute("size").toString());
 			if (Integer.parseInt(offset) < 6) {
@@ -93,7 +139,7 @@ public class PaginationUtil {
 						pageList.add(i);
 					}
 				}
-				
+
 			} else {
 				if (listsize >= RESULT_SIZE && Integer.parseInt(offset) - 5 > 0) {
 					List<Integer> temp = new ArrayList<Integer>();

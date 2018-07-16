@@ -1,9 +1,12 @@
 package org.opensrp.web.util;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.opensrp.acl.service.impl.LocationServiceImpl;
 import org.opensrp.common.util.SearchBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,13 +16,16 @@ public class SearchUtil {
 	
 	private static final Logger logger = Logger.getLogger(SearchUtil.class);
 	
-	private static final int DIVISION_TAG_ID = 1;
+	private static final int DIVISION_TAG_ID = 2;
 	
 	@Autowired
 	private SearchBuilder searchBuilder;
 	
 	@Autowired
 	private PaginationHelperUtil paginationHelperUtil;
+	
+	@Autowired
+	private LocationServiceImpl locationServiceImpl;
 	
 	public SearchUtil() {
 	}
@@ -33,5 +39,11 @@ public class SearchUtil {
 			searchBuilder = searchBuilder.clear();
 		}
 		return searchBuilder;
+	}
+	
+	public void setDivisionAttribute(HttpSession session) {
+		List<Object[]> divisions = locationServiceImpl.getLocationByTagId(DIVISION_TAG_ID);
+		logger.debug("set session attribute divisions: " + divisions.size());
+		session.setAttribute("divisions", divisions);
 	}
 }
