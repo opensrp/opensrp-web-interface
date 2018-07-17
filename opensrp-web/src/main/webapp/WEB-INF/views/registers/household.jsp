@@ -98,7 +98,6 @@
 												<td><%=first_name%></td>
 												<td><%=phone_number%></td>
 												<td><%=provider%></td>
-												<td><a href="<c:url value="details.html"/>">Details</a></td>
 											</tr>
 											<%
 												}

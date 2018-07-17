@@ -108,7 +108,6 @@
 												<td><%=lmp_date%></td>
 												<td><%=marital_status%></td>
 												<td><%=nid%></td>
-												<td><a href="<c:url value="details.html"/>">Details</a></td>
 											</tr>
 											<%
 												}

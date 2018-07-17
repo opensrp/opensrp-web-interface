@@ -48,6 +48,10 @@
 													style="width: 140px;">First Name</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Gender</th>
+												<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Birth Weight</th>
+												<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Mother Name</th>
 											</tr>
 										</thead>
 										<tfoot>
@@ -64,6 +68,10 @@
 													style="width: 140px;">First Name</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Gender</th>
+												<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Birth Weight</th>
+												<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Mother Name</th>
 											</tr>
 										</tfoot>
 										<tbody>
@@ -83,6 +91,8 @@
 														String first_name = String.valueOf(clientObject[9]);
 														String gender = String.valueOf(clientObject[10]);
 														String nid = String.valueOf(clientObject[15]);
+														String birth_weight = String.valueOf(clientObject[31]);
+														String mother_name = String.valueOf(clientObject[32]);
 											%>
 											<tr>
 												<td><%=base_entity_id%></td>
@@ -91,7 +101,8 @@
 												<td><%=country%></td>
 												<td><%=first_name%></td>
 												<td><%=gender%></td>
-												<td><a href="<c:url value="details.html"/>">Details</a></td>
+												<td><%=birth_weight%></td>
+												<td><%=mother_name%></td>
 											</tr>
 											<%
 												}
