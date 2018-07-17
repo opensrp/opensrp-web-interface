@@ -48,12 +48,6 @@
 													style="width: 225px;">Spouse Name</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 225px;">LMP Date</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Marital status</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">NID</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;"></th>
 											</tr>
 										</thead>
 										<tfoot>
@@ -70,12 +64,6 @@
 													style="width: 225px;">Spouse Name</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 225px;">LMP Date</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Marital status</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">NID</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;"></th>
 											</tr>
 										</tfoot>
 										<tbody>
@@ -97,7 +85,6 @@
 														String phone_number = String.valueOf(clientObject[17]);
 														String spouse_name = String.valueOf(clientObject[19]);
 														String lmp_date = String.valueOf(clientObject[24]);
-														String marital_status = String.valueOf(clientObject[30]);
 											%>
 											<tr>
 												<td><%=base_entity_id%></td>
@@ -106,8 +93,6 @@
 												<td><%=phone_number%></td>
 												<td><%=spouse_name%></td>
 												<td><%=lmp_date%></td>
-												<td><%=marital_status%></td>
-												<td><%=nid%></td>
 											</tr>
 											<%
 												}

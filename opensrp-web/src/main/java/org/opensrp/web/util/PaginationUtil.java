@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PaginationUtil {
 
-	private static final int RESULT_SIZE = 2;
+	private static final int RESULT_SIZE = 10;
 
 	@Autowired
 	private DatabaseServiceImpl databaseServiceImpl;
