@@ -25,7 +25,7 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="annotatedClasses">
 			<list>
-				<value>org.opensrp.web.controller.entity.Account</value>
+				
 				<value>org.opensrp.acl.entity.Team</value>
 				<value>org.opensrp.acl.entity.TeamMember</value>							
 				<value>org.opensrp.acl.entity.User</value>

@@ -20,7 +20,7 @@
 			access="isAuthenticated()" />
 		<security:form-login login-page="/login"
 			username-parameter="username" password-parameter="password"
-			authentication-failure-url="/Access_Denied" />
+			authentication-failure-url="/login" />
 		<security:csrf />
 	</security:http>
 

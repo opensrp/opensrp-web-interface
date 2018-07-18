@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository("aclAccountDao")
+@Repository("accountDao")
 public class AclAccountDao extends AbstractAclDao<User> implements UserDao {
 	
 	private static final Logger logger = Logger.getLogger(AclAccountDao.class);
