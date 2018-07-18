@@ -24,7 +24,10 @@
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="annotatedClasses">
-			<list>						
+			<list>	
+			<value>org.opensrp.common.entity.Marker</value>
+				<value>org.opensrp.web.nutrition.entity.ChildGrowth</value>
+				<value>org.opensrp.web.nutrition.entity.WeightVelocityChart</value>					
 				<value>org.opensrp.acl.entity.User</value>
 				<value>org.opensrp.acl.entity.Role</value>
 				<value>org.opensrp.acl.entity.Permission</value>

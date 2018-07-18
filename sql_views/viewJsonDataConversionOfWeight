@@ -1,0 +1,18 @@
+CREATE MATERIALIZED VIEW core."viewJsonDataConversionOfWeight"
+AS
+SELECT json->>'_id' as _id
+   , json->>'baseEntityId' as base_entity_id
+   , json->>'dateCreated' as date_created
+   , json->>'dateEdited' as date_edited
+   , json->>'eventDate' as event_date
+   , json->>'entityType' as entity_type   
+   , json->>'providerId' as provider_id
+   , json->>'serverVersion' as server_version
+   , json->'obs'->0->'values'->>0 as weight
+   ,json->'obs'->1->'values'->>0 as  z_score
+   
+   FROM core.event where json->>'entityType'='weight'
+WITH DATA;
+
+GRANT ALL ON TABLE core."viewJsonDataConversionOfWeight" TO postgres;
+GRANT ALL ON TABLE core."viewJsonDataConversionOfWeight" TO opensrp_admin;
