@@ -156,7 +156,7 @@ public class UserController {
 		return "redirect:/login?logout";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_ROLE')")
+	
 	@RequestMapping(value = "user/search.html", method = RequestMethod.GET)
 	public String providerSearch(Model model, HttpSession session, @RequestParam String name) throws JSONException {
 		

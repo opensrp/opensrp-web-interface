@@ -43,7 +43,7 @@ public class TeamMemberController {
 	@Autowired
 	private PaginationUtil paginationUtil;
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_TEAM_MEMBER')")
 	@RequestMapping(value = "/list.html", method = RequestMethod.GET)
 	public String locationList(HttpServletRequest request, HttpSession session, Model model) {
 		Class<TeamMember> entityClassName = TeamMember.class;
@@ -51,7 +51,7 @@ public class TeamMemberController {
 		return "team-member/index";
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_TEAM_MEMBER')")
 	@RequestMapping(value = "/add.html", method = RequestMethod.GET)
 	public ModelAndView saveLocation(ModelMap model, HttpSession session) throws JSONException {
 		model.addAttribute("teamMember", new TeamMember());
@@ -64,7 +64,7 @@ public class TeamMemberController {
 		
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_TEAM_MEMBER')")
 	@RequestMapping(value = "/add.html", method = RequestMethod.POST)
 	public ModelAndView saveLocation(@RequestParam(value = "person", required = false) int personId,
 	                                 @RequestParam(value = "personName") String personName,
@@ -86,7 +86,7 @@ public class TeamMemberController {
 		
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_TEAM_MEMBER')")
 	@RequestMapping(value = "/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editLocation(ModelMap model, HttpSession session, @PathVariable("id") int id) throws JSONException {
 		TeamMember teamMember = teamMemberServiceImpl.findById(id, "id", TeamMember.class);
@@ -100,7 +100,7 @@ public class TeamMemberController {
 		
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_TEAM_MEMBER')")
 	@RequestMapping(value = "/{id}/edit.html", method = RequestMethod.POST)
 	public ModelAndView editLocation(@RequestParam(value = "person", required = false) int personId,
 	                                 @RequestParam(value = "personName") String personName,

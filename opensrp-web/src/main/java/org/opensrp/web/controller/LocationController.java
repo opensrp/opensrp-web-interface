@@ -44,7 +44,7 @@ public class LocationController {
 	@Autowired
 	private PaginationUtil paginationUtil;
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION')")
 	@RequestMapping(value = "location.html", method = RequestMethod.GET)
 	public String locationList(HttpServletRequest request, HttpSession session, Model model) {
 		
@@ -53,7 +53,7 @@ public class LocationController {
 		return "location/index";
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_HIERARCHY_LOCATION')")
 	@RequestMapping(value = "location/hierarchy.html", method = RequestMethod.GET)
 	public String locationHierarchy(Model model, HttpSession session) throws JSONException {
 		String parentIndication = "#";
@@ -63,7 +63,7 @@ public class LocationController {
 		return "location/hierarchy";
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_LOCATION')")
 	@RequestMapping(value = "location/add.html", method = RequestMethod.GET)
 	public ModelAndView saveLocation(ModelMap model, HttpSession session) throws JSONException {
 		
@@ -78,7 +78,7 @@ public class LocationController {
 		
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_LOCATION')")
 	@RequestMapping(value = "/location/add.html", method = RequestMethod.POST)
 	public ModelAndView saveLocation(@RequestParam(value = "parentLocation", required = false) int parentLocationId,
 	                                 @RequestParam(value = "locationTag") int tagId,
@@ -100,7 +100,7 @@ public class LocationController {
 		
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_LOCATION')")
 	@RequestMapping(value = "location/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editLocation(ModelMap model, HttpSession session, @PathVariable("id") int id) {
 		Location location = locationServiceImpl.findById(id, "id", Location.class);
@@ -112,7 +112,7 @@ public class LocationController {
 		
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_LOCATION')")
 	@RequestMapping(value = "/location/{id}/edit.html", method = RequestMethod.POST)
 	public ModelAndView editLocation(@RequestParam(value = "parentLocation") int parentLocationId,
 	                                 @RequestParam(value = "locationTag") int tagId,
@@ -136,7 +136,7 @@ public class LocationController {
 		
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_ROLE')")
+	
 	@RequestMapping(value = "location/search.html", method = RequestMethod.GET)
 	public String locationSearch(Model model, HttpSession session, @RequestParam String name) throws JSONException {
 		List<Location> locations = locationServiceImpl.getAllByKeysWithALlMatches(name);

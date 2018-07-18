@@ -30,7 +30,7 @@ public class LocationTagController {
 	@Autowired
 	private LocationTag locationTag;
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION_TAG')")
 	@RequestMapping(value = "location/tag/list.html", method = RequestMethod.GET)
 	public String locationList(Model model) {
 		List<LocationTag> locations = locationTagServiceImpl.findAll("LocationTag");
@@ -38,7 +38,7 @@ public class LocationTagController {
 		return "location-tag/index";
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_LOCATION_TAG')")
 	@RequestMapping(value = "location/tag/add.html", method = RequestMethod.GET)
 	public ModelAndView saveLocation(ModelMap model, HttpSession session) {
 		model.addAttribute("locationTag", new Location());
@@ -46,7 +46,7 @@ public class LocationTagController {
 		
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_LOCATION_TAG')")
 	@RequestMapping(value = "/location/tag/add.html", method = RequestMethod.POST)
 	public ModelAndView saveLocation(@ModelAttribute("locationTag") @Valid LocationTag locationTag, BindingResult binding,
 	                                 ModelMap model, HttpSession session) throws Exception {
@@ -62,7 +62,7 @@ public class LocationTagController {
 		
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_LOCATION_TAG')")
 	@RequestMapping(value = "location/tag/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editRole(ModelMap model, HttpSession session, @PathVariable("id") int id) {
 		LocationTag locationTag = locationTagServiceImpl.findById(id, "id", LocationTag.class);
@@ -72,7 +72,7 @@ public class LocationTagController {
 		
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_LOCATION_TAG')")
 	@RequestMapping(value = "/location/tag/{id}/edit.html", method = RequestMethod.POST)
 	public ModelAndView editRole(@ModelAttribute("locationTag") @Valid LocationTag locationTag, BindingResult binding,
 	                             ModelMap model, HttpSession session, @PathVariable("id") int id) throws JSONException {

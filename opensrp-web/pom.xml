@@ -52,6 +52,12 @@
 			<artifactId>opensrp-connector</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.opensrp.dashboard</groupId>
+			<artifactId>opensrp-web-nutrition</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>

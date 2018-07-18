@@ -1,0 +1,50 @@
+CREATE MATERIALIZED VIEW core."viewJsonDataConversionOfEvent"
+AS
+SELECT json->>'_id' as _id
+   , json->>'baseEntityId' as base_entity_id
+   , json->>'dateCreated' as date_created
+   , json->>'dateEdited' as date_edited
+   , json->>'duration' as duration
+   , json->>'entityType' as entity_type 
+   , json->>'eventDate' as event_date
+   , json->>'eventType' as event_type
+   , json->>'locationId' as location_id
+   , json->>'obs' as observations
+   , json->>'providerId' as provider_id
+   , json->>'serverVersion' as server_version
+   , CASE
+    WHEN (json->>'eventType' = 'Vaccination') THEN json->'obs'->0->'values'->>0
+	ELSE null
+    END
+	as vaccination_date 
+   , CASE
+    WHEN (json->>'eventType' = 'Vaccination') THEN json->'obs'->0->>'formSubmissionField'
+	ELSE null
+    END 
+    as vaccination_dose 
+   , CASE
+    WHEN (json->>'eventType' = 'Vaccination') THEN json->'obs'->1->>'formSubmissionField'
+	ELSE null
+    END
+	as vaccination_dose_name 
+   , CASE
+    WHEN (json->>'eventType' = 'Vaccination') THEN json->'obs'->1->'values'->>0
+	ELSE null
+    END
+	as vaccination_name
+   , CASE
+    WHEN (json->>'entityType' = 'child') THEN json->'obs'->1->'values'->>0
+	ELSE null
+    END
+	as birth_weight
+   , CASE
+    WHEN (json->>'entityType' = 'child') THEN json->'obs'->3->'values'->>0
+	ELSE null
+    END
+	as mother_name
+   , json->>'version' as version
+   FROM core.event
+WITH DATA;
+
+GRANT ALL ON TABLE core."viewJsonDataConversionOfEvent" TO postgres;
+GRANT ALL ON TABLE core."viewJsonDataConversionOfEvent" TO opensrp_admin;

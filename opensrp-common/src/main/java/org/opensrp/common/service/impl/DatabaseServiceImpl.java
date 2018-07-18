@@ -139,4 +139,15 @@ public class DatabaseServiceImpl implements DatabaseService {
 		
 		return criteria;
 	}
+
+	@Transactional
+	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, Integer offset, Integer maxResults
+			, String viewName, String entityType) {
+		return databaseRepositoryImpl.getDataFromView(searchBuilder, offset, maxResults, viewName, entityType);
+	}
+
+	@Transactional
+	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType) {
+		return databaseRepositoryImpl.getViewDataSize(searchBuilder, viewName, entityType);
+	}
 }
