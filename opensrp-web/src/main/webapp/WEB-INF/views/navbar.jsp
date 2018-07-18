@@ -10,10 +10,10 @@
 	id="mainNav">
 	<a class="navbar-brand" href="<c:url value="/"/>"><img
 		src="<c:url value="/resources/img/logo-total.png"/>"></a>
-	
+
 	<div class="collapse navbar-collapse" id="navbarResponsive">
-		
-		
+
+
 		<ul class="navbar-nav ml-auto">
 			<%-- <li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown"
@@ -36,39 +36,64 @@
 					<a class="dropdown-item small" href="<c:url value="/child.html"/>"><strong>Child</strong> </a>
 				</div>
 			</li> --%>
-			
+
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="reportDropdown"
-				href="#" data-toggle="dropdown">Locations
-			</a>
-				<div class="dropdown-menu">					
+				href="#" data-toggle="dropdown">Locations </a>
+				<div class="dropdown-menu">
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/location/tag/list.html"/>"> <strong> Manage Tags</strong> 
-						
+					<a class="dropdown-item"
+						href="<c:url value="/location/tag/list.html"/>"> <strong>
+							Manage Tags</strong>
+
 					</a>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/location.html"/>"> <strong>Manage Locations</strong>
-					</a>					
-					
-				</div>
-			</li>
-			
+					<a class="dropdown-item" href="<c:url value="/location.html"/>">
+						<strong>Manage Locations</strong>
+					</a>
+
+				</div></li>
+
 			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle mr-lg-2" id="teamDropdown"
-				href="#" data-toggle="dropdown">Team 
-			</a>
-				<div class="dropdown-menu">					
+				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
+				href="#" data-toggle="dropdown">Registers </a>
+				<div class="dropdown-menu">
+
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/team/list.html"/>"> <strong> Manage Team</strong> 
-						
+					<a class="dropdown-item"
+						href="<c:url value="/registers/household.html"/>"> <strong>
+							Household</strong>
+					</a>
+
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/registers/mother.html"/>"> <strong>Mother</strong>
+					</a>
+
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/registers/child.html"/>"> <strong>Child</strong>
+					</a>
+
+				</div></li>
+
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle mr-lg-2" id="teamDropdown" href="#"
+				data-toggle="dropdown">Team </a>
+				<div class="dropdown-menu">
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/team/list.html"/>">
+						<strong> Manage Team</strong>
+
 					</a>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/team/teammember/list.html"/>"> <strong>Manage Team Member</strong>
-					</a>					
-					
-				</div>
-			</li>
-			
+					<a class="dropdown-item"
+						href="<c:url value="/team/teammember/list.html"/>"> <strong>Manage
+							Team Member</strong>
+					</a>
+
+				</div></li>
+
 			<%-- <li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="exportDropdown"
 				href="#" data-toggle="dropdown"> Exports
@@ -103,7 +128,7 @@
 					
 				</div>
 			</li> --%>
-			
+
 			<%-- 
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="roleDropdown"
@@ -120,30 +145,30 @@
 					</a>
 				</div>
 			</li> --%>
-			
+
 			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle mr-lg-2" id="userDropdown"
-				href="#" data-toggle="dropdown"> Users
-			</a>
-				<div class="dropdown-menu">	
-				
-				<div class="dropdown-divider"></div>
-				
-					<a class="dropdown-item" href="<c:url value="/user.html"/>"> <strong> Manage User</strong> 
-						
-					</a>
-									
+				class="nav-link dropdown-toggle mr-lg-2" id="userDropdown" href="#"
+				data-toggle="dropdown"> Users </a>
+				<div class="dropdown-menu">
+
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/role.html"/>"> <strong>Manage Role</strong>
+
+					<a class="dropdown-item" href="<c:url value="/user.html"/>"> <strong>
+							Manage User</strong>
+
 					</a>
-				</div>
-			</li>
-			
-			
-			
-			
-			
-			
+
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/role.html"/>"> <strong>Manage
+							Role</strong>
+					</a>
+				</div></li>
+
+
+
+
+
+
 			<li class="nav-item"><a class="nav-link" data-toggle="modal"
 				data-target="#exampleModal"> <i class="fa fa-fw fa-sign-out"></i>Logout
 			</a></li>

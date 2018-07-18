@@ -52,15 +52,14 @@ public class LocationServiceImpl implements AclService {
 	
 	@Transactional
 	public List<Object[]> getLocationByTagId(int tagId) {
-		// TODO Auto-generated method stub
-		String sqlQuery = "SELECT location.name,location.location_id FROM location left join location_tag_map  on location.location_id =location_tag_map.location_id "
-		        + "WHERE location_tag_id=:location_tag_id";
+		String sqlQuery = "SELECT location.name,location.id from core.location "
+				+ " WHERE location_tag_id=:location_tag_id";
 		return databaseRepositoryImpl.executeSelectQuery(sqlQuery, "location_tag_id", tagId);
 	}
 	
 	@Transactional
 	public List<Object[]> getChildData(int parentId) {
-		String sqlQuery = "SELECT location.name,location.location_id from location where parent_location=:parentId";
+		String sqlQuery = "SELECT location.name,location.id from core.location where parent_location_id=:parentId";
 		return databaseRepositoryImpl.executeSelectQuery(sqlQuery, "parentId", parentId);
 	}
 	

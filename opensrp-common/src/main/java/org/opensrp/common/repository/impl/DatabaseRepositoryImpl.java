@@ -265,7 +265,22 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return results;
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	public List<Object[]> executeSelectQuery(String sqlQuery) {
+		Session session = sessionFactory.openSession();
+		List<Object[]> results = null;
+		try {
+			SQLQuery query = session.createSQLQuery(sqlQuery);
+			results = query.list();
+			session.close();
+		}
+		catch (Exception e) {
+			session.close();
+		}
+		return results;
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Object[]> executeSelectQuery(String provider, String caseId, String scheduleName, String userType,
 	                                         String sqlQuery) {
@@ -344,5 +359,76 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		
 		return count;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, int result, int offsetreal
+			, String viewName, String entityType) {
+		Session session = sessionFactory.openSession();
+		List<T> viewData = null;
+		try {
+			String hql = "SELECT * FROM core.\"" +  viewName + "\" "
+		    + " where entity_type = '" + entityType + "'";
+
+			hql = setCondition(searchBuilder, hql);
+
+			Query query = session.createSQLQuery(hql);
+			query.setFirstResult(offsetreal);
+			query.setMaxResults(result);
+
+			viewData = query.list();
+			logger.info("data fetched successfully from " + viewName + ", data size: "
+			        + viewData.size());
+			session.close();
+		}
+		catch (Exception e) {
+			logger.error("Data fetch from " + viewName + " error:" + e.getMessage());
+		}
+		return viewData;
+	}
+
+	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType) {
+		Session session = sessionFactory.openSession();
+		int count = 0;
+		try {
+			String hql = "SELECT * FROM core.\"" +  viewName + "\""
+					+ " where entity_type = '" + entityType + "'";
+
+			hql = setCondition(searchBuilder, hql);
+
+			Query query = session.createSQLQuery(hql);
+			count = query.list().size();
+			session.close();
+		}
+		catch (Exception e) {
+			logger.error("Data fetch from " + viewName + " error:" + e.getMessage());
+		}
+
+		return count;
+	}
+
+	private String setCondition(SearchBuilder searchBuilder, String hql) {
+		if(searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {
+			hql = hql + " and division = '" + searchBuilder.getDivision() + "'";
+		}
+		if(searchBuilder.getDistrict() != null && !searchBuilder.getDistrict().isEmpty()) {
+			hql = hql + " and district = '" + searchBuilder.getDistrict() + "'";
+		}
+		if(searchBuilder.getUpazila() != null && !searchBuilder.getUpazila().isEmpty()) {
+			hql = hql + " and upazila = '" + searchBuilder.getUpazila() + "'";
+		}
+		/*if(searchBuilder.getUnion() != null && !searchBuilder.getUnion().isEmpty()) {
+			hql = hql + " and union = '" + searchBuilder.getUnion() + "'";
+		}*/
+		if(searchBuilder.getWard() != null && !searchBuilder.getWard().isEmpty()) {
+			hql = hql + " and ward = '" + searchBuilder.getWard() + "'";
+		}
+		if(searchBuilder.getSubunit() != null && !searchBuilder.getSubunit().isEmpty()) {
+			hql = hql + " and subunit = '" + searchBuilder.getSubunit() + "'";
+		}
+		if(searchBuilder.getMauzapara() != null && !searchBuilder.getMauzapara().isEmpty()) {
+			hql = hql + " and mauzapara = '" + searchBuilder.getMauzapara() + "'";
+		}
+		return hql;
 	}
 }
