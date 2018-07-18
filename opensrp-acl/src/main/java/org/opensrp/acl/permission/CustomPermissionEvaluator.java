@@ -23,7 +23,7 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
 		logger.debug("permission:" + permission.toString());
 		logger.debug("targetDomainObject:" + targetDomainObject.toString());
 		logger.debug("getAuthorities:" + authentication.getAuthorities());
-		
+		System.err.println("okkkkkkk");
 		Collection<? extends GrantedAuthority> role = authentication.getAuthorities();
 		for (GrantedAuthority grantedAuthority : role) {
 			

@@ -42,7 +42,7 @@ public class TeamController {
 	@Autowired
 	private PaginationUtil paginationUtil;
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_TEAM')")
 	@RequestMapping(value = "/list.html", method = RequestMethod.GET)
 	public String listTeam(HttpServletRequest request, HttpSession session, Model model) {
 		Class<Team> entityClassName = Team.class;
@@ -50,7 +50,7 @@ public class TeamController {
 		return "team/index";
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_TEAM')")
 	@RequestMapping(value = "/add.html", method = RequestMethod.GET)
 	public ModelAndView saveTeam(ModelMap model, HttpSession session) throws JSONException {
 		model.addAttribute("team", new Team());
@@ -60,7 +60,7 @@ public class TeamController {
 		
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_TEAM')")
 	@RequestMapping(value = "/add.html", method = RequestMethod.POST)
 	public ModelAndView saveTeam(@RequestParam(value = "location", required = false) int locationId,
 	                             @RequestParam(value = "superVisor") int supervisorId,
@@ -90,7 +90,7 @@ public class TeamController {
 		
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_TEAM')")
 	@RequestMapping(value = "/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editTeam(ModelMap model, HttpSession session, @PathVariable("id") int id) {
 		Team team = teamServiceImpl.findById(id, "id", Team.class);
@@ -102,7 +102,7 @@ public class TeamController {
 		
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_TEAM')")
 	@RequestMapping(value = "/{id}/edit.html", method = RequestMethod.POST)
 	public ModelAndView editTeam(@RequestParam(value = "location", required = false) int locationId,
 	                             @RequestParam(value = "superVisor") int supervisorId,
