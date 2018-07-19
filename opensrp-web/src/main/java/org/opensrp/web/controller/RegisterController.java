@@ -1,19 +1,25 @@
 package org.opensrp.web.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.opensrp.acl.entity.Permission;
+import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.service.impl.LocationServiceImpl;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class RegisterController {
@@ -26,6 +32,21 @@ public class RegisterController {
 
 	@Autowired
 	private LocationServiceImpl locationServiceImpl;
+	
+	@RequestMapping(value = "registers/{id}/motherDetails.html", method = RequestMethod.GET)
+	public String showMotherDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) {
+		Object data;
+		//data = databaseServiceImpl.findByKey(id, "base_entity_id", Mother.class);
+		return "registers/motherDetails";
+	}
+	
+	/*@RequestMapping(value = "registers/motherDetails.html", method = RequestMethod.GET)
+	public String showMotherDetails(HttpServletRequest request, HttpSession session, Model model) {
+		
+		//return "/registers/mother";
+		return "registers/motherDetails";
+	}*/
+	
 
 	@RequestMapping(value = "/registers/household.html", method = RequestMethod.GET)
 	public String showHouseholdList(HttpServletRequest request, HttpSession session, Model model) {
