@@ -3,6 +3,10 @@
  */
 package org.opensrp.web.nutrition.service.impl;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,8 +18,12 @@ import org.opensrp.common.entity.Marker;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.opensrp.common.service.impl.MarkerServiceImpl;
 import org.opensrp.common.util.AllConstant;
+import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.web.nutrition.service.NutritionService;
+import org.opensrp.web.nutrition.utils.GrowthValocityChart;
+import org.opensrp.web.nutrition.utils.Interval;
+import org.opensrp.web.nutrition.utils.Weight;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -85,19 +93,42 @@ public class ChildGrowthServiceImpl implements NutritionService {
 		return databaseRepositoryImpl.findAll(tableClass);
 	}
 	
-	public void startCalculateChildGrowth() {
+	@Transactional
+	public void startCalculateChildGrowth() throws ParseException {
 		marker = markerServiceImpl.findByName(AllConstant.MRAKER_NAME);
 		searchBuilder.setServerVersionn(marker.getTimeStamp());
-		List<Object> childWeights = databaseRepositoryImpl.getDataFromView(searchBuilder, -1, -1,
+		List<Object[]> childWeights = databaseRepositoryImpl.getDataFromView(searchBuilder, -1, -1,
 		    "viewJsonDataConversionOfWeight", "weight");
-		
-		for (Object childWeight : childWeights) {
-			//long currentDocumentTimeStamp = childWeight[]
-			System.err.println("childWeight:" + childWeight);
-			/*if (marker.getTimeStamp() < currentDocumentTimeStamp) {
-				marker.setTimeStamp(currentDocumentTimeStamp);
-				markerServiceImpl.update(marker);
-			}*/
+		double previousWeightInDouble = 0;
+		double currentWeight = 0;
+		double weight = 0;
+		double birthWeight = 0;
+		List<Map<String, Integer>> growthValocityChart = GrowthValocityChart.getGrowthValocityChart();
+		for (Map<String, Integer> map : growthValocityChart) {
+			System.err.println(map);
+		}
+		for (Object[] row : childWeights) {
+			try {
+				birthWeight = Double.parseDouble(row[8].toString());
+				
+				String previousWeight = (String) row[9];
+				currentWeight = Double.parseDouble(row[5].toString());
+				System.err.println(previousWeight);
+				if (previousWeight != null) {
+					previousWeightInDouble = Double.parseDouble(row[9].toString());
+					weight = Weight.getWeightInGram(previousWeightInDouble, currentWeight);
+				} else {
+					weight = Weight.getWeightInGram(birthWeight, currentWeight);
+				}
+				
+				System.err.println("weight:" + weight);
+				Date dob = DateUtil.parseDate(row[7].toString());
+				Date eventDate = DateUtil.parseDate(row[1].toString());
+				System.err.println(row[0] + ",Interval:" + Interval.getInterval(dob, eventDate));
+			}
+			catch (Exception e) {
+				logger.error("Error:" + e.getMessage());
+			}
 		}
 		
 	}

@@ -425,7 +425,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			hql = hql + " and mauzapara = '" + searchBuilder.getMauzapara() + "'";
 		}
 		if (searchBuilder.getServerVersion() != -1) {
-			hql = hql + " and server_version = '" + searchBuilder.getServerVersion() + "'";
+			hql = hql + " and server_version > '" + searchBuilder.getServerVersion() + "'";
 		}
 		return hql;
 	}

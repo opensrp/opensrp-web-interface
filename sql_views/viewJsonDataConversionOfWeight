@@ -1,17 +1,29 @@
 CREATE MATERIALIZED VIEW core."viewJsonDataConversionOfWeight"
 AS
-SELECT json->>'_id' as _id
-   , json->>'baseEntityId' as base_entity_id
-   , json->>'dateCreated' as date_created
-   , json->>'dateEdited' as date_edited
-   , json->>'eventDate' as event_date
-   , json->>'entityType' as entity_type   
-   , json->>'providerId' as provider_id
-   , json->>'serverVersion' as server_version
-   , json->'obs'->0->'values'->>0 as weight
-   ,json->'obs'->1->'values'->>0 as  z_score
+SELECT e.json->>'baseEntityId' as base_entity_id   
+   , cast(e.json->>'eventDate' as Date) as current_event_date
+   , e.json->>'entityType' as entity_type   
+   , e.json->>'providerId' as provider_id
+   , cast(e.json->>'serverVersion' as  bigint) as server_version
+   , cast(e.json->'obs'->0->'values'->>0 as decimal) as current_weight
+   , cast(e.json->'obs'->1->'values'->>0 as decimal) as  z_score
+   , cast(c.json->>'birthdate' as Date) as dob
+   , cast(bre.json->'obs'->1->'values'->>0 as decimal) as birth_weight   
+   , CASE
+    WHEN (e.json->'obs'->0->'values'->>0 != 'NULL') THEN cast(3 as decimal)
+	ELSE null
+    END
+	as previous_weight 
+    , CASE
+    WHEN (e.json->>'eventDate' != 'NULL') THEN cast('2018-04-02' as Date)
+	ELSE null
+    END
+	as previous_event_date 
    
-   FROM core.event where json->>'entityType'='weight'
+   FROM core.event e  JOIN core.client c ON c.json->'baseEntityId' = e.json->'baseEntityId'
+   join core.event bre on c.json->'baseEntityId' = bre.json->'baseEntityId'   
+   where e.json->>'entityType'='weight' and bre.json->>'eventType'='Birth Registration'
+   order by current_event_date desc
 WITH DATA;
 
 GRANT ALL ON TABLE core."viewJsonDataConversionOfWeight" TO postgres;

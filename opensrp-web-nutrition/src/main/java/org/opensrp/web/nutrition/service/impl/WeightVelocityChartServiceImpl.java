@@ -3,6 +3,8 @@
  */
 package org.opensrp.web.nutrition.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +15,7 @@ import org.hibernate.SessionFactory;
 import org.opensrp.common.entity.Marker;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.opensrp.common.service.impl.MarkerServiceImpl;
+import org.opensrp.web.nutrition.entity.WeightVelocityChart;
 import org.opensrp.web.nutrition.service.NutritionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
