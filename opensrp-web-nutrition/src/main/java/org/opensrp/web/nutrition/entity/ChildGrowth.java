@@ -35,6 +35,7 @@ public class ChildGrowth {
 	@SequenceGenerator(name = "child_growth_id_seq", sequenceName = "child_growth_id_seq", allocationSize = 1)
 	private int id;
 	
+	@Column(name = "base_entity_id")
 	private String baseEntityId;
 	
 	private int age;
@@ -46,6 +47,20 @@ public class ChildGrowth {
 	
 	@Column(name = "z_score")
 	private double zScore;
+	
+	private int interval;
+	
+	private String gender;
+	
+	private double lat;
+	
+	private double lon;
+	
+	private String provider;
+	
+	@Column(name = "last_event_date")
+	@Temporal(TemporalType.DATE)
+	private Date lastEventDate;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
@@ -63,6 +78,54 @@ public class ChildGrowth {
 	
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public String getProvider() {
+		return provider;
+	}
+	
+	public void setProvider(String provider) {
+		this.provider = provider;
+	}
+	
+	public Date getLastEventDate() {
+		return lastEventDate;
+	}
+	
+	public void setLastEventDate(Date lastEventDate) {
+		this.lastEventDate = lastEventDate;
+	}
+	
+	public int getInterval() {
+		return interval;
+	}
+	
+	public void setInterval(int interval) {
+		this.interval = interval;
+	}
+	
+	public String getGender() {
+		return gender;
+	}
+	
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
+	public double getLat() {
+		return lat;
+	}
+	
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+	
+	public double getLon() {
+		return lon;
+	}
+	
+	public void setLon(double lon) {
+		this.lon = lon;
 	}
 	
 	public String getBaseEntityId() {
@@ -133,13 +196,19 @@ public class ChildGrowth {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + age;
 		result = prime * result + ((baseEntityId == null) ? 0 : baseEntityId.hashCode());
 		result = prime * result + ((created == null) ? 0 : created.hashCode());
+		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
 		result = prime * result + (growthStatus ? 1231 : 1237);
 		result = prime * result + id;
-		result = prime * result + age;
-		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
+		result = prime * result + interval;
 		long temp;
+		temp = Double.doubleToLongBits(lat);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(lon);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
 		temp = Double.doubleToLongBits(weight);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(zScore);
@@ -156,6 +225,8 @@ public class ChildGrowth {
 		if (getClass() != obj.getClass())
 			return false;
 		ChildGrowth other = (ChildGrowth) obj;
+		if (age != other.age)
+			return false;
 		if (baseEntityId == null) {
 			if (other.baseEntityId != null)
 				return false;
@@ -166,11 +237,20 @@ public class ChildGrowth {
 				return false;
 		} else if (!created.equals(other.created))
 			return false;
+		if (gender == null) {
+			if (other.gender != null)
+				return false;
+		} else if (!gender.equals(other.gender))
+			return false;
 		if (growthStatus != other.growthStatus)
 			return false;
 		if (id != other.id)
 			return false;
-		if (age != other.age)
+		if (interval != other.interval)
+			return false;
+		if (Double.doubleToLongBits(lat) != Double.doubleToLongBits(other.lat))
+			return false;
+		if (Double.doubleToLongBits(lon) != Double.doubleToLongBits(other.lon))
 			return false;
 		if (updated == null) {
 			if (other.updated != null)
@@ -187,8 +267,8 @@ public class ChildGrowth {
 	@Override
 	public String toString() {
 		return "ChildGrowth [id=" + id + ", baseEntityId=" + baseEntityId + ", age=" + age + ", weight=" + weight
-		        + ", growthStatus=" + growthStatus + ", zScore=" + zScore + ", created=" + created + ", updated=" + updated
-		        + "]";
+		        + ", growthStatus=" + growthStatus + ", zScore=" + zScore + ", interval=" + interval + ", gender=" + gender
+		        + ", lat=" + lat + ", lon=" + lon + ", created=" + created + ", updated=" + updated + "]";
 	}
 	
 }

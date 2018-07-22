@@ -3,10 +3,8 @@
  */
 package org.opensrp.web.nutrition.service.impl;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +18,9 @@ import org.opensrp.common.service.impl.MarkerServiceImpl;
 import org.opensrp.common.util.AllConstant;
 import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.web.nutrition.entity.ChildGrowth;
 import org.opensrp.web.nutrition.service.NutritionService;
+import org.opensrp.web.nutrition.utils.Age;
 import org.opensrp.web.nutrition.utils.GrowthValocityChart;
 import org.opensrp.web.nutrition.utils.Interval;
 import org.opensrp.web.nutrition.utils.Weight;
@@ -94,37 +94,127 @@ public class ChildGrowthServiceImpl implements NutritionService {
 	}
 	
 	@Transactional
-	public void startCalculateChildGrowth() throws ParseException {
+	public void startCalculateChildGrowth() throws Exception {
 		marker = markerServiceImpl.findByName(AllConstant.MRAKER_NAME);
 		searchBuilder.setServerVersionn(marker.getTimeStamp());
 		List<Object[]> childWeights = databaseRepositoryImpl.getDataFromView(searchBuilder, -1, -1,
 		    "viewJsonDataConversionOfWeight", "weight");
-		double previousWeightInDouble = 0;
-		double currentWeight = 0;
-		double weight = 0;
-		double birthWeight = 0;
+		
 		List<Map<String, Integer>> growthValocityChart = GrowthValocityChart.getGrowthValocityChart();
-		for (Map<String, Integer> map : growthValocityChart) {
-			System.err.println(map);
-		}
+		
+		Map<String, Integer> maleGrowthValocityChart = growthValocityChart.get(0);
+		
+		Map<String, Integer> femaleGrowthValocityChart = growthValocityChart.get(1);
+		
 		for (Object[] row : childWeights) {
+			
+			double currentWeight = 0;
+			int weight = 0;
+			boolean growthStatus = false;
+			int interval = 0;
+			String provider = "";
+			int age = 0;
+			String key = "";
+			String gender = "";
+			int expectedGrowthWeight = 0;
+			double zScore = 0;
+			String gps = "";
+			long currentDocumentTimeStamp = Long.parseLong(String.valueOf(row[4]));
 			try {
-				birthWeight = Double.parseDouble(row[8].toString());
+				zScore = Double.parseDouble(String.valueOf(row[6]));
+				gps = String.valueOf(row[11]);
+				String[] latlon = gps.split(" ");
+				String baseEntityId = String.valueOf(row[0]);
+				Date dob = DateUtil.parseDate(String.valueOf(row[7]));
+				//birthWeight = Double.parseDouble(String.valueOf(row[8]));
+				Date currentEventDate = DateUtil.parseDate(String.valueOf(row[1]));
+				currentWeight = Double.parseDouble(String.valueOf(row[5]));
+				provider = String.valueOf(row[3]);
 				
-				String previousWeight = (String) row[9];
-				currentWeight = Double.parseDouble(row[5].toString());
-				System.err.println(previousWeight);
-				if (previousWeight != null) {
-					previousWeightInDouble = Double.parseDouble(row[9].toString());
-					weight = Weight.getWeightInGram(previousWeightInDouble, currentWeight);
-				} else {
+				String lastEventDate = String.valueOf(row[9]);
+				
+				//if (lastWeight != null) {
+				double lastWeight = Double.parseDouble(String.valueOf(row[8]));
+				weight = (int) Weight.getWeightInGram(lastWeight, currentWeight);
+				
+				interval = Interval.getInterval(DateUtil.parseDate(lastEventDate), currentEventDate);
+				/*} else {
 					weight = Weight.getWeightInGram(birthWeight, currentWeight);
+					interval = Interval.getInterval(dob, currentEventDate);
+				}*/
+				age = Age.getApproximateAge(dob, currentEventDate);
+				
+				key = String.valueOf(interval) + String.valueOf(age);
+				
+				gender = String.valueOf(row[10]);
+				if ("Male".equalsIgnoreCase(gender)) {
+					if (maleGrowthValocityChart.containsKey(key)) {
+						expectedGrowthWeight = (int) maleGrowthValocityChart.get(key);
+					}
+					
+				} else {
+					if (femaleGrowthValocityChart.containsKey(key)) {
+						expectedGrowthWeight = (int) femaleGrowthValocityChart.get(key);
+					}
+					
 				}
 				
-				System.err.println("weight:" + weight);
-				Date dob = DateUtil.parseDate(row[7].toString());
-				Date eventDate = DateUtil.parseDate(row[1].toString());
-				System.err.println(row[0] + ",Interval:" + Interval.getInterval(dob, eventDate));
+				System.err.println("Key:" + key + ",expectedGrowthWeight" + expectedGrowthWeight + ",weight:" + weight);
+				
+				if (weight >= expectedGrowthWeight) {
+					growthStatus = true;
+				}
+				
+				Map<String, Object> fielaValues = new HashMap<String, Object>();
+				fielaValues.put("lastEventDate", currentEventDate);
+				fielaValues.put("baseEntityId", baseEntityId);
+				ChildGrowth findChildGrowth = databaseRepositoryImpl.findByKeys(fielaValues, ChildGrowth.class);
+				
+				if (findChildGrowth != null) {
+					findChildGrowth.setAge(age);
+					findChildGrowth.setBaseEntityId(baseEntityId);
+					findChildGrowth.setGrowthStatus(growthStatus);
+					findChildGrowth.setzScore(zScore);
+					findChildGrowth.setWeight(weight);
+					findChildGrowth.setLastEventDate(currentEventDate);
+					findChildGrowth.setGender(gender);
+					findChildGrowth.setInterval(interval);
+					findChildGrowth.setProvider(provider);
+					if (!gps.equalsIgnoreCase("null")) {
+						
+						findChildGrowth.setLat(Double.parseDouble(latlon[0]));
+						findChildGrowth.setLon(Double.parseDouble(latlon[1]));
+						
+					}
+					update(findChildGrowth);
+				} else {
+					ChildGrowth childGrowth = new ChildGrowth();
+					childGrowth.setAge(age);
+					childGrowth.setBaseEntityId(baseEntityId);
+					childGrowth.setGrowthStatus(growthStatus);
+					childGrowth.setzScore(zScore);
+					childGrowth.setWeight(weight);
+					childGrowth.setLastEventDate(currentEventDate);
+					childGrowth.setGender(gender);
+					childGrowth.setInterval(interval);
+					childGrowth.setProvider(provider);
+					if (!gps.equalsIgnoreCase("null")) {
+						
+						childGrowth.setLat(Double.parseDouble(latlon[0]));
+						childGrowth.setLon(Double.parseDouble(latlon[1]));
+						
+					}
+					save(childGrowth);
+				}
+				
+				if (marker.getTimeStamp() < currentDocumentTimeStamp) {
+					marker.setTimeStamp(currentDocumentTimeStamp);
+					markerServiceImpl.update(marker);
+				}
+				
+				//System.err.println("weight:" + weight);
+				
+				//System.err.println(row[0] + ",Interval:" + Interval.getInterval(dob, eventDate));
 			}
 			catch (Exception e) {
 				logger.error("Error:" + e.getMessage());

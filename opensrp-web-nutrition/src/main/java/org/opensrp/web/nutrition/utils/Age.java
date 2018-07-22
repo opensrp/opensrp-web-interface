@@ -11,11 +11,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class Age {
 	
-	public static double getApproximateAge(Date dob, Date eventDate) {
-		long diffInMillies = Math.abs(eventDate.getTime() - dob.getTime());
-		double diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+	public static int getApproximateAge(Date dob, Date currentEventDate) {
+		return Interval.getInterval(dob, currentEventDate);
 		
-		return Math.floor(diff / 30);
 	}
 	
 	public static double getAgeInDays(Date dob, Date eventDate) {

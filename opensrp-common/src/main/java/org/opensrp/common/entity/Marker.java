@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Entity
-@Table(name = "marker")
+@Table(name = "marker", schema = "core")
 public class Marker {
 	
 	public Marker() {
