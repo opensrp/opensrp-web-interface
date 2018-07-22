@@ -1,6 +1,7 @@
 CREATE MATERIALIZED VIEW core."viewJsonDataConversionOfEvent"
 AS
-SELECT json->>'_id' as _id
+SELECT id
+   , json->>'_id' as _id
    , json->>'baseEntityId' as base_entity_id
    , json->>'dateCreated' as date_created
    , json->>'dateEdited' as date_edited
@@ -42,7 +43,12 @@ SELECT json->>'_id' as _id
 	ELSE null
     END
 	as mother_name
-   , json->>'version' as version
+   ,  CASE
+    WHEN (json->>'eventType' = 'New Woman Member Registration') THEN core.getObsValue(json->>'baseEntityId', 'pregnant')
+	ELSE null
+    END
+	as is_pregnant
+   ,json->>'version' as version
    FROM core.event
 WITH DATA;
 
