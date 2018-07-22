@@ -35,8 +35,8 @@ public class RegisterController {
 	
 	@RequestMapping(value = "registers/{id}/motherDetails.html", method = RequestMethod.GET)
 	public String showMotherDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) {
-		Object data;
-		//data = databaseServiceImpl.findByKey(id, "base_entity_id", Mother.class);
+		System.out.println("Mother id :" + id);
+		session.setAttribute("motherId", id);
 		return "registers/motherDetails";
 	}
 	

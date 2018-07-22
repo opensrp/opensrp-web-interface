@@ -100,12 +100,8 @@
 												<td><%=spouse_name%></td>
 												<td><%=lmp_date%></td>
 												
-												<td><a href="/registers/<%=id%>/motherDetails.html">Details</a>
+												<td><a href="/registers/<%=base_entity_id%>/motherDetails.html">Details</a>
 										</td> 
-										<!--  
-										<td><a href="/registers/motherDetails.html">Details</a>
-										</td>
-										-->
 											</tr>
 											<%
 												}
