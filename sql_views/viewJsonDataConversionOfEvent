@@ -44,7 +44,7 @@ SELECT id
     END
 	as mother_name
    ,  CASE
-    WHEN (json->>'eventType' = 'New Woman Member Registration') THEN core.getObsValue(json->>'baseEntityId', 'pregnant')
+    WHEN (json->>'eventType' = 'New Woman Member Registration') THEN core.getObsValue(id, 'pregnant')
 	ELSE null
     END
 	as is_pregnant
