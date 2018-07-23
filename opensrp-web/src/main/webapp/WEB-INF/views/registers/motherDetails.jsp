@@ -127,9 +127,9 @@ String motherId = null;
   	
 <%
 
- if (session.getAttribute("eventList") != null) {
+ if (session.getAttribute("NWMRList") != null) {
 	List<Object> dataList = (List<Object>) session
-			.getAttribute("eventList");
+			.getAttribute("NWMRList");
 	Iterator dataListIterator = dataList.iterator();
 	while (dataListIterator.hasNext()) {
 		Object[] clientObject = (Object[]) dataListIterator.next();

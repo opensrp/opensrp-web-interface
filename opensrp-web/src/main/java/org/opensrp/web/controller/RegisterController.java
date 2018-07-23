@@ -1,5 +1,7 @@
 package org.opensrp.web.controller;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -41,6 +43,25 @@ public class RegisterController {
 		List<Object> data;
 		data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfEvent","mother",id);
 		session.setAttribute("eventList", data);
+		
+		List<Object> NWMRList = new ArrayList<Object>();
+		Iterator dataListIterator = data.iterator();
+		while (dataListIterator.hasNext()) {
+			Object[] eventObject = (Object[]) dataListIterator.next();
+			
+			String eventType = String.valueOf(eventObject[8]);
+			//System.out.println(eventType);
+			
+			if(eventType.equals("New Woman Member Registration")){
+				//System.out.println(eventObject);
+				NWMRList.add(eventObject);
+				//System.out.println(NWMRList);
+			}
+		}
+		session.setAttribute("NWMRList", NWMRList);
+		
+		
+		
 		return "registers/motherDetails";
 	}
 	
