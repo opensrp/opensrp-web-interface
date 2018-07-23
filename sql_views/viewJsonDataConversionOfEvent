@@ -48,6 +48,16 @@ SELECT id
 	ELSE null
     END
 	as is_pregnant
+   ,  CASE
+    WHEN (json->>'eventType' = 'New Woman Member Registration') THEN core.getObsValue(id, 'edd')
+	ELSE null
+    END
+	as edd
+   ,  CASE
+    WHEN (json->>'eventType' = 'New Woman Member Registration') THEN core.getObsValue(id, 'lmp')
+	ELSE null
+    END
+	as lmp
    ,json->>'version' as version
    FROM core.event
 WITH DATA;

@@ -135,10 +135,14 @@ String motherId = null;
 		Object[] clientObject = (Object[]) dataListIterator.next();
 		String id = String.valueOf(clientObject[0]);
 		String isPregnant = String.valueOf(clientObject[19]);
+		String edd = String.valueOf(clientObject[20]);
+		String lmp = String.valueOf(clientObject[21]);
 		
 %>					
-<b><%=id%>  :  </b>
-<b><%=isPregnant%></b></br>
+<b>id : <%=id%></b></br>
+<b>Pregnant : <%=isPregnant%></b></br>
+<b>EDD : <%=edd%></b></br>
+<b>LMP : <%=lmp%></b></br>
 
 <%
 		}
