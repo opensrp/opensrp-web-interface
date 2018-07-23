@@ -37,6 +37,10 @@ public class RegisterController {
 	public String showMotherDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) {
 		System.out.println("Mother id :" + id);
 		session.setAttribute("motherId", id);
+		
+		List<Object> data;
+		data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfEvent","mother",id);
+		session.setAttribute("eventList", data);
 		return "registers/motherDetails";
 	}
 	

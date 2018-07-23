@@ -106,22 +106,6 @@ String motherId = null;
 </table>
 
 
- <div class="container-fluid">
-  <div class="row">
-  
-  <div class="span6">
-  <h3><b>Pregnancy Details</b></h3>
-  
-</div>
-
- <div class="span6"> 
- <h3><b>Counselling</b></h3>
-   
-</div>
-
-</div>
-</div>
-
 
 <%
 		}
@@ -130,7 +114,42 @@ String motherId = null;
 %>
 	
 	
-	
+
+
+ <div class="container-fluid">
+  <div class="row">
+  
+  <div class="span6">
+  <h3><b>Pregnancy Details</b></h3>
+  
+  
+  
+  	
+<%
+
+ if (session.getAttribute("eventList") != null) {
+	List<Object> dataList = (List<Object>) session
+			.getAttribute("eventList");
+	Iterator dataListIterator = dataList.iterator();
+	while (dataListIterator.hasNext()) {
+		Object[] clientObject = (Object[]) dataListIterator.next();
+		String id = String.valueOf(clientObject[0]);
+		String isPregnant = String.valueOf(clientObject[19]);
+		
+%>					
+<b><%=id%>  :  </b>
+<b><%=isPregnant%></b></br>
+
+<%
+		}
+		}
+%>
+  
+</div>
+
+
+</div>
+</div>	
 	
 	
 	
