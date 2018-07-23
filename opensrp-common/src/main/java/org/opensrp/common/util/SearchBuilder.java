@@ -29,6 +29,8 @@ public class SearchBuilder {
 	
 	private String year;
 	
+	private long serverVersion;
+	
 	public SearchBuilder() {
 		
 	}
@@ -46,6 +48,7 @@ public class SearchBuilder {
 		this.setSearch("");
 		this.setYear("");
 		this.setUserName("");
+		this.setServerVersionn(-1);
 		return this;
 		
 	}
@@ -56,6 +59,15 @@ public class SearchBuilder {
 	
 	public SearchBuilder setYear(String year) {
 		this.year = year;
+		return this;
+	}
+	
+	public long getServerVersion() {
+		return serverVersion;
+	}
+	
+	public SearchBuilder setServerVersionn(long serverVersion) {
+		this.serverVersion = serverVersion;
 		return this;
 	}
 	

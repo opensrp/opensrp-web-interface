@@ -11,12 +11,12 @@
 	
 	<context:component-scan base-package="org.opensrp.web.listener"></context:component-scan>
 	<context:annotation-config></context:annotation-config>
-	 <bean id="transmissionListener" class="org.opensrp.web.listener.TransmissionListener"></bean>
+	 <bean id="customListener" class="org.opensrp.web.listener.CustomListener"></bean>
 	 
-	 <task:scheduled-tasks scheduler="scheduler">
-        <task:scheduled ref="transmissionListener" method="dataListener" cron="0 0/1 * * * ?" />
+	 <task:scheduled-tasks scheduler="childGrowthCalculate">
+        <task:scheduled ref="customListener" method="startCalculateChildGrowth" cron="0 0/1 * * * ?" />
     </task:scheduled-tasks>
     
-   <task:scheduler pool-size="1" id="scheduler"/>
+   <task:scheduler pool-size="1" id="childGrowthCalculate"/>
 	<task:annotation-driven />
 </beans>

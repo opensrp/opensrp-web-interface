@@ -119,16 +119,16 @@ public class Team implements Serializable {
 		return created;
 	}
 	
-	public void setCreated(Date created) {
-		this.created = created;
+	public void setCreated() {
+		this.created = new Date();
 	}
 	
 	public Date getUpdated() {
 		return updated;
 	}
 	
-	public void setUpdated(Date updated) {
-		this.updated = updated;
+	public void setUpdated() {
+		this.updated = new Date();
 	}
 	
 	public User getCreator() {
