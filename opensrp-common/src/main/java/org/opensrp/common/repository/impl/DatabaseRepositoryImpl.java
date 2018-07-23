@@ -130,10 +130,22 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 	
-	public <T> List<T> findAllByKeys(Map<String, String> fielaValues, Class<?> className) {
+	public <T> T findByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
-		for (Map.Entry<String, String> entry : fielaValues.entrySet()) {
+		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		}
+		@SuppressWarnings("unchecked")
+		List<T> result = criteria.list();
+		session.close();
+		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+	}
+	
+	public <T> List<T> findAllByKeys(Map<String, Object> fielaValues, Class<?> className) {
+		Session session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(className);
+		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
 			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
 		}
 		
@@ -177,28 +189,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<Object> result = criteria.list();
 		session.close();
 		return (result.size() > 0 ? true : false);
-	}
-	
-	public <T> T findByCaseIdAndToday(String relationalId, Date today, Class<?> className) {
-		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		criteria.add(Restrictions.eq("relationalId", relationalId));
-		criteria.add(Restrictions.eq("today", today));
-		@SuppressWarnings("unchecked")
-		List<T> result = criteria.list();
-		session.close();
-		return (T) (result.size() > 0 ? (T) result.get(0) : null);
-	}
-	
-	public <T> T findByCaseIdAndBNFDate(String relationalId, Date bnfdate, Class<?> className) {
-		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		criteria.add(Restrictions.eq("relationalId", relationalId));
-		criteria.add(Restrictions.eq("FWBNFDATE", bnfdate));
-		@SuppressWarnings("unchecked")
-		List<T> result = criteria.list();
-		session.close();
-		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -265,7 +255,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return results;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public List<Object[]> executeSelectQuery(String sqlQuery) {
 		Session session = sessionFactory.openSession();
@@ -280,7 +270,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return results;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public List<Object[]> executeSelectQuery(String provider, String caseId, String scheduleName, String userType,
 	                                         String sqlQuery) {
@@ -399,24 +389,32 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	
 	
 
+
+	/**
+	 * maxRange -1 means setMaxResults does not consider. offsetreal -1 means setFirstResult does
+	 * not consider.
+	 */
+
 	@SuppressWarnings("unchecked")
-	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, int result, int offsetreal
-			, String viewName, String entityType) {
+	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, int maxRange, int offsetreal, String viewName,
+	                                   String entityType) {
 		Session session = sessionFactory.openSession();
 		List<T> viewData = null;
 		try {
-			String hql = "SELECT * FROM core.\"" +  viewName + "\" "
-		    + " where entity_type = '" + entityType + "'";
-
+			String hql = "SELECT * FROM core.\"" + viewName + "\" " + " where entity_type = '" + entityType + "'";
+			
 			hql = setCondition(searchBuilder, hql);
-
+			
 			Query query = session.createSQLQuery(hql);
-			query.setFirstResult(offsetreal);
-			query.setMaxResults(result);
-
+			if (offsetreal != -1) {
+				query.setFirstResult(offsetreal);
+			}
+			if (maxRange != -1) {
+				query.setMaxResults(maxRange);
+			}
+			
 			viewData = query.list();
-			logger.info("data fetched successfully from " + viewName + ", data size: "
-			        + viewData.size());
+			logger.info("data fetched successfully from " + viewName + ", data size: " + viewData.size());
 			session.close();
 		}
 		catch (Exception e) {
@@ -424,16 +422,15 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return viewData;
 	}
-
+	
 	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType) {
 		Session session = sessionFactory.openSession();
 		int count = 0;
 		try {
-			String hql = "SELECT * FROM core.\"" +  viewName + "\""
-					+ " where entity_type = '" + entityType + "'";
-
+			String hql = "SELECT * FROM core.\"" + viewName + "\"" + " where entity_type = '" + entityType + "'";
+			
 			hql = setCondition(searchBuilder, hql);
-
+			
 			Query query = session.createSQLQuery(hql);
 			count = query.list().size();
 			session.close();
@@ -441,31 +438,34 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		catch (Exception e) {
 			logger.error("Data fetch from " + viewName + " error:" + e.getMessage());
 		}
-
+		
 		return count;
 	}
-
+	
 	private String setCondition(SearchBuilder searchBuilder, String hql) {
-		if(searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {
+		if (searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {
 			hql = hql + " and division = '" + searchBuilder.getDivision() + "'";
 		}
-		if(searchBuilder.getDistrict() != null && !searchBuilder.getDistrict().isEmpty()) {
+		if (searchBuilder.getDistrict() != null && !searchBuilder.getDistrict().isEmpty()) {
 			hql = hql + " and district = '" + searchBuilder.getDistrict() + "'";
 		}
-		if(searchBuilder.getUpazila() != null && !searchBuilder.getUpazila().isEmpty()) {
+		if (searchBuilder.getUpazila() != null && !searchBuilder.getUpazila().isEmpty()) {
 			hql = hql + " and upazila = '" + searchBuilder.getUpazila() + "'";
 		}
 		/*if(searchBuilder.getUnion() != null && !searchBuilder.getUnion().isEmpty()) {
 			hql = hql + " and union = '" + searchBuilder.getUnion() + "'";
 		}*/
-		if(searchBuilder.getWard() != null && !searchBuilder.getWard().isEmpty()) {
+		if (searchBuilder.getWard() != null && !searchBuilder.getWard().isEmpty()) {
 			hql = hql + " and ward = '" + searchBuilder.getWard() + "'";
 		}
-		if(searchBuilder.getSubunit() != null && !searchBuilder.getSubunit().isEmpty()) {
+		if (searchBuilder.getSubunit() != null && !searchBuilder.getSubunit().isEmpty()) {
 			hql = hql + " and subunit = '" + searchBuilder.getSubunit() + "'";
 		}
-		if(searchBuilder.getMauzapara() != null && !searchBuilder.getMauzapara().isEmpty()) {
+		if (searchBuilder.getMauzapara() != null && !searchBuilder.getMauzapara().isEmpty()) {
 			hql = hql + " and mauzapara = '" + searchBuilder.getMauzapara() + "'";
+		}
+		if (searchBuilder.getServerVersion() != -1) {
+			hql = hql + " and server_version > '" + searchBuilder.getServerVersion() + "'";
 		}
 		return hql;
 	}

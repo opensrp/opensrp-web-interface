@@ -60,7 +60,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public <T> T findAllByKeys(Map<String, String> fielaValues, Class<?> className) {
+	public <T> T findAllByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		return (T) databaseRepositoryImpl.findAllByKeys(fielaValues, className);
 	}
 	
@@ -140,6 +140,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 		return criteria;
 	}
 	
+
 	
 	
 	
@@ -156,12 +157,13 @@ public class DatabaseServiceImpl implements DatabaseService {
 	
 	
 
+
 	@Transactional
-	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, Integer offset, Integer maxResults
-			, String viewName, String entityType) {
+	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, Integer offset, Integer maxResults, String viewName,
+	                                   String entityType) {
 		return databaseRepositoryImpl.getDataFromView(searchBuilder, offset, maxResults, viewName, entityType);
 	}
-
+	
 	@Transactional
 	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType) {
 		return databaseRepositoryImpl.getViewDataSize(searchBuilder, viewName, entityType);

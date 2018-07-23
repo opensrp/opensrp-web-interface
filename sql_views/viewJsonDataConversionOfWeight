@@ -1,0 +1,23 @@
+CREATE MATERIALIZED VIEW core."viewJsonDataConversionOfWeight"
+AS
+SELECT cast(e.json->>'baseEntityId' as varchar) as base_entity_id   
+   , cast(e.json->>'eventDate' as Date) as current_event_date
+   , cast(e.json->>'entityType' as varchar) as entity_type   
+   , cast(e.json->>'providerId' as varchar) as provider_id
+   , cast(e.json->>'serverVersion' as  bigint) as server_version
+   , cast(core.getObsValue (e.id, 'Weight_Kgs') as decimal) as current_weight
+   , cast(core.getobsvalue(e.id,'Z_Score_Weight_Age') as decimal) as  z_score
+   , cast(c.json->>'birthdate' as Date) as dob    
+   , cast(core.getobsvalue(e.id,'previous_weight') as decimal) as previous_weight 
+   ,  cast(core.getobsvalue(e.id,'previous_weight_date') as Date) as previous_event_date
+   , c.json->>'gender' as gender
+   , cast(c.json->'addresses'->0->'addressFields'->>'gps' as varchar) as gps
+   
+   FROM core.event e  JOIN core.client c ON c.json->'baseEntityId' = e.json->'baseEntityId'
+   join core.event bre on c.json->'baseEntityId' = bre.json->'baseEntityId'   
+   where e.json->>'entityType'='weight' and bre.json->>'eventType'='Birth Registration'
+   order by e.id desc
+WITH DATA;
+
+GRANT ALL ON TABLE core."viewJsonDataConversionOfWeight" TO postgres;
+GRANT ALL ON TABLE core."viewJsonDataConversionOfWeight" TO opensrp_admin;
