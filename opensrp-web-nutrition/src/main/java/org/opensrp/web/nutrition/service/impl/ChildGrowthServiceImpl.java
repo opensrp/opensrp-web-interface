@@ -18,6 +18,7 @@ import org.opensrp.common.service.impl.MarkerServiceImpl;
 import org.opensrp.common.util.AllConstant;
 import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.common.util.SearchCriteria;
 import org.opensrp.web.nutrition.entity.ChildGrowth;
 import org.opensrp.web.nutrition.service.NutritionService;
 import org.opensrp.web.nutrition.utils.Age;
@@ -40,13 +41,13 @@ public class ChildGrowthServiceImpl implements NutritionService {
 	private MarkerServiceImpl markerServiceImpl;
 	
 	@Autowired
-	private SearchBuilder searchBuilder;
-	
-	@Autowired
 	private Marker marker;
 	
 	@Autowired
 	private DatabaseRepositoryImpl databaseRepositoryImpl;
+	
+	@Autowired
+	private SearchBuilder searchBuilder;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -96,6 +97,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 	@Transactional
 	public void startCalculateChildGrowth() throws Exception {
 		marker = markerServiceImpl.findByName(AllConstant.MRAKER_NAME);
+		searchBuilder.clear();
 		searchBuilder.setServerVersionn(marker.getTimeStamp());
 		List<Object[]> childWeights = databaseRepositoryImpl.getDataFromView(searchBuilder, -1, -1,
 		    "viewJsonDataConversionOfWeight", "weight");
@@ -126,22 +128,18 @@ public class ChildGrowthServiceImpl implements NutritionService {
 				String[] latlon = gps.split(" ");
 				String baseEntityId = String.valueOf(row[0]);
 				Date dob = DateUtil.parseDate(String.valueOf(row[7]));
-				//birthWeight = Double.parseDouble(String.valueOf(row[8]));
+				
 				Date currentEventDate = DateUtil.parseDate(String.valueOf(row[1]));
 				currentWeight = Double.parseDouble(String.valueOf(row[5]));
 				provider = String.valueOf(row[3]);
 				
 				String lastEventDate = String.valueOf(row[9]);
 				
-				//if (lastWeight != null) {
 				double lastWeight = Double.parseDouble(String.valueOf(row[8]));
 				weight = (int) Weight.getWeightInGram(lastWeight, currentWeight);
 				
 				interval = Interval.getInterval(DateUtil.parseDate(lastEventDate), currentEventDate);
-				/*} else {
-					weight = Weight.getWeightInGram(birthWeight, currentWeight);
-					interval = Interval.getInterval(dob, currentEventDate);
-				}*/
+				
 				age = Age.getApproximateAge(dob, currentEventDate);
 				
 				key = String.valueOf(interval) + String.valueOf(age);
@@ -158,8 +156,6 @@ public class ChildGrowthServiceImpl implements NutritionService {
 					}
 					
 				}
-				
-				System.err.println("Key:" + key + ",expectedGrowthWeight" + expectedGrowthWeight + ",weight:" + weight);
 				
 				if (weight >= expectedGrowthWeight) {
 					growthStatus = true;
@@ -221,5 +217,17 @@ public class ChildGrowthServiceImpl implements NutritionService {
 			}
 		}
 		
+	}
+	
+	@Transactional
+	public List<Object[]> getChildFalteredData(SearchBuilder searchBuilder) {
+		
+		String sqlQuery = "SELECT child.provider_id,count( child.provider_id) "
+		        + "FROM (SELECT  distinct base_entity_id,provider, MAX(last_event_date) " + " AS created_at  FROM "
+		        + " core.child_growth   where growth_status = false GROUP BY  base_entity_id,provider) AS cg "
+		        + " JOIN  core.\"viewJsonDataConversionOfClient\" as child ON  child.base_entity_id = cg.base_entity_id "
+		        //+ SearchCriteria.getSearchCriteria(searchBuilder) + " group by  date_part('month', date(received_time)) "
+		        + "  group by child.provider_id ";
+		return databaseRepositoryImpl.executeRawQuery(searchBuilder, sqlQuery);
 	}
 }

@@ -352,8 +352,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 	
 	/**
-	 * maxRange -1 means setMaxResults does not consider. offsetreal -1 means setFirstResult does
-	 * not consider.
+	 * @param searchBuilder fdff maxRange -1 means setMaxResults does not consider. offsetreal -1
+	 *            means setFirstResult does not consider.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, int maxRange, int offsetreal, String viewName,
@@ -428,5 +428,45 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			hql = hql + " and server_version > '" + searchBuilder.getServerVersion() + "'";
 		}
 		return hql;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> executeRawQuery(SearchBuilder searchBuilder, String sqlQuery) {
+		System.err.println("sqlQuery:" + sqlQuery);
+		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
+		
+		if (searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {
+			
+			query.setParameter("division", searchBuilder.getDivision().toUpperCase());
+		}
+		if (searchBuilder.getDistrict() != null && !searchBuilder.getDistrict().isEmpty()) {
+			
+			query.setParameter("district", searchBuilder.getDistrict().toUpperCase());
+		}
+		if (searchBuilder.getUpazila() != null && !searchBuilder.getUpazila().isEmpty()) {
+			
+			query.setParameter("upazila", searchBuilder.getUpazila());
+		}
+		if (searchBuilder.getUnion() != null && !searchBuilder.getUnion().isEmpty()) {
+			
+			query.setParameter("unions", searchBuilder.getUnion());
+		}
+		if (searchBuilder.getWard() != null && !searchBuilder.getWard().isEmpty()) {
+			query.setParameter("ward", searchBuilder.getWard());
+		}
+		if (searchBuilder.getMauzapara() != null && !searchBuilder.getMauzapara().isEmpty()) {
+			query.setParameter("mauza_para", searchBuilder.getMauzapara());
+		}
+		if (searchBuilder.getSubunit() != null && !searchBuilder.getSubunit().isEmpty()) {
+			query.setParameter("subunit", searchBuilder.getSubunit());
+		}
+		if (searchBuilder.getProvider() != null && !searchBuilder.getProvider().isEmpty()) {
+			query.setParameter("provider", searchBuilder.getProvider());
+		}
+		//query.setParameter("years", searchBuilder.getYear());
+		
+		List<Object[]> results = query.list();
+		
+		return results;
 	}
 }
