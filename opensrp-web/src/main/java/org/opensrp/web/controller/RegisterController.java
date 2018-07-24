@@ -45,7 +45,8 @@ public class RegisterController {
 		session.setAttribute("eventList", data);
 		
 		List<Object> NWMRList = new ArrayList<Object>();
-		List<Object> CounsellingList = new ArrayList<Object>();
+		List<Object> counsellingList = new ArrayList<Object>();
+		List<Object> followUpList = new ArrayList<Object>();
 		Iterator dataListIterator = data.iterator();
 		while (dataListIterator.hasNext()) {
 			Object[] eventObject = (Object[]) dataListIterator.next();
@@ -58,11 +59,14 @@ public class RegisterController {
 				NWMRList.add(eventObject);
 				//System.out.println(NWMRList);
 			}else if(eventType.equals("Pregnant Woman Counselling") || eventType.equals("Lactating Woman Counselling")){
-				CounsellingList.add(eventObject);
+				counsellingList.add(eventObject);
+			}else if(eventType.equals("Woman Member Follow Up")){
+				followUpList.add(eventObject);
 			}
 		}
 		session.setAttribute("NWMRList", NWMRList);
-		session.setAttribute("CounsellingList", CounsellingList);
+		session.setAttribute("counsellingList", counsellingList);
+		session.setAttribute("followUpList", followUpList);
 		
 		
 		

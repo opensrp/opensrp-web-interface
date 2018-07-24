@@ -162,18 +162,18 @@ String motherId = null;
   <h3><b>Counselling Details</b></h3>
 <%
 
- if (session.getAttribute("CounsellingList") != null) {
+ if (session.getAttribute("counsellingList") != null) {
 	List<Object> dataList = (List<Object>) session
-			.getAttribute("CounsellingList");
+			.getAttribute("counsellingList");
 	Iterator dataListIterator = dataList.iterator();
 	while (dataListIterator.hasNext()) {
 		Object[] clientObject = (Object[]) dataListIterator.next();
 		String id = String.valueOf(clientObject[0]);
-		String Counselling = String.valueOf(clientObject[22]);
+		String counselling = String.valueOf(clientObject[22]);
 		
 %>					
 <b>id : <%=id%></b></br>
-<b>Counselling : <%=Counselling%></b></br>
+<b>Counselling : <%=counselling%></b></br>
 <%
 		}
 		}
@@ -185,7 +185,33 @@ String motherId = null;
 	
 	
 	
+
 	
+	
+ <div class="span6">
+  <h3><b>Follow Up Details</b></h3>
+<%
+
+ if (session.getAttribute("followUpList") != null) {
+	List<Object> dataList = (List<Object>) session
+			.getAttribute("followUpList");
+	Iterator dataListIterator = dataList.iterator();
+	while (dataListIterator.hasNext()) {
+		Object[] clientObject = (Object[]) dataListIterator.next();
+		String id = String.valueOf(clientObject[0]);
+		String followUpDate = String.valueOf(clientObject[23]);
+		String nextAppointmentDate = String.valueOf(clientObject[24]);
+		
+%>					
+<b>id : <%=id%></b></br>
+<b>Follow-up Date: <%=followUpDate%></b></br>
+<b>Next Appointment Date: <%=nextAppointmentDate%></b></br>
+<%
+		}
+		}
+%>
+  
+</div>		
 	
 	
 	
