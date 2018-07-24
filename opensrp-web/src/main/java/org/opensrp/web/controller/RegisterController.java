@@ -35,6 +35,66 @@ public class RegisterController {
 	@Autowired
 	private LocationServiceImpl locationServiceImpl;
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value = "registers/{id}/childDetails.html", method = RequestMethod.GET)
+	public String showChildDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) {
+		System.out.println("Child id :" + id);
+		session.setAttribute("childId", id);
+		
+		/*
+		List<Object> data;
+		data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfEvent","mother",id);
+		session.setAttribute("eventList", data);
+		
+		List<Object> NWMRList = new ArrayList<Object>();
+		List<Object> counsellingList = new ArrayList<Object>();
+		List<Object> followUpList = new ArrayList<Object>();
+		Iterator dataListIterator = data.iterator();
+		while (dataListIterator.hasNext()) {
+			Object[] eventObject = (Object[]) dataListIterator.next();
+			
+			String eventType = String.valueOf(eventObject[8]);
+			//System.out.println(eventType);
+			
+			if(eventType.equals("New Woman Member Registration")){
+				//System.out.println(eventObject);
+				NWMRList.add(eventObject);
+				//System.out.println(NWMRList);
+			}else if(eventType.equals("Pregnant Woman Counselling") || eventType.equals("Lactating Woman Counselling")){
+				counsellingList.add(eventObject);
+			}else if(eventType.equals("Woman Member Follow Up")){
+				followUpList.add(eventObject);
+			}
+		}
+		session.setAttribute("NWMRList", NWMRList);
+		session.setAttribute("counsellingList", counsellingList);
+		session.setAttribute("followUpList", followUpList);
+		
+		*/
+		
+		return "registers/childDetails";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@RequestMapping(value = "registers/{id}/motherDetails.html", method = RequestMethod.GET)
 	public String showMotherDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) {
 		System.out.println("Mother id :" + id);
