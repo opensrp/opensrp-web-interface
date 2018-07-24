@@ -79,7 +79,7 @@ public class RegisterController {
 		
 		*/
 		
-		return "registers/childDetails";
+		return "registers/childDetailsUI";
 	}
 	
 	
@@ -130,7 +130,7 @@ public class RegisterController {
 		
 		
 		
-		return "registers/motherDetails";
+		return "registers/motherDetailsUI";
 	}
 	
 	/*@RequestMapping(value = "registers/motherDetails.html", method = RequestMethod.GET)
