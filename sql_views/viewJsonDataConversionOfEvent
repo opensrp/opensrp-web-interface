@@ -58,6 +58,11 @@ SELECT id
 	ELSE null
     END
 	as lmp
+   , CASE
+    WHEN (json->>'eventType' like '%Counselling%') THEN core.getObsValue(id, 'pregnant_counselling_actions_for_next_meeting')
+	ELSE null
+    END
+	as pregnant_counselling_actions_for_next_meeting
    ,json->>'version' as version
    FROM core.event
 WITH DATA;

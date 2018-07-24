@@ -158,7 +158,28 @@ String motherId = null;
 	
 	
 	
-	
+ <div class="span6">
+  <h3><b>Counselling Details</b></h3>
+<%
+
+ if (session.getAttribute("CounsellingList") != null) {
+	List<Object> dataList = (List<Object>) session
+			.getAttribute("CounsellingList");
+	Iterator dataListIterator = dataList.iterator();
+	while (dataListIterator.hasNext()) {
+		Object[] clientObject = (Object[]) dataListIterator.next();
+		String id = String.valueOf(clientObject[0]);
+		String Counselling = String.valueOf(clientObject[22]);
+		
+%>					
+<b>id : <%=id%></b></br>
+<b>Counselling : <%=Counselling%></b></br>
+<%
+		}
+		}
+%>
+  
+</div>	
 	
 	
 	
