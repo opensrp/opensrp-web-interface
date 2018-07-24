@@ -1,0 +1,41 @@
+CREATE OR REPLACE FUNCTION core.child_growth_report(filterArray text[])
+RETURNS TABLE(provider_name character varying, falter int
+              , total int)
+AS $$
+DECLARE
+  
+BEGIN
+ 
+ DROP TABLE IF EXISTS child_growth_temp;
+ CREATE TEMP TABLE IF NOT EXISTS child_growth_temp (
+  	provider_name varchar(70) ,  
+	falter int NOT NULL DEFAULT 0,  
+  	total int NOT NULL DEFAULT 0,  
+  	PRIMARY KEY (provider_name)  
+);
+
+
+insert into child_growth_temp(provider_name,total)
+select cg.provider,count(cg.provider) from  core."child_growth" as cg
+join core."viewJsonDataConversionOfClient" as child 
+ON  child.base_entity_id = cg.base_entity_id
+where cg.is_last_event = true   group by cg.provider;
+    
+  /* update falter list  */
+ update child_growth_temp
+    set falter = growth_report.falter from
+    (select cg.provider,count(cg.provider) from  core."child_growth" as cg
+	join core."viewJsonDataConversionOfClient" as child 
+	ON  child.base_entity_id = cg.base_entity_id
+	where cg.is_last_event = true and cg.growth_status=false  group by cg.provider) as growth_report(provider_id, falter)
+    where child_growth_temp.provider_name = growth_report.provider_id;
+					
+
+RETURN QUERY SELECT  ttable.provider_name
+       , ttable.falter
+       , ttable.total       
+       from child_growth_temp ttable;
+END;
+$$ LANGUAGE plpgsql;
+
+/*SELECT core.child_growth_report(array['1','3']); */
