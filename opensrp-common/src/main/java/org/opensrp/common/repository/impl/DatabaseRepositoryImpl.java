@@ -142,6 +142,19 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 	
+	public <T> T findLastByKey(Map<String, Object> fielaValues, String orderByFieldName, Class<?> className) {
+		Session session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(className);
+		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		}
+		criteria.addOrder(Order.desc(orderByFieldName));
+		@SuppressWarnings("unchecked")
+		List<T> result = criteria.list();
+		session.close();
+		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+	}
+	
 	public <T> List<T> findAllByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
@@ -295,24 +308,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T> List<T> getDataFromSQLFunction(String procedureName, String params) {
-		Session session = sessionFactory.openSession();
-		List<T> aggregatedData = null;
-		try {
-			String hql = "select * from " + procedureName + "(" + params + ")";
-			Query query = session.createSQLQuery(hql);
-			aggregatedData = query.list();
-			logger.info("data fetched successfully from " + procedureName + ", aggregated data size: "
-			        + aggregatedData.size());
-			session.close();
-		}
-		catch (Exception e) {
-			logger.error("Data fetch from " + procedureName + " error:" + e.getMessage());
-		}
-		return aggregatedData;
-	}
-	
-	@SuppressWarnings("unchecked")
 	public <T> List<T> search(SearchBuilder searchBuilder, int result, int offsetreal, Class<?> entityClassName) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(entityClassName);
@@ -352,8 +347,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 	
 	/**
-	 * maxRange -1 means setMaxResults does not consider. offsetreal -1 means setFirstResult does
-	 * not consider.
+	 * @param searchBuilder fdff maxRange -1 means setMaxResults does not consider. offsetreal -1
+	 *            means setFirstResult does not consider.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, int maxRange, int offsetreal, String viewName,
@@ -429,4 +424,20 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return hql;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getDataFromSQLFunction(SearchBuilder searchBuilder, Query query, Session session) {
+		
+		List<T> aggregatedList = null;
+		try {
+			aggregatedList = query.list();
+			logger.info("Report Data fetched successfully from , aggregatedList size: " + aggregatedList.size());
+			session.close();
+		}
+		catch (Exception e) {
+			logger.error("Data fetch from  error:" + e.getMessage());
+		}
+		return aggregatedList;
+	}
+	
 }
