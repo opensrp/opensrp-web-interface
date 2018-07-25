@@ -79,7 +79,7 @@ public class RegisterController {
 		
 		*/
 		
-		return "registers/childDetailsUI";
+		return "registers/childDetails";
 	}
 	
 	
