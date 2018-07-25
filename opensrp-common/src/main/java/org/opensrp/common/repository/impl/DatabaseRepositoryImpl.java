@@ -346,10 +346,50 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return count;
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getDataFromViewByBEId(String viewName, String entityType, String baseEntityId) {
+		Session session = sessionFactory.openSession();
+		List<T> viewData = null;
+		try {
+			String hql = "SELECT * FROM core.\"" +  viewName + "\" "
+		    + " where entity_type = '" + entityType + "'"
+		    + " and base_entity_id = '" + baseEntityId + "'";
+			
+			Query query = session.createSQLQuery(hql);
+			viewData = query.list();
+			logger.info("data fetched successfully from " + viewName + ", data size: "
+			        + viewData.size());
+			session.close();
+		}
+		catch (Exception e) {
+			logger.error("Data fetch from " + viewName + " error:" + e.getMessage());
+		}
+		return viewData;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
 	/**
 	 * @param searchBuilder fdff maxRange -1 means setMaxResults does not consider. offsetreal -1
 	 *            means setFirstResult does not consider.
 	 */
+
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, int maxRange, int offsetreal, String viewName,
 	                                   String entityType) {

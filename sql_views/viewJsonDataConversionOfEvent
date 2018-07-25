@@ -1,6 +1,7 @@
 CREATE MATERIALIZED VIEW core."viewJsonDataConversionOfEvent"
 AS
-SELECT json->>'_id' as _id
+SELECT id
+   , json->>'_id' as _id
    , json->>'baseEntityId' as base_entity_id
    , json->>'dateCreated' as date_created
    , json->>'dateEdited' as date_edited
@@ -42,7 +43,37 @@ SELECT json->>'_id' as _id
 	ELSE null
     END
 	as mother_name
-   , json->>'version' as version
+   ,  CASE
+    WHEN (json->>'eventType' = 'New Woman Member Registration') THEN core.getObsValue(id, 'pregnant')
+	ELSE null
+    END
+	as is_pregnant
+   ,  CASE
+    WHEN (json->>'eventType' = 'New Woman Member Registration') THEN core.getObsValue(id, 'edd')
+	ELSE null
+    END
+	as edd
+   ,  CASE
+    WHEN (json->>'eventType' = 'New Woman Member Registration') THEN core.getObsValue(id, 'lmp')
+	ELSE null
+    END
+	as lmp
+   , CASE
+    WHEN (json->>'eventType' like '%Counselling%') THEN core.getObsValue(id, 'pregnant_counselling_actions_for_next_meeting')
+	ELSE null
+    END
+	as pregnant_counselling_actions_for_next_meeting
+   , CASE
+    WHEN (json->>'eventType' = 'Woman Member Follow Up') THEN core.getObsValue(id, 'Visit_date')
+	ELSE null
+    END
+	as follow_up_date
+   , CASE
+    WHEN (json->>'eventType' = 'Woman Member Follow Up') THEN core.getObsValue(id, 'Date_Of_next_appointment')
+	ELSE null
+    END
+	as date_Of_next_appointment
+   ,json->>'version' as version
    FROM core.event
 WITH DATA;
 

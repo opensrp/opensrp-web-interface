@@ -52,6 +52,8 @@
 													style="width: 140px;">Birth Weight</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Mother Name</th>
+												<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Action</th>
 											</tr>
 										</thead>
 										<tfoot>
@@ -72,6 +74,8 @@
 													style="width: 140px;">Birth Weight</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Mother Name</th>
+												<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Action</th>
 											</tr>
 										</tfoot>
 										<tbody>
@@ -103,6 +107,8 @@
 												<td><%=gender%></td>
 												<td><%=birth_weight%></td>
 												<td><%=mother_name%></td>
+												<td><a href="/registers/<%=base_entity_id%>/childDetails.html">Details</a>
+										</td> 
 											</tr>
 											<%
 												}
