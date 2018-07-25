@@ -98,6 +98,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 	
 	@Transactional
 	public void startCalculateChildGrowth() throws Exception {
+		searchBuilder.clear();
 		marker = markerServiceImpl.findByName(AllConstant.MRAKER_NAME);
 		searchBuilder.clear();
 		searchBuilder.setServerVersionn(marker.getTimeStamp());

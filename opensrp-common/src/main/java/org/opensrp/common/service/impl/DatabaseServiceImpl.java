@@ -168,4 +168,9 @@ public class DatabaseServiceImpl implements DatabaseService {
 	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType) {
 		return databaseRepositoryImpl.getViewDataSize(searchBuilder, viewName, entityType);
 	}
+
+	@Transactional
+	public String getChildGrowthFalteringPercentage() {
+		return databaseRepositoryImpl.getChildGrowthFalteringPercentage();
+	}
 }
