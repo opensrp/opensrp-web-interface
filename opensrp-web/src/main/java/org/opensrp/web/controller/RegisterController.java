@@ -48,11 +48,12 @@ public class RegisterController {
 		System.out.println("Child id :" + id);
 		session.setAttribute("childId", id);
 		
-		/*
-		List<Object> data;
-		data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfEvent","mother",id);
-		session.setAttribute("eventList", data);
 		
+		List<Object> data;
+		data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfWeight","weight",id);
+		session.setAttribute("weightList", data);
+		
+		/*
 		List<Object> NWMRList = new ArrayList<Object>();
 		List<Object> counsellingList = new ArrayList<Object>();
 		List<Object> followUpList = new ArrayList<Object>();

@@ -48,6 +48,11 @@ SELECT DISTINCT c.id as id
 	ELSE null
     END
 	as mother_name
+    , CASE
+    WHEN (e.json->>'entityType' = 'child') THEN core.getObsValue(e.id, 'Father_Guardian_Name')
+	ELSE null
+    END
+	as father_name
    FROM core.client c
    JOIN core.event e ON c.json->'baseEntityId' = e.json->'baseEntityId'
    WHERE e.json->>'eventType' LIKE '%Registration%'
