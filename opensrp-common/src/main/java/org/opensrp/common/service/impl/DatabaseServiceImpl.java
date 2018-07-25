@@ -82,7 +82,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 	
 	@Transactional
 	public <T> List<T> getDataFromSQLFunction(String procedureName, String params) {
-		return databaseRepositoryImpl.getDataFromSQLFunction(procedureName, params);
+		return null;
 	}
 	
 	@Transactional

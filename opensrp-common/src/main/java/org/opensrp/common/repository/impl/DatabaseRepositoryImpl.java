@@ -142,6 +142,19 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 	
+	public <T> T findLastByKey(Map<String, Object> fielaValues, String orderByFieldName, Class<?> className) {
+		Session session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(className);
+		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		}
+		criteria.addOrder(Order.desc(orderByFieldName));
+		@SuppressWarnings("unchecked")
+		List<T> result = criteria.list();
+		session.close();
+		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+	}
+	
 	public <T> List<T> findAllByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
@@ -295,24 +308,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T> List<T> getDataFromSQLFunction(String procedureName, String params) {
-		Session session = sessionFactory.openSession();
-		List<T> aggregatedData = null;
-		try {
-			String hql = "select * from " + procedureName + "(" + params + ")";
-			Query query = session.createSQLQuery(hql);
-			aggregatedData = query.list();
-			logger.info("data fetched successfully from " + procedureName + ", aggregated data size: "
-			        + aggregatedData.size());
-			session.close();
-		}
-		catch (Exception e) {
-			logger.error("Data fetch from " + procedureName + " error:" + e.getMessage());
-		}
-		return aggregatedData;
-	}
-	
-	@SuppressWarnings("unchecked")
 	public <T> List<T> search(SearchBuilder searchBuilder, int result, int offsetreal, Class<?> entityClassName) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(entityClassName);
@@ -431,42 +426,18 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Object[]> executeRawQuery(SearchBuilder searchBuilder, String sqlQuery) {
-		System.err.println("sqlQuery:" + sqlQuery);
-		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
+	public <T> List<T> getDataFromSQLFunction(SearchBuilder searchBuilder, Query query, Session session) {
 		
-		if (searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {
-			
-			query.setParameter("division", searchBuilder.getDivision().toUpperCase());
+		List<T> aggregatedList = null;
+		try {
+			aggregatedList = query.list();
+			logger.info("Report Data fetched successfully from , aggregatedList size: " + aggregatedList.size());
+			session.close();
 		}
-		if (searchBuilder.getDistrict() != null && !searchBuilder.getDistrict().isEmpty()) {
-			
-			query.setParameter("district", searchBuilder.getDistrict().toUpperCase());
+		catch (Exception e) {
+			logger.error("Data fetch from  error:" + e.getMessage());
 		}
-		if (searchBuilder.getUpazila() != null && !searchBuilder.getUpazila().isEmpty()) {
-			
-			query.setParameter("upazila", searchBuilder.getUpazila());
-		}
-		if (searchBuilder.getUnion() != null && !searchBuilder.getUnion().isEmpty()) {
-			
-			query.setParameter("unions", searchBuilder.getUnion());
-		}
-		if (searchBuilder.getWard() != null && !searchBuilder.getWard().isEmpty()) {
-			query.setParameter("ward", searchBuilder.getWard());
-		}
-		if (searchBuilder.getMauzapara() != null && !searchBuilder.getMauzapara().isEmpty()) {
-			query.setParameter("mauza_para", searchBuilder.getMauzapara());
-		}
-		if (searchBuilder.getSubunit() != null && !searchBuilder.getSubunit().isEmpty()) {
-			query.setParameter("subunit", searchBuilder.getSubunit());
-		}
-		if (searchBuilder.getProvider() != null && !searchBuilder.getProvider().isEmpty()) {
-			query.setParameter("provider", searchBuilder.getProvider());
-		}
-		//query.setParameter("years", searchBuilder.getYear());
-		
-		List<Object[]> results = query.list();
-		
-		return results;
+		return aggregatedList;
 	}
+	
 }
