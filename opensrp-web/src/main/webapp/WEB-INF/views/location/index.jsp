@@ -78,8 +78,7 @@ if (paginationAtributes.containsKey("name")) {
 								<tr>
 									<th>Name</th>
 									<th>Description</th>									
-									<th> Tag</th>
-									<th> Created Date</th>
+									<th> Tag</th>									
 									<th> Creator</th>
 								</tr>
 							</thead>
@@ -88,7 +87,7 @@ if (paginationAtributes.containsKey("name")) {
 									<th>Name</th>
 									<th>Description</th>									
 									<th> Tag</th>
-									<th> Created Date</th>
+									
 									<th> Creator</th>
 								</tr>
 							</tfoot>
@@ -116,7 +115,7 @@ if (paginationAtributes.containsKey("name")) {
 										
 										<td><%=location.getDescription() %></td>
 										<td><%=location.getLocationTag().getName()%></td>
-										<td><%=tagName%></td>
+										
 										<td><%=creator %></td>
 
 									</tr>

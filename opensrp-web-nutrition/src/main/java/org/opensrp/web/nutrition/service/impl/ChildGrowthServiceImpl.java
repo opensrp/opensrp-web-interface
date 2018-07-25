@@ -259,18 +259,18 @@ public class ChildGrowthServiceImpl implements NutritionService {
 	@Transactional
 	public List<Object[]> getChildFalteredData(SearchBuilder searchBuilder) {
 		Session session = sessionFactory.openSession();
-		searchBuilder.clear();
-		String procedureName = "core.child_growth_report";
-		String hql = "select * from " + procedureName + "(array[:division,:district,:upazila"
-		        + ",:union,:ward,:subunit,:mauzapara,:provider,:start_date,:end_date])";
 		
+		String procedureName = "core.child_growth_reports";
+		String hql = "select * from " + procedureName + "(array[:division,:district,:upazila"
+		        + ",:union,:ward,:subunit,:mauzapara,:provider,:start_date,:end_date])";		
 		Query query = session.createSQLQuery(hql);
-		setParameter(searchBuilder, query);
+		setParameter(searchBuilder, query);	
 		
 		return databaseRepositoryImpl.getDataFromSQLFunction(searchBuilder, query, session);
 	}
 	
 	private void setParameter(SearchBuilder searchBuilder, Query query) {
+		
 		if (searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {
 			query.setParameter("division", searchBuilder.getDivision());
 		} else {

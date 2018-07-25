@@ -38,19 +38,18 @@ public class ReportController {
 	private SearchUtil searchUtil;
 	
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
-	public String childGrowthReport(HttpServletRequest request, HttpSession session, Model model) {
-		String search = "";
-		search = (String) request.getParameter("search");
-		if (search != null) {
-			searchBuilder = paginationHelperUtil.setParams(request, session);
-		} else {
-			searchBuilder = searchBuilder.clear();
-		}
+	public String childGrowthReport(HttpServletRequest request, HttpSession session, Model model) {	
 		searchUtil.setDivisionAttribute(session);
 		searchBuilder.clear();
 		List<Object[]> data = childGrowthServiceImpl.getChildFalteredData(searchBuilder);
-		session.setAttribute("data", data);
-		System.err.println("Size:" + data.size());
+		session.setAttribute("data", data);		
 		return "/report/child-growth";
+	}
+	@RequestMapping(value = "/child-growth-ajax.html", method = RequestMethod.GET)
+	public String childGrowthReportAjax(HttpServletRequest request, HttpSession session, Model model){			
+		searchBuilder = paginationHelperUtil.setParams(request, session);
+		List<Object[]> data = childGrowthServiceImpl.getChildFalteredData(searchBuilder);
+		session.setAttribute("data", data);
+		return "/report/child-growth-ajax";
 	}
 }

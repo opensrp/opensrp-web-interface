@@ -39,24 +39,24 @@
 
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="reportDropdown"
-				href="#" data-toggle="dropdown">Locations </a>
+				href="#" data-toggle="dropdown">Location </a>
 				<div class="dropdown-menu">
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/location/tag/list.html"/>"> <strong>
-							Manage Tags</strong>
+							Manage Tag</strong>
 
 					</a>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="<c:url value="/location.html"/>">
-						<strong>Manage Locations</strong>
+						<strong>Manage Location</strong>
 					</a>
 
 				</div></li>
 
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
-				href="#" data-toggle="dropdown">Registers </a>
+				href="#" data-toggle="dropdown">Client </a>
 				<div class="dropdown-menu">
 
 					<div class="dropdown-divider"></div>
@@ -159,7 +159,7 @@
 
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="userDropdown" href="#"
-				data-toggle="dropdown"> Users </a>
+				data-toggle="dropdown"> User </a>
 				<div class="dropdown-menu">
 
 					<div class="dropdown-divider"></div>

@@ -38,7 +38,8 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="/registers/mother.html">Mother</a>
+                 
+		 <a  href="<c:url value="/registers/mother.html"/>">Mother</a>
         </li>
         <li class="breadcrumb-item active">Mother Details</li>
       </ol>

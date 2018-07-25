@@ -118,7 +118,7 @@ if (paginationAtributes.containsKey("name")) {
 										<td><%=team.getIdentifier() %></td>
 										<td><%=location%></td>
 										<td><%=superVisor%></td>
-										<td><%=superVisor %></td>
+										<td></td>
 
 									</tr>
 									<%
