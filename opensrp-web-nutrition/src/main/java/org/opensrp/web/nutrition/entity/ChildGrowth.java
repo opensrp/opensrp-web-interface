@@ -56,6 +56,9 @@ public class ChildGrowth {
 	
 	private double lon;
 	
+	@Column(name = "is_last_event", columnDefinition = "boolean default false")
+	private Boolean isLastEvent;
+	
 	private String provider;
 	
 	@Column(name = "last_event_date")
@@ -78,6 +81,14 @@ public class ChildGrowth {
 	
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public Boolean isLastEvent() {
+		return isLastEvent;
+	}
+	
+	public void setLastEvent(Boolean isLastEvent) {
+		this.isLastEvent = isLastEvent;
 	}
 	
 	public String getProvider() {

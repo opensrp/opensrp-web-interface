@@ -76,7 +76,18 @@
 					</a>
 
 				</div></li>
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle mr-lg-2" id="reportDropdown" href="#"
+				data-toggle="dropdown">Report </a>
+				<div class="dropdown-menu">
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/report/child-growth.html"/>">
+						<strong> Child Growth Report</strong>
 
+					</a>
+					
+
+				</div></li>
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="teamDropdown" href="#"
 				data-toggle="dropdown">Team </a>

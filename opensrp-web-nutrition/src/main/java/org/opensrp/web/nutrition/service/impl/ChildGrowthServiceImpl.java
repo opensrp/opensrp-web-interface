@@ -11,6 +11,8 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.opensrp.common.entity.Marker;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
@@ -18,6 +20,7 @@ import org.opensrp.common.service.impl.MarkerServiceImpl;
 import org.opensrp.common.util.AllConstant;
 import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.common.util.SearchCriteria;
 import org.opensrp.web.nutrition.entity.ChildGrowth;
 import org.opensrp.web.nutrition.service.NutritionService;
 import org.opensrp.web.nutrition.utils.Age;
@@ -40,13 +43,13 @@ public class ChildGrowthServiceImpl implements NutritionService {
 	private MarkerServiceImpl markerServiceImpl;
 	
 	@Autowired
-	private SearchBuilder searchBuilder;
-	
-	@Autowired
 	private Marker marker;
 	
 	@Autowired
 	private DatabaseRepositoryImpl databaseRepositoryImpl;
+	
+	@Autowired
+	private SearchBuilder searchBuilder;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -97,6 +100,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 	public void startCalculateChildGrowth() throws Exception {
 		searchBuilder.clear();
 		marker = markerServiceImpl.findByName(AllConstant.MRAKER_NAME);
+		searchBuilder.clear();
 		searchBuilder.setServerVersionn(marker.getTimeStamp());
 		List<Object[]> childWeights = databaseRepositoryImpl.getDataFromView(searchBuilder, -1, -1,
 		    "viewJsonDataConversionOfWeight", "weight");
@@ -127,22 +131,20 @@ public class ChildGrowthServiceImpl implements NutritionService {
 				String[] latlon = gps.split(" ");
 				String baseEntityId = String.valueOf(row[0]);
 				Date dob = DateUtil.parseDate(String.valueOf(row[7]));
-				//birthWeight = Double.parseDouble(String.valueOf(row[8]));
+				
 				Date currentEventDate = DateUtil.parseDate(String.valueOf(row[1]));
 				currentWeight = Double.parseDouble(String.valueOf(row[5]));
 				provider = String.valueOf(row[3]);
-				
+				double lastWeight = 0;
 				String lastEventDate = String.valueOf(row[9]);
+				if (!String.valueOf(row[8]).equalsIgnoreCase("null")) {
+					lastWeight = Double.parseDouble(String.valueOf(row[8]));
+				}
 				
-				//if (lastWeight != null) {
-				double lastWeight = Double.parseDouble(String.valueOf(row[8]));
 				weight = (int) Weight.getWeightInGram(lastWeight, currentWeight);
 				
 				interval = Interval.getInterval(DateUtil.parseDate(lastEventDate), currentEventDate);
-				/*} else {
-					weight = Weight.getWeightInGram(birthWeight, currentWeight);
-					interval = Interval.getInterval(dob, currentEventDate);
-				}*/
+				
 				age = Age.getApproximateAge(dob, currentEventDate);
 				
 				key = String.valueOf(interval) + String.valueOf(age);
@@ -160,8 +162,6 @@ public class ChildGrowthServiceImpl implements NutritionService {
 					
 				}
 				
-				System.err.println("Key:" + key + ",expectedGrowthWeight" + expectedGrowthWeight + ",weight:" + weight);
-				
 				if (weight >= expectedGrowthWeight) {
 					growthStatus = true;
 				}
@@ -169,6 +169,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 				Map<String, Object> fielaValues = new HashMap<String, Object>();
 				fielaValues.put("lastEventDate", currentEventDate);
 				fielaValues.put("baseEntityId", baseEntityId);
+				
 				ChildGrowth findChildGrowth = databaseRepositoryImpl.findByKeys(fielaValues, ChildGrowth.class);
 				
 				if (findChildGrowth != null) {
@@ -181,6 +182,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 					findChildGrowth.setGender(gender);
 					findChildGrowth.setInterval(interval);
 					findChildGrowth.setProvider(provider);
+					findChildGrowth.setLastEvent(false);
 					if (!gps.equalsIgnoreCase("null")) {
 						
 						findChildGrowth.setLat(Double.parseDouble(latlon[0]));
@@ -199,6 +201,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 					childGrowth.setGender(gender);
 					childGrowth.setInterval(interval);
 					childGrowth.setProvider(provider);
+					childGrowth.setLastEvent(false);
 					if (!gps.equalsIgnoreCase("null")) {
 						
 						childGrowth.setLat(Double.parseDouble(latlon[0]));
@@ -207,7 +210,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 					}
 					save(childGrowth);
 				}
-				
+				isLastEventUpdate(baseEntityId, provider, fielaValues);
 				if (marker.getTimeStamp() < currentDocumentTimeStamp) {
 					marker.setTimeStamp(currentDocumentTimeStamp);
 					markerServiceImpl.update(marker);
@@ -221,6 +224,102 @@ public class ChildGrowthServiceImpl implements NutritionService {
 				logger.error("Error:" + e.getMessage());
 			}
 		}
+		
+	}
+	
+	private void isLastEventUpdate(String baseEntityId, String provider, Map<String, Object> fielaValues) throws Exception {
+		/**
+		 * make false all true entity
+		 */
+		fielaValues.clear();
+		fielaValues.put("isLastEvent", true);
+		fielaValues.put("baseEntityId", baseEntityId);
+		fielaValues.put("provider", provider);
+		List<ChildGrowth> childGrowths = databaseRepositoryImpl.findAllByKeys(fielaValues, ChildGrowth.class);
+		//System.err.println("childGrowths:" + childGrowths);
+		if (childGrowths != null) {
+			for (ChildGrowth childGrowth : childGrowths) {
+				childGrowth.setLastEvent(false);
+				System.err.println("childGrowth all:" + childGrowth.toString());
+				update(childGrowth);
+			}
+		}
+		
+		fielaValues.clear();
+		fielaValues.put("provider", provider);
+		fielaValues.put("baseEntityId", baseEntityId);
+		System.err.println("fielaValues:" + fielaValues);
+		ChildGrowth childGrowth = databaseRepositoryImpl.findLastByKey(fielaValues, "lastEventDate", ChildGrowth.class);
+		System.err.println("childGrowth Lstststs:" + childGrowth);
+		childGrowth.setLastEvent(true);
+		System.err.println("childGrowth last:" + childGrowth.toString());
+		update(childGrowth);
+	}
+	
+	@Transactional
+	public List<Object[]> getChildFalteredData(SearchBuilder searchBuilder) {
+		Session session = sessionFactory.openSession();
+		searchBuilder.clear();
+		String procedureName = "core.child_growth_report";
+		String hql = "select * from " + procedureName + "(array[:division,:district,:upazila"
+		        + ",:union,:ward,:subunit,:mauzapara,:provider,:start_date,:end_date])";
+		
+		Query query = session.createSQLQuery(hql);
+		setParameter(searchBuilder, query);
+		
+		return databaseRepositoryImpl.getDataFromSQLFunction(searchBuilder, query, session);
+	}
+	
+	private void setParameter(SearchBuilder searchBuilder, Query query) {
+		if (searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {
+			query.setParameter("division", searchBuilder.getDivision());
+		} else {
+			query.setParameter("division", "");
+		}
+		if (searchBuilder.getDistrict() != null && !searchBuilder.getDistrict().isEmpty()) {
+			query.setParameter("district", searchBuilder.getDistrict());
+		} else {
+			query.setParameter("district", "");
+		}
+		
+		if (searchBuilder.getUpazila() != null && !searchBuilder.getUpazila().isEmpty()) {
+			query.setParameter("upazila", searchBuilder.getUpazila());
+		} else {
+			query.setParameter("upazila", "");
+		}
+		
+		if (searchBuilder.getUnion() != null && !searchBuilder.getUnion().isEmpty()) {
+			query.setParameter("union", searchBuilder.getUnion());
+		} else {
+			query.setParameter("union", "");
+		}
+		
+		if (searchBuilder.getWard() != null && !searchBuilder.getWard().isEmpty()) {
+			query.setParameter("ward", searchBuilder.getWard());
+		} else {
+			query.setParameter("ward", "");
+		}
+		
+		if (searchBuilder.getSubunit() != null && !searchBuilder.getSubunit().isEmpty()) {
+			query.setParameter("subunit", searchBuilder.getSubunit());
+		} else {
+			query.setParameter("subunit", "");
+		}
+		
+		if (searchBuilder.getMauzapara() != null && !searchBuilder.getMauzapara().isEmpty()) {
+			query.setParameter("mauzapara", searchBuilder.getMauzapara());
+		} else {
+			query.setParameter("mauzapara", "");
+		}
+		
+		if (searchBuilder.getProvider() != null && !searchBuilder.getProvider().isEmpty()) {
+			query.setParameter("provider", searchBuilder.getProvider());
+		} else {
+			query.setParameter("provider", "");
+		}
+		
+		query.setParameter("start_date", "");
+		query.setParameter("end_date", "");
 		
 	}
 }
