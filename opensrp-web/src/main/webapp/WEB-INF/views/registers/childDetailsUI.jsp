@@ -50,18 +50,52 @@
               <a class="list-group-item list-group-item-action" href="#">
                 <div class="media">
                   <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
+<%
+String childId = null;
+ if (session.getAttribute("childId") != null) {
+	 childId = (String) session.getAttribute("childId");
+ }	
+		if (session.getAttribute("dataList") != null) {
+			List<Object> dataList = (List<Object>) session
+					.getAttribute("dataList");
+			Iterator dataListIterator = dataList.iterator();
+			while (dataListIterator.hasNext()) {
+				Object[] clientObject = (Object[]) dataListIterator.next();
+				String base_entity_id = String.valueOf(clientObject[1]);
+				
+				if(base_entity_id.equals(childId)){
+				String address_type = String.valueOf(clientObject[2]);
+				String birth_date = String.valueOf(clientObject[3]);
+				String country = String.valueOf(clientObject[4]);
+				String created_date = String.valueOf(clientObject[5]);
+				String edited_date = String.valueOf(clientObject[6]);
+				String first_name = String.valueOf(clientObject[9]);
+				String gender = String.valueOf(clientObject[10]);
+				String nid = String.valueOf(clientObject[15]);
+				String birth_weight = String.valueOf(clientObject[31]);
+				String mother_name = String.valueOf(clientObject[32]);
+				
+		
+%>	                  
                   <div class="media-body">
-                    <strong>Child Name:</strong> Anowar<br>
-                    <strong>Basic info:</strong><br>
-                    <strong>Details:</strong><br>
-                    
+                    <strong>Name: </strong><%=first_name%><br>
+                    <strong>Father's Name: </strong><br>
+                    <strong>Mother's Name: </strong><%=mother_name%><br>
+                    <strong>Birth-date: </strong><%=birth_date%><br>
+                    <strong>Age: </strong><br>
+                    <strong>Gender: </strong><%=gender%><br>
+                    <strong>Birth-weight: </strong><%=birth_weight%><br>
                   </div>
+                  
                   <div class="media-body">
-                    <strong>Father's Name:</strong><br>
-                    <strong>Mother's Name:</strong><br>
                     <strong>Details:</strong><br>
-                    
                   </div>
+<%
+		}
+		}
+}
+%>                  
+                  
                 </div>
               </a>
               
