@@ -1,5 +1,6 @@
 package org.opensrp.common.repository.impl;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -352,8 +353,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 	
 	/**
-	 * maxRange -1 means setMaxResults does not consider. offsetreal -1 means setFirstResult does
-	 * not consider.
+	 * maxRange -1 means setMaxResults does not consider.
+	 * offsetreal -1 means setFirstResult does not consider.
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, int maxRange, int offsetreal, String viewName,
@@ -427,6 +428,41 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		if (searchBuilder.getServerVersion() != -1) {
 			hql = hql + " and server_version > '" + searchBuilder.getServerVersion() + "'";
 		}
+		if(searchBuilder.getPregStatus() != null && !searchBuilder.getPregStatus().isEmpty()) {
+			hql = hql + " and is_pregnant = '" + searchBuilder.getPregStatus() + "'";
+		}
 		return hql;
+	}
+
+	public String getChildGrowthFalteringPercentage() {
+		Session session = sessionFactory.openSession();
+		int count = 0;
+		int totalChildCount = 10;
+		double childGrowthFalteringPercentage = 0;
+		try {
+			String hql = "SELECT distinct base_entity_id , MAX(last_event_date) "
+					    + " FROM core.child_growth "
+                        + " where growth_status = false "
+                        + " GROUP BY base_entity_id";
+			Query query = session.createSQLQuery(hql);
+			count = query.list().size();
+			
+			hql = "SELECT distinct base_entity_id "
+                  + " FROM core.child_growth";
+		    query = session.createSQLQuery(hql);
+		    totalChildCount = query.list().size();
+			
+			
+			
+			childGrowthFalteringPercentage = ((double)count/(double)totalChildCount) * 100;
+			session.close();
+		}
+		catch (Exception e) {
+			logger.error("Data fetch from " + "core.child_growth " + " error:" + e.getMessage());
+		}
+		
+		DecimalFormat df = new DecimalFormat("###.##");
+		//df.format(childGrowthFalteringPercentage);
+		return df.format(childGrowthFalteringPercentage);
 	}
 }
