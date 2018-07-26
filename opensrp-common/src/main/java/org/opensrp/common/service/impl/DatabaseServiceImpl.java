@@ -151,7 +151,10 @@ public class DatabaseServiceImpl implements DatabaseService {
 		return databaseRepositoryImpl.getDataFromViewByBEId(viewName, entityType, baseEntityId);
 	}
 	
-	
+	@Transactional
+	public List<Object[]> executeSelectQuery(String sqlQuery) {
+		return databaseRepositoryImpl.executeSelectQuery(sqlQuery);
+	}
 	
 	
 	

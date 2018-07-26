@@ -191,8 +191,8 @@ String childId = null;
 		i++;
 		Object[] weightObject = (Object[]) dataListIterator.next();
 		String id = String.valueOf(weightObject[0]);
-		String eventDate = String.valueOf(weightObject[1]);
-		String currentWeight = String.valueOf(weightObject[5]);
+		String eventDate = String.valueOf(weightObject[8]);
+		String currentWeight = String.valueOf(weightObject[13]);
 		
 %>	          
                 <tr>

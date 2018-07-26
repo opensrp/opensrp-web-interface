@@ -12,6 +12,7 @@ import org.opensrp.acl.entity.Permission;
 import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.service.impl.LocationServiceImpl;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.web.nutrition.entity.ChildGrowth;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,8 +51,19 @@ public class RegisterController {
 		session.setAttribute("childId", id);
 		
 		
-		List<Object> data;
-		data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfWeight","weight",id);
+		List<Object[]> data;
+		List<ChildGrowth> childGrowthList;
+		//data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfWeight","weight",id);
+		childGrowthList = databaseServiceImpl.findAllByKey(id, "baseEntityId", ChildGrowth.class);
+		/*for(ChildGrowth cg: childGrowthList){
+			data.add((Object)cg);
+		}*/
+		String weightQuery = "SELECT * FROM core.child_growth "
+							+" WHERE base_entity_id = '"
+							+id
+							+"' " 
+							+" ORDER BY last_event_date ASC";
+		data = databaseServiceImpl.executeSelectQuery(weightQuery);
 		session.setAttribute("weightList", data);
 		
 		/*
