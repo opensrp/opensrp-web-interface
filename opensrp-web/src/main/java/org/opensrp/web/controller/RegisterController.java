@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping(value = "client")
 public class RegisterController {
 	
 	@Autowired
@@ -43,7 +44,7 @@ public class RegisterController {
 	
 	
 	
-	@RequestMapping(value = "registers/{id}/childDetails.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/child/{id}/details.html", method = RequestMethod.GET)
 	public String showChildDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) {
 		System.out.println("Child id :" + id);
 		session.setAttribute("childId", id);
@@ -80,7 +81,7 @@ public class RegisterController {
 		
 		*/
 		
-		return "registers/childDetails";
+		return "registers/child-details";
 	}
 	
 	
@@ -96,7 +97,7 @@ public class RegisterController {
 	
 	
 	
-	@RequestMapping(value = "registers/{id}/motherDetails.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/mother/{id}/details.html", method = RequestMethod.GET)
 	public String showMotherDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) {
 		System.out.println("Mother id :" + id);
 		session.setAttribute("motherId", id);
@@ -131,7 +132,7 @@ public class RegisterController {
 		
 		
 		
-		return "registers/motherDetails";
+		return "registers/mother-details";
 	}
 	
 	/*@RequestMapping(value = "registers/motherDetails.html", method = RequestMethod.GET)
@@ -142,19 +143,19 @@ public class RegisterController {
 	}*/
 	
 
-	@RequestMapping(value = "/registers/household.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/household.html", method = RequestMethod.GET)
 	public String showHouseholdList(HttpServletRequest request, HttpSession session, Model model) {
         paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "household");
 		return "/registers/household";
 	}
 
-	@RequestMapping(value = "/registers/mother.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/mother.html", method = RequestMethod.GET)
 	public String showMotherList(HttpServletRequest request, HttpSession session, Model model) {
         paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "mother");
 		return "/registers/mother";
 	}
 
-	@RequestMapping(value = "/registers/child.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/child.html", method = RequestMethod.GET)
 	public String showChildList(HttpServletRequest request, HttpSession session, Model model) {
         paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "child");
 		return "/registers/child";

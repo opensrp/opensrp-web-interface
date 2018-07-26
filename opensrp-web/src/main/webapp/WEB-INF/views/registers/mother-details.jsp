@@ -9,18 +9,15 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
-	
-	
-<!DOCTYPE html>
-<html lang="en">
 
+<!DOCTYPE html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>Child Details</title>
+  <title>Mother Details</title>
   <!-- Bootstrap core CSS-->
   <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom fonts for this template-->
@@ -35,79 +32,87 @@
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
-
-  <div class="content-wrapper">
+	
+	<div class="content-wrapper">
     <div class="container-fluid">
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="/registers/child.html">Child</a>
+          <a href="/client/mother.html">Mother</a>
         </li>
-        <li class="breadcrumb-item active">Child Details</li>
+        <li class="breadcrumb-item active">Mother Details</li>
       </ol>
       <!-- Child Register-->
       <div class="card mb-3">
             <div class="card-header">
-               Child Details</div>
+               Mother Details</div>
             <div class="list-group list-group-flush small">
               <a class="list-group-item list-group-item-action" href="#">
                 <div class="media">
                   <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
 <%
-String childId = null;
- if (session.getAttribute("childId") != null) {
-	 childId = (String) session.getAttribute("childId");
- }	
-		if (session.getAttribute("dataList") != null) {
-			List<Object> dataList = (List<Object>) session
-					.getAttribute("dataList");
-			Iterator dataListIterator = dataList.iterator();
-			while (dataListIterator.hasNext()) {
-				Object[] clientObject = (Object[]) dataListIterator.next();
-				String base_entity_id = String.valueOf(clientObject[1]);
-				
-				if(base_entity_id.equals(childId)){
-				String address_type = String.valueOf(clientObject[2]);
-				String birth_date = String.valueOf(clientObject[3]);
-				String country = String.valueOf(clientObject[4]);
-				String created_date = String.valueOf(clientObject[5]);
-				String edited_date = String.valueOf(clientObject[6]);
-				String first_name = String.valueOf(clientObject[9]);
-				String gender = String.valueOf(clientObject[10]);
-				String nid = String.valueOf(clientObject[15]);
-				String birth_weight = String.valueOf(clientObject[31]);
-				String mother_name = String.valueOf(clientObject[32]);
-				String father_name = String.valueOf(clientObject[33]);
-				
+String motherId = null;
+ if (session.getAttribute("motherId") != null) {
+	 motherId = (String) session.getAttribute("motherId");
+ }
+ if (session.getAttribute("dataList") != null) {
+	List<Object> dataList = (List<Object>) session
+			.getAttribute("dataList");
+	Iterator dataListIterator = dataList.iterator();
+	while (dataListIterator.hasNext()) {
+		Object[] clientObject = (Object[]) dataListIterator.next();
+		String id = String.valueOf(clientObject[1]);
+		if(id.equals(motherId)){
+		String firstName = String.valueOf(clientObject[9]);
+		String lastName = String.valueOf(clientObject[13]);
+		String birthDate = String.valueOf(clientObject[3]);
+		String spouseName = String.valueOf(clientObject[19]);
+		String phoneNumber = String.valueOf(clientObject[17]);
+
+		String division = String.valueOf(clientObject[8]);
+		String district = String.valueOf(clientObject[7]);
+		String upazilla = String.valueOf(clientObject[22]);
+		String union = String.valueOf(clientObject[21]);
+		String ward = String.valueOf(clientObject[23]);
+		String householdId = String.valueOf(clientObject[12]);
 		
-%>	                  
+		
+		String lmpDate = String.valueOf(clientObject[24]);
+		
+%>
+           
                   <div class="media-body">
-                    <strong>Name: </strong><%=first_name%><br>
-                    <strong>Father's Name: </strong><%=father_name%><br>
-                    <strong>Mother's Name: </strong><br>
-                    <strong>Birth-date: </strong><%=birth_date%><br>
+                    <strong>Name: </strong><%=firstName%><br>
+                    <strong>Birthdate: </strong><%=birthDate%><br>
                     <strong>Age: </strong><br>
-                    <strong>Gender: </strong><%=gender%><br>
-                    <strong>Birth-weight: </strong><%=birth_weight%><br>
+                    <strong>Marital Status: </strong>Married<br>
+                    <strong>Husband's Name: </strong><%=spouseName%><br>
+                    <strong>Contact Number: </strong><%=phoneNumber%><br>
+                    
                   </div>
-                  
                   <div class="media-body">
-                    <strong>Care-giver's Name: </strong><br>
+                    <strong>Division: </strong><%=division%><br>
+                    <strong>District: </strong><%=district%><br>
+                    <strong>Upazilla: </strong><%=upazilla%><br>
+                    <strong>Union: </strong><%=union%><br>
+                    <strong>Ward: </strong><%=ward%><br>
+                    <strong>Household: </strong><%=householdId%><br>
+                    
                   </div>
 <%
 		}
 		}
 }
-%>                     
+%>
                 </div>
               </a>
-
+              
+              
+              
               
             </div>
             <div class="card-footer small text-muted"></div>
           </div>
-      
-      
       
       <!-- Area Chart Example-->
       <div class="row">
@@ -115,16 +120,41 @@ String childId = null;
           <!-- Example Bar Chart Card-->
           <div class="card mb-3">
             <div class="card-header">
-               Siblings</div>
+               Pregnancy Details</div>
+<%
+
+if (session.getAttribute("NWMRList") != null) {
+List<Object> dataList = (List<Object>) session
+		.getAttribute("NWMRList");
+Iterator dataListIterator = dataList.iterator();
+while (dataListIterator.hasNext()) {
+	Object[] clientObject = (Object[]) dataListIterator.next();
+	String id = String.valueOf(clientObject[0]);
+	String isPregnant = String.valueOf(clientObject[19]);
+	String edd = String.valueOf(clientObject[20]);
+	String lmp = String.valueOf(clientObject[21]);
+		
+%>	
             <div class="card-body">
-              <p class="card-text small">1. These waves are looking pretty good today!
-                  <a href="#">#surfsup</a>
-                </p>
-                <p class="card-text small">2. These waves are looking pretty good today!
-                  <a href="#">#surfsup</a>
-                </p>
+             
+              <p class="card-text small">
+              <b>Pregnant : <%=isPregnant%></b>
+              </p>
+              
+              <p class="card-text small">
+              <b>EDD : <%=edd%></b>
+              </p>
+              
+              <p class="card-text small">
+              <b>LMP : <%=lmp%></b>
+              </p>
+              
             </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+<%
+		}
+		}
+%>
+            <div class="card-footer small text-muted"></div>
           </div>
           <!-- Card Columns Example Social Feed-->
           
@@ -136,16 +166,33 @@ String childId = null;
           <!-- Example Pie Chart Card-->
           <div class="card mb-3">
             <div class="card-header">
-              Counseling</div>
+              Counselling</div>
+              
+<%
+
+ if (session.getAttribute("counsellingList") != null) {
+	List<Object> dataList = (List<Object>) session
+			.getAttribute("counsellingList");
+	Iterator dataListIterator = dataList.iterator();
+	while (dataListIterator.hasNext()) {
+		Object[] clientObject = (Object[]) dataListIterator.next();
+		String id = String.valueOf(clientObject[0]);
+		String counselling = String.valueOf(clientObject[22]);
+		
+%>	              
+  
             <div class="card-body">
-             <p class="card-text small">These waves are looking pretty good today!
-                  <a href="#">#surfsup</a>
-                </p>
-                <p class="card-text small">These waves are looking pretty good today!
-                  <a href="#">#surfsup</a>
-                </p>
+             <p class="card-text small">
+             <b><%=id%> - <%=counselling%></b>
+             </p>
             </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+
+<%
+		}
+		}
+%>            
+            
+            <div class="card-footer small text-muted"></div>
           </div>
           <!-- Example Notifications Card-->
           
@@ -155,52 +202,52 @@ String childId = null;
       <!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">
-           Growth</div>
+           Follow-up</div>
         <div class="card-body">
           <div class="table-responsive">
+    
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
                   <th>Sl. No.</th>
-                  <th>Visit Date</th>
-                  <th>Weight</th>
-                  <th>Growth/month</th>
+                  <th>Date</th>
+                  <th>Pregnancy Age</th>
+                  <th>Next Appointment Date</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
                   <th>Sl. No.</th>
-                  <th>Visit Date</th>
-                  <th>Weight</th>
-                  <th>Growth/month</th>
+                  <th>Date</th>
+                  <th>Pregnancy Age</th>
+                  <th>Next Appointment Date</th>
                   <th>Status</th>
                 </tr>
               </tfoot>
               <tbody>
-              
-              
+
 <%
 
- if (session.getAttribute("weightList") != null) {
+ if (session.getAttribute("followUpList") != null) {
 	int i=0;
 	List<Object> dataList = (List<Object>) session
-			.getAttribute("weightList");
+			.getAttribute("followUpList");
 	Iterator dataListIterator = dataList.iterator();
 	while (dataListIterator.hasNext()) {
 		i++;
-		Object[] weightObject = (Object[]) dataListIterator.next();
-		String id = String.valueOf(weightObject[0]);
-		String eventDate = String.valueOf(weightObject[1]);
-		String currentWeight = String.valueOf(weightObject[5]);
+		Object[] clientObject = (Object[]) dataListIterator.next();
+		String id = String.valueOf(clientObject[0]);
+		String followUpDate = String.valueOf(clientObject[23]);
+		String nextAppointmentDate = String.valueOf(clientObject[24]);
 		
 %>	          
                 <tr>
                   <td><%=i%></td>
-                  <td><%=eventDate%></td>
-                  <td><%=currentWeight%></td>
+                  <td><%=followUpDate%></td>
                   <td></td>
-                  <td>..</td>
+                  <td><%=nextAppointmentDate%></td>
+                  <td>Good</td>
                 </tr>
                 
 <%
@@ -208,8 +255,7 @@ String childId = null;
 	i=0;
 		}
 %>
-                
-                
+
               </tbody>
             </table>
           </div>
@@ -219,7 +265,7 @@ String childId = null;
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
-   
+
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
       <i class="fa fa-angle-up"></i>
@@ -242,8 +288,8 @@ String childId = null;
         </div>
       </div>
     </div>
-    
     <jsp:include page="/WEB-INF/views/footer.jsp" />
+    
     
     <!-- Bootstrap core JavaScript-->
     <script src="/resources/vendor/jquery/jquery.min.js"></script>
@@ -259,8 +305,10 @@ String childId = null;
     <!-- Custom scripts for this page-->
     <script src="/resources/js/sb-admin-datatables.min.js"></script>
     <script src="/resources/js/sb-admin-charts.min.js"></script>
+    
+    
   </div>
-</body>
-
-</html>
 	
+
+</body>
+</html>

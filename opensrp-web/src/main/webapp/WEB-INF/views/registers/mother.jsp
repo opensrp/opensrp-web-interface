@@ -78,29 +78,29 @@
 													Iterator dataListIterator = dataList.iterator();
 													while (dataListIterator.hasNext()) {
 														Object[] clientObject = (Object[]) dataListIterator.next();
-														String base_entity_id = String.valueOf(clientObject[1]);
-														String address_type = String.valueOf(clientObject[2]);
-														String birth_date = String.valueOf(clientObject[3]);
+														String baseEntityId = String.valueOf(clientObject[1]);
+														String addressType = String.valueOf(clientObject[2]);
+														String birthDate = String.valueOf(clientObject[3]);
 														String country = String.valueOf(clientObject[4]);
-														String created_date = String.valueOf(clientObject[5]);
-														String edited_date = String.valueOf(clientObject[6]);
-														String first_name = String.valueOf(clientObject[9]);
+														String createdDate = String.valueOf(clientObject[5]);
+														String editedDate = String.valueOf(clientObject[6]);
+														String firstName = String.valueOf(clientObject[9]);
 														String nid = String.valueOf(clientObject[15]);
-														String phone_number = String.valueOf(clientObject[17]);
-														String spouse_name = String.valueOf(clientObject[19]);
-														String lmp_date = String.valueOf(clientObject[24]);
+														String phoneNumber = String.valueOf(clientObject[17]);
+														String spouseName = String.valueOf(clientObject[19]);
+														String lmpDate = String.valueOf(clientObject[24]);
 														
 														String id = String.valueOf(clientObject[0]);
 											%>
 											<tr>
-												<td><%=base_entity_id%></td>
-												<td><%=first_name%></td>
+												<td><%=baseEntityId%></td>
+												<td><%=firstName%></td>
 												<td><%=nid%></td>
-												<td><%=phone_number%></td>
-												<td><%=spouse_name%></td>
-												<td><%=lmp_date%></td>
+												<td><%=phoneNumber%></td>
+												<td><%=spouseName%></td>
+												<td><%=lmpDate%></td>
 												
-												<td><a href="/registers/<%=base_entity_id%>/motherDetails.html">Details</a>
+												<td><a href="/client/mother/<%=baseEntityId%>/details.html">Details</a>
 										</td> 
 											</tr>
 											<%

@@ -86,28 +86,28 @@
 													Iterator dataListIterator = dataList.iterator();
 													while (dataListIterator.hasNext()) {
 														Object[] clientObject = (Object[]) dataListIterator.next();
-														String base_entity_id = String.valueOf(clientObject[1]);
-														String address_type = String.valueOf(clientObject[2]);
-														String birth_date = String.valueOf(clientObject[3]);
+														String baseEntityId = String.valueOf(clientObject[1]);
+														String addressType = String.valueOf(clientObject[2]);
+														String birthDate = String.valueOf(clientObject[3]);
 														String country = String.valueOf(clientObject[4]);
-														String created_date = String.valueOf(clientObject[5]);
-														String edited_date = String.valueOf(clientObject[6]);
-														String first_name = String.valueOf(clientObject[9]);
+														String createdDate = String.valueOf(clientObject[5]);
+														String editedDate = String.valueOf(clientObject[6]);
+														String firstName = String.valueOf(clientObject[9]);
 														String gender = String.valueOf(clientObject[10]);
 														String nid = String.valueOf(clientObject[15]);
-														String birth_weight = String.valueOf(clientObject[31]);
-														String mother_name = String.valueOf(clientObject[32]);
+														String birthWeight = String.valueOf(clientObject[31]);
+														String motherName = String.valueOf(clientObject[32]);
 											%>
 											<tr>
-												<td><%=base_entity_id%></td>
-												<td><%=address_type%></td>
-												<td><%=birth_date%></td>
+												<td><%=baseEntityId%></td>
+												<td><%=addressType%></td>
+												<td><%=birthDate%></td>
 												<td><%=country%></td>
-												<td><%=first_name%></td>
+												<td><%=firstName%></td>
 												<td><%=gender%></td>
-												<td><%=birth_weight%></td>
-												<td><%=mother_name%></td>
-												<td><a href="/registers/<%=base_entity_id%>/childDetails.html">Details</a>
+												<td><%=birthWeight%></td>
+												<td><%=motherName%></td>
+												<td><a href="/client/child/<%=baseEntityId%>/details.html">Details</a>
 										</td> 
 											</tr>
 											<%
