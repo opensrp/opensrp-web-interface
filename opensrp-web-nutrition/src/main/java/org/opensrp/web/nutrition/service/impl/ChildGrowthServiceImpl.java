@@ -103,7 +103,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 		searchBuilder.clear();
 		searchBuilder.setServerVersionn(marker.getTimeStamp());
 		List<Object[]> childWeights = databaseRepositoryImpl.getDataFromView(searchBuilder, -1, -1,
-		    "viewJsonDataConversionOfWeight", "weight");
+		    "viewJsonDataConversionOfWeight", "weight", "server_version");
 		
 		List<Map<String, Integer>> growthValocityChart = GrowthValocityChart.getGrowthValocityChart();
 		
@@ -127,6 +127,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 			int chronicalFaltering = 0;
 			int chronicalGrowth = 0;
 			long currentDocumentTimeStamp = Long.parseLong(String.valueOf(row[4]));
+			
 			try {
 				zScore = Double.parseDouble(String.valueOf(row[6]));
 				gps = String.valueOf(row[11]);
@@ -135,6 +136,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 				Date dob = DateUtil.parseDate(String.valueOf(row[7]));
 				
 				Date currentEventDate = DateUtil.parseDate(String.valueOf(row[1]));
+				
 				currentWeight = Double.parseDouble(String.valueOf(row[5]));
 				provider = String.valueOf(row[3]);
 				double lastWeight = 0;
@@ -191,7 +193,10 @@ public class ChildGrowthServiceImpl implements NutritionService {
 						findChildGrowth.setLat(Double.parseDouble(latlon[0]));
 						findChildGrowth.setLon(Double.parseDouble(latlon[1]));
 					}
-					update(findChildGrowth);
+					synchronized (findChildGrowth) {
+						update(findChildGrowth);
+					}
+					
 				} else {
 					ChildGrowth childGrowth = new ChildGrowth();
 					childGrowth.setAge(age);
@@ -213,12 +218,17 @@ public class ChildGrowthServiceImpl implements NutritionService {
 						childGrowth.setLon(Double.parseDouble(latlon[1]));
 						
 					}
-					save(childGrowth);
+					synchronized (childGrowth) {
+						save(childGrowth);
+					}
+					
 				}
 				
 				falseAllEventByChild(baseEntityId, provider, fielaValues);
+				
 				markLastEventAndCalculateChronicalGrowthByChild(baseEntityId, provider, DateUtil.parseDate(lastEventDate),
 				    fielaValues);
+				
 				if (marker.getTimeStamp() < currentDocumentTimeStamp) {
 					marker.setTimeStamp(currentDocumentTimeStamp);
 					markerServiceImpl.update(marker);
@@ -254,34 +264,49 @@ public class ChildGrowthServiceImpl implements NutritionService {
 	
 	private void markLastEventAndCalculateChronicalGrowthByChild(String baseEntityId, String provider, Date lastEventDate,
 	                                                             Map<String, Object> fielaValues) throws Exception {
-		boolean growthStatus = getGrowthStatus(baseEntityId, provider, lastEventDate, fielaValues);
+		Boolean growthStatus = getGrowthStatus(baseEntityId, provider, lastEventDate, fielaValues);
 		int chronicalFaltering = 0;
 		int chronicalGrowth = 0;
 		fielaValues.clear();
 		fielaValues.put("provider", provider);
 		fielaValues.put("baseEntityId", baseEntityId);
 		ChildGrowth childGrowth = databaseRepositoryImpl.findLastByKey(fielaValues, "lastEventDate", ChildGrowth.class);
-		
-		if (growthStatus) {
-			chronicalGrowth = childGrowth.getChronicalGrowth() + 1;
-			chronicalFaltering = 0;
-		} else {
-			chronicalFaltering = childGrowth.getChronicalFaltering() + 1;
-			chronicalGrowth = 0;
+		boolean currentGrowthStatus = childGrowth.isGrowthStatus();
+		System.err.println("currentGrowth:" + childGrowth);
+		if (growthStatus != null) {
+			if (growthStatus.booleanValue()) {
+				if (currentGrowthStatus) {
+					System.err.println("childGrowth.getChronicalGrowth():" + childGrowth.getChronicalGrowth());
+					chronicalGrowth = childGrowth.getChronicalGrowth() + 1;
+					childGrowth.setChronicalGrowth(chronicalGrowth);
+				} else {
+					
+				}
+			} else {
+				if (!currentGrowthStatus) {
+					chronicalFaltering = childGrowth.getChronicalFaltering() + 1;
+					System.err.println("childGrowth.getChronicalFaltering():" + childGrowth.getChronicalFaltering());
+					childGrowth.setChronicalFaltering(chronicalFaltering);
+				}
+				
+			}
 		}
-		childGrowth.setChronicalFaltering(chronicalFaltering);
-		childGrowth.setChronicalGrowth(chronicalGrowth);
+		System.err.println("growthStatus:" + growthStatus + ",currentGrowthStatus:" + currentGrowthStatus
+		        + ",chronicalGrowth:" + chronicalGrowth + ",chronicalFaltering:" + chronicalFaltering);
 		childGrowth.setLastEvent(true);
 		update(childGrowth);
 	}
 	
-	private boolean getGrowthStatus(String baseEntityId, String provider, Date lastEventDate, Map<String, Object> fielaValues) {
-		boolean growthStatus = false;
+	private Boolean getGrowthStatus(String baseEntityId, String provider, Date lastEventDate, Map<String, Object> fielaValues) {
+		Boolean growthStatus = null;
 		fielaValues.clear();
 		fielaValues.put("provider", provider);
 		fielaValues.put("baseEntityId", baseEntityId);
 		fielaValues.put("lastEventDate", lastEventDate);
+		System.err.println("lastEventDate:" + lastEventDate);
+		//System.err.println("provider:" + provider + ",baseEntityId:" + baseEntityId + ",baseEntityId:" + lastEventDate);
 		ChildGrowth lastChildGrowth = databaseRepositoryImpl.findByKeys(fielaValues, ChildGrowth.class);
+		System.err.println("lastChildGrowth:" + lastChildGrowth);
 		if (lastChildGrowth != null) {
 			growthStatus = lastChildGrowth.isGrowthStatus();
 			

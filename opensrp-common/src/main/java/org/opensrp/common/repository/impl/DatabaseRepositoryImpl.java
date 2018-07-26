@@ -346,20 +346,18 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		
 		return count;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getDataFromViewByBEId(String viewName, String entityType, String baseEntityId) {
 		Session session = sessionFactory.openSession();
 		List<T> viewData = null;
 		try {
-			String hql = "SELECT * FROM core.\"" +  viewName + "\" "
-		    + " where entity_type = '" + entityType + "'"
-		    + " and base_entity_id = '" + baseEntityId + "'";
+			String hql = "SELECT * FROM core.\"" + viewName + "\" " + " where entity_type = '" + entityType + "'"
+			        + " and base_entity_id = '" + baseEntityId + "'";
 			
 			Query query = session.createSQLQuery(hql);
 			viewData = query.list();
-			logger.info("data fetched successfully from " + viewName + ", data size: "
-			        + viewData.size());
+			logger.info("data fetched successfully from " + viewName + ", data size: " + viewData.size());
 			session.close();
 		}
 		catch (Exception e) {
@@ -367,24 +365,27 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return viewData;
 	}
-
+	
 	/**
-	 * maxRange -1 means setMaxResults does not consider.
-	 * offsetreal -1 means setFirstResult does not consider.
+	 * maxRange -1 means setMaxResults does not consider. offsetreal -1 means setFirstResult does
+	 * not consider.
+	 * 
 	 * @param searchBuilder fdff maxRange -1 means setMaxResults does not consider. offsetreal -1
 	 *            means setFirstResult does not consider.
 	 */
-
+	
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, int maxRange, int offsetreal, String viewName,
-	                                   String entityType) {
+	                                   String entityType, String orderingBy) {
 		Session session = sessionFactory.openSession();
 		List<T> viewData = null;
 		try {
-			String hql = "SELECT * FROM core.\"" + viewName + "\" " + " where entity_type = '" + entityType + "'";
+			String hql = "SELECT * FROM core.\"" + viewName + "\" " + " where entity_type = '" + entityType + "'  ";
 			
 			hql = setCondition(searchBuilder, hql);
-			
+			if (!orderingBy.isEmpty()) {
+				hql += " order by " + orderingBy + " asc";
+			}
 			Query query = session.createSQLQuery(hql);
 			if (offsetreal != -1) {
 				query.setFirstResult(offsetreal);
@@ -447,33 +448,28 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		if (searchBuilder.getServerVersion() != -1) {
 			hql = hql + " and server_version > '" + searchBuilder.getServerVersion() + "'";
 		}
-		if(searchBuilder.getPregStatus() != null && !searchBuilder.getPregStatus().isEmpty()) {
+		if (searchBuilder.getPregStatus() != null && !searchBuilder.getPregStatus().isEmpty()) {
 			hql = hql + " and is_pregnant = '" + searchBuilder.getPregStatus() + "'";
 		}
 		return hql;
 	}
-
+	
 	public String getChildGrowthFalteringPercentage() {
 		Session session = sessionFactory.openSession();
 		int count = 0;
 		int totalChildCount = 10;
 		double childGrowthFalteringPercentage = 0;
 		try {
-			String hql = "SELECT distinct base_entity_id , MAX(last_event_date) "
-					    + " FROM core.child_growth "
-                        + " where growth_status = false "
-                        + " GROUP BY base_entity_id";
+			String hql = "SELECT distinct base_entity_id , MAX(last_event_date) " + " FROM core.child_growth "
+			        + " where growth_status = false " + " GROUP BY base_entity_id";
 			Query query = session.createSQLQuery(hql);
 			count = query.list().size();
 			
-			hql = "SELECT distinct base_entity_id "
-                  + " FROM core.child_growth";
-		    query = session.createSQLQuery(hql);
-		    totalChildCount = query.list().size();
+			hql = "SELECT distinct base_entity_id " + " FROM core.child_growth";
+			query = session.createSQLQuery(hql);
+			totalChildCount = query.list().size();
 			
-			
-			
-			childGrowthFalteringPercentage = ((double)count/(double)totalChildCount) * 100;
+			childGrowthFalteringPercentage = ((double) count / (double) totalChildCount) * 100;
 			session.close();
 		}
 		catch (Exception e) {
@@ -484,7 +480,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		//df.format(childGrowthFalteringPercentage);
 		return df.format(childGrowthFalteringPercentage);
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getDataFromSQLFunction(SearchBuilder searchBuilder, Query query, Session session) {
 		
