@@ -23,6 +23,19 @@
 			<div class="row">
 			</div>
 			<form id="search-form">
+			<div class="form-group">
+				<div class="row">
+					<div class="col-3">
+						<label>Start Date</label> <input class="form-control" type=text
+							name="start" id="start">
+					</div>
+					<div class="col-3">
+						<label>End Date</label> <input class="form-control" type="text"
+							name="end" id="end">
+
+					</div>
+				</div>
+			</div>
 			<div class="row">
 				
 				<div class="col-3">

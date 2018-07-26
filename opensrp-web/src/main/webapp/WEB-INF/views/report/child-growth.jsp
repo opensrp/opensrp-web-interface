@@ -30,7 +30,7 @@
 	<div class="content-wrapper">
 		<div class="container-fluid">
 
-			<jsp:include page="/WEB-INF/views/customSearchPanel.jsp" />
+			<jsp:include page="/WEB-INF/views/report-search-panel.jsp" />
 			<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%"> 
 							<img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
 							
@@ -93,7 +93,11 @@
 		</div>
 
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
+		
+		<script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
+		
 		<script src="<c:url value='/resources/js/jquery.dataTables.min.js'/>"></script>
+		<script src="<c:url value='/resources/js/datepicker.js'/>"></script>
 		<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js'/>"></script>
 		<script type="text/javascript">
 		$(document).ready(function() {
