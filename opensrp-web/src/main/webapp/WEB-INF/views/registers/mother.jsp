@@ -91,6 +91,8 @@
 														String lmpDate = String.valueOf(clientObject[24]);
 														
 														String id = String.valueOf(clientObject[0]);
+														pageContext.setAttribute("baseEntityId", baseEntityId);
+														
 											%>
 											<tr>
 												<td><%=baseEntityId%></td>
@@ -98,10 +100,10 @@
 												<td><%=nid%></td>
 												<td><%=phoneNumber%></td>
 												<td><%=spouseName%></td>
-												<td><%=lmpDate%></td>
-												
-												<td><a href="/client/mother/<%=baseEntityId%>/details.html">Details</a>
-										</td> 
+												<td><%=lmpDate%></td>												
+												<td>
+												<a href="<c:url value="/client/mother/${baseEntityId}/details.html"/>">Details</a>
+												</td> 
 											</tr>
 											<%
 												}

@@ -39,7 +39,7 @@
 		<div class="container-fluid">
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i><a href="/user.html"> User List</a> /
+
 					Reset Password
 				</div>
 				<div class="card-body">

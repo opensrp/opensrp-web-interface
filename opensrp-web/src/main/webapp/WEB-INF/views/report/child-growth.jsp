@@ -14,6 +14,13 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Child Growth Report</title>
 <link type="text/css"
 	href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/>" rel="stylesheet">
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -23,8 +30,10 @@
 	<div class="content-wrapper">
 		<div class="container-fluid">
 
-			<jsp:include page="/WEB-INF/views/customSearchPanel.jsp" />
-
+			<jsp:include page="/WEB-INF/views/report-search-panel.jsp" />
+			<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%"> 
+							<img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
+							
 			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> Child Growth Report
@@ -43,7 +52,6 @@
 							</thead>
 							
 							
-							
 							<tbody id="tableBody">	
 								
 								<%	String provider = "";
@@ -57,10 +65,10 @@
 									List<Object> data = (List<Object>) session.getAttribute("data");
 									Iterator dataCountListIterator = data.iterator();
 									while (dataCountListIterator.hasNext()) {
-										Object[] dashboardDataObject = (Object[]) dataCountListIterator.next();
-										provider = String.valueOf(dashboardDataObject[0]);
-										falter = Integer.parseInt(String.valueOf(dashboardDataObject[1]));
-										total = Integer.parseInt(String.valueOf(dashboardDataObject[2]));
+										Object[] DataObject = (Object[]) dataCountListIterator.next();
+										provider = String.valueOf(DataObject[0]);
+										falter = Integer.parseInt(String.valueOf(DataObject[1]));
+										total = Integer.parseInt(String.valueOf(DataObject[2]));
 										growth = total-falter;										
 										String falterInPercentage = String.format("%.2f", (double) (falter*100)/total);
 										String adequateInPercentage = String.format("%.2f",(double)(growth*100)/total);
@@ -85,26 +93,74 @@
 		</div>
 
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
+		
+		<script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
+		
 		<script src="<c:url value='/resources/js/jquery.dataTables.min.js'/>"></script>
+		<script src="<c:url value='/resources/js/datepicker.js'/>"></script>
 		<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js'/>"></script>
 		<script type="text/javascript">
 		$(document).ready(function() {
 		    $('#dataTable').DataTable();
 		} );
 		
-		$("#bth-search").submit(function(event) {   
+		$("#search-form").submit(function(event) { 
+			$("#loading").show();
+			 
+			var division = "";
+			var district = "";
+			var upazila = "";
+			var union = "";
+			var ward = "";
+			var subunit = "";
+			var mauzapara = "";
+			var params = "" ;
+			
+			division = $('#division').val();
+			district = $('#district').val();
+			upazila = $('#upazila').val();
+			union = $('#union').val();
+			ward = $('#ward').val();
+			subunit = $('#subunit').val();
+			mauzapara = $('#mauzapara').val();
+			if(division != "" && division != "0?" && division != null ){
+				params ="?division="+division;
+			}
+			if(district != "0?" &&  district != "" && district != null){
+				params +="&district="+district;
+				
+			}
+			if(upazila != "0?" && upazila != "" && upazila != null){
+				params +="&upazila="+upazila;
+			}
+			if(union != "0?" && union != "" && union != null){
+				params +="&union="+union;
+				console.log(union);
+			}
+			if(ward != "0?" && ward != "" && ward != null){
+				params +="&ward="+ward;
+			}
+			if(subunit != "0?" && subunit != "" && subunit != null){
+				params +="&subunit="+subunit;
+			}
+			if(mauzapara != "0?" && mauzapara != "" && mauzapara != null){
+				params +="&mauzapara="+mauzapara;
+			}
+			console.log(params);
+			event.preventDefault();
 			$.ajax({
 				type : "GET",
-				contentType : "application/json",
-				url : url,				 
+				contentType : "application/json",				
+				url : "/opensrp-dashboard/report/child-growth-ajax.html"+params,				 
 				dataType : 'html',
 				timeout : 100000,
 				beforeSend: function() {
-				    alert("OK");
+				    
 				   
 				},
-				success : function(data) {				   
-				   $("#"+id).html(data);
+				success : function(data) {	
+					$("#loading").hide();
+				   $("#tableBody").html(data);
 				},
 				error : function(e) {
 				    console.log("ERROR: ", e);

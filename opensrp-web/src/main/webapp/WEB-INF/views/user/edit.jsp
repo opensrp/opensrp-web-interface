@@ -42,8 +42,7 @@
 					</a>			
 		</div>
 			<div class="card mb-3">
-				<div class="card-header">
-					<i class="fa fa-table"></i> <a href="/user.html"> User List</a> /
+				<div class="card-header">					
 					Edit Account
 				</div>
 				<div class="card-body">

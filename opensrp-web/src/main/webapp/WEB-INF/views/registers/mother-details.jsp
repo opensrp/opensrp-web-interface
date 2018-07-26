@@ -37,8 +37,8 @@
     <div class="container-fluid">
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <a href="/client/mother.html">Mother</a>
+        <li class="breadcrumb-item">         
+		 <a  href="<c:url value="/client/mother.html"/>">Mother</a>
         </li>
         <li class="breadcrumb-item active">Mother Details</li>
       </ol>

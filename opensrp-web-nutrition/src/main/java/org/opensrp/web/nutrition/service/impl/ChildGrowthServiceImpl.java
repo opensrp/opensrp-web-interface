@@ -98,6 +98,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 	
 	@Transactional
 	public void startCalculateChildGrowth() throws Exception {
+		searchBuilder.clear();
 		marker = markerServiceImpl.findByName(AllConstant.MRAKER_NAME);
 		searchBuilder.clear();
 		searchBuilder.setServerVersionn(marker.getTimeStamp());
@@ -113,7 +114,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 		for (Object[] row : childWeights) {
 			
 			double currentWeight = 0;
-			int weight = 0;
+			double growth = 0;
 			boolean growthStatus = false;
 			int interval = 0;
 			String provider = "";
@@ -123,6 +124,8 @@ public class ChildGrowthServiceImpl implements NutritionService {
 			int expectedGrowthWeight = 0;
 			double zScore = 0;
 			String gps = "";
+			int chronicalFaltering = 0;
+			int chronicalGrowth = 0;
 			long currentDocumentTimeStamp = Long.parseLong(String.valueOf(row[4]));
 			try {
 				zScore = Double.parseDouble(String.valueOf(row[6]));
@@ -140,14 +143,10 @@ public class ChildGrowthServiceImpl implements NutritionService {
 					lastWeight = Double.parseDouble(String.valueOf(row[8]));
 				}
 				
-				weight = (int) Weight.getWeightInGram(lastWeight, currentWeight);
-				
+				growth = (int) Weight.getWeightInGram(lastWeight, currentWeight);
 				interval = Interval.getInterval(DateUtil.parseDate(lastEventDate), currentEventDate);
-				
 				age = Age.getApproximateAge(dob, currentEventDate);
-				
 				key = String.valueOf(interval) + String.valueOf(age);
-				
 				gender = String.valueOf(row[10]);
 				if ("Male".equalsIgnoreCase(gender)) {
 					if (maleGrowthValocityChart.containsKey(key)) {
@@ -161,8 +160,11 @@ public class ChildGrowthServiceImpl implements NutritionService {
 					
 				}
 				
-				if (weight >= expectedGrowthWeight) {
+				if (growth >= expectedGrowthWeight) {
 					growthStatus = true;
+					chronicalGrowth = 1;
+				} else {
+					chronicalFaltering = 1;
 				}
 				
 				Map<String, Object> fielaValues = new HashMap<String, Object>();
@@ -176,17 +178,18 @@ public class ChildGrowthServiceImpl implements NutritionService {
 					findChildGrowth.setBaseEntityId(baseEntityId);
 					findChildGrowth.setGrowthStatus(growthStatus);
 					findChildGrowth.setzScore(zScore);
-					findChildGrowth.setWeight(weight);
+					findChildGrowth.setWeight(currentWeight);
+					findChildGrowth.setGrowth(growth);
+					findChildGrowth.setChronicalFaltering(chronicalFaltering);
+					findChildGrowth.setChronicalGrowth(chronicalGrowth);
 					findChildGrowth.setLastEventDate(currentEventDate);
 					findChildGrowth.setGender(gender);
 					findChildGrowth.setInterval(interval);
 					findChildGrowth.setProvider(provider);
 					findChildGrowth.setLastEvent(false);
 					if (!gps.equalsIgnoreCase("null")) {
-						
 						findChildGrowth.setLat(Double.parseDouble(latlon[0]));
 						findChildGrowth.setLon(Double.parseDouble(latlon[1]));
-						
 					}
 					update(findChildGrowth);
 				} else {
@@ -195,8 +198,11 @@ public class ChildGrowthServiceImpl implements NutritionService {
 					childGrowth.setBaseEntityId(baseEntityId);
 					childGrowth.setGrowthStatus(growthStatus);
 					childGrowth.setzScore(zScore);
-					childGrowth.setWeight(weight);
+					childGrowth.setWeight(currentWeight);
+					childGrowth.setGrowth(growth);
 					childGrowth.setLastEventDate(currentEventDate);
+					childGrowth.setChronicalFaltering(chronicalFaltering);
+					childGrowth.setChronicalGrowth(chronicalGrowth);
 					childGrowth.setGender(gender);
 					childGrowth.setInterval(interval);
 					childGrowth.setProvider(provider);
@@ -209,24 +215,25 @@ public class ChildGrowthServiceImpl implements NutritionService {
 					}
 					save(childGrowth);
 				}
-				isLastEventUpdate(baseEntityId, provider, fielaValues);
+				
+				falseAllEventByChild(baseEntityId, provider, fielaValues);
+				markLastEventAndCalculateChronicalGrowthByChild(baseEntityId, provider, DateUtil.parseDate(lastEventDate),
+				    fielaValues);
 				if (marker.getTimeStamp() < currentDocumentTimeStamp) {
 					marker.setTimeStamp(currentDocumentTimeStamp);
 					markerServiceImpl.update(marker);
 				}
 				
-				//System.err.println("weight:" + weight);
-				
-				//System.err.println(row[0] + ",Interval:" + Interval.getInterval(dob, eventDate));
 			}
 			catch (Exception e) {
-				logger.error("Error:" + e.getMessage());
+				logger.error("error at base entity id :" + String.valueOf(row[0]) + ",cause:" + e.getMessage());
 			}
 		}
 		
 	}
 	
-	private void isLastEventUpdate(String baseEntityId, String provider, Map<String, Object> fielaValues) throws Exception {
+	private void falseAllEventByChild(String baseEntityId, String provider, Map<String, Object> fielaValues)
+	    throws Exception {
 		/**
 		 * make false all true entity
 		 */
@@ -235,34 +242,61 @@ public class ChildGrowthServiceImpl implements NutritionService {
 		fielaValues.put("baseEntityId", baseEntityId);
 		fielaValues.put("provider", provider);
 		List<ChildGrowth> childGrowths = databaseRepositoryImpl.findAllByKeys(fielaValues, ChildGrowth.class);
-		//System.err.println("childGrowths:" + childGrowths);
+		
 		if (childGrowths != null) {
 			for (ChildGrowth childGrowth : childGrowths) {
 				childGrowth.setLastEvent(false);
-				System.err.println("childGrowth all:" + childGrowth.toString());
 				update(childGrowth);
 			}
 		}
 		
+	}
+	
+	private void markLastEventAndCalculateChronicalGrowthByChild(String baseEntityId, String provider, Date lastEventDate,
+	                                                             Map<String, Object> fielaValues) throws Exception {
+		boolean growthStatus = getGrowthStatus(baseEntityId, provider, lastEventDate, fielaValues);
+		int chronicalFaltering = 0;
+		int chronicalGrowth = 0;
 		fielaValues.clear();
 		fielaValues.put("provider", provider);
 		fielaValues.put("baseEntityId", baseEntityId);
-		System.err.println("fielaValues:" + fielaValues);
 		ChildGrowth childGrowth = databaseRepositoryImpl.findLastByKey(fielaValues, "lastEventDate", ChildGrowth.class);
-		System.err.println("childGrowth Lstststs:" + childGrowth);
+		
+		if (growthStatus) {
+			chronicalGrowth = childGrowth.getChronicalGrowth() + 1;
+			chronicalFaltering = 0;
+		} else {
+			chronicalFaltering = childGrowth.getChronicalFaltering() + 1;
+			chronicalGrowth = 0;
+		}
+		childGrowth.setChronicalFaltering(chronicalFaltering);
+		childGrowth.setChronicalGrowth(chronicalGrowth);
 		childGrowth.setLastEvent(true);
-		System.err.println("childGrowth last:" + childGrowth.toString());
 		update(childGrowth);
+	}
+	
+	private boolean getGrowthStatus(String baseEntityId, String provider, Date lastEventDate, Map<String, Object> fielaValues) {
+		boolean growthStatus = false;
+		fielaValues.clear();
+		fielaValues.put("provider", provider);
+		fielaValues.put("baseEntityId", baseEntityId);
+		fielaValues.put("lastEventDate", lastEventDate);
+		ChildGrowth lastChildGrowth = databaseRepositoryImpl.findByKeys(fielaValues, ChildGrowth.class);
+		if (lastChildGrowth != null) {
+			growthStatus = lastChildGrowth.isGrowthStatus();
+			
+		}
+		return growthStatus;
+		
 	}
 	
 	@Transactional
 	public List<Object[]> getChildFalteredData(SearchBuilder searchBuilder) {
 		Session session = sessionFactory.openSession();
-		searchBuilder.clear();
-		String procedureName = "core.child_growth_report";
+		
+		String procedureName = "core.child_growth_reports";
 		String hql = "select * from " + procedureName + "(array[:division,:district,:upazila"
 		        + ",:union,:ward,:subunit,:mauzapara,:provider,:start_date,:end_date])";
-		
 		Query query = session.createSQLQuery(hql);
 		setParameter(searchBuilder, query);
 		
@@ -270,6 +304,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 	}
 	
 	private void setParameter(SearchBuilder searchBuilder, Query query) {
+		
 		if (searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {
 			query.setParameter("division", searchBuilder.getDivision());
 		} else {
