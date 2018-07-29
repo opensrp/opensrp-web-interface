@@ -156,6 +156,21 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 	
+	public <T> T findLastByKeyLessThanDateConditionOneField(Map<String, Object> fielaValues, Date fieldvalue, String field,
+	                                                        String orderByFieldName, Class<?> className) {
+		Session session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(className);
+		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		}
+		criteria.add(Restrictions.lt(field, fieldvalue));
+		criteria.addOrder(Order.desc(orderByFieldName));
+		@SuppressWarnings("unchecked")
+		List<T> result = criteria.list();
+		session.close();
+		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+	}
+	
 	public <T> List<T> findAllByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
@@ -451,6 +466,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		if (searchBuilder.getPregStatus() != null && !searchBuilder.getPregStatus().isEmpty()) {
 			hql = hql + " and is_pregnant = '" + searchBuilder.getPregStatus() + "'";
 		}
+		
 		return hql;
 	}
 	

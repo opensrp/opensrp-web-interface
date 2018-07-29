@@ -4,39 +4,39 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SearchBuilder {
-
+	
 	private String division;
-
+	
 	private String district;
-
+	
 	private String upazila;
-
+	
 	private String union;
-
+	
 	private String ward;
-
+	
 	private String subunit;
-
+	
 	private String mauzapara;
-
+	
 	private String provider;
-
+	
 	private String name;
-
+	
 	private String userName;
-
+	
 	private String search;
-
+	
 	private String year;
-
+	
 	private long serverVersion;
-
+	
 	private String pregStatus;
-
+	
 	public SearchBuilder() {
-
+		
 	}
-
+	
 	public SearchBuilder clear() {
 		this.setDivision("");
 		this.setDistrict("");
@@ -53,134 +53,134 @@ public class SearchBuilder {
 		this.setServerVersionn(-1);
 		this.setPregStatus("");
 		return this;
-
+		
 	}
-
+	
 	public String getYear() {
 		return year;
 	}
-
+	
 	public SearchBuilder setYear(String year) {
 		this.year = year;
 		return this;
 	}
-
+	
 	public long getServerVersion() {
 		return serverVersion;
 	}
-
+	
 	public SearchBuilder setServerVersionn(long serverVersion) {
 		this.serverVersion = serverVersion;
 		return this;
 	}
-
+	
 	public String getDivision() {
 		return division;
 	}
-
+	
 	public SearchBuilder setDivision(String division) {
 		this.division = division;
 		return this;
 	}
-
+	
 	public String getDistrict() {
 		return district;
 	}
-
+	
 	public SearchBuilder setDistrict(String district) {
 		this.district = district;
 		return this;
 	}
-
+	
 	public String getUpazila() {
 		return upazila;
 	}
-
+	
 	public SearchBuilder setUpazila(String upazila) {
 		this.upazila = upazila;
 		return this;
 	}
-
+	
 	public String getUnion() {
 		return union;
 	}
-
+	
 	public SearchBuilder setUnion(String union) {
 		this.union = union;
 		return this;
 	}
-
+	
 	public String getWard() {
 		return ward;
 	}
-
+	
 	public SearchBuilder setWard(String ward) {
 		this.ward = ward;
 		return this;
 	}
-
+	
 	public String getSubunit() {
 		return subunit;
 	}
-
+	
 	public SearchBuilder setSubunit(String subunit) {
 		this.subunit = subunit;
 		return this;
 	}
-
+	
 	public String getMauzapara() {
 		return mauzapara;
 	}
-
+	
 	public SearchBuilder setMauzapara(String mauzapara) {
 		this.mauzapara = mauzapara;
 		return this;
 	}
-
+	
 	public String getProvider() {
 		return provider;
 	}
-
+	
 	public SearchBuilder setProvider(String provider) {
 		this.provider = provider;
 		return this;
 	}
-
+	
 	public String getName() {
 		return name;
 	}
-
+	
 	public SearchBuilder setName(String name) {
 		this.name = name;
 		return this;
 	}
-
+	
 	public String getSearch() {
 		return search;
 	}
-
+	
 	public SearchBuilder setSearch(String search) {
 		this.search = search;
 		return this;
 	}
-
+	
 	public String getUserName() {
 		return userName;
 	}
-
+	
 	public SearchBuilder setUserName(String userName) {
 		this.userName = userName;
 		return this;
 	}
-
+	
 	public String getPregStatus() {
 		return pregStatus;
 	}
-
+	
 	public void setPregStatus(String pregStatus) {
 		this.pregStatus = pregStatus;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -199,7 +199,7 @@ public class SearchBuilder {
 		result = prime * result + ((year == null) ? 0 : year.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -271,12 +271,12 @@ public class SearchBuilder {
 			return false;
 		return true;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "SearchBuilder [division=" + division + ", district=" + district + ", upazila=" + upazila + ", union="
-				+ union + ", ward=" + ward + ", subunit=" + subunit + ", mauzapara=" + mauzapara + ", provider=" + provider
-				+ ", name=" + name + ", userName=" + userName + ", search=" + search + ", year=" + year + "]";
+		        + union + ", ward=" + ward + ", subunit=" + subunit + ", mauzapara=" + mauzapara + ", provider=" + provider
+		        + ", name=" + name + ", userName=" + userName + ", search=" + search + ", year=" + year + "]";
 	}
-
+	
 }

@@ -1,5 +1,5 @@
-CREATE OR REPLACE FUNCTION core.child_growth_report(filterArray text[])
-RETURNS TABLE(provider_name character varying, falter int
+CREATE OR REPLACE FUNCTION core.child_indicator_report(filterArray text[])
+RETURNS TABLE(indicator_name character varying, indicator_value int
               , total int)
 AS $$
 DECLARE
@@ -14,7 +14,8 @@ DECLARE
   mau varchar := ''; 
   start_date varchar := '';
   end_date varchar := '';
-  
+  eitity_type varchar := '';
+
 BEGIN
 div := filterArray[1];
   dis := filterArray[2];
@@ -25,13 +26,16 @@ div := filterArray[1];
   mau := filterArray[7]; 
   start_date := filterArray[8];
   end_date := filterArray[9];
+  
+  eitity_type := 'child';
+
  
- DROP TABLE IF EXISTS child_growth_temp;
- CREATE TEMP TABLE IF NOT EXISTS child_growth_temp (
-  	provider_name varchar(70) ,  
-	falter int NOT NULL DEFAULT 0,  
+ DROP TABLE IF EXISTS child_indicator_temp;
+ CREATE TEMP TABLE IF NOT EXISTS child_indicator_temp (
+  	indicator_name varchar(70) ,  
+	indicator_value int NOT NULL DEFAULT 0,  
   	total int NOT NULL DEFAULT 0,  
-  	PRIMARY KEY (provider_name)  
+  	PRIMARY KEY (indicator_name)  
 );
 
 
@@ -66,28 +70,18 @@ div := filterArray[1];
 
    completeCountFilterString := filterString;
    
+EXECUTE 'insert into child_indicator_temp(indicator_name,indicator_value) 
+values('|| E' \'df \',(select count(*) from core."viewJsonDataConversionOfClient" where entity_type =' || E' \'child\' ))';
 
-EXECUTE 'insert into child_growth_temp(provider_name,total)
-select cg.provider,count(cg.provider) from  core."child_growth" as cg
-join core."viewJsonDataConversionOfClient" as child 
-ON  child.base_entity_id = cg.base_entity_id
-where cg.is_last_event = true' || filterString  ||' group by cg.provider';
     
-  /* update falter list  */
- EXECUTE 'update child_growth_temp
-    set falter = growth_report.falter from
-    (select cg.provider,count(cg.provider) from  core."child_growth" as cg
-	join core."viewJsonDataConversionOfClient" as child 
-	ON  child.base_entity_id = cg.base_entity_id
-	where cg.is_last_event = true and cg.growth_status=false ' || filterString  ||'  group by cg.provider) as growth_report(provider_id, falter)
-    where child_growth_temp.provider_name = growth_report.provider_id';
-					
+ 				
 
-RETURN QUERY SELECT  ttable.provider_name
-       , ttable.falter
+RETURN QUERY SELECT  ttable.indicator_name
+       , ttable.indicator_value
        , ttable.total       
-       from child_growth_temp ttable;
+       from child_indicator_temp ttable;
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT core.child_growth_report(array['Jessore']); 
+SELECT core.child_indicator_report(array['Jessore','Jhenaidah','Maheshpur','Fatepur','Fatepur:Ward-2','Fatepur:Ward-2:1-KA','Fatepur:Ward-2:1-KA:EPI center']); 
+
