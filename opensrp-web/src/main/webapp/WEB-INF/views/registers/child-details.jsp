@@ -110,9 +110,9 @@ String childId = null;
       
       
       <!-- Area Chart Example-->
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-lg-6">
-          <!-- Example Bar Chart Card-->
+          Example Bar Chart Card
           <div class="card mb-3">
             <div class="card-header">
                Siblings</div>
@@ -126,14 +126,14 @@ String childId = null;
             </div>
             <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
           </div>
-          <!-- Card Columns Example Social Feed-->
+          Card Columns Example Social Feed
           
           
           
-          <!-- /Card Columns-->
+          /Card Columns
         </div>
         <div class="col-lg-6">
-          <!-- Example Pie Chart Card-->
+          Example Pie Chart Card
           <div class="card mb-3">
             <div class="card-header">
               Counseling</div>
@@ -147,10 +147,10 @@ String childId = null;
             </div>
             <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
           </div>
-          <!-- Example Notifications Card-->
+          Example Notifications Card
           
         </div>
-      </div>
+      </div> -->
       
       <!-- Example DataTables Card-->
       <div class="card mb-3">
