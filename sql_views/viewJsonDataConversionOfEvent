@@ -3,11 +3,11 @@ AS
 SELECT id
    , json->>'_id' as _id
    , json->>'baseEntityId' as base_entity_id
-   , json->>'dateCreated' as date_created
+   , cast(json->>'dateCreated' as timestamp) as date_created
    , json->>'dateEdited' as date_edited
    , json->>'duration' as duration
    , json->>'entityType' as entity_type 
-   , json->>'eventDate' as event_date
+   , cast(json->>'eventDate' as Date) as event_date
    , json->>'eventType' as event_type
    , json->>'locationId' as location_id
    , json->>'obs' as observations
@@ -44,7 +44,8 @@ SELECT id
     END
 	as mother_name
    ,  CASE
-    WHEN (json->>'eventType' = 'New Woman Member Registration') THEN core.getObsValue(id, 'pregnant')
+    WHEN ((json->>'eventType' = 'New Woman Member Registration')
+	OR (json->>'eventType' = 'Woman Member Follow Up')) THEN cast(core.getObsValue(id, 'pregnant') as varchar)
 	ELSE null
     END
 	as is_pregnant
@@ -74,6 +75,11 @@ SELECT id
     END
 	as date_Of_next_appointment
    ,json->>'version' as version
+   , CASE
+    WHEN (json->>'eventType' like '%Counselling%') THEN json->'obs'->1->'values'->>0
+	ELSE null
+    END
+	as woman_are_followed_counseling
    FROM core.event
 WITH DATA;
 
