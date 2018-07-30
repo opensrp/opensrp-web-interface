@@ -194,13 +194,26 @@ String childId = null;
 		String eventDate = String.valueOf(weightObject[8]);
 		String currentWeight = String.valueOf(weightObject[13]);
 		
+		String growthStatus = String.valueOf(weightObject[5]);
+		String growth = String.valueOf(weightObject[17]);
+		
+		double growthGram = Double.parseDouble(growth);
+		double growthKg = growthGram / 1000.00;
+		
+		String gStatusDecoded = null;
+		if(growthStatus.equals("true")){
+			gStatusDecoded = "Adequate";
+		}else{
+			gStatusDecoded = "Inadequate";
+		}
+		
 %>	          
                 <tr>
                   <td><%=i%></td>
                   <td><%=eventDate%></td>
                   <td><%=currentWeight%></td>
-                  <td></td>
-                  <td>..</td>
+                  <td><%=growthKg%></td>
+                  <td><%=gStatusDecoded%></td>
                 </tr>
                 
 <%
