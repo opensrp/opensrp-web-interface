@@ -1,3 +1,4 @@
+<%@page import="org.json.JSONArray"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -200,7 +201,8 @@ while (dataListIterator.hasNext()) {
               
               
 <%
-
+ String observation = null;
+ JSONArray obsArr = null;
  if (session.getAttribute("counsellingList") != null) {
 	List<Object> dataList = (List<Object>) session
 			.getAttribute("counsellingList");
@@ -273,7 +275,9 @@ while (dataListIterator.hasNext()) {
             </tr>
             
 <% 				
- 			
+			 observation = String.valueOf(clientObject[10]);
+             obsArr = new JSONArray(observation); 
+             
  			}
              j++;
              prevCounsellingFollwed = followedCounselling;
@@ -285,31 +289,40 @@ while (dataListIterator.hasNext()) {
             </div>
             
             
-            
+            <%-- <p id="obsString"><%=observation%></p> --%>
             
              <div class="table-responsive">
     
             <table class="table table-bordered" id="counsellingTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>Id No.</th>
-                  <th>Advice</th>
-                  <th>Followed Advice</th>
+                  <th>Particulars</th>
+                  <th>Value</th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
-                  <th>Id No.</th>
-                  <th>Advice</th>
-                  <th>Followed Advice</th>
+                  <th>Particulars</th>
+                  <th>Value</th>
                 </tr>
               </tfoot>
               <tbody> 
+<%
+for (int i = 0; i < obsArr.length(); i++)
+{
+      String formSubmissionField =  obsArr.getJSONObject(i).getString("formSubmissionField");
+      JSONArray valArr = obsArr.getJSONObject(i).getJSONArray("values");
+      //String val = valArr.getJSONObject(0).toString();
+      String val = valArr.getString(0);
+
+%>
               	<tr>
-              	<td>AAA</td>
-              	<td>BBB</td>
-              	<td>CCC</td>
+              	<td><%=formSubmissionField%></td>
+              	<td><%=val%></td>
               	</tr>
+<%
+}
+%>
               </tbody>
               </table>
               </div>
