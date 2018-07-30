@@ -168,30 +168,176 @@ while (dataListIterator.hasNext()) {
             <div class="card-header">
               Counselling</div>
               
+              
+              
+              
+              
+              
+              
+              
+               <div class="card-body">
+            
+            
+            <div class="table-responsive">
+    
+            <table class="table table-bordered" id="counsellingTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Id No.</th>
+                  <th>Advice</th>
+                  <th>Followed Advice</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>Id No.</th>
+                  <th>Advice</th>
+                  <th>Followed Advice</th>
+                </tr>
+              </tfoot>
+              <tbody> 
+              
+              
+              
 <%
 
  if (session.getAttribute("counsellingList") != null) {
 	List<Object> dataList = (List<Object>) session
 			.getAttribute("counsellingList");
-	Iterator dataListIterator = dataList.iterator();
+	
+	String prevCounsellingFollwed = null;
+	for(int i=(dataList.size()-1), j=0; i>=0; i--){
+		Object[] clientObject = (Object[]) dataList.get(i);
+		
+		String id = String.valueOf(clientObject[0]);
+		String counselling = String.valueOf(clientObject[22]);
+		String followedCounselling = String.valueOf(clientObject[26]);
+		
+	
+	
+/* 	Iterator dataListIterator = dataList.iterator();
 	while (dataListIterator.hasNext()) {
 		Object[] clientObject = (Object[]) dataListIterator.next();
 		String id = String.valueOf(clientObject[0]);
-		String counselling = String.valueOf(clientObject[22]);
+		String counselling = String.valueOf(clientObject[22]); */
 		
 %>	              
   
-            <div class="card-body">
-             <p class="card-text small">
-             <b><%=id%> - <%=counselling%></b>
+          
+            
+            
+            <tr>
+                  <td><%=id%></td>
+                  <td><%=counselling%></td>
+                  
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+             <%-- <p class="card-text small">
+             <b><%=id%> - <%=counselling%>  --%>
+ <% 
+ 			if(j!= 0){
+ 				
+ 			
+ 
+ %>            
+             
+             
+            <%--  - <%=prevCounsellingFollwed%></b>
              </p>
-            </div>
-
+            </div> --%>
+            
+           
+                  <td><%=prevCounsellingFollwed%></td>
+                </tr>
+				
 <%
+ 			}else{
+%>
+			<!-- </b>
+             </p>
+            </div> -->
+            
+            <td></td>
+            </tr>
+            
+<% 				
+ 			
+ 			}
+             j++;
+             prevCounsellingFollwed = followedCounselling;
 		}
 		}
 %>            
+            </tbody>
+            </table>
+            </div>
             
+            
+            
+            
+             <div class="table-responsive">
+    
+            <table class="table table-bordered" id="counsellingTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Id No.</th>
+                  <th>Advice</th>
+                  <th>Followed Advice</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>Id No.</th>
+                  <th>Advice</th>
+                  <th>Followed Advice</th>
+                </tr>
+              </tfoot>
+              <tbody> 
+              	<tr>
+              	<td>AAA</td>
+              	<td>BBB</td>
+              	<td>CCC</td>
+              	</tr>
+              </tbody>
+              </table>
+              </div>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            </div>
             <div class="card-footer small text-muted"></div>
           </div>
           <!-- Example Notifications Card-->
