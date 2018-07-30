@@ -37,22 +37,7 @@
 				</div>
 			</li> --%>
 
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle mr-lg-2" id="reportDropdown"
-				href="#" data-toggle="dropdown">Location </a>
-				<div class="dropdown-menu">
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item"
-						href="<c:url value="/location/tag/list.html"/>"> <strong>
-							Manage Tag</strong>
-
-					</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/location.html"/>">
-						<strong>Manage Location</strong>
-					</a>
-
-				</div></li>
+			
 
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
@@ -76,34 +61,24 @@
 					</a>
 
 				</div></li>
-			<li class="nav-item dropdown"><a
+			
+			
+				
+				<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="reportDropdown" href="#"
 				data-toggle="dropdown">Report </a>
 				<div class="dropdown-menu">
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="<c:url value="/report/child-growth.html"/>">
-						<strong> Child Growth Report</strong>
-
-					</a>
+					<strong> Child Growth Report</strong></a>
 					
-
-				</div></li>
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle mr-lg-2" id="teamDropdown" href="#"
-				data-toggle="dropdown">Team </a>
-				<div class="dropdown-menu">
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/team/list.html"/>">
-						<strong> Manage Team</strong>
-
-					</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item"
-						href="<c:url value="/team/teammember/list.html"/>"> <strong>Manage
-							Team Member</strong>
-					</a>
-
-				</div></li>
+					<a class="dropdown-item" href="<c:url value="/report/summary.html"/>">
+					<strong> Sumamry Report</strong></a>
+				</div>
+				
+				
+			</li>
 
 			<%-- <li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="exportDropdown"
@@ -175,9 +150,39 @@
 					</a>
 				</div></li>
 
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle mr-lg-2" id="reportDropdown"
+				href="#" data-toggle="dropdown">Location </a>
+				<div class="dropdown-menu">
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/location/tag/list.html"/>"> <strong>
+							Manage Tag</strong>
 
+					</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/location.html"/>">
+						<strong>Manage Location</strong>
+					</a>
 
+				</div></li>
 
+				<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle mr-lg-2" id="teamDropdown" href="#"
+				data-toggle="dropdown">Team </a>
+				<div class="dropdown-menu">
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/team/list.html"/>">
+						<strong> Manage Team</strong>
+
+					</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/team/teammember/list.html"/>"> <strong>Manage
+							Team Member</strong>
+					</a>
+
+				</div></li>
 
 
 			<li class="nav-item"><a class="nav-link" data-toggle="modal"
