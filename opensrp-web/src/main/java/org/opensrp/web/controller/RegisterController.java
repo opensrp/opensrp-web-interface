@@ -66,6 +66,23 @@ public class RegisterController {
 		data = databaseServiceImpl.executeSelectQuery(weightQuery);
 		session.setAttribute("weightList", data);
 		
+		
+		
+		
+		
+		int refreshCount=0;
+		String funcQuery = "SELECT * FROM core.refresh_all_materialized_views()";
+		//String funcQuery = "select core.refresh_all_materialized_views()";
+		List<Object[]> obArr = databaseServiceImpl.executeSelectQuery(funcQuery);
+		System.out.println(obArr);
+		
+		/*Iterator obArrIterator = obArr.iterator();
+		if (obArrIterator.hasNext()) {
+			Object[] resultObject = (Object[]) obArrIterator.next();
+		    refreshCount  = Integer.parseInt(String.valueOf(resultObject[1])) ;
+		}
+		session.setAttribute("refreshCount", refreshCount);*/
+
 		/*
 		List<Object> NWMRList = new ArrayList<Object>();
 		List<Object> counsellingList = new ArrayList<Object>();

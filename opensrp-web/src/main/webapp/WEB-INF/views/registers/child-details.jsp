@@ -181,6 +181,13 @@ String childId = null;
               
               
 <%
+int refreshCount=0;
+/* if (session.getAttribute("refreshCount") != null) {
+	 refreshCount = (int) session
+			.getAttribute("refreshCount");
+} */
+	
+	
 
  if (session.getAttribute("weightList") != null) {
 	int i=0;
@@ -232,6 +239,8 @@ String childId = null;
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
+    
+    <h1><%=refreshCount%></h1>
    
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
