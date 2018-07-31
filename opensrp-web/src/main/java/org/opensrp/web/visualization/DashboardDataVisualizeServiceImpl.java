@@ -18,13 +18,7 @@ public class DashboardDataVisualizeServiceImpl  implements VisualizationService{
 	@Transactional
 	@Override
 	public List<Object[]> getMonthWiseData(SearchBuilder searchBuilder) {
-		String query = "select date_part('month', date(last_event_date)),count(date_part('month', date(last_event_date)))"
-                + " from " + " core.child_growth "
-                + " where date_part('year', date(last_event_date)) = " + searchBuilder.getYear() + " "
-                // + SearchCriteria.getSearchCriteria(searchBuilder) 
-                + " group by date_part('month', date(last_event_date)) "
-                + " order by date_part('month', date(last_event_date)) asc";
-		//String sqlQuery = "select * from core.test_tablea";
+		String query = "select * from core.growth_faltering_percentage_linegraph()";
         return databaseRepositoryImpl.executeSelectQuery(query);
 	}
 
