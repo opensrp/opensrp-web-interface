@@ -38,18 +38,36 @@ public class ReportController {
 	private SearchUtil searchUtil;
 	
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
-	public String childGrowthReport(HttpServletRequest request, HttpSession session, Model model) {	
+	public String childGrowthReport(HttpServletRequest request, HttpSession session, Model model) {
 		searchUtil.setDivisionAttribute(session);
 		searchBuilder.clear();
 		List<Object[]> data = childGrowthServiceImpl.getChildFalteredData(searchBuilder);
-		session.setAttribute("data", data);		
+		session.setAttribute("data", data);
 		return "/report/child-growth";
 	}
+	
 	@RequestMapping(value = "/child-growth-ajax.html", method = RequestMethod.GET)
-	public String childGrowthReportAjax(HttpServletRequest request, HttpSession session, Model model){			
+	public String childGrowthReportAjax(HttpServletRequest request, HttpSession session, Model model) {
 		searchBuilder = paginationHelperUtil.setParams(request, session);
 		List<Object[]> data = childGrowthServiceImpl.getChildFalteredData(searchBuilder);
 		session.setAttribute("data", data);
 		return "/report/child-growth-ajax";
+	}
+	
+	@RequestMapping(value = "/summary.html", method = RequestMethod.GET)
+	public String summaryReport(HttpServletRequest request, HttpSession session, Model model) {
+		searchUtil.setDivisionAttribute(session);
+		searchBuilder.clear();
+		List<Object[]> data = childGrowthServiceImpl.getChildFalteredData(searchBuilder);
+		session.setAttribute("data", data);
+		return "/report/sumamry";
+	}
+	
+	@RequestMapping(value = "/summary-ajax.html", method = RequestMethod.GET)
+	public String sumamryReportAjax(HttpServletRequest request, HttpSession session, Model model) {
+		searchBuilder = paginationHelperUtil.setParams(request, session);
+		List<Object[]> data = childGrowthServiceImpl.getChildFalteredData(searchBuilder);
+		session.setAttribute("data", data);
+		return "/report/sumamry-ajax";
 	}
 }
