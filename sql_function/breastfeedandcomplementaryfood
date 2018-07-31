@@ -1,0 +1,50 @@
+CREATE OR REPLACE FUNCTION core.breastFeedAndComplementaryFood (dob varchar,childId varchar) 
+RETURNS varchar
+AS $$
+    DECLARE json_object json;
+    DECLARE item json;
+    DECLARE breastFeeding varchar = '';
+    DECLARE complementaryFood varchar = '';
+    DECLARE returnVal varchar = 'Yes';
+    DECLARE temprow RECORD;
+    DECLARE totalSize int;
+    BEGIN   
+    FOR temprow IN 
+        SELECT * FROM core.event e  
+  	    WHERE e.json->>'eventType' ='Lactating Woman Counselling' 
+        and cast(e.json->>'baseEntityId' as varchar) = childId and 
+        (DATE_PART('day', cast(e.json->>'eventDate' as varchar)::timestamp - dob::timestamp  )>=180
+         and DATE_PART('day', cast(e.json->>'eventDate' as varchar)::timestamp - dob::timestamp  ) <=270)
+       
+        LOOP
+        	FOR item IN SELECT * FROM json_array_elements((temprow.json->>'obs')::json)
+            LOOP
+                IF (item->>'formSubmissionField') = 'breastfeeding' 
+                THEN
+                breastfeeding = (item->>'values')::json->>0;                
+                END IF;
+                IF (item->>'formSubmissionField') = 'complimentary_amount' 
+                THEN
+                complementaryFood = (item->>'values')::json->>0;                
+                END IF;
+            END LOOP;
+            IF breastfeeding = 'No'  OR complementaryFood ='0'
+                THEN
+                return 'No'  ;              
+             END IF;                
+        	
+        END LOOP;
+   		totalSize = (SELECT count(*) FROM core.event e  
+  	    WHERE e.json->>'eventType' ='Lactating Woman Counselling' 
+        and cast(e.json->>'baseEntityId' as varchar) = childId and 
+        (DATE_PART('day', cast(e.json->>'eventDate' as varchar)::timestamp - dob::timestamp  )>=180
+         and DATE_PART('day', cast(e.json->>'eventDate' as varchar)::timestamp - dob::timestamp  ) <=270));
+    IF totalSize <= 0 
+        THEN
+        returnVal = 'NoDD';                
+    END IF;
+    return totalSize;
+  END;
+  $$ LANGUAGE 'plpgsql';
+  
+select core.breastFeedAndComplementaryFood ('2017-11-26', '51f67334-8750-429d-8fb9-d72e0f69c8c2');

@@ -35,5 +35,5 @@ client.base_entity_id
 
 WITH DATA;
 
-GRANT ALL ON TABLE core."viewJsonDataConversionOfWeight" TO postgres;
-GRANT ALL ON TABLE core."viewJsonDataConversionOfWeight" TO opensrp_admin;
+GRANT ALL ON TABLE core."wonamView" TO postgres;
+GRANT ALL ON TABLE core."wonamView" TO opensrp_admin;
