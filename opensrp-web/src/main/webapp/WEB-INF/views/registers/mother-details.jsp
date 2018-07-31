@@ -116,7 +116,7 @@ String motherId = null;
           </div>
       
       <!-- Area Chart Example-->
-      <div class="row">
+      <!-- <div class="row"> -->
         <div class="col-lg-6">
           <!-- Example Bar Chart Card-->
           <div class="card mb-3">
@@ -356,7 +356,7 @@ for (int i = 0; i < obsArr.length(); i++)
           <!-- Example Notifications Card-->
           
         </div>
-      </div>
+      <!-- </div> -->
       
       <!-- Example DataTables Card-->
       <div class="card mb-3">
