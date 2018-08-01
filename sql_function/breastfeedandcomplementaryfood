@@ -1,50 +1,56 @@
-CREATE OR REPLACE FUNCTION core.breastFeedAndComplementaryFood (dob varchar,childId varchar) 
-RETURNS varchar
+CREATE OR REPLACE FUNCTION core.breastfeed_and_complementary_foods (dob varchar,childId varchar) 
+RETURNS int
 AS $$
     DECLARE json_object json;
     DECLARE item json;
     DECLARE breastFeeding varchar = '';
     DECLARE complementaryFood varchar = '';
-    DECLARE returnVal varchar = 'Yes';
+    DECLARE breastFeedAndcomplementaryFood int = 2;
+    DECLARE childs RECORD;
     DECLARE temprow RECORD;
-    DECLARE totalSize int;
-    BEGIN   
-    FOR temprow IN 
-        SELECT * FROM core.event e  
-  	    WHERE e.json->>'eventType' ='Lactating Woman Counselling' 
-        and cast(e.json->>'baseEntityId' as varchar) = childId and 
-        (DATE_PART('day', cast(e.json->>'eventDate' as varchar)::timestamp - dob::timestamp  )>=180
-         and DATE_PART('day', cast(e.json->>'eventDate' as varchar)::timestamp - dob::timestamp  ) <=270)
-       
-        LOOP
-        	FOR item IN SELECT * FROM json_array_elements((temprow.json->>'obs')::json)
-            LOOP
-                IF (item->>'formSubmissionField') = 'breastfeeding' 
-                THEN
-                breastfeeding = (item->>'values')::json->>0;                
-                END IF;
-                IF (item->>'formSubmissionField') = 'complimentary_amount' 
-                THEN
-                complementaryFood = (item->>'values')::json->>0;                
-                END IF;
-            END LOOP;
-            IF breastfeeding = 'No'  OR complementaryFood ='0'
-                THEN
-                return 'No'  ;              
-             END IF;                
-        	
-        END LOOP;
-   		totalSize = (SELECT count(*) FROM core.event e  
-  	    WHERE e.json->>'eventType' ='Lactating Woman Counselling' 
-        and cast(e.json->>'baseEntityId' as varchar) = childId and 
-        (DATE_PART('day', cast(e.json->>'eventDate' as varchar)::timestamp - dob::timestamp  )>=180
-         and DATE_PART('day', cast(e.json->>'eventDate' as varchar)::timestamp - dob::timestamp  ) <=270));
-    IF totalSize <= 0 
-        THEN
-        returnVal = 'NoDD';                
-    END IF;
-    return totalSize;
+    DECLARE totalCount int:= 0; 
+    BEGIN  
+    	FOR childs IN 
+            SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" c  
+            WHERE c.event_type ='Birth Registration' 
+           --  and provider_id='joom'
+           -- and base_entity_id ='7d8782d9-ded5-4d57-beab-b9f1b5ef1e73'
+            LOOP	
+            breastFeedAndcomplementaryFood  = 0;
+            FOR temprow IN 
+                SELECT * FROM core.event e  
+                WHERE e.json->>'eventType' ='Lactating Woman Counselling' 
+                and cast(e.json->>'baseEntityId' as varchar) =  childs.baseEntityId and 
+                (DATE_PART('day', cast(e.json->>'eventDate' as varchar)::timestamp - childs.dob::timestamp  )>181
+                 and DATE_PART('day', cast(e.json->>'eventDate' as varchar)::timestamp - childs.dob::timestamp  ) <271)
+				
+                LOOP
+                	
+                    FOR item IN SELECT * FROM json_array_elements((temprow.json->>'obs')::json)
+                    LOOP
+                        IF (item->>'formSubmissionField') = 'breastfeeding' 
+                        THEN
+                        breastfeeding = (item->>'values')::json->>0;                
+                        END IF;
+                        IF (item->>'formSubmissionField') = 'complimentary_amount' 
+                        THEN
+                        complementaryFood = (item->>'values')::json->>0;                
+                        END IF;
+                    END LOOP;
+                    IF breastfeeding = 'No'  OR complementaryFood ='0'
+                        THEN
+                        breastFeedAndcomplementaryFood = 1;
+                        Exit  ;              
+                    END IF;
+               END LOOP;
+               		IF breastFeedAndcomplementaryFood = 0
+                    	THEN 
+                        totalCount = totalCount+1;
+                       --RAISE NOTICE 'i want to print % ', breastFeedAndcomplementaryFood;
+                 	END IF;
+   			END LOOP;
+    return totalCount;
   END;
   $$ LANGUAGE 'plpgsql';
   
-select core.breastFeedAndComplementaryFood ('2017-11-26', '51f67334-8750-429d-8fb9-d72e0f69c8c2');
+select core.breastfeed_and_complementary_foods ('2017-11-26', '51f67334-8750-429d-8fb9-d72e0f69c8c2');

@@ -1,0 +1,31 @@
+CREATE OR REPLACE FUNCTION core.severely_underweight (lists varchar[]) 
+RETURNS int
+AS $$    
+    DECLARE weightDifference float;    
+    DECLARE totalCount int:=0; 
+   	DECLARE childs RECORD;
+    BEGIN  
+    	FOR childs IN 
+            SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" c  
+            WHERE c.event_type ='Birth Registration' 
+           --  and provider_id='joom'
+          --  and base_entity_id ='536f5c9a-f953-4514-a40b-dd1a454f9705'
+            
+            LOOP        
+               weightDifference =  (SELECT weight - (SELECT  weight   FROM core.child_growth b 
+    			WHERE b.base_entity_id=t4.base_entity_id And b.last_event_date<t4.last_event_date 
+    			ORDER BY last_event_date DESC  limit 1)  as difference   
+				FROM core.child_growth t4
+	 			where base_entity_id = childs.baseEntityId 
+                         ORDER BY t4.last_event_date desc limit 1
+				);
+                IF weightDifference < 0 
+                    THEN
+                 totalCount= totalCount+1;           
+                END IF;
+            END LOOP;
+    return totalCount;
+  END;
+  $$ LANGUAGE 'plpgsql';
+  
+select core.severely_underweight (array['a9ab3f4d-bee9-4ba9-8951-119ccd215ab9']);

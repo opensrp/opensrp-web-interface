@@ -1,0 +1,29 @@
+CREATE OR REPLACE FUNCTION core.pregnant_women_counseled (lists varchar[]) 
+RETURNS int
+AS $$    
+    DECLARE totalSize int;
+    DECLARE returnVal varchar;
+    DECLARE i varchar; 
+    DECLARE totalCount int:=0; 
+   	DECLARE childs RECORD;
+    BEGIN  
+    	FOR childs IN 
+            SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" c  
+            WHERE c.event_type ='New Woman Member Registration' 
+           --  and provider_id='joom'
+           -- and base_entity_id ='45520784-1360-4136-842a-b1dcf5e34537'
+            
+            LOOP        
+                totalSize = (SELECT count(*) FROM core.event e  
+                WHERE e.json->>'eventType' ='Pregnant Woman Counselling'                
+                and cast(e.json->>'baseEntityId' as varchar) = childs.baseEntityId);
+                IF totalSize > 0 
+                    THEN
+                 totalCount= totalCount+1;           
+                END IF;
+            END LOOP;
+    return totalCount;
+  END;
+  $$ LANGUAGE 'plpgsql';
+  
+select core.pregnant_women_counseled (array['a9ab3f4d-bee9-4ba9-8951-119ccd215ab9','8c5606b6-d41f-40f0-bdde-d303a830206b','88139eb7-1e7d-496a-8f0d-3b88e061d0a0']);

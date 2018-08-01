@@ -1,0 +1,49 @@
+CREATE OR REPLACE FUNCTION core.exclusively_breastfeed (dob varchar,childId varchar) 
+RETURNS int
+AS $$
+    DECLARE json_object json;
+    DECLARE item json;
+    DECLARE totalCount int:= 0; 
+    DECLARE val varchar = '';   
+    DECLARE temprow RECORD;
+    DECLARE childs RECORD;
+    
+    BEGIN
+   		FOR childs IN 
+            SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" c  
+            WHERE c.event_type ='Birth Registration' 
+            --and base_entity_id ='82ff2d31-b00f-4767-ade8-3a10079686bb'
+            LOOP
+            val = '';
+            FOR temprow IN 
+                SELECT * FROM core.event e  
+                WHERE e.json->>'eventType' ='Lactating Woman Counselling' 
+                and cast(e.json->>'baseEntityId' as varchar) = childs.baseEntityId and 
+                DATE_PART('day', cast(e.json->>'eventDate' as varchar)::timestamp - childs.dob::timestamp  )<=180
+
+                LOOP
+                    FOR item IN SELECT * FROM json_array_elements((temprow.json->>'obs')::json)
+                    LOOP
+                        IF (item->>'formSubmissionField') = 'additional_liquids_other_than_breastmilk' 
+                        THEN
+                        val = (item->>'values')::json->>0;                
+                        END IF;
+                    END LOOP;
+                    IF val = 'Yes' 
+                        THEN
+                        EXIT;               
+                    END IF;
+                END LOOP;
+                 IF val='No'
+                    THEN 
+                    totalCount= totalCount+1;
+                   --RAISE NOTICE 'i want to print % ', val;
+                 END IF;
+                
+			END LOOP;
+   	
+    return totalCount;
+  END;
+  $$ LANGUAGE 'plpgsql';
+  
+select core.exclusively_breastfeed ('2018-02-3', '50bdcf1f-3cba-442b-94c9-ebbdeedc1469');
