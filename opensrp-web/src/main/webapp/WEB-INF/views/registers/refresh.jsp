@@ -41,9 +41,9 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="/client/child.html">Child</a>
+          <a href="/">Home</a>
         </li>
-        <li class="breadcrumb-item active">Child Details</li>
+        <li class="breadcrumb-item active">Refresh</li>
       </ol>
 
               
@@ -56,7 +56,7 @@ int refreshCount=0;
 } 		
 %>	          
   
-    <h1><%=refreshCount%></h1>
+    <h1>Materialized views refreshed : <%=refreshCount%></h1>
    
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">

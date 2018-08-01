@@ -46,7 +46,7 @@ public class RegisterController {
 		String funcQuery = "SELECT * FROM core.refresh_all_materialized_views()";
 		//String funcQuery = "SELECT * FROM  core.refresh_materialized_views()";
 		List<Object[]> obArr = databaseServiceImpl.executeSelectQuery(funcQuery);
-		System.out.println("MATERIALIZED VIEWS REFRESHED :::: "+ obArr);
+		System.out.println("MATERIALIZED VIEWS REFRESHED > > > > > "+ obArr);
 		
 		int rc=0;
 		Iterator obArrIterator = obArr.iterator();

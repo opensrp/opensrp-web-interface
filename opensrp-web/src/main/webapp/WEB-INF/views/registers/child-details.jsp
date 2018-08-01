@@ -77,7 +77,8 @@ String childId = null;
 				String nid = String.valueOf(clientObject[15]);
 				String birthWeight = String.valueOf(clientObject[31]);
 				String motherName = String.valueOf(clientObject[32]);
-				String fatherName = String.valueOf(clientObject[33]);
+				String fatherName = "";
+				//String fatherName = String.valueOf(clientObject[33]);
 				
 		
 %>	                  
