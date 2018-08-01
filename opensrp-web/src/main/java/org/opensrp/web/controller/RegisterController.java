@@ -39,6 +39,32 @@ public class RegisterController {
 	
 	
 	
+	@RequestMapping(value = "/refresh.html", method = RequestMethod.GET)
+	public String refreshAllMaterializedView(HttpServletRequest request, HttpSession session, Model model) {
+		
+		int refreshCount=0;
+		String funcQuery = "SELECT * FROM core.refresh_all_materialized_views()";
+		//String funcQuery = "SELECT * FROM  core.refresh_materialized_views()";
+		List<Object[]> obArr = databaseServiceImpl.executeSelectQuery(funcQuery);
+		System.out.println("MATERIALIZED VIEWS REFRESHED :::: "+ obArr);
+		
+		int rc=0;
+		Iterator obArrIterator = obArr.iterator();
+		if (obArrIterator.hasNext()) {
+			/*Object[] resultObject = (Object[]) obArrIterator.next();
+		    refreshCount  = Integer.parseInt(String.valueOf(resultObject[1])) ;*/
+		    rc =(Integer) obArrIterator.next();
+		}
+		//session.setAttribute("refreshCount", refreshCount);
+		session.setAttribute("refreshCount", rc);
+		
+
+		return "/registers/refresh";
+	}
+	
+	
+	
+	
 	
 	
 	
@@ -70,22 +96,7 @@ public class RegisterController {
 		
 		
 		
-		int refreshCount=0;
-		String funcQuery = "SELECT * FROM core.refresh_all_materialized_views()";
-		//String funcQuery = "SELECT * FROM  core.refresh_materialized_views()";
-		List<Object[]> obArr = databaseServiceImpl.executeSelectQuery(funcQuery);
-		System.out.println(obArr);
 		
-		int rc=0;
-		Iterator obArrIterator = obArr.iterator();
-		if (obArrIterator.hasNext()) {
-			/*Object[] resultObject = (Object[]) obArrIterator.next();
-		    refreshCount  = Integer.parseInt(String.valueOf(resultObject[1])) ;*/
-		    rc =(Integer) obArrIterator.next();
-		}
-		//session.setAttribute("refreshCount", refreshCount);
-		session.setAttribute("refreshCount", rc);
-
 		/*
 		List<Object> NWMRList = new ArrayList<Object>();
 		List<Object> counsellingList = new ArrayList<Object>();
