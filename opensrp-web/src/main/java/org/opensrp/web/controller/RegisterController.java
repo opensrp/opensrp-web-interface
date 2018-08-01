@@ -72,16 +72,19 @@ public class RegisterController {
 		
 		int refreshCount=0;
 		String funcQuery = "SELECT * FROM core.refresh_all_materialized_views()";
-		//String funcQuery = "select core.refresh_all_materialized_views()";
+		//String funcQuery = "SELECT * FROM  core.refresh_materialized_views()";
 		List<Object[]> obArr = databaseServiceImpl.executeSelectQuery(funcQuery);
 		System.out.println(obArr);
 		
-		/*Iterator obArrIterator = obArr.iterator();
+		int rc=0;
+		Iterator obArrIterator = obArr.iterator();
 		if (obArrIterator.hasNext()) {
-			Object[] resultObject = (Object[]) obArrIterator.next();
-		    refreshCount  = Integer.parseInt(String.valueOf(resultObject[1])) ;
+			/*Object[] resultObject = (Object[]) obArrIterator.next();
+		    refreshCount  = Integer.parseInt(String.valueOf(resultObject[1])) ;*/
+		    rc =(Integer) obArrIterator.next();
 		}
-		session.setAttribute("refreshCount", refreshCount);*/
+		//session.setAttribute("refreshCount", refreshCount);
+		session.setAttribute("refreshCount", rc);
 
 		/*
 		List<Object> NWMRList = new ArrayList<Object>();

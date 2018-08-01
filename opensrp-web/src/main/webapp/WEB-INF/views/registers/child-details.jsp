@@ -182,10 +182,10 @@ String childId = null;
               
 <%
 int refreshCount=0;
-/* if (session.getAttribute("refreshCount") != null) {
-	 refreshCount = (int) session
+ if (session.getAttribute("refreshCount") != null) {
+	 refreshCount = (Integer) session
 			.getAttribute("refreshCount");
-} */
+} 
 	
 	
 

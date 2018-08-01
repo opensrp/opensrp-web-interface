@@ -11,11 +11,12 @@ BEGIN
         RAISE NOTICE 'Refreshing %.%', schema_arg, r.matviewname;
         EXECUTE 'REFRESH MATERIALIZED VIEW ' || schema_arg || '."' || r.matviewname || '" WITH DATA'; 
         successCount= successCount+1;
+ 
     END LOOP;
-
+    
     RETURN successCount;
 END 
-$$ LANGUAGE plpgsql;
-
+$$ LANGUAGE plpgsql
+SECURITY DEFINER;
 
 select * from core.refresh_all_materialized_views();
