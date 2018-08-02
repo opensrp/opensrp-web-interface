@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION core.breastfeed_and_complementary_foods (dob varchar,childId varchar) 
+CREATE OR REPLACE FUNCTION core.breastfeed_and_complementary_foods (lists varchar[]) 
 RETURNS int
 AS $$
     DECLARE json_object json;

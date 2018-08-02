@@ -315,6 +315,19 @@ public class ChildGrowthServiceImpl implements NutritionService {
 		return databaseRepositoryImpl.getDataFromSQLFunction(searchBuilder, query, session);
 	}
 	
+	@Transactional
+	public List<Object[]> getSummaryData(SearchBuilder searchBuilder) {
+		Session session = sessionFactory.openSession();
+		
+		String procedureName = "core.child_summary_report";
+		String hql = "select * from " + procedureName + "(array[:division,:district,:upazila"
+		        + ",:union,:ward,:subunit,:mauzapara,:provider,:start_date,:end_date])";
+		Query query = session.createSQLQuery(hql);
+		setParameter(searchBuilder, query);
+		
+		return databaseRepositoryImpl.getDataFromSQLFunction(searchBuilder, query, session);
+	}
+	
 	private void setParameter(SearchBuilder searchBuilder, Query query) {
 		
 		if (searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {

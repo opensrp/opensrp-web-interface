@@ -3,78 +3,46 @@ RETURNS TABLE(indicator_name character varying, indicator_value int
               , total int)
 AS $$
 DECLARE
-  filterString varchar := '';
-  completeCountFilterString varchar := '';  
-  div varchar := '';
-  dis varchar := '';
-  upa varchar := '';
-  uni varchar := '';
-  war varchar := '';
-  sub varchar := '';
-  mau varchar := ''; 
-  start_date varchar := '';
-  end_date varchar := '';
-  eitity_type varchar := '';
+  
 
 BEGIN
-div := filterArray[1];
-  dis := filterArray[2];
-  upa := filterArray[3];
-  uni := filterArray[4];
-  war := filterArray[5];
-  sub := filterArray[6];
-  mau := filterArray[7]; 
-  start_date := filterArray[8];
-  end_date := filterArray[9];
-  
-  eitity_type := 'child';
 
- 
  DROP TABLE IF EXISTS child_indicator_temp;
  CREATE TEMP TABLE IF NOT EXISTS child_indicator_temp (
-  	indicator_name varchar(70) ,  
+  	indicator_name varchar(150) ,  
 	indicator_value int NOT NULL DEFAULT 0,  
   	total int NOT NULL DEFAULT 0,  
   	PRIMARY KEY (indicator_name)  
 );
 
+EXECUTE 'insert into child_indicator_temp(indicator_name,indicator_value,total) 
+values('|| E' \'% of population we are reaching: \',(select count(*) from core."viewJsonDataConversionOfClient" 
+where entity_type =' || E' \'child\' ),1000)';
 
-/*Creating location conditions query string*/
-   if (div != '') THEN
-       filterString := E' and child.division=\'' || div || E'\'';
-   END IF;
 
-   if (dis != '') THEN
-       filterString := filterString || E' and child.district=\'' || dis || E'\'';
-   END IF;
 
-   if (upa != '') THEN
-       filterString := filterString || E' and upazila=\'' || upa || E'\'';
-   END IF;
+insert into child_indicator_temp(indicator_name,indicator_value,total) 
+values('% of pregnant women counseled:',core.pregnant_women_counseled( filterArray),100);
 
-   if (uni != '') THEN
-       filterString := filterString || E' and client_union=\'' || uni || E'\'';
-   END IF;
-
-   if (war != '') THEN
-       filterString := filterString || E' and ward=\'' || war || E'\'';
-   END IF;
-
-   if (sub != '') THEN
-       filterString := filterString || E' and subunit=\'' || sub || E'\'';
-   END IF;
-
-   if (mau != '') THEN
-       filterString := filterString || E' and mauzapara=\'' || mau || E'\'';
-   END IF;
-
-   completeCountFilterString := filterString;
-   
-EXECUTE 'insert into child_indicator_temp(indicator_name,indicator_value) 
-values('|| E' \'df \',(select count(*) from core."viewJsonDataConversionOfClient" where entity_type =' || E' \'child\' ))';
-
-    
+insert into child_indicator_temp(indicator_name,indicator_value,total) 
+values('% of children under six months who are exclusively breastfeed :',core.exclusively_breastfeed( filterArray),core.under_six_child_mother_counseled(filterArray));
  				
+insert into child_indicator_temp(indicator_name,indicator_value,total) 
+values('% of timely introduction of complementary food :',core.breastfeed_and_complementary_foods( filterArray),core.under_six_to_nine_child(filterArray));
+
+insert into child_indicator_temp(indicator_name,indicator_value,total) 
+values('% of children who are growth faltering :',core.growth_faltering( filterArray),core.total_child(filterArray));
+
+insert into child_indicator_temp(indicator_name,indicator_value,total) 
+values('% of children growth faltering for 2 months consecutively :',core.two_month_growth_faltering_consecutively( filterArray),core.total_children_measured_over_two_weigth_record(filterArray));
+
+
+insert into child_indicator_temp(indicator_name,indicator_value,total) 
+values('% of women with an underweight child committed to a small doable action before next appointment :',core.committed_previous_action( filterArray),core.growth_faltering( filterArray));
+
+insert into child_indicator_temp(indicator_name,indicator_value,total) 
+values('% of severely underweight children 6-23 months :',core.severely_underweight( filterArray),core.total_child(filterArray));
+
 
 RETURN QUERY SELECT  ttable.indicator_name
        , ttable.indicator_value

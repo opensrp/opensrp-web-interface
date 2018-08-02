@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION core.exclusively_breastfeed (dob varchar,childId varchar) 
+CREATE OR REPLACE FUNCTION core.exclusively_breastfeed (lists varchar[]) 
 RETURNS int
 AS $$
     DECLARE json_object json;

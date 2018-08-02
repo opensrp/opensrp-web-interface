@@ -58,7 +58,7 @@ public class ReportController {
 	public String summaryReport(HttpServletRequest request, HttpSession session, Model model) {
 		searchUtil.setDivisionAttribute(session);
 		searchBuilder.clear();
-		List<Object[]> data = childGrowthServiceImpl.getChildFalteredData(searchBuilder);
+		List<Object[]> data = childGrowthServiceImpl.getSummaryData(searchBuilder);
 		session.setAttribute("data", data);
 		return "/report/sumamry";
 	}
@@ -66,7 +66,7 @@ public class ReportController {
 	@RequestMapping(value = "/summary-ajax.html", method = RequestMethod.GET)
 	public String sumamryReportAjax(HttpServletRequest request, HttpSession session, Model model) {
 		searchBuilder = paginationHelperUtil.setParams(request, session);
-		List<Object[]> data = childGrowthServiceImpl.getChildFalteredData(searchBuilder);
+		List<Object[]> data = childGrowthServiceImpl.getSummaryData(searchBuilder);
 		session.setAttribute("data", data);
 		return "/report/sumamry-ajax";
 	}

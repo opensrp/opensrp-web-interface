@@ -1,0 +1,27 @@
+CREATE OR REPLACE FUNCTION core.growth_faltering (lists varchar[]) 
+RETURNS int
+AS $$    
+    DECLARE totalCount int:=0; 
+   
+    BEGIN  
+    	totalCount = (select count(*)
+            FROM core."viewJsonDataConversionOfClient" c
+            join 
+                (SELECT base_entity_id,growth_status,last_event_date
+                 FROM core.child_growth cg1
+                 WHERE cg1.growth_status=false  and (cg1.last_event_date BETWEEN '2018-02-07'
+                 AND '2018-08-15') and NOT EXISTS (
+                   SELECT *
+                   FROM core.child_growth cg2
+                   WHERE cg1.base_entity_id = cg2.base_entity_id
+                     AND cg1.last_event_date < cg2.last_event_date
+                   ) order by base_entity_id desc
+                ) as gf
+             on c.base_entity_id = gf.base_entity_id
+            WHERE c.event_type ='Birth Registration') ;
+            --- should be changed next to event date 
+    return totalCount;
+  END;
+  $$ LANGUAGE 'plpgsql';
+  
+select core.growth_faltering (array['a9ab3f4d-bee9-4ba9-8951-119ccd215ab9','8c5606b6-d41f-40f0-bdde-d303a830206b','88139eb7-1e7d-496a-8f0d-3b88e061d0a0']);

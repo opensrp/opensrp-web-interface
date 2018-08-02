@@ -40,52 +40,36 @@
 				</div>
 				<div class="card-body">
 					
-						<div class="form-group">
-							<div class="row">
-								<div class="col-6">% of population we are reaching: </div>
-								<div class="col-3"> 70%</div>
+						<div class="form-group" id="data">
+							<%	String indicator = "";
+									int count = 0;
+									int total = 0;
+									int growth=0;
+									int size=0;
+									int counter=0;						
+									
+									if(session.getAttribute("data") != null){
+									List<Object> data = (List<Object>) session.getAttribute("data");
+									Iterator dataCountListIterator = data.iterator();
+									while (dataCountListIterator.hasNext()) {
+										Object[] DataObject = (Object[]) dataCountListIterator.next();
+										indicator = String.valueOf(DataObject[0]);
+										count = Integer.parseInt(String.valueOf(DataObject[1]));
+										total = Integer.parseInt(String.valueOf(DataObject[2]));																				
+										String falterInPercentage = String.format("%.2f", (double) (count*100)/total);
+										
+									%>
+									<div class="row">
+									<div class="col-6"><%=indicator %> </div>
+									<div class="col-3"><%=falterInPercentage%> %</div>
+									</div>
+									<% 
+									   } 
+									}									
+									%>
 							
-							</div>
-							
-							<div class="row">
-								<div class="col-6">% of pregnant women counseled: </div>
-								<div class="col-3"> 30%</div>
-							
-							</div>
-							<div class="row">
-								<div class="col-6">% of children under six months who are exclusively breastfeed : </div>
-								<div class="col-3"> 40%</div>
-							
-							</div>
-							
-							<div class="row">
-								<div class="col-6">% timely introduction of complementary food : </div>
-								<div class="col-3"> 50%</div>
-							
-							</div>
-							<div class="row">
-								<div class="col-6">% of children who are growth faltering : </div>
-								<div class="col-3"> 50%</div>
-							
-							</div>
-							<div class="row">
-								<div class="col-6">% of children growth faltering for 2 months consecutively : </div>
-								<div class="col-3"> 45%</div>
-							
-							</div>
-							
-							<div class="row">
-								<div class="col-6">% of women with an underweight child committed to a small doable action before nenxt appointment : </div>
-								<div class="col-3"> 25%</div>							
-							</div>
-							<div class="row">
-								<div class="col-6">% of severely underweight children 6-23 months : </div>
-								<div class="col-3"> 25%</div>							
-							</div>
 					</div>
-				
-				<div class="card-footer small text-muted"></div>
-			</div>
+				</div>
 		</div>
 
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
@@ -145,7 +129,7 @@
 			$.ajax({
 				type : "GET",
 				contentType : "application/json",				
-				url : "/opensrp-dashboard/report/child-growth-ajax.html"+params,				 
+				url : "/opensrp-dashboard/report/summary-ajax.html"+params,				 
 				dataType : 'html',
 				timeout : 100000,
 				beforeSend: function() {
@@ -154,7 +138,7 @@
 				},
 				success : function(data) {	
 					$("#loading").hide();
-				   $("#tableBody").html(data);
+				   $("#data").html(data);
 				},
 				error : function(e) {
 				    console.log("ERROR: ", e);

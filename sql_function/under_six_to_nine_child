@@ -1,0 +1,16 @@
+CREATE OR REPLACE FUNCTION core.under_six_to_nine_child (lists varchar[]) 
+RETURNS int
+AS $$    
+    DECLARE totalCount int:=0; 
+   
+    BEGIN  
+    totalCount = (select count(*)
+            FROM core."viewJsonDataConversionOfClient" c            
+            WHERE c.event_type ='Birth Registration' and             
+            (DATE_PART('day', '2018-09-02'::timestamp - c.birth_date::timestamp)>181
+                 and DATE_PART('day', '2018-09-02'::timestamp - c.birth_date::timestamp)<271)) ;
+    return totalCount;
+  END;
+  $$ LANGUAGE 'plpgsql';
+  
+select core.under_six_to_nine_child (array['a9ab3f4d-bee9-4ba9-8951-119ccd215ab9','8c5606b6-d41f-40f0-bdde-d303a830206b','88139eb7-1e7d-496a-8f0d-3b88e061d0a0']);
