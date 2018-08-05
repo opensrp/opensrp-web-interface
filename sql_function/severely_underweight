@@ -20,7 +20,7 @@ AS $$
             LOOP        
                 weightDifference =  (SELECT weight - (SELECT  weight   FROM core.child_growth b 
     			WHERE b.base_entity_id=t4.base_entity_id And b.event_date<t4.event_date 
-    			ORDER BY last_event_date DESC  limit 1)  as difference   
+    			ORDER BY event_date DESC  limit 1)  as difference   
 				FROM core.child_growth t4
 	 			where base_entity_id = childs.baseEntityId 
                          ORDER BY t4.event_date desc limit 1
