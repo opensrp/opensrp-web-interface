@@ -1,24 +1,28 @@
-CREATE OR REPLACE FUNCTION core.total_children_measured_over_two_weigth_record(lists varchar[]) 
+CREATE OR REPLACE FUNCTION core.total_children_measured_over_two_weigth_record(conditions varchar,startDate varchar,endDate varchar) 
 RETURNS int
 AS $$    
     DECLARE totalCount int:=0; 
-   
-    BEGIN  
+    betweenCondition varchar := '';
+    BEGIN      
+    if (startDate != '' AND endDate != '') THEN            
+		betweenCondition := betweenCondition || E' and( c.date_created between \''|| startDate || E'\' and \''
+                             || endDate || E'\')';
+	END IF;
+    
     	DROP TABLE IF EXISTS over_two_weigth_record_temp;
          CREATE TEMP TABLE IF NOT EXISTS over_two_weigth_record_temp (
             total int NOT NULL DEFAULT 0 
             
         );
         
-        insert into over_two_weigth_record_temp(total) 
+      EXECUTE 'insert into over_two_weigth_record_temp(total) 
 		select count(*)
         FROM core."viewJsonDataConversionOfClient" c
         join core.child_growth  cg
         on c.base_entity_id = cg.base_entity_id	
-        group by cg.base_entity_id having count(cg.base_entity_id)>=2 order by cg.base_entity_id;
+        WHERE c.event_type =' || E' \'Birth Registration\'' || conditions || betweenCondition || 'group by cg.base_entity_id having count(cg.base_entity_id)>=2 order by cg.base_entity_id';
 	
     return (select count(*) from over_two_weigth_record_temp);
   END;
   $$ LANGUAGE 'plpgsql';
   
-select core.total_children_measured_over_two_weigth_record (array['a9ab3f4d-bee9-4ba9-8951-119ccd215ab9','8c5606b6-d41f-40f0-bdde-d303a830206b','88139eb7-1e7d-496a-8f0d-3b88e061d0a0']);

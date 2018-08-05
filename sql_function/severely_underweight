@@ -1,18 +1,24 @@
-CREATE OR REPLACE FUNCTION core.severely_underweight (lists varchar[]) 
+CREATE OR REPLACE FUNCTION core.severely_underweight (conditions varchar,startDate varchar,endDate varchar) 
 RETURNS int
 AS $$    
     DECLARE weightDifference float;    
     DECLARE totalCount int:=0; 
    	DECLARE childs RECORD;
+    betweenCondition varchar := '';
     BEGIN  
-    	FOR childs IN 
-            SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" c  
-            WHERE c.event_type ='Birth Registration' 
+    	if (startDate != '' AND endDate != '') THEN            
+		betweenCondition := betweenCondition || E' and( cg.last_event_date between \''|| startDate || E'\' and \''
+                             || endDate || E'\')';
+        END IF;
+        
+    	FOR childs IN         
+            EXECUTE 'SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" as c  
+            WHERE c.event_type =' || E' \'Birth Registration\' '|| conditions           
            --  and provider_id='joom'
-          --  and base_entity_id ='536f5c9a-f953-4514-a40b-dd1a454f9705'
+           --  and base_entity_id ='536f5c9a-f953-4514-a40b-dd1a454f9705'
             
             LOOP        
-               weightDifference =  (SELECT weight - (SELECT  weight   FROM core.child_growth b 
+                weightDifference =  (SELECT weight - (SELECT  weight   FROM core.child_growth b 
     			WHERE b.base_entity_id=t4.base_entity_id And b.last_event_date<t4.last_event_date 
     			ORDER BY last_event_date DESC  limit 1)  as difference   
 				FROM core.child_growth t4
@@ -28,4 +34,3 @@ AS $$
   END;
   $$ LANGUAGE 'plpgsql';
   
-select core.severely_underweight (array['a9ab3f4d-bee9-4ba9-8951-119ccd215ab9']);

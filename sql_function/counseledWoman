@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION core.pregnant_women_counseled (lists varchar[]) 
+CREATE OR REPLACE FUNCTION core.counseled_pregnant_women (conditions varchar,startDate varchar,endDate varchar) 
 RETURNS int
 AS $$    
     DECLARE totalSize int;
@@ -6,10 +6,15 @@ AS $$
     DECLARE i varchar; 
     DECLARE totalCount int:=0; 
    	DECLARE childs RECORD;
+    betweenCondition varchar := '';
     BEGIN  
+    if (startDate != '' AND endDate != '') THEN            
+		betweenCondition := betweenCondition || E' and( cg.last_event_date between \''|| startDate || E'\' and \''
+                             || endDate || E'\')';
+        END IF; 
     	FOR childs IN 
-            SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" c  
-            WHERE c.event_type ='New Woman Member Registration' 
+            EXECUTE 'SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" as c  
+            WHERE c.event_type =' || E' \'New Woman Member Registration\' '|| conditions
            --  and provider_id='joom'
            -- and base_entity_id ='45520784-1360-4136-842a-b1dcf5e34537'
             
@@ -26,4 +31,3 @@ AS $$
   END;
   $$ LANGUAGE 'plpgsql';
   
-select core.pregnant_women_counseled (array['a9ab3f4d-bee9-4ba9-8951-119ccd215ab9','8c5606b6-d41f-40f0-bdde-d303a830206b','88139eb7-1e7d-496a-8f0d-3b88e061d0a0']);

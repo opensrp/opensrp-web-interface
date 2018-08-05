@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION core.exclusively_breastfeed (lists varchar[]) 
+CREATE OR REPLACE FUNCTION core.exclusively_breastfeed (conditions varchar,startDate varchar,endDate varchar) 
 RETURNS int
 AS $$
     DECLARE json_object json;
@@ -6,13 +6,18 @@ AS $$
     DECLARE totalCount int:= 0; 
     DECLARE val varchar = '';   
     DECLARE temprow RECORD;
-    DECLARE childs RECORD;
-    
-    BEGIN
+    DECLARE childs RECORD;    
+    betweenCondition varchar := '';
+    BEGIN  
+    if (startDate != '' AND endDate != '') THEN            
+		betweenCondition := betweenCondition || E' and( cg.last_event_date between \''|| startDate || E'\' and \''
+                             || endDate || E'\')';
+        END IF;
    		FOR childs IN 
-            SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" c  
-            WHERE c.event_type ='Birth Registration' 
-            --and base_entity_id ='82ff2d31-b00f-4767-ade8-3a10079686bb'
+           
+             EXECUTE 'SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" as c  
+            WHERE c.event_type =' || E' \'Birth Registration\' '|| conditions
+             --and base_entity_id ='82ff2d31-b00f-4767-ade8-3a10079686bb'
             LOOP
             val = '';
             FOR temprow IN 
@@ -46,4 +51,3 @@ AS $$
   END;
   $$ LANGUAGE 'plpgsql';
   
-select core.exclusively_breastfeed ('2018-02-3', '50bdcf1f-3cba-442b-94c9-ebbdeedc1469');

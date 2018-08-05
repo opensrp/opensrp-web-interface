@@ -3,10 +3,66 @@ RETURNS TABLE(indicator_name character varying, indicator_value int
               , total int)
 AS $$
 DECLARE
-  
+  filterString varchar := '';
+  completeCountFilterString varchar := '';  
+  div varchar := '';
+  dis varchar := '';
+  upa varchar := '';
+  uni varchar := '';
+  war varchar := '';
+  sub varchar := '';
+  mau varchar := ''; 
+  start_date varchar := '';
+  end_date varchar := '';
 
 BEGIN
+  div := filterArray[1];
+  dis := filterArray[2];
+  upa := filterArray[3];
+  uni := filterArray[4];
+  war := filterArray[5];
+  sub := filterArray[6];
+  mau := filterArray[7]; 
+  start_date := filterArray[8];
+  end_date := filterArray[9];
 
+/*Creating location conditions query string*/
+   if (div != '') THEN
+       filterString := E' and division=\'' || div || E'\'';
+   END IF;
+
+   if (dis != '') THEN
+       filterString := filterString || E' and district=\'' || dis || E'\'';
+   END IF;
+
+   if (upa != '') THEN
+       filterString := filterString || E' and upazila=\'' || upa || E'\'';
+   END IF;
+
+   if (uni != '') THEN
+       filterString := filterString || E' and client_union=\'' || uni || E'\'';
+   END IF;
+
+   if (war != '') THEN
+       filterString := filterString || E' and ward=\'' || war || E'\'';
+   END IF;
+
+   if (sub != '') THEN
+       filterString := filterString || E' and subunit=\'' || sub || E'\'';
+   END IF;
+
+   if (mau != '') THEN
+       filterString := filterString || E' and mauzapara=\'' || mau || E'\'';
+   END IF;
+
+   completeCountFilterString := filterString;
+   
+   /*Creating date conditions query string*/
+	/*if (start_date != '' AND end_date != '') THEN            
+		filterString := filterString || E' and member_reg_date between \''|| start_date || E'\' and \''
+                             || end_date || E'\'';
+	END IF; */
+   
  DROP TABLE IF EXISTS child_indicator_temp;
  CREATE TEMP TABLE IF NOT EXISTS child_indicator_temp (
   	indicator_name varchar(150) ,  
@@ -17,31 +73,31 @@ BEGIN
 
 EXECUTE 'insert into child_indicator_temp(indicator_name,indicator_value,total) 
 values('|| E' \'% of population we are reaching: \',(select count(*) from core."viewJsonDataConversionOfClient" 
-where entity_type =' || E' \'child\' ),1000)';
+where entity_type =' || E' \'child\''||filterString ||'),1000)';
 
 
 
 insert into child_indicator_temp(indicator_name,indicator_value,total) 
-values('% of pregnant women counseled:',core.pregnant_women_counseled( filterArray),100);
+values('% of pregnant women counseled:',core.counseled_pregnant_women(filterString, start_date,end_date),100); 
 
 insert into child_indicator_temp(indicator_name,indicator_value,total) 
-values('% of children under six months who are exclusively breastfeed :',core.exclusively_breastfeed( filterArray),core.under_six_child_mother_counseled(filterArray));
+values('% of children under six months who are exclusively breastfeed :',core.exclusively_breastfeed( filterString, start_date,end_date),core.under_six_child_mother_counseled(filterString, start_date,end_date));
  				
 insert into child_indicator_temp(indicator_name,indicator_value,total) 
-values('% of timely introduction of complementary food :',core.breastfeed_and_complementary_foods( filterArray),core.under_six_to_nine_child(filterArray));
+values('% of timely introduction of complementary food :',core.breastfeed_and_complementary_foods(filterString, start_date,end_date),core.under_six_to_nine_child(filterString, start_date,end_date));
 
 insert into child_indicator_temp(indicator_name,indicator_value,total) 
-values('% of children who are growth faltering :',core.growth_faltering( filterArray),core.total_child(filterArray));
+values('% of children who are growth faltering :',core.growth_faltering(filterString, start_date,end_date),core.total_child(filterString, start_date,end_date));
 
 insert into child_indicator_temp(indicator_name,indicator_value,total) 
-values('% of children growth faltering for 2 months consecutively :',core.two_month_growth_faltering_consecutively( filterArray),core.total_children_measured_over_two_weigth_record(filterArray));
+values('% of children growth faltering for 2 months consecutively :',core.two_month_growth_faltering_consecutively(filterString, start_date,end_date),core.total_children_measured_over_two_weigth_record(filterString, start_date,end_date));
 
 
 insert into child_indicator_temp(indicator_name,indicator_value,total) 
-values('% of women with an underweight child committed to a small doable action before next appointment :',core.committed_previous_action( filterArray),core.growth_faltering( filterArray));
+values('% of women with an underweight child committed to a small doable action before next appointment :',core.committed_previous_action(filterString, start_date,end_date),core.growth_faltering( filterString, start_date,end_date));
 
 insert into child_indicator_temp(indicator_name,indicator_value,total) 
-values('% of severely underweight children 6-23 months :',core.severely_underweight( filterArray),core.total_child(filterArray));
+values('% of severely underweight children 6-23 months :',core.severely_underweight(filterString, start_date,end_date),core.total_child(filterString, start_date,end_date));
 
 
 RETURN QUERY SELECT  ttable.indicator_name
@@ -51,5 +107,6 @@ RETURN QUERY SELECT  ttable.indicator_name
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT core.child_indicator_report(array['Jessore','Jhenaidah','Maheshpur','Fatepur','Fatepur:Ward-2','Fatepur:Ward-2:1-KA','Fatepur:Ward-2:1-KA:EPI center']); 
+SELECT core.child_indicator_report(array['Jessore','Jhenaidah','Maheshpur','Fatepur','Fatepur:Ward-2','Fatepur:Ward-2:1-KA','Fatepur:Ward-2:1-KA:EPI center','2018-02-07','2018-08-15']); 
+SELECT core.child_indicator_report(array['','','','','','','','2018-02-07','2018-08-15']); 
 

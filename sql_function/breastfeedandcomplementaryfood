@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION core.breastfeed_and_complementary_foods (lists varchar[]) 
+CREATE OR REPLACE FUNCTION core.breastfeed_and_complementary_foods (conditions varchar,startDate varchar,endDate varchar) 
 RETURNS int
 AS $$
     DECLARE json_object json;
@@ -9,10 +9,15 @@ AS $$
     DECLARE childs RECORD;
     DECLARE temprow RECORD;
     DECLARE totalCount int:= 0; 
+     betweenCondition varchar := '';
     BEGIN  
-    	FOR childs IN 
-            SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" c  
-            WHERE c.event_type ='Birth Registration' 
+    if (startDate != '' AND endDate != '') THEN            
+		betweenCondition := betweenCondition || E' and( cg.last_event_date between \''|| startDate || E'\' and \''
+                             || endDate || E'\')';
+        END IF;
+    	FOR childs IN
+             EXECUTE 'SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" as c  
+            WHERE c.event_type =' || E' \'Birth Registration\' '|| conditions
            --  and provider_id='joom'
            -- and base_entity_id ='7d8782d9-ded5-4d57-beab-b9f1b5ef1e73'
             LOOP	
@@ -53,4 +58,3 @@ AS $$
   END;
   $$ LANGUAGE 'plpgsql';
   
-select core.breastfeed_and_complementary_foods ('2017-11-26', '51f67334-8750-429d-8fb9-d72e0f69c8c2');

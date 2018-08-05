@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION core.committed_previous_action (lists varchar[]) 
+CREATE OR REPLACE FUNCTION core.committed_previous_action (conditions varchar,startDate varchar,endDate varchar) 
 RETURNS int
 AS $$
     DECLARE json_object json;
@@ -11,11 +11,11 @@ AS $$
     DECLARE temprow RECORD;
     DECLARE totalSize int;
     BEGIN   
-       FOR childs IN 
-           SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" c  
-            WHERE c.event_type ='Birth Registration' 
+       FOR childs IN            
+            EXECUTE 'SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" as c  
+            WHERE c.event_type =' || E' \'Birth Registration\' '|| conditions
             -- and base_entity_id ='a159347c-081c-4dce-ab2b-4324aa21f75f' 
-             and provider_id='joom'
+            -- and provider_id='joom'
           
         LOOP 
         	val = '';
@@ -47,4 +47,3 @@ AS $$
   END;
   $$ LANGUAGE 'plpgsql';
   
-select core.committed_previous_action (array['a9ab3f4d-bee9-4ba9-8951-119ccd215ab9']);
