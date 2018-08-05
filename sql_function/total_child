@@ -11,7 +11,7 @@ AS $$
     
      EXECUTE 'select count(*)
             FROM core."viewJsonDataConversionOfClient" c            
-            WHERE c.event_type =' || E' \'Birth Registration\'' || betweenCondition INTO totalCount;
+            WHERE c.event_type =' || E' \'Birth Registration\'' || betweenCondition || conditions INTO totalCount;
             --- should be changed next to event date 
     return totalCount;
   END;

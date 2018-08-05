@@ -69,7 +69,7 @@ public class ChildGrowth {
 	
 	private String provider;
 	
-	@Column(name = "last_event_date")
+	@Column(name = "event_date")
 	@Temporal(TemporalType.DATE)
 	private Date lastEventDate;
 	

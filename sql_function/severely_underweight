@@ -7,7 +7,7 @@ AS $$
     betweenCondition varchar := '';
     BEGIN  
     	if (startDate != '' AND endDate != '') THEN            
-		betweenCondition := betweenCondition || E' and( cg.last_event_date between \''|| startDate || E'\' and \''
+		betweenCondition := betweenCondition || E' and( cg.event_date between \''|| startDate || E'\' and \''
                              || endDate || E'\')';
         END IF;
         
@@ -19,11 +19,11 @@ AS $$
             
             LOOP        
                 weightDifference =  (SELECT weight - (SELECT  weight   FROM core.child_growth b 
-    			WHERE b.base_entity_id=t4.base_entity_id And b.last_event_date<t4.last_event_date 
+    			WHERE b.base_entity_id=t4.base_entity_id And b.event_date<t4.event_date 
     			ORDER BY last_event_date DESC  limit 1)  as difference   
 				FROM core.child_growth t4
 	 			where base_entity_id = childs.baseEntityId 
-                         ORDER BY t4.last_event_date desc limit 1
+                         ORDER BY t4.event_date desc limit 1
 				);
                 IF weightDifference < 0 
                     THEN
