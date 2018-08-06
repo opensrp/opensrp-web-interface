@@ -4,10 +4,10 @@ AS $$
     DECLARE weightDifference float;    
     DECLARE totalCount int:=0; 
    	DECLARE childs RECORD;
-    betweenCondition varchar := '';
+    dateBetweenCondition varchar := '';
     BEGIN  
     	if (startDate != '' AND endDate != '') THEN            
-		betweenCondition := betweenCondition || E' and( cg.event_date between \''|| startDate || E'\' and \''
+		dateBetweenCondition := dateBetweenCondition || E' and( cg1.event_date between \''|| startDate || E'\' and \''
                              || endDate || E'\')';
         END IF;
         
@@ -18,13 +18,13 @@ AS $$
            --  and base_entity_id ='536f5c9a-f953-4514-a40b-dd1a454f9705'
             
             LOOP        
-                weightDifference =  (SELECT weight - (SELECT  weight   FROM core.child_growth b 
-    			WHERE b.base_entity_id=t4.base_entity_id And b.event_date<t4.event_date 
+               EXECUTE 'SELECT weight - (SELECT  weight   FROM core.child_growth cg 
+    			WHERE cg.base_entity_id=cg1.base_entity_id And cg.event_date<cg1.event_date 
     			ORDER BY event_date DESC  limit 1)  as difference   
-				FROM core.child_growth t4
-	 			where base_entity_id = childs.baseEntityId 
-                         ORDER BY t4.event_date desc limit 1
-				);
+				FROM core.child_growth cg1
+	 			where base_entity_id =' ||E' \''||childs.baseEntityId ||E'\' '|| dateBetweenCondition ||
+                'ORDER BY cg1.event_date desc limit 1'
+				 into weightDifference ;
                 IF weightDifference < 0 
                     THEN
                  totalCount= totalCount+1;           
@@ -34,3 +34,4 @@ AS $$
   END;
   $$ LANGUAGE 'plpgsql';
   
+  SELECT core.severely_underweight('','2018-02-07','2018-08-15'); 

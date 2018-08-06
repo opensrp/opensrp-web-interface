@@ -6,11 +6,14 @@ AS $$
     BEGIN      
     if (startDate != '' AND endDate != '') THEN            
 		endDateCondition = E'\''||endDate || E'\'';
+    ELSE   
+        endDate = NOW();
+        endDateCondition = E'\''||endDate || E'\'';
 	END IF; 
      EXECUTE 'select count(*)
             FROM core."viewJsonDataConversionOfClient" c            
             WHERE c.event_type =' || E' \'Birth Registration\' and             
-            (DATE_PART(' || E'\'day\','||endDateCondition || '::timestamp - c.birth_date::timestamp)>181
+            (DATE_PART(' || E'\'day\','|| endDateCondition || '::timestamp - c.birth_date::timestamp)>181
                  and DATE_PART('|| E'\'day\','|| endDateCondition || '::timestamp - c.birth_date::timestamp)<271 )' || conditions  into totalCount ;
     return totalCount;
   END;

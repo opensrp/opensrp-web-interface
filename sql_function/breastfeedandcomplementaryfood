@@ -7,12 +7,13 @@ AS $$
     DECLARE complementaryFood varchar = '';
     DECLARE breastFeedAndcomplementaryFood int = 2;
     DECLARE childs RECORD;
-    DECLARE temprow RECORD;
+    DECLARE eventRow RECORD;
     DECLARE totalCount int:= 0; 
-     betweenCondition varchar := '';
+    DECLARE totalCountInEvent int:= 0; 
+   	dateBetweenCondition varchar := '';
     BEGIN  
     if (startDate != '' AND endDate != '') THEN            
-		betweenCondition := betweenCondition || E' and( cg.event_date between \''|| startDate || E'\' and \''
+		dateBetweenCondition := dateBetweenCondition || E' and( event_date between \''|| startDate || E'\' and \''
                              || endDate || E'\')';
         END IF;
     	FOR childs IN
@@ -22,33 +23,25 @@ AS $$
            -- and base_entity_id ='7d8782d9-ded5-4d57-beab-b9f1b5ef1e73'
             LOOP	
             breastFeedAndcomplementaryFood  = 0;
-            FOR temprow IN 
-                SELECT * FROM core.event e  
-                WHERE e.json->>'eventType' ='Lactating Woman Counselling' 
-                and cast(e.json->>'baseEntityId' as varchar) =  childs.baseEntityId and 
-                (DATE_PART('day', cast(e.json->>'eventDate' as varchar)::timestamp - childs.dob::timestamp  )>181
-                 and DATE_PART('day', cast(e.json->>'eventDate' as varchar)::timestamp - childs.dob::timestamp  ) <271)
-				
+            FOR eventRow IN 
+                EXECUTE 'SELECT * FROM core."viewJsonDataConversionOfEvent" e  
+                WHERE e.event_type ='|| E'\'Lactating Woman Counselling\'                
+                and e.base_entity_id ='||E' \''||childs.baseEntityId ||E'\'' || dateBetweenCondition 
+               
                 LOOP
-                	
-                    FOR item IN SELECT * FROM json_array_elements((temprow.json->>'obs')::json)
-                    LOOP
-                        IF (item->>'formSubmissionField') = 'breastfeeding' 
-                        THEN
-                        breastfeeding = (item->>'values')::json->>0;                
-                        END IF;
-                        IF (item->>'formSubmissionField') = 'complimentary_amount' 
-                        THEN
-                        complementaryFood = (item->>'values')::json->>0;                
-                        END IF;
-                    END LOOP;
+                	breastfeeding = eventRow.breastfeeding;                
+                    complementaryFood = eventRow.complimentary_amount;
                     IF breastfeeding = 'No'  OR complementaryFood ='0'
                         THEN
                         breastFeedAndcomplementaryFood = 1;
                         Exit  ;              
                     END IF;
-               END LOOP;
-               		IF breastFeedAndcomplementaryFood = 0
+                END LOOP;
+                EXECUTE 'SELECT count(*) FROM core."viewJsonDataConversionOfEvent" e  
+                WHERE e.event_type ='|| E'\'Lactating Woman Counselling\'                
+                and e.base_entity_id ='||E' \''||childs.baseEntityId ||E'\'' || dateBetweenCondition into totalCountInEvent ;
+				
+               		IF breastFeedAndcomplementaryFood = 0 and totalCountInEvent !=0
                     	THEN 
                         totalCount = totalCount+1;
                        --RAISE NOTICE 'i want to print % ', breastFeedAndcomplementaryFood;

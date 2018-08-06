@@ -8,35 +8,46 @@ AS $$
     DECLARE childs RECORD;
     DECLARE val varchar = '';
     DECLARE returnVal varchar = 'Yes';
-    DECLARE temprow RECORD;
+    DECLARE eventRow RECORD;
     DECLARE totalSize int;
-    BEGIN   
+    dateBetweenCondition varchar := '';
+    BEGIN  
+    if (startDate != '' AND endDate != '') THEN            
+		dateBetweenCondition := dateBetweenCondition || E' and( event_date between \''|| startDate || E'\' and \''
+                             || endDate || E'\')';
+        END IF;   
        FOR childs IN            
-            EXECUTE 'SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" as c  
-            WHERE c.event_type =' || E' \'Birth Registration\' '|| conditions
+            EXECUTE 'select c.base_entity_id as baseEntityId,c.birth_date as dob
+            FROM core."viewJsonDataConversionOfClient" c
+            join 
+                (SELECT base_entity_id,growth_status,event_date
+                 FROM core.child_growth cg1
+                 WHERE cg1.growth_status=false ' || dateBetweenCondition ||' and NOT EXISTS (
+                   SELECT *
+                   FROM core.child_growth cg2
+                   WHERE cg1.base_entity_id = cg2.base_entity_id
+                     AND cg1.event_date < cg2.event_date
+                   ) order by base_entity_id desc
+                ) as gf
+             on c.base_entity_id = gf.base_entity_id
+            WHERE c.event_type =' || E' \'Birth Registration\'' || conditions 
             -- and base_entity_id ='a159347c-081c-4dce-ab2b-4324aa21f75f' 
             -- and provider_id='joom'
           
         LOOP 
         	val = '';
-            FOR temprow IN 
-                SELECT * FROM core.event e  
-                WHERE e.json->>'eventType' ='Lactating Woman Counselling' 
-                and cast(e.json->>'baseEntityId' as varchar) = childs.baseEntityId       
+            FOR eventRow IN 
+            	EXECUTE 'SELECT * FROM core."viewJsonDataConversionOfEvent" e  
+                WHERE e.event_type ='|| E'\'Lactating Woman Counselling\'                
+                and e.base_entity_id ='||E' \''||childs.baseEntityId ||E'\'' || dateBetweenCondition
+                
                 LOOP
-                	
-                    FOR item IN SELECT * FROM json_array_elements((temprow.json->>'obs')::json)
-                    LOOP
-                        IF (item->>'formSubmissionField') = 'lactating_counselling_actions_decided_previous_meeting' 
-                        THEN
-                        val = (item->>'values')::json->>0;                
-                        END IF;
-                    END LOOP;
+                    val = eventRow.lactating_counselling_actions_decided_previous_meeting; 
                     IF val = 'No' 
                         THEN                    
                         EXIT;               
                     END IF;
-            END LOOP;
+            	END LOOP;
             IF val='Yes'
                 THEN 
                 totalCount= totalCount+1;
@@ -47,3 +58,9 @@ AS $$
   END;
   $$ LANGUAGE 'plpgsql';
   
+  SELECT core.committed_previous_action('','2018-02-07','2018-08-15'); 
+
+
+SELECT c.base_entity_id as baseEntityId, e.lactating_counselling_actions_decided_previous_meeting FROM core."viewJsonDataConversionOfClient" as c  
+ left join core."viewJsonDataConversionOfEvent" e   on c.base_entity_id = e.base_entity_id
+ where c.event_type = 'Birth Registration' and e.event_type ='Lactating Woman Counselling'

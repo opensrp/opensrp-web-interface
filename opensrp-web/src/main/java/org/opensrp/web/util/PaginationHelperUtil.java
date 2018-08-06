@@ -82,6 +82,8 @@ public class PaginationHelperUtil {
 		String name = "";
 		String year = "";
 		String userName = "";
+		String start_date = "";
+		String end_date = "";
 		
 		if (request.getParameterMap().containsKey("division")) {
 			division = (String) request.getParameter("division");
@@ -123,10 +125,21 @@ public class PaginationHelperUtil {
 		if (request.getParameterMap().containsKey("userName")) {
 			userName = (String) request.getParameter("userName");
 		}
+		if (request.getParameterMap().containsKey("userName")) {
+			userName = (String) request.getParameter("userName");
+		}
+		if (request.getParameterMap().containsKey("start_date")) {
+			start_date = (String) request.getParameter("start_date");
+		}
+		if (request.getParameterMap().containsKey("end_date")) {
+			end_date = (String) request.getParameter("end_date");
+			
+		}
+		
 		searchBuilder.setDivision(locationName(division)).setDistrict(locationName(district))
 		        .setUpazila(locationName(upazila)).setUnion(locationName(union)).setWard(locationName(ward))
 		        .setSubunit(locationName(subunit)).setMauzapara(locationName(mauzapara)).setProvider(provider).setName(name)
-		        .setYear(year).setUserName(userName);
+		        .setYear(year).setUserName(userName).setStart(start_date).setEnd(end_date);
 		logger.debug("set searchBuilder: " + searchBuilder.toString());
 		return searchBuilder;
 		

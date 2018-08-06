@@ -377,8 +377,18 @@ public class ChildGrowthServiceImpl implements NutritionService {
 			query.setParameter("provider", "");
 		}
 		
-		query.setParameter("start_date", "");
-		query.setParameter("end_date", "");
+		if (searchBuilder.getStart() != null && !searchBuilder.getStart().isEmpty()) {
+			query.setParameter("start_date", searchBuilder.getStart());
+			
+		} else {
+			query.setParameter("start_date", "");
+		}
+		
+		if (searchBuilder.getEnd() != null && !searchBuilder.getEnd().isEmpty()) {
+			query.setParameter("end_date", searchBuilder.getEnd());
+		} else {
+			query.setParameter("end_date", "");
+		}
 		
 	}
 }

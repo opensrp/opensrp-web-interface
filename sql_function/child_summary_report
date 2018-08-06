@@ -1,10 +1,10 @@
-CREATE OR REPLACE FUNCTION core.child_indicator_report(filterArray text[])
+CREATE OR REPLACE FUNCTION core.child_summary_report(filterArray text[])
 RETURNS TABLE(indicator_name character varying, indicator_value int
               , total int)
 AS $$
 DECLARE
   filterString varchar := '';
-  completeCountFilterString varchar := '';  
+  dateBetweenCondition varchar := '';  
   div varchar := '';
   dis varchar := '';
   upa varchar := '';
@@ -23,8 +23,8 @@ BEGIN
   war := filterArray[5];
   sub := filterArray[6];
   mau := filterArray[7]; 
-  start_date := filterArray[8];
-  end_date := filterArray[9];
+  start_date := filterArray[9];
+  end_date := filterArray[10];
 
 /*Creating location conditions query string*/
    if (div != '') THEN
@@ -55,13 +55,12 @@ BEGIN
        filterString := filterString || E' and mauzapara=\'' || mau || E'\'';
    END IF;
 
-   completeCountFilterString := filterString;
    
    /*Creating date conditions query string*/
-	/*if (start_date != '' AND end_date != '') THEN            
-		filterString := filterString || E' and member_reg_date between \''|| start_date || E'\' and \''
+	if (start_date != '' AND end_date != '') THEN            
+		dateBetweenCondition :=  E' and member_reg_date between \''|| start_date || E'\' and \''
                              || end_date || E'\'';
-	END IF; */
+	END IF; 
    
  DROP TABLE IF EXISTS child_indicator_temp;
  CREATE TEMP TABLE IF NOT EXISTS child_indicator_temp (
@@ -73,7 +72,7 @@ BEGIN
 
 EXECUTE 'insert into child_indicator_temp(indicator_name,indicator_value,total) 
 values('|| E' \'% of population we are reaching: \',(select count(*) from core."viewJsonDataConversionOfClient" 
-where entity_type =' || E' \'child\''||filterString ||'),1000)';
+where entity_type =' || E' \'child\''||filterString || dateBetweenCondition || '),1000)';
 
 
 
@@ -107,6 +106,6 @@ RETURN QUERY SELECT  ttable.indicator_name
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT core.child_indicator_report(array['Jessore','Jhenaidah','Maheshpur','Fatepur','Fatepur:Ward-2','Fatepur:Ward-2:1-KA','Fatepur:Ward-2:1-KA:EPI center','2018-02-07','2018-08-15']); 
-SELECT core.child_indicator_report(array['','','','','','','','2018-02-07','2018-08-15']); 
+SELECT core.child_indicator_report(array['Khulna','Jhenaidah','Maheshpur','Fatepur','Fatepur:Ward-2','Fatepur:Ward-2:1-KA','Fatepur:Ward-2:1-KA:EPI center','2018-02-07','2018-08-15']); 
+SELECT core.child_indicator_report(array['','','','','','','','','']); 
 

@@ -93,6 +93,8 @@
 			var subunit = "";
 			var mauzapara = "";
 			var params = "" ;
+			var start_date = "" ;
+			var end_date = "" ;
 			
 			division = $('#division').val();
 			district = $('#district').val();
@@ -101,8 +103,10 @@
 			ward = $('#ward').val();
 			subunit = $('#subunit').val();
 			mauzapara = $('#mauzapara').val();
+			start_date = $('#start').val();
+			end_date = $('#end').val();
 			if(division != "" && division != "0?" && division != null ){
-				params ="?division="+division;
+				params ="&division="+division;
 			}
 			if(district != "0?" &&  district != "" && district != null){
 				params +="&district="+district;
@@ -124,12 +128,18 @@
 			if(mauzapara != "0?" && mauzapara != "" && mauzapara != null){
 				params +="&mauzapara="+mauzapara;
 			}
+			if( start_date != "" && start_date != null){
+				params +="&start_date="+start_date;
+			}
+			if( end_date != "" && end_date != null){
+				params +="&end_date="+end_date;
+			}
 			console.log(params);
 			event.preventDefault();
 			$.ajax({
 				type : "GET",
 				contentType : "application/json",				
-				url : "/opensrp-dashboard/report/summary-ajax.html"+params,				 
+				url : "/opensrp-dashboard/report/summary-ajax.html?"+params,				 
 				dataType : 'html',
 				timeout : 100000,
 				beforeSend: function() {

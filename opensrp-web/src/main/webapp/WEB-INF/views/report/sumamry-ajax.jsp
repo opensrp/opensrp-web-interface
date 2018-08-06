@@ -15,15 +15,20 @@
 		List<Object> data = (List<Object>) session.getAttribute("data");
 		Iterator dataCountListIterator = data.iterator();
 		while (dataCountListIterator.hasNext()) {
+			String falterInPercentage = "";
 			Object[] DataObject = (Object[]) dataCountListIterator.next();
 			indicator = String.valueOf(DataObject[0]);
 			count = Integer.parseInt(String.valueOf(DataObject[1]));
-			total = Integer.parseInt(String.valueOf(DataObject[2]));																				
-			String falterInPercentage = String.format("%.2f", (double) (count*100)/total);
+			total = Integer.parseInt(String.valueOf(DataObject[2]));
+			if(count > 0){
+			 falterInPercentage = String.format("%.2f", (double) (count*100)/total);
+			}else{
+				falterInPercentage = String.format("%.2f", 0.000);
+			}
 										
 		%>
 			<div class="row">
-			<div class="col-6"><%=indicator %> </div>
+			<div class="col-6"><%=indicator %></div>
 			<div class="col-3"><%=falterInPercentage%> %</div>
 			</div>
 		<% 
