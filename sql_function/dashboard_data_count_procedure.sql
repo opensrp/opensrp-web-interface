@@ -27,7 +27,9 @@ BEGIN
    /*insert % of the Children are reaching data*/
    insert into core.dashboard_data_count(countType, totalCount, classColor, isPercentage)
    values('% of the Children are reaching'
-		  , 90
+		  , (SELECT round(((SELECT count(distinct base_entity_id)
+			 from core."viewJsonDataConversionOfEvent"
+			 where entity_type = 'weight') :: numeric /100 :: numeric)*100, 2))
 		  , 'bg-warning'
 		  , true);
 
@@ -61,7 +63,11 @@ BEGIN
    /*insert % of the Woman are Reaching data*/
    insert into core.dashboard_data_count(countType, totalCount, classColor, isPercentage)
    values('% of the Woman are Reaching'
-		  , 70
+		  , (SELECT round(((SELECT count(distinct base_entity_id)
+			 from core."viewJsonDataConversionOfEvent"
+			 where (event_type = 'Woman Member Follow Up'
+					OR event_type = 'Pregnant Woman Counselling')) :: numeric
+				   / 100 :: numeric) * 100, 2))
 		  , 'bg-success'
 		  , true);
 	
@@ -80,7 +86,7 @@ BEGIN
 			/ (SELECT count(*)
 			   FROM core."viewJsonDataConversionOfEvent"
 			   where entity_type = 'mother'
-			   and is_pregnant = 'Yes') :: numeric) * 100, 2 ))
+			  ) :: numeric) * 100, 2 ))
 			, 'bg-danger'
 			, true);
 						

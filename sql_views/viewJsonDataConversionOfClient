@@ -3,7 +3,7 @@ AS
 SELECT DISTINCT c.id as id
    , c.json->>'baseEntityId' as base_entity_id
    , c.json->'addresses'->0->>'addressType' as address_type
-   , c.json->>'birthdate' as birth_date
+   , cast(c.json->>'birthdate' as Date) as birth_date
    , c.json->'addresses'->0->'addressFields'->>'country' as country
    , c.json->>'dateCreated' as date_created
    , c.json->>'dateEdited' as date_edited
@@ -33,12 +33,8 @@ SELECT DISTINCT c.id as id
    , e.json->>'providerId' as provider_id
    , e.json->>'entityType' as entity_type
    , e.json->>'eventType' as event_type
+   , core.getObsValue(e.id, 'start') as member_reg_date
    , CASE
-    WHEN (e.json->>'eventType' = 'New Woman Member Registration') THEN e.json->'obs'->1->'values'->>0
-	ELSE null
-    END 
-    as member_reg_date
-	, CASE
     WHEN (e.json->>'entityType' = 'child') THEN e.json->'obs'->1->'values'->>0
 	ELSE null
     END
