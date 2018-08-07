@@ -145,6 +145,13 @@ public class DatabaseServiceImpl implements DatabaseService {
 		return databaseRepositoryImpl.getDataFromViewByBEId(viewName, entityType, baseEntityId);
 	}
 	
+	
+	@Transactional
+	public List<Object[]> executeSelectQuery(String sqlQuery) {
+		return databaseRepositoryImpl.executeSelectQuery(sqlQuery);
+	}
+	
+
 	@Transactional
 	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, Integer offset, Integer maxResults, String viewName,
 	                                   String entityType) {

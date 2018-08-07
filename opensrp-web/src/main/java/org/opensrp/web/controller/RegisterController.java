@@ -12,6 +12,7 @@ import org.opensrp.acl.entity.Permission;
 import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.service.impl.LocationServiceImpl;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.web.nutrition.entity.ChildGrowth;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping(value = "client")
 public class RegisterController {
 	
 	@Autowired
@@ -37,22 +39,65 @@ public class RegisterController {
 	
 	
 	
+	@RequestMapping(value = "/refresh.html", method = RequestMethod.GET)
+	public String refreshAllMaterializedView(HttpServletRequest request, HttpSession session, Model model) {
+		
+		int refreshCount=0;
+		String funcQuery = "SELECT * FROM core.refresh_all_materialized_views()";
+		//String funcQuery = "SELECT * FROM  core.refresh_materialized_views()";
+		List<Object[]> obArr = databaseServiceImpl.executeSelectQuery(funcQuery);
+		System.out.println("MATERIALIZED VIEWS REFRESHED > > > > > "+ obArr);
+		
+		int rc=0;
+		Iterator obArrIterator = obArr.iterator();
+		if (obArrIterator.hasNext()) {
+			/*Object[] resultObject = (Object[]) obArrIterator.next();
+		    refreshCount  = Integer.parseInt(String.valueOf(resultObject[1])) ;*/
+		    rc =(Integer) obArrIterator.next();
+		}
+		//session.setAttribute("refreshCount", refreshCount);
+		session.setAttribute("refreshCount", rc);
+		
+
+		return "/registers/refresh";
+	}
 	
 	
 	
 	
 	
 	
-	@RequestMapping(value = "registers/{id}/childDetails.html", method = RequestMethod.GET)
+	
+	
+	
+	
+	@RequestMapping(value = "/child/{id}/details.html", method = RequestMethod.GET)
 	public String showChildDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) {
 		System.out.println("Child id :" + id);
 		session.setAttribute("childId", id);
 		
-		/*
-		List<Object> data;
-		data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfEvent","mother",id);
-		session.setAttribute("eventList", data);
 		
+		List<Object[]> data;
+		List<ChildGrowth> childGrowthList;
+		//data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfWeight","weight",id);
+		childGrowthList = databaseServiceImpl.findAllByKey(id, "baseEntityId", ChildGrowth.class);
+		/*for(ChildGrowth cg: childGrowthList){
+			data.add((Object)cg);
+		}*/
+		String weightQuery = "SELECT * FROM core.child_growth "
+							+" WHERE base_entity_id = '"
+							+id
+							+"' " 
+							+" ORDER BY last_event_date ASC";
+		data = databaseServiceImpl.executeSelectQuery(weightQuery);
+		session.setAttribute("weightList", data);
+		
+		
+		
+		
+		
+		
+		/*
 		List<Object> NWMRList = new ArrayList<Object>();
 		List<Object> counsellingList = new ArrayList<Object>();
 		List<Object> followUpList = new ArrayList<Object>();
@@ -79,7 +124,7 @@ public class RegisterController {
 		
 		*/
 		
-		return "registers/childDetails";
+		return "registers/child-details";
 	}
 	
 	
@@ -95,7 +140,7 @@ public class RegisterController {
 	
 	
 	
-	@RequestMapping(value = "registers/{id}/motherDetails.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/mother/{id}/details.html", method = RequestMethod.GET)
 	public String showMotherDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) {
 		System.out.println("Mother id :" + id);
 		session.setAttribute("motherId", id);
@@ -130,7 +175,7 @@ public class RegisterController {
 		
 		
 		
-		return "registers/motherDetailsUI";
+		return "registers/mother-details";
 	}
 	
 	/*@RequestMapping(value = "registers/motherDetails.html", method = RequestMethod.GET)
@@ -141,19 +186,19 @@ public class RegisterController {
 	}*/
 	
 
-	@RequestMapping(value = "/registers/household.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/household.html", method = RequestMethod.GET)
 	public String showHouseholdList(HttpServletRequest request, HttpSession session, Model model) {
         paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "household");
 		return "/registers/household";
 	}
 
-	@RequestMapping(value = "/registers/mother.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/mother.html", method = RequestMethod.GET)
 	public String showMotherList(HttpServletRequest request, HttpSession session, Model model) {
         paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "mother");
 		return "/registers/mother";
 	}
 
-	@RequestMapping(value = "/registers/child.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/child.html", method = RequestMethod.GET)
 	public String showChildList(HttpServletRequest request, HttpSession session, Model model) {
         paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "child");
 		return "/registers/child";

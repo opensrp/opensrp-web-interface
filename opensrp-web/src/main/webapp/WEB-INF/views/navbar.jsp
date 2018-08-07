@@ -46,18 +46,23 @@
 
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/registers/household.html"/>"> <strong>
+						href="<c:url value="/client/household.html"/>"> <strong>
 							Household</strong>
 					</a>
 
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/registers/mother.html"/>"> <strong>Mother</strong>
+						href="<c:url value="/client/mother.html"/>"> <strong>Mother</strong>
 					</a>
 
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/registers/child.html"/>"> <strong>Child</strong>
+						href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
+					</a>
+					
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/client/refresh.html"/>"> <strong>Refresh</strong>
 					</a>
 
 				</div></li>

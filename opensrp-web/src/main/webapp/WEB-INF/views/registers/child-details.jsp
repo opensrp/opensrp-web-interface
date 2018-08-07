@@ -9,15 +9,18 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
-
+	
+	
 <!DOCTYPE html>
+<html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>Mother Details</title>
+  <title>Child Details</title>
   <!-- Bootstrap core CSS-->
   <link href="/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom fonts for this template-->
@@ -32,223 +35,193 @@
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
-	
-	<div class="content-wrapper">
+
+  <div class="content-wrapper">
     <div class="container-fluid">
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-                 
-		 <a  href="<c:url value="/registers/mother.html"/>">Mother</a>
+          <a href="/client/child.html">Child</a>
         </li>
-        <li class="breadcrumb-item active">Mother Details</li>
+        <li class="breadcrumb-item active">Child Details</li>
       </ol>
       <!-- Child Register-->
       <div class="card mb-3">
             <div class="card-header">
-               Mother Details</div>
+               Child Details</div>
             <div class="list-group list-group-flush small">
               <a class="list-group-item list-group-item-action" href="#">
                 <div class="media">
                   <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
 <%
-String motherId = null;
- if (session.getAttribute("motherId") != null) {
-	 motherId = (String) session.getAttribute("motherId");
- }
- if (session.getAttribute("dataList") != null) {
-	List<Object> dataList = (List<Object>) session
-			.getAttribute("dataList");
-	Iterator dataListIterator = dataList.iterator();
-	while (dataListIterator.hasNext()) {
-		Object[] clientObject = (Object[]) dataListIterator.next();
-		String id = String.valueOf(clientObject[1]);
-		if(id.equals(motherId)){
-		String first_name = String.valueOf(clientObject[9]);
-		String last_name = String.valueOf(clientObject[13]);
-		String birth_date = String.valueOf(clientObject[3]);
-		String spouse_name = String.valueOf(clientObject[19]);
-		String phone_number = String.valueOf(clientObject[17]);
-
-		String division = String.valueOf(clientObject[8]);
-		String district = String.valueOf(clientObject[7]);
-		String upazilla = String.valueOf(clientObject[22]);
-		String union = String.valueOf(clientObject[21]);
-		String ward = String.valueOf(clientObject[23]);
-		String householdId = String.valueOf(clientObject[12]);
+String childId = null;
+ if (session.getAttribute("childId") != null) {
+	 childId = (String) session.getAttribute("childId");
+ }	
+		if (session.getAttribute("dataList") != null) {
+			List<Object> dataList = (List<Object>) session
+					.getAttribute("dataList");
+			Iterator dataListIterator = dataList.iterator();
+			while (dataListIterator.hasNext()) {
+				Object[] clientObject = (Object[]) dataListIterator.next();
+				String baseEntityId = String.valueOf(clientObject[1]);
+				
+				if(baseEntityId.equals(childId)){
+				String addressType = String.valueOf(clientObject[2]);
+				String birthDate = String.valueOf(clientObject[3]);
+				String country = String.valueOf(clientObject[4]);
+				String createdDate = String.valueOf(clientObject[5]);
+				String editedDate = String.valueOf(clientObject[6]);
+				String firstName = String.valueOf(clientObject[9]);
+				String gender = String.valueOf(clientObject[10]);
+				String nid = String.valueOf(clientObject[15]);
+				String birthWeight = String.valueOf(clientObject[31]);
+				String motherName = String.valueOf(clientObject[32]);
+				String fatherName = "";
+				//String fatherName = String.valueOf(clientObject[33]);
+				
 		
-		
-		String lmp_date = String.valueOf(clientObject[24]);
-		
-%>
-           
+%>	                  
                   <div class="media-body">
-                    <strong>Name: </strong><%=first_name%><br>
-                    <strong>Birthdate: </strong><%=birth_date%><br>
+                    <strong>Name: </strong><%=firstName%><br>
+                    <strong>Father's Name: </strong><%=fatherName%><br>
+                    <strong>Mother's Name: </strong><br>
+                    <strong>Birth-date: </strong><%=birthDate%><br>
                     <strong>Age: </strong><br>
-                    <strong>Marital Status: </strong>Married<br>
-                    <strong>Husband's Name: </strong><%=spouse_name%><br>
-                    <strong>Contact Number: </strong><%=phone_number%><br>
-                    
+                    <strong>Gender: </strong><%=gender%><br>
+                    <strong>Birth-weight: </strong><%=birthWeight%><br>
                   </div>
+                  
                   <div class="media-body">
-                    <strong>Division: </strong><%=division%><br>
-                    <strong>District: </strong><%=district%><br>
-                    <strong>Upazilla: </strong><%=upazilla%><br>
-                    <strong>Union: </strong><%=union%><br>
-                    <strong>Ward: </strong><%=ward%><br>
-                    <strong>Household: </strong><%=householdId%><br>
-                    
+                    <strong>Care-giver's Name: </strong><br>
                   </div>
 <%
 		}
 		}
 }
-%>
+%>                     
                 </div>
               </a>
-              
-              
-              
+
               
             </div>
             <div class="card-footer small text-muted"></div>
           </div>
       
+      
+      
       <!-- Area Chart Example-->
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-lg-6">
-          <!-- Example Bar Chart Card-->
+          Example Bar Chart Card
           <div class="card mb-3">
             <div class="card-header">
-               Pregnancy Details</div>
-<%
-
-if (session.getAttribute("NWMRList") != null) {
-List<Object> dataList = (List<Object>) session
-		.getAttribute("NWMRList");
-Iterator dataListIterator = dataList.iterator();
-while (dataListIterator.hasNext()) {
-	Object[] clientObject = (Object[]) dataListIterator.next();
-	String id = String.valueOf(clientObject[0]);
-	String isPregnant = String.valueOf(clientObject[19]);
-	String edd = String.valueOf(clientObject[20]);
-	String lmp = String.valueOf(clientObject[21]);
-		
-%>	
+               Siblings</div>
             <div class="card-body">
-             
-              <p class="card-text small">
-              <b>Pregnant : <%=isPregnant%></b>
-              </p>
-              
-              <p class="card-text small">
-              <b>EDD : <%=edd%></b>
-              </p>
-              
-              <p class="card-text small">
-              <b>LMP : <%=lmp%></b>
-              </p>
-              
+              <p class="card-text small">1. These waves are looking pretty good today!
+                  <a href="#">#surfsup</a>
+                </p>
+                <p class="card-text small">2. These waves are looking pretty good today!
+                  <a href="#">#surfsup</a>
+                </p>
             </div>
-<%
-		}
-		}
-%>
-            <div class="card-footer small text-muted"></div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
           </div>
-          <!-- Card Columns Example Social Feed-->
+          Card Columns Example Social Feed
           
           
           
-          <!-- /Card Columns-->
+          /Card Columns
         </div>
         <div class="col-lg-6">
-          <!-- Example Pie Chart Card-->
+          Example Pie Chart Card
           <div class="card mb-3">
             <div class="card-header">
-              Counselling</div>
-              
-<%
-
- if (session.getAttribute("counsellingList") != null) {
-	List<Object> dataList = (List<Object>) session
-			.getAttribute("counsellingList");
-	Iterator dataListIterator = dataList.iterator();
-	while (dataListIterator.hasNext()) {
-		Object[] clientObject = (Object[]) dataListIterator.next();
-		String id = String.valueOf(clientObject[0]);
-		String counselling = String.valueOf(clientObject[22]);
-		
-%>	              
-  
+              Counseling</div>
             <div class="card-body">
-             <p class="card-text small">
-             <b><%=id%> - <%=counselling%></b>
-             </p>
+             <p class="card-text small">These waves are looking pretty good today!
+                  <a href="#">#surfsup</a>
+                </p>
+                <p class="card-text small">These waves are looking pretty good today!
+                  <a href="#">#surfsup</a>
+                </p>
             </div>
-
-<%
-		}
-		}
-%>            
-            
-            <div class="card-footer small text-muted"></div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
           </div>
-          <!-- Example Notifications Card-->
+          Example Notifications Card
           
         </div>
-      </div>
+      </div> -->
       
       <!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">
-           Follow-up</div>
+           Growth</div>
         <div class="card-body">
           <div class="table-responsive">
-    
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
                   <th>Sl. No.</th>
-                  <th>Date</th>
-                  <th>Pregnancy Age</th>
-                  <th>Next Appointment Date</th>
+                  <th>Visit Date</th>
+                  <th>Weight</th>
+                  <th>Growth/month</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
                   <th>Sl. No.</th>
-                  <th>Date</th>
-                  <th>Pregnancy Age</th>
-                  <th>Next Appointment Date</th>
+                  <th>Visit Date</th>
+                  <th>Weight</th>
+                  <th>Growth/month</th>
                   <th>Status</th>
                 </tr>
               </tfoot>
               <tbody>
-
+              
+              
 <%
+int refreshCount=0;
+ if (session.getAttribute("refreshCount") != null) {
+	 refreshCount = (Integer) session
+			.getAttribute("refreshCount");
+} 
+	
+	
 
- if (session.getAttribute("followUpList") != null) {
+ if (session.getAttribute("weightList") != null) {
 	int i=0;
 	List<Object> dataList = (List<Object>) session
-			.getAttribute("followUpList");
+			.getAttribute("weightList");
 	Iterator dataListIterator = dataList.iterator();
 	while (dataListIterator.hasNext()) {
 		i++;
-		Object[] clientObject = (Object[]) dataListIterator.next();
-		String id = String.valueOf(clientObject[0]);
-		String followUpDate = String.valueOf(clientObject[23]);
-		String nextAppointmentDate = String.valueOf(clientObject[24]);
+		Object[] weightObject = (Object[]) dataListIterator.next();
+		String id = String.valueOf(weightObject[0]);
+		String eventDate = String.valueOf(weightObject[8]);
+		String currentWeight = String.valueOf(weightObject[13]);
+		
+		String growthStatus = String.valueOf(weightObject[5]);
+		String growth = String.valueOf(weightObject[17]);
+		
+		double growthGram = Double.parseDouble(growth);
+		double growthKg = growthGram / 1000.00;
+		
+		String gStatusDecoded = null;
+		if(growthStatus.equals("true")){
+			gStatusDecoded = "Adequate";
+		}else{
+			gStatusDecoded = "Inadequate";
+		}
 		
 %>	          
                 <tr>
                   <td><%=i%></td>
-                  <td><%=followUpDate%></td>
-                  <td></td>
-                  <td><%=nextAppointmentDate%></td>
-                  <td>Good</td>
+                  <td><%=eventDate%></td>
+                  <td><%=currentWeight%></td>
+                  <td><%=growthKg%></td>
+                  <td><%=gStatusDecoded%></td>
                 </tr>
                 
 <%
@@ -256,7 +229,8 @@ while (dataListIterator.hasNext()) {
 	i=0;
 		}
 %>
-
+                
+                
               </tbody>
             </table>
           </div>
@@ -266,13 +240,9 @@ while (dataListIterator.hasNext()) {
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
-    <footer class="sticky-footer">
-      <div class="container">
-        <div class="text-center">
-          <small>Copyright © Your Website 2018</small>
-        </div>
-      </div>
-    </footer>
+    
+    <h1><%=refreshCount%></h1>
+   
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
       <i class="fa fa-angle-up"></i>
@@ -295,8 +265,8 @@ while (dataListIterator.hasNext()) {
         </div>
       </div>
     </div>
-    <jsp:include page="/WEB-INF/views/footer.jsp" />
     
+    <jsp:include page="/WEB-INF/views/footer.jsp" />
     
     <!-- Bootstrap core JavaScript-->
     <script src="/resources/vendor/jquery/jquery.min.js"></script>
@@ -312,10 +282,8 @@ while (dataListIterator.hasNext()) {
     <!-- Custom scripts for this page-->
     <script src="/resources/js/sb-admin-datatables.min.js"></script>
     <script src="/resources/js/sb-admin-charts.min.js"></script>
-    
-    
   </div>
-	
-
 </body>
+
 </html>
+	
