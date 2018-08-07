@@ -16,15 +16,15 @@ DECLARE
   end_date varchar := '';
   
 BEGIN
-div := filterArray[1];
+  div := filterArray[1];
   dis := filterArray[2];
   upa := filterArray[3];
   uni := filterArray[4];
   war := filterArray[5];
   sub := filterArray[6];
   mau := filterArray[7]; 
-  start_date := filterArray[8];
-  end_date := filterArray[9];
+  start_date := filterArray[9];
+  end_date := filterArray[10];
  
  DROP TABLE IF EXISTS child_growth_temp;
  CREATE TEMP TABLE IF NOT EXISTS child_growth_temp (
@@ -41,7 +41,7 @@ div := filterArray[1];
    END IF;
 
    if (dis != '') THEN
-       filterString := filterString || E' and child.district=\'' || dis || E'\'';
+       filterString := filterString || E' and district=\'' || dis || E'\'';
    END IF;
 
    if (upa != '') THEN
