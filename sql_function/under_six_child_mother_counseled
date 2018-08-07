@@ -1,0 +1,34 @@
+CREATE OR REPLACE FUNCTION core.under_six_child_mother_counseled (conditions varchar,startDate varchar,endDate varchar) 
+RETURNS int
+AS $$    
+    DECLARE totalCount int:=0; 
+    dateCondition varchar := '';
+    datePartCondition varchar := '';
+    BEGIN      
+    if (startDate != '' AND endDate != '') THEN     	
+    	endDate = E'\''||endDate || E'\'';
+		dateCondition =' and '|| endDate ||'>= e1.date_created';
+        datePartCondition = ' and DATE_PART('|| E'\'day\',' || endDate ||'::timestamp - c.birth_date::timestamp)<=180 ';
+	ELSE
+        endDate = NOW();
+    	endDate = E'\''||endDate || E'\'';
+		dateCondition =' and '|| endDate ||'>= e1.date_created';
+        datePartCondition = ' and DATE_PART('|| E'\'day\',' || endDate ||'::timestamp - c.birth_date::timestamp)<=180 ';
+    END IF;   
+    EXECUTE 'select count(*)
+            FROM core."viewJsonDataConversionOfClient" c
+            join 
+            (SELECT *
+             FROM core."viewJsonDataConversionOfEvent" e1
+             WHERE  e1.event_type='|| E' \'Lactating Woman Counselling\' '|| dateCondition ||' and NOT EXISTS (
+               SELECT *
+               FROM core."viewJsonDataConversionOfEvent" e2
+               WHERE  e1.base_entity_id = e2.base_entity_id
+                 AND e1.date_created < e2.date_created
+              ) order by e1.base_entity_id desc) as lwce
+             on c.base_entity_id = lwce.base_entity_id
+            WHERE c.event_type ='|| E' \'Birth Registration\' and  lwce.event_type ='|| E' \'Lactating Woman Counselling\'
+            ' || datePartCondition || conditions  into totalCount;
+    return totalCount;
+  END;
+  $$ LANGUAGE 'plpgsql';

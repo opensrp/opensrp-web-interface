@@ -3,8 +3,28 @@ RETURNS TABLE(provider_name character varying, falter int
               , total int)
 AS $$
 DECLARE
+  filterString varchar := '';
+  completeCountFilterString varchar := '';  
+  div varchar := '';
+  dis varchar := '';
+  upa varchar := '';
+  uni varchar := '';
+  war varchar := '';
+  sub varchar := '';
+  mau varchar := ''; 
+  start_date varchar := '';
+  end_date varchar := '';
   
 BEGIN
+div := filterArray[1];
+  dis := filterArray[2];
+  upa := filterArray[3];
+  uni := filterArray[4];
+  war := filterArray[5];
+  sub := filterArray[6];
+  mau := filterArray[7]; 
+  start_date := filterArray[8];
+  end_date := filterArray[9];
  
  DROP TABLE IF EXISTS child_growth_temp;
  CREATE TEMP TABLE IF NOT EXISTS child_growth_temp (
@@ -15,20 +35,52 @@ BEGIN
 );
 
 
-insert into child_growth_temp(provider_name,total)
+/*Creating location conditions query string*/
+   if (div != '') THEN
+       filterString := E' and child.division=\'' || div || E'\'';
+   END IF;
+
+   if (dis != '') THEN
+       filterString := filterString || E' and child.district=\'' || dis || E'\'';
+   END IF;
+
+   if (upa != '') THEN
+       filterString := filterString || E' and upazila=\'' || upa || E'\'';
+   END IF;
+
+   if (uni != '') THEN
+       filterString := filterString || E' and client_union=\'' || uni || E'\'';
+   END IF;
+
+   if (war != '') THEN
+       filterString := filterString || E' and ward=\'' || war || E'\'';
+   END IF;
+
+   if (sub != '') THEN
+       filterString := filterString || E' and subunit=\'' || sub || E'\'';
+   END IF;
+
+   if (mau != '') THEN
+       filterString := filterString || E' and mauzapara=\'' || mau || E'\'';
+   END IF;
+
+   completeCountFilterString := filterString;
+   
+
+EXECUTE 'insert into child_growth_temp(provider_name,total)
 select cg.provider,count(cg.provider) from  core."child_growth" as cg
 join core."viewJsonDataConversionOfClient" as child 
 ON  child.base_entity_id = cg.base_entity_id
-where cg.is_last_event = true   group by cg.provider;
+where cg.is_last_event = true' || filterString  ||' group by cg.provider';
     
   /* update falter list  */
- update child_growth_temp
+ EXECUTE 'update child_growth_temp
     set falter = growth_report.falter from
     (select cg.provider,count(cg.provider) from  core."child_growth" as cg
 	join core."viewJsonDataConversionOfClient" as child 
 	ON  child.base_entity_id = cg.base_entity_id
-	where cg.is_last_event = true and cg.growth_status=false  group by cg.provider) as growth_report(provider_id, falter)
-    where child_growth_temp.provider_name = growth_report.provider_id;
+	where cg.is_last_event = true and cg.growth_status=false ' || filterString  ||'  group by cg.provider) as growth_report(provider_id, falter)
+    where child_growth_temp.provider_name = growth_report.provider_id';
 					
 
 RETURN QUERY SELECT  ttable.provider_name
@@ -38,4 +90,4 @@ RETURN QUERY SELECT  ttable.provider_name
 END;
 $$ LANGUAGE plpgsql;
 
-/*SELECT core.child_growth_report(array['1','3']); */
+SELECT core.child_growth_report(array['Jessore']); 

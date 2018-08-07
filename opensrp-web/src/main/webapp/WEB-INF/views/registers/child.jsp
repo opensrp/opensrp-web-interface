@@ -97,6 +97,7 @@
 														String nid = String.valueOf(clientObject[15]);
 														String birth_weight = String.valueOf(clientObject[31]);
 														String mother_name = String.valueOf(clientObject[32]);
+														pageContext.setAttribute("base_entity_id", base_entity_id);
 											%>
 											<tr>
 												<td><%=base_entity_id%></td>
@@ -107,7 +108,9 @@
 												<td><%=gender%></td>
 												<td><%=birth_weight%></td>
 												<td><%=mother_name%></td>
-												<td><a href="/registers/<%=base_entity_id%>/childDetails.html">Details</a>
+												<td>
+												<a href="<c:url value="/registers/${base_entity_id}/childDetails.html"/>">Details</a>
+												
 										</td> 
 											</tr>
 											<%

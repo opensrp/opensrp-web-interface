@@ -51,7 +51,7 @@ body {
 }
 
 .marker {
-	background-image: url('/resources/images/mapbox-icon.png');
+	background-image: url('/opensrp-dashboard/resources/images/mapbox-icon.png');
 	background-size: cover;
 	width: 50px;
 	height: 50px;
@@ -91,7 +91,7 @@ body {
 					<div class="card text-white bg-primary o-hidden h-100">
 						<div class="card-body">
 							<div class="card-body-icon">
-								<i class="fa fa-fw fa-comments"></i>
+								<i class="fa fa-fw fa-child"></i>
 							</div>
 							<div class="mr-5">
 								<% 
@@ -112,7 +112,7 @@ body {
 					<div class="card text-white bg-warning o-hidden h-100">
 						<div class="card-body">
 							<div class="card-body-icon">
-								<i class="fa fa-fw fa-list"></i>
+								<i class="fa fa-fw fa-child"></i>
 							</div>
 							<div class="mr-5">
 								<h3>90%</h3>
@@ -130,7 +130,7 @@ body {
 					<div class="card text-white bg-success o-hidden h-100">
 						<div class="card-body">
 							<div class="card-body-icon">
-								<i class="fa fa-fw fa-shopping-cart"></i>
+								<i class="fa fa-fw fa-child"></i>
 							</div>
 							<div class="mr-5">
 								<% 
@@ -152,7 +152,7 @@ body {
 					<div class="card text-white bg-danger o-hidden h-100">
 						<div class="card-body">
 							<div class="card-body-icon">
-								<i class="fa fa-fw fa-support"></i>
+								<i class="fa fa-fw fa-female"></i>
 							</div>
 							<div class="mr-5">
 								<% 
@@ -173,7 +173,7 @@ body {
 					<div class="card text-white bg-success o-hidden h-100">
 						<div class="card-body">
 							<div class="card-body-icon">
-								<i class="fa fa-fw fa-support"></i>
+								<i class="fa fa-fw fa-female"></i>
 							</div>
 							<div class="mr-5">
 								<h3>70%</h3>
@@ -191,7 +191,7 @@ body {
 					<div class="card text-white bg-danger o-hidden h-100">
 						<div class="card-body">
 							<div class="card-body-icon">
-								<i class="fa fa-fw fa-support"></i>
+								<i class="fa fa-fw fa-female"></i>
 							</div>
 							<div class="mr-5">
 								<h3>30%</h3>
@@ -273,7 +273,7 @@ body {
             coordinates: [90.4043, 23.7940]
             },
             properties: {
-            title: 'Mapbox',
+            title: 'Lovely',
             description: 'Banani'
             }
          },
@@ -284,7 +284,7 @@ body {
             coordinates: [90.3442, 23.7837]
             },
             properties: {
-            title: 'Mapbox',
+            title: 'Sweety',
             description: 'Gabtoli'
             }
         }]

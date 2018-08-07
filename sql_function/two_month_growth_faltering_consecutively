@@ -1,0 +1,21 @@
+CREATE OR REPLACE FUNCTION core.two_month_growth_faltering_consecutively (conditions varchar,startDate varchar,endDate varchar) 
+RETURNS int
+AS $$    
+    DECLARE totalCount int:=0; 
+    betweenCondition varchar := '';
+    BEGIN  
+    if (startDate != '' AND endDate != '') THEN            
+		betweenCondition := betweenCondition || E' and( cg.event_date between \''|| startDate || E'\' and \''
+                             || endDate || E'\')';
+        END IF;
+    	EXECUTE 'select count(*)
+            FROM core."viewJsonDataConversionOfClient" c
+            join core.child_growth cg 
+             on c.base_entity_id = cg.base_entity_id
+            WHERE c.event_type =' || E' \'Birth Registration\' and cg.chronical_faltering>=2 '
+            || betweenCondition || conditions INTO totalCount ;  
+            --- should be changed next to event date 
+    return totalCount;
+  END;
+  $$ LANGUAGE 'plpgsql';
+  

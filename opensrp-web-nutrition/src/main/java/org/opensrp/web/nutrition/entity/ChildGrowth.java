@@ -42,6 +42,14 @@ public class ChildGrowth {
 	
 	private double weight;
 	
+	private double growth;
+	
+	@Column(name = "chronical_faltering", columnDefinition = "int default 0")
+	private int chronicalFaltering;
+	
+	@Column(name = "chronical_growth", columnDefinition = "int default 0")
+	private int chronicalGrowth;
+	
 	@Column(name = "growth_status")
 	private boolean growthStatus;
 	
@@ -61,7 +69,7 @@ public class ChildGrowth {
 	
 	private String provider;
 	
-	@Column(name = "last_event_date")
+	@Column(name = "event_date")
 	@Temporal(TemporalType.DATE)
 	private Date lastEventDate;
 	
@@ -81,6 +89,30 @@ public class ChildGrowth {
 	
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public double getGrowth() {
+		return growth;
+	}
+	
+	public void setGrowth(double growth) {
+		this.growth = growth;
+	}
+	
+	public int getChronicalFaltering() {
+		return chronicalFaltering;
+	}
+	
+	public void setChronicalFaltering(int chronicalFaltering) {
+		this.chronicalFaltering = chronicalFaltering;
+	}
+	
+	public int getChronicalGrowth() {
+		return chronicalGrowth;
+	}
+	
+	public void setChronicalGrowth(int chronicalGrowth) {
+		this.chronicalGrowth = chronicalGrowth;
 	}
 	
 	public Boolean isLastEvent() {
@@ -209,16 +241,23 @@ public class ChildGrowth {
 		int result = 1;
 		result = prime * result + age;
 		result = prime * result + ((baseEntityId == null) ? 0 : baseEntityId.hashCode());
+		result = prime * result + chronicalFaltering;
+		result = prime * result + chronicalGrowth;
 		result = prime * result + ((created == null) ? 0 : created.hashCode());
 		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(growth);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + (growthStatus ? 1231 : 1237);
 		result = prime * result + id;
 		result = prime * result + interval;
-		long temp;
+		result = prime * result + ((isLastEvent == null) ? 0 : isLastEvent.hashCode());
+		result = prime * result + ((lastEventDate == null) ? 0 : lastEventDate.hashCode());
 		temp = Double.doubleToLongBits(lat);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(lon);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((provider == null) ? 0 : provider.hashCode());
 		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
 		temp = Double.doubleToLongBits(weight);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -243,6 +282,10 @@ public class ChildGrowth {
 				return false;
 		} else if (!baseEntityId.equals(other.baseEntityId))
 			return false;
+		if (chronicalFaltering != other.chronicalFaltering)
+			return false;
+		if (chronicalGrowth != other.chronicalGrowth)
+			return false;
 		if (created == null) {
 			if (other.created != null)
 				return false;
@@ -253,15 +296,32 @@ public class ChildGrowth {
 				return false;
 		} else if (!gender.equals(other.gender))
 			return false;
+		if (Double.doubleToLongBits(growth) != Double.doubleToLongBits(other.growth))
+			return false;
 		if (growthStatus != other.growthStatus)
 			return false;
 		if (id != other.id)
 			return false;
 		if (interval != other.interval)
 			return false;
+		if (isLastEvent == null) {
+			if (other.isLastEvent != null)
+				return false;
+		} else if (!isLastEvent.equals(other.isLastEvent))
+			return false;
+		if (lastEventDate == null) {
+			if (other.lastEventDate != null)
+				return false;
+		} else if (!lastEventDate.equals(other.lastEventDate))
+			return false;
 		if (Double.doubleToLongBits(lat) != Double.doubleToLongBits(other.lat))
 			return false;
 		if (Double.doubleToLongBits(lon) != Double.doubleToLongBits(other.lon))
+			return false;
+		if (provider == null) {
+			if (other.provider != null)
+				return false;
+		} else if (!provider.equals(other.provider))
 			return false;
 		if (updated == null) {
 			if (other.updated != null)
@@ -278,8 +338,10 @@ public class ChildGrowth {
 	@Override
 	public String toString() {
 		return "ChildGrowth [id=" + id + ", baseEntityId=" + baseEntityId + ", age=" + age + ", weight=" + weight
-		        + ", growthStatus=" + growthStatus + ", zScore=" + zScore + ", interval=" + interval + ", gender=" + gender
-		        + ", lat=" + lat + ", lon=" + lon + ", created=" + created + ", updated=" + updated + "]";
+		        + ", growth=" + growth + ", chronicalFaltering=" + chronicalFaltering + ", chronicalGrowth="
+		        + chronicalGrowth + ", growthStatus=" + growthStatus + ", zScore=" + zScore + ", interval=" + interval
+		        + ", gender=" + gender + ", lat=" + lat + ", lon=" + lon + ", isLastEvent=" + isLastEvent + ", provider="
+		        + provider + ", lastEventDate=" + lastEventDate + ", created=" + created + ", updated=" + updated + "]";
 	}
 	
 }

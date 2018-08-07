@@ -4,39 +4,43 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SearchBuilder {
-
+	
 	private String division;
-
+	
 	private String district;
-
+	
 	private String upazila;
-
+	
 	private String union;
-
+	
 	private String ward;
-
+	
 	private String subunit;
-
+	
 	private String mauzapara;
-
+	
 	private String provider;
-
+	
 	private String name;
-
+	
 	private String userName;
-
+	
 	private String search;
-
+	
 	private String year;
-
+	
 	private long serverVersion;
-
+	
 	private String pregStatus;
-
+	
+	private String start;
+	
+	private String end;
+	
 	public SearchBuilder() {
-
+		
 	}
-
+	
 	public SearchBuilder clear() {
 		this.setDivision("");
 		this.setDistrict("");
@@ -52,145 +56,169 @@ public class SearchBuilder {
 		this.setUserName("");
 		this.setServerVersionn(-1);
 		this.setPregStatus("");
+		this.setStart("");
+		this.setEnd("");
 		return this;
-
+		
 	}
-
+	
+	public String getStart() {
+		return start;
+	}
+	
+	public SearchBuilder setStart(String start) {
+		this.start = start;
+		return this;
+	}
+	
+	public String getEnd() {
+		return end;
+	}
+	
+	public SearchBuilder setEnd(String end) {
+		this.end = end;
+		return this;
+	}
+	
 	public String getYear() {
 		return year;
 	}
-
+	
 	public SearchBuilder setYear(String year) {
 		this.year = year;
 		return this;
 	}
-
+	
 	public long getServerVersion() {
 		return serverVersion;
 	}
-
+	
 	public SearchBuilder setServerVersionn(long serverVersion) {
 		this.serverVersion = serverVersion;
 		return this;
 	}
-
+	
 	public String getDivision() {
 		return division;
 	}
-
+	
 	public SearchBuilder setDivision(String division) {
 		this.division = division;
 		return this;
 	}
-
+	
 	public String getDistrict() {
 		return district;
 	}
-
+	
 	public SearchBuilder setDistrict(String district) {
 		this.district = district;
 		return this;
 	}
-
+	
 	public String getUpazila() {
 		return upazila;
 	}
-
+	
 	public SearchBuilder setUpazila(String upazila) {
 		this.upazila = upazila;
 		return this;
 	}
-
+	
 	public String getUnion() {
 		return union;
 	}
-
+	
 	public SearchBuilder setUnion(String union) {
 		this.union = union;
 		return this;
 	}
-
+	
 	public String getWard() {
 		return ward;
 	}
-
+	
 	public SearchBuilder setWard(String ward) {
 		this.ward = ward;
 		return this;
 	}
-
+	
 	public String getSubunit() {
 		return subunit;
 	}
-
+	
 	public SearchBuilder setSubunit(String subunit) {
 		this.subunit = subunit;
 		return this;
 	}
-
+	
 	public String getMauzapara() {
 		return mauzapara;
 	}
-
+	
 	public SearchBuilder setMauzapara(String mauzapara) {
 		this.mauzapara = mauzapara;
 		return this;
 	}
-
+	
 	public String getProvider() {
 		return provider;
 	}
-
+	
 	public SearchBuilder setProvider(String provider) {
 		this.provider = provider;
 		return this;
 	}
-
+	
 	public String getName() {
 		return name;
 	}
-
+	
 	public SearchBuilder setName(String name) {
 		this.name = name;
 		return this;
 	}
-
+	
 	public String getSearch() {
 		return search;
 	}
-
+	
 	public SearchBuilder setSearch(String search) {
 		this.search = search;
 		return this;
 	}
-
+	
 	public String getUserName() {
 		return userName;
 	}
-
+	
 	public SearchBuilder setUserName(String userName) {
 		this.userName = userName;
 		return this;
 	}
-
+	
 	public String getPregStatus() {
 		return pregStatus;
 	}
-
+	
 	public void setPregStatus(String pregStatus) {
 		this.pregStatus = pregStatus;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((district == null) ? 0 : district.hashCode());
 		result = prime * result + ((division == null) ? 0 : division.hashCode());
+		result = prime * result + ((end == null) ? 0 : end.hashCode());
 		result = prime * result + ((mauzapara == null) ? 0 : mauzapara.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((pregStatus == null) ? 0 : pregStatus.hashCode());
 		result = prime * result + ((provider == null) ? 0 : provider.hashCode());
 		result = prime * result + ((search == null) ? 0 : search.hashCode());
+		result = prime * result + (int) (serverVersion ^ (serverVersion >>> 32));
+		result = prime * result + ((start == null) ? 0 : start.hashCode());
 		result = prime * result + ((subunit == null) ? 0 : subunit.hashCode());
 		result = prime * result + ((union == null) ? 0 : union.hashCode());
 		result = prime * result + ((upazila == null) ? 0 : upazila.hashCode());
@@ -199,7 +227,7 @@ public class SearchBuilder {
 		result = prime * result + ((year == null) ? 0 : year.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -219,6 +247,11 @@ public class SearchBuilder {
 				return false;
 		} else if (!division.equals(other.division))
 			return false;
+		if (end == null) {
+			if (other.end != null)
+				return false;
+		} else if (!end.equals(other.end))
+			return false;
 		if (mauzapara == null) {
 			if (other.mauzapara != null)
 				return false;
@@ -229,6 +262,11 @@ public class SearchBuilder {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
+		if (pregStatus == null) {
+			if (other.pregStatus != null)
+				return false;
+		} else if (!pregStatus.equals(other.pregStatus))
+			return false;
 		if (provider == null) {
 			if (other.provider != null)
 				return false;
@@ -238,6 +276,13 @@ public class SearchBuilder {
 			if (other.search != null)
 				return false;
 		} else if (!search.equals(other.search))
+			return false;
+		if (serverVersion != other.serverVersion)
+			return false;
+		if (start == null) {
+			if (other.start != null)
+				return false;
+		} else if (!start.equals(other.start))
 			return false;
 		if (subunit == null) {
 			if (other.subunit != null)
@@ -271,12 +316,13 @@ public class SearchBuilder {
 			return false;
 		return true;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "SearchBuilder [division=" + division + ", district=" + district + ", upazila=" + upazila + ", union="
-				+ union + ", ward=" + ward + ", subunit=" + subunit + ", mauzapara=" + mauzapara + ", provider=" + provider
-				+ ", name=" + name + ", userName=" + userName + ", search=" + search + ", year=" + year + "]";
+		        + union + ", ward=" + ward + ", subunit=" + subunit + ", mauzapara=" + mauzapara + ", provider=" + provider
+		        + ", name=" + name + ", userName=" + userName + ", search=" + search + ", year=" + year + ", serverVersion="
+		        + serverVersion + ", pregStatus=" + pregStatus + ", start=" + start + ", end=" + end + "]";
 	}
-
+	
 }

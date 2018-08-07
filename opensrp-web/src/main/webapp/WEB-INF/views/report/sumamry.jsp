@@ -20,7 +20,7 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Child Growth Report</title>
+<title>Summary Report</title>
 <link type="text/css"
 	href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/>" rel="stylesheet">
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -36,26 +36,13 @@
 							
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Child Growth Report
+					<i class="fa fa-table"></i> Summary Report
 				</div>
 				<div class="card-body">
-					<div class="table-responsive">
-						<table class="table table-bordered" id="dataTable">
-							<thead>
-								<tr>
-									<th>CHW Name</th>
-									<th>Adequate Growth</th>
-									<th>Inadequate Growth</th>
-									<th>Total</th>
-									
-								</tr>
-							</thead>
-							
-							
-							<tbody id="tableBody">	
-								
-								<%	String provider = "";
-									int falter = 0;
+					
+						<div class="form-group" id="data">
+							<%	String indicator = "";
+									int count = 0;
 									int total = 0;
 									int growth=0;
 									int size=0;
@@ -66,43 +53,34 @@
 									Iterator dataCountListIterator = data.iterator();
 									while (dataCountListIterator.hasNext()) {
 										Object[] DataObject = (Object[]) dataCountListIterator.next();
-										provider = String.valueOf(DataObject[0]);
-										falter = Integer.parseInt(String.valueOf(DataObject[1]));
-										total = Integer.parseInt(String.valueOf(DataObject[2]));
-										growth = total-falter;										
-										String falterInPercentage = String.format("%.2f", (double) (falter*100)/total);
-										String adequateInPercentage = String.format("%.2f",(double)(growth*100)/total);
+										indicator = String.valueOf(DataObject[0]);
+										count = Integer.parseInt(String.valueOf(DataObject[1]));
+										total = Integer.parseInt(String.valueOf(DataObject[2]));																				
+										String falterInPercentage = String.format("%.2f", (double) (count*100)/total);
 										
 									%>
-									<tr>
-									<td><%=provider %></td>
-									<td><%=growth %>  ( <%=adequateInPercentage %> % )</td>
-									<td><%=falter %>  ( <%= falterInPercentage %> % )</td>									
-									<td><%=total %></td>
-									</tr>
+									<div class="row">
+									<div class="col-6"><%=indicator %> </div>
+									<div class="col-3"><%=falterInPercentage%> %</div>
+									</div>
 									<% 
 									   } 
 									}									
 									%>
-							</tbody>
-						</table>
+							
 					</div>
 				</div>
-				<div class="card-footer small text-muted"></div>
-			</div>
 		</div>
 
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 		
 		<script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 		
-		<script src="<c:url value='/resources/js/jquery.dataTables.min.js'/>"></script>
+		
 		<script src="<c:url value='/resources/js/datepicker.js'/>"></script>
-		<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js'/>"></script>
+		
 		<script type="text/javascript">
-		$(document).ready(function() {
-		    $('#dataTable').DataTable();
-		} );
+		
 		
 		$("#search-form").submit(function(event) { 
 			$("#loading").show();
@@ -115,6 +93,8 @@
 			var subunit = "";
 			var mauzapara = "";
 			var params = "" ;
+			var start_date = "" ;
+			var end_date = "" ;
 			
 			division = $('#division').val();
 			district = $('#district').val();
@@ -123,8 +103,10 @@
 			ward = $('#ward').val();
 			subunit = $('#subunit').val();
 			mauzapara = $('#mauzapara').val();
+			start_date = $('#start').val();
+			end_date = $('#end').val();
 			if(division != "" && division != "0?" && division != null ){
-				params ="?division="+division;
+				params ="&division="+division;
 			}
 			if(district != "0?" &&  district != "" && district != null){
 				params +="&district="+district;
@@ -146,12 +128,18 @@
 			if(mauzapara != "0?" && mauzapara != "" && mauzapara != null){
 				params +="&mauzapara="+mauzapara;
 			}
+			if( start_date != "" && start_date != null){
+				params +="&start_date="+start_date;
+			}
+			if( end_date != "" && end_date != null){
+				params +="&end_date="+end_date;
+			}
 			console.log(params);
 			event.preventDefault();
 			$.ajax({
 				type : "GET",
 				contentType : "application/json",				
-				url : "/opensrp-dashboard/report/child-growth-ajax.html"+params,				 
+				url : "/opensrp-dashboard/report/summary-ajax.html?"+params,				 
 				dataType : 'html',
 				timeout : 100000,
 				beforeSend: function() {
@@ -160,7 +148,7 @@
 				},
 				success : function(data) {	
 					$("#loading").hide();
-				   $("#tableBody").html(data);
+				   $("#data").html(data);
 				},
 				error : function(e) {
 				    console.log("ERROR: ", e);
