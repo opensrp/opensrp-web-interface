@@ -286,9 +286,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Object[]> executeSelectQuery(String sqlQuery) {
+	public <T> List<T> executeSelectQuery(String sqlQuery) {
 		Session session = sessionFactory.openSession();
-		List<Object[]> results = null;
+		List<T> results = null;
 		try {
 			SQLQuery query = session.createSQLQuery(sqlQuery);
 			results = query.list();

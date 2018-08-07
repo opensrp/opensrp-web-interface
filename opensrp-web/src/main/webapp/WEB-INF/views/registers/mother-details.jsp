@@ -64,21 +64,21 @@ String motherId = null;
 		Object[] clientObject = (Object[]) dataListIterator.next();
 		String id = String.valueOf(clientObject[1]);
 		if(id.equals(motherId)){
-		String firstName = String.valueOf(clientObject[9]);
-		String lastName = String.valueOf(clientObject[13]);
-		String birthDate = String.valueOf(clientObject[3]);
-		String spouseName = String.valueOf(clientObject[19]);
-		String phoneNumber = String.valueOf(clientObject[17]);
+		String firstName = (String.valueOf(clientObject[9])!= null)?String.valueOf(clientObject[9]) : "";
+		String lastName = (String.valueOf(clientObject[13])!= null)?String.valueOf(clientObject[13]) : "";
+		String birthDate = (String.valueOf(clientObject[3])!= null)?String.valueOf(clientObject[3]) : "";
+		String spouseName = (String.valueOf(clientObject[19])!= null)?String.valueOf(clientObject[19]) : "";;
+		String phoneNumber = (String.valueOf(clientObject[17])!= null)?String.valueOf(clientObject[17]) : "";
 
-		String division = String.valueOf(clientObject[8]);
-		String district = String.valueOf(clientObject[7]);
-		String upazilla = String.valueOf(clientObject[22]);
-		String union = String.valueOf(clientObject[21]);
-		String ward = String.valueOf(clientObject[23]);
-		String householdId = String.valueOf(clientObject[12]);
+		String division = (String.valueOf(clientObject[8])!= null)?String.valueOf(clientObject[8]) : "";
+		String district = (String.valueOf(clientObject[7])!= null)?String.valueOf(clientObject[7]) : "";
+		String upazilla = (String.valueOf(clientObject[22])!= null)?String.valueOf(clientObject[22]) : "";
+		String union = (String.valueOf(clientObject[21])!= null)?String.valueOf(clientObject[21]) : "";
+		String ward = (String.valueOf(clientObject[23])!= null)?String.valueOf(clientObject[23]) : "";
+		String householdId = (String.valueOf(clientObject[12])!= null)?String.valueOf(clientObject[12]) : "";
 		
 		
-		String lmpDate = String.valueOf(clientObject[24]);
+		String lmpDate = (String.valueOf(clientObject[24])!= null)?String.valueOf(clientObject[24]) : "";
 		
 %>
            
@@ -102,7 +102,7 @@ String motherId = null;
                   </div>
 <%
 		}
-		}
+	}
 }
 %>
                 </div>
@@ -130,10 +130,10 @@ List<Object> dataList = (List<Object>) session
 Iterator dataListIterator = dataList.iterator();
 while (dataListIterator.hasNext()) {
 	Object[] clientObject = (Object[]) dataListIterator.next();
-	String id = String.valueOf(clientObject[0]);
-	String isPregnant = String.valueOf(clientObject[19]);
-	String edd = String.valueOf(clientObject[20]);
-	String lmp = String.valueOf(clientObject[21]);
+	String id = (String.valueOf(clientObject[0])!= null)?String.valueOf(clientObject[0]) : "";
+	String isPregnant = (String.valueOf(clientObject[20])!= null)?String.valueOf(clientObject[20]) : "";
+	String edd = (String.valueOf(clientObject[21])!= null)?String.valueOf(clientObject[21]) : "";
+	String lmp = (String.valueOf(clientObject[22])!= null)?String.valueOf(clientObject[22]) : "";
 		
 %>	
             <div class="card-body">
@@ -206,14 +206,15 @@ while (dataListIterator.hasNext()) {
  if (session.getAttribute("counsellingList") != null) {
 	List<Object> dataList = (List<Object>) session
 			.getAttribute("counsellingList");
+	if(dataList.size()!=0){
 	
 	String prevCounsellingFollwed = null;
 	for(int i=(dataList.size()-1), j=0; i>=0; i--){
 		Object[] clientObject = (Object[]) dataList.get(i);
 		
-		String id = String.valueOf(clientObject[0]);
-		String counselling = String.valueOf(clientObject[22]);
-		String followedCounselling = String.valueOf(clientObject[26]);
+		String id = (String.valueOf(clientObject[0])!= null)?String.valueOf(clientObject[0]) : "";
+		String counselling = (String.valueOf(clientObject[23])!= null)?String.valueOf(clientObject[23]) : "";
+		String followedCounselling = (String.valueOf(clientObject[27])!= null)?String.valueOf(clientObject[27]) : "";
 		
 	
 	
@@ -231,58 +232,33 @@ while (dataListIterator.hasNext()) {
             <tr>
                   <td><%=id%></td>
                   <td><%=counselling%></td>
-                  
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-             <%-- <p class="card-text small">
-             <b><%=id%> - <%=counselling%>  --%>
+
  <% 
  			if(j!= 0){
  				
  			
  
  %>            
-             
-             
-            <%--  - <%=prevCounsellingFollwed%></b>
-             </p>
-            </div> --%>
-            
-           
                   <td><%=prevCounsellingFollwed%></td>
                 </tr>
 				
 <%
  			}else{
 %>
-			<!-- </b>
-             </p>
-            </div> -->
             
             <td></td>
             </tr>
             
 <% 				
-			 observation = String.valueOf(clientObject[10]);
+			 observation = (String.valueOf(clientObject[10])!= null)?String.valueOf(clientObject[10]) : "";
              obsArr = new JSONArray(observation); 
              
  			}
              j++;
              prevCounsellingFollwed = followedCounselling;
 		}
-		}
+	}
+	}
 %>            
             </tbody>
             </table>
@@ -308,20 +284,25 @@ while (dataListIterator.hasNext()) {
               </tfoot>
               <tbody> 
 <%
-for (int i = 0; i < obsArr.length(); i++)
+if(obsArr!=null){
+ for (int i = 0; i < obsArr.length(); i++)
 {
-      String formSubmissionField =  obsArr.getJSONObject(i).getString("formSubmissionField");
+      String formSubmissionField =  (obsArr.getJSONObject(i).getString("formSubmissionField")!=null)?
+    		  							obsArr.getJSONObject(i).getString("formSubmissionField"): "";
       JSONArray valArr = obsArr.getJSONObject(i).getJSONArray("values");
       //String val = valArr.getJSONObject(0).toString();
-      String val = valArr.getString(0);
-
+      String val = (valArr.getString(0)!=null)?valArr.getString(0):"";
+ 
 %>
-              	<tr>
+                <tr>
               	<td><%=formSubmissionField%></td>
               	<td><%=val%></td>
-              	</tr>
+              	</tr> 
 <%
 }
+ 
+}
+ 
 %>
               </tbody>
               </table>
@@ -392,14 +373,15 @@ for (int i = 0; i < obsArr.length(); i++)
 	int i=0;
 	List<Object> dataList = (List<Object>) session
 			.getAttribute("followUpList");
+	if(dataList.size()!=0){
 	Iterator dataListIterator = dataList.iterator();
 	while (dataListIterator.hasNext()) {
 		i++;
 		Object[] clientObject = (Object[]) dataListIterator.next();
-		String id = String.valueOf(clientObject[0]);
-		String followUpDate = String.valueOf(clientObject[23]);
-		String nextAppointmentDate = String.valueOf(clientObject[24]);
-		
+		String id = (String.valueOf(clientObject[0])!= null)?String.valueOf(clientObject[0]) : "";;
+		String followUpDate = (String.valueOf(clientObject[24])!= null)?String.valueOf(clientObject[24]) : "";;
+		String nextAppointmentDate = (String.valueOf(clientObject[25])!= null)?String.valueOf(clientObject[25]) : "";;
+		 
 %>	          
                 <tr>
                   <td><%=i%></td>
@@ -407,12 +389,14 @@ for (int i = 0; i < obsArr.length(); i++)
                   <td></td>
                   <td><%=nextAppointmentDate%></td>
                   <td>Good</td>
-                </tr>
+                </tr> 
                 
 <%
-		}
+	 }	
 	i=0;
-		}
+ }
+} 
+		
 %>
 
               </tbody>

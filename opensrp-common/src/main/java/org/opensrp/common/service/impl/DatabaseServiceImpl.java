@@ -147,7 +147,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 	
 	
 	@Transactional
-	public List<Object[]> executeSelectQuery(String sqlQuery) {
+	public <T> List<T> executeSelectQuery(String sqlQuery) {
 		return databaseRepositoryImpl.executeSelectQuery(sqlQuery);
 	}
 	
