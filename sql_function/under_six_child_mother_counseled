@@ -2,33 +2,38 @@ CREATE OR REPLACE FUNCTION core.under_six_child_mother_counseled (conditions var
 RETURNS int
 AS $$    
     DECLARE totalCount int:=0; 
-    dateCondition varchar := '';
+    dateConditionInEvent varchar := '';
     datePartCondition varchar := '';
     BEGIN      
     if (startDate != '' AND endDate != '') THEN     	
     	endDate = E'\''||endDate || E'\'';
-		dateCondition =' and '|| endDate ||'>= e1.date_created';
-        datePartCondition = ' and DATE_PART('|| E'\'day\',' || endDate ||'::timestamp - c.birth_date::timestamp)<=180 ';
+        startDate = E'\''||startDate || E'\'';
+		dateConditionInEvent := dateConditionInEvent || E' and ( event_date between '|| startDate || ' and '
+                             || endDate ||')';
+        datePartCondition = ' and ( DATE_PART('|| E'\'day\',' || startDate ||'::timestamp - c.birth_date::timestamp)<=180 
+        and  birth_date<'|| startDate ||'OR DATE_PART('|| E'\'day\',' || endDate ||'::timestamp - c.birth_date::timestamp)<=180 
+        and  birth_date<'|| endDate||')';
 	ELSE
-        endDate = NOW();
-    	endDate = E'\''||endDate || E'\'';
-		dateCondition =' and '|| endDate ||'>= e1.date_created';
-        datePartCondition = ' and DATE_PART('|| E'\'day\',' || endDate ||'::timestamp - c.birth_date::timestamp)<=180 ';
+        
+    	endDate = E'\''||NOW()|| E'\'';
+		dateConditionInEvent := '';
+        datePartCondition = ' and DATE_PART('|| E'\'day\',' || endDate ||'::timestamp - c.birth_date::timestamp)<=180 and  birth_date <'|| endDate;
     END IF;   
     EXECUTE 'select count(*)
             FROM core."viewJsonDataConversionOfClient" c
             join 
             (SELECT *
              FROM core."viewJsonDataConversionOfEvent" e1
-             WHERE  e1.event_type='|| E' \'Lactating Woman Counselling\' '|| dateCondition ||' and NOT EXISTS (
+             WHERE  e1.event_type='|| E' \'Lactating Woman Counselling\' '|| dateConditionInEvent ||' and NOT EXISTS (
                SELECT *
                FROM core."viewJsonDataConversionOfEvent" e2
                WHERE  e1.base_entity_id = e2.base_entity_id
                  AND e1.date_created < e2.date_created
               ) order by e1.base_entity_id desc) as lwce
              on c.base_entity_id = lwce.base_entity_id
-            WHERE c.event_type ='|| E' \'Birth Registration\' and  lwce.event_type ='|| E' \'Lactating Woman Counselling\'
-            ' || datePartCondition || conditions  into totalCount;
+            WHERE c.event_type ='|| E' \'Birth Registration\' ' || datePartCondition || conditions  into totalCount;
     return totalCount;
   END;
   $$ LANGUAGE 'plpgsql';
+  
+  select core.under_six_child_mother_counseled('','','');

@@ -106,6 +106,6 @@ RETURN QUERY SELECT  ttable.indicator_name
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT core.child_indicator_report(array['Khulna','Jhenaidah','Maheshpur','Fatepur','Fatepur:Ward-2','Fatepur:Ward-2:1-KA','Fatepur:Ward-2:1-KA:EPI center','2018-02-07','2018-08-15']); 
-SELECT core.child_indicator_report(array['','','','','','','','','']); 
+SELECT core.child_summary_report(array['Khulna','Jhenaidah','Maheshpur','Fatepur','Fatepur:Ward-2','Fatepur:Ward-2:1-KA','Fatepur:Ward-2:1-KA:EPI center','2018-02-07','2018-08-15']); 
+SELECT core.child_summary_report(array['','','','','','','','','']); 
 

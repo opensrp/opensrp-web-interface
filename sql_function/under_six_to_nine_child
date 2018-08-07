@@ -3,18 +3,30 @@ RETURNS int
 AS $$    
     DECLARE totalCount int:=0; 
     endDateCondition varchar := '';
+    datePartCondition varchar :='';
     BEGIN      
     if (startDate != '' AND endDate != '') THEN            
-		endDateCondition = E'\''||endDate || E'\'';
+		endDate = E'\''||endDate || E'\'';
+        startDate = E'\''||startDate || E'\'';
+        datePartCondition =' and (
+            (DATE_PART(' || E'\'day\','|| startDate || '::timestamp - c.birth_date::timestamp)>181
+                 and DATE_PART('|| E'\'day\','|| startDate || '::timestamp - c.birth_date::timestamp)<271 and birth_date <'||startDate ||')
+                  OR  
+            (DATE_PART(' || E'\'day\','|| endDate || '::timestamp - c.birth_date::timestamp)>181
+                 and DATE_PART('|| E'\'day\','|| endDate || '::timestamp - c.birth_date::timestamp)<271 and birth_date <'|| endDate ||')
+            )';
     ELSE   
-        endDate = NOW();
-        endDateCondition = E'\''||endDate || E'\'';
+        endDate = E'\''||NOW()|| E'\'';
+        datePartCondition =' and (
+            (DATE_PART(' || E'\'day\','|| endDate || '::timestamp - c.birth_date::timestamp)>181
+                 and DATE_PART('|| E'\'day\','|| endDate || '::timestamp - c.birth_date::timestamp)<271 and birth_date <'|| endDate ||')
+            )';
 	END IF; 
      EXECUTE 'select count(*)
             FROM core."viewJsonDataConversionOfClient" c            
-            WHERE c.event_type =' || E' \'Birth Registration\' and             
-            (DATE_PART(' || E'\'day\','|| endDateCondition || '::timestamp - c.birth_date::timestamp)>181
-                 and DATE_PART('|| E'\'day\','|| endDateCondition || '::timestamp - c.birth_date::timestamp)<271 )' || conditions  into totalCount ;
+            WHERE c.event_type =' || E' \'Birth Registration\'' || datePartCondition || conditions  into totalCount ;
     return totalCount;
   END;
   $$ LANGUAGE 'plpgsql';
+  
+  select core.under_six_to_nine_child('','','');

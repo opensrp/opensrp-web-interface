@@ -3,6 +3,7 @@
  */
 package org.opensrp.web.controller;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -78,6 +79,14 @@ public class ReportController {
 	
 	@RequestMapping(value = "/analytics-ajax.html", method = RequestMethod.GET)
 	public String analyticsAjax(HttpServletRequest request, HttpSession session, Model model) {
-		return "/report/sumamry-ajax";
+		searchBuilder.clear();
+		List<Object[]> viewRefresh = childGrowthServiceImpl.refreshView(searchBuilder);
+		int refreshCount = 0;
+		Iterator obArrIterator = viewRefresh.iterator();
+		if (obArrIterator.hasNext()) {
+			refreshCount = (Integer) obArrIterator.next();
+		}
+		session.setAttribute("refreshCount", refreshCount);
+		return "/report/analytics-ajax";
 	}
 }
