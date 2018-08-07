@@ -20,17 +20,17 @@ BEGIN
 
    /*insert data for total child growth faltering*/
    insert into helper_table(month, growthFalteringPercentage)
-   select date_part('month', date(last_event_date))
-   , count(date_part('month', date(last_event_date)))
+   select date_part('month', date(event_date))
+   , count(date_part('month', date(event_date)))
    from core.child_growth cg1
    WHERE cg1.growth_status=false and NOT EXISTS (
 				  SELECT *
 				  FROM core.child_growth cg2
 				  WHERE cg1.base_entity_id = cg2.base_entity_id
-				  AND cg1.last_event_date < cg2.last_event_date
+				  AND cg1.event_date < cg2.event_date
 			  )
-   group by date_part('month', date(last_event_date))
-   order by date_part('month', date(last_event_date)) asc;
+   group by date_part('month', date(event_date))
+   order by date_part('month', date(event_date)) asc;
 
    /*insert percentage of growth faltering data*/
    insert into table_growth_faltering_percentage(month, growthFalteringPercentage)
