@@ -1,4 +1,4 @@
-package org.opensrp.web.visualization;
+package org.opensrp.web.nutrition.visualization;
 
 import java.util.List;
 
@@ -10,9 +10,9 @@ public class DataVisualization {
 	public List<Object[]> getMonthWiseData(SearchBuilder searchBuilder, VisualizationService visualizationService) {
 		return visualizationService.getMonthWiseData(searchBuilder);
 	}
-	
+
 	public List<Object[]> getDayWiseData(SearchBuilder searchBuilder, VisualizationService visualizationService) {
 		return visualizationService.getDayWiseData(searchBuilder);
 	}
-	
+
 }
