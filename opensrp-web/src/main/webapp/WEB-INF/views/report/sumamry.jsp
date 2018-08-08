@@ -29,7 +29,12 @@
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
 		<div class="container-fluid">
-
+			<div class="form-group">				
+				   <a  href="<c:url value="/report/child-growth.html"/>"> <strong> Child Growth Report</strong> 
+					</a>  |  <a  href="<c:url value="/report/summary.html"/>"> <strong>Sumamry Report</strong>
+					</a>|  <a  href="<c:url value="/report/analytics.html"/>"> <strong>Analytics</strong>
+					</a>		
+			</div>
 			<jsp:include page="/WEB-INF/views/report-search-panel.jsp" />
 			<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%"> 
 							<img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
@@ -49,24 +54,29 @@
 									int counter=0;						
 									
 									if(session.getAttribute("data") != null){
-									List<Object> data = (List<Object>) session.getAttribute("data");
-									Iterator dataCountListIterator = data.iterator();
-									while (dataCountListIterator.hasNext()) {
-										Object[] DataObject = (Object[]) dataCountListIterator.next();
-										indicator = String.valueOf(DataObject[0]);
-										count = Integer.parseInt(String.valueOf(DataObject[1]));
-										total = Integer.parseInt(String.valueOf(DataObject[2]));																				
-										String falterInPercentage = String.format("%.2f", (double) (count*100)/total);
-										
-									%>
-									<div class="row">
-									<div class="col-6"><%=indicator %> </div>
-									<div class="col-3"><%=falterInPercentage%> %</div>
-									</div>
-									<% 
-									   } 
-									}									
-									%>
+										List<Object> data = (List<Object>) session.getAttribute("data");
+										Iterator dataCountListIterator = data.iterator();
+										while (dataCountListIterator.hasNext()) {
+											String falterInPercentage = "";
+											Object[] DataObject = (Object[]) dataCountListIterator.next();
+											indicator = String.valueOf(DataObject[0]);
+											count = Integer.parseInt(String.valueOf(DataObject[1]));
+											total = Integer.parseInt(String.valueOf(DataObject[2]));
+											if(count > 0){
+											 falterInPercentage = String.format("%.2f", (double) (count*100)/total);
+											}else{
+												falterInPercentage = String.format("%.2f", 0.000);
+											}
+																		
+										%>
+											<div class="row">
+											<div class="col-6"><%=indicator %></div>
+											<div class="col-3"><%=falterInPercentage%> %</div>
+											</div>
+										<% 
+																	   } 
+										}									
+									%>			
 							
 					</div>
 				</div>

@@ -7,24 +7,35 @@ AS $$
     DECLARE val varchar = '';   
     DECLARE eventRow RECORD;
     DECLARE childs RECORD;    
-    dateBetweenCondition varchar := '';
+    eventBetweenDateCondition varchar := '';
+    clientdateBetweenCondition varchar := '';
+    underSixCondition varchar := '';
     BEGIN  
-    if (startDate != '' AND endDate != '') THEN            
-		dateBetweenCondition := dateBetweenCondition || E' and( event_date between \''|| startDate || E'\' and \''
-                             || endDate || E'\')';
-        END IF;
-   		FOR childs IN 
+    if (startDate != '' AND endDate != '') THEN 
+    	endDate = E'\''||endDate|| E'\'';
+        startDate = E'\''||startDate|| E'\'';		
+        eventBetweenDateCondition := eventBetweenDateCondition || E' and ( event_date between '|| startDate || ' and '
+                             || endDate ||')';
+        clientdateBetweenCondition := clientdateBetweenCondition || E'  ( birth_date between '|| startDate || ' and '
+                             || endDate ||')';
+        underSixCondition = ' and ( ( DATE_PART('|| E'\'day\',' || startDate ||'::timestamp - c.birth_date::timestamp)<=180 
+        and  birth_date<='|| startDate ||') OR '|| clientdateBetweenCondition || ')';
+    ELSE
+    	endDate = E'\''||NOW()|| E'\'';
+		eventBetweenDateCondition := '';
+        underSixCondition = ' and DATE_PART('|| E'\'day\',' || endDate ||'::timestamp - c.birth_date::timestamp)<=180 and  birth_date <='|| endDate;
+    END IF;
+   	FOR childs IN 
            
              EXECUTE 'SELECT c.base_entity_id as baseEntityId,c.birth_date as dob FROM core."viewJsonDataConversionOfClient" as c  
-            WHERE c.event_type =' || E' \'Birth Registration\' '|| conditions
+             WHERE c.event_type =' || E' \'Birth Registration\' '|| conditions || underSixCondition
              --and base_entity_id ='82ff2d31-b00f-4767-ade8-3a10079686bb'
             LOOP
             val = '';
             FOR eventRow IN 
                 EXECUTE 'SELECT * FROM core."viewJsonDataConversionOfEvent" e  
                 WHERE e.event_type ='|| E'\'Lactating Woman Counselling\'                
-                and e.base_entity_id ='||E' \''||childs.baseEntityId ||E'\'' || dateBetweenCondition
-                
+                and e.base_entity_id ='||E' \''||childs.baseEntityId ||E'\'' || eventBetweenDateCondition                
                 LOOP                   
                     val = eventRow.additional_liquids_other_than_breastmilk; 
                     IF val = 'Yes' 
@@ -44,3 +55,6 @@ AS $$
   END;
   $$ LANGUAGE 'plpgsql';
   
+
+  
+  select core.exclusively_breastfeed('','','');

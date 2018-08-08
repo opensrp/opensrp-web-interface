@@ -1,0 +1,33 @@
+CREATE OR REPLACE FUNCTION core.total_child_six_to_twentythree (conditions varchar,startDate varchar,endDate varchar) 
+RETURNS int
+AS $$    
+    DECLARE totalCount int:=0; 
+    betweenCondition varchar := '';
+    clientdateBetweenCondition varchar :='';
+    sixTotwentythreeAgedCondition varchar := '';
+    BEGIN      
+   	IF (startDate != '' AND endDate != '') THEN            
+		endDate = E'\''|| endDate || E'\'';
+        startDate = E'\''||startDate || E'\'';
+        clientdateBetweenCondition := clientdateBetweenCondition || E'  ( birth_date between '|| startDate || ' and '
+                             || endDate ||')';
+        sixTotwentythreeAgedCondition =' and (
+            ( DATE_PART (' || E'\'day\','|| startDate || '::timestamp - c.birth_date::timestamp)>181
+                 and  DATE_PART('|| E'\'day\','|| startDate || '::timestamp - c.birth_date::timestamp)<691 and birth_date <'||startDate ||'
+                 ) OR ' || clientdateBetweenCondition ||')';
+    	ELSE   
+        endDate = E'\''||NOW()|| E'\'';
+        sixTotwentythreeAgedCondition =' and (
+            ( DATE_PART(' || E'\'day\','|| endDate || '::timestamp - c.birth_date::timestamp)>181
+                 and DATE_PART('|| E'\'day\','|| endDate || '::timestamp - c.birth_date::timestamp)<691 and birth_date <='|| endDate ||')
+            )';
+	END IF; 
+    
+     EXECUTE 'select count(*)
+            FROM core."viewJsonDataConversionOfClient" c            
+            WHERE c.event_type =' || E' \'Birth Registration\'' || sixTotwentythreeAgedCondition || conditions INTO totalCount;
+            --- should be changed next to event date 
+    return totalCount;
+  END;
+  $$ LANGUAGE 'plpgsql';
+   select core.total_child_six_to_twentythree('','','');

@@ -37,15 +37,15 @@ public class DashboardController {
 
 	@Autowired
 	SearchBuilder searchBuilder;
-
+	
 	@Autowired
 	private SearchUtil searchUtil;
-
+	
 	public VisualizationService visualizationService;
-
+	
 	@Autowired
 	private DashboardDataVisualizeServiceImpl dashboardDataVisualizeServiceImpl;
-
+	
 	@Autowired
 	private DataVisualization dataVisualization;
 
@@ -138,7 +138,6 @@ public class DashboardController {
 			searchBuilder.setYear(currentYear.toString());
 		}
 		searchUtil.setDivisionAttribute(session);
-
 		List<Object[]> monthWiseData = dataVisualization.getMonthWiseData(searchBuilder, visualizationService);
 
 		JSONArray lineChartData = HighChart.getLineChartData(monthWiseData, searchBuilder.getYear());
@@ -146,7 +145,7 @@ public class DashboardController {
 		session.setAttribute("lineChartData", lineChartData);
 		session.setAttribute("lineChartCategory", lineChartCategory);
 	}
-
+	
 	private void setTitles(Model model, HttpSession session, String title) {
 		model.addAttribute("title", title + " Search Criteria");
 		session.setAttribute("chatTitle", title + " Data Visualization");

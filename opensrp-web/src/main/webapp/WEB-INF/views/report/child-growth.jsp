@@ -29,7 +29,12 @@
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
 		<div class="container-fluid">
-
+			<div class="form-group">				
+				   <a  href="<c:url value="/report/child-growth.html"/>"> <strong> Child Growth Report</strong> 
+					</a>  |  <a  href="<c:url value="/report/summary.html"/>"> <strong>Sumamry Report</strong>
+					</a>|  <a  href="<c:url value="/report/analytics.html"/>"> <strong>Analytics</strong>
+					</a>		
+			</div>
 			<jsp:include page="/WEB-INF/views/report-search-panel.jsp" />
 			<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%"> 
 							<img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
@@ -68,10 +73,17 @@
 										Object[] DataObject = (Object[]) dataCountListIterator.next();
 										provider = String.valueOf(DataObject[0]);
 										falter = Integer.parseInt(String.valueOf(DataObject[1]));
-										total = Integer.parseInt(String.valueOf(DataObject[2]));
-										growth = total-falter;										
-										String falterInPercentage = String.format("%.2f", (double) (falter*100)/total);
-										String adequateInPercentage = String.format("%.2f",(double)(growth*100)/total);
+										growth = Integer.parseInt(String.valueOf(DataObject[2]));
+										total = falter+growth;
+										String falterInPercentage = "";
+										String adequateInPercentage = "";									
+										if(total>0){
+										 	falterInPercentage = String.format("%.2f", (double) (falter*100)/total);			
+										 	adequateInPercentage = String.format("%.2f",(double)(growth*100)/total);
+										}else{
+											falterInPercentage = "0.0";
+											adequateInPercentage = "0.0";
+										}
 										
 									%>
 									<tr>
@@ -115,6 +127,8 @@
 			var subunit = "";
 			var mauzapara = "";
 			var params = "" ;
+			var start_date = "" ;
+			var end_date = "" ;
 			
 			division = $('#division').val();
 			district = $('#district').val();
@@ -123,8 +137,10 @@
 			ward = $('#ward').val();
 			subunit = $('#subunit').val();
 			mauzapara = $('#mauzapara').val();
+			start_date = $('#start').val();
+			end_date = $('#end').val();
 			if(division != "" && division != "0?" && division != null ){
-				params ="?division="+division;
+				params ="&division="+division;
 			}
 			if(district != "0?" &&  district != "" && district != null){
 				params +="&district="+district;
@@ -146,12 +162,17 @@
 			if(mauzapara != "0?" && mauzapara != "" && mauzapara != null){
 				params +="&mauzapara="+mauzapara;
 			}
-			console.log(params);
+			if( start_date != "" && start_date != null){
+				params +="&start_date="+start_date;
+			}
+			if( end_date != "" && end_date != null){
+				params +="&end_date="+end_date;
+			}
 			event.preventDefault();
 			$.ajax({
 				type : "GET",
 				contentType : "application/json",				
-				url : "/opensrp-dashboard/report/child-growth-ajax.html"+params,				 
+				url : "/opensrp-dashboard/report/child-growth-ajax.html?"+params,				 
 				dataType : 'html',
 				timeout : 100000,
 				beforeSend: function() {

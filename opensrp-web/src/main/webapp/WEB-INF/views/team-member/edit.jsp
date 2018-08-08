@@ -172,7 +172,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
           .addClass( "form-control custom-combobox-input ui-widget ui-widget-content  ui-corner-left" )
           .autocomplete({
             delay: 0,
-            minLength: 3,
+            minLength: 1,
             source: $.proxy( this, "_source" )
           })
           .tooltip({
@@ -285,7 +285,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 	        value: <%=selectedLocationList%>,
 	        useCommaKey: true,
 	        allowFreeEntries: false,
-	        maxSelection: 3,
+	        maxSelection: 5,
 	        maxEntryLength: 70,
 	 		maxEntryRenderer: function(v) {
 	 			return '<div style="color:red">Typed Word TOO LONG </div>';

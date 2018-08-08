@@ -8,7 +8,7 @@ $(function() {
 								var orginalDate = new Date(selectedDate);
 								var monthsAddedDate = new Date(new Date(
 										orginalDate).setMonth(orginalDate
-										.getMonth() + 3));
+										.getMonth() + 12));
 
 								$("#end").datepicker("option", 'minDate',
 										selectedDate);
@@ -24,7 +24,7 @@ $(function() {
 					onSelect : function(selectedDate) {
 						var orginalDate = new Date(selectedDate);
 						var monthsAddedDate = new Date(new Date(orginalDate)
-								.setMonth(orginalDate.getMonth() - 3));
+								.setMonth(orginalDate.getMonth() - 12));
 
 						$("#start").datepicker("option", 'minDate',
 								monthsAddedDate);
