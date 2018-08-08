@@ -149,7 +149,7 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
           .addClass( "form-control custom-combobox-input ui-widget ui-widget-content ui-corner-left" )
           .autocomplete({
             delay: 0,
-            minLength: 3,
+            minLength: 1,
             source: $.proxy( this, "_source" )
           })
           .tooltip({

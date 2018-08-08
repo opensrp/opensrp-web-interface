@@ -3,18 +3,31 @@ RETURNS int
 AS $$    
     DECLARE totalCount int:=0; 
     endDateCondition varchar := '';
+    clientdateBetweenCondition varchar :='';
+    sixToNineAgedCondition varchar := '';
     BEGIN      
     if (startDate != '' AND endDate != '') THEN            
-		endDateCondition = E'\''||endDate || E'\'';
+		endDate = E'\''|| endDate || E'\'';
+        startDate = E'\''||startDate || E'\'';
+        clientdateBetweenCondition := clientdateBetweenCondition || E'  ( birth_date between '|| startDate || ' and '
+                             || endDate ||')';
+        sixToNineAgedCondition =' and (
+            ( DATE_PART (' || E'\'day\','|| startDate || '::timestamp - c.birth_date::timestamp)>181
+                 and  DATE_PART('|| E'\'day\','|| startDate || '::timestamp - c.birth_date::timestamp)<271 and birth_date <'||startDate ||'
+                 ) OR ' || clientdateBetweenCondition ||')';
     ELSE   
-        endDate = NOW();
-        endDateCondition = E'\''||endDate || E'\'';
+        endDate = E'\''||NOW()|| E'\'';
+        sixToNineAgedCondition =' and (
+            ( DATE_PART(' || E'\'day\','|| endDate || '::timestamp - c.birth_date::timestamp)>181
+                 and DATE_PART('|| E'\'day\','|| endDate || '::timestamp - c.birth_date::timestamp)<271 and birth_date <='|| endDate ||')
+            )';
 	END IF; 
      EXECUTE 'select count(*)
             FROM core."viewJsonDataConversionOfClient" c            
-            WHERE c.event_type =' || E' \'Birth Registration\' and             
-            (DATE_PART(' || E'\'day\','|| endDateCondition || '::timestamp - c.birth_date::timestamp)>181
-                 and DATE_PART('|| E'\'day\','|| endDateCondition || '::timestamp - c.birth_date::timestamp)<271 )' || conditions  into totalCount ;
+            WHERE c.event_type =' || E' \'Birth Registration\'' || sixToNineAgedCondition || conditions  into totalCount ;
     return totalCount;
   END;
   $$ LANGUAGE 'plpgsql';
+  
+  select core.under_six_to_nine_child('','2018-03-01','2018-08-01');
+    select core.under_six_to_nine_child('','','');

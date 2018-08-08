@@ -12,7 +12,6 @@ import org.json.JSONException;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.web.util.SearchUtil;
-import org.opensrp.web.visualization.ChildDataVisualizeServiceImpl;
 import org.opensrp.web.visualization.DashboardDataVisualizeServiceImpl;
 import org.opensrp.web.visualization.DataVisualization;
 import org.opensrp.web.visualization.HighChart;
@@ -34,15 +33,15 @@ public class DashboardController {
 	
 	@Autowired
 	SearchBuilder searchBuilder;
-
+	
 	@Autowired
 	private SearchUtil searchUtil;
-
+	
 	public VisualizationService visualizationService;
-
+	
 	@Autowired
 	private DashboardDataVisualizeServiceImpl dashboardDataVisualizeServiceImpl;
-
+	
 	@Autowired
 	private DataVisualization dataVisualization;
 	
@@ -51,23 +50,23 @@ public class DashboardController {
 		searchBuilder.clear();
 		int totalChildCount = databaseServiceImpl.getViewDataSize(searchBuilder, "viewJsonDataConversionOfClient", "child");
 		session.setAttribute("totalChildCount", totalChildCount);
-
+		
 		searchBuilder.setPregStatus("Yes");
-		int totalPregnantCount = databaseServiceImpl.getViewDataSize(searchBuilder, "viewJsonDataConversionOfEvent", "mother");
+		int totalPregnantCount = databaseServiceImpl.getViewDataSize(searchBuilder, "viewJsonDataConversionOfEvent",
+		    "mother");
 		session.setAttribute("totalPregnantCount", totalPregnantCount);
-
+		
 		searchBuilder.setPregStatus("Yes");
 		String childGrowthFalteringPercentage = databaseServiceImpl.getChildGrowthFalteringPercentage();
 		session.setAttribute("childGrowthFalteringPercentage", childGrowthFalteringPercentage);
-
+		
 		visualizationService = dashboardDataVisualizeServiceImpl;
 		setHighChartData(request, session);
 		setTitles(model, session, "Child");
 		return "home";
 	}
-
-	private void setHighChartData(HttpServletRequest request, HttpSession session)
-			throws JSONException {
+	
+	private void setHighChartData(HttpServletRequest request, HttpSession session) throws JSONException {
 		SearchBuilder searchBuilder = searchUtil.generateSearchBuilderParams(request, session);
 		if (searchBuilder.getYear() == null || searchBuilder.getYear().isEmpty()) {
 			searchBuilder.setYear(currentYear.toString());
@@ -75,7 +74,7 @@ public class DashboardController {
 		//searchUtil.setProviderAttribute(session);
 		searchUtil.setDivisionAttribute(session);
 		//searchUtil.setSelectedfilter(request, session);
-
+		
 		List<Object[]> monthWiseData = dataVisualization.getMonthWiseData(searchBuilder, visualizationService);
 		/*JSONArray monthWiseSeriesData = HighChart.getMonthWiseSeriesData(monthWiseData);
 
@@ -88,7 +87,7 @@ public class DashboardController {
 		//session.setAttribute("monthWiseSeriesData", monthWiseSeriesData);
 		session.setAttribute("lineChartCategory", lineChartCategory);
 	}
-
+	
 	private void setTitles(Model model, HttpSession session, String title) {
 		model.addAttribute("title", title + " Search Criteria");
 		session.setAttribute("chatTitle", title + " Data Visualization");
