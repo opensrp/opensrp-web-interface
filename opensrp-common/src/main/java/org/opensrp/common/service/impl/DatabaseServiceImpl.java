@@ -17,102 +17,102 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DatabaseServiceImpl implements DatabaseService {
-	
+
 	private static final Logger logger = Logger.getLogger(DatabaseServiceImpl.class);
-	
+
 	@Autowired
 	private DatabaseRepositoryImpl databaseRepositoryImpl;
-	
+
 	public DatabaseServiceImpl() {
-		
+
 	}
-	
+
 	@Transactional
 	@Override
 	public <T> long save(T t) throws Exception {
 		return databaseRepositoryImpl.save(t);
 	}
-	
+
 	@Transactional
 	@Override
 	public <T> int delete(T t) {
 		return 0;
 	}
-	
+
 	@Transactional
 	@Override
 	public <T> T findById(int id, String fieldName, Class<?> className) {
 		return databaseRepositoryImpl.findById(id, fieldName, className);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Transactional
 	@Override
 	public <T> List<T> findAll(String tableClass) {
 		return (List<T>) databaseRepositoryImpl.findAll(tableClass);
 	}
-	
+
 	@Transactional
 	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
 		return databaseRepositoryImpl.findByKey(value, fieldName, className);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public <T> T findAllByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		return (T) databaseRepositoryImpl.findAllByKeys(fielaValues, className);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public <T> T findAllByKey(String value, String fieldName, Class<?> className) {
 		return (T) databaseRepositoryImpl.findAllByKey(value, fieldName, className);
 	}
-	
+
 	@Transactional
 	public <T> List<T> findAllFormNames(String tableClass) {
 		return databaseRepositoryImpl.findAll(tableClass);
 	}
-	
+
 	@Transactional
 	public List<Object[]> getQueryData(String provider, String caseId, String scheduleName, String userType, String sqlQuery) {
 		return databaseRepositoryImpl.executeSelectQuery(provider, caseId, scheduleName, userType, sqlQuery);
 	}
-	
+
 	@Transactional
 	public <T> List<T> getDataFromSQLFunction(String procedureName, String params) {
 		return null;
 	}
-	
+
 	@Transactional
 	@Override
 	public <T> long update(T t) throws Exception {
-		
+
 		return databaseRepositoryImpl.update(t);
 	}
-	
+
 	@Transactional
 	public <T> List<T> search(SearchBuilder searchBuilder, Integer offset, Integer maxResults, Class<?> entityClassName) {
 		return databaseRepositoryImpl.search(searchBuilder, offset, maxResults, entityClassName);
 	}
-	
+
 	@Transactional
 	public int countBySearch(SearchBuilder searchBuilder, Class<?> entityClassName) {
 		return databaseRepositoryImpl.countBySearch(searchBuilder, entityClassName);
 	}
-	
+
 	public static Criteria createCriteriaCondition(SearchBuilder searchBuilder, Criteria criteria) {
 		if (searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {
-			
+
 			criteria.add(Restrictions.eq("division", searchBuilder.getDivision().toUpperCase()));
 		}
 		if (searchBuilder.getDistrict() != null && !searchBuilder.getDistrict().isEmpty()) {
-			
+
 			criteria.add(Restrictions.eq("district", searchBuilder.getDistrict().toUpperCase()));
 		}
 		if (searchBuilder.getUpazila() != null && !searchBuilder.getUpazila().isEmpty()) {
-			
+
 			criteria.add(Restrictions.eq("upazila", searchBuilder.getUpazila()));
 		}
 		if (searchBuilder.getUnion() != null && !searchBuilder.getUnion().isEmpty()) {
@@ -136,35 +136,28 @@ public class DatabaseServiceImpl implements DatabaseService {
 		if (searchBuilder.getUserName() != null && !searchBuilder.getUserName().isEmpty()) {
 			criteria.add(Restrictions.ilike("username", searchBuilder.getUserName(), MatchMode.ANYWHERE));
 		}
-		
+
 		return criteria;
 	}
-	
+
 	@Transactional
 	public <T> List<T> getDataFromViewByBEId(String viewName, String entityType, String baseEntityId) {
 		return databaseRepositoryImpl.getDataFromViewByBEId(viewName, entityType, baseEntityId);
 	}
-	
-	
-	@Transactional
-	public List<Object[]> executeSelectQuery(String sqlQuery) {
-		return databaseRepositoryImpl.executeSelectQuery(sqlQuery);
-	}
-	
 
 	@Transactional
 	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, Integer offset, Integer maxResults, String viewName,
 	                                   String entityType) {
 		return databaseRepositoryImpl.getDataFromView(searchBuilder, offset, maxResults, viewName, entityType, "id");
 	}
-	
+
 	@Transactional
 	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType) {
 		return databaseRepositoryImpl.getViewDataSize(searchBuilder, viewName, entityType);
 	}
-	
-	@Transactional
-	public String getChildGrowthFalteringPercentage() {
-		return databaseRepositoryImpl.getChildGrowthFalteringPercentage();
+
+    @Transactional
+	public <T> List<T> executeSelectQuery(String sqlQuery) {
+		return databaseRepositoryImpl.executeSelectQuery(sqlQuery);
 	}
 }
