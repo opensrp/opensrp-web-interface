@@ -169,21 +169,11 @@ public class RegisterController {
 				followUpList.add(eventObject);
 			}
 		}
-	/*	System.out.println(NWMRList);
-		System.out.println(counsellingList);
-		System.out.println(followUpList);
-		*/
+
 		session.setAttribute("NWMRList", NWMRList);
 		session.setAttribute("counsellingList", counsellingList);
 		session.setAttribute("followUpList", followUpList);
-		
-		
-/*		
-		System.out.println("Getting value form session >>>>> ");
-		System.out.println(session.getAttribute("counsellingList"));
-		System.out.println(session.getAttribute("followUpList"));
 
-		*/
 		return "registers/mother-details";
 	}
 	

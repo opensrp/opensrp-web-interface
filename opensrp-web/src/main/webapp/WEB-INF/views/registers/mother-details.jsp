@@ -44,6 +44,9 @@
         <li class="breadcrumb-item active">Mother Details</li>
       </ol>
       <!-- Child Register-->
+      <div class= "row">
+      <div class="col-lg-6">
+      
       <div class="card mb-3">
             <div class="card-header">
                Mother Details</div>
@@ -114,11 +117,13 @@ String motherId = null;
             </div>
             <div class="card-footer small text-muted"></div>
           </div>
+          </div>
       
       <!-- Area Chart Example-->
       <!-- <div class="row"> -->
-        <div class="col-lg-6">
+       
           <!-- Example Bar Chart Card-->
+          <div class="col-lg-6">
           <div class="card mb-3">
             <div class="card-header">
                Pregnancy Details</div>
@@ -156,14 +161,18 @@ while (dataListIterator.hasNext()) {
 		}
 %>
             <div class="card-footer small text-muted"></div>
-          </div>
+        </div>
+        </div>
           <!-- Card Columns Example Social Feed-->
           
           
           
           <!-- /Card Columns-->
         </div>
-        <div class="col-lg-6">
+        
+        
+        
+       <!--  <div class="col-lg-6"> -->
           <!-- Example Pie Chart Card-->
           <div class="card mb-3">
             <div class="card-header">
@@ -178,7 +187,7 @@ while (dataListIterator.hasNext()) {
               
                <div class="card-body">
             
-            
+            <div class="row">
             <div class="table-responsive">
     
             <table class="table table-bordered" id="counsellingTable" width="100%" cellspacing="0">
@@ -308,7 +317,7 @@ if(obsArr!=null){
               </table>
               </div>
             
-            
+            </div>
             
             
             
@@ -336,7 +345,7 @@ if(obsArr!=null){
           </div>
           <!-- Example Notifications Card-->
           
-        </div>
+       <!--  </div> -->
       <!-- </div> -->
       
       <!-- Example DataTables Card-->
