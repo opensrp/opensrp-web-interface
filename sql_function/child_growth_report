@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION core.child_growth_report(filterArray text[])
 RETURNS TABLE(provider_name character varying, falter int
-              , total int)
+              , growth int)
 AS $$
 DECLARE
   filterString varchar := '';
@@ -14,6 +14,8 @@ DECLARE
   mau varchar := ''; 
   start_date varchar := '';
   end_date varchar := '';
+  eventBetweenCondition varchar := '';
+  clientDateBetweenCondition varchar := '';
   
 BEGIN
   div := filterArray[1];
@@ -30,14 +32,14 @@ BEGIN
  CREATE TEMP TABLE IF NOT EXISTS child_growth_temp (
   	provider_name varchar(70) ,  
 	falter int NOT NULL DEFAULT 0,  
-  	total int NOT NULL DEFAULT 0,  
+  	growth int NOT NULL DEFAULT 0,  
   	PRIMARY KEY (provider_name)  
 );
 
 
 /*Creating location conditions query string*/
    if (div != '') THEN
-       filterString := E' and child.division=\'' || div || E'\'';
+       filterString := E' and division=\'' || div || E'\'';
    END IF;
 
    if (dis != '') THEN
@@ -63,31 +65,62 @@ BEGIN
    if (mau != '') THEN
        filterString := filterString || E' and mauzapara=\'' || mau || E'\'';
    END IF;
-
-   completeCountFilterString := filterString;
    
-
-EXECUTE 'insert into child_growth_temp(provider_name,total)
-select cg.provider,count(cg.provider) from  core."child_growth" as cg
-join core."viewJsonDataConversionOfClient" as child 
-ON  child.base_entity_id = cg.base_entity_id
-where cg.is_last_event = true' || filterString  ||' group by cg.provider';
+	IF (start_date != '' AND end_date != '') THEN            
+		end_date = E'\''|| end_date || E'\'';
+        start_date = E'\''||start_date || E'\'';
+		eventBetweenCondition := eventBetweenCondition || E' and ( event_date between '|| start_date || ' and '
+                             || end_date ||')';   
+   END IF;
+   
+EXECUTE 'insert into child_growth_temp(provider_name)
+select provider_id from  core."viewJsonDataConversionOfClient" as c
+where c.event_type =' || E' \'Birth Registration\'' || filterString  ||' group by provider_id';
     
   /* update falter list  */
  EXECUTE 'update child_growth_temp
     set falter = growth_report.falter from
-    (select cg.provider,count(cg.provider) from  core."child_growth" as cg
-	join core."viewJsonDataConversionOfClient" as child 
-	ON  child.base_entity_id = cg.base_entity_id
-	where cg.is_last_event = true and cg.growth_status=false ' || filterString  ||'  group by cg.provider) as growth_report(provider_id, falter)
+    (select gf.provider,count(gf.provider)
+            FROM core."viewJsonDataConversionOfClient" c
+            join 
+                (SELECT provider, base_entity_id,growth_status,event_date
+                 FROM core.child_growth cg1
+                 WHERE cg1.growth_status=false ' || eventBetweenCondition ||' and NOT EXISTS (
+                   SELECT *
+                   FROM core.child_growth cg2
+                   WHERE cg1.base_entity_id = cg2.base_entity_id
+                     AND cg1.event_date < cg2.event_date
+                   ) order by base_entity_id desc
+                ) as gf
+             on c.base_entity_id = gf.base_entity_id
+            WHERE c.event_type =' || E' \'Birth Registration\'' || filterString ||' group by gf.provider) as growth_report(provider_id, falter)
+    where child_growth_temp.provider_name = growth_report.provider_id';
+   
+   
+   EXECUTE 'update child_growth_temp
+    set growth = growth_report.growth from
+    (select gf.provider,count(gf.provider)
+            FROM core."viewJsonDataConversionOfClient" c
+            join 
+                (SELECT provider, base_entity_id,growth_status,event_date
+                 FROM core.child_growth cg1
+                 WHERE cg1.growth_status=true ' || eventBetweenCondition ||' and NOT EXISTS (
+                   SELECT *
+                   FROM core.child_growth cg2
+                   WHERE cg1.base_entity_id = cg2.base_entity_id
+                     AND cg1.event_date < cg2.event_date
+                   ) order by base_entity_id desc
+                ) as gf
+             on c.base_entity_id = gf.base_entity_id
+            WHERE c.event_type =' || E' \'Birth Registration\'' || filterString ||' group by gf.provider) as growth_report(provider_id, growth)
     where child_growth_temp.provider_name = growth_report.provider_id';
 					
 
 RETURN QUERY SELECT  ttable.provider_name
        , ttable.falter
-       , ttable.total       
+       , ttable.growth       
        from child_growth_temp ttable;
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT core.child_growth_report(array['Jessore']); 
+SELECT core.child_growth_report(array['Jessore','','','','','','','','2017-01-02','2018-02-01']); 

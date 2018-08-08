@@ -96,7 +96,7 @@ insert into child_indicator_temp(indicator_name,indicator_value,total)
 values('% of women with an underweight child committed to a small doable action before next appointment :',core.committed_previous_action(filterString, start_date,end_date),core.growth_faltering( filterString, start_date,end_date));
 
 insert into child_indicator_temp(indicator_name,indicator_value,total) 
-values('% of severely underweight children 6-23 months :',core.severely_underweight(filterString, start_date,end_date),core.total_child(filterString, start_date,end_date));
+values('% of severely underweight children 6-23 months :',core.severely_underweight(filterString, start_date,end_date),core.total_child_six_to_twentythree(filterString, start_date,end_date));
 
 
 RETURN QUERY SELECT  ttable.indicator_name

@@ -13,7 +13,7 @@ AS $$
     dateBetweenCondition varchar := '';
     BEGIN  
     if (startDate != '' AND endDate != '') THEN            
-		dateBetweenCondition := dateBetweenCondition || E' and( event_date between \''|| startDate || E'\' and \''
+		dateBetweenCondition := dateBetweenCondition || E' and ( event_date between \''|| startDate || E'\' and \''
                              || endDate || E'\')';
         END IF;   
        FOR childs IN            
@@ -58,7 +58,7 @@ AS $$
   END;
   $$ LANGUAGE 'plpgsql';
   
-  SELECT core.committed_previous_action('','2018-02-07','2018-08-15'); 
+  SELECT core.committed_previous_action('','2018-01-01','2018-08-08'); 
 
 
 SELECT c.base_entity_id as baseEntityId, e.lactating_counselling_actions_decided_previous_meeting FROM core."viewJsonDataConversionOfClient" as c  

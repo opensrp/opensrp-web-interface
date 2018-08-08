@@ -4,7 +4,8 @@
 <%@page import="java.util.Iterator"%>
 
 
-<%	String provider = "";
+<%	
+String provider = "";
 int falter = 0;
 int total = 0;
 int growth=0;
@@ -17,10 +18,17 @@ int counter=0;
 			Object[] DataObject = (Object[]) dataCountListIterator.next();
 			provider = String.valueOf(DataObject[0]);
 			falter = Integer.parseInt(String.valueOf(DataObject[1]));
-			total = Integer.parseInt(String.valueOf(DataObject[2]));
-			growth = total-falter;										
-			String falterInPercentage = String.format("%.2f", (double) (falter*100)/total);
-			String adequateInPercentage = String.format("%.2f",(double)(growth*100)/total);
+			growth = Integer.parseInt(String.valueOf(DataObject[2]));
+			total = falter+growth;
+			String falterInPercentage = "";
+			String adequateInPercentage = "";
+			if(total>0){
+			 	falterInPercentage = String.format("%.2f", (double) (falter*100)/total);			
+			 	adequateInPercentage = String.format("%.2f",(double)(growth*100)/total);
+			}else{
+				falterInPercentage = "0.0";
+				adequateInPercentage = "0.0";
+			}
 										
 			%>
 			<tr>
