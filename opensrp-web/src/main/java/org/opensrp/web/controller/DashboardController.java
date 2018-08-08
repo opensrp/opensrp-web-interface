@@ -105,25 +105,27 @@ public class DashboardController {
 
 		JSONArray features = new JSONArray();
 
-		for(ChildGrowth row: geoDatas) {
-			if (row.getLon() != 0.0) {
-				//co-odinates [90.4043, 23.7940]
-				JSONObject feature = new JSONObject();
-				feature.put("type", "Feature");
-				JSONObject geometry = new JSONObject();
-				geometry.put("type", "Point");
-				JSONArray JSONArrayCoord = new JSONArray();
+		if (geoDatas != null && !geoDatas.isEmpty()) {
+			for (ChildGrowth row : geoDatas) {
+				if (row.getLon() != 0.0) {
+					//co-odinates [90.4043, 23.7940]
+					JSONObject feature = new JSONObject();
+					feature.put("type", "Feature");
+					JSONObject geometry = new JSONObject();
+					geometry.put("type", "Point");
+					JSONArray JSONArrayCoord = new JSONArray();
 
-				JSONArrayCoord.put(row.getLon());
-				JSONArrayCoord.put(row.getLat());
-				geometry.put("coordinates", JSONArrayCoord);
-				feature.put("geometry", geometry);
-				JSONObject properties = new JSONObject();
+					JSONArrayCoord.put(row.getLon());
+					JSONArrayCoord.put(row.getLat());
+					geometry.put("coordinates", JSONArrayCoord);
+					feature.put("geometry", geometry);
+					JSONObject properties = new JSONObject();
 
-				properties.put("title", row.getProvider());
-				properties.put("description", row.getProvider());
-				feature.put("properties", properties);
-				features.put(feature);
+					properties.put("title", row.getProvider());
+					properties.put("description", row.getProvider());
+					feature.put("properties", properties);
+					features.put(feature);
+				}
 			}
 		}
 		featureCollection.put("features", features);
