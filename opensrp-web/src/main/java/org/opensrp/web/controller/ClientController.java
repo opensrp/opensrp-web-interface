@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(value = "client")
-public class RegisterController {
+public class ClientController {
 	
 	@Autowired
     private DatabaseServiceImpl databaseServiceImpl;
@@ -37,32 +37,32 @@ public class RegisterController {
 	@RequestMapping(value = "/child/{id}/details.html", method = RequestMethod.GET)
 	public String showChildDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) {
 		clientServiceImpl.getChildWeightList(session,id);
-		return "registers/child-details";
+		return "client/child-details";
 	}
 	
 	
 	@RequestMapping(value = "/mother/{id}/details.html", method = RequestMethod.GET)
 	public String showMotherDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) {
 		clientServiceImpl.getMotherDetails(session, id);
-		return "registers/mother-details";
+		return "client/mother-details";
 	}
 
 	@RequestMapping(value = "/household.html", method = RequestMethod.GET)
 	public String showHouseholdList(HttpServletRequest request, HttpSession session, Model model) {
         paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "household");
-		return "/registers/household";
+		return "/client/household";
 	}
 
 	@RequestMapping(value = "/mother.html", method = RequestMethod.GET)
 	public String showMotherList(HttpServletRequest request, HttpSession session, Model model) {
         paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "mother");
-		return "/registers/mother";
+		return "/client/mother";
 	}
 
 	@RequestMapping(value = "/child.html", method = RequestMethod.GET)
 	public String showChildList(HttpServletRequest request, HttpSession session, Model model) {
         paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "child");
-		return "/registers/child";
+		return "/client/child";
 	}
 
 	@RequestMapping(value = "/location", method = RequestMethod.GET)
@@ -71,11 +71,6 @@ public class RegisterController {
 		System.out.println("child data size: " + parentData.size());
 		session.setAttribute("data", parentData);
 		return "/location";
-	}
-
-	@RequestMapping(value = "/registers/details.html", method = RequestMethod.GET)
-	public String motherDetails(HttpServletRequest request, HttpSession session, Model model) {
-		return "/registers/details";
 	}
 
 }
