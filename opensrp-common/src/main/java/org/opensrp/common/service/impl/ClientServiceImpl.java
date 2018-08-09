@@ -1,6 +1,10 @@
 package org.opensrp.common.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
@@ -23,6 +27,7 @@ public class ClientServiceImpl implements DatabaseService {
 	public ClientServiceImpl() {
 		
 	}
+	
 	
 	@Transactional
 	@Override
@@ -60,6 +65,58 @@ public class ClientServiceImpl implements DatabaseService {
 	public <T> long update(T t) throws Exception {
 		return databaseRepositoryImpl.update(t);
 	}
+	
+	@Transactional
+	public void getChildWeightList(HttpSession session,String id){
+		System.out.println("Child id :" + id);
+		session.setAttribute("childId", id);
+		
+		List<Object[]> weightList;
+		String weightQuery = "SELECT * FROM core.child_growth "
+							+" WHERE base_entity_id = '"
+							+id
+							+"' " 
+							+" ORDER BY last_event_date ASC";
+		weightList = databaseServiceImpl.executeSelectQuery(weightQuery);
+		session.setAttribute("weightList", weightList);
+	}
+	
+	@Transactional
+	public void getMotherDetails(HttpSession session,String id){
+		
+		System.out.println("Mother id :" + id);
+		session.setAttribute("motherId", id);
+		
+		List<Object> data;
+		data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfEvent","mother",id);
+		session.setAttribute("eventList", data);
+		
+		List<Object> NWMRList = new ArrayList<Object>();
+		List<Object> counsellingList = new ArrayList<Object>();
+		List<Object> followUpList = new ArrayList<Object>();
+		Iterator dataListIterator = data.iterator();
+		while (dataListIterator.hasNext()) {
+			Object[] eventObject = (Object[]) dataListIterator.next();
+			
+			String eventType = String.valueOf(eventObject[8]);
+			//System.out.println(eventType);
+			
+			if(eventType.equals("New Woman Member Registration")){
+				//System.out.println(eventObject);
+				NWMRList.add(eventObject);
+				//System.out.println(NWMRList);
+			}else if(eventType.equals("Pregnant Woman Counselling") || eventType.equals("Lactating Woman Counselling")){
+				counsellingList.add(eventObject);
+			}else if(eventType.equals("Woman Member Follow Up")){
+				followUpList.add(eventObject);
+			}
+		}
+
+		session.setAttribute("NWMRList", NWMRList);
+		session.setAttribute("counsellingList", counsellingList);
+		session.setAttribute("followUpList", followUpList);
+	}
+	
 	
 }
 

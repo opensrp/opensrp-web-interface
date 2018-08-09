@@ -60,11 +60,6 @@
 						href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
 					</a>
 					
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item"
-						href="<c:url value="/client/refresh.html"/>"> <strong>Refresh</strong>
-					</a>
-
 				</div></li>
 			
 			
