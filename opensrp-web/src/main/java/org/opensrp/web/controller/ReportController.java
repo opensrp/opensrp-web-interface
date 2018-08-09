@@ -84,7 +84,7 @@ public class ReportController {
 		int refreshCount = 0;
 		Iterator obArrIterator = viewRefresh.iterator();
 		if (obArrIterator.hasNext()) {
-			refreshCount = (Integer) obArrIterator.next();
+			refreshCount = refreshCount + (Integer) obArrIterator.next();
 		}
 		session.setAttribute("refreshCount", refreshCount);
 		return "/report/analytics-ajax";
