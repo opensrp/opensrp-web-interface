@@ -84,15 +84,18 @@ String childId = null;
 %>	                  
                   <div class="media-body">
                     <strong>Name: </strong><%=firstName%><br>
-                    <strong>Father's Name: </strong><%=fatherName%><br>
-                    <strong>Mother's Name: </strong><br>
-                    <strong>Birth-date: </strong><%=birthDate%><br>
                     <strong>Age: </strong><br>
                     <strong>Gender: </strong><%=gender%><br>
-                    <strong>Birth-weight: </strong><%=birthWeight%><br>
                   </div>
                   
                   <div class="media-body">
+                     <strong>Birth-date: </strong><%=birthDate%><br>
+                     <strong>Birth-weight: </strong><%=birthWeight%><br>
+                  </div>
+                  
+                  <div class="media-body">
+                    <strong>Father's Name: </strong><%=fatherName%><br>
+                    <strong>Mother's Name: </strong><br>
                     <strong>Care-giver's Name: </strong><br>
                   </div>
 <%
@@ -182,14 +185,6 @@ String childId = null;
               
               
 <%
-int refreshCount=0;
- if (session.getAttribute("refreshCount") != null) {
-	 refreshCount = (Integer) session
-			.getAttribute("refreshCount");
-} 
-	
-	
-
  if (session.getAttribute("weightList") != null) {
 	int i=0;
 	List<Object> dataList = (List<Object>) session
@@ -240,8 +235,7 @@ int refreshCount=0;
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
-    
-    <h1><%=refreshCount%></h1>
+
    
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
