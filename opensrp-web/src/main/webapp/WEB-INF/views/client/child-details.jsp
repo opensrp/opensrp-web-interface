@@ -207,7 +207,7 @@ lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
 			.getAttribute("weightList");
 	Iterator dataListIterator = dataList.iterator();
 	while (dataListIterator.hasNext()) {
-		i++;
+		
 		Object[] weightObject = (Object[]) dataListIterator.next();
 		String id = String.valueOf(weightObject[0]);
 		String eventDate = String.valueOf(weightObject[8]);
@@ -236,6 +236,7 @@ lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
                 </tr>
                 
 <%
+	i++;
 		}
 	i=0;
 		}
@@ -311,7 +312,7 @@ lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
 				type : 'line'
 			},
 			title : {
-				text : '% Children who are growth faltering over time'
+				text : 'Growth'
 			},
 			subtitle : {
 				text : ''
@@ -319,9 +320,12 @@ lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
 			credits : {
 				enabled : false
 			},
+			xAxis : {
+				allowDecimals: false
+			},
 			yAxis : {
 				title : {
-					text : '% Children growth faltering'
+					text : 'Kg'
 				}
 			},
 
