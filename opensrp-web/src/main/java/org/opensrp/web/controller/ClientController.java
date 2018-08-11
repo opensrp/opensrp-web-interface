@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONException;
 import org.opensrp.acl.service.impl.LocationServiceImpl;
 import org.opensrp.common.service.impl.ClientServiceImpl;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
@@ -35,7 +36,7 @@ public class ClientController {
 
 	
 	@RequestMapping(value = "/child/{id}/details.html", method = RequestMethod.GET)
-	public String showChildDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) {
+	public String showChildDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) throws JSONException {
 		clientServiceImpl.getChildWeightList(session,id);
 		return "client/child-details";
 	}

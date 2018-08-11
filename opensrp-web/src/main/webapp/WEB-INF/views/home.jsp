@@ -9,7 +9,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.opensrp.common.util.NumberToDigit"%>
-<%@page import="org.opensrp.web.nutrition.visualization.HighChart"%>
+<%@page import="org.opensrp.common.visualization.HighChart"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
