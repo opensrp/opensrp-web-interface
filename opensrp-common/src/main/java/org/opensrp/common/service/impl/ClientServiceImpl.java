@@ -80,31 +80,38 @@ public class ClientServiceImpl implements DatabaseService {
 							+" WHERE base_entity_id = '"
 							+id
 							+"' " 
-							+" ORDER BY last_event_date ASC";
+							+" ORDER BY event_date ASC";
 		weightList = databaseServiceImpl.executeSelectQuery(weightQuery);
 		
 		//for line chart
 		List<Object[]> weightForChart = new ArrayList<Object[]>();
 		List<Object[]> growthForChart= new ArrayList<Object[]>();
-		Object[] rowData = new Object[2];
+		
 		Iterator weightListIterator = weightList.iterator();
 		int i=0;
 		while (weightListIterator.hasNext()) {
 			Object[] weightObject = (Object[]) weightListIterator.next();
-			String weight = String.valueOf(weightObject[13]);
-			String growth = String.valueOf(weightObject[17]);
-			rowData[0] = i;
-			rowData[1] = weight;
-			weightForChart.add(rowData);
+			Object[] rowWeightData = new Object[2];
+			Object[] rowGrowthData = new Object[2];
+			Double weight = Double.parseDouble(String.valueOf(weightObject[13]));
+			Double growth = Double.parseDouble(String.valueOf(weightObject[17]));
+			growth /= 1000.00;
+			/*System.out.println(weight);
+			System.out.println(growth);*/
+			rowWeightData[0] = i;
+			rowWeightData[1] = weight;
+			weightForChart.add(rowWeightData);
 			
-			rowData[0] = i;
-			rowData[1] = growth;
-			growthForChart.add(rowData);
+			rowGrowthData[0] = i;
+			rowGrowthData[1] = growth;
+			growthForChart.add(rowGrowthData);
 		}
 		JSONArray lineChartWeightData = HighChart.getLineChartData(weightForChart, "Weight");
 		JSONArray lineChartGrowthData = HighChart.getLineChartData(growthForChart, "Growth");
 		
 		session.setAttribute("weightList", weightList);
+		session.setAttribute("lineChartWeightData", lineChartWeightData);
+		session.setAttribute("lineChartGrowthData", lineChartGrowthData);
 	}
 	
 	@Transactional

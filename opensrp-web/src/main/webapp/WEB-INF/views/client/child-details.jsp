@@ -1,3 +1,7 @@
+<%@page import="com.google.gson.JsonArray"%>
+<%@page import="com.google.gson.JsonObject"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="org.json.JSONArray"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -55,6 +59,9 @@
                   <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
 <%
 String childId = null;
+JSONArray lineChartWeightData = (JSONArray)session.getAttribute("lineChartWeightData");
+JSONArray lineChartGrowthData = (JSONArray)session.getAttribute("lineChartGrowthData");
+lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
  if (session.getAttribute("childId") != null) {
 	 childId = (String) session.getAttribute("childId");
  }	
@@ -112,6 +119,15 @@ String childId = null;
           </div>
       
       
+      
+       <!-- Area Chart Example-->
+			<div class="card mb-3">
+				<div id="lineChart" class="card-body"></div>
+			</div>
+      
+      
+     <%--  <h1><%=lineChartWeightData%></h1></br>
+      <h1><%=lineChartGrowthData.getJSONObject(0)%></h1> --%>
       
       <!-- Area Chart Example-->
       <!-- <div class="row">
@@ -232,6 +248,12 @@ String childId = null;
         </div>
         <div class="card-footer small text-muted"></div>
       </div>
+      
+      
+      
+     
+      
+      
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
@@ -277,6 +299,66 @@ String childId = null;
     <script src="/resources/js/sb-admin-datatables.min.js"></script>
     <script src="/resources/js/sb-admin-charts.min.js"></script>
   </div>
+  
+  
+  	<script src="<c:url value='/resources/chart/highcharts.js'/>"></script>
+	<script src="<c:url value='/resources/chart/data.js'/>"></script>
+	<script src="<c:url value='/resources/chart/drilldown.js'/>"></script>
+	<script src="<c:url value='/resources/chart/series-label.js'/>"></script>
+	<script type="text/javascript">
+		Highcharts.chart('lineChart', {
+			chart : {
+				type : 'line'
+			},
+			title : {
+				text : '% Children who are growth faltering over time'
+			},
+			subtitle : {
+				text : ''
+			},
+			credits : {
+				enabled : false
+			},
+			yAxis : {
+				title : {
+					text : '% Children growth faltering'
+				}
+			},
+
+			legend : {
+				layout : 'vertical',
+				align : 'right',
+				verticalAlign : 'middle'
+			},
+
+			plotOptions : {
+				line : {
+					dataLabels : {
+						enabled : true
+					},
+					enableMouseTracking : true
+				}
+			},
+
+			responsive : {
+				rules : [ {
+					condition : {
+						maxWidth : 500
+					},
+					chartOptions : {
+						legend : {
+							layout : 'horizontal',
+							align : 'center',
+							verticalAlign : 'bottom'
+						}
+					}
+				} ]
+			},
+
+			series :
+	<%=lineChartWeightData%>
+		});
+	</script>
 </body>
 
 </html>
