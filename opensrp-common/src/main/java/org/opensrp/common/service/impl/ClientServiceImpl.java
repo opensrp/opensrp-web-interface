@@ -9,9 +9,10 @@ import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.opensrp.common.interfaces.DatabaseService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
-import org.opensrp.web.visualization.HighChart;
+import org.opensrp.common.visualization.HighChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,7 +70,7 @@ public class ClientServiceImpl implements DatabaseService {
 	}
 	
 	@Transactional
-	public void getChildWeightList(HttpSession session,String id){
+	public void getChildWeightList(HttpSession session,String id) throws JSONException{
 		System.out.println("Child id :" + id);
 		session.setAttribute("childId", id);
 		
