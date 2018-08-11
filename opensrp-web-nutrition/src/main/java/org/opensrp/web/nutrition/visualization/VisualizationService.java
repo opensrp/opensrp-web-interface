@@ -1,4 +1,4 @@
-package org.opensrp.web.visualization;
+package org.opensrp.web.nutrition.visualization;
 
 import java.util.List;
 

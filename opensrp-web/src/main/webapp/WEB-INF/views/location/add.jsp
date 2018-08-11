@@ -134,7 +134,7 @@ JSONArray locatationTreeData = (JSONArray)session.getAttribute("locatationTreeDa
 								<div class="row">									
 									<div class="col-5">
 									<label for="exampleInputName"> Location Tag</label>
-										<select class="custom-select custom-select-lg mb-3" id="locationTag" name="locationTag">
+										<select class="custom-select custom-select-lg mb-3" id="locationTag" name="locationTag" required>
 									 		<option value="0" selected>Please Select</option>
 												<%
 												for (Map.Entry<Integer, String> entry : tags.entrySet())
@@ -199,7 +199,7 @@ JSONArray locatationTreeData = (JSONArray)session.getAttribute("locatationTreeDa
           .addClass( "form-control custom-combobox-input ui-widget ui-widget-content  ui-corner-left" )
           .autocomplete({
             delay: 0,
-            minLength: 3,
+            minLength: 1,
             source: $.proxy( this, "_source" )
           })
           .tooltip({

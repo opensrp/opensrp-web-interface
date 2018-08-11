@@ -105,6 +105,7 @@ if (paginationAtributes.containsKey("name")) {
 									if(location.getLocationTag() != null){
 										tagName = location.getLocationTag().getName();
 									}
+									
 									if(location.getCreator()!= null){
 										creator = location.getCreator().getUsername();
 									}
@@ -114,7 +115,7 @@ if (paginationAtributes.containsKey("name")) {
 										<td><a href="<c:url value="/location/${id}/edit.html"/>"><%=location.getName() %></a></td>
 										
 										<td><%=location.getDescription() %></td>
-										<td><%=location.getLocationTag().getName()%></td>
+										<td><%=tagName%></td>
 										
 										<td><%=creator %></td>
 

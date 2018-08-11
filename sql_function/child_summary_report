@@ -96,7 +96,7 @@ insert into child_indicator_temp(indicator_name,indicator_value,total)
 values('% of women with an underweight child committed to a small doable action before next appointment :',core.committed_previous_action(filterString, start_date,end_date),core.growth_faltering( filterString, start_date,end_date));
 
 insert into child_indicator_temp(indicator_name,indicator_value,total) 
-values('% of severely underweight children 6-23 months :',core.severely_underweight(filterString, start_date,end_date),core.total_child(filterString, start_date,end_date));
+values('% of severely underweight children 6-23 months :',core.severely_underweight(filterString, start_date,end_date),core.total_child_six_to_twentythree(filterString, start_date,end_date));
 
 
 RETURN QUERY SELECT  ttable.indicator_name
@@ -106,6 +106,6 @@ RETURN QUERY SELECT  ttable.indicator_name
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT core.child_indicator_report(array['Khulna','Jhenaidah','Maheshpur','Fatepur','Fatepur:Ward-2','Fatepur:Ward-2:1-KA','Fatepur:Ward-2:1-KA:EPI center','2018-02-07','2018-08-15']); 
-SELECT core.child_indicator_report(array['','','','','','','','','']); 
+SELECT core.child_summary_report(array['Khulna','Jhenaidah','Maheshpur','Fatepur','Fatepur:Ward-2','Fatepur:Ward-2:1-KA','Fatepur:Ward-2:1-KA:EPI center','2018-02-07','2018-08-15']); 
+SELECT core.child_summary_report(array['','','','','','','','','']); 
 

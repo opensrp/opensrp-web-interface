@@ -58,8 +58,8 @@
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
-					</a>
-					
+					</a>				
+
 				</div></li>
 			
 			
@@ -69,9 +69,13 @@
 				data-toggle="dropdown">Report </a>
 				<div class="dropdown-menu">
 					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/report/analytics.html"/>">
+					<strong> Analytics</strong></a>
+					
+					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="<c:url value="/report/child-growth.html"/>">
 					<strong> Child Growth Report</strong></a>
-					
+										
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="<c:url value="/report/summary.html"/>">
 					<strong> Sumamry Report</strong></a>

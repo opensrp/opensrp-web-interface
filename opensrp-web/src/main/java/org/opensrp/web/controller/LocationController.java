@@ -136,11 +136,18 @@ public class LocationController {
 		
 	}
 	
-	
 	@RequestMapping(value = "location/search.html", method = RequestMethod.GET)
 	public String locationSearch(Model model, HttpSession session, @RequestParam String name) throws JSONException {
 		List<Location> locations = locationServiceImpl.getAllByKeysWithALlMatches(name);
 		session.setAttribute("searchedLocation", locations);
 		return "location/search";
+	}
+	
+	@RequestMapping(value = "/location", method = RequestMethod.GET)
+	public String getChildLocationList(HttpServletRequest request, HttpSession session, Model model, @RequestParam int id) {
+		List<Object[]> parentData = locationServiceImpl.getChildData(id);
+		System.out.println("child data size: " + parentData.size());
+		session.setAttribute("data", parentData);
+		return "/location";
 	}
 }
