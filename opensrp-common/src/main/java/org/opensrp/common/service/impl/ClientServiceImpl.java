@@ -8,8 +8,10 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.opensrp.common.interfaces.DatabaseService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
+import org.opensrp.web.visualization.HighChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,12 +74,35 @@ public class ClientServiceImpl implements DatabaseService {
 		session.setAttribute("childId", id);
 		
 		List<Object[]> weightList;
+		
 		String weightQuery = "SELECT * FROM core.child_growth "
 							+" WHERE base_entity_id = '"
 							+id
 							+"' " 
 							+" ORDER BY last_event_date ASC";
 		weightList = databaseServiceImpl.executeSelectQuery(weightQuery);
+		
+		//for line chart
+		List<Object[]> weightForChart = new ArrayList<Object[]>();
+		List<Object[]> growthForChart= new ArrayList<Object[]>();
+		Object[] rowData = new Object[2];
+		Iterator weightListIterator = weightList.iterator();
+		int i=0;
+		while (weightListIterator.hasNext()) {
+			Object[] weightObject = (Object[]) weightListIterator.next();
+			String weight = String.valueOf(weightObject[13]);
+			String growth = String.valueOf(weightObject[17]);
+			rowData[0] = i;
+			rowData[1] = weight;
+			weightForChart.add(rowData);
+			
+			rowData[0] = i;
+			rowData[1] = growth;
+			growthForChart.add(rowData);
+		}
+		JSONArray lineChartWeightData = HighChart.getLineChartData(weightForChart, "Weight");
+		JSONArray lineChartGrowthData = HighChart.getLineChartData(growthForChart, "Growth");
+		
 		session.setAttribute("weightList", weightList);
 	}
 	
