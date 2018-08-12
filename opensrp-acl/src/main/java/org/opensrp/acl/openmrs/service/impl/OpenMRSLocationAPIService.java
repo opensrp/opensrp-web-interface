@@ -89,4 +89,10 @@ public class OpenMRSLocationAPIService implements OpenMRSConnector<Location> {
 		
 		return locationObject;
 	}
+	
+	@Override
+	public JSONArray getByQuery(String query) throws JSONException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

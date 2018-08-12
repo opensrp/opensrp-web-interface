@@ -1221,6 +1221,10 @@ th {
 .label-width {
 	width: 110px;
 }
+
+.label-width-no-start {
+	width: 110px;
+}
 .text-para {	
 	color: #0e0e0e;
 }
@@ -1231,4 +1235,7 @@ th {
 }
 .btn-center {
 	margin-left: 120px;
+}
+.text-red {	
+	color:red;
 }

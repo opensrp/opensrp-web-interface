@@ -28,11 +28,6 @@
 
 <c:url var="saveUrl" value="/user/add.html" />
 
-
-
-
-
-
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 
@@ -48,19 +43,15 @@
 					<i class="fa fa-table"></i> Add User
 				</div>
 				<div class="card-body">
-					<div id="usernameErrorMessage"></div>
-					<div id="passwordNotmatchedMessage"></div>
-					<div id="roleSelectmessage"></div>
+					
 					<form:form 	modelAttribute="account" id="UserInfo" class="form-inline">	
 										
 						<div class="row col-12 tag-height">						 
 							<div class="form-group required">														
 								<label class="label-width" for="inputPassword6"> First name </label>										 
 								<form:input path="firstName" class="form-control mx-sm-3"
-								required="required" placeholder="Enter first name" />																	
-									
-							</div>
-							
+								required="required" placeholder="Enter first name" />
+							</div>							
 						 </div>
 						 
 						 <div class="row col-12 tag-height">						
@@ -102,16 +93,17 @@
 								<form:input path="username" class="form-control mx-sm-3"
 										required="required" placeholder="Enter user name" />
 								<small id="passwordHelpInline" class="text-muted text-para">
-	                          		User can log in with  Username.
+	                          		<span class="text-red" id="usernameUniqueErrorMessage"></span> User can log in with  Username.
 	                        	</small>
-							 </div>
-						 </div>				
+							 </div>							 
+						 </div>
+						 	
 							
 						<div class="row col-12 tag-height">						
 							<div class="form-group required">														
 								<label class="label-width" for="inputPassword6">Password</label>										 
-								<input type="password"  class="form-control mx-sm-3" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required />
-								<small id="passwordHelpInline" placeholder="Enter password" class="text-muted text-para">
+								<input type="password" placeholder="Enter password" class="form-control mx-sm-3" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required />
+								<small id="passwordHelpInline" class="text-muted text-para">
 	                          		 Password should be 8 characters long and should have both upper and lower case characters ,
 	                          		 at least one digit , at least one non digit.
 	                        	</small>
@@ -125,35 +117,35 @@
 										placeholder="Confirm password" class="form-control mx-sm-3"
 										required="required" />
 								<small id="passwordHelpInline" class="text-muted text-para">
-	                          		 Retype the password (for accuracy).
+	                          		 <span class="text-red" id="passwordNotmatchedMessage"></span> Retype the password (for accuracy).
 	                        	</small>
 							 </div>
+							 
 						 </div>
 						
 						<div class="row col-12 tag-height">						
 							<div class="form-group required">
-							<label class="label-width"  for="inputPassword6">Role</label>
+								<label class="label-width"  for="inputPassword6">Role</label>
 									<%
-										List<Role> roles = (List<Role>) session.getAttribute("roles");
-											int[] selectedRoles = (int[]) session
-													.getAttribute("selectedRoles");
-											for (Role role : roles) {
-									%>
-									
+										List<Role> roles = (List<Role>) session.getAttribute("roles");											
+										for (Role role : roles) {
+									%>									
 										<form:checkbox 
-											path="roles" class="chk" value="<%=role.getId()%>"
-											checked="<%=CheckboxHelperUtil.checkCheckedBox(selectedRoles,
-							role.getId())%>" />
-										<label class="form-control mx-sm-3" for="defaultCheck1"> <%=role.getName()%>
-										</label>
-									
+											path="roles" class="chk" value="<%=role.getId()%>" />
+										<label class="form-control mx-sm-3" for="defaultCheck1"> <%=role.getName()%></label>									
 									<%
 										}
 									%>
 								
 							</div>
+							
 						</div>
-						
+						<div class="row col-12 tag-height">	
+							<div class="form-group">
+								<label class="label-width"></label>
+								<div class="text-red" id="roleSelectmessage"></div>
+							</div>
+						</div>
 						<div class="row col-12 tag-height">						
 							<div class="form-group">
 									<input type="submit" onclick="return Validate()"  value="Save" 	class="btn btn-primary btn-block btn-center" />
@@ -197,12 +189,15 @@
 				beforeSend: function(xhr) {				    
 					 xhr.setRequestHeader(header, token);
 				},
-				success : function(data) {	
-					$("#loading").hide();
-				   $("#data").html(data);
+				success : function(data) {
+				   $("#usernameUniqueErrorMessage").html(data);
+				   if(data == ""){					   
+					   window.location.replace("/opensrp-dashboard/user.html");
+					   
+				   }
+				   
 				},
 				error : function(e) {
-				    console.log("ERROR: ", e);
 				   
 				},
 				done : function(e) {				    
@@ -224,16 +219,12 @@
 		/* we join the array separated by the comma */
 		var selected;
 		selected = chkArray.join(',') ;		
-		if(selected.length > 0){			
-		}else{			
-			$("#roleSelectmessage").html("Please at least one role");
-			return false;
-		}
-		$("#roleSelectmessage").html("e");
+		
 		return selected;
 	}
 	
 	 function Validate() {
+		 
          var password = document.getElementById("password").value;
          var confirmPassword = document.getElementById("retypePassword").value;
          if (password != confirmPassword) {
@@ -241,8 +232,24 @@
         	
         	 return false;
          }
+         
          $("#passwordNotmatchedMessage").html("");
-     	
+         var chkArray = [];
+ 		
+ 		/* look for all checkboes that have a class 'chk' attached to it and check if it was checked */
+ 		$(".chk:checked").each(function() {
+ 			chkArray.push($(this).val());
+ 		});
+ 		
+ 		/* we join the array separated by the comma */
+ 		var selected;
+ 		selected = chkArray.join(',') ;		
+ 		if(selected.length > 0){			
+ 		}else{			
+ 			$("#roleSelectmessage").html("Please select at least one role");
+ 			return false;
+ 		}
+ 		$("#roleSelectmessage").html("");
          return true;
      }
 	
