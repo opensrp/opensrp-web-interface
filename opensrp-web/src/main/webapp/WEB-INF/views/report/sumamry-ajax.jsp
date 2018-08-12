@@ -27,10 +27,10 @@
 			}
 										
 		%>
-			<div class="row">
-			<div class="col-6"><%=indicator %></div>
-			<div class="col-3"><%=falterInPercentage%> %</div>
-			</div>
+			<tr>
+			<td><%=indicator %></td>
+			<td><%=falterInPercentage%> %</td>
+			</tr>
 		<% 
 									   } 
 		}									

@@ -44,8 +44,10 @@
 					<i class="fa fa-table"></i> Summary Report
 				</div>
 				<div class="card-body">
-					
-						<div class="form-group" id="data">
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable">
+							<tbody id="tableBody">	
+						
 							<%	String indicator = "";
 									int count = 0;
 									int total = 0;
@@ -69,15 +71,18 @@
 											}
 																		
 										%>
-											<div class="row">
-											<div class="col-6"><%=indicator %></div>
-											<div class="col-3"><%=falterInPercentage%> %</div>
-											</div>
+											<tr>
+											<td><%=indicator %></td>
+											<td><%=falterInPercentage%> %</td>
+											</tr>
 										<% 
 																	   } 
 										}									
 									%>			
 							
+						
+							</tbody>
+						</table>
 					</div>
 				</div>
 		</div>
@@ -91,6 +96,9 @@
 		
 		<script type="text/javascript">
 		
+		$(document).ready(function() {
+		    $('#dataTable').DataTable();
+		} );
 		
 		$("#search-form").submit(function(event) { 
 			$("#loading").show();
@@ -158,7 +166,7 @@
 				},
 				success : function(data) {	
 					$("#loading").hide();
-				   $("#data").html(data);
+				   $("#dataTable").html(data);
 				},
 				error : function(e) {
 				    console.log("ERROR: ", e);
