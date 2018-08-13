@@ -49,6 +49,11 @@ SELECT DISTINCT c.id as id
 	ELSE null
     END
 	as father_name
+    , CASE
+    WHEN (e.json->>'entityType' = 'child') THEN core.latest_child_growth_status(e.json->>'baseEntityId')
+	ELSE null
+    END
+	as latest_growth_status
    FROM core.client c
    JOIN core.event e ON c.json->'baseEntityId' = e.json->'baseEntityId'
    WHERE e.json->>'eventType' LIKE '%Registration%'
