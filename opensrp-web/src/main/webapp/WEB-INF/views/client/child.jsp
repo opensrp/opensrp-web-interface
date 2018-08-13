@@ -37,7 +37,7 @@
 										<thead>
 											<tr>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Base Entity Id</th>
+													style="width: 140px;">Growth Status</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 79px;">Address Type</th>
 												<th tabindex="0" rowspan="1" colspan="1"
@@ -59,7 +59,7 @@
 										<tfoot>
 											<tr>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Base Entity Id</th>
+													style="width: 140px;">Growth Status</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 79px;">Address Type</th>
 												<th tabindex="0" rowspan="1" colspan="1"
@@ -98,13 +98,28 @@
 
 														String birthWeight = String.valueOf(clientObject[31]);
 														String motherName = String.valueOf(clientObject[32]);
-														String birth_weight = String.valueOf(clientObject[31]);
-														String mother_name = String.valueOf(clientObject[32]);
+														
+														String latest_growth_status = String.valueOf(clientObject[34]);
+														//String mother_name = String.valueOf(clientObject[32]);
 														pageContext.setAttribute("baseEntityId", baseEntityId);
+														
+														String gStatusDecoded = "No data found";
+														String bgColor = "#ff9800";
+														if(!latest_growth_status.isEmpty() && latest_growth_status!=null){
+															
+															if(latest_growth_status.equals("true")){
+																gStatusDecoded = "Adequate";
+																bgColor="#4CAF50";
+															}else if(latest_growth_status.equals("false")){
+																gStatusDecoded = "Inadequate";
+																bgColor="#f44336";
+															}
+														
+														}
 
 											%>
 											<tr>
-												<td><%=baseEntityId%></td>
+												<td bgcolor=<%=bgColor%>><%=gStatusDecoded%></td>
 												<td><%=addressType%></td>
 												<td><%=birthDate%></td>
 												<td><%=country%></td>

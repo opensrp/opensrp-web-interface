@@ -219,11 +219,24 @@ lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
 		double growthGram = Double.parseDouble(growth);
 		double growthKg = growthGram / 1000.00;
 		
-		String gStatusDecoded = null;
+		/* String gStatusDecoded = null;
 		if(growthStatus.equals("true")){
 			gStatusDecoded = "Adequate";
 		}else{
 			gStatusDecoded = "Inadequate";
+		} */
+		
+		String gStatusDecoded = "No data found";
+		String bgColor = "#ff9800";
+		if(!growthStatus.isEmpty() && growthStatus!=null){
+			
+			if(growthStatus.equals("true")){
+				gStatusDecoded = "Adequate";
+				bgColor="#4CAF50";
+			}else if(growthStatus.equals("false")){
+				gStatusDecoded = "Inadequate";
+				bgColor="#f44336";
+			}
 		}
 		
 %>	          
@@ -232,7 +245,7 @@ lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
                   <td><%=eventDate%></td>
                   <td><%=currentWeight%></td>
                   <td><%=growthKg%></td>
-                  <td><%=gStatusDecoded%></td>
+                  <td bgcolor=<%=bgColor%>><%=gStatusDecoded%></td>
                 </tr>
                 
 <%
