@@ -56,7 +56,7 @@
             <div class="list-group list-group-flush small">
               <a class="list-group-item list-group-item-action" href="#">
                 <div class="media">
-                  <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
+                  <img class="d-flex mr-3 rounded-circle" src="/resources/img/child.png" alt="">
 <%
 String childId = null;
 JSONArray lineChartWeightData = (JSONArray)session.getAttribute("lineChartWeightData");
