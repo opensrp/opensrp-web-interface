@@ -328,13 +328,6 @@ public class ChildGrowthServiceImpl implements NutritionService {
 		return databaseRepositoryImpl.getDataFromSQLFunction(searchBuilder, query, session);
 	}
 	
-	@Transactional
-	public List<Object[]> refreshView(SearchBuilder searchBuilder) {
-		String funcQuery = "SELECT * FROM core.refresh_all_materialized_views()";
-		//String funcQuery = "SELECT * FROM  core.refresh_materialized_views()";
-		return databaseRepositoryImpl.executeSelectQuery(funcQuery);
-	}
-	
 	private void setParameter(SearchBuilder searchBuilder, Query query) {
 		
 		if (searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {

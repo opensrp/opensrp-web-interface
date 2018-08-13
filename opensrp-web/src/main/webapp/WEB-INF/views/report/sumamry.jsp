@@ -32,7 +32,7 @@
 			<div class="form-group">				
 				   <a  href="<c:url value="/report/child-growth.html"/>"> <strong> Child Growth Report</strong> 
 					</a>  |  <a  href="<c:url value="/report/summary.html"/>"> <strong>Sumamry Report</strong>
-					</a>|  <a  href="<c:url value="/report/analytics.html"/>"> <strong>Analytics</strong>
+					</a>|  <a  href="<c:url value="/analytics/analytics.html"/>"> <strong>Analytics</strong>
 					</a>		
 			</div>
 			<jsp:include page="/WEB-INF/views/report-search-panel.jsp" />
@@ -76,7 +76,7 @@
 											<td><%=falterInPercentage%> %</td>
 											</tr>
 										<% 
-																	   } 
+										  } 
 										}									
 									%>			
 							

@@ -32,6 +32,6 @@
 			<td><%=falterInPercentage%> %</td>
 			</tr>
 		<% 
-									   } 
+			} 
 		}									
 	%>				
