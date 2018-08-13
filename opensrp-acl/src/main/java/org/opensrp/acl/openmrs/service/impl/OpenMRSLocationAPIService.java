@@ -32,12 +32,24 @@ public class OpenMRSLocationAPIService implements OpenMRSConnector<Location> {
 	@Override
 	public Location add(Location location) throws JSONException {
 		String locationUuid = "";
-		JSONObject createdLocation = openMRSAPIServiceImpl.add(PAYLOAD, makeLocationObject(location), LOCATION_URL);
-		if (createdLocation.has("uuid")) {
-			locationUuid = (String) createdLocation.get("uuid");
-			location.setUuid(locationUuid);
+		String query = "";
+		JSONArray existinglocation = new JSONArray();
+		query = "q=" + location.getName();
+		existinglocation = getByQuery(query);
+		if (existinglocation.length() == 0) {
+			JSONObject createdLocation = openMRSAPIServiceImpl.add(PAYLOAD, makeLocationObject(location), LOCATION_URL);
+			if (createdLocation.has("uuid")) {
+				locationUuid = (String) createdLocation.get("uuid");
+				location.setUuid(locationUuid);
+			} else {
+				//TODO
+			}
 		} else {
-			//TODO
+			JSONObject locationObject = new JSONObject();
+			locationObject = (JSONObject) existinglocation.get(0);
+			locationUuid = (String) locationObject.get("uuid");
+			update(location, locationUuid);
+			location.setUuid(locationUuid);
 		}
 		return location;
 	}
@@ -88,5 +100,13 @@ public class OpenMRSLocationAPIService implements OpenMRSConnector<Location> {
 		locationObject.put(parentLocationKey, parentLocationUuid);
 		
 		return locationObject;
+	}
+	
+	@Override
+	public JSONArray getByQuery(String query) throws JSONException {
+		JSONObject location = openMRSAPIServiceImpl.getByQuery(query, LOCATION_URL);
+		JSONArray locationArray = new JSONArray();
+		locationArray = (JSONArray) location.get("results");
+		return locationArray;
 	}
 }

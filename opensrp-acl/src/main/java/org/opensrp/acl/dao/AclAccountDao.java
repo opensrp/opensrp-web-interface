@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository("accountDao")
-public class AclAccountDao extends AbstractAclDao<User> implements UserDao {
+public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 	
 	private static final Logger logger = Logger.getLogger(AclAccountDao.class);
 	
@@ -31,7 +31,8 @@ public class AclAccountDao extends AbstractAclDao<User> implements UserDao {
 		User account = null;
 		try {
 			account = getByUsername(username);
-			logger.info("username:" + account.getAuthorities().toString());
+			logger.info("username:" + account.toString());
+			
 		}
 		catch (Exception e) {
 			logger.error("account null: " + e);

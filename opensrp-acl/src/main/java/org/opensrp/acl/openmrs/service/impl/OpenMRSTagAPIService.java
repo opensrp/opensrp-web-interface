@@ -4,6 +4,7 @@
 
 package org.opensrp.acl.openmrs.service.impl;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.acl.entity.LocationTag;
@@ -65,6 +66,12 @@ public class OpenMRSTagAPIService implements OpenMRSConnector<LocationTag> {
 		JSONObject tag = new JSONObject();
 		tag.put(nameKey, name);
 		return tag;
+	}
+	
+	@Override
+	public JSONArray getByQuery(String query) throws JSONException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

@@ -156,10 +156,22 @@
 
 
 		<%
-			JSONArray lineChartData = (JSONArray)session.getAttribute("lineChartData");
-			JSONArray lineChartCategory = (JSONArray)session.getAttribute("lineChartCategory");
-			JSONObject featureCollectionOfGrowthFaltering = (JSONObject)session.getAttribute("featureCollectionOfGrowthFaltering");	
-			JSONObject featureCollectionOfAdequateGrowth = (JSONObject)session.getAttribute("featureCollectionOfAdequateGrowth");
+		    JSONArray lineChartData = null;
+		    JSONArray lineChartCategory = null;
+		    JSONObject featureCollectionOfGrowthFaltering = null;
+		    JSONObject featureCollectionOfAdequateGrowth = null;
+		    if (session.getAttribute("lineChartData") != null) {
+			    lineChartData = (JSONArray)session.getAttribute("lineChartData");
+		    }
+		    if (session.getAttribute("lineChartCategory") != null) {
+			    lineChartCategory = (JSONArray)session.getAttribute("lineChartCategory");
+		    }
+		    if (session.getAttribute("featureCollectionOfGrowthFaltering") != null) {
+			    featureCollectionOfGrowthFaltering = (JSONObject)session.getAttribute("featureCollectionOfGrowthFaltering");
+		    }
+		    if (session.getAttribute("featureCollectionOfAdequateGrowth") != null) {
+		        featureCollectionOfAdequateGrowth = (JSONObject)session.getAttribute("featureCollectionOfAdequateGrowth");
+		    }
 		%>
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 	</div>

@@ -32,7 +32,7 @@
 			<div class="form-group">				
 				   <a  href="<c:url value="/report/child-growth.html"/>"> <strong> Child Growth Report</strong> 
 					</a>  |  <a  href="<c:url value="/report/summary.html"/>"> <strong>Sumamry Report</strong>
-					</a>|  <a  href="<c:url value="/report/analytics.html"/>"> <strong>Analytics</strong>
+					</a>|  <a  href="<c:url value="/analytics/analytics.html"/>"> <strong>Analytics</strong>
 					</a>		
 			</div>
 		    <div class="card mb-3">
@@ -68,7 +68,7 @@
 			$.ajax({
 				type : "GET",
 				contentType : "application/json",				
-				url : "/opensrp-dashboard/report/analytics-ajax.html",				 
+				url : "/opensrp-dashboard/analytics/analytics-ajax.html",				 
 				dataType : 'html',
 				timeout : 100000,
 				beforeSend: function() {

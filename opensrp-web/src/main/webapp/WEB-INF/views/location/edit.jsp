@@ -35,7 +35,7 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 		<div class="container-fluid">
 			<div class="form-group">				
 				   <a  href="<c:url value="/location/tag/list.html"/>"> <strong> Manage Tags</strong> 
-					</a>  |  <a  href="<c:url value="/location.html"/>"> <strong>Manage Locations</strong>
+					</a>  |  <a  href="<c:url value="/location/location.html"/>"> <strong>Manage Locations</strong>
 					</a>|  <a  href="<c:url value="/location/hierarchy.html"/>"> <strong>View Hierarchy</strong>
 					</a>			
 			</div>
@@ -84,8 +84,8 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 								<div class="row">									
 									<div class="col-5">
 									<label for="exampleInputName"> Location Tag</label>
-										<select class="custom-select custom-select-lg mb-3" id="locationTag" name="locationTag">
-									 		<option value="0" selected>Please Select</option>
+										<select class="custom-select custom-select-lg mb-3" id="locationTag" name="locationTag" required="required">
+									 		<option value="" selected>Please Select</option>
 												<%
 												for (Map.Entry<Integer, String> entry : tags.entrySet())
 												{

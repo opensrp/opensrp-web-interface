@@ -13,11 +13,15 @@ import javax.validation.Valid;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.acl.entity.Location;
+import org.opensrp.acl.permission.CustomPermissionEvaluator;
 import org.opensrp.acl.service.impl.LocationServiceImpl;
 import org.opensrp.acl.service.impl.LocationTagServiceImpl;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -44,10 +48,14 @@ public class LocationController {
 	@Autowired
 	private PaginationUtil paginationUtil;
 	
+	@Autowired
+	private CustomPermissionEvaluator c;
+	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION')")
-	@RequestMapping(value = "location.html", method = RequestMethod.GET)
+	@RequestMapping(value = "location/location.html", method = RequestMethod.GET)
 	public String locationList(HttpServletRequest request, HttpSession session, Model model) {
-		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		//System.err.println(c.hasPermission(auth, "returnObject", "PERM_READ_LOCATION"));
 		Class<Location> entityClassName = Location.class;
 		paginationUtil.createPagination(request, session, entityClassName);
 		return "location/index";
@@ -86,7 +94,8 @@ public class LocationController {
 	                                 @ModelAttribute("location") @Valid Location location, BindingResult binding,
 	                                 ModelMap model, HttpSession session) throws Exception {
 		location.setName(location.getName().trim());
-		if (!locationServiceImpl.locationExists(location)) {
+		boolean chceckInOpenmrs = false;
+		if (!locationServiceImpl.locationExists(location, chceckInOpenmrs)) {
 			locationServiceImpl.save(locationServiceImpl.setCreatorParentLocationTagAttributeInLocation(location,
 			    parentLocationId, tagId));
 		} else {
@@ -96,7 +105,7 @@ public class LocationController {
 			return new ModelAndView("/location/add");
 		}
 		
-		return new ModelAndView("redirect:/location.html");
+		return new ModelAndView("redirect:/location/location.html");
 		
 	}
 	
@@ -121,8 +130,8 @@ public class LocationController {
 	                                 ModelMap model, HttpSession session, @PathVariable("id") int id) throws Exception {
 		location.setId(id);
 		location.setName(location.getName().trim());
-		
-		if (!locationServiceImpl.locationExists(location)) {
+		boolean chceckInOpenmrs = true;
+		if (!locationServiceImpl.locationExists(location, chceckInOpenmrs)) {
 			locationServiceImpl.update(locationServiceImpl.setCreatorParentLocationTagAttributeInLocation(location,
 			    parentLocationId, tagId));
 		} else {
@@ -132,7 +141,7 @@ public class LocationController {
 			return new ModelAndView("/location/edit");
 		}
 		
-		return new ModelAndView("redirect:/location.html");
+		return new ModelAndView("redirect:/location/location.html");
 		
 	}
 	
@@ -146,7 +155,6 @@ public class LocationController {
 	@RequestMapping(value = "/location", method = RequestMethod.GET)
 	public String getChildLocationList(HttpServletRequest request, HttpSession session, Model model, @RequestParam int id) {
 		List<Object[]> parentData = locationServiceImpl.getChildData(id);
-		System.out.println("child data size: " + parentData.size());
 		session.setAttribute("data", parentData);
 		return "/location";
 	}

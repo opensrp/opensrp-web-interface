@@ -1215,3 +1215,27 @@ th {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
   background-clip: padding-box;
 }
+.tag-height {
+	margin-bottom: 10px;
+}
+.label-width {
+	width: 110px;
+}
+
+.label-width-no-start {
+	width: 110px;
+}
+.text-para {	
+	color: #0e0e0e;
+}
+.form-group.required .label-width:after{ 
+   content:"*";
+   margin-left:2px;
+   color:red;
+}
+.btn-center {
+	margin-left: 120px;
+}
+.text-red {	
+	color:red;
+}

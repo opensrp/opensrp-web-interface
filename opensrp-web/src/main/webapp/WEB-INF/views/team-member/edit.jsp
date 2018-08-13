@@ -55,21 +55,17 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 					<i class="fa fa-table"></i> Add Team
 				</div>
 				<div class="card-body">
-				<span> ${uniqueNameErrorMessage}</span><br />
-				<span> ${supervisorUuidErrorMessage}</span><br />
-				<span> ${uniqueIdetifierErrorMessage}</span><br />
-				<span> ${locationSelectErrorMessage}</span>
-					<form:form method="POST" action="${saveUrl}" modelAttribute="teamMember">
-					
+				
+					<form:form method="POST" action="${saveUrl}" modelAttribute="teamMember">					
 					<form:hidden path="person" id="person" value="<%=selectedPersonId %>" />	
 					<div class="form-group">							
 							<div class="row">									
 								<div class="col-5">
 									<div id="cm" class="ui-widget">
 										<label>Person </label>
-										<select id="combobox" class="form-control">
-											  
+										<select id="combobox" class="form-control">											  
 										</select>
+										<span class="text-red">${uniqueNameErrorMessage}</span> 
 									</div>
 								</div>									
 							</div>
@@ -80,10 +76,9 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 								<div class="col-5">
 									<div id="cm" class="ui-widget">
 										<label>Location </label>
-										<div id="locationsTag">
-                          					
+										<div id="locationsTag">                          					
                           				</div>
-										
+										<span class="text-red">${locationSelectErrorMessage}</span>
 									</div>
 								</div>									
 							</div>
@@ -95,6 +90,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 									<form:input path="identifier" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="identifier" />
+									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
 						</div>
@@ -104,8 +100,8 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 								<div class="row">									
 									<div class="col-5">
 									<label for="exampleInputName">Team</label>
-										<select class="custom-select custom-select-lg mb-3" id="team" name="team">
-									 		<option value="0" selected>Please Select</option>
+										<select class="custom-select custom-select-lg mb-3" id="team" name="team" required="required">
+									 		<option value="" selected>Please Select</option>
 												<%
 												for (Map.Entry<Integer, String> entry : teams.entrySet())
 												{

@@ -20,13 +20,13 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
 	
 	@Override
 	public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
-		logger.debug("permission:" + permission.toString());
-		logger.debug("targetDomainObject:" + targetDomainObject.toString());
-		logger.debug("getAuthorities:" + authentication.getAuthorities());
-		System.err.println("okkkkkkk");
+		logger.info("permission:" + permission.toString());
+		logger.info("targetDomainObject:" + targetDomainObject.toString());
+		logger.info("getAuthorities:" + authentication.getAuthorities());
+		System.err.println("okkkkkkk" + authentication.toString());
 		Collection<? extends GrantedAuthority> role = authentication.getAuthorities();
 		for (GrantedAuthority grantedAuthority : role) {
-			
+			System.err.println(grantedAuthority.getAuthority());
 			if (grantedAuthority.getAuthority().equalsIgnoreCase(permission.toString())) {
 				logger.info("authorized by permission:" + grantedAuthority.getAuthority());
 				return true;
