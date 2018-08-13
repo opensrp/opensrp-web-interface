@@ -59,7 +59,6 @@
 					<a class="dropdown-item"
 						href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
 					</a>				
-					
 
 				</div></li>
 			
