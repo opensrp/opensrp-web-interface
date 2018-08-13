@@ -36,45 +36,45 @@
 										style="width: 100%;">
 										<thead>
 											<tr>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Growth Status</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Address Type</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Birth Date</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Country</th>
-												<th tabindex="0" rowspan="1" colspan="1"
+												    <th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">First Name</th>
-												<th tabindex="0" rowspan="1" colspan="1"
+													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Gender</th>
-												<th tabindex="0" rowspan="1" colspan="1"
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 106px;">Birth Date</th>
+													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Birth Weight</th>
-												<th tabindex="0" rowspan="1" colspan="1"
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 79px;">Address Type</th>
+													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Mother Name</th>
-												<th tabindex="0" rowspan="1" colspan="1"
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 43px;">Provider</th>
+												 	<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Latest Growth Status</th>
+													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Action</th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Growth Status</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Address Type</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Birth Date</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Country</th>
-												<th tabindex="0" rowspan="1" colspan="1"
+												    <th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">First Name</th>
-												<th tabindex="0" rowspan="1" colspan="1"
+													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Gender</th>
-												<th tabindex="0" rowspan="1" colspan="1"
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 106px;">Birth Date</th>
+													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Birth Weight</th>
-												<th tabindex="0" rowspan="1" colspan="1"
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 79px;">Address Type</th>
+													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Mother Name</th>
-												<th tabindex="0" rowspan="1" colspan="1"
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 43px;">Provider</th>
+												 	<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Latest Growth Status</th>
+													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Action</th>
 											</tr>
 										</tfoot>
@@ -100,7 +100,7 @@
 														String motherName = String.valueOf(clientObject[32]);
 														
 														String latest_growth_status = String.valueOf(clientObject[34]);
-														//String mother_name = String.valueOf(clientObject[32]);
+														String provider = String.valueOf(clientObject[27]);
 														pageContext.setAttribute("baseEntityId", baseEntityId);
 														
 														String gStatusDecoded = "No data found";
@@ -114,24 +114,21 @@
 																gStatusDecoded = "Inadequate";
 																bgColor="#f44336";
 															}
-														
 														}
 
 											%>
 											<tr>
-												<td bgcolor=<%=bgColor%>><%=gStatusDecoded%></td>
-												<td><%=addressType%></td>
-												<td><%=birthDate%></td>
-												<td><%=country%></td>
 												<td><%=firstName%></td>
 												<td><%=gender%></td>
-
+												<td><%=birthDate%></td>
 												<td><%=birthWeight%></td>
+												<td><%=addressType%></td>
 												<td><%=motherName%></td>
+												<td><%=provider%></td>
+												<td bgcolor=<%=bgColor%>><%=gStatusDecoded%></td>
 												<td>
-												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>
-												
-										</td> 
+												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>		
+												</td> 
 											</tr>
 											<%
 												}
