@@ -43,7 +43,7 @@ BEGIN
 				  SELECT *
 				  FROM core.child_growth cg2
 				  WHERE cg1.base_entity_id = cg2.base_entity_id
-				  AND cg1.last_event_date < cg2.last_event_date
+				  AND cg1.event_date < cg2.event_date
 			  )) :: numeric
 			  / (SELECT count(distinct base_entity_id)
 				FROM core."viewJsonDataConversionOfClient"

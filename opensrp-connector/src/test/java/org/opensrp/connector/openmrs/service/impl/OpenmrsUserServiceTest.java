@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -283,4 +284,17 @@ public class OpenmrsUserServiceTest {
 		openMRSAPIService.delete("", userUuid, USER_URL);
 	}
 	
+	@Test
+	public void getUserByNane() throws JSONException {
+		JSONObject getProviderObject = openMRSAPIService.getByQuery("v=full&username=admin", USER_URL);
+		JSONArray arr = new JSONArray();
+		arr = (JSONArray) getProviderObject.get("results");
+		System.err.println("" + arr.length());
+		JSONObject ob = new JSONObject();
+		ob = (JSONObject) arr.get(0);
+		JSONObject person = new JSONObject();
+		person = (JSONObject) ob.get("person");
+		
+		//System.err.println("dddd:" + ob);
+	}
 }

@@ -4,6 +4,7 @@
 
 package org.opensrp.acl.openmrs.service.impl;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.acl.entity.Team;
@@ -76,6 +77,12 @@ public class OpenMRSTeamAPIService implements OpenMRSConnector<Team> {
 			teamObject.put(locationKey, team.getLocation().getUuid());
 		}
 		return teamObject;
+	}
+	
+	@Override
+	public JSONArray getByQuery(String query) throws JSONException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

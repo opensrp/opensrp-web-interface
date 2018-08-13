@@ -72,21 +72,4 @@ public class ReportController {
 		return "/report/sumamry-ajax";
 	}
 	
-	@RequestMapping(value = "/analytics.html", method = RequestMethod.GET)
-	public String analytics(HttpServletRequest request, HttpSession session, Model model) {
-		return "/report/analytics";
-	}
-	
-	@RequestMapping(value = "/analytics-ajax.html", method = RequestMethod.GET)
-	public String analyticsAjax(HttpServletRequest request, HttpSession session, Model model) {
-		searchBuilder.clear();
-		List<Object[]> viewRefresh = childGrowthServiceImpl.refreshView(searchBuilder);
-		int refreshCount = 0;
-		Iterator obArrIterator = viewRefresh.iterator();
-		if (obArrIterator.hasNext()) {
-			refreshCount = (Integer) obArrIterator.next();
-		}
-		session.setAttribute("refreshCount", refreshCount);
-		return "/report/analytics-ajax";
-	}
 }

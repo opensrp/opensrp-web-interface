@@ -52,4 +52,11 @@ public class OpenMRSAPIServiceImpl extends OpenmrsCredentialsService implements 
 		return new JSONObject(op.body());
 	}
 	
+	@Override
+	public JSONObject getByQuery(String payload, String URL) throws JSONException {
+		HttpResponse op = HttpUtil.get(HttpUtil.removeEndingSlash(OPENMRS_BASE_URL) + "/" + URL, payload, OPENMRS_USER,
+		    OPENMRS_PWD);
+		return new JSONObject(op.body());
+	}
+	
 }

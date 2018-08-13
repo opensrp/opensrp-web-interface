@@ -53,7 +53,7 @@ public class TeamMemberController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_TEAM_MEMBER')")
 	@RequestMapping(value = "/add.html", method = RequestMethod.GET)
-	public ModelAndView saveLocation(ModelMap model, HttpSession session) throws JSONException {
+	public ModelAndView saveTeamMember(ModelMap model, HttpSession session) throws JSONException {
 		model.addAttribute("teamMember", new TeamMember());
 		String personName = "";
 		
@@ -66,12 +66,12 @@ public class TeamMemberController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_TEAM_MEMBER')")
 	@RequestMapping(value = "/add.html", method = RequestMethod.POST)
-	public ModelAndView saveLocation(@RequestParam(value = "person", required = false) int personId,
-	                                 @RequestParam(value = "personName") String personName,
-	                                 @RequestParam(value = "team") int teamId,
-	                                 @RequestParam(value = "locationList[]", required = false) int[] locations,
-	                                 @ModelAttribute("teamMember") @Valid TeamMember teamMember, BindingResult binding,
-	                                 ModelMap model, HttpSession session) throws Exception {
+	public ModelAndView saveTeamMember(@RequestParam(value = "person", required = false) int personId,
+	                                   @RequestParam(value = "personName") String personName,
+	                                   @RequestParam(value = "team") int teamId,
+	                                   @RequestParam(value = "locationList[]", required = false) int[] locations,
+	                                   @ModelAttribute("teamMember") @Valid TeamMember teamMember, BindingResult binding,
+	                                   ModelMap model, HttpSession session) throws Exception {
 		teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember, personId,
 		    teamId, locations);
 		
@@ -88,7 +88,7 @@ public class TeamMemberController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_TEAM_MEMBER')")
 	@RequestMapping(value = "/{id}/edit.html", method = RequestMethod.GET)
-	public ModelAndView editLocation(ModelMap model, HttpSession session, @PathVariable("id") int id) throws JSONException {
+	public ModelAndView editTeamMember(ModelMap model, HttpSession session, @PathVariable("id") int id) throws JSONException {
 		TeamMember teamMember = teamMemberServiceImpl.findById(id, "id", TeamMember.class);
 		model.addAttribute("id", id);
 		model.addAttribute("teamMember", teamMember);
@@ -102,12 +102,12 @@ public class TeamMemberController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_TEAM_MEMBER')")
 	@RequestMapping(value = "/{id}/edit.html", method = RequestMethod.POST)
-	public ModelAndView editLocation(@RequestParam(value = "person", required = false) int personId,
-	                                 @RequestParam(value = "personName") String personName,
-	                                 @RequestParam(value = "team") int teamId,
-	                                 @RequestParam(value = "locationList[]", required = false) int[] locations,
-	                                 @ModelAttribute("teamMember") @Valid TeamMember teamMember, BindingResult binding,
-	                                 ModelMap model, HttpSession session, @PathVariable("id") int id) throws Exception {
+	public ModelAndView editTeamMember(@RequestParam(value = "person", required = false) int personId,
+	                                   @RequestParam(value = "personName") String personName,
+	                                   @RequestParam(value = "team") int teamId,
+	                                   @RequestParam(value = "locationList[]", required = false) int[] locations,
+	                                   @ModelAttribute("teamMember") @Valid TeamMember teamMember, BindingResult binding,
+	                                   ModelMap model, HttpSession session, @PathVariable("id") int id) throws Exception {
 		teamMember.setId(id);
 		teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember, personId,
 		    teamId, locations);

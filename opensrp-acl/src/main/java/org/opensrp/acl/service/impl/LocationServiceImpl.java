@@ -52,8 +52,7 @@ public class LocationServiceImpl implements AclService {
 	
 	@Transactional
 	public List<Object[]> getLocationByTagId(int tagId) {
-		String sqlQuery = "SELECT location.name,location.id from core.location "
-				+ " WHERE location_tag_id=:location_tag_id";
+		String sqlQuery = "SELECT location.name,location.id from core.location " + " WHERE location_tag_id=:location_tag_id";
 		return databaseRepositoryImpl.executeSelectQuery(sqlQuery, "location_tag_id", tagId);
 	}
 	
@@ -141,11 +140,31 @@ public class LocationServiceImpl implements AclService {
 		return locationTreeAsMap;
 	}
 	
-	public boolean locationExists(Location location) {
+	public boolean locationExists(Location location, boolean isOpenMRSCheck) throws JSONException {
 		boolean exists = false;
+		boolean isExistsInOpenMRS = false;
+		JSONArray existinglocation = new JSONArray();
+		String query = "";
 		if (location != null) {
 			exists = databaseRepositoryImpl.entityExists(location.getId(), location.getName(), "name", Location.class);
+			
+			if (isOpenMRSCheck) {
+				Location findLocation = findById(location.getId(), "id", Location.class);
+				if (!findLocation.getName().equalsIgnoreCase(location.getName())) {
+					query = "q=" + location.getName();
+					existinglocation = openMRSLocationAPIService.getByQuery(query);
+					System.err.println("len:" + existinglocation.length());
+					if (existinglocation.length() != 0) {
+						isExistsInOpenMRS = true;
+					}
+					if (!exists) { // if false then alter 
+						exists = isExistsInOpenMRS;
+					}
+				}
+				
+			}
 		}
+		
 		return exists;
 	}
 	
