@@ -37,17 +37,17 @@
 										<thead>
 											<tr>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Base Entity Id</th>
-												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">First Name</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 225px;">NID</th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Phone Number</th>
-												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 225px;">Spouse Name</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 225px;">LMP Date</th>
+												<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 225px;">Phone Number</th>
+												<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Provider</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 225px;">Action</th>
 											</tr>
@@ -55,17 +55,17 @@
 										<tfoot>
 											<tr>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Base Entity Id</th>
-												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">First Name</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 225px;">NID</th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Phone Number</th>
-												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 225px;">Spouse Name</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 225px;">LMP Date</th>
+												<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 225px;">Phone Number</th>
+												<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Provider</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 225px;">Action</th>
 											</tr>
@@ -89,18 +89,19 @@
 														String phoneNumber = String.valueOf(clientObject[17]);
 														String spouseName = String.valueOf(clientObject[19]);
 														String lmpDate = String.valueOf(clientObject[24]);
+														String provider = String.valueOf(clientObject[27]);
 														
 														String id = String.valueOf(clientObject[0]);
 														pageContext.setAttribute("baseEntityId", baseEntityId);
 														
 											%>
 											<tr>
-												<td><%=baseEntityId%></td>
 												<td><%=firstName%></td>
 												<td><%=nid%></td>
-												<td><%=phoneNumber%></td>
 												<td><%=spouseName%></td>
-												<td><%=lmpDate%></td>												
+												<td><%=lmpDate%></td>
+												<td><%=phoneNumber%></td>
+												<td><%=provider%></td>												
 												<td>
 												<a href="<c:url value="/client/mother/${baseEntityId}/details.html"/>">Details</a>
 												</td> 

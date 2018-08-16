@@ -14,11 +14,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.common.visualization.DashboardDataVisualizeServiceImpl;
+import org.opensrp.common.visualization.DataVisualization;
+import org.opensrp.common.visualization.HighChart;
+import org.opensrp.common.visualization.VisualizationService;
 import org.opensrp.web.nutrition.entity.ChildGrowth;
-import org.opensrp.web.nutrition.visualization.DashboardDataVisualizeServiceImpl;
-import org.opensrp.web.nutrition.visualization.DataVisualization;
-import org.opensrp.web.nutrition.visualization.HighChart;
-import org.opensrp.web.nutrition.visualization.VisualizationService;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,7 +52,8 @@ public class DashboardController {
 	@RequestMapping("/")
 	public String showHome(HttpServletRequest request, Model model, HttpSession session) throws JSONException {
 		/*Different types of data counts and percentages*/
-		List<Object> dashboardAggregatedList = databaseServiceImpl.executeSelectQuery("select * from core.fn_growplus_dashboard_data_count()");
+		List<Object> dashboardAggregatedList = databaseServiceImpl
+				.executeSelectQuery("select * from core.fn_growplus_dashboard_data_count()");
 		session.setAttribute("dashboardAggregatedList", dashboardAggregatedList);
 
 		/*Line chart data*/
@@ -70,8 +71,7 @@ public class DashboardController {
 		return "home";
 	}
 
-	private JSONObject createGeoJSON(boolean flag)
-			throws JSONException {
+	private JSONObject createGeoJSON(boolean flag) throws JSONException {
 
 		/* {type: 'FeatureCollection',
 		        features: [{
@@ -133,8 +133,7 @@ public class DashboardController {
 		return featureCollection;
 	}
 
-	private void setHighChartData(HttpServletRequest request, HttpSession session)
-			throws JSONException {
+	private void setHighChartData(HttpServletRequest request, HttpSession session) throws JSONException {
 		SearchBuilder searchBuilder = searchUtil.generateSearchBuilderParams(request, session);
 		if (searchBuilder.getYear() == null || searchBuilder.getYear().isEmpty()) {
 			searchBuilder.setYear(currentYear.toString());
@@ -144,6 +143,7 @@ public class DashboardController {
 
 		JSONArray lineChartData = HighChart.getMultiLineChartData(monthWiseData, searchBuilder.getYear());
 		JSONArray lineChartCategory = HighChart.getMultiLineChartCategory(monthWiseData);
+
 		session.setAttribute("lineChartData", lineChartData);
 		session.setAttribute("lineChartCategory", lineChartCategory);
 	}

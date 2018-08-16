@@ -1,0 +1,19 @@
+CREATE OR REPLACE FUNCTION core.latest_child_growth_status (baseEntityId varchar) 
+RETURNS text
+AS $$
+  DECLARE val text;
+  BEGIN
+    SELECT growth_status into val
+	FROM core.child_growth cg1
+	WHERE  NOT EXISTS (
+          SELECT *
+          FROM core.child_growth cg2
+          WHERE cg1.base_entity_id = cg2.base_entity_id
+            AND cg1.event_date < cg2.event_date
+  		)
+  	 AND cg1.base_entity_id = baseEntityId;
+    return val;
+  END;
+  $$ LANGUAGE 'plpgsql';
+  
+select core.latest_child_growth_status ('734eb1f8-97d3-42c5-82a4-275c2b45f1a8');

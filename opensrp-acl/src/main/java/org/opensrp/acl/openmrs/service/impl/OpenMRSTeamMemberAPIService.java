@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.acl.entity.Location;
@@ -94,5 +95,11 @@ public class OpenMRSTeamMemberAPIService implements OpenMRSConnector<TeamMember>
 		teamMemberObject.put(locationsKey, locationList);
 		
 		return teamMemberObject;
+	}
+	
+	@Override
+	public JSONArray getByQuery(String query) throws JSONException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

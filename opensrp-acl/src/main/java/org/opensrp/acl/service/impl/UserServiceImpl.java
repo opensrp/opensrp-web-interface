@@ -14,10 +14,13 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.entity.User;
 import org.opensrp.acl.openmrs.service.impl.OpenMRSUserAPIService;
 import org.opensrp.acl.service.AclService;
+import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,13 +44,8 @@ public class UserServiceImpl implements AclService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	private static final String ATTRIBUTE_PASSWORD_NOT_MATCH = "passwordNotMatch";
-	
-	private static final String ATTRIBUTE_UNIQUE_USER = "unique";
-	
-	private static final String MESSAGE_PASSWORD_NOT_MATCHED = "Password Does not match";
-	
-	private static final String MESSAGE_DUPLICATE_USER_NAME = "User name alreday taken";
+	@Autowired
+	private User user;
 	
 	@Transactional
 	@Override
@@ -56,15 +54,38 @@ public class UserServiceImpl implements AclService {
 		long createdUser = 0;
 		Set<Role> roles = user.getRoles();
 		boolean isProvider = roleServiceImpl.isProvider(roles);
+		JSONArray existingOpenMRSUser = new JSONArray();
+		String query = "";
+		String existingUserUUid = "";
+		String existingUserPersonUUid = "";
+		
+		query = "v=full&username=" + user.getUsername();
 		if (isProvider) {
-			user = openMRSUserAPIService.add(user);
-			if (!user.getUuid().isEmpty()) {
-				user.setPassword(passwordEncoder.encode(user.getPassword()));
-				user.setProvider(true);
-				createdUser = repository.save(user);
+			existingOpenMRSUser = openMRSUserAPIService.getByQuery(query);
+			if (existingOpenMRSUser.length() == 0) {
+				user = openMRSUserAPIService.add(user);
+				if (!user.getUuid().isEmpty()) {
+					user.setPassword(passwordEncoder.encode(user.getPassword()));
+					user.setProvider(true);
+					createdUser = repository.save(user);
+				} else {
+					logger.error("No uuid found for user:" + user.getUsername());
+				}
 			} else {
-				logger.error("No uuid found for user:" + user.getUsername());
+				JSONObject userOb = new JSONObject();
+				userOb = (JSONObject) existingOpenMRSUser.get(0);
+				existingUserUUid = (String) userOb.get("uuid");
+				JSONObject person = new JSONObject();
+				person = (JSONObject) userOb.get("person");
+				existingUserPersonUUid = (String) person.get("uuid");
+				user.setProvider(true);
+				user.setUuid(existingUserUUid);
+				user.setPersonUUid(existingUserPersonUUid);
+				openMRSUserAPIService.update(user, existingUserUUid);
+				user.setPassword(passwordEncoder.encode(user.getPassword()));
+				createdUser = repository.save(user);
 			}
+			
 		} else {
 			user.setProvider(false);
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -113,11 +134,11 @@ public class UserServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	public Set<Role> setRoles(int[] selectedRoles) {
+	public Set<Role> setRoles(String[] selectedRoles) {
 		Set<Role> roles = new HashSet<Role>();
 		if (selectedRoles != null) {
-			for (int roleId : selectedRoles) {
-				Role role = repository.findById(roleId, "id", Role.class);
+			for (String roleId : selectedRoles) {
+				Role role = repository.findById(Integer.parseInt(roleId), "id", Role.class);
 				roles.add(role);
 			}
 		}
@@ -128,46 +149,25 @@ public class UserServiceImpl implements AclService {
 		return passwordEncoder.matches(account.getRetypePassword(), passwordEncoder.encode(account.getPassword()));
 	}
 	
-	public boolean isUserAlreadyExist(User account) {
-		return repository.findByUserName(account.getUsername(), "username", User.class);
+	public boolean isUserExist(String userName) {
+		return repository.findByUserName(userName, "username", User.class);
 	}
 	
-	public boolean checkValidationsAndSave(User account, int[] roles, HttpSession session, ModelMap model) {
-		try {
-			if (isPasswordMatched(account) && !isUserAlreadyExist(account)) {
-				account.setEnabled(true);
-				account.setRoles(setRoles(roles));
-				save(account);
-				return true;
-			} else {
-				setSelectedRolesAttributes(roles, session);
-				if (!isPasswordMatched(account) && isUserAlreadyExist(account)) {
-					setPasswordNotMatchedAttribute(model);
-					setUniqueUserAttribute(model);
-				} else if (isUserAlreadyExist(account)) {
-					setUniqueUserAttribute(model);
-				} else {
-					setPasswordNotMatchedAttribute(model);
-				}
-				return false;
-			}
-		}
-		catch (Exception e) {
-			return false;
-		}
-	}
-	
-	public void setSelectedRolesAttributes(int[] roles, HttpSession session) {
-		session.setAttribute("roles", repository.findAll("Role"));
-		session.setAttribute("selectedRoles", roles);
-	}
-	
-	public void setPasswordNotMatchedAttribute(ModelMap model) {
-		model.addAttribute(ATTRIBUTE_PASSWORD_NOT_MATCH, MESSAGE_PASSWORD_NOT_MATCHED);
-	}
-	
-	private void setUniqueUserAttribute(ModelMap model) {
-		model.addAttribute(ATTRIBUTE_UNIQUE_USER, MESSAGE_DUPLICATE_USER_NAME);
+	public User convert(UserDTO userDTO) {
+		String[] roles = userDTO.getRoles().split(",");
+		
+		user.setUsername(userDTO.getUsername());
+		user.setEmail(userDTO.getEmail());
+		user.setEnabled(true);
+		user.setFirstName(userDTO.getFirstName());
+		user.setGender("");
+		user.setIdetifier(userDTO.getIdetifier());
+		user.setLastName(userDTO.getLastName());
+		user.setMobile(userDTO.getMobile());
+		user.setPassword(userDTO.getPassword());
+		user.setRoles(setRoles(roles));
+		return user;
+		
 	}
 	
 	public int[] getSelectedRoles(User account) {
@@ -230,5 +230,11 @@ public class UserServiceImpl implements AclService {
 			
 		}
 		return usersMap;
+	}
+	
+	@Transactional
+	public void setRolesAttributes(int[] roles, HttpSession session) {
+		session.setAttribute("roles", repository.findAll("Role"));
+		session.setAttribute("selectedRoles", roles);
 	}
 }

@@ -1,3 +1,7 @@
+<%@page import="com.google.gson.JsonArray"%>
+<%@page import="com.google.gson.JsonObject"%>
+<%@page import="org.json.JSONObject"%>
+<%@page import="org.json.JSONArray"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -52,9 +56,12 @@
             <div class="list-group list-group-flush small">
               <a class="list-group-item list-group-item-action" href="#">
                 <div class="media">
-                  <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/45x45" alt="">
+                  <img class="d-flex mr-3 rounded-circle" src="/resources/img/child.png" alt="">
 <%
 String childId = null;
+JSONArray lineChartWeightData = (JSONArray)session.getAttribute("lineChartWeightData");
+JSONArray lineChartGrowthData = (JSONArray)session.getAttribute("lineChartGrowthData");
+lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
  if (session.getAttribute("childId") != null) {
 	 childId = (String) session.getAttribute("childId");
  }	
@@ -84,15 +91,18 @@ String childId = null;
 %>	                  
                   <div class="media-body">
                     <strong>Name: </strong><%=firstName%><br>
-                    <strong>Father's Name: </strong><%=fatherName%><br>
-                    <strong>Mother's Name: </strong><br>
-                    <strong>Birth-date: </strong><%=birthDate%><br>
                     <strong>Age: </strong><br>
                     <strong>Gender: </strong><%=gender%><br>
-                    <strong>Birth-weight: </strong><%=birthWeight%><br>
                   </div>
                   
                   <div class="media-body">
+                     <strong>Birth-date: </strong><%=birthDate%><br>
+                     <strong>Birth-weight: </strong><%=birthWeight%><br>
+                  </div>
+                  
+                  <div class="media-body">
+                    <strong>Father's Name: </strong><%=fatherName%><br>
+                    <strong>Mother's Name: </strong><br>
                     <strong>Care-giver's Name: </strong><br>
                   </div>
 <%
@@ -109,6 +119,15 @@ String childId = null;
           </div>
       
       
+      
+       <!-- Area Chart Example-->
+			<div class="card mb-3">
+				<div id="lineChart" class="card-body"></div>
+			</div>
+      
+      
+     <%--  <h1><%=lineChartWeightData%></h1></br>
+      <h1><%=lineChartGrowthData.getJSONObject(0)%></h1> --%>
       
       <!-- Area Chart Example-->
       <!-- <div class="row">
@@ -182,21 +201,13 @@ String childId = null;
               
               
 <%
-int refreshCount=0;
- if (session.getAttribute("refreshCount") != null) {
-	 refreshCount = (Integer) session
-			.getAttribute("refreshCount");
-} 
-	
-	
-
  if (session.getAttribute("weightList") != null) {
 	int i=0;
 	List<Object> dataList = (List<Object>) session
 			.getAttribute("weightList");
 	Iterator dataListIterator = dataList.iterator();
 	while (dataListIterator.hasNext()) {
-		i++;
+		
 		Object[] weightObject = (Object[]) dataListIterator.next();
 		String id = String.valueOf(weightObject[0]);
 		String eventDate = String.valueOf(weightObject[8]);
@@ -208,11 +219,24 @@ int refreshCount=0;
 		double growthGram = Double.parseDouble(growth);
 		double growthKg = growthGram / 1000.00;
 		
-		String gStatusDecoded = null;
+		/* String gStatusDecoded = null;
 		if(growthStatus.equals("true")){
 			gStatusDecoded = "Adequate";
 		}else{
 			gStatusDecoded = "Inadequate";
+		} */
+		
+		String gStatusDecoded = "No data found";
+		String bgColor = "#ff9800";
+		if(!growthStatus.isEmpty() && growthStatus!=null){
+			
+			if(growthStatus.equals("true")){
+				gStatusDecoded = "Adequate";
+				bgColor="#4CAF50";
+			}else if(growthStatus.equals("false")){
+				gStatusDecoded = "Inadequate";
+				bgColor="#f44336";
+			}
 		}
 		
 %>	          
@@ -221,10 +245,11 @@ int refreshCount=0;
                   <td><%=eventDate%></td>
                   <td><%=currentWeight%></td>
                   <td><%=growthKg%></td>
-                  <td><%=gStatusDecoded%></td>
+                  <td bgcolor=<%=bgColor%>><%=gStatusDecoded%></td>
                 </tr>
                 
 <%
+	i++;
 		}
 	i=0;
 		}
@@ -237,11 +262,16 @@ int refreshCount=0;
         </div>
         <div class="card-footer small text-muted"></div>
       </div>
+      
+      
+      
+     
+      
+      
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
-    
-    <h1><%=refreshCount%></h1>
+
    
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -283,6 +313,69 @@ int refreshCount=0;
     <script src="/resources/js/sb-admin-datatables.min.js"></script>
     <script src="/resources/js/sb-admin-charts.min.js"></script>
   </div>
+  
+  
+  	<script src="<c:url value='/resources/chart/highcharts.js'/>"></script>
+	<script src="<c:url value='/resources/chart/data.js'/>"></script>
+	<script src="<c:url value='/resources/chart/drilldown.js'/>"></script>
+	<script src="<c:url value='/resources/chart/series-label.js'/>"></script>
+	<script type="text/javascript">
+		Highcharts.chart('lineChart', {
+			chart : {
+				type : 'line'
+			},
+			title : {
+				text : 'Growth'
+			},
+			subtitle : {
+				text : ''
+			},
+			credits : {
+				enabled : false
+			},
+			xAxis : {
+				allowDecimals: false
+			},
+			yAxis : {
+				title : {
+					text : 'Kg'
+				}
+			},
+
+			legend : {
+				layout : 'vertical',
+				align : 'right',
+				verticalAlign : 'middle'
+			},
+
+			plotOptions : {
+				line : {
+					dataLabels : {
+						enabled : true
+					},
+					enableMouseTracking : true
+				}
+			},
+
+			responsive : {
+				rules : [ {
+					condition : {
+						maxWidth : 500
+					},
+					chartOptions : {
+						legend : {
+							layout : 'horizontal',
+							align : 'center',
+							verticalAlign : 'bottom'
+						}
+					}
+				} ]
+			},
+
+			series :
+	<%=lineChartWeightData%>
+		});
+	</script>
 </body>
 
 </html>

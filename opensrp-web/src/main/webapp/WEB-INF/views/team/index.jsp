@@ -79,7 +79,7 @@ if (paginationAtributes.containsKey("name")) {
 									<th>Identifier</th>									
 									<th>Location</th>
 									<th>Current Supervisor</th>
-									<th># Members</th>
+									
 								</tr>
 							</thead>
 							<tfoot>
@@ -88,7 +88,7 @@ if (paginationAtributes.containsKey("name")) {
 									<th>Identifier</th>									
 									<th>Location</th>
 									<th>Current Supervisor</th>
-									<th># Members</th>
+									
 								</tr>
 							</tfoot>
 							<tbody>
@@ -118,7 +118,7 @@ if (paginationAtributes.containsKey("name")) {
 										<td><%=team.getIdentifier() %></td>
 										<td><%=location%></td>
 										<td><%=superVisor%></td>
-										<td></td>
+										
 
 									</tr>
 									<%
