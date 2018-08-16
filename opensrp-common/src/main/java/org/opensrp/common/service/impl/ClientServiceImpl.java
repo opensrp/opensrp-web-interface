@@ -151,5 +151,31 @@ public class ClientServiceImpl implements DatabaseService {
 	}
 	
 	
+	
+	@Transactional
+	public void getDuplicateRecord(HttpSession session,String viewName) throws JSONException{
+		System.out.println("viewName :" + viewName);
+
+		List<Object[]> duplicateRecordList;
+		
+		String query = " SELECT A.* "
+					+" FROM core.\"viewJsonDataConversionOfClient\" A "
+					+" Join "
+					+" (SELECT first_name,division,district,gender, count(*) "
+					+" FROM core.\"viewJsonDataConversionOfClient\" "
+					+" group by first_name, division, district,gender "
+					+" having count(*) > 1) B "
+					+" ON A.first_name = B.first_name "
+					+" AND A.division = B.division "
+					+" AND A.district = B.district "
+					+" AND A.gender = B.gender "
+					+" order by first_name, division, district, gender ";
+		
+		duplicateRecordList = databaseServiceImpl.executeSelectQuery(query);
+
+		session.setAttribute("duplicateRecordList", duplicateRecordList);
+	}
+	
+	
 }
 
