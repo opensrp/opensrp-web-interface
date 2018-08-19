@@ -160,7 +160,7 @@ public class ClientServiceImpl implements DatabaseService {
 		jArray.put("first_name");
 		jArray.put("division");
 		jArray.put("district");
-		jArray.put("gender");
+		//jArray.put("gender");
         System.out.println("JSONArray >>>>> " + jArray.toString());
 
 		

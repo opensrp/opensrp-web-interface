@@ -67,6 +67,7 @@
 										</tfoot>
 										<tbody>
 											<%
+												String prevGroupId = "";
 												if (session.getAttribute("duplicateRecordList") != null) {
 													List<Object> dataList = (List<Object>) session
 															.getAttribute("duplicateRecordList");
@@ -90,12 +91,26 @@
 														String provider = String.valueOf(clientObject[27]);
 														pageContext.setAttribute("baseEntityId", baseEntityId);
 														
-														String groupId = String.valueOf(clientObject[35]);;
+														String groupId = String.valueOf(clientObject[35]);
+														
+														
+														
+														String bgColor = "#4CAF50";
+														if(!prevGroupId.isEmpty() && prevGroupId!=null){
+															
+															if(!groupId.equals(prevGroupId)){
+																bgColor="#4CAF50";
+															}else{
+																bgColor="#f44336";
+															}
+														}
+														
+														prevGroupId = groupId;
 														
 
 											%>
 											<tr>
-												<td><%=groupId%></td>
+												<td bgcolor=<%=bgColor%>><%=groupId%></td>
 												<td><%=firstName%></td>
 												<td><%=gender%></td>
 												<td><%=addressType%></td>
