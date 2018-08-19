@@ -58,7 +58,12 @@
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
-					</a>				
+					</a>
+						
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/client/duplicateClient.html"/>"> <strong>Duplicate Client</strong>
+					</a>			
 
 				</div></li>
 			

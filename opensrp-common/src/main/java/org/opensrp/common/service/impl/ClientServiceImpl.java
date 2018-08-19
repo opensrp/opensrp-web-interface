@@ -154,22 +154,65 @@ public class ClientServiceImpl implements DatabaseService {
 	
 	@Transactional
 	public void getDuplicateRecord(HttpSession session,String viewName) throws JSONException{
-		System.out.println("viewName :" + viewName);
-
-		List<Object[]> duplicateRecordList;
+		System.out.println("viewName >>>>> " + viewName);
 		
+		JSONArray jArray = new JSONArray();
+		jArray.put("first_name");
+		jArray.put("division");
+		jArray.put("district");
+		jArray.put("gender");
+        System.out.println("JSONArray >>>>> " + jArray.toString());
+
+		
+		List<String> criteriaList = new ArrayList<String>();
+		//criteriaList.add("first_name");
+		//criteriaList.add("division");
+		//criteriaList.add("district");
+		//criteriaList.add("gender");
+		
+		if (jArray != null) { 
+			   for (int i=0;i<jArray.length();i++){ 
+				   criteriaList.add(jArray.getString(i));
+			   } 
+			} 
+		System.out.println("criteriaList >>>>> " + criteriaList.toString());
+		
+		String selectString = "";
+		for(int i=0; i<criteriaList.size(); i++){
+			selectString += criteriaList.get(i);
+			if (i != criteriaList.size() -1){
+				selectString += " , ";
+			}
+		}
+		System.out.println("selectString >>>>> " + selectString);
+		
+		String joinString = "";
+		for(int i=0; i<criteriaList.size(); i++){
+			joinString += " A."+criteriaList.get(i);
+			joinString += " = ";
+			joinString += " B."+criteriaList.get(i);
+			if (i != criteriaList.size() -1){
+				joinString += " AND ";
+			}
+		}
+		System.out.println("joinString >>>>> " + joinString);
+		
+		List<Object[]> duplicateRecordList;
 		String query = " SELECT A.* "
-					+" FROM core.\"viewJsonDataConversionOfClient\" A "
+					+" FROM core.\""+viewName+"\" A "
 					+" Join "
-					+" (SELECT first_name,division,district,gender, count(*) "
-					+" FROM core.\"viewJsonDataConversionOfClient\" "
-					+" group by first_name, division, district,gender "
+					+" (SELECT "
+					+selectString
+					+" , count(*) "
+					+" FROM core.\""+viewName+"\" "
+					+" group by "
+					+selectString
 					+" having count(*) > 1) B "
-					+" ON A.first_name = B.first_name "
-					+" AND A.division = B.division "
-					+" AND A.district = B.district "
-					+" AND A.gender = B.gender "
-					+" order by first_name, division, district, gender ";
+					+" ON "
+					+joinString
+					+" order by "
+					+selectString ;
+
 		
 		duplicateRecordList = databaseServiceImpl.executeSelectQuery(query);
 

@@ -33,7 +33,13 @@ public class ClientController {
 	
 	@Autowired
 	private ClientServiceImpl clientServiceImpl;
-
+	
+	
+	@RequestMapping(value = "/duplicateClient.html", method = RequestMethod.GET)
+	public String showDuplicateRecord(HttpServletRequest request, HttpSession session, Model model) throws JSONException {
+        clientServiceImpl.getDuplicateRecord(session,"viewJsonDataConversionOfClient");
+        return "client/duplicate-client";
+	}
 	
 	@RequestMapping(value = "/child/{id}/details.html", method = RequestMethod.GET)
 	public String showChildDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) throws JSONException {
