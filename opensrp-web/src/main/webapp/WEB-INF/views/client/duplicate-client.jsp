@@ -35,6 +35,8 @@
 										style="width: 100%;">
 										<thead>
 											<tr>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Group Id</th>
 												    <th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">First Name</th>
 													<th tabindex="0" rowspan="1" colspan="1"
@@ -49,6 +51,8 @@
 										</thead>
 										<tfoot>
 											<tr>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Group Id</th>
 												   <th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">First Name</th>
 													<th tabindex="0" rowspan="1" colspan="1"
@@ -86,21 +90,12 @@
 														String provider = String.valueOf(clientObject[27]);
 														pageContext.setAttribute("baseEntityId", baseEntityId);
 														
-														String gStatusDecoded = "No data found";
-														String bgColor = "#ff9800";
-														if(!latest_growth_status.isEmpty() && latest_growth_status!=null){
-															
-															if(latest_growth_status.equals("true")){
-																gStatusDecoded = "Adequate";
-																bgColor="#4CAF50";
-															}else if(latest_growth_status.equals("false")){
-																gStatusDecoded = "Inadequate";
-																bgColor="#f44336";
-															}
-														}
+														String groupId = String.valueOf(clientObject[35]);;
+														
 
 											%>
 											<tr>
+												<td><%=groupId%></td>
 												<td><%=firstName%></td>
 												<td><%=gender%></td>
 												<td><%=addressType%></td>

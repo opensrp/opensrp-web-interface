@@ -186,6 +186,18 @@ public class ClientServiceImpl implements DatabaseService {
 		}
 		System.out.println("selectString >>>>> " + selectString);
 		
+		
+		
+		String groupIdString = " DENSE_RANK() OVER (ORDER BY  ";
+		for(int i=0; i<criteriaList.size(); i++){
+			groupIdString += " A."+criteriaList.get(i);
+			if (i != criteriaList.size() -1){
+				groupIdString += " , ";
+			}
+		}
+		groupIdString += ") AS groupId" ;
+		System.out.println("groupIdString >>>>> " + groupIdString);
+		
 		String joinString = "";
 		for(int i=0; i<criteriaList.size(); i++){
 			joinString += " A."+criteriaList.get(i);
@@ -198,7 +210,8 @@ public class ClientServiceImpl implements DatabaseService {
 		System.out.println("joinString >>>>> " + joinString);
 		
 		List<Object[]> duplicateRecordList;
-		String query = " SELECT A.* "
+		String query = " SELECT A.* ,"
+					+groupIdString
 					+" FROM core.\""+viewName+"\" A "
 					+" Join "
 					+" (SELECT "
