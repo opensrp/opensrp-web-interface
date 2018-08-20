@@ -22,15 +22,15 @@ Completed features:
 4. Role management
 5. Location management
 6. Maintain access control information sync with OpenMRS
-
-Upcoming features:
-
 7. Client & Events details view
 8. Client profile view
 9. Summary dashboard
 10. GIS dashboard
 11. Provider performance report
 12. Provider activity monitoring dashboard
+13. Find duplicate clients/events
+14. Data Edit/Correct from web interface
+
 
 ## Technologies
 
