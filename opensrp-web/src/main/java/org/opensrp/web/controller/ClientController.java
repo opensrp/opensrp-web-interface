@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
+import org.opensrp.acl.service.impl.DuplicateRecordServiceImpl;
 import org.opensrp.acl.service.impl.LocationServiceImpl;
 import org.opensrp.common.service.impl.ClientServiceImpl;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
@@ -34,10 +35,18 @@ public class ClientController {
 	@Autowired
 	private ClientServiceImpl clientServiceImpl;
 	
+	@Autowired
+	private DuplicateRecordServiceImpl duplicateRecordServiceImpl;
+	
+	@RequestMapping(value = "/duplicateEvent.html", method = RequestMethod.GET)
+	public String showDuplicateEvent(HttpServletRequest request, HttpSession session, Model model) throws JSONException {
+		duplicateRecordServiceImpl.getDuplicateRecord(session,"viewJsonDataConversionOfEvent");
+        return "client/duplicate-event";
+	}
 	
 	@RequestMapping(value = "/duplicateClient.html", method = RequestMethod.GET)
 	public String showDuplicateRecord(HttpServletRequest request, HttpSession session, Model model) throws JSONException {
-        clientServiceImpl.getDuplicateRecord(session,"viewJsonDataConversionOfClient");
+		duplicateRecordServiceImpl.getDuplicateRecord(session,"viewJsonDataConversionOfClient");
         return "client/duplicate-client";
 	}
 	

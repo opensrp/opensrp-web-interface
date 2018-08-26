@@ -38,13 +38,15 @@
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Group Id</th>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+													style="width: 140px;">Entity Type</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Gender</th>
+													style="width: 140px;">Event Type</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Address Type</th>
+													style="width: 79px;">Event Date</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Provider</th>
+													style="width: 43px;">Location</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Provider</th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Action</th>
 											</tr>
@@ -53,14 +55,16 @@
 											<tr>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Group Id</th>
-												   <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+												    <th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Entity Type</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Gender</th>
+													style="width: 140px;">Event Type</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Address Type</th>
+													style="width: 79px;">Event Date</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Provider</th>
+													style="width: 43px;">Location</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Provider</th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Action</th>
 											</tr>
@@ -73,25 +77,14 @@
 															.getAttribute("duplicateRecordList");
 													Iterator dataListIterator = dataList.iterator();
 													while (dataListIterator.hasNext()) {
-														Object[] clientObject = (Object[]) dataListIterator.next();
-														String baseEntityId = String.valueOf(clientObject[1]);
-														String addressType = String.valueOf(clientObject[2]);
-														String birthDate = String.valueOf(clientObject[3]);
-														String country = String.valueOf(clientObject[4]);
-														String createdDate = String.valueOf(clientObject[5]);
-														String editedDate = String.valueOf(clientObject[6]);
-														String firstName = String.valueOf(clientObject[9]);
-														String gender = String.valueOf(clientObject[10]);
-														String nid = String.valueOf(clientObject[15]);
-
-														String birthWeight = String.valueOf(clientObject[31]);
-														String motherName = String.valueOf(clientObject[32]);
+														Object[] eventObject = (Object[]) dataListIterator.next();
+														String entityType = String.valueOf(eventObject[6]);
+														String eventType = String.valueOf(eventObject[8]);
+														String eventDate = String.valueOf(eventObject[7]);
+														String locationId = String.valueOf(eventObject[9]);
+														String providerId = String.valueOf(eventObject[11]);
 														
-														String latest_growth_status = String.valueOf(clientObject[34]);
-														String provider = String.valueOf(clientObject[27]);
-														pageContext.setAttribute("baseEntityId", baseEntityId);
-														
-														String groupId = String.valueOf(clientObject[35]);
+														String groupId = String.valueOf(eventObject[28]);
 														
 														
 														
@@ -111,12 +104,13 @@
 											%>
 											<tr>
 												<td bgcolor=<%=bgColor%>><%=groupId%></td>
-												<td><%=firstName%></td>
-												<td><%=gender%></td>
-												<td><%=addressType%></td>
-												<td><%=provider%></td>
+												<td><%=entityType%></td>
+												<td><%=eventType%></td>
+												<td><%=eventDate%></td>
+												<td><%=locationId%></td>
+												<td><%=providerId%></td>
 												<td>
-												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>		
+												<a href="<c:url value=""/>">Details</a>		
 												</td> 
 											</tr>
 											<%
