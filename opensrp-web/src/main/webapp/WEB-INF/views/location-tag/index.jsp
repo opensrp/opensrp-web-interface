@@ -38,13 +38,13 @@
 				
 			</div>
 			<div class="form-group">
-			<h1>Manage Location Tags</h1>
+			<h5>Manage Location Tags</h5>
 			<a  href="<c:url value="/location/tag/add.html"/>"> <strong>Add New Location Tag</strong>
 					</a>
 			</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Current Location Tags
+					 Location Tags
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
