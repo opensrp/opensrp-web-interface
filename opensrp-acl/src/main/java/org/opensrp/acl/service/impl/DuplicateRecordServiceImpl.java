@@ -77,7 +77,44 @@ public class DuplicateRecordServiceImpl implements AclService {
 		return databaseRepositoryImpl.findAll(tableClass);
 	}
 	
-
+	//for saving criteria to startup
+	public static Map<String,List<String>> mapViewNameMatchingCriteria = 
+			new HashMap<String, List<String>>();
+	
+	public static Map<String,List<String>> getMapViewNameMatchingCriteria(){
+		return mapViewNameMatchingCriteria;
+	}
+	
+	@Transactional
+	public  Map<String,List<String>>getMatchingCriteriaForAllViews(){
+		if(mapViewNameMatchingCriteria.size()== 0){
+			List<String> viewNameList = getDistinctViewName();
+			for(int i=0; i<viewNameList.size();i++){
+				String viewName = viewNameList.get(i);
+				List<String> criteriaList = fetchMatchingCriteriaForView(viewName);
+				mapViewNameMatchingCriteria.put(viewName, criteriaList);
+			}
+		}
+		System.out.println("matching criteria for all view >>>>> " 
+		+ mapViewNameMatchingCriteria.toString());
+		
+		return mapViewNameMatchingCriteria;
+		
+	}
+	
+	@Transactional
+	public List<String> getDistinctViewName(){
+		List<String> viewNameStringtList = new ArrayList<String>();
+		String query = "SELECT DISTINCT(view_name) "
+				+"FROM core.\"duplicate_matching_criteria_definition\"";
+		viewNameStringtList = databaseServiceImpl.executeSelectQuery(query);
+		System.out.println("Distinct viewName list >>>>> " + viewNameStringtList.toString());
+		return viewNameStringtList;
+	}
+	
+	//END: for saving criteria to startup
+	
+	@Transactional
 	public List<String> fetchMatchingCriteriaForView(String viewName){
 		Map<String, Object> findBy = new HashMap<String, Object>();
 		findBy.put("viewName", viewName);
@@ -178,17 +215,12 @@ public class DuplicateRecordServiceImpl implements AclService {
 	@Transactional
 	public void getDuplicateRecord(HttpSession session,String viewName) throws JSONException{
 		System.out.println("viewName >>>>> " + viewName);
-
-		/*List<String> criteriaList = new ArrayList<String>();
-		criteriaList.add("first_name");
-		criteriaList.add("division");
-		criteriaList.add("district");*/
-		//criteriaList.add("gender");
-		
 		List<Object[]> duplicateRecordList = null;
 		
-		List<String> criteriaList = fetchMatchingCriteriaForView(viewName);
-		//saveDuplicateMatchCriteriaForView(viewName, criteriaList);
+		Map<String,List<String>> mapViewNameMatchingCriteria = getMapViewNameMatchingCriteria();
+		List<String> criteriaList = mapViewNameMatchingCriteria.get(viewName);
+		System.out.println("criteriaList >>>>> " + criteriaList.toString());
+		
 		if(criteriaList != null){
 			String query = getQueryForDuplicateRecord(viewName, criteriaList);
 			duplicateRecordList = databaseServiceImpl.executeSelectQuery(query);
