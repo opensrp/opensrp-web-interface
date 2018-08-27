@@ -36,14 +36,14 @@
 			</div>
 			
 			<div class="form-group">
-				<h1>Role Management</h1>
+				<h5>Role Management</h5>
 				<a  href="<c:url value="/role/add.html"/>"> <strong>Add Role</strong>
 						</a>
 			</div>
 			<!-- Example DataTables Card-->
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Role List
+					 Role List
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">

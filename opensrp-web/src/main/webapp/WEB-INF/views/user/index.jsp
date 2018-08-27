@@ -50,7 +50,7 @@ if (paginationAtributes.containsKey("name")) {
 			</div>
 			
 			<div class="form-group">
-				<h1>User Management</h1>
+				<h5>User Management</h5>
 				<a  href="<c:url value="/user/add.html"/>"> <strong>Add User</strong>
 						</a>
 			</div>
@@ -75,7 +75,7 @@ if (paginationAtributes.containsKey("name")) {
 			<!-- Example DataTables Card-->
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> User List
+					 User List
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">

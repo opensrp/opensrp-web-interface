@@ -45,7 +45,7 @@ if (paginationAtributes.containsKey("name")) {
 					</a>		
 		</div>
 		<div class="form-group">
-			<h1>Location Management</h1>
+			<h5>Location Management</h5>
 			<a  href="<c:url value="/location/add.html"/>"> <strong>Add New Location</strong>
 					</a>
 		</div>
@@ -69,7 +69,7 @@ if (paginationAtributes.containsKey("name")) {
 			</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Location List
+					 Location List
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">

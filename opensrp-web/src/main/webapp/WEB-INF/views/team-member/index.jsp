@@ -47,7 +47,7 @@ if (paginationAtributes.containsKey("name")) {
 					</a>		
 		</div>
 		<div class="form-group">
-			<h1>Team Member Management</h1>
+			<h5>Team Member Management</h5>
 			<a  href="<c:url value="/team/teammember/add.html"/>"> <strong>Add New Team Member</strong>
 					</a>
 		</div>
@@ -71,7 +71,7 @@ if (paginationAtributes.containsKey("name")) {
 			</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Team Member List
+					 Team Member List
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
