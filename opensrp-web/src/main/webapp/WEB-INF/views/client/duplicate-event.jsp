@@ -23,7 +23,7 @@
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Duplicate Client List
+					<i class="fa fa-table"></i> Duplicate Event List
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -104,11 +104,11 @@
 											%>
 											<tr>
 												<td bgcolor=<%=bgColor%>><%=groupId%></td>
-												<td><%=entityType%></td>
-												<td><%=eventType%></td>
-												<td><%=eventDate%></td>
-												<td><%=locationId%></td>
-												<td><%=providerId%></td>
+												<td bgcolor=<%=bgColor%>><%=entityType%></td>
+												<td bgcolor=<%=bgColor%>><%=eventType%></td>
+												<td bgcolor=<%=bgColor%>><%=eventDate%></td>
+												<td bgcolor=<%=bgColor%>><%=locationId%></td>
+												<td bgcolor=<%=bgColor%>><%=providerId%></td>
 												<td>
 												<a href="<c:url value=""/>">Details</a>		
 												</td> 
