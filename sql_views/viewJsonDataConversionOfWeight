@@ -11,6 +11,7 @@ SELECT cast(e.json->>'baseEntityId' as varchar) as base_entity_id
    , c.json->>'gender' as gender
    , cast(c.json->'addresses'->0->'addressFields'->>'gps' as varchar) as gps
    , cast(core.getobsvalue(bre.id,'Birth_Weight')  as decimal) as birth_weight
+   , cast(c.json->>'firstName' as varchar) as first_name
    FROM core.event e  JOIN core.client c ON c.json->'baseEntityId' = e.json->'baseEntityId'
    join core.event bre on c.json->'baseEntityId' = bre.json->'baseEntityId'   
    where e.json->>'entityType'='weight' and bre.json->>'eventType'='Birth Registration'

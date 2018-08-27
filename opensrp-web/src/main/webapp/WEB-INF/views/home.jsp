@@ -203,9 +203,16 @@
 							new mapboxgl.Popup({
 								offset : 25
 							}) // add popups
-							.setHTML('<h3>' + marker.properties.title
-									+ '</h3><p>'
-									+ marker.properties.description + '</p>'))
+							.setHTML('<h5>' + marker.properties.title
+									+ '</h5><p>'
+									+ 'Gender: ' + marker.properties.gender
+									+ '<br />'
+									+ 'Age: ' +marker.properties.age
+									+ '<br />'
+									+ 'Weight: ' +marker.properties.weight
+									+ '<br />'
+									+ 'Provider: ' + marker.properties.provider
+									+ '</p>'))
 					.addTo(map);
 		});
 
@@ -220,9 +227,16 @@
 							new mapboxgl.Popup({
 								offset : 25
 							}) // add popups
-							.setHTML('<h3>' + marker.properties.title
-									+ '</h3><p>'
-									+ marker.properties.description + '</p>'))
+							.setHTML('<h5>' + marker.properties.title
+									+ '</h5><p>'
+									+ 'Gender: ' + marker.properties.gender
+									+ '<br />'
+									+ 'Age: ' +marker.properties.age
+									+ '<br />'
+									+ 'Weight: ' +marker.properties.weight
+									+ '<br />'
+									+ 'Provider: ' + marker.properties.provider
+									+ '</p>'))
 					.addTo(map);
 		});
 	</script>

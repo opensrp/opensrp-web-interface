@@ -52,8 +52,7 @@ public class DashboardController {
 	@RequestMapping("/")
 	public String showHome(HttpServletRequest request, Model model, HttpSession session) throws JSONException {
 		/*Different types of data counts and percentages*/
-		List<Object> dashboardAggregatedList = databaseServiceImpl
-				.executeSelectQuery("select * from core.fn_growplus_dashboard_data_count()");
+		List<Object> dashboardAggregatedList = databaseServiceImpl.executeSelectQuery("select * from core.fn_growplus_dashboard_data_count()");
 		session.setAttribute("dashboardAggregatedList", dashboardAggregatedList);
 
 		/*Line chart data*/
@@ -71,9 +70,11 @@ public class DashboardController {
 		return "home";
 	}
 
-	private JSONObject createGeoJSON(boolean flag) throws JSONException {
+	private JSONObject createGeoJSON(boolean flag)
+			throws JSONException {
 
-		/* {type: 'FeatureCollection',
+		/* Sample geoJSON:
+		 * {type: 'FeatureCollection',
 		        features: [{
 		            type: 'Feature',
 		            geometry: {
@@ -121,8 +122,12 @@ public class DashboardController {
 					feature.put("geometry", geometry);
 					JSONObject properties = new JSONObject();
 
-					properties.put("title", row.getProvider());
-					properties.put("description", row.getProvider());
+					properties.put("title", row.getFirst_name());
+
+					properties.put("gender", row.getGender());
+					properties.put("age", row.getAge());
+					properties.put("weight", row.getWeight());
+					properties.put("provider", row.getProvider());
 					feature.put("properties", properties);
 					features.put(feature);
 				}
@@ -133,7 +138,8 @@ public class DashboardController {
 		return featureCollection;
 	}
 
-	private void setHighChartData(HttpServletRequest request, HttpSession session) throws JSONException {
+	private void setHighChartData(HttpServletRequest request, HttpSession session)
+			throws JSONException {
 		SearchBuilder searchBuilder = searchUtil.generateSearchBuilderParams(request, session);
 		if (searchBuilder.getYear() == null || searchBuilder.getYear().isEmpty()) {
 			searchBuilder.setYear(currentYear.toString());
@@ -143,7 +149,6 @@ public class DashboardController {
 
 		JSONArray lineChartData = HighChart.getMultiLineChartData(monthWiseData, searchBuilder.getYear());
 		JSONArray lineChartCategory = HighChart.getMultiLineChartCategory(monthWiseData);
-
 		session.setAttribute("lineChartData", lineChartData);
 		session.setAttribute("lineChartCategory", lineChartCategory);
 	}
@@ -152,4 +157,5 @@ public class DashboardController {
 		model.addAttribute("title", title + " Search Criteria");
 		session.setAttribute("chatTitle", title + " Data Visualization");
 	}
+
 }
