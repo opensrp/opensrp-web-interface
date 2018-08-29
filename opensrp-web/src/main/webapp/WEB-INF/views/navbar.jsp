@@ -68,7 +68,17 @@
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Duplicate Event</strong>
-					</a>			
+					</a>
+						
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Duplicate Definition Client</strong>
+					</a>
+					
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Duplicate Definition Event</strong>
+					</a>		
 
 				</div></li>
 			

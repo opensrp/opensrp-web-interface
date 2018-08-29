@@ -19,7 +19,17 @@
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
 		<div class="container-fluid">
-
+		
+		<div class="form-group">				
+			 <a  href="<c:url value="/client/household.html"/>"> <strong>Household</strong> 
+			 </a>  |<a  href="<c:url value="/client/mother.html"/>"> <strong>Mother</strong>
+			 </a>  |<a  href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateClient.html"/>"> <strong>Duplicate Client</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Duplicate Event</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Duplicate Definition of Client</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Duplicate Definition of Event</strong>
+			 </a>  		
+			</div>
 
 			<div class="card mb-3">
 				<div class="card-header">
@@ -109,8 +119,8 @@
 												<td bgcolor=<%=bgColor%>><%=eventDate%></td>
 												<td bgcolor=<%=bgColor%>><%=locationId%></td>
 												<td bgcolor=<%=bgColor%>><%=providerId%></td>
-												<td>
-												<a href="<c:url value=""/>">Details</a>		
+												<td bgcolor=<%=bgColor%>>
+												<%-- <a href="<c:url value=""/>">Details</a> --%>	
 												</td> 
 											</tr>
 											<%

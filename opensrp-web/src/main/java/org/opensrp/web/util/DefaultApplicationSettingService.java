@@ -153,6 +153,7 @@ public class DefaultApplicationSettingService {
 		
 		growthValocityChart.getAllGrowthValocityChart();
 		duplicateRecordServiceImpl.getMatchingCriteriaForAllViews();
+		duplicateRecordServiceImpl.getCloumnNameListForAllViewsWithDuplicateRecord();
 	}
 	
 	public void runScript(String aSQLScriptFilePath, ScriptRunner sr) throws FileNotFoundException, IOException,

@@ -42,12 +42,24 @@
 
   <div class="content-wrapper">
     <div class="container-fluid">
+    
+    <div class="form-group">				
+			 <a  href="<c:url value="/client/household.html"/>"> <strong>Household</strong> 
+			 </a>  |<a  href="<c:url value="/client/mother.html"/>"> <strong>Mother</strong>
+			 </a>  |<a  href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateClient.html"/>"> <strong>Duplicate Client</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Duplicate Event</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Duplicate Definition of Client</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Duplicate Definition of Event</strong>
+			 </a>  		
+			</div>
+    
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <a href="/client/child.html">Child</a>
         </li>
-        <li class="breadcrumb-item active">Child Details</li>
+        <li class="breadcrumb-item">Child Details</li>
       </ol>
       <!-- Child Register-->
       <div class="card mb-3">

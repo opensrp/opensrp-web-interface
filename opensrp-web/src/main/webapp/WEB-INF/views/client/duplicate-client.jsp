@@ -19,7 +19,17 @@
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
 		<div class="container-fluid">
-
+		
+		<div class="form-group">				
+			 <a  href="<c:url value="/client/household.html"/>"> <strong>Household</strong> 
+			 </a>  |<a  href="<c:url value="/client/mother.html"/>"> <strong>Mother</strong>
+			 </a>  |<a  href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateClient.html"/>"> <strong>Duplicate Client</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Duplicate Event</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Duplicate Definition of Client</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Duplicate Definition of Event</strong>
+			 </a>  		
+			</div>
 
 			<div class="card mb-3">
 				<div class="card-header">
@@ -111,12 +121,14 @@
 											%>
 											<tr>
 												<td bgcolor=<%=bgColor%>><%=groupId%></td>
-												<td><%=firstName%></td>
-												<td><%=gender%></td>
-												<td><%=addressType%></td>
-												<td><%=provider%></td>
-												<td>
-												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>		
+												<td bgcolor=<%=bgColor%>><%=firstName%></td>
+												<td bgcolor=<%=bgColor%>><%=gender%></td>
+												<td bgcolor=<%=bgColor%>><%=addressType%></td>
+												<td bgcolor=<%=bgColor%>><%=provider%></td>
+												<td bgcolor=<%=bgColor%>>
+												<%-- 
+												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>
+												 --%>		
 												</td> 
 											</tr>
 											<%
