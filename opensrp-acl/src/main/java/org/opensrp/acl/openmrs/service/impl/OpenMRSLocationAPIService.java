@@ -81,7 +81,6 @@ public class OpenMRSLocationAPIService implements OpenMRSConnector<Location> {
 	public JSONObject makeLocationObject(Location location) throws JSONException {
 		JSONObject locationObject = new JSONObject();
 		JSONArray tagsArray = new JSONArray();
-		JSONObject tagsObject = new JSONObject();
 		String parentLocationUuid = "";
 		
 		if (location.getParentLocation() != null) {
@@ -91,8 +90,7 @@ public class OpenMRSLocationAPIService implements OpenMRSConnector<Location> {
 		}
 		
 		if (location.getLocationTag() != null) {
-			tagsObject.put("tag", location.getLocationTag().getName());
-			tagsArray.put(tagsObject);
+			tagsArray.put(location.getLocationTag().getUuid());
 			locationObject.put(tagsKey, tagsArray);
 		}
 		

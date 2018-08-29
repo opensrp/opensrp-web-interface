@@ -36,7 +36,7 @@ public class OpenmrsLocationServiceTest {
 	
 	public final static String parentLocationKey = "parentLocation";
 	
-	public static String parentLocation = "44221e79-b3f0-496f-9d3c-467216fa1d53";
+	public static String parentLocation = "";
 	
 	@Before
 	public void setup() throws IOException {
@@ -47,10 +47,7 @@ public class OpenmrsLocationServiceTest {
 		JSONObject location = new JSONObject();
 		
 		JSONArray tagsArray = new JSONArray();
-		JSONObject tagsObject = new JSONObject();
-		
-		tagsObject.put("tag", tags);
-		tagsArray.put(tagsObject);
+		tagsArray.put(tags);
 		
 		location.put(nameKey, name);
 		location.put(tagsKey, tagsArray);
@@ -75,10 +72,10 @@ public class OpenmrsLocationServiceTest {
 		
 	}
 	
-	public JSONObject updateLocation(String uuid) throws JSONException {
-		tags = "District";
-		parentLocation = "b585f3e0-273b-4fb2-b273-e4d5b08eda22";
-		return openMRSAPIService.update("", makeLocationObject(locationName, tags, parentLocation), uuid, LOCATION_URL);
+	public JSONObject updateLocation(String uuid, String tagUUid) throws JSONException {
+		
+		parentLocation = "";
+		return openMRSAPIService.update("", makeLocationObject(locationName, tagUUid, parentLocation), uuid, LOCATION_URL);
 		
 	}
 	
@@ -86,15 +83,15 @@ public class OpenmrsLocationServiceTest {
 	public void createUpdateGetAndDeleteLocation() throws JSONException {
 		
 		JSONObject createdLocationTag = createTag();
-		System.err.println(createdLocationTag);
-		String tagUuid = (String) createdLocationTag.get("uuid");
 		
+		String tagUuid = createdLocationTag.getString("uuid");
+		System.err.println("tagUuid:" + tagUuid);
 		/**
 		 * create location information
 		 */
 		
-		JSONObject createdLocation = createLocation(tagName);
-		
+		JSONObject createdLocation = createLocation(tagUuid);
+		System.err.println(createdLocation);
 		String locationUuid = (String) createdLocation.get("uuid");
 		String createdLocationName = (String) createdLocation.get("name");
 		Assert.assertEquals(locationName, createdLocationName);
@@ -102,7 +99,7 @@ public class OpenmrsLocationServiceTest {
 		/**
 		 * update location information
 		 */
-		JSONObject updatedLocation = updateLocation(locationUuid);
+		JSONObject updatedLocation = updateLocation(locationUuid, tagUuid);
 		String updatedLocationUuid = (String) updatedLocation.get("uuid");
 		Assert.assertEquals(locationUuid, updatedLocationUuid);
 		

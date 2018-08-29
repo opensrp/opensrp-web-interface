@@ -18,7 +18,7 @@ public class DashboardDataVisualizeServiceImpl  implements VisualizationService{
 	@Transactional
 	@Override
 	public List<Object[]> getMonthWiseData(SearchBuilder searchBuilder) {
-		String query = "select * from core.growth_faltering_percentage_linegraph()";
+		String query = "select * from core.multi_linegraph_for_growth_faltering()";
         return databaseRepositoryImpl.executeSelectQuery(query);
 	}
 
