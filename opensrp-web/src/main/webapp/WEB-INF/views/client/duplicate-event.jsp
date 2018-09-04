@@ -31,11 +31,9 @@
 			 </a>  		
 			</div>
 
-			<jsp:include page="/WEB-INF/views/searchPanel.jsp" />
-
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Child List
+					<i class="fa fa-table"></i> Duplicate Event List
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -47,98 +45,82 @@
 										style="width: 100%;">
 										<thead>
 											<tr>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Group Id</th>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+													style="width: 140px;">Entity Type</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Gender</th>
+													style="width: 140px;">Event Type</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Birth Date</th>
+													style="width: 79px;">Event Date</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Birth Weight</th>
+													style="width: 43px;">Location</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Address Type</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Mother Name</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Provider</th>
-												 	<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Latest Growth Status</th>
+													style="width: 140px;">Provider</th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Action</th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Group Id</th>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+													style="width: 140px;">Entity Type</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Gender</th>
+													style="width: 140px;">Event Type</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Birth Date</th>
+													style="width: 79px;">Event Date</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Birth Weight</th>
+													style="width: 43px;">Location</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Address Type</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Mother Name</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Provider</th>
-												 	<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Latest Growth Status</th>
+													style="width: 140px;">Provider</th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Action</th>
 											</tr>
 										</tfoot>
 										<tbody>
 											<%
-												if (session.getAttribute("dataList") != null) {
+												String prevGroupId = "";
+												if (session.getAttribute("duplicateRecordList") != null) {
 													List<Object> dataList = (List<Object>) session
-															.getAttribute("dataList");
+															.getAttribute("duplicateRecordList");
 													Iterator dataListIterator = dataList.iterator();
 													while (dataListIterator.hasNext()) {
-														Object[] clientObject = (Object[]) dataListIterator.next();
-														String baseEntityId = String.valueOf(clientObject[1]);
-														String addressType = String.valueOf(clientObject[2]);
-														String birthDate = String.valueOf(clientObject[3]);
-														String country = String.valueOf(clientObject[4]);
-														String createdDate = String.valueOf(clientObject[5]);
-														String editedDate = String.valueOf(clientObject[6]);
-														String firstName = String.valueOf(clientObject[9]);
-														String gender = String.valueOf(clientObject[10]);
-														String nid = String.valueOf(clientObject[15]);
-
-														String birthWeight = String.valueOf(clientObject[31]);
-														String motherName = String.valueOf(clientObject[32]);
+														Object[] eventObject = (Object[]) dataListIterator.next();
+														String entityType = String.valueOf(eventObject[6]);
+														String eventType = String.valueOf(eventObject[8]);
+														String eventDate = String.valueOf(eventObject[7]);
+														String locationId = String.valueOf(eventObject[9]);
+														String providerId = String.valueOf(eventObject[11]);
 														
-														String latest_growth_status = String.valueOf(clientObject[34]);
-														String provider = String.valueOf(clientObject[27]);
-														pageContext.setAttribute("baseEntityId", baseEntityId);
+														String groupId = String.valueOf(eventObject[28]);
 														
-														String gStatusDecoded = "No data found";
-														String bgColor = "#ff9800";
-														if(!latest_growth_status.isEmpty() && latest_growth_status!=null){
+														
+														
+														String bgColor = "#4CAF50";
+														if(!prevGroupId.isEmpty() && prevGroupId!=null){
 															
-															if(latest_growth_status.equals("true")){
-																gStatusDecoded = "Adequate";
+															if(!groupId.equals(prevGroupId)){
 																bgColor="#4CAF50";
-															}else if(latest_growth_status.equals("false")){
-																gStatusDecoded = "Inadequate";
+															}else{
 																bgColor="#f44336";
 															}
 														}
+														
+														prevGroupId = groupId;
+														
 
 											%>
 											<tr>
-												<td><%=firstName%></td>
-												<td><%=gender%></td>
-												<td><%=birthDate%></td>
-												<td><%=birthWeight%></td>
-												<td><%=addressType%></td>
-												<td><%=motherName%></td>
-												<td><%=provider%></td>
-												<td bgcolor=<%=bgColor%>><%=gStatusDecoded%></td>
-												<td>
-												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>		
+												<td bgcolor=<%=bgColor%>><%=groupId%></td>
+												<td bgcolor=<%=bgColor%>><%=entityType%></td>
+												<td bgcolor=<%=bgColor%>><%=eventType%></td>
+												<td bgcolor=<%=bgColor%>><%=eventDate%></td>
+												<td bgcolor=<%=bgColor%>><%=locationId%></td>
+												<td bgcolor=<%=bgColor%>><%=providerId%></td>
+												<td bgcolor=<%=bgColor%>>
+												<%-- <a href="<c:url value=""/>">Details</a> --%>	
 												</td> 
 											</tr>
 											<%
@@ -151,7 +133,7 @@
 								</div>
 							</div>
 
-							<jsp:include page="/WEB-INF/views/pager.jsp" />
+							<%-- <jsp:include page="/WEB-INF/views/pager.jsp" /> --%>
 
 						</div>
 					</div>

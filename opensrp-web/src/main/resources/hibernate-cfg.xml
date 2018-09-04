@@ -25,7 +25,6 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="annotatedClasses">
 			<list>
-				
 				<value>org.opensrp.common.entity.Marker</value>
 				<value>org.opensrp.web.nutrition.entity.ChildGrowth</value>
 				<value>org.opensrp.web.nutrition.entity.WeightVelocityChart</value>
@@ -35,7 +34,8 @@
 				<value>org.opensrp.acl.entity.Role</value>
 				<value>org.opensrp.acl.entity.Permission</value>
 				<value>org.opensrp.acl.entity.Location</value>
-				<value>org.opensrp.acl.entity.LocationTag</value>				
+				<value>org.opensrp.acl.entity.LocationTag</value>	
+				<value>org.opensrp.acl.entity.DuplicateMatchingCriteriaDefinition</value>			
 			</list>
 		</property>
 		<property name="hibernateProperties">
