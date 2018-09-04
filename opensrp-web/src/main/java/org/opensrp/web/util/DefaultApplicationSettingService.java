@@ -21,6 +21,7 @@ import org.hibernate.SessionFactory;
 import org.opensrp.acl.entity.Permission;
 import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.entity.User;
+import org.opensrp.acl.service.impl.DuplicateRecordServiceImpl;
 import org.opensrp.acl.service.impl.LocationServiceImpl;
 import org.opensrp.acl.service.impl.PermissionServiceImpl;
 import org.opensrp.acl.service.impl.RoleServiceImpl;
@@ -69,6 +70,9 @@ public class DefaultApplicationSettingService {
 	
 	@Autowired
 	private WeightVelocityChartServiceImpl weightVelocityChartServiceImpl;
+	
+	@Autowired
+	private DuplicateRecordServiceImpl duplicateRecordServiceImpl;
 	
 	public DefaultApplicationSettingService() {
 		
@@ -148,6 +152,8 @@ public class DefaultApplicationSettingService {
 		addMarker();
 		
 		growthValocityChart.getAllGrowthValocityChart();
+		duplicateRecordServiceImpl.getMatchingCriteriaForAllViews();
+		duplicateRecordServiceImpl.getCloumnNameListForAllViewsWithDuplicateRecord();
 	}
 	
 	public void runScript(String aSQLScriptFilePath, ScriptRunner sr) throws FileNotFoundException, IOException,
