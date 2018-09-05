@@ -76,14 +76,7 @@ public class FacilityServiceImpl implements FacilityService {
 		return databaseRepositoryImpl.findAll(tableClass);
 	}
 	
-	public void setSessionAttribute(HttpSession session, Facility facility, String locationName) {
-		if (facility.getLocation() != null) {
-			session.setAttribute("selectedLocation", facility.getLocation().getId());
-		} else {
-			session.setAttribute("selectedLocation", 0);
-		}
-		session.setAttribute("locationName", locationName);
-	}
+	
 	
 	
 }

@@ -89,7 +89,7 @@ String selectedLocationName = (String)session.getAttribute("locationName");
 								</div>
 							</div>
 						</div>
-						<form:hidden path="location" id="location" value="Dhaka" />
+						<form:hidden path="location" id="location" value="" />
 						<%-- <form:hidden path="location" id="location" value="<%=selectedLocationName%>" />
 						
 						<div class="form-group">							
