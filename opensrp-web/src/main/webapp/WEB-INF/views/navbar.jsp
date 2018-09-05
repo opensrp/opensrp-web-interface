@@ -54,6 +54,12 @@
 						href="<c:url value="/facility/add.html"/>"> <strong>
 							Registration</strong>
 					</a>
+					
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/facility/index.html"/>"> <strong>
+							Community Clinic</strong>
+					</a>
 		
 
 				</div></li>

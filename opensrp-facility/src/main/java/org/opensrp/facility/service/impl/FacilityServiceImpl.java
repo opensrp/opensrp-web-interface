@@ -3,10 +3,13 @@ package org.opensrp.facility.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
+import org.opensrp.acl.entity.Team;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
+import org.opensrp.facility.entity.Facility;
 import org.opensrp.facility.service.FacilityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,5 +75,15 @@ public class FacilityServiceImpl implements FacilityService {
 	public <T> List<T> findAll(String tableClass) {
 		return databaseRepositoryImpl.findAll(tableClass);
 	}
+	
+	public void setSessionAttribute(HttpSession session, Facility facility, String locationName) {
+		if (facility.getLocation() != null) {
+			session.setAttribute("selectedLocation", facility.getLocation().getId());
+		} else {
+			session.setAttribute("selectedLocation", 0);
+		}
+		session.setAttribute("locationName", locationName);
+	}
+	
 	
 }

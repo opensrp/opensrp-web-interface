@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -17,6 +19,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.opensrp.acl.entity.Location;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -48,6 +51,10 @@ public class Facility implements Serializable {
 	@NotNull
 	@Column(name = "longitude")
 	private String longitude;
+	
+	@ManyToOne()
+	@JoinColumn(name = "location_id", referencedColumnName = "id")
+	private Location location;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
@@ -117,6 +124,14 @@ public class Facility implements Serializable {
 		this.updated = updated;
 	}
 
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -131,6 +146,7 @@ public class Facility implements Serializable {
 		result = prime * result + ((hrmId == null) ? 0 : hrmId.hashCode());
 		result = prime * result + ((latitude == null) ? 0 : latitude.hashCode());
 		result = prime * result + ((longitude == null) ? 0 : longitude.hashCode());
+		result = prime * result + ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((created == null) ? 0 : created.hashCode());
 		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
 		return result;
@@ -172,6 +188,12 @@ public class Facility implements Serializable {
 				return false;
 		} else if (!longitude.equals(other.longitude))
 			return false;
+		
+		if (location == null) {
+			if (other.location != null)
+				return false;
+		} else if (!location.equals(other.location))
+			return false;
 
 		if (created == null) {
 			if (other.created != null)
@@ -196,6 +218,7 @@ public class Facility implements Serializable {
 				+ ", hrmId=" + hrmId
 				+ ", latitude=" + latitude 
 				+ ", longitude=" + longitude 
+				+ ", location=" + location 
 				+ ", created=" + created 
 				+ ", updated="+ updated 
 				+ "]";
