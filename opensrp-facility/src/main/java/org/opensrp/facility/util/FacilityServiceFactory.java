@@ -6,21 +6,23 @@ import org.opensrp.facility.service.impl.FacilityWorkerServiceImpl;
 import org.opensrp.facility.service.impl.FacilityWorkerTrainingServiceImpl;
 import org.opensrp.facility.service.impl.FacilityWorkerTypeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class FacilityServiceFactoryUtil {
+@Component
+public class FacilityServiceFactory {
 	
 	@Autowired
-	private static FacilityServiceImpl facilityServiceImpl;
+	private  FacilityServiceImpl facilityServiceImpl;
 	@Autowired
-	private static FacilityWorkerServiceImpl facilityWorkerServiceImpl;
+	private  FacilityWorkerServiceImpl facilityWorkerServiceImpl;
 	@Autowired
-	private static FacilityWorkerTrainingServiceImpl facilityWorkerTrainingServiceImpl;
+	private  FacilityWorkerTrainingServiceImpl facilityWorkerTrainingServiceImpl;
 	@Autowired
-	private static FacilityWorkerTypeServiceImpl facilityWorkerTypeServiceImpl;
+	private  FacilityWorkerTypeServiceImpl facilityWorkerTypeServiceImpl;
 	
-	private static FacilityService facilityService;
+	private  FacilityService facilityService;
 
-	public static FacilityService getFacility(String facilityType){
+	public  FacilityService getFacility(String facilityType){
 		
 		if("FacilityServiceImpl".equalsIgnoreCase(facilityType)){
 			facilityService = facilityServiceImpl;
@@ -32,7 +34,7 @@ public class FacilityServiceFactoryUtil {
 			facilityService = facilityWorkerTypeServiceImpl;
 		}
 		
-		//System.out.println(facilityService.toString());
+		System.out.println(facilityService.toString());
 		return facilityService;
 	}
 	
