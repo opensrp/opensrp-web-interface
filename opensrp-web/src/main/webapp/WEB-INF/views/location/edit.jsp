@@ -59,6 +59,16 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
+									<label for="exampleInputName">Code</label>
+									<form:input path="code" class="form-control"
+										required="required" aria-describedby="nameHelp"
+										placeholder="Description" />
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-5">
 									<label for="exampleInputName">Description</label>
 									<form:input path="description" class="form-control"
 										required="required" aria-describedby="nameHelp"
