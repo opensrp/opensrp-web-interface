@@ -18,6 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.entity.User;
+import org.opensrp.acl.openmrs.service.OpenMRSConnector;
+import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
 import org.opensrp.acl.openmrs.service.impl.OpenMRSUserAPIService;
 import org.opensrp.acl.service.AclService;
 import org.opensrp.common.dto.UserDTO;
@@ -36,7 +38,7 @@ public class UserServiceImpl implements AclService {
 	private DatabaseRepositoryImpl repository;
 	
 	@Autowired
-	private OpenMRSUserAPIService openMRSUserAPIService;
+	private OpenMRSServiceFactory openMRSServiceFactory;
 	
 	@Autowired
 	private RoleServiceImpl roleServiceImpl;
@@ -61,9 +63,9 @@ public class UserServiceImpl implements AclService {
 		
 		query = "v=full&username=" + user.getUsername();
 		if (isProvider) {
-			existingOpenMRSUser = openMRSUserAPIService.getByQuery(query);
+			existingOpenMRSUser = openMRSServiceFactory.getOpenMRSConnector("user").getByQuery(query);
 			if (existingOpenMRSUser.length() == 0) {
-				user = openMRSUserAPIService.add(user);
+				user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
 				if (!user.getUuid().isEmpty()) {
 					user.setPassword(passwordEncoder.encode(user.getPassword()));
 					user.setProvider(true);
@@ -81,7 +83,7 @@ public class UserServiceImpl implements AclService {
 				user.setProvider(true);
 				user.setUuid(existingUserUUid);
 				user.setPersonUUid(existingUserPersonUUid);
-				openMRSUserAPIService.update(user, existingUserUUid);
+				openMRSServiceFactory.getOpenMRSConnector("user").update(user, existingUserUUid);
 				user.setPassword(passwordEncoder.encode(user.getPassword()));
 				createdUser = repository.save(user);
 			}
@@ -189,7 +191,7 @@ public class UserServiceImpl implements AclService {
 		
 		boolean isProvider = roleServiceImpl.isProvider(roles);
 		if (isProvider) {
-			String uuid = openMRSUserAPIService.update(user, user.getUuid());
+			String uuid = openMRSServiceFactory.getOpenMRSConnector("user").update(user, user.getUuid());
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setProvider(true);
 			updatedUser = repository.update(user);

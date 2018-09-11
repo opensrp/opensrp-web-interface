@@ -4,6 +4,10 @@
 
 package org.opensrp.acl.service.impl;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +23,8 @@ import org.json.JSONObject;
 import org.opensrp.acl.entity.Location;
 import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.entity.User;
+import org.opensrp.acl.openmrs.service.OpenMRSConnector;
+import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
 import org.opensrp.acl.openmrs.service.impl.OpenMRSLocationAPIService;
 import org.opensrp.acl.service.AclService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
@@ -41,7 +47,7 @@ public class LocationServiceImpl implements AclService {
 	private SessionFactory sessionFactory;
 	
 	@Autowired
-	private OpenMRSLocationAPIService openMRSLocationAPIService;
+	private OpenMRSServiceFactory openMRSServiceFactory;
 	
 	@Autowired
 	private LocationTagServiceImpl locationTagServiceImpl;
@@ -66,7 +72,7 @@ public class LocationServiceImpl implements AclService {
 	@Override
 	public <T> long save(T t) throws Exception {
 		Location location = (Location) t;
-		location = openMRSLocationAPIService.add(location);
+		location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
 		long createdLocation = 0;
 		if (!location.getUuid().isEmpty()) {
 			createdLocation = databaseRepositoryImpl.save(location);
@@ -82,7 +88,7 @@ public class LocationServiceImpl implements AclService {
 	public <T> int update(T t) throws JSONException {
 		Location location = (Location) t;
 		int updatedLocation = 0;
-		String uuid = openMRSLocationAPIService.update(location, location.getUuid());
+		String uuid = openMRSServiceFactory.getOpenMRSConnector("location").update(location, location.getUuid());
 		if (!uuid.isEmpty()) {
 			location.setUuid(uuid);
 			updatedLocation = databaseRepositoryImpl.update(location);
@@ -152,7 +158,7 @@ public class LocationServiceImpl implements AclService {
 				Location findLocation = findById(location.getId(), "id", Location.class);
 				if (!findLocation.getName().equalsIgnoreCase(location.getName())) {
 					query = "q=" + location.getName();
-					existinglocation = openMRSLocationAPIService.getByQuery(query);
+					existinglocation = openMRSServiceFactory.getOpenMRSConnector("location").getByQuery(query);
 					System.err.println("len:" + existinglocation.length());
 					if (existinglocation.length() != 0) {
 						isExistsInOpenMRS = true;
@@ -335,5 +341,59 @@ public class LocationServiceImpl implements AclService {
 			}
 		}
 		return locationJsonArray;
+	}
+	
+	public void uploadLocation(File csvFile) throws Exception {
+		
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+		
+		int position = 0;
+		String[] tags = null;
+		try {
+			br = new BufferedReader(new FileReader(csvFile));
+			while ((line = br.readLine()) != null) {
+				String tag = "";
+				String code = "";
+				String name = "";
+				String parent = "";
+				String[] locations = line.split(cvsSplitBy);
+				if (position == 0) {
+					tags = locations;
+				} else {
+					for (int i = 0; i < locations.length; i = i + 2) {
+						code = locations[i];
+						name = locations[i + 1];
+						if (i != 0) {
+							parent = locations[i - 1];
+						}
+						tag = tags[i + 1];
+						LocationTag locationTag = findByKey(tag, "name", LocationTag.class);
+						Location parentLocation = findByKey(parent, "name", Location.class);
+						Location isExists = findByKey(name, "name", Location.class);
+						
+						System.err.println("Tags:" + tag + " ,code:" + code + " ,Name:" + name + ", Parent:" + parent);
+						if (isExists == null) {
+							Location location = new Location();
+							location.setCode(code);
+							location.setName(name);
+							location.setLocationTag(locationTag);
+							location.setParentLocation(parentLocation);
+							location.setDescription(name);
+							databaseRepositoryImpl.save(location);
+							System.err.println("Tags:" + locationTag.getUuid() + " ,code:" + locations[i] + " ,Name:"
+							        + locations[i + 1] + ", Parent:" + parentLocation);
+						}
+					}
+				}
+				position++;
+			}
+			
+		}
+		catch (IOException e) {
+			System.out.println("error while reading csv and put to db : " + e.getMessage());
+		}
+		
 	}
 }

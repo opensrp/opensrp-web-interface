@@ -182,12 +182,14 @@
 					<a class="dropdown-item"
 						href="<c:url value="/location/tag/list.html"/>"> <strong>
 							Manage Tag</strong>
-
 					</a>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="<c:url value="/location/location.html"/>">
 						<strong>Manage Location</strong>
 					</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/location/upload_csv.html"/>">
+						<strong>Upload location</strong></a>
 
 				</div></li>
 

@@ -23,6 +23,8 @@ import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.entity.Team;
 import org.opensrp.acl.entity.TeamMember;
 import org.opensrp.acl.entity.User;
+import org.opensrp.acl.openmrs.service.OpenMRSConnector;
+import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
 import org.opensrp.acl.openmrs.service.impl.OpenMRSTeamMemberAPIService;
 import org.opensrp.acl.service.AclService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
@@ -44,7 +46,7 @@ public class TeamMemberServiceImpl implements AclService {
 	private SessionFactory sessionFactory;
 	
 	@Autowired
-	private OpenMRSTeamMemberAPIService openMRSTeamMemberAPIService;
+	private OpenMRSServiceFactory openMRSServiceFactory;
 	
 	@Autowired
 	private UserServiceImpl userServiceImpl;
@@ -64,7 +66,7 @@ public class TeamMemberServiceImpl implements AclService {
 	public <T> long save(T t) throws Exception {
 		TeamMember teamMember = (TeamMember) t;
 		long createdTeamMember = 0;
-		teamMember = openMRSTeamMemberAPIService.add(teamMember);
+		teamMember = (TeamMember) openMRSServiceFactory.getOpenMRSConnector("member").add(teamMember);
 		if (!teamMember.getUuid().isEmpty()) {
 			createdTeamMember = databaseRepositoryImpl.save(teamMember);
 		} else {
@@ -81,7 +83,7 @@ public class TeamMemberServiceImpl implements AclService {
 		TeamMember teamMember = (TeamMember) t;
 		int updatedTag = 0;
 		
-		String uuid = openMRSTeamMemberAPIService.update(teamMember, teamMember.getUuid());
+		String uuid = openMRSServiceFactory.getOpenMRSConnector("member").update(teamMember, teamMember.getUuid());
 		if (!uuid.isEmpty()) {
 			updatedTag = databaseRepositoryImpl.update(teamMember);
 		} else {

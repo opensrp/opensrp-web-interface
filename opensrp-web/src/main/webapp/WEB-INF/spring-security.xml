@@ -13,7 +13,7 @@
 		<security:intercept-url pattern="/resources/**"
 			access="permitAll" />
 		<security:intercept-url pattern="/login*"
-			access="isAnonymous()" />
+			access="isAnonymous()" />			
 		<security:intercept-url pattern="/user/add*"
 			access="permitAll" />
 		<security:intercept-url pattern="/**"
