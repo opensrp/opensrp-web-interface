@@ -16,6 +16,9 @@
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 
+
+
+
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
@@ -86,12 +89,14 @@
 														
 														
 														Facility facility = (Facility) dataListIterator.next();
+														int id = facility.getId();
 														String name = facility.getName();
 														String hrmId = facility.getHrmId();
 														String latitude = facility.getLatitude();
 														String longitude = facility.getLongitude();
 														
 														//String location = facility.getLocation().getName();
+														String addWorkerURL = "/facility/"+id+"/addWorker.html";
 											%>
 											<tr>
 												<td><%=name%></td>
@@ -102,7 +107,7 @@
 												<td>
 												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>
 												| 	
-												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Add Worker</a>	
+												<a href="<c:url value="<%= addWorkerURL%>" />">Add Worker</a>	
 												</td> 
 											</tr>
 											<%
