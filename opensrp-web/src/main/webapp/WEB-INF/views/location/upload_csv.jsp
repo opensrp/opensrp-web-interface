@@ -49,10 +49,11 @@
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName">File  </label>
-									<input id="file" type="file" name="file" />
-										
+									<input id="file" type="file" name="file" />										
 								</div>
+								
 							</div>
+							<span class="text-red">${msg}</span>
 						</div>
 						<div class="form-group">
 							<div class="row">

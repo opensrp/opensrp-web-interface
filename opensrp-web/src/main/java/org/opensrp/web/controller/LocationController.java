@@ -102,7 +102,7 @@ public class LocationController {
 	                                 ModelMap model, HttpSession session) throws Exception {
 		location.setName(location.getName().trim());
 		boolean chceckInOpenmrs = false;
-		if (!locationServiceImpl.locationExists(location, chceckInOpenmrs)) {
+		if (!locationServiceImpl.locationExistsForUpdate(location, chceckInOpenmrs)) {
 			locationServiceImpl.save(locationServiceImpl.setCreatorParentLocationTagAttributeInLocation(location,
 			    parentLocationId, tagId));
 		} else {
@@ -138,7 +138,7 @@ public class LocationController {
 		location.setId(id);
 		location.setName(location.getName().trim());
 		boolean chceckInOpenmrs = true;
-		if (!locationServiceImpl.locationExists(location, chceckInOpenmrs)) {
+		if (!locationServiceImpl.locationExistsForUpdate(location, chceckInOpenmrs)) {
 			locationServiceImpl.update(locationServiceImpl.setCreatorParentLocationTagAttributeInLocation(location,
 			    parentLocationId, tagId));
 		} else {
@@ -177,6 +177,10 @@ public class LocationController {
 	    throws Exception {
 		if (file.isEmpty()) {
 			model.put("msg", "failed to upload file because its empty");
+			model.addAttribute("msg", "failed to upload file because its empty");
+			return new ModelAndView("/location/upload_csv");
+		} else if (!"text/csv".equalsIgnoreCase(file.getContentType())) {
+			model.addAttribute("msg", "file type should be '.csv'");
 			return new ModelAndView("/location/upload_csv");
 		}
 		
@@ -203,7 +207,11 @@ public class LocationController {
 			model.put("msg", "failed to process file because : " + e.getMessage());
 			return new ModelAndView("/location/upload_csv");
 		}
-		locationServiceImpl.uploadLocation(csvFile);
+		String msg = locationServiceImpl.uploadLocation(csvFile);
+		if (!msg.isEmpty()) {
+			model.put("msg", msg);
+			return new ModelAndView("/location/upload_csv");
+		}
 		return new ModelAndView("redirect:/location/location.html");
 	}
 }

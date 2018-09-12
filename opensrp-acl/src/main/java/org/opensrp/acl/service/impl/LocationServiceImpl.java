@@ -77,7 +77,7 @@ public class LocationServiceImpl implements AclService {
 		if (!location.getUuid().isEmpty()) {
 			createdLocation = databaseRepositoryImpl.save(location);
 		} else {
-			logger.error("No uuid found for user:" + location.getName());
+			logger.error("No uuid found for location:" + location.getName());
 			// TODO
 		}
 		return createdLocation;
@@ -146,7 +146,7 @@ public class LocationServiceImpl implements AclService {
 		return locationTreeAsMap;
 	}
 	
-	public boolean locationExists(Location location, boolean isOpenMRSCheck) throws JSONException {
+	public boolean locationExistsForUpdate(Location location, boolean isOpenMRSCheck) throws JSONException {
 		boolean exists = false;
 		boolean isExistsInOpenMRS = false;
 		JSONArray existinglocation = new JSONArray();
@@ -159,7 +159,7 @@ public class LocationServiceImpl implements AclService {
 				if (!findLocation.getName().equalsIgnoreCase(location.getName())) {
 					query = "q=" + location.getName();
 					existinglocation = openMRSServiceFactory.getOpenMRSConnector("location").getByQuery(query);
-					System.err.println("len:" + existinglocation.length());
+					
 					if (existinglocation.length() != 0) {
 						isExistsInOpenMRS = true;
 					}
@@ -343,8 +343,9 @@ public class LocationServiceImpl implements AclService {
 		return locationJsonArray;
 	}
 	
-	public void uploadLocation(File csvFile) throws Exception {
-		
+	@SuppressWarnings("resource")
+	public String uploadLocation(File csvFile) throws Exception {
+		String msg = "";
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
@@ -372,28 +373,34 @@ public class LocationServiceImpl implements AclService {
 						LocationTag locationTag = findByKey(tag, "name", LocationTag.class);
 						Location parentLocation = findByKey(parent, "name", Location.class);
 						Location isExists = findByKey(name, "name", Location.class);
-						
-						System.err.println("Tags:" + tag + " ,code:" + code + " ,Name:" + name + ", Parent:" + parent);
-						if (isExists == null) {
-							Location location = new Location();
-							location.setCode(code);
-							location.setName(name);
-							location.setLocationTag(locationTag);
-							location.setParentLocation(parentLocation);
-							location.setDescription(name);
-							databaseRepositoryImpl.save(location);
-							System.err.println("Tags:" + locationTag.getUuid() + " ,code:" + locations[i] + " ,Name:"
-							        + locations[i + 1] + ", Parent:" + parentLocation);
+						Location location = new Location();
+						location.setCode(code);
+						location.setName(name);
+						location.setLocationTag(locationTag);
+						location.setParentLocation(parentLocation);
+						location.setDescription(name);
+						location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
+						if (!location.getUuid().isEmpty()) {
+							if (isExists == null) {
+								databaseRepositoryImpl.save(location);
+							} else {
+								logger.info("already exists location:" + location.getName());
+							}
+						} else {
+							logger.info("No uuid found for location:" + location.getName());
+							
 						}
+						
 					}
 				}
 				position++;
 			}
 			
 		}
-		catch (IOException e) {
-			System.out.println("error while reading csv and put to db : " + e.getMessage());
+		catch (Exception e) {
+			logger.info("Some problem occured, please contact with admin..");
+			msg = "Some problem occured, please contact with admin..";
 		}
-		
+		return msg;
 	}
 }
