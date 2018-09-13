@@ -92,6 +92,7 @@
 														
 														//String location = facility.getLocation().getName();
 														String addWorkerURL = "/facility/"+id+"/addWorker.html";
+														String detailsURL = "/facility/"+id+"/details.html";
 											%>
 											<tr>
 												<td><%=name%></td>
@@ -100,7 +101,7 @@
 												<td><%=longitude%></td>
 												<td></td>
 												<td>
-												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>
+												<a href="<c:url value="<%= detailsURL%>" />">Details</a>
 												| 	
 												<a href="<c:url value="<%= addWorkerURL%>" />">Add Worker</a>	
 												</td> 

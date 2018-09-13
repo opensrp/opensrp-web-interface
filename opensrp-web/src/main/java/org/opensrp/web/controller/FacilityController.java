@@ -1,7 +1,9 @@
 package org.opensrp.web.controller;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -137,5 +139,31 @@ public class FacilityController {
 		return facilityWorkerList;
        
 	}*/
+	
+	
+	@RequestMapping(value = "/{id}/details.html", method = RequestMethod.GET)
+	public String facilityDetails(ModelMap model, HttpSession session,@PathVariable("id") int id){
+		
+		/*List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findAll("FacilityWorkerType");
+		List<FacilityTraining> CHCPTrainingList = facilityServiceFactory.getFacility("FacilityWorkerTrainingServiceImpl").findAll("FacilityTraining");
+		FacilityHelperUtil.setWorkerTypeListToSession(session, workerTypeList);
+		FacilityHelperUtil.setCHCPTrainingListToSession(session, CHCPTrainingList);*/
+		
+		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
+		FacilityWorker facilityWorkerObject = facilityWorker;
+		facilityWorkerObject.setFacility(facility);
+		model.addAttribute("facilityWorker", facilityWorkerObject);
+		
+		Map<String, Object> facilityMap = new HashMap<String, Object>();
+		facilityMap.put("facility", facility);
+		List<FacilityWorker> facilityWorkerList = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findAllByKeys(facilityMap, FacilityWorker.class);
+		FacilityHelperUtil.setFacilityWorkerListToSession(session, facilityWorkerList);
+		
+		model.addAttribute("facility", facility);
+		
+		//return new ModelAndView("facility/details", "command", facility);
+		return "facility/details";
+       
+	}
 
 }
