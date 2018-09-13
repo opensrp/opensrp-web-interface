@@ -1,6 +1,5 @@
 package org.opensrp.web.controller;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +18,6 @@ import org.opensrp.facility.util.FacilityServiceFactory;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,8 +25,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 
 @Controller
@@ -61,14 +59,14 @@ public class FacilityController {
 	}
 
 	@RequestMapping(value = "/add.html", method = RequestMethod.POST)
-	public ModelAndView saveFacility(
+	 public RedirectView saveFacility(
 								 @RequestParam(value = "location", required = false) String locationId,
 	                             //@RequestParam(value = "locationName") String locationName,
 	                             @ModelAttribute("facility") @Valid Facility facility, BindingResult binding, ModelMap model,
 	                             HttpSession session) throws Exception {
 		
 		facilityServiceFactory.getFacility("FacilityServiceImpl").save(facility);
-		return new ModelAndView("/facility/add", "command", facility);
+		return new RedirectView("/facility/index.html");
 		
 	}
 	
@@ -100,7 +98,7 @@ public class FacilityController {
 	
 	
 	@RequestMapping(value = "/saveWorker.html", method = RequestMethod.POST)
-	public String saveWorker(HttpServletRequest request,
+	public RedirectView saveWorker(HttpServletRequest request,
 			ModelMap model,
 			@ModelAttribute("facility") @Valid FacilityWorker facilityWorker,
 			@RequestParam(value = "facilityWorkerTypeId", required = false) int facilityWorkerTypeId,
@@ -127,9 +125,7 @@ public class FacilityController {
 		facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").save(facilityWorker);
 		
 		
-		return showFacilityList(request,session);
-		
-		//return "/facility/index";
+		return new RedirectView("/facility/index.html");
        
 	}
 	

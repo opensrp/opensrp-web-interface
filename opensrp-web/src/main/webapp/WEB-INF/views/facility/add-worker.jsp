@@ -70,10 +70,10 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Identifier</label>
+									<label for="exampleInputName">Identifier (Email/Mobile No.)</label>
 									<form:input path="identifier" class="form-control"
 										required="required" aria-describedby="nameHelp"
-										placeholder="identifier" />
+										placeholder="Identifier (Email/Mobile No.)" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
