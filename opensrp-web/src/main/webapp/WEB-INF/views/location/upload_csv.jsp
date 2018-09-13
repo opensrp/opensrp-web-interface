@@ -7,7 +7,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page import="org.opensrp.common.util.CheckboxHelperUtil"%>
 <%@page import="java.util.List"%>
-<%@page import="org.opensrp.acl.entity.Permission"%>
+<%@page import="java.util.Map"%>
+<%@page import="org.opensrp.acl.entity.LocationTag"%>
+<%@page import="org.json.JSONObject" %>
+<%@page import="org.json.JSONArray" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,12 +20,13 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link type="text/css" href="<c:url value="/resources/css/jqx.base.css"/>" rel="stylesheet">
 
-<title>Edit Location Tag</title>
+<title>Uplaod location</title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
-<c:url var="saveUrl" value="/location/tag/${id}/edit.html" />
+<c:url var="saveUrl" value="/location/upload_csv.html" />
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
@@ -31,44 +36,29 @@
 				   <a  href="<c:url value="/location/tag/list.html"/>"> <strong> Manage Tags</strong> 
 					</a>  |  <a  href="<c:url value="/location/location.html"/>"> <strong>Manage Locations</strong>
 					</a>|  <a  href="<c:url value="/location/hierarchy.html"/>"> <strong>View Hierarchy</strong>
-					</a> |  <a  href="<c:url value="/location/upload_csv.html"/>"> <strong>Upload location</strong>
+					</a>  |  <a  href="<c:url value="/location/upload_csv.html"/>"> <strong>Upload location</strong>
 					</a>		
 		</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Edit Location Tag
+					<i class="fa fa-table"></i> Upload location
 				</div>
-				<div class="card-body">
-				<span> ${uniqueErrorMessage}</span>
-					<form:form method="POST" action="${saveUrl}" modelAttribute="locationTag">
+				<div class="card-body">				
+					<form:form method="POST" action="${saveUrl}?${_csrf.parameterName}=${_csrf.token}" modelAttribute="location" enctype="multipart/form-data">
 						<div class="form-group">
 							<div class="row">
-								<div class="col-3">
-									<label for="exampleInputName">Name</label>
-									<form:input path="name" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="Location Name" />
+								<div class="col-5">
+									<label for="exampleInputName">File  </label>
+									<input id="file" type="file" name="file" />										
 								</div>
+								
 							</div>
+							<span class="text-red">${msg}</span>
 						</div>
-						<form:hidden path="id" />
-						<form:hidden path="uuid" />
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<label for="exampleInputName">Description</label>
-									<form:input path="description" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="Description" />
-								</div>
-							</div>
-						</div>
-						
-						<form:label path="uuid"> uuid:${locationTag.getUuid()}</form:label>
-						<div class="form-group">
-							<div class="row">
-								<div class="col-3">
-									<input type="submit" value="Save"
+									<input type="submit" value="Upload"
 										class="btn btn-primary btn-block" />
 								</div>
 							</div>
@@ -81,5 +71,8 @@
 		<!-- /.content-wrapper-->
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 	</div>
+	
+  <script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
+        
 </body>
 </html>

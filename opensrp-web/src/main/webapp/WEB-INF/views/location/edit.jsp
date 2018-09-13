@@ -37,6 +37,7 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 				   <a  href="<c:url value="/location/tag/list.html"/>"> <strong> Manage Tags</strong> 
 					</a>  |  <a  href="<c:url value="/location/location.html"/>"> <strong>Manage Locations</strong>
 					</a>|  <a  href="<c:url value="/location/hierarchy.html"/>"> <strong>View Hierarchy</strong>
+					</a>  |  <a  href="<c:url value="/location/upload_csv.html"/>"> <strong>Upload location</strong>
 					</a>			
 			</div>
 			<div class="card mb-3">
@@ -53,6 +54,16 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 									<form:input path="name" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Location Name" />
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-5">
+									<label for="exampleInputName">Code</label>
+									<form:input path="code" class="form-control"
+										required="required" aria-describedby="nameHelp"
+										placeholder="Description" />
 								</div>
 							</div>
 						</div>

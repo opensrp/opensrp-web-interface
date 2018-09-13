@@ -9,12 +9,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.acl.entity.Team;
 import org.opensrp.acl.openmrs.service.OpenMRSConnector;
+import org.opensrp.connector.openmrs.service.APIServiceFactory;
 import org.opensrp.connector.openmrs.service.impl.OpenMRSAPIServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OpenMRSTeamAPIService implements OpenMRSConnector<Team> {
+public class OpenMRSTeamAPIService implements OpenMRSConnector<Object> {
 	
 	private static final String TEAM_URL = "ws/rest/v1/team/team";
 	
@@ -29,12 +30,13 @@ public class OpenMRSTeamAPIService implements OpenMRSConnector<Team> {
 	private static String PAYLOAD = "";
 	
 	@Autowired
-	private OpenMRSAPIServiceImpl openMRSAPIServiceImpl;
+	private APIServiceFactory apiServiceFactory;
 	
 	@Override
-	public Team add(Team team) throws JSONException {
+	public Team add(Object teamOb) throws JSONException {
+		Team team = (Team) teamOb;
 		String teamUuid = "";
-		JSONObject createdTeam = openMRSAPIServiceImpl.add(PAYLOAD, makeTeamObject(team), TEAM_URL);
+		JSONObject createdTeam = apiServiceFactory.getApiService("openmrs").add(PAYLOAD, makeTeamObject(team), TEAM_URL);
 		if (createdTeam.has("uuid")) {
 			teamUuid = (String) createdTeam.get("uuid");
 			team.setUuid(teamUuid);
@@ -45,9 +47,11 @@ public class OpenMRSTeamAPIService implements OpenMRSConnector<Team> {
 	}
 	
 	@Override
-	public String update(Team team, String uuid) throws JSONException {
+	public String update(Object teamOb, String uuid) throws JSONException {
+		Team team = (Team) teamOb;
 		String teamUuid = "";
-		JSONObject updatedTeam = openMRSAPIServiceImpl.update(PAYLOAD, makeTeamObject(team), uuid, TEAM_URL);
+		JSONObject updatedTeam = apiServiceFactory.getApiService("openmrs").update(PAYLOAD, makeTeamObject(team), uuid,
+		    TEAM_URL);
 		if (updatedTeam.has("uuid")) {
 			teamUuid = (String) updatedTeam.get("uuid");
 		}

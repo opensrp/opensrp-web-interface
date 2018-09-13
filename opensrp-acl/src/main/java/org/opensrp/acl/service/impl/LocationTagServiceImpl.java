@@ -15,6 +15,8 @@ import org.hibernate.SessionFactory;
 import org.json.JSONException;
 import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.entity.User;
+import org.opensrp.acl.openmrs.service.OpenMRSConnector;
+import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
 import org.opensrp.acl.openmrs.service.impl.OpenMRSTagAPIService;
 import org.opensrp.acl.service.AclService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
@@ -36,7 +38,7 @@ public class LocationTagServiceImpl implements AclService {
 	private SessionFactory sessionFactory;
 	
 	@Autowired
-	private OpenMRSTagAPIService openMRSTagAPIService;
+	private OpenMRSServiceFactory openMRSServiceFactory;
 	
 	public LocationTagServiceImpl() {
 		
@@ -46,7 +48,7 @@ public class LocationTagServiceImpl implements AclService {
 	@Override
 	public <T> long save(T t) throws Exception {
 		LocationTag locationTag = (LocationTag) t;
-		locationTag = openMRSTagAPIService.add(locationTag);
+		locationTag = (LocationTag) openMRSServiceFactory.getOpenMRSConnector("tag").add(locationTag);
 		long createdTag = 0;
 		if (!locationTag.getUuid().isEmpty()) {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -66,7 +68,7 @@ public class LocationTagServiceImpl implements AclService {
 	public <T> int update(T t) throws JSONException {
 		LocationTag locationTag = (LocationTag) t;
 		int updatedTag = 0;
-		String uuid = openMRSTagAPIService.update(locationTag, locationTag.getUuid());
+		String uuid = openMRSServiceFactory.getOpenMRSConnector("tag").update(locationTag, locationTag.getUuid());
 		if (!uuid.isEmpty()) {
 			updatedTag = databaseRepositoryImpl.update(locationTag);
 		} else {
