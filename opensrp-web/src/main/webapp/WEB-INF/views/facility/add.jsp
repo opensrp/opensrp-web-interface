@@ -23,7 +23,7 @@ String selectedLocationName = (String)session.getAttribute("locationName");
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Add permissions</title>
+<title>Add Facility</title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -34,10 +34,10 @@ String selectedLocationName = (String)session.getAttribute("locationName");
 	<div class="content-wrapper">
 		<div class="container-fluid">
 			<div class="form-group">				
-					   <a  href="<c:url value="/user.html"/>"> <strong> Manage User</strong> 
-						</a>  |   <a  href="<c:url value="/role.html"/>"> <strong>Manage Role</strong>
-						</a>			
-			</div>
+				   <a  href="<c:url value="/facility/add.html"/>" > <strong>Registration</strong> 
+					</a>  |  <a  href="<c:url value="/facility/index.html"/>"> <strong>Community Clinic</strong>
+					</a>		
+		    </div>
 			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> Community Clinic Registration

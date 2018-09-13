@@ -34,7 +34,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link type="text/css" href="<c:url value="/resources/css/jqx.base.css"/>" rel="stylesheet">
 
-<title>Add Team</title>
+<title>Add Worker</title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -45,8 +45,8 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		<div class="form-group">				
-				   <a  href="<c:url value="/team/list.html"/>"> <strong> Manage Team</strong> 
-					</a>  |  <a  href="<c:url value="/team/teammember/list.html"/>"> <strong>Manage Team Member</strong>
+				   <a  href="<c:url value="/facility/add.html"/>" > <strong>Registration</strong> 
+					</a>  |  <a  href="<c:url value="/facility/index.html"/>"> <strong>Community Clinic</strong>
 					</a>		
 		</div>
 			<div class="card mb-3">
@@ -87,7 +87,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 									<label for="exampleInputName">Organization</label>
 									<form:input path="organization" class="form-control"
 										required="required" aria-describedby="nameHelp"
-										placeholder="identifier" />
+										placeholder="Organization" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
@@ -101,7 +101,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 								<div class="row">									
 									<div class="col-5">
 									<label for="exampleInputName">Worker type</label>
-										<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" required>
+										<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" onchange="checkForTraining()" required>
 									 		<option value="" selected>Please Select</option>
 												<%
 												for (FacilityWorkerType workerType : workerTypeList)
@@ -120,7 +120,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 						
 						
 						<input type="text" id= "trainings" name="trainings" value="" readonly>
-						<div class="form-group">
+						<div class="form-group" id="trainingDiv">
 							<div class="form-check">
 								<div class="row">
 
@@ -172,6 +172,7 @@ var trainingList = [];
 
 $(document).ready(function() {
 	$("#trainings").hide();
+	$("#trainingDiv").hide();
 });
 
 
@@ -182,6 +183,17 @@ function check(){
 	});
 	trainingList = allVals;
 	$("#trainings").val(trainingList.toString());
+}
+
+function checkForTraining(){
+	var chcp = '1';
+	var workerType =$("#facilityWorkerTypeId").val();
+	if(workerType === chcp){
+		$("#trainingDiv").show();
+	}else{
+		$("#trainingDiv").hide();
+	}
+	
 }
 
 </script>	

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -106,8 +107,10 @@ public class FacilityController {
 		    @RequestParam(value = "trainings", required = false) String trainings,
 			BindingResult binding,
 			HttpSession session) throws Exception{
+		
+		if(!trainings.equals("")){
 		String[] trainingList = trainings.split(",");
-		System.out.println(trainings+" >>>>> <<<<<");
+		//System.out.println(trainings+" >>>>> <<<<<");
 		
 		Set<FacilityTraining> facilityTrainings = new HashSet<FacilityTraining>();
 		for(int i=0; i< trainingList.length; i++){
@@ -117,6 +120,7 @@ public class FacilityController {
 			}
 		}
 		facilityWorker.setFacilityTrainings(facilityTrainings);
+		}
 		
 		FacilityWorkerType facilityWorkerType = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findById(facilityWorkerTypeId, "id", FacilityWorkerType.class);
 		facilityWorker.setFacilityWorkerType(facilityWorkerType);
@@ -129,5 +133,13 @@ public class FacilityController {
        
 	}
 	
+	/*@RequestMapping(value = "/showWorkerList.html", method = RequestMethod.GET)
+	public  @ResponseBody List<FacilityWorker> showWorkerList (ModelMap model, HttpSession session){
+		
+		List<FacilityWorker> facilityWorkerList = new ArrayList<FacilityWorker>();
+		
+		return facilityWorkerList;
+       
+	}*/
 
 }
