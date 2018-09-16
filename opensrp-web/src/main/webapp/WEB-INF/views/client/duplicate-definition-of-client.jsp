@@ -16,7 +16,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Duplicate Definition of Event</title>
+<title>Similarity Definition of Event</title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -30,17 +30,17 @@
 			 <a  href="<c:url value="/client/household.html"/>"> <strong>Household</strong> 
 			 </a>  |<a  href="<c:url value="/client/mother.html"/>"> <strong>Mother</strong>
 			 </a>  |<a  href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
-			 </a>  |<a  href="<c:url value="/client/duplicateClient.html"/>"> <strong>Duplicate Client</strong>
-			 </a>  |<a  href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Duplicate Event</strong>
-			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Duplicate Definition of Client</strong>
-			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Duplicate Definition of Event</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateClient.html"/>"> <strong>Similar Client</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Similar Event</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Similarity Definition of Client</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Similarity Definition of Event</strong>
 			 </a>  		
 			</div>
 			
 			
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Duplicate Matching Criteria of Client
+					<i class="fa fa-table"></i> Similarity Matching Criteria of Client
 				</div>
 				<div class="card-body">
 					<form:form method="POST" action="${updateDuplicateDefinitionUrl}">

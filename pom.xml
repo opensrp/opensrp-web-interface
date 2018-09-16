@@ -12,6 +12,7 @@
     <module>opensrp-acl</module>      
     <module>opensrp-web</module>
     <module>opensrp-web-nutrition</module>
+    <module>opensrp-facility</module>
   </modules>
   
   <properties>

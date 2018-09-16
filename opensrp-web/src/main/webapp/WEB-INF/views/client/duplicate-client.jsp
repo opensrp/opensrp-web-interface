@@ -24,16 +24,16 @@
 			 <a  href="<c:url value="/client/household.html"/>"> <strong>Household</strong> 
 			 </a>  |<a  href="<c:url value="/client/mother.html"/>"> <strong>Mother</strong>
 			 </a>  |<a  href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
-			 </a>  |<a  href="<c:url value="/client/duplicateClient.html"/>"> <strong>Duplicate Client</strong>
-			 </a>  |<a  href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Duplicate Event</strong>
-			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Duplicate Definition of Client</strong>
-			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Duplicate Definition of Event</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateClient.html"/>"> <strong>Similar Client</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Similar Event</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Similarity Definition of Client</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Similarity Definition of Event</strong>
 			 </a>  		
 			</div>
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Duplicate Client List
+					<i class="fa fa-table"></i> Similar Client List
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">

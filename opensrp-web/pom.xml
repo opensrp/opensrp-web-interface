@@ -44,6 +44,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.opensrp.dashboard</groupId>
+			<artifactId>opensrp-facility</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.opensrp.dashboard</groupId>
 			<artifactId>opensrp-acl</artifactId>
 			<version>${project.version}</version>
 		</dependency>

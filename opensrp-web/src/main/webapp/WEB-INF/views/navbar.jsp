@@ -36,6 +36,41 @@
 					<a class="dropdown-item small" href="<c:url value="/child.html"/>"><strong>Child</strong> </a>
 				</div>
 			</li> --%>
+			
+			
+			
+			
+			
+			
+			
+			
+			<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
+				href="#" data-toggle="dropdown">Facility </a>
+				<div class="dropdown-menu">
+
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/facility/add.html"/>"> <strong>
+							Registration</strong>
+					</a>
+					
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/facility/index.html"/>"> <strong>
+							Community Clinic</strong>
+					</a>
+		
+
+				</div></li>
+			
+			
+			
+			
+			
+			
+			
+			
 
 			
 
@@ -62,22 +97,22 @@
 						
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/duplicateClient.html"/>"> <strong>Duplicate Client</strong>
+						href="<c:url value="/client/duplicateClient.html"/>"> <strong>Similar Client</strong>
 					</a>	
 					
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Duplicate Event</strong>
+						href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Similar Event</strong>
 					</a>
 						
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Duplicate Definition Client</strong>
+						href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Similar Definition Client</strong>
 					</a>
 					
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Duplicate Definition Event</strong>
+						href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Similar Definition Event</strong>
 					</a>		
 
 				</div></li>

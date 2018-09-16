@@ -169,12 +169,13 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		session.close();
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
-
+// criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY); added to avoid duplicate record
 	public <T> List<T> findAllByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
 		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
 			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		}
 
 		@SuppressWarnings("unchecked")

@@ -30,6 +30,8 @@ import org.opensrp.common.entity.Marker;
 import org.opensrp.common.service.impl.MarkerServiceImpl;
 import org.opensrp.common.util.AllConstant;
 import org.opensrp.common.util.DefaultRole;
+import org.opensrp.facility.service.impl.FacilityWorkerTrainingServiceImpl;
+import org.opensrp.facility.service.impl.FacilityWorkerTypeServiceImpl;
 import org.opensrp.web.nutrition.entity.WeightVelocityChart;
 import org.opensrp.web.nutrition.service.impl.WeightVelocityChartServiceImpl;
 import org.opensrp.web.nutrition.utils.GrowthValocityChart;
