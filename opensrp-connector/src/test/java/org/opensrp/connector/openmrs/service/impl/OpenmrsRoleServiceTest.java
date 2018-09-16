@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,8 @@ public class OpenmrsRoleServiceTest {
 	public void setup() throws IOException {
 		
 	}
-	
+
+	@Ignore
 	@Test
 	public void createUpdateGetAndDeleteRole() throws JSONException {
 		String name = "Test";

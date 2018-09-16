@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.opensrp.common.interfaces.DatabaseService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.opensrp.common.visualization.HighChart;
@@ -26,7 +27,10 @@ public class ClientServiceImpl implements DatabaseService {
 	
 	@Autowired
 	private DatabaseRepositoryImpl databaseRepositoryImpl;
-	
+
+	@Autowired
+	private OpenSRPClientServiceImpl openSRPClientServiceImpl;
+
 	public ClientServiceImpl() {
 		
 	}
@@ -150,6 +154,13 @@ public class ClientServiceImpl implements DatabaseService {
 		session.setAttribute("followUpList", followUpList);
 	}
 	
+	@Transactional
+	public <T> int updateClientEntity(JSONObject jo) throws JSONException {
+		int updatedTag = 0;
+		String uuid = openSRPClientServiceImpl.update(jo);
+
+		return updatedTag;
+	}
 	
 	
 	

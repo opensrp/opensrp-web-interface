@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.opensrp.common.entity.Client;
 import org.opensrp.common.interfaces.DatabaseService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.opensrp.common.util.SearchBuilder;
@@ -165,5 +166,9 @@ public class DatabaseServiceImpl implements DatabaseService {
 	public List<Object[]> refreshView(SearchBuilder searchBuilder) {
 		String funcQuery = "SELECT * FROM core.refresh_all_materialized_views()";
 		return databaseRepositoryImpl.executeSelectQuery(funcQuery);
+	}
+
+	public List<Object> findAllTest(Class<?> className) {
+		return databaseRepositoryImpl.findAllTest(className);
 	}
 }

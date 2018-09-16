@@ -26,6 +26,7 @@
 		<property name="annotatedClasses">
 			<list>
 				<value>org.opensrp.common.entity.Marker</value>
+				<value>org.opensrp.common.entity.ClientEntity</value>
 				<value>org.opensrp.web.nutrition.entity.ChildGrowth</value>
 				<value>org.opensrp.web.nutrition.entity.WeightVelocityChart</value>
 				<value>org.opensrp.acl.entity.Team</value>
