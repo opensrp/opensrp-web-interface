@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.common.entity.ClientEntity;
 import org.opensrp.common.interfaces.DatabaseService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.opensrp.common.visualization.HighChart;
@@ -153,18 +154,33 @@ public class ClientServiceImpl implements DatabaseService {
 		session.setAttribute("counsellingList", counsellingList);
 		session.setAttribute("followUpList", followUpList);
 	}
-	
-	@Transactional
-	public <T> int updateClientEntity(JSONObject jo) throws JSONException {
-		int updatedTag = 0;
-		String uuid = openSRPClientServiceImpl.update(jo);
 
-		return updatedTag;
+	public void updateClientData(ClientEntity clientEntity, String baseEntityId)
+			throws JSONException {
+		 List<Object> clientData = databaseServiceImpl.executeSelectQuery("select id, cast(json as character varying) from core.client " 
+				+ " where json->>'baseEntityId' = '" + baseEntityId + "'");
+
+		if (clientData != null) {
+			System.out.println("client data: " + clientData.size());
+			Iterator dataListIterator = clientData.iterator();
+
+			while (dataListIterator.hasNext()) {
+				Object[] clientObject = (Object[]) dataListIterator.next();
+				String jsonData = String.valueOf(clientObject[1]);
+
+				JSONObject jsonFromClient = new JSONObject(jsonData);
+				jsonFromClient.put("firstName", clientEntity.getFirstName());
+				jsonFromClient.getJSONObject("attributes").put("phoneNumber", clientEntity.getPhoneNumber());
+
+                JSONObject jsonObject = new JSONObject();
+
+				JSONArray jsonArray = new JSONArray();
+				jsonArray.put(jsonFromClient);
+				jsonObject.put("clients", jsonArray);
+
+				openSRPClientServiceImpl.update(jsonObject);
+			}
+		}
 	}
-	
-	
-	
-	
-	
 }
 

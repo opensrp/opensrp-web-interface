@@ -1,6 +1,5 @@
 package org.opensrp.web.controller;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +9,6 @@ import javax.validation.Valid;
 import org.json.JSONException;
 import org.opensrp.acl.entity.DuplicateMatchingCriteriaDefinition;
 import org.opensrp.acl.service.impl.DuplicateRecordServiceImpl;
-import org.json.JSONObject;
 import org.opensrp.acl.service.impl.LocationServiceImpl;
 import org.opensrp.common.entity.ClientEntity;
 import org.opensrp.common.service.impl.ClientServiceImpl;
@@ -108,61 +106,24 @@ public class ClientController {
 		return "client/mother-details";
 	}
 
-	@RequestMapping(value = "/mother/{id}/edit.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/mother/{baseEntityId}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editMother(HttpServletRequest request, HttpSession session, ModelMap model,
-			@PathVariable("id") String id) {
-		System.out.println("Mother id :" + id);
-		session.setAttribute("motherId", id);
-
-		List<Object> data;
-		data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfClient", "mother", id);
-		session.setAttribute("eventList", data);
+			@PathVariable("baseEntityId") String baseEntityId) {
+		List<Object> data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfClient", "mother", baseEntityId);
+		session.setAttribute("editData", data);
 
 		ClientEntity clientEntity =  new ClientEntity();
 		model.addAttribute("clientEntity", clientEntity);
 		return new ModelAndView("client/edit", "command", clientEntity);
 	}
 
-	@RequestMapping(value = "/mother/{id}/edit.html", method = RequestMethod.POST)
+	@RequestMapping(value = "/mother/{baseEntityId}/edit.html", method = RequestMethod.POST)
 	public ModelAndView editMother(@ModelAttribute("clientEntity") @Valid ClientEntity clientEntity, BindingResult binding, ModelMap model,
-			HttpSession session) throws JSONException {
+			HttpSession session, @PathVariable("baseEntityId") String baseEntityId) throws JSONException {
+		System.out.println("submit clientEntity: " + baseEntityId);
+		clientServiceImpl.updateClientData(clientEntity, baseEntityId);
 
-		System.out.println("submit clientEntity");
-
-
-		List<Object> clientData;
-		clientData = databaseServiceImpl.executeSelectQuery("select id, cast(json as character varying) from core.client");
-		if (clientData != null) {
-			System.out.println("client data:" + clientData.size());
-			Iterator dataListIterator = clientData.iterator();
-
-			System.out.println("dataListIterator: " + dataListIterator.hasNext());
-			while (dataListIterator.hasNext()) {
-				Object[] clientObject = (Object[]) dataListIterator.next();
-				String jsonData = String.valueOf(clientObject[1]);
-				JSONObject jo = new JSONObject(jsonData);
-
-				if(String.valueOf(clientObject[0]).equalsIgnoreCase("232")) {
-					String id = String.valueOf(clientObject[0]);
-					jo.put("middleName", clientEntity.getFirstName());
-					
-					jo.getJSONObject("attributes").put("phoneNumber", clientEntity.getLastName());
-					
-					clientServiceImpl.updateClientEntity(jo);
-				}
-
-				System.out.println("jsonData "+ String.valueOf(clientObject[0]) + ": "+ jo);
-			}
-		}
-
-		try {
-
-			databaseServiceImpl.save(clientEntity);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		return new ModelAndView("redirect:/client/mother.html");
-
 	}
 
 	@RequestMapping(value = "/household.html", method = RequestMethod.GET)

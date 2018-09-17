@@ -15,11 +15,8 @@ final String CLIENT_URL = "rest/event/add";
 	@Autowired
 	private OpenSRPAPIServiceImpl openSRPAPIServiceImpl;
 
-	public String update(JSONObject jo) throws JSONException {
-		String tagUuid = "";
+	public void update(JSONObject jo) throws JSONException {
 		openSRPAPIServiceImpl.updateClient(PAYLOAD, jo, CLIENT_URL);
-
-		return tagUuid;
 	}
 
 }

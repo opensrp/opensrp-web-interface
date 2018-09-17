@@ -5,7 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.exolab.castor.types.DateTime;
@@ -13,41 +12,37 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Entity
-@Table(name = "clientEntity", schema = "core")
 public class ClientEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clientEntity_id_seq")
 	@SequenceGenerator(name = "clientEntity_id_seq", sequenceName = "clientEntity_id_seq", allocationSize = 1)
 	private int id;
 
-	@JsonProperty
 	private String baseEntityId;
-	@JsonProperty
-    private String firstName;
-    @JsonProperty
-    private String middleName;
-    @JsonProperty
-    private String lastName;
-    @JsonProperty
-    private DateTime birthdate;
-    @JsonProperty
-    private DateTime deathdate;
-    @JsonProperty
-    private Boolean birthdateApprox;
-    @JsonProperty
-    private Boolean deathdateApprox;
-    @JsonProperty
-    private String gender;
-    @JsonProperty
-    private String clientType;
 
-	public int getId() {
-		return id;
-	}
+	private String firstName;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+	private String middleName;
+
+	private String lastName;
+
+	private DateTime birthdate;
+
+	private DateTime deathdate;
+
+	private String gender;
+
+	private String phoneNumber;
+
+	private String spouseName;
+
+	private String nid;
+
+	private String motherName;
+
+	private String fatherName;
+
+	private String householdCode;
 
 	public String getBaseEntityId() {
 		return baseEntityId;
@@ -97,22 +92,6 @@ public class ClientEntity {
 		this.deathdate = deathdate;
 	}
 
-	public Boolean getBirthdateApprox() {
-		return birthdateApprox;
-	}
-
-	public void setBirthdateApprox(Boolean birthdateApprox) {
-		this.birthdateApprox = birthdateApprox;
-	}
-
-	public Boolean getDeathdateApprox() {
-		return deathdateApprox;
-	}
-
-	public void setDeathdateApprox(Boolean deathdateApprox) {
-		this.deathdateApprox = deathdateApprox;
-	}
-
 	public String getGender() {
 		return gender;
 	}
@@ -121,13 +100,56 @@ public class ClientEntity {
 		this.gender = gender;
 	}
 
-	public String getClientType() {
-		return clientType;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setClientType(String clientType) {
-		this.clientType = clientType;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
-	
+
+	public String getSpouseName() {
+		return spouseName;
+	}
+
+	public void setSpouseName(String spouseName) {
+		this.spouseName = spouseName;
+	}
+
+	public String getNid() {
+		return nid;
+	}
+
+	public void setNid(String nid) {
+		this.nid = nid;
+	}
+
+	public String getMotherName() {
+		return motherName;
+	}
+
+	public void setMotherName(String motherName) {
+		this.motherName = motherName;
+	}
+
+	public String getFatherName() {
+		return fatherName;
+	}
+
+	public void setFatherName(String fatherName) {
+		this.fatherName = fatherName;
+	}
+
+	public String getHouseholdCode() {
+		return householdCode;
+	}
+
+	public void setHouseholdCode(String householdCode) {
+		this.householdCode = householdCode;
+	}
+
+	public int getId() {
+		return id;
+	}
 }
 

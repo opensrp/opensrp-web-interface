@@ -40,7 +40,7 @@
 	rel="stylesheet">
 </head>
 
-<c:url var="saveUrl" value="/client/mother/${id}/edit.html" />
+<c:url var="saveUrl" value="/client/mother/${baseEntityId}/edit.html" />
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
@@ -52,27 +52,54 @@
 					<i class="fa fa-table"></i> Edit Mother
 				</div>
 				<div class="card-body">
-					<form:form method="POST" action="${saveUrl}" modelAttribute="clientEntity">
-					   <div class="form-group">
+					<form:form method="POST" action="${saveUrl}"
+						modelAttribute="clientEntity">
+						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
 									<%
-										if (session.getAttribute("eventList") != null) {
-											List<Object> dataList = (List<Object>) session.getAttribute("eventList");
+										if (session.getAttribute("editData") != null) {
+											List<Object> dataList = (List<Object>) session.getAttribute("editData");
 											Iterator dataListIterator = dataList.iterator();
 											while (dataListIterator.hasNext()) {
 												Object[] clientObject = (Object[]) dataListIterator.next();
 												String firstName = String.valueOf(clientObject[9]);
+												String householdCode = String.valueOf(clientObject[12]);
+												String lastName = String.valueOf(clientObject[13]);
+												String nid = String.valueOf(clientObject[15]);
 												String phoneNumber = String.valueOf(clientObject[17]);
+												String spouseName = String.valueOf(clientObject[19]);
+												String motherNumber = String.valueOf(clientObject[32]);
+												String fatherName = String.valueOf(clientObject[33]);
 									%>
-									<label for="Name">Name</label>
+									<label for="Name">First Name</label>
 									<form:input path="firstName" class="form-control"
-									placeholder="Name" value="<%=firstName%>"/>
+										placeholder="Name" value="<%=firstName%>" />
 										
-									<label for="Phone">Phone</label>
+									<label for="lastName">Last Name</label>
 									<form:input path="lastName" class="form-control"
-									placeholder="Phone" value="<%=phoneNumber%>"/>
-							
+										placeholder="lastName" value="<%=lastName%>" />
+
+                                    <label for="householdCode">Household ID</label>
+									<form:input path="householdCode" class="form-control"
+									    placeholder="householdCode" value="<%=householdCode%>" />
+
+									<label for="NID">NID</label>
+									<form:input path="nid" class="form-control"
+									    placeholder="NID" value="<%=nid%>" />
+
+									<label for="Spouse">Spouse Name</label>
+									<form:input path="spouseName" class="form-control"
+										placeholder="Spouse" value="<%=spouseName%>" />
+
+									<label for="motherName">Mother Name</label>
+									<form:input path="motherName" class="form-control"
+										placeholder="motherName" value="<%=motherNumber%>" />
+
+                                    <label for="fatherName">Father Name</label>
+									<form:input path="fatherName" class="form-control"
+										placeholder="fatherName" value="<%=fatherName%>" />
+
 									<%
 											}
 										}
@@ -80,8 +107,8 @@
 								</div>
 							</div>
 						</div>
-		
-		                <form:hidden path="id" />
+
+						<form:hidden path="id" />
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
@@ -89,7 +116,7 @@
 										class="btn btn-primary btn-block" />
 								</div>
 							</div>
-						</div>					
+						</div>
 					</form:form>
 
 				</div>
@@ -97,6 +124,6 @@
 			</div>
 			<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>
-		</div>
+	</div>
 </body>
 </html>
