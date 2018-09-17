@@ -2,7 +2,6 @@ package org.opensrp.web.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -57,12 +55,15 @@ public class FacilityController {
 	@Autowired
 	private FacilityWorker facilityWorker;
 	
+	@Autowired
+	private FacilityHelperUtil facilityHelperUtil;
+	
 	
 	@RequestMapping(value = "/add.html", method = RequestMethod.GET)
 	public ModelAndView addFacility(ModelMap model, HttpSession session){
 		String locationName = "";
 		
-		FacilityHelperUtil.setSessionAttribute(session, facility, locationName);
+		facilityHelperUtil.setSessionAttribute(session, facility, locationName);
 		return new ModelAndView("facility/add", "command", facility);
        
 	}
@@ -90,11 +91,11 @@ public class FacilityController {
 		
 		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findAll("FacilityWorkerType");
 		List<FacilityTraining> CHCPTrainingList = facilityServiceFactory.getFacility("FacilityWorkerTrainingServiceImpl").findAll("FacilityTraining");
-		FacilityHelperUtil.setWorkerTypeListToSession(session, workerTypeList);
-		FacilityHelperUtil.setCHCPTrainingListToSession(session, CHCPTrainingList);
+		facilityHelperUtil.setWorkerTypeListToSession(session, workerTypeList);
+		facilityHelperUtil.setCHCPTrainingListToSession(session, CHCPTrainingList);
 		
 		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
-		FacilityWorker facilityWorkerObject = facilityWorker;
+		FacilityWorker facilityWorkerObject = new FacilityWorker();
 		facilityWorkerObject.setFacility(facility);
 		model.addAttribute("facilityWorker", facilityWorkerObject);
 		
@@ -135,7 +136,7 @@ public class FacilityController {
        
 	}
 	
-	@RequestMapping(value = "/{id}/getWorkerList.html", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/{id}/getWorkerList.html", method = RequestMethod.GET)
 	public ResponseEntity<String> getWorkerList (ModelMap model, HttpSession session,
 			@PathVariable("id") int id){
 		
@@ -146,7 +147,7 @@ public class FacilityController {
 		
 		return new ResponseEntity<>(new Gson().toJson(facilityWorkerList), OK);
        
-	}
+	}*/
 	
 	@RequestMapping(value = "/deleteWorker.html", method = RequestMethod.POST)
 	public ResponseEntity<String> deleteWorker (ModelMap model, HttpSession session,
@@ -169,7 +170,7 @@ public class FacilityController {
 		Map<String, Object> facilityMap = new HashMap<String, Object>();
 		facilityMap.put("facility", facility);
 		List<FacilityWorker> facilityWorkerList = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findAllByKeys(facilityMap, FacilityWorker.class);
-		FacilityHelperUtil.setFacilityWorkerListToSession(session, facilityWorkerList);
+		facilityHelperUtil.setFacilityWorkerListToSession(session, facilityWorkerList);
 		
 		model.addAttribute("facility", facility);
 		

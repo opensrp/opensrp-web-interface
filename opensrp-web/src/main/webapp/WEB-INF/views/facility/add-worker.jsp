@@ -34,6 +34,9 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link type="text/css" href="<c:url value="/resources/css/jqx.base.css"/>" rel="stylesheet">
 
+<meta name="_csrf" content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <title>Add Worker</title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
@@ -56,7 +59,8 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 				</div>
 				<div class="card-body">
 				
-					<form:form method="POST" action="${saveUrl}" modelAttribute="facilityWorker">
+					<%-- <form:form method="POST" action="${saveUrl}" modelAttribute="facilityWorker"> --%>
+					<form:form id="workerInfo" modelAttribute="facilityWorker">
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
@@ -252,6 +256,46 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 	</div>
 	
 <script type="text/javascript"> 
+
+
+$("#workerInfo").submit(function(event) { 
+	var url = "/rest/api/v1/facility/saveWorker";			
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	var formData = {
+            'name': $('input[name=name]').val(),
+            'identifier': $('input[name=identifier]').val(),
+            'organization': $('input[name=organization]').val(),
+            'facilityWorkerTypeId': $("#facilityWorkerTypeId").val(),
+            'facilityTrainings': $('input[name=trainings]').val(),
+            'facilityId': $("#facilityId").val()
+        };
+	event.preventDefault();
+	
+	$.ajax({
+		contentType : "application/json",
+		type: "POST",
+        url: url,
+        data: JSON.stringify(formData), 
+        dataType : 'json',
+        
+		timeout : 100000,
+		beforeSend: function(xhr) {				    
+			 xhr.setRequestHeader(header, token);
+		},
+		success : function(data) {
+		   getWorkerList($("#facilityId").val());
+		},
+		error : function(e) {
+		   
+		},
+		done : function(e) {				    
+		    console.log("DONE");				    
+		}
+	});
+});	
+
+
 var trainingList = [];
 
 $(document).ready(function() {
@@ -281,9 +325,10 @@ function checkForTraining(){
 }
 
 function getWorkerList(id) {
-	var gerWorkerListURL ="getWorkerList.html";
+	/* var getWorkerListURL ="getWorkerList.html"; */
+	var workerListURL = "/rest/api/v1/facility/"+id+"/getWorkerList.html";
 	
-    $.ajax(gerWorkerListURL, {
+    $.ajax(workerListURL, {
         type: 'GET',
     }).done(function(workerList) {
     	showWorkerListOnTable(workerList);
@@ -349,6 +394,9 @@ function showWorkerListOnTable(workerList){
         
         }
 }
+
+
+
 </script>	
 	  
 </body>
