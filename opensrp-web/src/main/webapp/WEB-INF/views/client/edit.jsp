@@ -71,34 +71,63 @@
 												String spouseName = String.valueOf(clientObject[19]);
 												String motherNumber = String.valueOf(clientObject[32]);
 												String fatherName = String.valueOf(clientObject[33]);
-									%>
-									<label for="Name">First Name</label>
-									<form:input path="firstName" class="form-control"
-										placeholder="Name" value="<%=firstName%>" />
-										
-									<label for="lastName">Last Name</label>
-									<form:input path="lastName" class="form-control"
-										placeholder="lastName" value="<%=lastName%>" />
 
-                                    <label for="householdCode">Household ID</label>
+												if(firstName.equalsIgnoreCase("null")) {
+													firstName = "";
+												}
+												if(householdCode.equalsIgnoreCase("null")) {
+													householdCode = "";
+												}
+												if(lastName.equalsIgnoreCase("null")) {
+													lastName = "";
+												}
+												if(nid.equalsIgnoreCase("null")) {
+													nid = "";
+												}
+												if(phoneNumber.equalsIgnoreCase("null")) {
+													phoneNumber = "";
+												}
+												if(spouseName.equalsIgnoreCase("null")) {
+													spouseName = "";
+												}
+												if(motherNumber.equalsIgnoreCase("null")) {
+													motherNumber = "";
+												}
+												if(fatherName.equalsIgnoreCase("null")) {
+													fatherName = "";
+												}
+									%>
+									<label for="First Name">First Name</label>
+									<form:input path="firstName" class="form-control"
+										placeholder="First Name" value="<%=firstName%>" />
+										
+									<label for="Last Name">Last Name</label>
+									<form:input path="lastName" class="form-control"
+										placeholder="Last Name" value="<%=lastName%>" />
+
+                                    <label for="Household ID">Household ID</label>
 									<form:input path="householdCode" class="form-control"
-									    placeholder="householdCode" value="<%=householdCode%>" />
+									    placeholder="Household ID" value="<%=householdCode%>" />
+
+                                    <label for="Phone Number">Phone Number</label>
+									<form:input path="phoneNumber" class="form-control"
+										placeholder="Phone Number" value="<%=phoneNumber%>" />
 
 									<label for="NID">NID</label>
 									<form:input path="nid" class="form-control"
 									    placeholder="NID" value="<%=nid%>" />
 
-									<label for="Spouse">Spouse Name</label>
+									<label for="Spouse Name">Spouse Name</label>
 									<form:input path="spouseName" class="form-control"
-										placeholder="Spouse" value="<%=spouseName%>" />
+										placeholder="Spouse Name" value="<%=spouseName%>" />
 
-									<label for="motherName">Mother Name</label>
+									<label for="Mother Name">Mother Name</label>
 									<form:input path="motherName" class="form-control"
-										placeholder="motherName" value="<%=motherNumber%>" />
+										placeholder="Mother Name" value="<%=motherNumber%>" />
 
-                                    <label for="fatherName">Father Name</label>
+                                    <label for="Father Name">Father Name</label>
 									<form:input path="fatherName" class="form-control"
-										placeholder="fatherName" value="<%=fatherName%>" />
+										placeholder="Father Name" value="<%=fatherName%>" />
 
 									<%
 											}
