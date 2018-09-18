@@ -86,7 +86,7 @@ public class FacilityController {
 		return "/facility/index";
 	}
 	
-	@RequestMapping(value = "/{id}/addWorker.html", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/{id}/addWorker.html", method = RequestMethod.GET)
 	public ModelAndView addWorker(ModelMap model, HttpSession session,@PathVariable("id") int id){
 		
 		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findAll("FacilityWorkerType");
@@ -100,6 +100,19 @@ public class FacilityController {
 		model.addAttribute("facilityWorker", facilityWorkerObject);
 		
 		return new ModelAndView("facility/add-worker", "command", facilityWorker);
+       
+	}*/
+	
+	@RequestMapping(value = "/{id}/addWorker.html", method = RequestMethod.GET)
+	public String addWorker(ModelMap model, HttpSession session,@PathVariable("id") int id){
+		
+		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findAll("FacilityWorkerType");
+		List<FacilityTraining> CHCPTrainingList = facilityServiceFactory.getFacility("FacilityWorkerTrainingServiceImpl").findAll("FacilityTraining");
+		facilityHelperUtil.setWorkerTypeListToSession(session, workerTypeList);
+		facilityHelperUtil.setCHCPTrainingListToSession(session, CHCPTrainingList);
+		
+		session.setAttribute("facilityId", id);
+		return "facility/add-worker-temp";
        
 	}
 	
@@ -148,6 +161,19 @@ public class FacilityController {
 		return new ResponseEntity<>(new Gson().toJson(facilityWorkerList), OK);
        
 	}*/
+	
+	@RequestMapping(value = "/{id}/getWorkerList.html", method = RequestMethod.GET)
+	public String getWorkerList (ModelMap model, HttpSession session,
+			@PathVariable("id") int id){
+		
+		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
+		Map<String, Object> facilityMap = new HashMap<String, Object>();
+		facilityMap.put("facility", facility);
+		List<FacilityWorker> facilityWorkerList = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findAllByKeys(facilityMap, FacilityWorker.class);
+		facilityHelperUtil.setFacilityWorkerListToSession(session, facilityWorkerList);
+		return "facility/worker-list";
+       
+	}
 	
 	@RequestMapping(value = "/deleteWorker.html", method = RequestMethod.POST)
 	public ResponseEntity<String> deleteWorker (ModelMap model, HttpSession session,

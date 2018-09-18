@@ -47,6 +47,7 @@ public class FacilityHelperUtil {
 	}
 	
 	public FacilityWorker convertFacilityWorkerDTO(FacilityWorkerDTO facilityWorkerDTO) {
+		FacilityWorker facilityWorker = new FacilityWorker();
 		
 		facilityWorker.setName(facilityWorkerDTO.getName());
 		facilityWorker.setIdentifier(facilityWorkerDTO.getIdentifier());
