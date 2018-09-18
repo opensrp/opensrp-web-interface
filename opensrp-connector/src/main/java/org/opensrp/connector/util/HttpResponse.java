@@ -1,4 +1,4 @@
-package org.opensrp.common.util;
+package org.opensrp.connector.util;
 
 public class HttpResponse {
     private final boolean isSuccess;

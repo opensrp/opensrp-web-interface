@@ -259,6 +259,7 @@ public class OpenmrsUserServiceTest {
 		
 	}
 	
+	@Ignore
 	@Test
 	public void createUpdateGetAndDeleteProvider() throws JSONException {
 		String personUuid = createUpdateAndGetPerson();
@@ -284,6 +285,7 @@ public class OpenmrsUserServiceTest {
 		openMRSAPIService.delete("", userUuid, USER_URL);
 	}
 	
+	@Ignore
 	@Test
 	public void getUserByNane() throws JSONException {
 		JSONObject getProviderObject = openMRSAPIService.getByQuery("v=full&username=admin", USER_URL);

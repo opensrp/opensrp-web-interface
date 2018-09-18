@@ -166,4 +166,8 @@ public class DatabaseServiceImpl implements DatabaseService {
 		String funcQuery = "SELECT * FROM core.refresh_all_materialized_views()";
 		return databaseRepositoryImpl.executeSelectQuery(funcQuery);
 	}
+
+	public List<Object> findAllTest(Class<?> className) {
+		return databaseRepositoryImpl.findAllTest(className);
+	}
 }

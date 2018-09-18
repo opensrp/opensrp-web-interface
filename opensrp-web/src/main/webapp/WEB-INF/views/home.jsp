@@ -260,8 +260,7 @@
 				enabled : false
 			},
 			xAxis : {
-				categories :
-	<%=lineChartCategory%>
+				categories : <%=lineChartCategory%>
 		},
 			yAxis : {
 				title : {
@@ -299,8 +298,7 @@
 				} ]
 			},
 
-			series :
-	<%=lineChartData%>
+			series : <%=lineChartData%>
 		});
 	</script>
 

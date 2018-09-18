@@ -115,6 +115,7 @@
 												<td><%=provider%></td>												
 												<td>
 												<a href="<c:url value="/client/mother/${baseEntityId}/details.html"/>">Details</a>
+												/<a href="<c:url value="/client/mother/${baseEntityId}/edit.html"/>">Edit</a>
 												</td> 
 											</tr>
 											<%
