@@ -348,23 +348,37 @@ function getWorkerList(id) {
 }
 
 function deleteWorker(workerId) {
-	var gerWorkerDeleteURL ="${home}facility/deleteWorker.html";
+	var detailsPageUrl = "details.html";
+	var url = "/rest/api/v1/facility/deleteWorker";			
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	var formData = {
+            'workerId': workerId
+        };
 	
-	
-    $.ajax(gerWorkerDeleteURL, {
-        type: 'POST',
-        data: {
-            id: workerId
-        }
+	$.ajax({
+		contentType : "application/json",
+		type: "POST",
+        url: url,
+        data: JSON.stringify(formData), 
+        dataType : 'json',
         
-    }).done(function(isDeleted) {
-    	if(isDeleted==='ture'){
-    		var rowToDelete = 'table#dataTable tr#'+ workerId;
-    		$(rowToDelete).remove();
-    	}
-    }).error(function() {
-        //alert('Error');
-    });
+		timeout : 100000,
+		beforeSend: function(xhr) {				    
+			 xhr.setRequestHeader(header, token);
+		},
+		success : function(data) {
+		   //getWorkerList($("#facilityId").val());
+		   window.location.replace(detailsPageUrl);
+		},
+		error : function(e) {
+		   
+		},
+		done : function(e) {				    
+		    console.log("DONE");				    
+		}
+	});
+    
 }
 
 function showOnDataTable(){

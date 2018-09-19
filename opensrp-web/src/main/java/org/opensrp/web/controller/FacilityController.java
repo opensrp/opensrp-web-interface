@@ -175,15 +175,6 @@ public class FacilityController {
        
 	}
 	
-	@RequestMapping(value = "/deleteWorker.html", method = RequestMethod.POST)
-	public ResponseEntity<String> deleteWorker (ModelMap model, HttpSession session,
-			@RequestParam(value = "id", required = false) int workerId){
-		
-		FacilityWorker facilityWorker = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findById(workerId, "id", FacilityWorker.class);
-		boolean isDeleted = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").delete(facilityWorker);
-		return new ResponseEntity<>(new Gson().toJson(isDeleted), OK);
-	}
-	
 	
 	@RequestMapping(value = "/{id}/details.html", method = RequestMethod.GET)
 	public String facilityDetails(ModelMap model, HttpSession session,@PathVariable("id") int id){
