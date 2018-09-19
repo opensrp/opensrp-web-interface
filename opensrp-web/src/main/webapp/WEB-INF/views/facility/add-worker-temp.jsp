@@ -47,6 +47,12 @@ int facilityId= (Integer)session.getAttribute("facilityId");
 					</a>  |  <a  href="<c:url value="/facility/index.html"/>"> <strong>Community Clinic</strong>
 					</a>		
 		</div>
+		
+		
+		<div class="form-group">	
+		<a  href="/facility/<%=facilityId%>/details.html"> <strong>Details</strong> </a>		
+		</div>
+		
 			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> Add Worker
@@ -253,6 +259,7 @@ int facilityId= (Integer)session.getAttribute("facilityId");
 
 
 $("#workerInfo").submit(function(event) { 
+	var detailsPageUrl = "/facility/"+$("#facilityId").val()+"/details.html";
 	var url = "/rest/api/v1/facility/saveWorker";			
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
@@ -278,7 +285,8 @@ $("#workerInfo").submit(function(event) {
 			 xhr.setRequestHeader(header, token);
 		},
 		success : function(data) {
-		   getWorkerList($("#facilityId").val());
+		   //getWorkerList($("#facilityId").val());
+		   window.location.replace(detailsPageUrl);
 		},
 		error : function(e) {
 		   
@@ -297,8 +305,7 @@ $(document).ready(function() {
 	//$("#trainings").hide();
 	//$("#trainingDiv").hide();
 	getWorkerList($("#facilityId").val());
-	alert("in ready"+ i++ );
-	$('#dataTable').DataTable();
+	//$('#dataTable').DataTable();
 	
 });
 
@@ -332,8 +339,7 @@ function getWorkerList(id) {
     }).done(function(workerList) {
     	
     	$("#dataTableBody").html(workerList);
-    	refreshDataTable();
-    	alert(workerList);
+    	//refreshDataTable();
     	showOnDataTable();
     	
     }).error(function() {
@@ -362,15 +368,13 @@ function deleteWorker(workerId) {
 }
 
 function showOnDataTable(){
-	  alert("in show" + i++);
 	  $('#dataTable').DataTable();
 }
 function refreshDataTable(){
 	//$("#dataTable").datatable().fnDestroy();
     //$("#dataTable").dataTable();
-    alert("in destroy"+ i++);
-    var table = $('#dataTable').DataTable();
-    table.destroy();
+    /* var table = $('#dataTable').DataTable();
+    table.draw(); */
 	
 }
 

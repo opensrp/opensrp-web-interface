@@ -200,7 +200,7 @@ public class FacilityController {
 		
 		model.addAttribute("facility", facility);
 		
-		return "facility/details";
+		return "facility/details-temp";
        
 	}
 
