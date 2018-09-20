@@ -76,7 +76,7 @@ public class FacilityController {
 	                             HttpSession session) throws Exception {
 		
 		facilityServiceFactory.getFacility("FacilityServiceImpl").save(facility);
-		return new RedirectView("/facility/index.html");
+		return new RedirectView("/opensrp-dashboard/facility/index.html");
 		
 	}
 	
@@ -144,7 +144,7 @@ public class FacilityController {
 		facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").save(facilityWorker);
 		
 		//String facilityDetailsUrlString = "/facility/"+facilityWorker.getFacility().getId()+"/details.html";
-		String addWorkerUrlString = "/facility/"+facilityWorker.getFacility().getId()+"/addWorker.html";
+		String addWorkerUrlString = "/opensrp-dashboard/facility/"+facilityWorker.getFacility().getId()+"/addWorker.html";
 		return new RedirectView(addWorkerUrlString);
        
 	}

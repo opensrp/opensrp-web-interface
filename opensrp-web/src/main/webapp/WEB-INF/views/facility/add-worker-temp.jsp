@@ -50,7 +50,7 @@ int facilityId= (Integer)session.getAttribute("facilityId");
 		
 		
 		<div class="form-group">	
-		<a  href="/facility/<%=facilityId%>/details.html"> <strong>Details</strong> </a>		
+		<a  href="/opensrp-dashboard/facility/<%=facilityId%>/details.html"> <strong>Details</strong> </a>		
 		</div>
 		
 			<div class="card mb-3">
@@ -259,8 +259,8 @@ int facilityId= (Integer)session.getAttribute("facilityId");
 
 
 $("#workerInfo").submit(function(event) { 
-	var detailsPageUrl = "/facility/"+$("#facilityId").val()+"/details.html";
-	var url = "/rest/api/v1/facility/saveWorker";			
+	var detailsPageUrl = "/opensrp-dashboard/facility/"+$("#facilityId").val()+"/details.html";
+	var url = "/opensrp-dashboard/rest/api/v1/facility/saveWorker";			
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	var formData = {
@@ -330,7 +330,7 @@ function checkForTraining(){
 }
 
 function getWorkerList(id) {
-	var workerListURL ="getWorkerList.html";
+	var workerListURL ="/opensrp-dashboard/facility/getWorkerList.html";
 	//var workerListURL = "/rest/api/v1/facility/"+id+"/getWorkerList.html";
 	
     $.ajax(workerListURL, {
@@ -348,8 +348,8 @@ function getWorkerList(id) {
 }
 
 function deleteWorker(workerId) {
-	var detailsPageUrl = "details.html";
-	var url = "/rest/api/v1/facility/deleteWorker";			
+	var detailsPageUrl = "/opensrp-dashboard/facility/details.html";
+	var url = "/opensrp-dashboard/rest/api/v1/facility/deleteWorker";			
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	var formData = {

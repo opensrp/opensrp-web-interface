@@ -83,8 +83,9 @@ if (session.getAttribute("facilityWorkerList") != null) {
 				   </a>		
 		</div>
 		
-		<div class="form-group">	
-		<a  href="/facility/${facility.id}/addWorker.html"> <strong>Add Worker</strong> </a>		
+		<div class="form-group">
+		
+		<a  href="/opensrp-dashboard/facility/${facility.id}/addWorker.html"> <strong>Add Worker</strong> </a>		
 		</div>
 		
 		
