@@ -308,8 +308,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		catch (Exception e) {
 			session.close();
 		}
-
-		System.out.println("results size: " + results.size());
 		return results;
 	}
 

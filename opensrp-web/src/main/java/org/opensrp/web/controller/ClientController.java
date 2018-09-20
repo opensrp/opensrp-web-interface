@@ -109,7 +109,7 @@ public class ClientController {
 	@RequestMapping(value = "/mother/{baseEntityId}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editMother(HttpServletRequest request, HttpSession session, ModelMap model,
 			@PathVariable("baseEntityId") String baseEntityId) {
-		List<Object> data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfClient", "mother", baseEntityId);
+		List<Object> data = databaseServiceImpl.getDataFromViewByBEId("viewJsonDataConversionOfClient", clientServiceImpl.getWomanEntityName(), baseEntityId);
 		session.setAttribute("editData", data);
 
 		ClientEntity clientEntity =  new ClientEntity();
@@ -128,20 +128,26 @@ public class ClientController {
 
 	@RequestMapping(value = "/household.html", method = RequestMethod.GET)
 	public String showHouseholdList(HttpServletRequest request, HttpSession session, Model model) {
-		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "household");
+		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", clientServiceImpl.getHouseholdEntityNamePrefix() + "household");
 		return "/client/household";
 	}
 
 	@RequestMapping(value = "/mother.html", method = RequestMethod.GET)
 	public String showMotherList(HttpServletRequest request, HttpSession session, Model model) {
-		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "mother");
+		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", clientServiceImpl.getWomanEntityName());
 		return "/client/mother";
 	}
 
 	@RequestMapping(value = "/child.html", method = RequestMethod.GET)
 	public String showChildList(HttpServletRequest request, HttpSession session, Model model) {
-		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "child");
+		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", clientServiceImpl.getHouseholdEntityNamePrefix() + "child");
 		return "/client/child";
+	}
+
+	@RequestMapping(value = "/member.html", method = RequestMethod.GET)
+	public String showMemberList(HttpServletRequest request, HttpSession session, Model model) {
+		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "ec_member");
+		return "/client/member";
 	}
 
 	@RequestMapping(value = "/location", method = RequestMethod.GET)

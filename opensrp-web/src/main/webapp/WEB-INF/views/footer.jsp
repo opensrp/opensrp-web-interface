@@ -10,7 +10,9 @@
  <footer class="sticky-footer">
       <div class="container">
         <div class="text-center">
-          <small>Copyright © mPower Social Enterprise Ltd. 2018</small>
+          <small><img
+		src="<c:url value="/resources/img/community.png"/>" style = "height: 46px">
+		Copyright © mPower Social Enterprise Ltd. 2018</small>
         </div>
       </div>
     </footer>

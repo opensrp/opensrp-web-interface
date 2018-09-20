@@ -9,7 +9,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
 	id="mainNav">
 	<a class="navbar-brand" href="<c:url value="/"/>"><img
-		src="<c:url value="/resources/img/logo-total.png"/>"></a>
+		src="<c:url value="/resources/img/ministry.png"/>" style = "height: 46px"></a>
 
 	<div class="collapse navbar-collapse" id="navbarResponsive">
 
@@ -59,7 +59,12 @@
 					<a class="dropdown-item"
 						href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
 					</a>
-						
+
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/client/member.html"/>"> <strong>Member</strong>
+					</a>
+
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/duplicateClient.html"/>"> <strong>Duplicate Client</strong>
