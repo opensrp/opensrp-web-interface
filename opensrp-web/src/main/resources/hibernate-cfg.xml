@@ -35,7 +35,11 @@
 				<value>org.opensrp.acl.entity.Permission</value>
 				<value>org.opensrp.acl.entity.Location</value>
 				<value>org.opensrp.acl.entity.LocationTag</value>	
-				<value>org.opensrp.acl.entity.DuplicateMatchingCriteriaDefinition</value>			
+				<value>org.opensrp.acl.entity.DuplicateMatchingCriteriaDefinition</value>	
+				<value>org.opensrp.facility.entity.Facility</value>	
+				<value>org.opensrp.facility.entity.FacilityWorker</value>
+				<value>org.opensrp.facility.entity.FacilityTraining</value>
+				<value>org.opensrp.facility.entity.FacilityWorkerType</value>	
 			</list>
 		</property>
 		<property name="hibernateProperties">
