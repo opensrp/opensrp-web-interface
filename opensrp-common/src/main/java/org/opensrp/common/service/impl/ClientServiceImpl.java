@@ -14,12 +14,13 @@ import org.json.JSONObject;
 import org.opensrp.common.entity.ClientEntity;
 import org.opensrp.common.interfaces.DatabaseService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
+import org.opensrp.common.util.EntityProperties;
 import org.opensrp.common.visualization.HighChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClientServiceImpl implements DatabaseService {
+public class ClientServiceImpl extends EntityProperties implements DatabaseService {
 
 	private static final Logger logger = Logger.getLogger(ClientServiceImpl.class);
 
@@ -194,6 +195,16 @@ public class ClientServiceImpl implements DatabaseService {
 		}
 
 		openSRPClientServiceImpl.update(jsonObject);
+	}
+
+	public String getHouseholdEntityNamePrefix() {
+		System.out.println("entity properties: " + PROJECT_ENTITY);
+		return PROJECT_ENTITY;
+	}
+
+	public String getWomanEntityName() {
+		System.out.println("woman properties: " + WOMAN_ENTITY);
+		return WOMAN_ENTITY;
 	}
 }
 

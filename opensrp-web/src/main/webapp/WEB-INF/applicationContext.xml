@@ -22,7 +22,7 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 	
-	<context:property-placeholder location="classpath:opensrp.properties,classpath:hibernate.properties"/>
+	<context:property-placeholder location="classpath:opensrp.properties,classpath:hibernate.properties,classpath:project.properties"/>
 	<!-- <import resource="classpath:thyme-leaf-context.xml"/> -->
 	<import resource="classpath:mvc-context.xml" />
 	<import resource="classpath:hibernate-cfg.xml" />

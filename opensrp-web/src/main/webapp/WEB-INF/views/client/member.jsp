@@ -35,7 +35,7 @@
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Household List
+					<i class="fa fa-table"></i> Child List
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -47,38 +47,46 @@
 										style="width: 100%;">
 										<thead>
 											<tr>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Created Date</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Ward</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">HHID</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Household Code</th>
-												<th tabindex="0" rowspan="1" colspan="1"
+												    <th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">First Name</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Phone Number</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Provider</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 79px;">Last Name</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Gender</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 106px;">Birth Date</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Ward</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">NID</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">BRID</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 43px;">Provider</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Action</th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Created Date</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Ward</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">HHID</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Household Code</th>
-												<th tabindex="0" rowspan="1" colspan="1"
+												    <th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">First Name</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Phone Number</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Provider</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 79px;">Last Name</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Gender</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 106px;">Birth Date</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Ward</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">NID</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">BRID</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 43px;">Provider</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Action</th>
 											</tr>
 										</tfoot>
 										<tbody>
@@ -89,29 +97,32 @@
 													Iterator dataListIterator = dataList.iterator();
 													while (dataListIterator.hasNext()) {
 														Object[] clientObject = (Object[]) dataListIterator.next();
-
-														String created_date = String.valueOf(clientObject[5]);
+														String birthDate = String.valueOf(clientObject[3]);
 														String firstName = String.valueOf(clientObject[9]);
-														String gobhhid = String.valueOf(clientObject[11]);
-														String household_code = String.valueOf(clientObject[12]);
-														String phone_number = String.valueOf(clientObject[17]);
+														String gender = String.valueOf(clientObject[10]);
+														String lastName = String.valueOf(clientObject[13]);
+														String nid = String.valueOf(clientObject[15]);
+														String brid = String.valueOf(clientObject[16]);
 														String ward = String.valueOf(clientObject[23]);
 														String provider = String.valueOf(clientObject[27]);
 
 														if(firstName.equalsIgnoreCase("null")) {
 															firstName = "";
 														}
-														if(created_date.equalsIgnoreCase("null")) {
-															created_date = "";
+														if(birthDate.equalsIgnoreCase("null")) {
+															birthDate = "";
 														}
-														if(household_code.equalsIgnoreCase("null")) {
-															household_code = "";
+														if(lastName.equalsIgnoreCase("null")) {
+															lastName = "";
 														}
-														if(gobhhid.equalsIgnoreCase("null")) {
-															gobhhid = "";
+														if(nid.equalsIgnoreCase("null")) {
+															nid = "";
 														}
-														if(phone_number.equalsIgnoreCase("null")) {
-															phone_number = "";
+														if(brid.equalsIgnoreCase("null")) {
+															brid = "";
+														}
+														if(gender.equalsIgnoreCase("null")) {
+															gender = "";
 														}
 														if(ward.equalsIgnoreCase("null")) {
 															ward = "";
@@ -121,13 +132,17 @@
 														}
 											%>
 											<tr>
-												<td><%=created_date%></td>
-												<td><%=ward%></td>
-												<td><%=gobhhid%></td>
-												<td><%=household_code%></td>
 												<td><%=firstName%></td>
-												<td><%=phone_number%></td>
+												<td><%=lastName%></td>
+												<td><%=gender%></td>
+												<td><%=birthDate%></td>
+												<td><%=ward%></td>
+												<td><%=nid%></td>
+												<td><%=brid%></td>
 												<td><%=provider%></td>
+												<td>
+												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>		
+												</td> 
 											</tr>
 											<%
 												}

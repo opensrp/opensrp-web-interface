@@ -105,6 +105,27 @@
 														String id = String.valueOf(clientObject[0]);
 														pageContext.setAttribute("baseEntityId", baseEntityId);
 														
+														if(firstName.equalsIgnoreCase("null")) {
+															firstName = "";
+														}
+														if(birthDate.equalsIgnoreCase("null")) {
+															birthDate = "";
+														}
+														if(spouseName.equalsIgnoreCase("null")) {
+															spouseName = "";
+														}
+														if(nid.equalsIgnoreCase("null")) {
+															nid = "";
+														}
+														if(lmpDate.equalsIgnoreCase("null")) {
+															lmpDate = "";
+														}
+														if(phoneNumber.equalsIgnoreCase("null")) {
+															phoneNumber = "";
+														}
+														if(provider.equalsIgnoreCase("null")) {
+															provider = "";
+														}
 											%>
 											<tr>
 												<td><%=firstName%></td>
