@@ -2,9 +2,9 @@ package org.opensrp.connector.openmrs.service.impl;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.common.util.HttpResponse;
-import org.opensrp.common.util.HttpUtil;
 import org.opensrp.connector.openmrs.service.APIService;
+import org.opensrp.connector.util.HttpResponse;
+import org.opensrp.connector.util.HttpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

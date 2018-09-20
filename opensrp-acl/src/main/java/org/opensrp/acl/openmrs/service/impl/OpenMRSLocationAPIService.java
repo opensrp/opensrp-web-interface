@@ -9,12 +9,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.acl.entity.Location;
 import org.opensrp.acl.openmrs.service.OpenMRSConnector;
+import org.opensrp.connector.openmrs.service.APIServiceFactory;
 import org.opensrp.connector.openmrs.service.impl.OpenMRSAPIServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OpenMRSLocationAPIService implements OpenMRSConnector<Location> {
+public class OpenMRSLocationAPIService implements OpenMRSConnector<Object> {
 	
 	final String LOCATION_URL = "ws/rest/v1/location";
 	
@@ -27,17 +28,19 @@ public class OpenMRSLocationAPIService implements OpenMRSConnector<Location> {
 	private static String PAYLOAD = "";
 	
 	@Autowired
-	private OpenMRSAPIServiceImpl openMRSAPIServiceImpl;
+	private APIServiceFactory apiServiceFactory;
 	
 	@Override
-	public Location add(Location location) throws JSONException {
+	public Location add(Object locationOb) throws JSONException {
+		Location location = (Location) locationOb;
 		String locationUuid = "";
 		String query = "";
 		JSONArray existinglocation = new JSONArray();
 		query = "q=" + location.getName();
 		existinglocation = getByQuery(query);
 		if (existinglocation.length() == 0) {
-			JSONObject createdLocation = openMRSAPIServiceImpl.add(PAYLOAD, makeLocationObject(location), LOCATION_URL);
+			JSONObject createdLocation = apiServiceFactory.getApiService("openmrs").add(PAYLOAD,
+			    makeLocationObject(location), LOCATION_URL);
 			if (createdLocation.has("uuid")) {
 				locationUuid = (String) createdLocation.get("uuid");
 				location.setUuid(locationUuid);
@@ -55,9 +58,11 @@ public class OpenMRSLocationAPIService implements OpenMRSConnector<Location> {
 	}
 	
 	@Override
-	public String update(Location location, String uuid) throws JSONException {
+	public String update(Object locationOb, String uuid) throws JSONException {
+		Location location = (Location) locationOb;
 		String locationUuid = "";
-		JSONObject updatedLocation = openMRSAPIServiceImpl.update(PAYLOAD, makeLocationObject(location), uuid, LOCATION_URL);
+		JSONObject updatedLocation = apiServiceFactory.getApiService("openmrs").update(PAYLOAD,
+		    makeLocationObject(location), uuid, LOCATION_URL);
 		if (updatedLocation.has("uuid")) {
 			locationUuid = (String) updatedLocation.get("uuid");
 		} else {
@@ -102,7 +107,7 @@ public class OpenMRSLocationAPIService implements OpenMRSConnector<Location> {
 	
 	@Override
 	public JSONArray getByQuery(String query) throws JSONException {
-		JSONObject location = openMRSAPIServiceImpl.getByQuery(query, LOCATION_URL);
+		JSONObject location = apiServiceFactory.getApiService("openmrs").getByQuery(query, LOCATION_URL);
 		JSONArray locationArray = new JSONArray();
 		locationArray = (JSONArray) location.get("results");
 		return locationArray;

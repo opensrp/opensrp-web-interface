@@ -24,10 +24,10 @@
 			 <a  href="<c:url value="/client/household.html"/>"> <strong>Household</strong> 
 			 </a>  |<a  href="<c:url value="/client/mother.html"/>"> <strong>Mother</strong>
 			 </a>  |<a  href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
-			 </a>  |<a  href="<c:url value="/client/duplicateClient.html"/>"> <strong>Similar Client</strong>
-			 </a>  |<a  href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Similar Event</strong>
-			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Similarity Definition of Client</strong>
-			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Similarity Definition of Event</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateClient.html"/>"> <strong>Duplicate Client</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Duplicate Event</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Duplicate Definition of Client</strong>
+			 </a>  |<a  href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Duplicate Definition of Event</strong>
 			 </a>  		
 			</div>
 
@@ -35,7 +35,7 @@
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Mother List
+					<i class="fa fa-table"></i> Child List
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -47,38 +47,46 @@
 										style="width: 100%;">
 										<thead>
 											<tr>
-												<th tabindex="0" rowspan="1" colspan="1"
+												    <th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">First Name</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">NID</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Spouse Name</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">LMP Date</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Phone Number</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Provider</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Action</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 79px;">Last Name</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Gender</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 106px;">Birth Date</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Ward</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">NID</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">BRID</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 43px;">Provider</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Action</th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
-												<th tabindex="0" rowspan="1" colspan="1"
+												    <th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">First Name</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">NID</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Spouse Name</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">LMP Date</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Phone Number</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Provider</th>
-												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Action</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 79px;">Last Name</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Gender</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 106px;">Birth Date</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Ward</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">NID</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">BRID</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 43px;">Provider</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">Action</th>
 											</tr>
 										</tfoot>
 										<tbody>
@@ -89,39 +97,35 @@
 													Iterator dataListIterator = dataList.iterator();
 													while (dataListIterator.hasNext()) {
 														Object[] clientObject = (Object[]) dataListIterator.next();
-														String baseEntityId = String.valueOf(clientObject[1]);
-														String addressType = String.valueOf(clientObject[2]);
 														String birthDate = String.valueOf(clientObject[3]);
-														String country = String.valueOf(clientObject[4]);
-														String createdDate = String.valueOf(clientObject[5]);
-														String editedDate = String.valueOf(clientObject[6]);
 														String firstName = String.valueOf(clientObject[9]);
+														String gender = String.valueOf(clientObject[10]);
+														String lastName = String.valueOf(clientObject[13]);
 														String nid = String.valueOf(clientObject[15]);
-														String phoneNumber = String.valueOf(clientObject[17]);
-														String spouseName = String.valueOf(clientObject[19]);
-														String lmpDate = String.valueOf(clientObject[24]);
+														String brid = String.valueOf(clientObject[16]);
+														String ward = String.valueOf(clientObject[23]);
 														String provider = String.valueOf(clientObject[27]);
-														
-														String id = String.valueOf(clientObject[0]);
-														pageContext.setAttribute("baseEntityId", baseEntityId);
-														
+
 														if(firstName.equalsIgnoreCase("null")) {
 															firstName = "";
 														}
 														if(birthDate.equalsIgnoreCase("null")) {
 															birthDate = "";
 														}
-														if(spouseName.equalsIgnoreCase("null")) {
-															spouseName = "";
+														if(lastName.equalsIgnoreCase("null")) {
+															lastName = "";
 														}
 														if(nid.equalsIgnoreCase("null")) {
 															nid = "";
 														}
-														if(lmpDate.equalsIgnoreCase("null")) {
-															lmpDate = "";
+														if(brid.equalsIgnoreCase("null")) {
+															brid = "";
 														}
-														if(phoneNumber.equalsIgnoreCase("null")) {
-															phoneNumber = "";
+														if(gender.equalsIgnoreCase("null")) {
+															gender = "";
+														}
+														if(ward.equalsIgnoreCase("null")) {
+															ward = "";
 														}
 														if(provider.equalsIgnoreCase("null")) {
 															provider = "";
@@ -129,14 +133,15 @@
 											%>
 											<tr>
 												<td><%=firstName%></td>
+												<td><%=lastName%></td>
+												<td><%=gender%></td>
+												<td><%=birthDate%></td>
+												<td><%=ward%></td>
 												<td><%=nid%></td>
-												<td><%=spouseName%></td>
-												<td><%=lmpDate%></td>
-												<td><%=phoneNumber%></td>
-												<td><%=provider%></td>												
+												<td><%=brid%></td>
+												<td><%=provider%></td>
 												<td>
-												<a href="<c:url value="/client/mother/${baseEntityId}/details.html"/>">Details</a>
-												/<a href="<c:url value="/client/mother/${baseEntityId}/edit.html"/>">Edit</a>
+												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>		
 												</td> 
 											</tr>
 											<%

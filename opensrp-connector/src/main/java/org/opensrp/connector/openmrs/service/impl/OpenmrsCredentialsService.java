@@ -3,7 +3,7 @@ package org.opensrp.connector.openmrs.service.impl;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.opensrp.common.util.HttpUtil;
+import org.opensrp.connector.util.HttpUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

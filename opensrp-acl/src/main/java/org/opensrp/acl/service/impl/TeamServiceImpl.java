@@ -18,6 +18,8 @@ import org.opensrp.acl.entity.Location;
 import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.entity.Team;
 import org.opensrp.acl.entity.User;
+import org.opensrp.acl.openmrs.service.OpenMRSConnector;
+import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
 import org.opensrp.acl.openmrs.service.impl.OpenMRSTeamAPIService;
 import org.opensrp.acl.service.AclService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
@@ -39,7 +41,7 @@ public class TeamServiceImpl implements AclService {
 	private SessionFactory sessionFactory;
 	
 	@Autowired
-	private OpenMRSTeamAPIService openMRSTeamAPIService;
+	private OpenMRSServiceFactory openMRSServiceFactory;
 	
 	@Autowired
 	private UserServiceImpl userServiceImpl;
@@ -52,7 +54,7 @@ public class TeamServiceImpl implements AclService {
 	@Override
 	public <T> long save(T t) throws Exception {
 		Team team = (Team) t;
-		team = openMRSTeamAPIService.add(team);
+		team = (Team) openMRSServiceFactory.getOpenMRSConnector("team").add(team);
 		long createdTeam = 0;
 		if (!team.getUuid().isEmpty()) {
 			createdTeam = databaseRepositoryImpl.save(team);
@@ -69,7 +71,7 @@ public class TeamServiceImpl implements AclService {
 	public <T> int update(T t) throws JSONException {
 		Team team = (Team) t;
 		int updatedTag = 0;
-		String uuid = openMRSTeamAPIService.update(team, team.getUuid());
+		String uuid = openMRSServiceFactory.getOpenMRSConnector("team").update(team, team.getUuid());
 		if (!uuid.isEmpty()) {
 			updatedTag = databaseRepositoryImpl.update(team);
 		} else {

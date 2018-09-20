@@ -252,6 +252,17 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
 	}
 
+	
+	public <T> List<T> findAllTest(Class<?> className) {
+		Session session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(className);
+		@SuppressWarnings("unchecked")
+		List<T> result = criteria.list();
+		session.close();
+		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	public <T> List<T> list(int result, int offsetreal, Class<?> entityClassName) {
 		Session session = sessionFactory.openSession();

@@ -46,6 +46,9 @@ public class Location implements Serializable {
 	@Column(name = "uuid")
 	private String uuid;
 	
+	@Column(name = "code")
+	private String code;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
 	@CreationTimestamp
@@ -139,6 +142,14 @@ public class Location implements Serializable {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getCode() {
+		return code;
+	}
+	
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 }

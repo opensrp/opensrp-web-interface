@@ -14,12 +14,13 @@ import org.json.JSONObject;
 import org.opensrp.acl.entity.Location;
 import org.opensrp.acl.entity.TeamMember;
 import org.opensrp.acl.openmrs.service.OpenMRSConnector;
+import org.opensrp.connector.openmrs.service.APIServiceFactory;
 import org.opensrp.connector.openmrs.service.impl.OpenMRSAPIServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OpenMRSTeamMemberAPIService implements OpenMRSConnector<TeamMember> {
+public class OpenMRSTeamMemberAPIService implements OpenMRSConnector<Object> {
 	
 	private static final String TEAM_MEMBER_URL = "ws/rest/v1/team/teammember";
 	
@@ -36,12 +37,14 @@ public class OpenMRSTeamMemberAPIService implements OpenMRSConnector<TeamMember>
 	private static String PAYLOAD = "";
 	
 	@Autowired
-	private OpenMRSAPIServiceImpl openMRSAPIServiceImpl;
+	private APIServiceFactory apiServiceFactory;
 	
 	@Override
-	public TeamMember add(TeamMember teamMember) throws JSONException {
+	public TeamMember add(Object teamMemberOb) throws JSONException {
+		TeamMember teamMember = (TeamMember) teamMemberOb;
 		String teamMemberUuid = "";
-		JSONObject createdTeamMember = openMRSAPIServiceImpl.add(PAYLOAD, makeTeamMemebrObject(teamMember), TEAM_MEMBER_URL);
+		JSONObject createdTeamMember = apiServiceFactory.getApiService("openmrs").add(PAYLOAD,
+		    makeTeamMemebrObject(teamMember), TEAM_MEMBER_URL);
 		System.err.println(createdTeamMember);
 		if (createdTeamMember.has("uuid")) {
 			teamMemberUuid = (String) createdTeamMember.get("uuid");
@@ -53,10 +56,11 @@ public class OpenMRSTeamMemberAPIService implements OpenMRSConnector<TeamMember>
 	}
 	
 	@Override
-	public String update(TeamMember teamMember, String uuid) throws JSONException {
+	public String update(Object teamMemberOb, String uuid) throws JSONException {
+		TeamMember teamMember = (TeamMember) teamMemberOb;
 		String teamMemberUuid = "";
-		JSONObject updatedTeamMember = openMRSAPIServiceImpl.update(PAYLOAD, makeTeamMemebrObject(teamMember), uuid,
-		    TEAM_MEMBER_URL);
+		JSONObject updatedTeamMember = apiServiceFactory.getApiService("openmrs").update(PAYLOAD,
+		    makeTeamMemebrObject(teamMember), uuid, TEAM_MEMBER_URL);
 		if (updatedTeamMember.has("uuid")) {
 			teamMemberUuid = (String) updatedTeamMember.get("uuid");
 		}

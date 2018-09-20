@@ -32,7 +32,8 @@
 				    <a  href="<c:url value="/location/tag/list.html"/>"> <strong> Manage Tags</strong> 
 					</a>  |  <a  href="<c:url value="/location/location.html"/>"> <strong>Manage Locations</strong>
 					</a>|  <a  href="<c:url value="/location/hierarchy.html"/>"> <strong>View Hierarchy</strong>
-					</a>		
+					</a> |  <a  href="<c:url value="/location/upload_csv.html"/>"> <strong>Upload location</strong>
+					</a>	
 		</div>
 						
 			<div class="card mb-3">

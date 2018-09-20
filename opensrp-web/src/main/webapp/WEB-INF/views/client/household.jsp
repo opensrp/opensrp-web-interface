@@ -48,9 +48,9 @@
 										<thead>
 											<tr>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Base Entity Id</th>
+													style="width: 140px;">Created Date</th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Address Type</th>
+													style="width: 79px;">Ward</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 43px;">HHID</th>
 												<th tabindex="0" rowspan="1" colspan="1"
@@ -66,9 +66,9 @@
 										<tfoot>
 											<tr>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Base Entity Id</th>
+													style="width: 140px;">Created Date</th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Address Type</th>
+													style="width: 79px;">Ward</th>
 												<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 43px;">HHID</th>
 												<th tabindex="0" rowspan="1" colspan="1"
@@ -89,24 +89,43 @@
 													Iterator dataListIterator = dataList.iterator();
 													while (dataListIterator.hasNext()) {
 														Object[] clientObject = (Object[]) dataListIterator.next();
-														String base_entity_id = String.valueOf(clientObject[1]);
-														String address_type = String.valueOf(clientObject[2]);
-														String birth_date = String.valueOf(clientObject[3]);
-														String country = String.valueOf(clientObject[4]);
+
 														String created_date = String.valueOf(clientObject[5]);
-														String edited_date = String.valueOf(clientObject[6]);
-														String first_name = String.valueOf(clientObject[9]);
+														String firstName = String.valueOf(clientObject[9]);
 														String gobhhid = String.valueOf(clientObject[11]);
 														String household_code = String.valueOf(clientObject[12]);
 														String phone_number = String.valueOf(clientObject[17]);
+														String ward = String.valueOf(clientObject[23]);
 														String provider = String.valueOf(clientObject[27]);
+
+														if(firstName.equalsIgnoreCase("null")) {
+															firstName = "";
+														}
+														if(created_date.equalsIgnoreCase("null")) {
+															created_date = "";
+														}
+														if(household_code.equalsIgnoreCase("null")) {
+															household_code = "";
+														}
+														if(gobhhid.equalsIgnoreCase("null")) {
+															gobhhid = "";
+														}
+														if(phone_number.equalsIgnoreCase("null")) {
+															phone_number = "";
+														}
+														if(ward.equalsIgnoreCase("null")) {
+															ward = "";
+														}
+														if(provider.equalsIgnoreCase("null")) {
+															provider = "";
+														}
 											%>
 											<tr>
-												<td><%=base_entity_id%></td>
-												<td><%=address_type%></td>
+												<td><%=created_date%></td>
+												<td><%=ward%></td>
 												<td><%=gobhhid%></td>
 												<td><%=household_code%></td>
-												<td><%=first_name%></td>
+												<td><%=firstName%></td>
 												<td><%=phone_number%></td>
 												<td><%=provider%></td>
 											</tr>
