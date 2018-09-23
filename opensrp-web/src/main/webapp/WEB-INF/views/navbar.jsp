@@ -60,6 +60,12 @@
 						href="<c:url value="/facility/index.html"/>"> <strong>
 							Community Clinic</strong>
 					</a>
+					
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/facility/upload_csv.html"/>"> <strong>
+							Upload Facility</strong>
+					</a>
 		
 
 				</div></li>

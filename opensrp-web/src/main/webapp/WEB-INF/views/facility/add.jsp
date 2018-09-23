@@ -36,8 +36,9 @@ String selectedLocationName = (String)session.getAttribute("locationName");
 			<div class="form-group">				
 				   <a  href="<c:url value="/facility/add.html"/>" > <strong>Registration</strong> 
 					</a>  |  <a  href="<c:url value="/facility/index.html"/>"> <strong>Community Clinic</strong>
-					</a>		
-		    </div>
+					</a>  |  <a  href="<c:url value="/facility/upload_csv.html"/>"> <strong>Upload Facility</strong>
+					</a>			
+		</div>
 			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> Community Clinic Registration
@@ -89,21 +90,7 @@ String selectedLocationName = (String)session.getAttribute("locationName");
 								</div>
 							</div>
 						</div>
-						<form:hidden path="location" id="location" value="" />
-						<%-- <form:hidden path="location" id="location" value="<%=selectedLocationName%>" />
 						
-						<div class="form-group">							
-							<div class="row">									
-								<div class="col-5">
-									<div id="cm" class="ui-widget">
-										<label>Search Location </label>
-										<select id="combobox" class="form-control">
-										</select>
-										<span class="text-red">${locationUuidErrorMessage}</span>
-									</div>
-								</div>									
-							</div>
-						</div> --%>
 						
 						<div class="form-group">
 							<div class="row">

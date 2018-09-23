@@ -45,7 +45,8 @@ int facilityId= (Integer)session.getAttribute("facilityId");
 		<div class="form-group">				
 				   <a  href="<c:url value="/facility/add.html"/>" > <strong>Registration</strong> 
 					</a>  |  <a  href="<c:url value="/facility/index.html"/>"> <strong>Community Clinic</strong>
-					</a>		
+					</a>  |  <a  href="<c:url value="/facility/upload_csv.html"/>"> <strong>Upload Facility</strong>
+					</a>			
 		</div>
 		
 		

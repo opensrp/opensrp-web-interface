@@ -9,8 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -19,7 +17,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.opensrp.acl.entity.Location;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,17 +41,53 @@ public class Facility implements Serializable {
 	@Column(name = "hrm_id")
 	private String hrmId;
 
-	@NotNull
+	
 	@Column(name = "latitude")
 	private String latitude;
 	
-	@NotNull
+	
 	@Column(name = "longitude")
 	private String longitude;
 	
-	@ManyToOne()
-	@JoinColumn(name = "location_id", referencedColumnName = "id")
-	private Location location;
+	
+	@Column(name = "division")
+	private String division;
+	
+	
+	@Column(name = "division_code")
+	private String divisionCode;
+	
+	
+	@Column(name = "district")
+	private String district;
+	
+	
+	@Column(name = "district_code")
+	private String districtCode;
+	
+	
+	@Column(name = "upazilla")
+	private String upazilla;
+	
+	
+	@Column(name = "upazilla_code")
+	private String upazillaCode;
+	
+	
+	@Column(name = "union_name")
+	private String union;
+	
+	
+	@Column(name = "union_code")
+	private String unionCode;
+	
+	
+	@Column(name = "ward")
+	private String ward;
+	
+	
+	@Column(name = "ward_code")
+	private String wardCode;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
@@ -66,7 +99,6 @@ public class Facility implements Serializable {
 	@UpdateTimestamp
 	private Date updated = new Date();
 
-	
 
 	public int getId() {
 		return id;
@@ -108,6 +140,86 @@ public class Facility implements Serializable {
 		this.longitude = longitude;
 	}
 
+	public String getDivision() {
+		return division;
+	}
+
+	public void setDivision(String division) {
+		this.division = division;
+	}
+
+	public String getDivisionCode() {
+		return divisionCode;
+	}
+
+	public void setDivisionCode(String divisionCode) {
+		this.divisionCode = divisionCode;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+
+	public String getDistrictCode() {
+		return districtCode;
+	}
+
+	public void setDistrictCode(String districtCode) {
+		this.districtCode = districtCode;
+	}
+
+	public String getUpazilla() {
+		return upazilla;
+	}
+
+	public void setUpazilla(String upazilla) {
+		this.upazilla = upazilla;
+	}
+
+	public String getUpazillaCode() {
+		return upazillaCode;
+	}
+
+	public void setUpazillaCode(String upazillaCode) {
+		this.upazillaCode = upazillaCode;
+	}
+
+	public String getUnion() {
+		return union;
+	}
+
+	public void setUnion(String union) {
+		this.union = union;
+	}
+
+	public String getUnionCode() {
+		return unionCode;
+	}
+
+	public void setUnionCode(String unionCode) {
+		this.unionCode = unionCode;
+	}
+
+	public String getWard() {
+		return ward;
+	}
+
+	public void setWard(String ward) {
+		this.ward = ward;
+	}
+
+	public String getWardCode() {
+		return wardCode;
+	}
+
+	public void setWardCode(String wardCode) {
+		this.wardCode = wardCode;
+	}
+
 	public Date getCreated() {
 		return created;
 	}
@@ -124,14 +236,6 @@ public class Facility implements Serializable {
 		this.updated = updated;
 	}
 
-	public Location getLocation() {
-		return location;
-	}
-
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -140,17 +244,36 @@ public class Facility implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-
-		result = prime * result + id;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((hrmId == null) ? 0 : hrmId.hashCode());
-		result = prime * result + ((latitude == null) ? 0 : latitude.hashCode());
-		result = prime * result + ((longitude == null) ? 0 : longitude.hashCode());
-		result = prime * result + ((location == null) ? 0 : location.hashCode());
 		result = prime * result + ((created == null) ? 0 : created.hashCode());
+		result = prime * result
+				+ ((district == null) ? 0 : district.hashCode());
+		result = prime * result
+				+ ((districtCode == null) ? 0 : districtCode.hashCode());
+		result = prime * result
+				+ ((division == null) ? 0 : division.hashCode());
+		result = prime * result
+				+ ((divisionCode == null) ? 0 : divisionCode.hashCode());
+		result = prime * result + ((hrmId == null) ? 0 : hrmId.hashCode());
+		result = prime * result + id;
+		result = prime * result
+				+ ((latitude == null) ? 0 : latitude.hashCode());
+		result = prime * result
+				+ ((longitude == null) ? 0 : longitude.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((union == null) ? 0 : union.hashCode());
+		result = prime * result
+				+ ((unionCode == null) ? 0 : unionCode.hashCode());
+		result = prime * result
+				+ ((upazilla == null) ? 0 : upazilla.hashCode());
+		result = prime * result
+				+ ((upazillaCode == null) ? 0 : upazillaCode.hashCode());
 		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
+		result = prime * result + ((ward == null) ? 0 : ward.hashCode());
+		result = prime * result
+				+ ((wardCode == null) ? 0 : wardCode.hashCode());
 		return result;
 	}
+	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -161,67 +284,101 @@ public class Facility implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Facility other = (Facility) obj;
-
-		if (id != other.id)
-			return false;
-
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-
-		if (hrmId == null) {
-			if (other.hrmId != null)
-				return false;
-		} else if (!hrmId.equals(other.hrmId))
-			return false;
-
-		if (latitude == null) {
-			if (other.latitude != null)
-				return false;
-		} else if (!latitude.equals(other.latitude))
-			return false;
-		
-		if (longitude == null) {
-			if (other.longitude != null)
-				return false;
-		} else if (!longitude.equals(other.longitude))
-			return false;
-		
-		if (location == null) {
-			if (other.location != null)
-				return false;
-		} else if (!location.equals(other.location))
-			return false;
-
 		if (created == null) {
 			if (other.created != null)
 				return false;
 		} else if (!created.equals(other.created))
 			return false;
-
+		if (district == null) {
+			if (other.district != null)
+				return false;
+		} else if (!district.equals(other.district))
+			return false;
+		if (districtCode == null) {
+			if (other.districtCode != null)
+				return false;
+		} else if (!districtCode.equals(other.districtCode))
+			return false;
+		if (division == null) {
+			if (other.division != null)
+				return false;
+		} else if (!division.equals(other.division))
+			return false;
+		if (divisionCode == null) {
+			if (other.divisionCode != null)
+				return false;
+		} else if (!divisionCode.equals(other.divisionCode))
+			return false;
+		if (hrmId == null) {
+			if (other.hrmId != null)
+				return false;
+		} else if (!hrmId.equals(other.hrmId))
+			return false;
+		if (id != other.id)
+			return false;
+		if (latitude == null) {
+			if (other.latitude != null)
+				return false;
+		} else if (!latitude.equals(other.latitude))
+			return false;
+		if (longitude == null) {
+			if (other.longitude != null)
+				return false;
+		} else if (!longitude.equals(other.longitude))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (union == null) {
+			if (other.union != null)
+				return false;
+		} else if (!union.equals(other.union))
+			return false;
+		if (unionCode == null) {
+			if (other.unionCode != null)
+				return false;
+		} else if (!unionCode.equals(other.unionCode))
+			return false;
+		if (upazilla == null) {
+			if (other.upazilla != null)
+				return false;
+		} else if (!upazilla.equals(other.upazilla))
+			return false;
+		if (upazillaCode == null) {
+			if (other.upazillaCode != null)
+				return false;
+		} else if (!upazillaCode.equals(other.upazillaCode))
+			return false;
 		if (updated == null) {
 			if (other.updated != null)
 				return false;
 		} else if (!updated.equals(other.updated))
 			return false;
-
+		if (ward == null) {
+			if (other.ward != null)
+				return false;
+		} else if (!ward.equals(other.ward))
+			return false;
+		if (wardCode == null) {
+			if (other.wardCode != null)
+				return false;
+		} else if (!wardCode.equals(other.wardCode))
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Facility" + " [" 
-				+ "id=" + id
-				+ ", name=" + name 
-				+ ", hrmId=" + hrmId
-				+ ", latitude=" + latitude 
-				+ ", longitude=" + longitude 
-				+ ", location=" + location 
-				+ ", created=" + created 
-				+ ", updated="+ updated 
-				+ "]";
+		return "Facility [id=" + id + ", name=" + name + ", hrmId=" + hrmId
+				+ ", latitude=" + latitude + ", longitude=" + longitude
+				+ ", division=" + division + ", divisionCode=" + divisionCode
+				+ ", district=" + district + ", districtCode=" + districtCode
+				+ ", upazilla=" + upazilla + ", upazillaCode=" + upazillaCode
+				+ ", union=" + union + ", unionCode=" + unionCode + ", ward="
+				+ ward + ", wardCode=" + wardCode + ", created=" + created
+				+ ", updated=" + updated + "]";
 	}
 
 }
