@@ -188,6 +188,8 @@ public class DuplicateRecordServiceImpl implements AclService {
 		findBy.put("status", true);
 		DuplicateMatchingCriteriaDefinition duplicateMatchingCriteriaDefinition = databaseRepositoryImpl
 				.findByKeys(findBy, DuplicateMatchingCriteriaDefinition.class);
+		System.out.println("in duplicateMatchingCriteriaService  >>>>>  "
+				+duplicateMatchingCriteriaDefinition.getMatchingKeys());
 		return duplicateMatchingCriteriaDefinition;
 	}
 
@@ -320,6 +322,7 @@ public class DuplicateRecordServiceImpl implements AclService {
 			System.out.println("columnNameList >>>>> " + columnNameList.toString());
 		}
 		session.setAttribute("columnNameList", columnNameList);
+		System.out.println(columnNameList.size());
 	}
 
 }

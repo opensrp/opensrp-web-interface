@@ -112,7 +112,7 @@ public class FacilityController {
 		facilityHelperUtil.setCHCPTrainingListToSession(session, CHCPTrainingList);
 		
 		session.setAttribute("facilityId", id);
-		return "facility/add-worker-temp";
+		return "facility/add-worker";
        
 	}
 	
@@ -191,7 +191,7 @@ public class FacilityController {
 		
 		model.addAttribute("facility", facility);
 		
-		return "facility/details-temp";
+		return "facility/details";
        
 	}
 

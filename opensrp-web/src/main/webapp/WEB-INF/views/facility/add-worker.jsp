@@ -15,14 +15,7 @@
 <%@page import="org.opensrp.facility.entity.FacilityWorkerType" %>
 <%
 List<FacilityWorkerType> workerTypeList= (List<FacilityWorkerType>)session.getAttribute("workerTypeList");
-
-/* Map<Integer, String> supervisors =  (Map<Integer, String>)session.getAttribute("supervisors");
-
-String selectedLocationName = (String)session.getAttribute("locationName");
-
-Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr"); */
-
-
+int facilityId= (Integer)session.getAttribute("facilityId");
 	%>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,6 +26,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link type="text/css" href="<c:url value="/resources/css/jqx.base.css"/>" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/resources/css/dataTables.jqueryui.min.css">
 
 <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
@@ -53,6 +47,12 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 					</a>  |  <a  href="<c:url value="/facility/index.html"/>"> <strong>Community Clinic</strong>
 					</a>		
 		</div>
+		
+		
+		<div class="form-group">	
+		<a  href="/opensrp-dashboard/facility/<%=facilityId%>/details.html"> <strong>Details</strong> </a>		
+		</div>
+		
 			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> Add Worker
@@ -60,12 +60,12 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 				<div class="card-body">
 				
 					<%-- <form:form method="POST" action="${saveUrl}" modelAttribute="facilityWorker"> --%>
-					<form:form id="workerInfo" modelAttribute="facilityWorker">
+					<form:form id="workerInfo" >
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName">Name  </label>
-									<form:input path="name" class="form-control"
+									<input name="name" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Name" /> 
 									<span class="text-red">${uniqueNameErrorMessage}</span>
@@ -76,7 +76,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName">Identifier (Email/Mobile No.)</label>
-									<form:input path="identifier" class="form-control"
+									<input name="identifier" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Identifier (Email/Mobile No.)" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
@@ -84,13 +84,13 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 							</div>
 						</div>
 						
-						<form:hidden path="facility.id" id="facilityId"/>
+						<input name="facilityId" id="facilityId" value="<%=facilityId%>" style="display: none;"/>
 						
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName">Organization</label>
-									<form:input path="organization" class="form-control"
+									<input name="organization" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Organization" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
@@ -170,7 +170,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 			
 			
 			
-				<div class="card mb-3">
+			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> Worker List
 				</div>
@@ -198,6 +198,8 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 													style="width: 79px;">Action</th>
 											</tr>
 										</thead>
+										
+										
 										<tfoot>
 											<tr>
 												    <th tabindex="0" rowspan="1" colspan="1"
@@ -215,6 +217,10 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 											</tr>
 										</tfoot>
 										
+										<tbody id="dataTableBody">
+										
+										</tbody>
+										
 									</table>
 
 								</div>
@@ -231,20 +237,8 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 			
 			
 			
-		</div>
-		
-		
-		
-		
-		
-		
-		
-		
 			
-		
-		
-		
-		
+		</div>
 		
 		
 		
@@ -255,11 +249,18 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 	</div>
 	
+
+  
+<script type="text/javascript" charset="utf8" src="/resources/datatables/jquery.dataTables.js"></script>
+<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js'/>"></script>
+
+	
 <script type="text/javascript"> 
 
 
 $("#workerInfo").submit(function(event) { 
-	var url = "/rest/api/v1/facility/saveWorker";			
+	var detailsPageUrl = "/opensrp-dashboard/facility/"+$("#facilityId").val()+"/details.html";
+	var url = "/opensrp-dashboard/rest/api/v1/facility/saveWorker";			
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	var formData = {
@@ -284,7 +285,8 @@ $("#workerInfo").submit(function(event) {
 			 xhr.setRequestHeader(header, token);
 		},
 		success : function(data) {
-		   getWorkerList($("#facilityId").val());
+		   //getWorkerList($("#facilityId").val());
+		   window.location.replace(detailsPageUrl);
 		},
 		error : function(e) {
 		   
@@ -297,11 +299,14 @@ $("#workerInfo").submit(function(event) {
 
 
 var trainingList = [];
-
+var facilityWorkerList;
+var i=0;
 $(document).ready(function() {
 	//$("#trainings").hide();
 	//$("#trainingDiv").hide();
 	getWorkerList($("#facilityId").val());
+	//$('#dataTable').DataTable();
+	
 });
 
 function check(){
@@ -325,76 +330,67 @@ function checkForTraining(){
 }
 
 function getWorkerList(id) {
-	/* var getWorkerListURL ="getWorkerList.html"; */
-	var workerListURL = "/rest/api/v1/facility/"+id+"/getWorkerList.html";
+	var workerListURL ="/opensrp-dashboard/facility/"+id+"/getWorkerList.html";
+	//var workerListURL = "/rest/api/v1/facility/"+id+"/getWorkerList.html";
 	
     $.ajax(workerListURL, {
         type: 'GET',
+        dataType: 'html',
     }).done(function(workerList) {
-    	showWorkerListOnTable(workerList);
+    	
+    	$("#dataTableBody").html(workerList);
+    	//refreshDataTable();
+    	showOnDataTable();
+    	
     }).error(function() {
         //alert('Error');
     });
 }
 
 function deleteWorker(workerId) {
-	var gerWorkerDeleteURL ="${home}facility/deleteWorker.html";
+	var detailsPageUrl = "/opensrp-dashboard/facility/details.html";
+	var url = "/opensrp-dashboard/rest/api/v1/facility/deleteWorker";			
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	var formData = {
+            'workerId': workerId
+        };
 	
-	
-    $.ajax(gerWorkerDeleteURL, {
-        type: 'POST',
-        data: {
-            id: workerId
-        }
+	$.ajax({
+		contentType : "application/json",
+		type: "POST",
+        url: url,
+        data: JSON.stringify(formData), 
+        dataType : 'json',
         
-    }).done(function(isDeleted) {
-    	if(isDeleted==='ture'){
-    		var rowToDelete = 'table#dataTable tr#'+ workerId;
-    		$(rowToDelete).remove();
-    	}
-    }).error(function() {
-        //alert('Error');
-    });
-}
-
-function showWorkerListOnTable(workerList){
-	var data = $.parseJSON(workerList);
+		timeout : 100000,
+		beforeSend: function(xhr) {				    
+			 xhr.setRequestHeader(header, token);
+		},
+		success : function(data) {
+		   //getWorkerList($("#facilityId").val());
+		   window.location.replace(detailsPageUrl);
+		},
+		error : function(e) {
+		   
+		},
+		done : function(e) {				    
+		    console.log("DONE");				    
+		}
+	});
     
-    var rowCount = $('#dataTable tr').length;
-
-    for (i = 1; i < rowCount-1; i++) {
-        document.getElementById("dataTable").deleteRow(1);
-    }
-	
-    for (j = 0; j < data.length; j++) {
-        var table = document.getElementById("dataTable");
-        var row = table.insertRow(1);
-        row.id = data[j].id;
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        var cell4 = row.insertCell(3);
-        var cell5 = row.insertCell(4);
-        var cell6 = row.insertCell(5);
-        
-        cell1.innerHTML = data[j].facilityWorkerType? data[j].facilityWorkerType.name : "";
-        cell2.innerHTML = data[j].name? data[j].name : "";
-        cell3.innerHTML = data[j].identifier? data[j].identifier : "";
-        cell4.innerHTML = data[j].organization? data[j].organization : "" ;
-        var trainingList = data[j].facilityTrainings? data[j].facilityTrainings : "";
-        var trainingListString = "";
-        for(k = 0; k<trainingList.length; k++){
-        	trainingListString += trainingList[k].name;
-        	if(k!=trainingList.length - 1){
-        		trainingListString += ", ";
-        	}
-        }
-        cell5.innerHTML = trainingListString? trainingListString : "" ;
-        cell6.innerHTML = '<button onclick="deleteWorker('+ data[j].id+')" class="btn btn-primary btn-block">Delete</button>';
-        
-        }
 }
 
+function showOnDataTable(){
+	  $('#dataTable').DataTable();
+}
+function refreshDataTable(){
+	//$("#dataTable").datatable().fnDestroy();
+    //$("#dataTable").dataTable();
+    /* var table = $('#dataTable').DataTable();
+    table.draw(); */
+	
+}
 
 
 </script>	
