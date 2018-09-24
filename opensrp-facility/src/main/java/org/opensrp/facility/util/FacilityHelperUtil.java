@@ -236,28 +236,54 @@ public class FacilityHelperUtil {
 	public Facility setLocationCodesToFacility(Facility facility){
 		if(facility.getDivision() != null && !facility.getDivision().isEmpty()){
 			String[] division = facility.getDivision().split("\\?");
-			facility.setDivision(division[1]);
-			facility.setDivisionCode(division[0]);
+			if(division.length>1){
+				facility.setDivision(division[1]);
+				facility.setDivisionCode(division[0]);
+			}else{
+				facility.setDivision("");
+				facility.setDivisionCode("");
+			}
 		}
 		if(facility.getDistrict() != null && !facility.getDistrict().isEmpty()){
 			String[] district = facility.getDistrict().split("\\?");
-			facility.setDistrict(district[1]);
-			facility.setDistrictCode(district[0]);
+			if(district.length>1){
+				facility.setDistrict(district[1]);
+				facility.setDistrictCode(district[0]);
+			}else{
+				facility.setDistrict("");
+				facility.setDistrictCode("");
+			}
 		}
 		if(facility.getUpazilla() != null && !facility.getUpazilla().isEmpty()){
 			String[] upazilla = facility.getUpazilla().split("\\?");
-			facility.setUpazilla(upazilla[1]);
-			facility.setUpazillaCode(upazilla[0]);
+			if(upazilla.length>1){
+				facility.setUpazilla(upazilla[1]);
+				facility.setUpazillaCode(upazilla[0]);
+			}else{
+				facility.setUpazilla("");
+				facility.setUpazillaCode("");
+			}
 		}
 		if(facility.getUnion() != null && !facility.getUnion().isEmpty()){
 			String[] union = facility.getUnion().split("\\?");
-			facility.setUnion(union[1]);
-			facility.setUnionCode(union[0]);
+			if(union.length>1){
+				facility.setUnion(union[1]);
+				facility.setUnionCode(union[0]);
+			}else{
+				facility.setUnion("");
+				facility.setUnionCode("");
+			}
 		}
 		if(facility.getWard() != null && !facility.getWard().isEmpty()){
 			String[] ward = facility.getWard().split("\\?");
-			facility.setWard(ward[1]);
-			facility.setWardCode(ward[0]);
+			if(ward.length>1){
+				facility.setWard(ward[1]);
+				facility.setWardCode(ward[0]);
+			}else{
+				facility.setWard("");
+				facility.setWardCode("");
+			}
+			
 		}
 		return facility;
 	}

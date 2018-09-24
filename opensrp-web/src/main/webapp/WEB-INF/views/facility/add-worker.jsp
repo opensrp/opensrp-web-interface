@@ -57,7 +57,7 @@ String facilityName= (String)session.getAttribute("facilityName");
 		
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Add Worker (<%=facilityName %>)
+					<i class="fa fa-table"></i> Add Worker (<b><%=facilityName %></b>)
 				</div>
 				<div class="card-body">
 				
@@ -174,7 +174,7 @@ String facilityName= (String)session.getAttribute("facilityName");
 			
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Worker List (<%=facilityName %>)
+					<i class="fa fa-table"></i> Worker List (<b><%=facilityName %></b>)
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">

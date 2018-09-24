@@ -75,7 +75,7 @@ String selectedLocationName = (String)session.getAttribute("locationName");
 								<div class="col-5">
 									<label for="exampleInputName">Latitude  </label>
 									<form:input path="latitude" class="form-control"
-										required="required" aria-describedby="nameHelp"
+										 aria-describedby="nameHelp"
 										placeholder="Latitude" value="${latitude}" />
 								</div>
 							</div>
@@ -86,7 +86,7 @@ String selectedLocationName = (String)session.getAttribute("locationName");
 								<div class="col-5">
 									<label for="exampleInputName">Longitude  </label>
 									<form:input path="longitude" class="form-control"
-										required="required" aria-describedby="nameHelp"
+										aria-describedby="nameHelp"
 										placeholder="Longitude" value="${longitude}" />
 								</div>
 							</div>

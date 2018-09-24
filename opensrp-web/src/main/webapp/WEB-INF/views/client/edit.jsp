@@ -47,6 +47,7 @@
 
 	<div class="content-wrapper">
 		<div class="container-fluid">
+		<jsp:include page="/WEB-INF/views/client-url.jsp" />
 			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> Edit Mother
