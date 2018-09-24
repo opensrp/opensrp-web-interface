@@ -1,7 +1,5 @@
 package org.opensrp.web.controller;
 
-import static org.springframework.http.HttpStatus.OK;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.json.JSONException;
-import org.opensrp.acl.entity.Location;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.facility.entity.Facility;
 import org.opensrp.facility.entity.FacilityTraining;
@@ -28,7 +25,6 @@ import org.opensrp.facility.util.FacilityHelperUtil;
 import org.opensrp.facility.util.FacilityServiceFactory;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -40,8 +36,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
-import com.google.gson.Gson;
 
 
 @Controller
@@ -83,6 +77,7 @@ public class FacilityController {
 	                             @ModelAttribute("facility") @Valid Facility facility, BindingResult binding, ModelMap model,
 	                             HttpSession session) throws Exception {
 		
+		facility = facilityHelperUtil.setLocationCodesToFacility(facility);
 		facilityServiceFactory.getFacility("FacilityServiceImpl").save(facility);
 		return new RedirectView("/opensrp-dashboard/facility/index.html");
 		
@@ -118,6 +113,9 @@ public class FacilityController {
 		List<FacilityTraining> CHCPTrainingList = facilityServiceFactory.getFacility("FacilityWorkerTrainingServiceImpl").findAll("FacilityTraining");
 		facilityHelperUtil.setWorkerTypeListToSession(session, workerTypeList);
 		facilityHelperUtil.setCHCPTrainingListToSession(session, CHCPTrainingList);
+		
+		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
+		session.setAttribute("facilityName", facility.getName());
 		
 		session.setAttribute("facilityId", id);
 		return "facility/add-worker";
@@ -243,8 +241,11 @@ public class FacilityController {
 			model.put("msg", "failed to process file because : " + e.getMessage());
 			return new ModelAndView("/facility/upload_csv");
 		}
-		//String msg = locationServiceImpl.uploadLocation(csvFile);
 		String msg = facilityHelperUtil.uploadFacility(csvFile);
+		
+		//used for populating chcp table temporarily
+		//String msg = facilityHelperUtil.uploadChcp(csvFile);
+		
 		if (!msg.isEmpty()) {
 			model.put("msg", msg);
 			return new ModelAndView("/facility/upload_csv");

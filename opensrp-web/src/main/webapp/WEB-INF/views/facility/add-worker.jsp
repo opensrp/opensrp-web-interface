@@ -16,6 +16,7 @@
 <%
 List<FacilityWorkerType> workerTypeList= (List<FacilityWorkerType>)session.getAttribute("workerTypeList");
 int facilityId= (Integer)session.getAttribute("facilityId");
+String facilityName= (String)session.getAttribute("facilityName");
 	%>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,7 +57,7 @@ int facilityId= (Integer)session.getAttribute("facilityId");
 		
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Add Worker
+					<i class="fa fa-table"></i> Add Worker (<%=facilityName %>)
 				</div>
 				<div class="card-body">
 				
@@ -173,7 +174,7 @@ int facilityId= (Integer)session.getAttribute("facilityId");
 			
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Worker List
+					<i class="fa fa-table"></i> Worker List (<%=facilityName %>)
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">

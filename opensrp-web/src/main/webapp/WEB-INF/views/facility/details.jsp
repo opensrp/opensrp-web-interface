@@ -108,7 +108,14 @@ if (session.getAttribute("facilityWorkerList") != null) {
   <tr>
  	<td>3.</td>
     <td>ভৌগোলিক অবস্থা: </td>
-    <td colspan="3">Latitude: ${facility.latitude}<br> Longitude: ${facility.longitude}</td>
+    <td colspan="3">
+     Division: ${facility.division}<br>
+     District: ${facility.district}<br>
+     Upazilla: ${facility.upazilla}<br>
+     Union: ${facility.union}<br>
+     Ward: ${facility.ward}<br>
+     Latitude: ${facility.latitude}<br>
+     Longitude: ${facility.longitude}</td>
   </tr>
   <tr>
   	<td>4.</td>

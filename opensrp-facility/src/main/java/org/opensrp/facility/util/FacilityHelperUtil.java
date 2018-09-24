@@ -14,6 +14,7 @@ import org.opensrp.acl.entity.Location;
 import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.service.impl.LocationServiceImpl;
 import org.opensrp.facility.dto.FacilityWorkerDTO;
+import org.opensrp.facility.entity.Chcp;
 import org.opensrp.facility.entity.Facility;
 import org.opensrp.facility.entity.FacilityTraining;
 import org.opensrp.facility.entity.FacilityWorker;
@@ -188,5 +189,76 @@ public class FacilityHelperUtil {
 			msg = "Some problem occured, please contact with admin..";
 		}
 		return msg;
+	}
+	
+	@SuppressWarnings("resource")
+	public String uploadChcp(File csvFile) throws Exception {
+		String msg = "";
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+		
+		int position = 0;
+		String[] tags = null;
+		try {
+			br = new BufferedReader(new FileReader(csvFile));
+			while ((line = br.readLine()) != null) {
+				String[] facilityFromCsv = line.split(cvsSplitBy);
+				if (position == 0) {
+					tags = facilityFromCsv;
+					System.out.println("tags >> "+facilityFromCsv[0]+" >> "+facilityFromCsv[1]+" >> "+facilityFromCsv[3]);
+				} else {
+					System.out.println(facilityFromCsv[0]+" >> "+facilityFromCsv[1]+" >> "+facilityFromCsv[3]);
+					
+					if(facilityFromCsv.length >=16){
+						if((facilityFromCsv[13] != null && !facilityFromCsv[13].isEmpty()) && (facilityFromCsv[15] != null && !facilityFromCsv[15].isEmpty())){
+						Chcp chcp = new Chcp();
+						chcp.setName(facilityFromCsv[13]);
+						chcp.setIdentifier(facilityFromCsv[15]);
+						facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").save(chcp);
+						}
+
+					}
+					
+				}
+				position++;
+			}
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			logger.info("Some problem occured, please contact with admin..");
+			msg = "Some problem occured, please contact with admin..";
+		}
+		return msg;
+	}
+	
+	public Facility setLocationCodesToFacility(Facility facility){
+		if(facility.getDivision() != null && !facility.getDivision().isEmpty()){
+			String[] division = facility.getDivision().split("\\?");
+			facility.setDivision(division[1]);
+			facility.setDivisionCode(division[0]);
+		}
+		if(facility.getDistrict() != null && !facility.getDistrict().isEmpty()){
+			String[] district = facility.getDistrict().split("\\?");
+			facility.setDistrict(district[1]);
+			facility.setDistrictCode(district[0]);
+		}
+		if(facility.getUpazilla() != null && !facility.getUpazilla().isEmpty()){
+			String[] upazilla = facility.getUpazilla().split("\\?");
+			facility.setUpazilla(upazilla[1]);
+			facility.setUpazillaCode(upazilla[0]);
+		}
+		if(facility.getUnion() != null && !facility.getUnion().isEmpty()){
+			String[] union = facility.getUnion().split("\\?");
+			facility.setUnion(union[1]);
+			facility.setUnionCode(union[0]);
+		}
+		if(facility.getWard() != null && !facility.getWard().isEmpty()){
+			String[] ward = facility.getWard().split("\\?");
+			facility.setWard(ward[1]);
+			facility.setWardCode(ward[0]);
+		}
+		return facility;
 	}
 }
