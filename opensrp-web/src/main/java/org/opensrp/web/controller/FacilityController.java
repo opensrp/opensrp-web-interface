@@ -1,5 +1,7 @@
 package org.opensrp.web.controller;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,6 +27,7 @@ import org.opensrp.facility.util.FacilityHelperUtil;
 import org.opensrp.facility.util.FacilityServiceFactory;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -36,6 +39,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+
+import com.google.gson.Gson;
 
 
 @Controller
@@ -179,6 +184,21 @@ public class FacilityController {
 		List<FacilityWorker> facilityWorkerList = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findAllByKeys(facilityMap, FacilityWorker.class);
 		facilityHelperUtil.setFacilityWorkerListToSession(session, facilityWorkerList);
 		return "facility/worker-list";
+       
+	}
+	
+	@RequestMapping(value = "/{workerId}/editWorker.html", method = RequestMethod.GET)
+	public String editWorker (ModelMap model, HttpSession session,
+			@PathVariable("workerId") int workerId){
+		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findAll("FacilityWorkerType");
+		List<FacilityTraining> CHCPTrainingList = facilityServiceFactory.getFacility("FacilityWorkerTrainingServiceImpl").findAll("FacilityTraining");
+		facilityHelperUtil.setWorkerTypeListToSession(session, workerTypeList);
+		facilityHelperUtil.setCHCPTrainingListToSession(session, CHCPTrainingList);
+		
+		FacilityWorker facilityWorker = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findById(workerId, "id", FacilityWorker.class);
+		System.out.println(facilityWorker);
+		session.setAttribute("workerToEdit", facilityWorker);
+		return "facility/edit-worker";
        
 	}
 	

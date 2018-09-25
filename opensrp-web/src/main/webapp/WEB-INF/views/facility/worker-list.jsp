@@ -43,7 +43,8 @@
 		}
 	%>
 										<td><%=trainingString %></td>
-										<td><button onclick="deleteWorker(<%=worker.getId() %>)" class="btn btn-primary btn-block">Delete</button></td>
+										<td><button onclick="editWorker(<%=worker.getId() %>)" class="btn btn-primary btn-block">Edit</button></td>
+										<td><button onclick="deleteWorker(<%=worker.getFacility().getId()%>,<%=worker.getId() %>)" class="btn btn-primary btn-block">Delete</button></td>
 									</tr>
 									<%
 									

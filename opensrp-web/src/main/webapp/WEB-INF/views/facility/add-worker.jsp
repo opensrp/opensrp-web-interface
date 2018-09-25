@@ -27,7 +27,8 @@ String facilityName= (String)session.getAttribute("facilityName");
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link type="text/css" href="<c:url value="/resources/css/jqx.base.css"/>" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="/resources/css/dataTables.jqueryui.min.css">
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/>">
+
 
 <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
@@ -87,6 +88,7 @@ String facilityName= (String)session.getAttribute("facilityName");
 						</div>
 						
 						<input name="facilityId" id="facilityId" value="<%=facilityId%>" style="display: none;"/>
+						<input name="newWorker" id="newWorker" value="1" style="display: none;"/>
 						
 						<div class="form-group">
 							<div class="row">
@@ -198,6 +200,8 @@ String facilityName= (String)session.getAttribute("facilityName");
 													style="width: 79px;">Training</th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 79px;">Action</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 79px;">Action</th>
 											</tr>
 										</thead>
 										
@@ -214,6 +218,8 @@ String facilityName= (String)session.getAttribute("facilityName");
 													style="width: 140px;">Organization</th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 79px;">Training</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 79px;">Action</th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 79px;">Action</th>
 											</tr>
@@ -253,7 +259,7 @@ String facilityName= (String)session.getAttribute("facilityName");
 	
 
   
-<script type="text/javascript" charset="utf8" src="/resources/datatables/jquery.dataTables.js"></script>
+<script type="text/javascript" charset="utf8" src="<c:url value='/resources/datatables/jquery.dataTables.js'/>" ></script>
 <script src="<c:url value='/resources/js/dataTables.jqueryui.min.js'/>"></script>
 
 	
@@ -261,11 +267,9 @@ String facilityName= (String)session.getAttribute("facilityName");
 
 
 $("#workerInfo").submit(function(event) { 
-	var detailsPageUrl = "/opensrp-dashboard/facility/"+$("#facilityId").val()+"/details.html";
-	var url = "/opensrp-dashboard/rest/api/v1/facility/saveWorker";			
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
+	var url = "/opensrp-dashboard/rest/api/v1/facility/saveWorker";
 	var formData = {
+			'workerId': '-99',
             'name': $('input[name=name]').val(),
             'identifier': $('input[name=identifier]').val(),
             'organization': $('input[name=organization]').val(),
@@ -273,7 +277,30 @@ $("#workerInfo").submit(function(event) {
             'facilityTrainings': $('input[name=trainings]').val(),
             'facilityId': $("#facilityId").val()
         };
+	var detailsPageUrl = "/opensrp-dashboard/facility/"+$("#facilityId").val()+"/details.html";
+	
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	
 	event.preventDefault();
+	
+	
+	if($("#newWorker").val() === "0"){
+		//alert("old worker : "+$("#facilityId").val()+" -> "+$("#workerId").val());
+		url = "/opensrp-dashboard/rest/api/v1/facility/editWorker";
+		formData = {
+				'workerId': $("#workerId").val(),
+	            'name': $('input[name=name]').val(),
+	            'identifier': $('input[name=identifier]').val(),
+	            'organization': $('input[name=organization]').val(),
+	            'facilityWorkerTypeId': $("#facilityWorkerTypeId").val(),
+	            'facilityTrainings': $('input[name=trainings]').val(),
+	            'facilityId': $("#facilityId").val()
+	        };
+	}else if($("#newWorker").val() === "1"){
+		alert("new worker");
+	}
+	
 	
 	$.ajax({
 		contentType : "application/json",
@@ -349,8 +376,23 @@ function getWorkerList(id) {
     });
 }
 
-function deleteWorker(workerId) {
-	var detailsPageUrl = "/opensrp-dashboard/facility/details.html";
+function editWorker(workerId) {
+	var workerListURL ="/opensrp-dashboard/facility/"+workerId+"/editWorker.html";
+	
+    $.ajax(workerListURL, {
+        type: 'GET',
+        dataType: 'html',
+    }).done(function(workerDetails) {
+    	
+    	$("#workerInfo").html(workerDetails);
+    	
+    }).error(function() {
+        //alert('Error');
+    });
+}
+
+function deleteWorker(facilityId,workerId) {
+	var detailsPageUrl = "/opensrp-dashboard/facility/"+facilityId+"/details.html";
 	var url = "/opensrp-dashboard/rest/api/v1/facility/deleteWorker";			
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
