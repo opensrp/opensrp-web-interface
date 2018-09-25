@@ -62,9 +62,10 @@ public class FacilityController {
 	
 	
 	@RequestMapping(value = "/add.html", method = RequestMethod.GET)
-	public ModelAndView addFacility(ModelMap model, HttpSession session){
+	public ModelAndView addFacility(HttpServletRequest request,ModelMap model, HttpSession session){
 		String locationName = "";
 		
+		paginationUtil.createPagination(request, session, Facility.class);
 		//facilityHelperUtil.setSessionAttribute(session, facility, locationName);
 		return new ModelAndView("facility/add", "command", facility);
        

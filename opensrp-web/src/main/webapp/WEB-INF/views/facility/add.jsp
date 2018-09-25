@@ -10,11 +10,6 @@
 <%@page import="java.util.Map"%>
 <%@page import="org.opensrp.acl.entity.Permission"%>
 
-<%
-Integer selectedLocationId = (Integer)session.getAttribute("selectedLocation");
-String selectedLocationName = (String)session.getAttribute("locationName");
-%>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -48,54 +43,11 @@ String selectedLocationName = (String)session.getAttribute("locationName");
 					<form:form method="POST" action="${saveUrl}" >
 					
 					
-						<div class="form-group">
-							<div class="row">
-								<div class="col-5">
-									<label for="exampleInputName">Name  </label>
-									<form:input path="name" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="Facility Name" value="${name}" />
-								</div>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<div class="row">
-								<div class="col-5">
-									<label for="exampleInputName">HRM ID  </label>
-									<form:input path="hrmId" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="HRM ID" value="${hrmId}" />
-								</div>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<div class="row">
-								<div class="col-5">
-									<label for="exampleInputName">Latitude  </label>
-									<form:input path="latitude" class="form-control"
-										 aria-describedby="nameHelp"
-										placeholder="Latitude" value="${latitude}" />
-								</div>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<div class="row">
-								<div class="col-5">
-									<label for="exampleInputName">Longitude  </label>
-									<form:input path="longitude" class="form-control"
-										aria-describedby="nameHelp"
-										placeholder="Longitude" value="${longitude}" />
-								</div>
-							</div>
-						</div>
-						
-						
-						
+					
+					
+					
 <!-- for location -->						
-					<%
+<%
 	Map<String, String> paginationAtributes = (Map<String, String>) session
 			.getAttribute("paginationAtributes");
 	String division = "";
@@ -296,6 +248,59 @@ String selectedLocationName = (String)session.getAttribute("locationName");
 						
 						
 <!-- end of location -->						
+					
+					
+					
+					
+					
+					
+						<div class="form-group">
+							<div class="row">
+								<div class="col-5">
+									<label for="exampleInputName">Name  </label>
+									<form:input path="name" class="form-control"
+										required="required" aria-describedby="nameHelp"
+										placeholder="Facility Name" value="${name}" />
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-5">
+									<label for="exampleInputName">HRM ID  </label>
+									<form:input path="hrmId" class="form-control"
+										required="required" aria-describedby="nameHelp"
+										placeholder="HRM ID" value="${hrmId}" />
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-5">
+									<label for="exampleInputName">Latitude  </label>
+									<form:input path="latitude" class="form-control"
+										 aria-describedby="nameHelp"
+										placeholder="Latitude" value="${latitude}" />
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-5">
+									<label for="exampleInputName">Longitude  </label>
+									<form:input path="longitude" class="form-control"
+										aria-describedby="nameHelp"
+										placeholder="Longitude" value="${longitude}" />
+								</div>
+							</div>
+						</div>
+						
+						
+						
+					
 						
 						
 						

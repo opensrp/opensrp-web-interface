@@ -479,7 +479,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			hql = hql + " and is_pregnant = '" + searchBuilder.getPregStatus() + "'";
 		}
 		if (searchBuilder.getName() != null && !searchBuilder.getName().isEmpty()) {
-			hql = hql + " and first_name like '%" + searchBuilder.getName() + "%'";
+			hql = hql + " and first_name ilike '%" + searchBuilder.getName() + "%'";
 		}
 
 		
