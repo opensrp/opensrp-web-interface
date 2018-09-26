@@ -57,7 +57,7 @@
 					
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/facility/index.html"/>"> <strong>
+						href="<c:url value="/"/>"> <strong>
 							Community Clinic</strong>
 					</a>
 					

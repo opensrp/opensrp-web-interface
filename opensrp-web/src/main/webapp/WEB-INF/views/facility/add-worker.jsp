@@ -43,16 +43,11 @@ String facilityName= (String)session.getAttribute("facilityName");
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
 		<div class="container-fluid">
-		<div class="form-group">				
-				   <a  href="<c:url value="/facility/add.html"/>" > <strong>Registration</strong> 
-					</a>  |  <a  href="<c:url value="/facility/index.html"/>"> <strong>Community Clinic</strong>
-					</a>  |  <a  href="<c:url value="/facility/upload_csv.html"/>"> <strong>Upload Facility</strong>
-					</a>			
-		</div>
 		
+		<jsp:include page="/WEB-INF/views/facility-url.jsp" />
 		
 		<div class="form-group">	
-		<a  href="/opensrp-dashboard/facility/<%=facilityId%>/details.html"> <strong>Details</strong> </a>		
+		<a  href="/opensrp-dashboard/facility/<%=facilityId%>/details.html"> <strong>CC Profile</strong> </a>		
 		</div>
 		
 			<div class="card mb-3">

@@ -49,7 +49,7 @@ public class DashboardController {
 	@Autowired
 	private DataVisualization dataVisualization;
 
-	@RequestMapping("/")
+	@RequestMapping("/dashboard")
 	public String showHome(HttpServletRequest request, Model model, HttpSession session) throws JSONException {
 		/*Different types of data counts and percentages*/
 		List<Object> dashboardAggregatedList = databaseServiceImpl.executeSelectQuery("select * from core.fn_growplus_dashboard_data_count()");

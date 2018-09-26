@@ -376,7 +376,7 @@ footer.sticky-footer {
 .bg-dark {
     background-color: #2a649e!important;
 }
-.bg-login{ background:url(../img/bg.jpg) no-repeat; background-size:cover;
+.bg-login{ background-color: #0062cc; background-size:cover;
 }
 
 

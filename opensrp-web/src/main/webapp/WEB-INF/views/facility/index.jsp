@@ -24,12 +24,7 @@
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		
-		<div class="form-group">				
-				   <a  href="<c:url value="/facility/add.html"/>" > <strong>Registration</strong> 
-					</a>  |  <a  href="<c:url value="/facility/index.html"/>"> <strong>Community Clinic</strong>
-					</a>  |  <a  href="<c:url value="/facility/upload_csv.html"/>"> <strong>Upload Facility</strong>
-					</a>			
-		</div>
+		<jsp:include page="/WEB-INF/views/facility-url.jsp" />
 			
 
 			<div class="card mb-3">
@@ -46,10 +41,10 @@
 										style="width: 100%;">
 										<thead>
 											<tr>
-												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Community Clinic Name</th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">HRM ID</th>
+												    <th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">CC Name</th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 106px;">Division</th>
 													<th tabindex="0" rowspan="1" colspan="1"
@@ -90,15 +85,15 @@
 														String detailsURL = "/facility/"+id+"/details.html";
 											%>
 											<tr>
-												<td><%=name%></td>
 												<td><%=hrmId%></td>
+												<td><%=name%></td>
 												<td><%=division%></td>
 												<td><%=district%></td>
 												<td><%=upazilla%></td>
 												<td><%=union%></td>
 												<td><%=ward%></td>
 												<td>
-												<a href="<c:url value="<%= detailsURL%>" />">Details</a>
+												<a href="<c:url value="<%= detailsURL%>" />">CC Profile</a>
 												| 	
 												<a href="<c:url value="<%= addWorkerURL%>" />">Add Worker/Training</a>	
 												</td> 

@@ -44,7 +44,7 @@ import com.google.gson.Gson;
 
 
 @Controller
-@RequestMapping(value = "facility")
+//@RequestMapping(value = "facility")
 public class FacilityController {
 	
 	@Autowired
@@ -66,17 +66,15 @@ public class FacilityController {
 	private FacilityHelperUtil facilityHelperUtil;
 	
 	
-	@RequestMapping(value = "/add.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/facility/add.html", method = RequestMethod.GET)
 	public ModelAndView addFacility(HttpServletRequest request,ModelMap model, HttpSession session){
-		String locationName = "";
-		
 		paginationUtil.createPagination(request, session, Facility.class);
 		//facilityHelperUtil.setSessionAttribute(session, facility, locationName);
 		return new ModelAndView("facility/add", "command", facility);
        
 	}
 
-	@RequestMapping(value = "/add.html", method = RequestMethod.POST)
+	@RequestMapping(value = "/facility/add.html", method = RequestMethod.POST)
 	 public RedirectView saveFacility(
 								 @RequestParam(value = "location", required = false) String locationId,
 	                             //@RequestParam(value = "locationName") String locationName,
@@ -85,11 +83,11 @@ public class FacilityController {
 		
 		facility = facilityHelperUtil.setLocationCodesToFacility(facility);
 		facilityServiceFactory.getFacility("FacilityServiceImpl").save(facility);
-		return new RedirectView("/opensrp-dashboard/facility/index.html");
+		return new RedirectView("/opensrp-dashboard/");
 		
 	}
 	
-	@RequestMapping(value = "/index.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showFacilityList(HttpServletRequest request, HttpSession session) {
         paginationUtil.createPagination(request, session, Facility.class);
 		return "/facility/index";
@@ -112,7 +110,7 @@ public class FacilityController {
        
 	}*/
 	
-	@RequestMapping(value = "/{id}/addWorker.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/facility/{id}/addWorker.html", method = RequestMethod.GET)
 	public String addWorker(ModelMap model, HttpSession session,@PathVariable("id") int id){
 		
 		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findAll("FacilityWorkerType");
@@ -129,7 +127,7 @@ public class FacilityController {
 	}
 	
 	
-	@RequestMapping(value = "/saveWorker.html", method = RequestMethod.POST)
+	@RequestMapping(value = "/facility/saveWorker.html", method = RequestMethod.POST)
 	public RedirectView saveWorker(HttpServletRequest request,
 			ModelMap model,
 			@ModelAttribute("facilityWorker") @Valid FacilityWorker facilityWorker,
@@ -174,7 +172,7 @@ public class FacilityController {
        
 	}*/
 	
-	@RequestMapping(value = "/{id}/getWorkerList.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/facility/{id}/getWorkerList.html", method = RequestMethod.GET)
 	public String getWorkerList (ModelMap model, HttpSession session,
 			@PathVariable("id") int id){
 		
@@ -187,7 +185,7 @@ public class FacilityController {
        
 	}
 	
-	@RequestMapping(value = "/{workerId}/editWorker.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/facility/{workerId}/editWorker.html", method = RequestMethod.GET)
 	public String editWorker (ModelMap model, HttpSession session,
 			@PathVariable("workerId") int workerId){
 		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findAll("FacilityWorkerType");
@@ -203,7 +201,7 @@ public class FacilityController {
 	}
 	
 	
-	@RequestMapping(value = "/{id}/details.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/facility/{id}/details.html", method = RequestMethod.GET)
 	public String facilityDetails(ModelMap model, HttpSession session,@PathVariable("id") int id){
 		
 		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
@@ -222,12 +220,12 @@ public class FacilityController {
        
 	}
 	
-	@RequestMapping(value = "/upload_csv.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/facility/upload_csv.html", method = RequestMethod.GET)
 	public String csvUpload(HttpSession session) throws JSONException {
 		return "/facility/upload_csv";
 	}
 	
-	@RequestMapping(value = "/upload_csv.html", method = RequestMethod.POST)
+	@RequestMapping(value = "/facility/upload_csv.html", method = RequestMethod.POST)
 	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model)
 	    throws Exception {
 		if (file.isEmpty()) {

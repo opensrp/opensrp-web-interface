@@ -98,6 +98,12 @@ public class ClientController {
 		clientServiceImpl.getChildWeightList(session,id);
 		return "client/child-details";
 	}
+	
+	@RequestMapping(value = "/member/{id}/details.html", method = RequestMethod.GET)
+	public String showMemberDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) throws JSONException {
+		session.setAttribute("memberId", id);
+		return "client/member-details";
+	}
 
 
 	@RequestMapping(value = "/mother/{id}/details.html", method = RequestMethod.GET)
