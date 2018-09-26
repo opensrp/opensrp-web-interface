@@ -257,10 +257,10 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Name  </label>
+									<label for="exampleInputName">Community Clinic Name  </label>
 									<form:input path="name" class="form-control"
 										required="required" aria-describedby="nameHelp"
-										placeholder="Facility Name" value="${name}" />
+										placeholder="Community Clinic Name" value="${name}" />
 								</div>
 							</div>
 						</div>

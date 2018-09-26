@@ -47,35 +47,24 @@
 										<thead>
 											<tr>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Name</th>
+													style="width: 140px;">Community Clinic Name</th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">HRM ID</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Latitude</th>
+													style="width: 106px;">Division</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Longitude</th>
+													style="width: 140px;">District</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Location</th>
+													style="width: 79px;">Upazilla</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 79px;">Union</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 79px;">Ward</th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Action</th>
 											</tr>
 										</thead>
-										<tfoot>
-											<tr>
-												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Name</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">HRM ID</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Latitude</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Longitude</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Location</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Action</th>
-											</tr>
-										</tfoot>
+									
 										<tbody>
 											<%
 												if (session.getAttribute("dataList") != null) {
@@ -86,10 +75,15 @@
 														
 														Facility facility = (Facility) dataListIterator.next();
 														int id = facility.getId();
-														String name = facility.getName();
-														String hrmId = facility.getHrmId();
-														String latitude = facility.getLatitude();
-														String longitude = facility.getLongitude();
+														String name = facility.getName()!=null ? facility.getName() : "";
+														String hrmId = facility.getHrmId()!=null ? facility.getHrmId() : "";
+														String latitude = facility.getLatitude()!=null? facility.getLatitude() : "";
+														String longitude = facility.getLongitude()!=null? facility.getLongitude() : "";
+														String division = facility.getDivision()!= null? facility.getDivision() : "";
+														String district = facility.getDistrict()!= null? facility.getDistrict() : "";
+														String upazilla = facility.getUpazilla()!= null? facility.getUpazilla() : "";
+														String union = facility.getUnion()!= null? facility.getUnion() : "";
+														String ward = facility.getWard() != null? facility.getWard() : "";
 														
 														//String location = facility.getLocation().getName();
 														String addWorkerURL = "/facility/"+id+"/addWorker.html";
@@ -98,9 +92,11 @@
 											<tr>
 												<td><%=name%></td>
 												<td><%=hrmId%></td>
-												<td><%=latitude%></td>
-												<td><%=longitude%></td>
-												<td></td>
+												<td><%=division%></td>
+												<td><%=district%></td>
+												<td><%=upazilla%></td>
+												<td><%=union%></td>
+												<td><%=ward%></td>
 												<td>
 												<a href="<c:url value="<%= detailsURL%>" />">Details</a>
 												| 	

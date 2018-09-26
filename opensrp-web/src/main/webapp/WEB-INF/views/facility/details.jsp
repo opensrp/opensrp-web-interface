@@ -21,6 +21,10 @@
 <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> -->
 <title>HRIS</title>
 </head>
+<style>
+td{ padding:5px;}
+
+</style>
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <%
 List<Integer> trainingIdList = new ArrayList<Integer>();
@@ -93,7 +97,12 @@ if (session.getAttribute("facilityWorkerList") != null) {
 			
   <div class="row">
            	
-  <h2>কমিউনিটি ক্লিনিকের সেবা প্রদানকারী এবং সেবার তথ্য সমূহ: </h2>         	
+<table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="left" valign="top"><h2>কমিউনিটি ক্লিনিকের সেবা প্রদানকারী এবং সেবার তথ্য সমূহ: </h2></td>
+  </tr>
+  <tr>
+    <td>      	
   <table width="100%" border="0" align="center" cellpadding="1" cellspacing="1">
   <tr>
   	<td>1.</td>
@@ -265,7 +274,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
 %>
       <tr>
         <td><%=i++ %>.</td>
-        <td>দুর্যোক ব্যবস্থাপনা প্রশিক্ষণ</td>
+        <td>দুর্যোগ ব্যবস্থাপনা প্রশিক্ষণ</td>
       </tr>
 <%
 	} 
@@ -281,7 +290,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
 %>
       <tr>
         <td><%=i++ %>.</td>
-        <td>স্বাস্থা শিক্ষা প্রশিক্ষণ</td>
+        <td>স্বাস্থ্য শিক্ষা প্রশিক্ষণ</td>
       </tr>
 <%
 	} 
@@ -305,7 +314,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
 %>
       <tr>
         <td><%=i++ %>.</td>
-        <td>নবজাতকের অত্যাবর্ষকীয় সেবা বিষয়ক প্রশিক্ষণ</td>
+        <td>নবজাতকের অত্যাবশ্যকীয় সেবা বিষয়ক প্রশিক্ষণ</td>
       </tr>
 <%
 	} 
@@ -401,6 +410,8 @@ if (session.getAttribute("facilityWorkerList") != null) {
  %>    
      
     </table></td>
+  </tr>
+</table></td>
   </tr>
 </table>
            	

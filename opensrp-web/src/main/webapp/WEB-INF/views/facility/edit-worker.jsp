@@ -4,8 +4,7 @@
 <%@page import="org.opensrp.facility.entity.FacilityWorker"%>
 <%@page import="org.opensrp.facility.entity.FacilityTraining"%>
 <%@page import="org.opensrp.facility.entity.FacilityWorkerType" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -18,13 +17,13 @@
 	FacilityWorker workerToEdit = (FacilityWorker) session.getAttribute("workerToEdit");
 	int facilityId = workerToEdit.getFacility().getId();
 	int workerId = workerToEdit.getId();
-	String name = workerToEdit.getName();
-	String identifier = workerToEdit.getIdentifier();
-	String organization = workerToEdit.getOrganization();
+	String name = workerToEdit.getName()!=null? workerToEdit.getName() : "";
+	String identifier = workerToEdit.getIdentifier()!=null? workerToEdit.getIdentifier() : "";
+	String organization = workerToEdit.getOrganization()!=null? workerToEdit.getOrganization() : "";
 	FacilityWorkerType workerToEditType = workerToEdit.getFacilityWorkerType();
 	Set<FacilityTraining> workerToEditTrainings = workerToEdit.getFacilityTrainings();
 	String visualStatus = "none";
-	if(workerToEditTrainings.size()>0){
+	if(workerToEditType.getId()==1){
 		visualStatus = "block";
 	}
 	List<FacilityWorkerType> workerTypeList= (List<FacilityWorkerType>)session.getAttribute("workerTypeList");

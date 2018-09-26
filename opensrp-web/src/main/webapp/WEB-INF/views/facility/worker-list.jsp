@@ -3,8 +3,7 @@
 <%@page import="java.util.Iterator"%>
 <%@page import="org.opensrp.facility.entity.FacilityWorker"%>
 <%@page import="org.opensrp.facility.entity.FacilityTraining"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -19,14 +18,17 @@
 	String creator = "";
 	for (FacilityWorker worker : workerList) 
 	{
-		
+		String workerType = worker.getFacilityWorkerType().getName() != null? worker.getFacilityWorkerType().getName() : "";
+		String workerName = worker.getName() != null? worker.getName() : "";
+		String workerIdentifier = worker.getIdentifier() != null? worker.getIdentifier() : "";
+		String workerOrganization = worker.getOrganization() != null? worker.getOrganization() : "";
 	%>
 									
 									<tr>
-										<td><%=worker.getFacilityWorkerType().getName() %></td>
-										<td><%=worker.getName() %></td>
-										<td><%=worker.getIdentifier() %></td>
-										<td><%=worker.getOrganization() %></td>
+										<td><%=workerType %></td>
+										<td><%=workerName %></td>
+										<td><%=workerIdentifier %></td>
+										<td><%=workerOrganization %></td>
 										
 	<% 	
 	String trainingString = "";

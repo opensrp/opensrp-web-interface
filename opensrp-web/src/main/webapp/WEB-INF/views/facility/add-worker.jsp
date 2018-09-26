@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
 
+<%@ page contentType="text/html; charset=UTF-8" language="java"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -67,10 +66,10 @@ String facilityName= (String)session.getAttribute("facilityName");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Name  </label>
+									<label for="exampleInputName">Worker Name  </label>
 									<input name="name" class="form-control"
 										required="required" aria-describedby="nameHelp"
-										placeholder="Name" /> 
+										placeholder="Worker Name" /> 
 									<span class="text-red">${uniqueNameErrorMessage}</span>
 								</div>
 							</div>
@@ -206,24 +205,7 @@ String facilityName= (String)session.getAttribute("facilityName");
 										</thead>
 										
 										
-										<tfoot>
-											<tr>
-												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Worker Type</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Name</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Identifier</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Organization</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Training</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Action</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Action</th>
-											</tr>
-										</tfoot>
+										
 										
 										<tbody id="dataTableBody">
 										
@@ -298,7 +280,7 @@ $("#workerInfo").submit(function(event) {
 	            'facilityId': $("#facilityId").val()
 	        };
 	}else if($("#newWorker").val() === "1"){
-		alert("new worker");
+		//alert("new worker");
 	}
 	
 	
@@ -354,6 +336,7 @@ function checkForTraining(){
 		$("#trainingDiv").show();
 	}else{
 		$("#trainingDiv").hide();
+		$("#trainings").val("");
 	}
 	
 }
