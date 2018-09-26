@@ -90,7 +90,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		
 		<div class="form-group">
 		
-		<a  href="/opensrp-dashboard/facility/${facility.id}/addWorker.html"> <strong>Add Worker</strong> </a>		
+		<a  href="/opensrp-dashboard/facility/${facility.id}/addWorker.html"> <strong>Add Worker/Training</strong> </a>		
 		</div>
 		
 		
@@ -117,14 +117,37 @@ if (session.getAttribute("facilityWorkerList") != null) {
   <tr>
  	<td>3.</td>
     <td>ভৌগোলিক অবস্থা: </td>
-    <td colspan="3">
-     Division: ${facility.division}<br>
-     District: ${facility.district}<br>
-     Upazilla: ${facility.upazilla}<br>
-     Union: ${facility.union}<br>
-     Ward: ${facility.ward}<br>
-     Latitude: ${facility.latitude}<br>
-     Longitude: ${facility.longitude}</td>
+    <td colspan="3"><table width="100%" border="0">
+    <tr>
+    	<td>বিভাগ :</td>
+    	<td> ${facility.division}</td>
+    </tr>
+    <tr>
+    	<td>জেলা :</td>
+    	<td> ${facility.district}</td>
+    </tr>
+    <tr>
+    	<td>উপজেলা :</td>
+    	<td> ${facility.upazilla}</td>
+    </tr>
+     <tr>
+    	<td>ইউনিয়ন :</td>
+    	<td> ${facility.union}</td>
+    </tr>
+    <tr>
+    	<td>ওয়ার্ড :</td>
+    	<td> ${facility.ward}</td>
+    </tr>
+     <tr>
+    	<td>অক্ষাংশ :</td>
+    	<td> ${facility.latitude}</td>
+    </tr>
+    <tr>
+    	<td>দ্রাঘিমা :</td>
+    	<td> ${facility.longitude}</td>
+    </tr>
+    </table>
+   	
   </tr>
   <tr>
   	<td>4.</td>
@@ -135,14 +158,14 @@ if (session.getAttribute("facilityWorkerList") != null) {
   </tr>
   <tr>
   	<td>5.</td>
-    <td>স্বাস্থ সহকারীর নাম:</td>
+    <td>স্বাস্থ্য সহকারীর নাম:</td>
     <td><%=(coreWorkers[2][0]!= null)? coreWorkers[2][0] : ""%></td>
     <td>মোবাইল নাম্বার:</td>
     <td><%=(coreWorkers[2][1]!= null)? coreWorkers[2][1] : ""%></td>
   </tr>
   <tr>
     <td>6.</td>
-    <td>সহকারীর স্বাস্থ পরিদর্শকের  নাম:</td>
+    <td>সহকারীর স্বাস্থ্য পরিদর্শকের  নাম:</td>
     <td><%=(coreWorkers[3][0]!= null)? coreWorkers[3][0] : ""%></td>
     <td>মোবাইল নাম্বার:</td>
     <td><%=(coreWorkers[3][1]!= null)? coreWorkers[3][1] : ""%></td>
@@ -190,7 +213,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
   
   <tr>
     <td>10. </td>
-    <td colspan="4">অনন্যা স্বাস্থা কর্মীর নাম: </td>
+    <td colspan="4">অনন্যা স্বাস্থ্য কর্মীর নাম: </td>
   </tr>
  <tr>
     <td>&nbsp;</td>
@@ -216,7 +239,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
   </tr>
   <!-- <tr>
   	<td>10.</td>
-    <td>অনন্যা স্বাস্থা কর্মীর নাম (যদি থাকে):</td>
+    <td>অনন্যা স্বাস্থ্য কর্মীর নাম (যদি থাকে):</td>
     <td>..................................................</td>
     <td>মোবাইল নাম্বার:</td>
     <td>.....................................................</td>

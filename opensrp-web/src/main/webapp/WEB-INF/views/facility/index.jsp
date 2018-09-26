@@ -100,7 +100,7 @@
 												<td>
 												<a href="<c:url value="<%= detailsURL%>" />">Details</a>
 												| 	
-												<a href="<c:url value="<%= addWorkerURL%>" />">Add Worker</a>	
+												<a href="<c:url value="<%= addWorkerURL%>" />">Add Worker/Training</a>	
 												</td> 
 											</tr>
 											<%

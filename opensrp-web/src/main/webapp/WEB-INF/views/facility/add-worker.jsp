@@ -66,7 +66,7 @@ String facilityName= (String)session.getAttribute("facilityName");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Worker Name  </label>
+									<label for="exampleInputName">স্বাস্থ্য কর্মীর নাম  </label>
 									<input name="name" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Worker Name" /> 
@@ -77,7 +77,7 @@ String facilityName= (String)session.getAttribute("facilityName");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Identifier (Email/Mobile No.)</label>
+									<label for="exampleInputName">স্বাস্থ্য কর্মীর মোবাইল নম্বর / ইমেইল </label>
 									<input name="identifier" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Identifier (Email/Mobile No.)" />
@@ -92,7 +92,7 @@ String facilityName= (String)session.getAttribute("facilityName");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Organization</label>
+									<label for="exampleInputName">স্বাস্থ্য কর্মীর প্রতিষ্ঠান</label>
 									<input name="organization" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Organization" />
@@ -108,7 +108,7 @@ String facilityName= (String)session.getAttribute("facilityName");
 					    <div class="form-group">							
 								<div class="row">									
 									<div class="col-5">
-									<label for="exampleInputName">Worker type</label>
+									<label for="exampleInputName">স্বাস্থ্য কর্মীর প্রকারভেদ</label>
 										<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" onchange="checkForTraining()" required>
 									 		<option value="" selected>Please Select</option>
 												<%

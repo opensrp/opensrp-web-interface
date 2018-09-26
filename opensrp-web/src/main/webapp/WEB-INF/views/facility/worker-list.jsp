@@ -16,6 +16,7 @@
 	<%
 	List<FacilityWorker> workerList = (List<FacilityWorker>) session.getAttribute("facilityWorkerList");
 	String creator = "";
+	if(workerList!=null){
 	for (FacilityWorker worker : workerList) 
 	{
 		String workerType = worker.getFacilityWorkerType().getName() != null? worker.getFacilityWorkerType().getName() : "";
@@ -51,4 +52,5 @@
 									<%
 									
 									}
+	}
 									%>
