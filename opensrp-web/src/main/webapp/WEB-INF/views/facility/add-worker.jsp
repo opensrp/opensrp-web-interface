@@ -16,6 +16,7 @@
 List<FacilityWorkerType> workerTypeList= (List<FacilityWorkerType>)session.getAttribute("workerTypeList");
 int facilityId= (Integer)session.getAttribute("facilityId");
 String facilityName= (String)session.getAttribute("facilityName");
+Map<Integer,Integer> distinctWorkerCountMap = (Map<Integer,Integer>) session.getAttribute("distinctWorkerCountMap");
 	%>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,6 +59,26 @@ String facilityName= (String)session.getAttribute("facilityName");
 				
 					<%-- <form:form method="POST" action="${saveUrl}" modelAttribute="facilityWorker"> --%>
 					<form:form id="workerInfo" >
+					
+					<div class="form-group">							
+								<div class="row">									
+									<div class="col-5">
+									<label for="exampleInputName">স্বাস্থ্য কর্মীর প্রকারভেদ</label>
+										<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" onchange="checkForTraining()" required>
+									 		<option value="" selected>Please Select</option>
+												<%
+												for (FacilityWorkerType workerType : workerTypeList)
+												{
+														%>
+															<option value="<%=workerType.getId() %>"><%=workerType.getName()%></option>
+														<%
+												}
+												%>
+											</select>
+											<span class="text-red">${supervisorUuidErrorMessage}</span>
+									</div>									
+								</div>
+						</div>
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
@@ -100,33 +121,16 @@ String facilityName= (String)session.getAttribute("facilityName");
 					
 					
 					
-					    <div class="form-group">							
-								<div class="row">									
-									<div class="col-5">
-									<label for="exampleInputName">স্বাস্থ্য কর্মীর প্রকারভেদ</label>
-										<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" onchange="checkForTraining()" required>
-									 		<option value="" selected>Please Select</option>
-												<%
-												for (FacilityWorkerType workerType : workerTypeList)
-												{
-														%>
-															<option value="<%=workerType.getId() %>"><%=workerType.getName()%></option>
-														<%
-												}
-												%>
-											</select>
-											<span class="text-red">${supervisorUuidErrorMessage}</span>
-									</div>									
-								</div>
-							
-						</div>
+					    
 						
 						
 						<input type="text" id= "trainings" name="trainings" value="" style="display: none;" readonly>
 						<div class="form-group" id="trainingDiv"  style="display: none;">
 							<div class="form-check">
 								<div class="row">
-
+								<div class="col-10">
+									<label for="exampleInputName">সিএইচসিপির প্রাপ্ত প্রশিক্ষণ সমূহ:</label><br>
+								</div>
 									<%
 										List<FacilityTraining> CHCPTrainingList = (List<FacilityTraining>) session.getAttribute("CHCPTrainingList");											
 										for (FacilityTraining facilityTraining : CHCPTrainingList) {
@@ -276,6 +280,12 @@ $("#workerInfo").submit(function(event) {
 	        };
 	}else if($("#newWorker").val() === "1"){
 		//alert("new worker");
+		var newWorkerType = $("#facilityWorkerTypeId").val();
+		var chcp = '1';
+		if(newWorkerType == chcp && distinctWorkerCountArray[newWorkerType][1]>0){
+			alert("already have a chcp");
+			return;
+		}
 	}
 	
 	
@@ -307,13 +317,34 @@ $("#workerInfo").submit(function(event) {
 var trainingList = [];
 var facilityWorkerList;
 var i=0;
+var distinctWorkerCountArray;
 $(document).ready(function() {
+	initializeDistinctWorkerCountArray();
 	//$("#trainings").hide();
 	//$("#trainingDiv").hide();
 	getWorkerList($("#facilityId").val());
 	//$('#dataTable').DataTable();
 	
 });
+
+function initializeDistinctWorkerCountArray(){
+	var distinctWorkerCountString = "<%=distinctWorkerCountMap%>" ;
+	var distinctWorkerCountString = removeBraces(distinctWorkerCountString);
+	distinctWorkerCountArray = stringTOArray(distinctWorkerCountString, ",");
+	for(var i=0;i<distinctWorkerCountArray.length;i++){
+		distinctWorkerCountArray[i] = stringTOArray(distinctWorkerCountArray[i], "=");
+	}
+	alert(distinctWorkerCountArray);
+}
+
+function removeBraces(inputString){
+	inputString = inputString.replace(/{/g, '').replace(/}/g, '');
+	return inputString;
+}
+function stringTOArray(inputString, separator){
+	var array = inputString.split(separator);
+	return array;
+}
 
 function check(){
 	var allVals = [];
@@ -331,6 +362,9 @@ function checkForTraining(){
 	var chcp = '1';
 	var workerType =$("#facilityWorkerTypeId").val();
 	if(workerType === chcp){
+		if(distinctWorkerCountArray[workerType][1]>0){
+			alert("already has a chcp");
+		}
 		$("#trainingDiv").show();
 		$("#trainings").val(prevTrainings);
 	}else{

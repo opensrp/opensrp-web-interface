@@ -3,8 +3,10 @@ package org.opensrp.facility.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -49,6 +51,27 @@ public class FacilityHelperUtil {
 	
 	public void setFacilityWorkerListToSession(HttpSession session, List<FacilityWorker> facilityWorkerList){
 		session.setAttribute("facilityWorkerList", facilityWorkerList);
+	}
+	
+	public List<FacilityWorker> getFacilityWorkerList (Facility facility){
+		Map<String, Object> facilityMap = new HashMap<String, Object>();
+		facilityMap.put("facility", facility);
+		List<FacilityWorker> facilityWorkerList = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findAllByKeys(facilityMap, FacilityWorker.class);
+		return facilityWorkerList;
+	}
+	
+	public Map<Integer,Integer> getDistinctWorkerCount(List<FacilityWorker> facilityWorkerList){
+		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findAll("FacilityWorkerType");
+		Map<Integer,Integer> distinctWorkerCountMap= new HashMap<Integer,Integer>();
+		for(FacilityWorkerType facilityWorkerType : workerTypeList){
+			distinctWorkerCountMap.put(facilityWorkerType.getId(), 0);
+		}
+		for(FacilityWorker worker : facilityWorkerList){
+			int workerType = worker.getFacilityWorkerType().getId();
+			int prevCount = distinctWorkerCountMap.get(workerType);
+			distinctWorkerCountMap.put(workerType, prevCount+1);
+		}
+		return distinctWorkerCountMap;
 	}
 	
 	public FacilityWorker convertFacilityWorkerDTO(FacilityWorkerDTO facilityWorkerDTO) {

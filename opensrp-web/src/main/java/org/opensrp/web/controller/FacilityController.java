@@ -121,10 +121,16 @@ public class FacilityController {
 		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
 		session.setAttribute("facilityName", facility.getName());
 		
+		List<FacilityWorker> facilityWorkerList = facilityHelperUtil.getFacilityWorkerList (facility);
+		Map<Integer,Integer> distinctWorkerCountMap = facilityHelperUtil.getDistinctWorkerCount(facilityWorkerList);
+		session.setAttribute("distinctWorkerCountMap", distinctWorkerCountMap);
+		System.out.println(distinctWorkerCountMap.toString());
+		
 		session.setAttribute("facilityId", id);
 		return "facility/add-worker";
        
 	}
+	
 	
 	
 	@RequestMapping(value = "/facility/saveWorker.html", method = RequestMethod.POST)
@@ -177,9 +183,7 @@ public class FacilityController {
 			@PathVariable("id") int id){
 		
 		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
-		Map<String, Object> facilityMap = new HashMap<String, Object>();
-		facilityMap.put("facility", facility);
-		List<FacilityWorker> facilityWorkerList = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findAllByKeys(facilityMap, FacilityWorker.class);
+		List<FacilityWorker> facilityWorkerList = facilityHelperUtil.getFacilityWorkerList(facility);
 		facilityHelperUtil.setFacilityWorkerListToSession(session, facilityWorkerList);
 		return "facility/worker-list";
        
