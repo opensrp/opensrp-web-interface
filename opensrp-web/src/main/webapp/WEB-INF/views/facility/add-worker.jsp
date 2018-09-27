@@ -324,13 +324,18 @@ function check(){
 	$("#trainings").val(trainingList.toString());
 }
 
+var prevTrainings ="";
 function checkForTraining(){
+	check();
+	//alert($("#trainings").val());
 	var chcp = '1';
 	var workerType =$("#facilityWorkerTypeId").val();
 	if(workerType === chcp){
 		$("#trainingDiv").show();
+		$("#trainings").val(prevTrainings);
 	}else{
 		$("#trainingDiv").hide();
+		prevTrainings = $("#trainings").val();
 		$("#trainings").val("");
 	}
 	
