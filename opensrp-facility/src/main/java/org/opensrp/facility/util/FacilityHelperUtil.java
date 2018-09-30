@@ -66,10 +66,12 @@ public class FacilityHelperUtil {
 		for(FacilityWorkerType facilityWorkerType : workerTypeList){
 			distinctWorkerCountMap.put(facilityWorkerType.getId(), 0);
 		}
+		if(facilityWorkerList != null){
 		for(FacilityWorker worker : facilityWorkerList){
 			int workerType = worker.getFacilityWorkerType().getId();
 			int prevCount = distinctWorkerCountMap.get(workerType);
 			distinctWorkerCountMap.put(workerType, prevCount+1);
+			}
 		}
 		return distinctWorkerCountMap;
 	}

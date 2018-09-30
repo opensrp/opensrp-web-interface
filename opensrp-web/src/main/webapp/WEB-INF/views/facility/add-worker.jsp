@@ -79,6 +79,19 @@ Map<Integer,Integer> distinctWorkerCountMap = (Map<Integer,Integer>) session.get
 									</div>									
 								</div>
 						</div>
+						
+						
+						<div class="form-group" id="messageDiv"  style="display: none;">
+							<div class="form-check">
+								<div class="row">
+									<div class="col-10">
+										<label for="exampleInputName" id="msg" style="color:Tomato;border:2px solid Tomato;"></label><br>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
@@ -259,6 +272,7 @@ $("#workerInfo").submit(function(event) {
             'facilityId': $("#facilityId").val()
         };
 	var detailsPageUrl = "/opensrp-dashboard/facility/"+$("#facilityId").val()+"/details.html";
+	var addWorkerPageUrl = "/opensrp-dashboard/facility/"+$("#facilityId").val()+"/addWorker.html";
 	
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
@@ -282,8 +296,11 @@ $("#workerInfo").submit(function(event) {
 		//alert("new worker");
 		var newWorkerType = $("#facilityWorkerTypeId").val();
 		var chcp = '1';
-		if(newWorkerType == chcp && distinctWorkerCountArray[newWorkerType][1]>0){
-			alert("already have a chcp");
+		if(newWorkerType == chcp && distinctWorkerCountArray[newWorkerType-1][1]>0){
+			var messageStr = "Already has a chcp. Please delete the previous one and try again.";
+			alert(messageStr);
+			//$("#msg").text(messageStr);
+			//$("#messageDiv").show();
 			return;
 		}
 	}
@@ -302,7 +319,7 @@ $("#workerInfo").submit(function(event) {
 		},
 		success : function(data) {
 		   //getWorkerList($("#facilityId").val());
-		   window.location.replace(detailsPageUrl);
+		   window.location.replace(addWorkerPageUrl);
 		},
 		error : function(e) {
 		   
@@ -334,7 +351,7 @@ function initializeDistinctWorkerCountArray(){
 	for(var i=0;i<distinctWorkerCountArray.length;i++){
 		distinctWorkerCountArray[i] = stringTOArray(distinctWorkerCountArray[i], "=");
 	}
-	alert(distinctWorkerCountArray);
+	//alert(distinctWorkerCountArray);
 }
 
 function removeBraces(inputString){
@@ -358,12 +375,13 @@ function check(){
 var prevTrainings ="";
 function checkForTraining(){
 	check();
+	hideWarning();
 	//alert($("#trainings").val());
 	var chcp = '1';
 	var workerType =$("#facilityWorkerTypeId").val();
-	if(workerType === chcp){
-		if(distinctWorkerCountArray[workerType][1]>0){
-			alert("already has a chcp");
+	if(workerType === '1'){
+		if(distinctWorkerCountArray[0][1]>0){
+			warnUser("CHCP", 1);
 		}
 		$("#trainingDiv").show();
 		$("#trainings").val(prevTrainings);
@@ -371,9 +389,63 @@ function checkForTraining(){
 		$("#trainingDiv").hide();
 		prevTrainings = $("#trainings").val();
 		$("#trainings").val("");
-	}
+		
+		//alert(workerType);
+		if(workerType === '2'){
+			if(distinctWorkerCountArray[1][1]>0){
+				warnUser("HEALTH ASSISTANT", 1);
+			}  
+		}else if(workerType === '3'){
+			if(distinctWorkerCountArray[2][1]>0){
+				warnUser("ASSISTANT HEALTH INSPECTOR", 1);
+			}  
+		}else if(workerType === '4'){
+			if(distinctWorkerCountArray[3][1]>0){
+				warnUser("FAMILY PLANNING ASSISTANT", 1);
+			}  
+		}else if(workerType === '5'){
+			if(distinctWorkerCountArray[4][1]>0){
+				warnUser("FAMILY PLANNING INSPECTOR", 1);
+			}  
+		}else if(workerType === '6'){
+			if(distinctWorkerCountArray[5][1]>0){
+				warnUser("MULTIPURPOSE HEALTH VOLUNTEER", 1);
+			}  
+		}else if(workerType === '7'){
+			if(distinctWorkerCountArray[6][1]>0){
+				warnUser("OTHER HEALTH WORKER", 1);
+			}  
+		}else if(workerType === '8'){
+			if(distinctWorkerCountArray[7][1]>16){
+				warnUser("COMMUNITY GROUP MEMBER", 17);
+			}  
+		}else if(workerType === '9'){
+			if(distinctWorkerCountArray[8][1]>16){
+				warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17);
+			}  
+		}
+		
+			
+	} 
 	
 }
+
+function warnUser(workerType, validNumber){
+	if(validNumber === 1){
+		var messageStr = "Already has a "+workerType+". Please delete the previous one and try again.";
+	}else if(validNumber >1){
+		var messageStr = "Number of "+workerType+"cannot be more than "+validNumber+".";
+	}
+	
+	$("#msg").text(messageStr);
+	$("#messageDiv").show();
+}
+
+function hideWarning(){
+	$("#msg").text("");
+	$("#messageDiv").hide();
+}
+
 
 function getWorkerList(id) {
 	var workerListURL ="/opensrp-dashboard/facility/"+id+"/getWorkerList.html";
@@ -410,6 +482,7 @@ function editWorker(workerId) {
 
 function deleteWorker(facilityId,workerId) {
 	var detailsPageUrl = "/opensrp-dashboard/facility/"+facilityId+"/details.html";
+	var addWorkerPageUrl = "/opensrp-dashboard/facility/"+facilityId+"/addWorker.html";
 	var url = "/opensrp-dashboard/rest/api/v1/facility/deleteWorker";			
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
@@ -430,7 +503,7 @@ function deleteWorker(facilityId,workerId) {
 		},
 		success : function(data) {
 		   //getWorkerList($("#facilityId").val());
-		   window.location.replace(detailsPageUrl);
+		   window.location.replace(addWorkerPageUrl);
 		},
 		error : function(e) {
 		   
