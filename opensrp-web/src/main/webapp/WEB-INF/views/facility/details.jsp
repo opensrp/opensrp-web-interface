@@ -123,7 +123,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
     </tr>
     <tr>
     	<td>উপজেলা :</td>
-    	<td> ${facility.upazilla}</td>
+    	<td> ${facility.upazila}</td>
     </tr>
      <tr>
     	<td>ইউনিয়ন :</td>

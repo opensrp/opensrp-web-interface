@@ -158,12 +158,12 @@ public class FacilityHelperUtil {
 					
 					
 					if(facilityFromCsv.length >=8){
-						facility.setUpazilla(facilityFromCsv[7].toUpperCase());
+						facility.setUpazila(facilityFromCsv[7].toUpperCase());
 					}
 					
 					
 					if(facilityFromCsv.length >=9){
-						facility.setUpazillaCode(facilityFromCsv[8]);
+						facility.setUpazilaCode(facilityFromCsv[8]);
 					}
 					
 					
@@ -279,14 +279,14 @@ public class FacilityHelperUtil {
 				facility.setDistrictCode("");
 			}
 		}
-		if(facility.getUpazilla() != null && !facility.getUpazilla().isEmpty()){
-			String[] upazilla = facility.getUpazilla().split("\\?");
+		if(facility.getUpazila() != null && !facility.getUpazila().isEmpty()){
+			String[] upazilla = facility.getUpazila().split("\\?");
 			if(upazilla.length>1){
-				facility.setUpazilla(upazilla[1]);
-				facility.setUpazillaCode(upazilla[0]);
+				facility.setUpazila(upazilla[1]);
+				facility.setUpazilaCode(upazilla[0]);
 			}else{
-				facility.setUpazilla("");
-				facility.setUpazillaCode("");
+				facility.setUpazila("");
+				facility.setUpazilaCode("");
 			}
 		}
 		if(facility.getUnion() != null && !facility.getUnion().isEmpty()){

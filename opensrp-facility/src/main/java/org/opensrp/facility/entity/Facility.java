@@ -66,12 +66,12 @@ public class Facility implements Serializable {
 	private String districtCode;
 	
 	
-	@Column(name = "upazilla")
-	private String upazilla;
+	@Column(name = "upazila")
+	private String upazila;
 	
 	
-	@Column(name = "upazilla_code")
-	private String upazillaCode;
+	@Column(name = "upazila_code")
+	private String upazilaCode;
 	
 	
 	@Column(name = "union_name")
@@ -98,6 +98,7 @@ public class Facility implements Serializable {
 	@Column(name = "MODIFIED_DATE", insertable = true, updatable = true)
 	@UpdateTimestamp
 	private Date updated = new Date();
+
 
 
 	public int getId() {
@@ -172,20 +173,21 @@ public class Facility implements Serializable {
 		this.districtCode = districtCode;
 	}
 
-	public String getUpazilla() {
-		return upazilla;
+
+	public String getUpazila() {
+		return upazila;
 	}
 
-	public void setUpazilla(String upazilla) {
-		this.upazilla = upazilla;
+	public void setUpazila(String upazila) {
+		this.upazila = upazila;
 	}
 
-	public String getUpazillaCode() {
-		return upazillaCode;
+	public String getUpazilaCode() {
+		return upazilaCode;
 	}
 
-	public void setUpazillaCode(String upazillaCode) {
-		this.upazillaCode = upazillaCode;
+	public void setUpazilaCode(String upazilaCode) {
+		this.upazilaCode = upazilaCode;
 	}
 
 	public String getUnion() {
@@ -264,9 +266,9 @@ public class Facility implements Serializable {
 		result = prime * result
 				+ ((unionCode == null) ? 0 : unionCode.hashCode());
 		result = prime * result
-				+ ((upazilla == null) ? 0 : upazilla.hashCode());
+				+ ((upazila == null) ? 0 : upazila.hashCode());
 		result = prime * result
-				+ ((upazillaCode == null) ? 0 : upazillaCode.hashCode());
+				+ ((upazilaCode == null) ? 0 : upazilaCode.hashCode());
 		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
 		result = prime * result + ((ward == null) ? 0 : ward.hashCode());
 		result = prime * result
@@ -341,15 +343,15 @@ public class Facility implements Serializable {
 				return false;
 		} else if (!unionCode.equals(other.unionCode))
 			return false;
-		if (upazilla == null) {
-			if (other.upazilla != null)
+		if (upazila == null) {
+			if (other.upazila != null)
 				return false;
-		} else if (!upazilla.equals(other.upazilla))
+		} else if (!upazila.equals(other.upazila))
 			return false;
-		if (upazillaCode == null) {
-			if (other.upazillaCode != null)
+		if (upazilaCode == null) {
+			if (other.upazilaCode != null)
 				return false;
-		} else if (!upazillaCode.equals(other.upazillaCode))
+		} else if (!upazilaCode.equals(other.upazilaCode))
 			return false;
 		if (updated == null) {
 			if (other.updated != null)
@@ -375,7 +377,7 @@ public class Facility implements Serializable {
 				+ ", latitude=" + latitude + ", longitude=" + longitude
 				+ ", division=" + division + ", divisionCode=" + divisionCode
 				+ ", district=" + district + ", districtCode=" + districtCode
-				+ ", upazilla=" + upazilla + ", upazillaCode=" + upazillaCode
+				+ ", upazilla=" + upazila + ", upazillaCode=" + upazilaCode
 				+ ", union=" + union + ", unionCode=" + unionCode + ", ward="
 				+ ward + ", wardCode=" + wardCode + ", created=" + created
 				+ ", updated=" + updated + "]";

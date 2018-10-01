@@ -77,7 +77,7 @@
 														String longitude = facility.getLongitude()!=null? facility.getLongitude() : "";
 														String division = facility.getDivision()!= null? facility.getDivision() : "";
 														String district = facility.getDistrict()!= null? facility.getDistrict() : "";
-														String upazilla = facility.getUpazilla()!= null? facility.getUpazilla() : "";
+														String upazila = facility.getUpazila()!= null? facility.getUpazila() : "";
 														String union = facility.getUnion()!= null? facility.getUnion() : "";
 														String ward = facility.getWard() != null? facility.getWard() : "";
 														
@@ -90,7 +90,7 @@
 												<td><%=name%></td>
 												<td><%=division%></td>
 												<td><%=district%></td>
-												<td><%=upazilla%></td>
+												<td><%=upazila%></td>
 												<td><%=union%></td>
 												<td><%=ward%></td>
 												<td>
