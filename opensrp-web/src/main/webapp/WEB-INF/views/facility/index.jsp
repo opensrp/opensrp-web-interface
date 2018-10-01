@@ -26,7 +26,8 @@
 		
 		<jsp:include page="/WEB-INF/views/facility-url.jsp" />
 			
-
+		<jsp:include page="/WEB-INF/views/searchPanel.jsp" />
+		
 			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> Community Clinic List

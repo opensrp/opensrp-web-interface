@@ -273,7 +273,7 @@ public class FacilityController {
 			model.put("msg", msg);
 			return new ModelAndView("/facility/upload_csv");
 		}
-		return new ModelAndView("redirect:/facility/index.html");
+		return new ModelAndView("redirect:/");
 	}
 
 }

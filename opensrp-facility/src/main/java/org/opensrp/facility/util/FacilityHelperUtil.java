@@ -138,7 +138,7 @@ public class FacilityHelperUtil {
 					
 					
 					if(facilityFromCsv.length >=4){
-						facility.setDivision(facilityFromCsv[3]);
+						facility.setDivision(facilityFromCsv[3].toUpperCase());
 					}
 					
 					
@@ -148,7 +148,7 @@ public class FacilityHelperUtil {
 					
 					
 					if(facilityFromCsv.length >=6){
-						facility.setDistrict(facilityFromCsv[5]);
+						facility.setDistrict(facilityFromCsv[5].toUpperCase());
 					}
 					
 					
@@ -158,7 +158,7 @@ public class FacilityHelperUtil {
 					
 					
 					if(facilityFromCsv.length >=8){
-						facility.setUpazilla(facilityFromCsv[7]);
+						facility.setUpazilla(facilityFromCsv[7].toUpperCase());
 					}
 					
 					
@@ -168,7 +168,7 @@ public class FacilityHelperUtil {
 					
 					
 					if(facilityFromCsv.length >=10){
-						facility.setUnion(facilityFromCsv[9]);
+						facility.setUnion(facilityFromCsv[9].toUpperCase());
 					}
 					
 					
@@ -178,7 +178,7 @@ public class FacilityHelperUtil {
 					
 					
 					if(facilityFromCsv.length >=12){
-						facility.setWard(facilityFromCsv[11]);
+						facility.setWard(facilityFromCsv[11].toUpperCase());
 					}
 					
 					
@@ -186,7 +186,7 @@ public class FacilityHelperUtil {
 						facility.setWardCode(facilityFromCsv[12]);
 					}
 					
-					
+					System.out.println(facility.toString());
 					facilityServiceFactory.getFacility("FacilityServiceImpl").save(facility);
 					
 					if(facilityFromCsv.length >=16){
