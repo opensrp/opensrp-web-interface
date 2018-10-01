@@ -45,11 +45,8 @@ JSONArray locatationTreeData = (JSONArray)session.getAttribute("locatationTreeDa
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		<div class="form-group">				
-				   <a  href="<c:url value="/location/tag/list.html"/>"> <strong> Manage Tags</strong> 
-					</a>  |  <a  href="<c:url value="/location/location.html"/>"> <strong>Manage Locations</strong>
-					</a>|  <a  href="<c:url value="/location/hierarchy.html"/>"> <strong>View Hierarchy</strong>
-					</a> |  <a  href="<c:url value="/location/upload_csv.html"/>"> <strong>Upload location</strong>
-					</a>	
+			<jsp:include page="/WEB-INF/views/location/location-tag-link.jsp" />
+
 		</div>
 			<div class="card mb-3">
 				<div class="card-header">

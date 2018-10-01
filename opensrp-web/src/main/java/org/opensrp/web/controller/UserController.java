@@ -62,7 +62,7 @@ public class UserController {
 	@Autowired
 	private PaginationUtil paginationUtil;
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_USER')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_USER_LIST')")
 	@RequestMapping(value = "/user.html", method = RequestMethod.GET)
 	public String userList(HttpServletRequest request, HttpSession session, Model model) {
 		

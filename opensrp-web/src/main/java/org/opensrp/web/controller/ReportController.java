@@ -14,6 +14,7 @@ import org.opensrp.web.nutrition.service.impl.ChildGrowthServiceImpl;
 import org.opensrp.web.util.PaginationHelperUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +38,7 @@ public class ReportController {
 	
 	@Autowired
 	private SearchUtil searchUtil;
-	
+	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_REPORT')")
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
 	public String childGrowthReport(HttpServletRequest request, HttpSession session, Model model) {
 		searchUtil.setDivisionAttribute(session);
@@ -54,7 +55,7 @@ public class ReportController {
 		session.setAttribute("data", data);
 		return "/report/child-growth-ajax";
 	}
-	
+	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_SUMMARY_REPORT')")
 	@RequestMapping(value = "/summary.html", method = RequestMethod.GET)
 	public String summaryReport(HttpServletRequest request, HttpSession session, Model model) {
 		searchUtil.setDivisionAttribute(session);

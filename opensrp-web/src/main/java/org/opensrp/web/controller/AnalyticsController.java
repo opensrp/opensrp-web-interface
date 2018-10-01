@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.SearchBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ public class AnalyticsController {
 	@Autowired
 	SearchBuilder searchBuilder;
 	
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/analytics.html", method = RequestMethod.GET)
 	public String analytics(HttpServletRequest request, HttpSession session, Model model) {
 		return "/analytics/analytics";

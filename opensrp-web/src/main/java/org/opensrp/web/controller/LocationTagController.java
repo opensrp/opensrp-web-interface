@@ -30,7 +30,7 @@ public class LocationTagController {
 	@Autowired
 	private LocationTag locationTag;
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION_TAG')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION_TAG_LIST')")
 	@RequestMapping(value = "location/tag/list.html", method = RequestMethod.GET)
 	public String locationList(Model model) {
 		List<LocationTag> locations = locationTagServiceImpl.findAll("LocationTag");

@@ -37,9 +37,7 @@
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		<div class="form-group">				
-				   <a  href="<c:url value="/user.html"/>"> <strong> Manage User</strong> 
-					</a>  |   <a  href="<c:url value="/role.html"/>"> <strong>Manage Role</strong>
-					</a>			
+			<jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />			
 		</div>
 			<div class="card mb-3">
 				<div class="card-header">					
