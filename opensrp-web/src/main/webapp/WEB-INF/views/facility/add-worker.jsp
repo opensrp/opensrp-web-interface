@@ -170,7 +170,7 @@ Map<Integer,Integer> distinctWorkerCountMap = (Map<Integer,Integer>) session.get
 						
 							
 						
-						<div class="form-group">
+						<div class="form-group" id="saveButtonDiv">
 							<div class="row">
 								<div class="col-3">
 									<input type="submit" value="Save"
@@ -376,53 +376,40 @@ var prevTrainings ="";
 function checkForTraining(){
 	check();
 	hideWarning();
+	$("#saveButtonDiv").show();
 	//alert($("#trainings").val());
 	var chcp = '1';
 	var workerType =$("#facilityWorkerTypeId").val();
 	if(workerType === '1'){
 		if(distinctWorkerCountArray[0][1]>0){
 			warnUser("CHCP", 1);
+		}else{
+
+			$("#trainingDiv").show();
+			$("#trainings").val(prevTrainings);
 		}
-		$("#trainingDiv").show();
-		$("#trainings").val(prevTrainings);
 	}else{
 		$("#trainingDiv").hide();
 		prevTrainings = $("#trainings").val();
 		$("#trainings").val("");
 		
 		//alert(workerType);
-		if(workerType === '2'){
-			if(distinctWorkerCountArray[1][1]>0){
-				warnUser("HEALTH ASSISTANT", 1);
-			}  
-		}else if(workerType === '3'){
-			if(distinctWorkerCountArray[2][1]>0){
+		if(workerType === '2' && distinctWorkerCountArray[1][1]>0){
+				warnUser("HEALTH ASSISTANT", 1); 
+		}else if(workerType === '3' && distinctWorkerCountArray[2][1]>0){
 				warnUser("ASSISTANT HEALTH INSPECTOR", 1);
-			}  
-		}else if(workerType === '4'){
-			if(distinctWorkerCountArray[3][1]>0){
+		}else if(workerType === '4' && distinctWorkerCountArray[3][1]>0){
 				warnUser("FAMILY PLANNING ASSISTANT", 1);
-			}  
-		}else if(workerType === '5'){
-			if(distinctWorkerCountArray[4][1]>0){
-				warnUser("FAMILY PLANNING INSPECTOR", 1);
-			}  
-		}else if(workerType === '6'){
-			if(distinctWorkerCountArray[5][1]>0){
-				warnUser("MULTIPURPOSE HEALTH VOLUNTEER", 1);
-			}  
-		}else if(workerType === '7'){
-			if(distinctWorkerCountArray[6][1]>0){
+		}else if(workerType === '5' && distinctWorkerCountArray[4][1]>0){
+				warnUser("FAMILY PLANNING INSPECTOR", 1);  
+		}else if(workerType === '6' && distinctWorkerCountArray[5][1]>4){
+				warnUser("MULTIPURPOSE HEALTH VOLUNTEER", 5); 
+		}else if(workerType === '7' && distinctWorkerCountArray[6][1]>0){
 				warnUser("OTHER HEALTH WORKER", 1);
-			}  
-		}else if(workerType === '8'){
-			if(distinctWorkerCountArray[7][1]>16){
+		}else if(workerType === '8' && distinctWorkerCountArray[7][1]>16){
 				warnUser("COMMUNITY GROUP MEMBER", 17);
-			}  
-		}else if(workerType === '9'){
-			if(distinctWorkerCountArray[8][1]>16){
-				warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17);
-			}  
+		}else if(workerType === '9' && distinctWorkerCountArray[8][1]>16){
+				warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17); 
 		}
 		
 			
@@ -434,11 +421,12 @@ function warnUser(workerType, validNumber){
 	if(validNumber === 1){
 		var messageStr = "Already has a "+workerType+". Please delete the previous one and try again.";
 	}else if(validNumber >1){
-		var messageStr = "Number of "+workerType+"cannot be more than "+validNumber+".";
+		var messageStr = "Number of "+workerType+" cannot be more than "+validNumber+".";
 	}
 	
 	$("#msg").text(messageStr);
 	$("#messageDiv").show();
+	$("#saveButtonDiv").hide();
 }
 
 function hideWarning(){
