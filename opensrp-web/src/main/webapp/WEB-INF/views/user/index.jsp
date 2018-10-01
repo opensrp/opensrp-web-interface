@@ -7,7 +7,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
-	
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>	
 <%@page import="org.opensrp.acl.entity.User"%>
 <%@page import="org.opensrp.acl.entity.Role"%>
 <%@page import="java.util.Map"%>
@@ -44,15 +44,13 @@ if (paginationAtributes.containsKey("name")) {
 		<div class="container-fluid">
 		
 			<div class="form-group">				
-					   <a  href="<c:url value="/user.html"/>"> <strong> Manage User</strong> 
-						</a>  |   <a  href="<c:url value="/role.html"/>"> <strong>Manage Role</strong>
-						</a>			
+				<jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />			
 			</div>
 			
 			<div class="form-group">
 				<h5>User Management</h5>
-				<a  href="<c:url value="/user/add.html"/>"> <strong>Add User</strong>
-						</a>
+				<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
+				<a  href="<c:url value="/user/add.html"/>"> <strong>Add User</strong> </a> <%} %>
 			</div>
 			<div class="card mb-3">
 				
@@ -89,15 +87,7 @@ if (paginationAtributes.containsKey("name")) {
 									<th>Actions</th>
 								</tr>
 							</thead>
-							<tfoot>
-								<tr>
-									<th>FullName</th>
-									<th>User Name</th>
-									<th>Email</th>
-									<th>Role</th>
-									<th>Actions</th>
-								</tr>
-							</tfoot>
+							
 							<tbody>
 							<%
 								List<User> users = (List<User>) session
@@ -114,7 +104,7 @@ if (paginationAtributes.containsKey("name")) {
 							%>
 								
 									<tr>
-										<td><a href="<c:url value="/user/${id}/edit.html"/>"><%=user.getFullName() %></a></td>
+										<td><%=user.getFullName() %></td>
 										<td><%=user.getUsername()%></td>
 										<td><%=user.getEmail()%></td>
 										<td>
@@ -123,9 +113,11 @@ if (paginationAtributes.containsKey("name")) {
 										<b> <%=role.getName()%> </b>
 										<% } %> 
 										</td>
-										<td><a href="<c:url value="/user/${id}/edit.html"/>">Edit</a>
-											| <a href="<c:url value="/user/${id}/password.html"/>">Reset
-												Pasword</a></td>
+										<td>
+										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
+											<a href="<c:url value="/user/${id}/edit.html"/>">Edit</a> |  <%} %>
+										<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
+											<a href="<c:url value="/user/${id}/password.html"/>">Reset Pasword</a> <%} %></td>
 
 									</tr>
 									<%

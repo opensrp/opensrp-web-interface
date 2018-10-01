@@ -7,6 +7,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,15 +31,13 @@
 	<div class="content-wrapper">
 		<div class="container-fluid">
 			<div class="form-group">				
-					   <a  href="<c:url value="/user.html"/>"> <strong> Manage User</strong> 
-						</a>  |   <a  href="<c:url value="/role.html"/>"> <strong>Manage Role</strong>
-						</a>			
+				<jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />			
 			</div>
 			
 			<div class="form-group">
 				<h5>Role Management</h5>
-				<a  href="<c:url value="/role/add.html"/>"> <strong>Add Role</strong>
-						</a>
+				<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_ROLE")){ %>
+				<a  href="<c:url value="/role/add.html"/>"> <strong>Add Role</strong></a> <%} %>
 			</div>
 			<!-- Example DataTables Card-->
 			<div class="card mb-3">
@@ -55,22 +54,18 @@
 									<th>Actions</th>
 								</tr>
 							</thead>
-							<tfoot>
-								<tr>
-									<th>Role</th>
-									<th>Permissions</th>
-									<th>Actions</th>
-								</tr>
-							</tfoot>
+							
 							<tbody>
 								<c:forEach var="role" items="${roles}" varStatus="loop">
 									<tr>
-										<td><a href="<c:url value="/role/${role.id}/edit.html"/>">${role.getName()}</a></td>
+										<td>${role.getName()}</td>
 										<td><c:forEach var="permission"
 												items="${role.getPermissions()}" varStatus="loop">
 												<b> ${permission.getName()} , </b>
 											</c:forEach></td>
-										<td><a href="<c:url value="/role/${role.id}/edit.html"/>">Edit</a>
+										<td>
+										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_ROLE")){ %>
+											<a href="<c:url value="/role/${role.id}/edit.html"/>">Edit</a> <%} %>
 										</td>
 
 									</tr>

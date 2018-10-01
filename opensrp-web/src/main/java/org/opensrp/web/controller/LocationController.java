@@ -55,14 +55,11 @@ public class LocationController {
 	@Autowired
 	private PaginationUtil paginationUtil;
 	
-	@Autowired
-	private CustomPermissionEvaluator c;
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION')")
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION_LIST')")
 	@RequestMapping(value = "location/location.html", method = RequestMethod.GET)
 	public String locationList(HttpServletRequest request, HttpSession session, Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		//System.err.println(c.hasPermission(auth, "returnObject", "PERM_READ_LOCATION"));
 		Class<Location> entityClassName = Location.class;
 		paginationUtil.createPagination(request, session, entityClassName);
 		return "location/index";

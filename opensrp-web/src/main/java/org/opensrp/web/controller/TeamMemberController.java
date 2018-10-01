@@ -43,7 +43,7 @@ public class TeamMemberController {
 	@Autowired
 	private PaginationUtil paginationUtil;
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_TEAM_MEMBER')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_TEAM_MEMBER_LIST')")
 	@RequestMapping(value = "/list.html", method = RequestMethod.GET)
 	public String locationList(HttpServletRequest request, HttpSession session, Model model) {
 		Class<TeamMember> entityClassName = TeamMember.class;
