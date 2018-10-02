@@ -20,20 +20,21 @@
 				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
 				href="#" data-toggle="dropdown">Facility </a>
 				<div class="dropdown-menu">
-					<% if(AuthenticationManagerUtil.isPermitted("FACILITY_REGISTRATION")){ %>
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/facility/add.html"/>"> <strong>
 							Registration</strong>
 					</a>
 					<% } %>
-					<% if(AuthenticationManagerUtil.isPermitted("COMMUNITY_CLINIC_LIST")){ %>
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/"/>"> <strong>
 							Community Clinic</strong>
 					</a>
-
+					<% } %>
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/facility/upload_csv.html"/>"> <strong>

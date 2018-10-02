@@ -77,16 +77,15 @@ if (paginationAtributes.containsKey("name")) {
 								<tr>
 									<th>Name</th>
 									<th>Description</th>									
-									<th> Tag</th>									
-									<th> Creator</th>
+									<th>Tag</th>									
+									<th>Actions</th>
 								</tr>
 							</thead>
 							<tfoot>
 								<tr>
 									<th>Name</th>
 									<th>Description</th>									
-									<th> Tag</th>
-									
+									<th>Tag</th>
 									<th>Actions</th>
 								</tr>
 							</tfoot>

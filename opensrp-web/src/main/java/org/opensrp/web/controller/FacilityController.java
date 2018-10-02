@@ -1,7 +1,5 @@
 package org.opensrp.web.controller;
 
-import static org.springframework.http.HttpStatus.OK;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,7 +25,7 @@ import org.opensrp.facility.util.FacilityHelperUtil;
 import org.opensrp.facility.util.FacilityServiceFactory;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -39,8 +37,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-
-import com.google.gson.Gson;
 
 
 @Controller
@@ -65,7 +61,7 @@ public class FacilityController {
 	@Autowired
 	private FacilityHelperUtil facilityHelperUtil;
 	
-	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY')")
 	@RequestMapping(value = "/facility/add.html", method = RequestMethod.GET)
 	public ModelAndView addFacility(HttpServletRequest request,ModelMap model, HttpSession session){
 		paginationUtil.createPagination(request, session, Facility.class);
@@ -74,6 +70,7 @@ public class FacilityController {
        
 	}
 
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY')")
 	@RequestMapping(value = "/facility/add.html", method = RequestMethod.POST)
 	 public RedirectView saveFacility(
 								 @RequestParam(value = "location", required = false) String locationId,
@@ -87,6 +84,7 @@ public class FacilityController {
 		
 	}
 	
+	//@PostAuthorize("hasPermission(returnObject, 'PERM_READ_FACILITY')")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showFacilityList(HttpServletRequest request, HttpSession session) {
         paginationUtil.createPagination(request, session, Facility.class);
@@ -110,6 +108,7 @@ public class FacilityController {
        
 	}*/
 	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY_WORKER')")
 	@RequestMapping(value = "/facility/{id}/addWorker.html", method = RequestMethod.GET)
 	public String addWorker(ModelMap model, HttpSession session,@PathVariable("id") int id){
 		
@@ -132,7 +131,7 @@ public class FacilityController {
 	}
 	
 	
-	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY_WORKER')")
 	@RequestMapping(value = "/facility/saveWorker.html", method = RequestMethod.POST)
 	public RedirectView saveWorker(HttpServletRequest request,
 			ModelMap model,
@@ -178,6 +177,7 @@ public class FacilityController {
        
 	}*/
 	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_FACILITY_WORKER')")
 	@RequestMapping(value = "/facility/{id}/getWorkerList.html", method = RequestMethod.GET)
 	public String getWorkerList (ModelMap model, HttpSession session,
 			@PathVariable("id") int id){
@@ -189,6 +189,7 @@ public class FacilityController {
        
 	}
 	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY_WORKER')")
 	@RequestMapping(value = "/facility/{workerId}/editWorker.html", method = RequestMethod.GET)
 	public String editWorker (ModelMap model, HttpSession session,
 			@PathVariable("workerId") int workerId){
@@ -205,6 +206,7 @@ public class FacilityController {
 	}
 	
 	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_FACILITY')")
 	@RequestMapping(value = "/facility/{id}/details.html", method = RequestMethod.GET)
 	public String facilityDetails(ModelMap model, HttpSession session,@PathVariable("id") int id){
 		
@@ -224,11 +226,13 @@ public class FacilityController {
        
 	}
 	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
 	@RequestMapping(value = "/facility/upload_csv.html", method = RequestMethod.GET)
 	public String csvUpload(HttpSession session) throws JSONException {
 		return "/facility/upload_csv";
 	}
 	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
 	@RequestMapping(value = "/facility/upload_csv.html", method = RequestMethod.POST)
 	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model)
 	    throws Exception {

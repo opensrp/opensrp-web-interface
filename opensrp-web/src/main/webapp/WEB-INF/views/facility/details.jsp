@@ -12,7 +12,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
-
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <!DOCTYPE html>
 <html> 
@@ -84,8 +84,9 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		<jsp:include page="/WEB-INF/views/facility-url.jsp" />
 		
 		<div class="form-group">
-		
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
 		<a  href="/opensrp-dashboard/facility/${facility.id}/addWorker.html"> <strong>Add Worker/Training</strong> </a>		
+		<%} %>
 		</div>
 		
 		

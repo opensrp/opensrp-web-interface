@@ -12,6 +12,8 @@
 <%@page import="org.json.JSONArray" %>
 <%@page import="org.opensrp.facility.entity.FacilityTraining" %>
 <%@page import="org.opensrp.facility.entity.FacilityWorkerType" %>
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
+
 <%
 List<FacilityWorkerType> workerTypeList= (List<FacilityWorkerType>)session.getAttribute("workerTypeList");
 int facilityId= (Integer)session.getAttribute("facilityId");
@@ -48,7 +50,9 @@ Map<Integer,Integer> distinctWorkerCountMap = (Map<Integer,Integer>) session.get
 		<jsp:include page="/WEB-INF/views/facility-url.jsp" />
 		
 		<div class="form-group">	
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 		<a  href="/opensrp-dashboard/facility/<%=facilityId%>/details.html"> <strong>CC Profile</strong> </a>		
+		<%} %>
 		</div>
 		
 			<div class="card mb-3">

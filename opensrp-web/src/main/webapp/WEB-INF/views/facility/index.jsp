@@ -10,6 +10,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -94,9 +95,13 @@
 												<td><%=union%></td>
 												<td><%=ward%></td>
 												<td>
+												<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 												<a href="<c:url value="<%= detailsURL%>" />">CC Profile</a>
 												| 	
+												<%} %>
+												<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
 												<a href="<c:url value="<%= addWorkerURL%>" />">Add Worker/Training</a>	
+												<%} %>
 												</td> 
 											</tr>
 											<%

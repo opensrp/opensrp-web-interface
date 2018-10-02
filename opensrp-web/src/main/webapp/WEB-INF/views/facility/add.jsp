@@ -8,6 +8,7 @@
 <%@page import="org.opensrp.common.util.CheckboxHelperUtil"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <%@page import="org.opensrp.acl.entity.Permission"%>
 
 <!DOCTYPE html>
@@ -29,7 +30,9 @@
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
 		<div class="container-fluid">
+		
 			<jsp:include page="/WEB-INF/views/facility-url.jsp" />
+			
 			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> Community Clinic Registration
