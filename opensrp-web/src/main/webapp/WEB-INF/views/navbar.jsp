@@ -50,51 +50,51 @@
 				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
 				href="#" data-toggle="dropdown">Client </a>
 				<div class="dropdown-menu">
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_HOUSEHOLD_LIST")){ %>
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_HOUSEHOLD")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/household.html"/>"> <strong>
 							Household</strong>
 					</a>
 					<% } %>
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_MOTHER_LIST")){ %>
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_MOTHER")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/mother.html"/>"> <strong>Mother</strong>
 					</a>
 					<% } %>
 					
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_MOTHER_LIST")){ %>
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_CHILD")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
 					</a>
 					<% } %>
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_CHILD_LIST")){ %>
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_MEMBER")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/member.html"/>"> <strong>Member</strong>
 					</a>
 					<% } %>
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_SIMILAR_CLIENT_LIST")){ %>
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILAR_EVENT_CLIENT")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/duplicateClient.html"/>"> <strong>Similar Client</strong>
 					</a>	
 					<% } %>
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_SIMILER_EVENT_LIST")){ %>
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILAR_EVENT_CLIENT")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Similar Event</strong>
 					</a>
 					<% } %>
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_SIMILER_CLIENT_RULE_DEFINATION")){ %>
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILARITY_DEFINITION")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Similar Definition Client</strong>
 					</a>
 					<% } %>
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_SIMILER_EVENT_RULE_DEFINATION")){ %>
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILARITY_DEFINITION")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Similar Definition Event</strong>
