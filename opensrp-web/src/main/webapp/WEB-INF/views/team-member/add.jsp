@@ -45,9 +45,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		<div class="form-group">				
-				   <a  href="<c:url value="/team/list.html"/>"> <strong> Manage Team</strong> 
-					</a>  |  <a  href="<c:url value="/team/teammember/list.html"/>"> <strong>Manage Team Member</strong>
-					</a>		
+			<jsp:include page="/WEB-INF/views/team/team-member-link.jsp" />		
 		</div>
 			<div class="card mb-3">
 				<div class="card-header">

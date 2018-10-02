@@ -38,7 +38,7 @@ public class RoleController {
 	@Autowired
 	private Role role;
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_ROLE')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_ROLE_LIST')")
 	@RequestMapping(value = "role.html", method = RequestMethod.GET)
 	public String roleList(Model model) {
 		List<Role> roles = roleServiceImpl.findAll("Role");
