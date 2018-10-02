@@ -1,6 +1,8 @@
 package org.opensrp.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +12,7 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.opensrp.acl.entity.Permission;
+import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.entity.User;
 import org.opensrp.acl.service.impl.RoleServiceImpl;
 import org.opensrp.acl.service.impl.UserServiceImpl;
@@ -151,4 +154,5 @@ public class UserController {
 		session.setAttribute("searchedUsers", users);
 		return "user/search";
 	}
+	
 }
