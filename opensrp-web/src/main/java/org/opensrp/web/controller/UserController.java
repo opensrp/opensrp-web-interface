@@ -1,6 +1,8 @@
 package org.opensrp.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +12,7 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.opensrp.acl.entity.Permission;
+import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.entity.User;
 import org.opensrp.acl.service.impl.RoleServiceImpl;
 import org.opensrp.acl.service.impl.UserServiceImpl;
@@ -150,5 +153,28 @@ public class UserController {
 		List<User> users = userServiceImpl.getAllProviderByKeysWithALlMatches(name);
 		session.setAttribute("searchedUsers", users);
 		return "user/search";
+	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ModelAndView analytics(HttpServletRequest request, HttpSession session, Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+		List<String> roleName = new ArrayList<String>();
+		Set<Role> roles = (Set<Role>) user.getRoles();
+		for (Role role : roles) {
+			roleName.add(role.getName());
+		}
+		/**
+		 * TODO
+		 */
+		String targetUrl = "/dashboard";
+		if (roleName.contains("admin")) {
+			targetUrl = "/dashboard";
+		} else if (roleName.contains("test")) {
+			targetUrl = "/analytics/analytics.html";
+		}
+		
+		return new ModelAndView("redirect:" + targetUrl);
+		
 	}
 }
