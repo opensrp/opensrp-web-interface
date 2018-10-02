@@ -155,26 +155,4 @@ public class UserController {
 		return "user/search";
 	}
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView analytics(HttpServletRequest request, HttpSession session, Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = (User) auth.getPrincipal();
-		List<String> roleName = new ArrayList<String>();
-		Set<Role> roles = (Set<Role>) user.getRoles();
-		for (Role role : roles) {
-			roleName.add(role.getName());
-		}
-		/**
-		 * TODO
-		 */
-		String targetUrl = "/dashboard";
-		if (roleName.contains("admin")) {
-			targetUrl = "/dashboard";
-		} else if (roleName.contains("test")) {
-			targetUrl = "/analytics/analytics.html";
-		}
-		
-		return new ModelAndView("redirect:" + targetUrl);
-		
-	}
 }
