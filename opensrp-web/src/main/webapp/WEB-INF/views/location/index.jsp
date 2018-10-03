@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -45,7 +45,7 @@ if (paginationAtributes.containsKey("name")) {
 		<div class="form-group">
 			<h5>Location Management</h5>
 			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_LOCATION")){ %>
-			<a  href="<c:url value="/location/add.html"/>"> <strong>Add New Location</strong></a>
+			<a  href="<c:url value="/location/add.html?lang=${locale}"/>"> <strong>Add New Location</strong></a>
 			<% } %>
 		</div>
 		<div class="card mb-3">
@@ -116,7 +116,7 @@ if (paginationAtributes.containsKey("name")) {
 										<td><%=tagName%></td>										
 										<td>
 										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_LOCATION")){ %>
-										<a href="<c:url value="/location/${id}/edit.html"/>">Edit</a></td>
+										<a href="<c:url value="/location/${id}/edit.html?lang=${locale}"/>">Edit</a></td>
 										<%} %>
 
 									</tr>

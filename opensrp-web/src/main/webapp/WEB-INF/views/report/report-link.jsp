@@ -3,11 +3,11 @@
 
 
 <% if(AuthenticationManagerUtil.isPermitted("CHILD_GROWTH_REPORT")){ %>
-<a  href="<c:url value="/report/child-growth.html"/>"> <strong> Child Growth Report</strong> </a>  |  <% } %>
+<a  href="<c:url value="/report/child-growth.html?lang=${locale}"/>"> <strong> Child Growth Report</strong> </a>  |  <% } %>
 <% if(AuthenticationManagerUtil.isPermitted("CHILD_GROWTH_SUMMARY_REPORT")){ %> 
-<a  href="<c:url value="/report/summary.html"/>"> <strong>Sumamry Report</strong>  </a>  |  <% } %>
+<a  href="<c:url value="/report/summary.html?lang=${locale}"/>"> <strong>Sumamry Report</strong>  </a>  |  <% } %>
 <% if(AuthenticationManagerUtil.isPermitted("ANALYTICS")){ %>
-<a  href="<c:url value="/analytics/analytics.html"/>"> <strong>Analytics</strong> 	</a> <% } %>
+<a  href="<c:url value="/analytics/analytics.html?lang=${locale}"/>"> <strong>Analytics</strong> 	</a> <% } %>
     
 
 

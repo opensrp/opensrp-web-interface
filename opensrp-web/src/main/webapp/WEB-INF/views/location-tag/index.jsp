@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -38,7 +38,7 @@
 			<div class="form-group">
 			<h5>Manage Location Tags</h5>
 			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_LOCATION_TAG")){ %>			
-			<a  href="<c:url value="/location/tag/add.html"/>"> <strong>Add New Location Tag</strong> </a>
+			<a  href="<c:url value="/location/tag/add.html?lang=${locale}"/>"> <strong>Add New Location Tag</strong> </a>
 			<%} %>
 			</div>
 			<div class="card mb-3">
@@ -72,7 +72,7 @@
 										<td>${locationTag.getCreated()}</td>
 										<td>
 										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_LOCATION_TAG")){ %>
-											<a href="<c:url value="/location/tag/${locationTag.id}/edit.html"/>">Edit</a>
+											<a href="<c:url value="/location/tag/${locationTag.id}/edit.html?lang=${locale}"/>">Edit</a>
 										<%} %>
 										</td>
 

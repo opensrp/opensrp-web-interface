@@ -1,6 +1,7 @@
 package org.opensrp.web.controller;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -40,16 +41,17 @@ public class RoleController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_ROLE_LIST')")
 	@RequestMapping(value = "role.html", method = RequestMethod.GET)
-	public String roleList(Model model) {
+	public String roleList(Model model, Locale locale) {
 		List<Role> roles = roleServiceImpl.findAll("Role");
 		model.addAttribute("roles", roles);
+		model.addAttribute("locale", locale);
 		return "role/index";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_ROLE')")
 	@RequestMapping(value = "role/add.html", method = RequestMethod.GET)
-	public ModelAndView saveRole(ModelMap model, HttpSession session) {
-		
+	public ModelAndView saveRole(ModelMap model, HttpSession session, Locale locale) {
+		model.addAttribute("locale", locale);
 		model.addAttribute("role", new Role());
 		int[] permissions = null;
 		session.setAttribute("permissions", permissionService.findAll("Permission"));
@@ -79,7 +81,7 @@ public class RoleController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_ROLE')")
 	@RequestMapping(value = "role/{id}/edit.html", method = RequestMethod.GET)
-	public ModelAndView editRole(ModelMap model, HttpSession session, @PathVariable("id") int id) {
+	public ModelAndView editRole(ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale) {
 		Role role = roleServiceImpl.findById(id, "id", Role.class);
 		model.addAttribute("role", role);
 		int[] permissions = new int[200];
@@ -93,6 +95,7 @@ public class RoleController {
 		session.setAttribute("permissions", permissionService.findAll("Permission"));
 		session.setAttribute("selectedPermissions", permissions);
 		model.addAttribute("id", id);
+		model.addAttribute("locale", locale);
 		return new ModelAndView("role/edit", "command", role);
 		
 	}

@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -45,7 +45,7 @@ if (paginationAtributes.containsKey("name")) {
 		<div class="form-group">
 			<h5>Team Management</h5>
 			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_TEAM")){ %>			
-			<a  href="<c:url value="/team/add.html"/>"> <strong>Add New Team</strong></a> <%} %>
+			<a  href="<c:url value="/team/add.html?lang=${locale}"/>"> <strong>Add New Team</strong></a> <%} %>
 		</div>
 		<div class="card mb-3">
 				
@@ -110,7 +110,7 @@ if (paginationAtributes.containsKey("name")) {
 										<td><%=superVisor%></td>
 										<td>
 										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_TEAM")){ %>	
-											<a href="<c:url value="/team/${id}/edit.html"/>">Edit</a> <%} %>
+											<a href="<c:url value="/team/${id}/edit.html?lang=${locale}"/>">Edit</a> <%} %>
 										</td>
 
 									</tr>

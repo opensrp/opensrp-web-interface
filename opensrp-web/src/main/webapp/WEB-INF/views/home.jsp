@@ -2,8 +2,8 @@
 <%@page import="com.google.gson.JsonObject"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="org.json.JSONArray"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
@@ -28,7 +28,7 @@
 <meta name='viewport'
 	content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
-<title>OPENSRP Dashboard Home</title>
+<title><spring:message code="lbl.dashboardPageTitle"/></title>
 
 <script
 	src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
@@ -60,7 +60,7 @@
 		<div class="container-fluid">
 			<!-- Breadcrumbs-->
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item"><spring:message code="lbl.dashboardPageTitle"/></li>
 				<!-- <li class="breadcrumb-item active">My Dashboard</li> -->
 			</ol>
 			<!-- Icon Cards-->

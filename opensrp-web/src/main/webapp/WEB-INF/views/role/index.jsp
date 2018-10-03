@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -37,7 +37,7 @@
 			<div class="form-group">
 				<h5>Role Management</h5>
 				<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_ROLE")){ %>
-				<a  href="<c:url value="/role/add.html"/>"> <strong>Add Role</strong></a> <%} %>
+				<a  href="<c:url value="/role/add.html?lang=${locale}"/>"> <strong>Add Role</strong></a> <%} %>
 			</div>
 			<!-- Example DataTables Card-->
 			<div class="card mb-3">
@@ -65,7 +65,7 @@
 											</c:forEach></td>
 										<td>
 										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_ROLE")){ %>
-											<a href="<c:url value="/role/${role.id}/edit.html"/>">Edit</a> <%} %>
+											<a href="<c:url value="/role/${role.id}/edit.html?lang=${locale}"/>">Edit</a> <%} %>
 										</td>
 
 									</tr>
