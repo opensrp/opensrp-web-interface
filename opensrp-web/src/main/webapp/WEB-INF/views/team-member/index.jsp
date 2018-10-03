@@ -7,6 +7,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 	
 <%@page import="org.opensrp.acl.entity.TeamMember"%>
 <%@page import="org.opensrp.acl.entity.Location"%>
@@ -42,14 +43,12 @@ if (paginationAtributes.containsKey("name")) {
 		<div class="container-fluid">
 			<!-- Example DataTables Card-->
 		<div class="form-group">				
-				   <a  href="<c:url value="/team/list.html"/>"> <strong> Manage Team</strong> 
-					</a>  |  <a  href="<c:url value="/team/teammember/list.html"/>"> <strong>Manage Team Member</strong>
-					</a>		
+			<jsp:include page="/WEB-INF/views/team/team-member-link.jsp" />		
 		</div>
 		<div class="form-group">
 			<h5>Team Member Management</h5>
-			<a  href="<c:url value="/team/teammember/add.html"/>"> <strong>Add New Team Member</strong>
-					</a>
+			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_TEAM_MEMBER")){ %>
+			<a  href="<c:url value="/team/teammember/add.html"/>"> <strong>Add New Team Member</strong>	</a> <%} %>
 		</div>
 		<div class="card mb-3">
 				
@@ -81,17 +80,11 @@ if (paginationAtributes.containsKey("name")) {
 									<th>Name</th>
 									<th>Identifier</th>									
 									<th>Location</th>
-									<th>Team</th>									
+									<th>Team</th>
+									<th>Actions</th>										
 								</tr>
 							</thead>
-							<tfoot>
-								<tr>
-									<th>Name</th>
-									<th>Identifier</th>									
-									<th>Location</th>
-									<th>Team</th>	
-								</tr>
-							</tfoot>
+							
 							<tbody>
 							
 							<%
@@ -118,11 +111,15 @@ if (paginationAtributes.containsKey("name")) {
 							%>
 								
 									<tr>
-										<td><a href="<c:url value="/team/teammember/${id}/edit.html"/>"><%=teamMember.getPerson().getUsername() %></a></td>
+										<td><%=teamMember.getPerson().getUsername() %></td>
 										<td><%=teamMember.getIdentifier() %></td>
 										<td><%=locationNames%></td>
 										<td><%=team%></td>
-										
+										<td>
+										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_TEAM_MEMBER")){ %>
+											<a href="<c:url value="/team/teammember/${id}/edit.html"/>">Edit</a>
+										<%} %>	
+										</td>
 
 									</tr>
 									<%

@@ -55,14 +55,9 @@ public class LocationController {
 	@Autowired
 	private PaginationUtil paginationUtil;
 	
-	@Autowired
-	private CustomPermissionEvaluator c;
-	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION_LIST')")
 	@RequestMapping(value = "location/location.html", method = RequestMethod.GET)
 	public String locationList(HttpServletRequest request, HttpSession session, Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		//System.err.println(c.hasPermission(auth, "returnObject", "PERM_READ_LOCATION"));
 		Class<Location> entityClassName = Location.class;
 		paginationUtil.createPagination(request, session, entityClassName);
 		return "location/index";
@@ -166,12 +161,14 @@ public class LocationController {
 		return "/location";
 	}
 	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_LOCATION')")
 	@RequestMapping(value = "location/upload_csv.html", method = RequestMethod.GET)
 	public String csvUpload(ModelMap model, HttpSession session) throws JSONException {
 		model.addAttribute("location", new Location());
 		return "/location/upload_csv";
 	}
 	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_LOCATION')")
 	@RequestMapping(value = "/location/upload_csv.html", method = RequestMethod.POST)
 	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model)
 	    throws Exception {

@@ -50,15 +50,16 @@ public class DashboardController {
 
 	@Autowired
 	private DataVisualization dataVisualization;
-	
+
 	@Autowired
 	private SocioEconomicDataVisualizeServiceImpl socioEconomicDataVisualizeServiceImpl;
 
+	@RequestMapping("/dashboard")
 
-	@RequestMapping("/")
 	public String showHome(HttpServletRequest request, Model model, HttpSession session) throws JSONException {
 		/*Different types of data counts and percentages*/
-		List<Object> dashboardAggregatedList = databaseServiceImpl.executeSelectQuery("select * from core.fn_growplus_dashboard_data_count()");
+		List<Object> dashboardAggregatedList = databaseServiceImpl
+				.executeSelectQuery("select * from core.fn_growplus_dashboard_data_count()");
 		session.setAttribute("dashboardAggregatedList", dashboardAggregatedList);
 
 		/*Line chart data*/
@@ -84,9 +85,7 @@ public class DashboardController {
 		return "visualization/socioeconomic";
 	}
 
-	private JSONObject createGeoJSON(boolean flag)
-			throws JSONException {
-
+	private JSONObject createGeoJSON(boolean flag) throws JSONException {
 		/* Sample geoJSON:
 		 * {type: 'FeatureCollection',
 		        features: [{
@@ -166,29 +165,29 @@ public class DashboardController {
 		session.setAttribute("lineChartData", lineChartData);
 		session.setAttribute("lineChartCategory", lineChartCategory);
 	}
-	
+
 	private void setHighChartData(HttpServletRequest request, HttpSession session)
-            throws JSONException {
-        searchBuilder = searchUtil.generateSearchBuilderParams(request, session);
-        if (searchBuilder.getYear() == null || searchBuilder.getYear().isEmpty()) {
-            searchBuilder.setYear(currentYear.toString());
-        }
-        //searchUtil.setProviderAttribute(session);
-        searchUtil.setDivisionAttribute(session);
-        //searchUtil.setSelectedfilter(request, session);
+			throws JSONException {
+		searchBuilder = searchUtil.generateSearchBuilderParams(request, session);
+		if (searchBuilder.getYear() == null || searchBuilder.getYear().isEmpty()) {
+			searchBuilder.setYear(currentYear.toString());
+		}
+		//searchUtil.setProviderAttribute(session);
+		searchUtil.setDivisionAttribute(session);
+		//searchUtil.setSelectedfilter(request, session);
 
-        List<Object[]> monthWiseData = dataVisualization.getMonthWiseData(searchBuilder, visualizationService);
-        JSONArray monthWiseSeriesData = HighChart.getMonthWiseSeriesData(monthWiseData);
+		List<Object[]> monthWiseData = dataVisualization.getMonthWiseData(searchBuilder, visualizationService);
+		JSONArray monthWiseSeriesData = HighChart.getMonthWiseSeriesData(monthWiseData);
 
-        //List<Object[]> dayWiseData = dataVisualization.getDayWiseData(searchBuilder, visualizationService);
-        //JSONArray dataJsonArray = HighChart.getDayWiseDrilldownSeriesData(dayWiseData);
-        JSONArray lineChartData = HighChart.getLineChartData(monthWiseData, searchBuilder.getYear());
-        JSONArray lineChartCategory = HighChart.getLineChartCategory(monthWiseData);
-        //session.setAttribute("dayWiseData", dataJsonArray);
-        session.setAttribute("lineChartData", lineChartData);
-        session.setAttribute("monthWiseSeriesData", monthWiseSeriesData);
-        session.setAttribute("lineChartCategory", lineChartCategory);
-    }
+		//List<Object[]> dayWiseData = dataVisualization.getDayWiseData(searchBuilder, visualizationService);
+		//JSONArray dataJsonArray = HighChart.getDayWiseDrilldownSeriesData(dayWiseData);
+		JSONArray lineChartData = HighChart.getLineChartData(monthWiseData, searchBuilder.getYear());
+		JSONArray lineChartCategory = HighChart.getLineChartCategory(monthWiseData);
+		//session.setAttribute("dayWiseData", dataJsonArray);
+		session.setAttribute("lineChartData", lineChartData);
+		session.setAttribute("monthWiseSeriesData", monthWiseSeriesData);
+		session.setAttribute("lineChartCategory", lineChartCategory);
+	}
 
 	private void setTitles(Model model, HttpSession session, String title) {
 		model.addAttribute("title", title + " Search Criteria");

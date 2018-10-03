@@ -7,6 +7,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 	
 <%@page import="org.opensrp.acl.entity.Team"%>
 
@@ -39,14 +40,12 @@ if (paginationAtributes.containsKey("name")) {
 		<div class="container-fluid">
 			<!-- Example DataTables Card-->
 		<div class="form-group">				
-				   <a  href="<c:url value="/team/list.html"/>"> <strong> Manage Team</strong> 
-					</a>  |  <a  href="<c:url value="/team/teammember/list.html"/>"> <strong>Manage Team Member</strong>
-					</a>		
+			<jsp:include page="/WEB-INF/views/team/team-member-link.jsp" />		
 		</div>
 		<div class="form-group">
 			<h5>Team Management</h5>
-			<a  href="<c:url value="/team/add.html"/>"> <strong>Add New Team</strong>
-					</a>
+			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_TEAM")){ %>			
+			<a  href="<c:url value="/team/add.html"/>"> <strong>Add New Team</strong></a> <%} %>
 		</div>
 		<div class="card mb-3">
 				
@@ -79,18 +78,10 @@ if (paginationAtributes.containsKey("name")) {
 									<th>Identifier</th>									
 									<th>Location</th>
 									<th>Current Supervisor</th>
-									
+									<th>Actions</th>
 								</tr>
 							</thead>
-							<tfoot>
-								<tr>
-									<th>Name</th>
-									<th>Identifier</th>									
-									<th>Location</th>
-									<th>Current Supervisor</th>
-									
-								</tr>
-							</tfoot>
+							
 							<tbody>
 							
 							<%
@@ -113,12 +104,14 @@ if (paginationAtributes.containsKey("name")) {
 							%>
 								
 									<tr>
-										<td><a href="<c:url value="/team/${id}/edit.html"/>"><%=team.getName() %></a></td>
-										
+										<td><%=team.getName() %></td>										
 										<td><%=team.getIdentifier() %></td>
 										<td><%=location%></td>
 										<td><%=superVisor%></td>
-										
+										<td>
+										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_TEAM")){ %>	
+											<a href="<c:url value="/team/${id}/edit.html"/>">Edit</a> <%} %>
+										</td>
 
 									</tr>
 									<%

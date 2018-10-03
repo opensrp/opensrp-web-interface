@@ -7,6 +7,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,17 +32,14 @@
 		<div class="container-fluid">
 			<!-- Example DataTables Card-->
 			<div class="form-group">
-			 	<a  href="<c:url value="/location/tag/list.html"/>"> <strong> Manage Tags</strong> 
-					</a>  |  <a  href="<c:url value="/location/location.html"/>"> <strong>Manage Locations</strong>
-					</a>|  <a  href="<c:url value="/location/hierarchy.html"/>"> <strong>View Hierarchy</strong>
-					</a> |  <a  href="<c:url value="/location/upload_csv.html"/>"> <strong>Upload location</strong>
-					</a>
+			<jsp:include page="/WEB-INF/views/location/location-tag-link.jsp" />
 				
 			</div>
 			<div class="form-group">
 			<h5>Manage Location Tags</h5>
-			<a  href="<c:url value="/location/tag/add.html"/>"> <strong>Add New Location Tag</strong>
-					</a>
+			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_LOCATION_TAG")){ %>			
+			<a  href="<c:url value="/location/tag/add.html"/>"> <strong>Add New Location Tag</strong> </a>
+			<%} %>
 			</div>
 			<div class="card mb-3">
 				<div class="card-header">
@@ -69,10 +67,13 @@
 							<tbody>
 								<c:forEach var="locationTag" items="${locationTags}" varStatus="loop">
 									<tr>
-										<td><a href="<c:url value="/location/tag/${locationTag.id}/edit.html"/>">${locationTag.getName()}</a></td>
+										<td>${locationTag.getName()}</td>
 										<td>${locationTag.getDescription()}</td>
 										<td>${locationTag.getCreated()}</td>
-										<td><a href="<c:url value="/location/tag/${locationTag.id}/edit.html"/>">Edit</a>
+										<td>
+										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_LOCATION_TAG")){ %>
+											<a href="<c:url value="/location/tag/${locationTag.id}/edit.html"/>">Edit</a>
+										<%} %>
 										</td>
 
 									</tr>

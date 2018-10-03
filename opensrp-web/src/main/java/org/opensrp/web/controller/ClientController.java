@@ -15,6 +15,7 @@ import org.opensrp.common.service.impl.ClientServiceImpl;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -45,6 +46,7 @@ public class ClientController {
 	@Autowired
 	private DuplicateRecordServiceImpl duplicateRecordServiceImpl;
 
+	@PostAuthorize("hasPermission(returnObject, 'UPDATEDUPLICATEDEFINATION')")
 	@RequestMapping(value = "/updateDuplicateDefinition.html", method = RequestMethod.POST)
 	public String updateDuplicateDefinition(@RequestParam(value = "criteriaString", required = false) String criteriaString,
 			@RequestParam(value = "id", required = false) String id,
@@ -65,6 +67,7 @@ public class ClientController {
 		return showDuplicateClient(session, model);
 	}
 
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/duplicateDefinitionOfClient.html", method = RequestMethod.GET)
 	public ModelAndView showDuplicateDefinitionOfClient(HttpServletRequest request, HttpSession session, Model model) throws JSONException {
 		duplicateRecordServiceImpl.getColumnNameList(session,"viewJsonDataConversionOfClient");
@@ -73,6 +76,7 @@ public class ClientController {
 		return new ModelAndView("client/duplicate-definition-of-client", "command", duplicateMatchingCriteriaDefinition);
 	}
 
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/duplicateDefinitionOfEvent.html", method = RequestMethod.GET)
 	public ModelAndView showDuplicateDefinitionOfEvent(HttpServletRequest request, HttpSession session, Model model) throws JSONException {
 		duplicateRecordServiceImpl.getColumnNameList(session,"viewJsonDataConversionOfEvent");
@@ -81,31 +85,35 @@ public class ClientController {
 		return new ModelAndView("client/duplicate-definition-of-event", "command", duplicateMatchingCriteriaDefinition);
 	}
 
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/duplicateEvent.html", method = RequestMethod.GET)
 	public String showDuplicateEvent(HttpSession session, Model model) throws JSONException {
 		duplicateRecordServiceImpl.getDuplicateRecord(session,"viewJsonDataConversionOfEvent");
 		return "client/duplicate-event";
 	}
 
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/duplicateClient.html", method = RequestMethod.GET)
 	public String showDuplicateClient(HttpSession session, Model model) throws JSONException {
 		duplicateRecordServiceImpl.getDuplicateRecord(session,"viewJsonDataConversionOfClient");
 		return "client/duplicate-client";
 	}
 
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/child/{id}/details.html", method = RequestMethod.GET)
 	public String showChildDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) throws JSONException {
 		clientServiceImpl.getChildWeightList(session,id);
 		return "client/child-details";
 	}
 
-
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/mother/{id}/details.html", method = RequestMethod.GET)
 	public String showMotherDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) {
 		clientServiceImpl.getMotherDetails(session, id);
 		return "client/mother-details";
 	}
-
+	
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/mother/{baseEntityId}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editMother(HttpServletRequest request, HttpSession session, ModelMap model,
 			@PathVariable("baseEntityId") String baseEntityId) {
@@ -117,6 +125,7 @@ public class ClientController {
 		return new ModelAndView("client/edit", "command", clientEntity);
 	}
 
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/mother/{baseEntityId}/edit.html", method = RequestMethod.POST)
 	public ModelAndView editMother(@ModelAttribute("clientEntity") @Valid ClientEntity clientEntity, BindingResult binding, ModelMap model,
 			HttpSession session, @PathVariable("baseEntityId") String baseEntityId) throws JSONException {
@@ -126,30 +135,35 @@ public class ClientController {
 		return new ModelAndView("redirect:/client/mother.html");
 	}
 
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/household.html", method = RequestMethod.GET)
 	public String showHouseholdList(HttpServletRequest request, HttpSession session, Model model) {
 		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", clientServiceImpl.getHouseholdEntityNamePrefix() + "household");
 		return "/client/household";
 	}
 
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/mother.html", method = RequestMethod.GET)
 	public String showMotherList(HttpServletRequest request, HttpSession session, Model model) {
 		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", clientServiceImpl.getWomanEntityName());
 		return "/client/mother";
 	}
 
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/child.html", method = RequestMethod.GET)
 	public String showChildList(HttpServletRequest request, HttpSession session, Model model) {
 		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", clientServiceImpl.getHouseholdEntityNamePrefix() + "child");
 		return "/client/child";
 	}
 
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/member.html", method = RequestMethod.GET)
 	public String showMemberList(HttpServletRequest request, HttpSession session, Model model) {
 		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "ec_member");
 		return "/client/member";
 	}
 
+	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/location", method = RequestMethod.GET)
 	public String getChildLocationList(HttpServletRequest request, HttpSession session, Model model, @RequestParam int id) {
 		List<Object[]> parentData = locationServiceImpl.getChildData(id);

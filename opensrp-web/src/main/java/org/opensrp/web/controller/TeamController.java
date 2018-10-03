@@ -42,7 +42,7 @@ public class TeamController {
 	@Autowired
 	private PaginationUtil paginationUtil;
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_TEAM')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_TEAM_LIST')")
 	@RequestMapping(value = "/list.html", method = RequestMethod.GET)
 	public String listTeam(HttpServletRequest request, HttpSession session, Model model) {
 		
