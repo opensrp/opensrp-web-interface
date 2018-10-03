@@ -60,7 +60,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public <T> T findAllByKeys(Map<String, String> fielaValues, Class<?> className) {
+	public <T> T findAllByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		return (T) databaseRepositoryImpl.findAllByKeys(fielaValues, className);
 	}
 	
@@ -82,7 +82,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 	
 	@Transactional
 	public <T> List<T> getDataFromSQLFunction(String procedureName, String params) {
-		return databaseRepositoryImpl.getDataFromSQLFunction(procedureName, params);
+		return null;
 	}
 	
 	@Transactional
@@ -139,15 +139,35 @@ public class DatabaseServiceImpl implements DatabaseService {
 		
 		return criteria;
 	}
-
+	
 	@Transactional
-	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, Integer offset, Integer maxResults
-			, String viewName, String entityType) {
-		return databaseRepositoryImpl.getDataFromView(searchBuilder, offset, maxResults, viewName, entityType);
+	public <T> List<T> getDataFromViewByBEId(String viewName, String entityType, String baseEntityId) {
+		return databaseRepositoryImpl.getDataFromViewByBEId(viewName, entityType, baseEntityId);
 	}
 
 	@Transactional
+	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, Integer offset, Integer maxResults, String viewName,
+	                                   String entityType) {
+		return databaseRepositoryImpl.getDataFromView(searchBuilder, offset, maxResults, viewName, entityType, "id");
+	}
+	
+	@Transactional
 	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType) {
 		return databaseRepositoryImpl.getViewDataSize(searchBuilder, viewName, entityType);
+	}
+	
+	@Transactional
+	public <T> List<T> executeSelectQuery(String sqlQuery) {
+		return databaseRepositoryImpl.executeSelectQuery(sqlQuery);
+	}
+	
+	@Transactional
+	public List<Object[]> refreshView(SearchBuilder searchBuilder) {
+		String funcQuery = "SELECT * FROM core.refresh_all_materialized_views()";
+		return databaseRepositoryImpl.executeSelectQuery(funcQuery);
+	}
+
+	public List<Object> findAllTest(Class<?> className) {
+		return databaseRepositoryImpl.findAllTest(className);
 	}
 }

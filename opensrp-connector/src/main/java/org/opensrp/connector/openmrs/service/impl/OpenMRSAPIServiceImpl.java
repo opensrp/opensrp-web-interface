@@ -2,9 +2,9 @@ package org.opensrp.connector.openmrs.service.impl;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.common.util.HttpResponse;
-import org.opensrp.common.util.HttpUtil;
 import org.opensrp.connector.openmrs.service.APIService;
+import org.opensrp.connector.util.HttpResponse;
+import org.opensrp.connector.util.HttpUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -49,6 +49,13 @@ public class OpenMRSAPIServiceImpl extends OpenmrsCredentialsService implements 
 	public JSONObject get(String payload, String uuid, String URL) throws JSONException {
 		HttpResponse op = HttpUtil.get(HttpUtil.removeEndingSlash(OPENMRS_BASE_URL) + "/" + URL + "/" + uuid, payload,
 		    OPENMRS_USER, OPENMRS_PWD);
+		return new JSONObject(op.body());
+	}
+	
+	@Override
+	public JSONObject getByQuery(String payload, String URL) throws JSONException {
+		HttpResponse op = HttpUtil.get(HttpUtil.removeEndingSlash(OPENMRS_BASE_URL) + "/" + URL, payload, OPENMRS_USER,
+		    OPENMRS_PWD);
 		return new JSONObject(op.body());
 	}
 	

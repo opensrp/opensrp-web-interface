@@ -44,6 +44,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.opensrp.dashboard</groupId>
+			<artifactId>opensrp-facility</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.opensrp.dashboard</groupId>
 			<artifactId>opensrp-acl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -147,6 +152,18 @@
 			<artifactId>spring-tx</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+		<dependency>
+	<groupId>commons-io</groupId>
+	<artifactId>commons-io</artifactId>
+	<version>1.3.2</version>
+</dependency>
+	
 
 		<!-- PostgreSQL -->
 		<dependency>

@@ -37,28 +37,22 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 	<div class="content-wrapper">
 		<div class="container-fluid">
 			<div class="form-group">				
-				   <a  href="<c:url value="/team/list.html"/>"> <strong> Manage Team</strong> 
-					</a>  |  <a  href="<c:url value="/team/teammember/list.html"/>"> <strong>Manage Team Member</strong>
-					</a>		
+			<jsp:include page="/WEB-INF/views/team/team-member-link.jsp" />		
 			</div>
 			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> Add Team
 				</div>
 				<div class="card-body">
-				<span> ${uniqueNameErrorMessage}</span><br />
-				<span> ${supervisorUuidErrorMessage}</span><br />
-				<span> ${uniqueIdetifierErrorMessage}</span><br />
-				<span> ${locationUuidErrorMessage}</span>
+				
 					<form:form method="POST" action="${saveUrl}" modelAttribute="team">
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Name  </label>
+									<label for="exampleInputName">Team Name </label>
 									<form:input path="name" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="Name" value="${name}" />
-										
+										required="required"/>
+									<span class="text-red">${uniqueNameErrorMessage}</span>	
 								</div>
 							</div>
 						</div>
@@ -69,6 +63,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 									<form:input path="identifier" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="identifier" />
+									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
 						</div>
@@ -82,6 +77,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 										<select id="combobox" class="form-control">
 											  
 										</select>
+										<span class="text-red">${locationUuidErrorMessage}</span>
 									</div>
 								</div>									
 							</div>
@@ -90,8 +86,8 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 								<div class="row">									
 									<div class="col-5">
 									<label for="exampleInputName">Supervisor</label>
-										<select class="custom-select custom-select-lg mb-3" id="superVisor" name="superVisor">
-									 		<option value="0" selected>Please Select</option>
+										<select class="custom-select custom-select-lg mb-3" id="superVisor" name="superVisor" required>
+									 		<option value="" selected>Please Select</option>
 												<%
 												for (Map.Entry<Integer, String> entry : supervisors.entrySet())
 												{
@@ -106,6 +102,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 												}
 												%>
 											</select>
+											<span class="text-red">${supervisorUuidErrorMessage}</span>
 									</div>									
 								</div>
 							
@@ -157,7 +154,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
           .addClass( "form-control custom-combobox-input ui-widget ui-widget-content  ui-corner-left" )
           .autocomplete({
             delay: 0,
-            minLength: 3,
+            minLength: 1,
             source: $.proxy( this, "_source" )
           })
           .tooltip({

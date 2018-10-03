@@ -34,10 +34,7 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 	<div class="content-wrapper">
 		<div class="container-fluid">
 			<div class="form-group">				
-				   <a  href="<c:url value="/location/tag/list.html"/>"> <strong> Manage Tags</strong> 
-					</a>  |  <a  href="<c:url value="/location.html"/>"> <strong>Manage Locations</strong>
-					</a>|  <a  href="<c:url value="/location/hierarchy.html"/>"> <strong>View Hierarchy</strong>
-					</a>			
+			<jsp:include page="/WEB-INF/views/location/location-tag-link.jsp" />
 			</div>
 			<div class="card mb-3">
 				<div class="card-header">
@@ -53,6 +50,16 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 									<form:input path="name" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Location Name" />
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-5">
+									<label for="exampleInputName">Code</label>
+									<form:input path="code" class="form-control"
+										required="required" aria-describedby="nameHelp"
+										placeholder="Description" />
 								</div>
 							</div>
 						</div>
@@ -84,8 +91,8 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 								<div class="row">									
 									<div class="col-5">
 									<label for="exampleInputName"> Location Tag</label>
-										<select class="custom-select custom-select-lg mb-3" id="locationTag" name="locationTag">
-									 		<option value="0" selected>Please Select</option>
+										<select class="custom-select custom-select-lg mb-3" id="locationTag" name="locationTag" required="required">
+									 		<option value="" selected>Please Select</option>
 												<%
 												for (Map.Entry<Integer, String> entry : tags.entrySet())
 												{
@@ -149,7 +156,7 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
           .addClass( "form-control custom-combobox-input ui-widget ui-widget-content ui-corner-left" )
           .autocomplete({
             delay: 0,
-            minLength: 3,
+            minLength: 1,
             source: $.proxy( this, "_source" )
           })
           .tooltip({

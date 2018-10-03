@@ -7,7 +7,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
-	
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
+
 <%@page import="org.opensrp.acl.entity.Location"%>
 
 <!DOCTYPE html>
@@ -39,15 +40,13 @@ if (paginationAtributes.containsKey("name")) {
 		<div class="container-fluid">
 			<!-- Example DataTables Card-->
 		<div class="form-group">				
-				   <a  href="<c:url value="/location/tag/list.html"/>"> <strong> Manage Tags</strong> 
-					</a>  |  <a  href="<c:url value="/location.html"/>"> <strong>Manage Locations</strong>
-					</a>|  <a  href="<c:url value="/location/hierarchy.html"/>"> <strong>View Hierarchy</strong>
-					</a>		
+			<jsp:include page="/WEB-INF/views/location/location-tag-link.jsp" />
 		</div>
 		<div class="form-group">
-			<h1>Location Management</h1>
-			<a  href="<c:url value="/location/add.html"/>"> <strong>Add New Location</strong>
-					</a>
+			<h5>Location Management</h5>
+			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_LOCATION")){ %>
+			<a  href="<c:url value="/location/add.html"/>"> <strong>Add New Location</strong></a>
+			<% } %>
 		</div>
 		<div class="card mb-3">
 				
@@ -69,7 +68,7 @@ if (paginationAtributes.containsKey("name")) {
 			</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Location List
+					 Location List
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -78,8 +77,7 @@ if (paginationAtributes.containsKey("name")) {
 								<tr>
 									<th>Name</th>
 									<th>Description</th>									
-									<th> Tag</th>
-									<th> Created Date</th>
+									<th> Tag</th>									
 									<th> Creator</th>
 								</tr>
 							</thead>
@@ -88,8 +86,8 @@ if (paginationAtributes.containsKey("name")) {
 									<th>Name</th>
 									<th>Description</th>									
 									<th> Tag</th>
-									<th> Created Date</th>
-									<th> Creator</th>
+									
+									<th>Actions</th>
 								</tr>
 							</tfoot>
 							<tbody>
@@ -106,18 +104,20 @@ if (paginationAtributes.containsKey("name")) {
 									if(location.getLocationTag() != null){
 										tagName = location.getLocationTag().getName();
 									}
+									
 									if(location.getCreator()!= null){
 										creator = location.getCreator().getUsername();
 									}
 							%>
 								
 									<tr>
-										<td><a href="<c:url value="/location/${id}/edit.html"/>"><%=location.getName() %></a></td>
-										
+										<td><%=location.getName() %></td>										
 										<td><%=location.getDescription() %></td>
-										<td><%=location.getLocationTag().getName()%></td>
-										<td><%=tagName%></td>
-										<td><%=creator %></td>
+										<td><%=tagName%></td>										
+										<td>
+										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_LOCATION")){ %>
+										<a href="<c:url value="/location/${id}/edit.html"/>">Edit</a></td>
+										<%} %>
 
 									</tr>
 									<%

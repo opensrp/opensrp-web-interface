@@ -11,12 +11,13 @@ import org.json.JSONObject;
 import org.opensrp.acl.entity.User;
 import org.opensrp.acl.openmrs.service.OpenMRSConnector;
 import org.opensrp.common.util.DefaultRole;
+import org.opensrp.connector.openmrs.service.APIServiceFactory;
 import org.opensrp.connector.openmrs.service.impl.OpenMRSAPIServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OpenMRSUserAPIService implements OpenMRSConnector<User> {
+public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 	
 	private static final Logger logger = Logger.getLogger(OpenMRSUserAPIService.class);
 	
@@ -47,7 +48,7 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<User> {
 	JSONObject person = new JSONObject();
 	
 	@Autowired
-	private OpenMRSAPIServiceImpl openMRSAPIServiceImpl;
+	private APIServiceFactory apiServiceFactory;
 	
 	public JSONObject generatePersonObject(User user) throws JSONException {
 		JSONArray personArray = new JSONArray();
@@ -83,21 +84,24 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<User> {
 	}
 	
 	@Override
-	public User add(User user) throws JSONException {
+	public User add(Object userOb) throws JSONException {
+		User user = (User) userOb;
 		String userUuid = "";
 		boolean isUpdate = false;
-		JSONObject createdPerson = openMRSAPIServiceImpl.add(PAYLOAD, generatePersonObject(user), PERSON_URL);
+		JSONObject createdPerson = apiServiceFactory.getApiService("openmrs").add(PAYLOAD, generatePersonObject(user),
+		    PERSON_URL);
 		logger.info("createdPerson::" + createdPerson);
 		if (createdPerson.has("uuid")) {
 			
-			JSONObject createdUser = openMRSAPIServiceImpl.add(PAYLOAD, generateUserJsonObject(user, isUpdate), USER_URL);
+			JSONObject createdUser = apiServiceFactory.getApiService("openmrs").add(PAYLOAD,
+			    generateUserJsonObject(user, isUpdate), USER_URL);
 			
-			if(createdUser.has("uuid")){
+			if (createdUser.has("uuid")) {
 				JSONObject person = (JSONObject) createdUser.get("person");
-				if(person.has("uuid")){
+				if (person.has("uuid")) {
 					user.setPersonUUid(person.getString("uuid"));
 				}
-				logger.info("createdUole:" + createdUser);
+				logger.info("createdUser:" + createdUser);
 				
 				userUuid = (String) createdUser.get("uuid");
 				user.setUuid(userUuid);
@@ -111,12 +115,13 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<User> {
 	}
 	
 	@Override
-	public String update(User user, String uuid) throws JSONException {
+	public String update(Object userOb, String uuid) throws JSONException {
+		User user = (User) userOb;
 		String userUuid = "";
 		boolean isUpdate = true;
-		JSONObject updatedRole = openMRSAPIServiceImpl.update(PAYLOAD, generateUserJsonObject(user, isUpdate), uuid,
-		    USER_URL);
-		logger.info("updatedRole:" + updatedRole);
+		JSONObject updatedRole = apiServiceFactory.getApiService("openmrs").update(PAYLOAD,
+		    generateUserJsonObject(user, isUpdate), uuid, USER_URL);
+		logger.info("updatedUser:" + updatedRole);
 		if (updatedRole.has("uuid")) {
 			userUuid = (String) updatedRole.get("uuid");
 		} else {
@@ -137,8 +142,16 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<User> {
 		return null;
 	}
 	
-	private JSONObject personDelete(String uuid) throws JSONException{
-		return openMRSAPIServiceImpl.delete(PAYLOAD, uuid, PERSON_URL);
+	private JSONObject personDelete(String uuid) throws JSONException {
+		return apiServiceFactory.getApiService("openmrs").delete(PAYLOAD, uuid, PERSON_URL);
 	}
 	
+	@Override
+	public JSONArray getByQuery(String query) throws JSONException {
+		
+		JSONObject user = apiServiceFactory.getApiService("openmrs").getByQuery(query, USER_URL);
+		JSONArray userArray = new JSONArray();
+		userArray = (JSONArray) user.get("results");
+		return userArray;
+	}
 }

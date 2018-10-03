@@ -11,8 +11,8 @@
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	
-	<context:component-scan base-package="org.opensrp.web.controller" />
+	<!-- <context:component-scan base-package="org.opensrp.web" />
 	<annotation-driven />
-	
+	 -->
 	
 </beans:beans>

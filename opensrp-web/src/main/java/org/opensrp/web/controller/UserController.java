@@ -1,6 +1,8 @@
 package org.opensrp.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +12,7 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.opensrp.acl.entity.Permission;
+import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.entity.User;
 import org.opensrp.acl.service.impl.RoleServiceImpl;
 import org.opensrp.acl.service.impl.UserServiceImpl;
@@ -62,7 +65,7 @@ public class UserController {
 	@Autowired
 	private PaginationUtil paginationUtil;
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_USER')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_USER_LIST')")
 	@RequestMapping(value = "/user.html", method = RequestMethod.GET)
 	public String userList(HttpServletRequest request, HttpSession session, Model model) {
 		
@@ -76,20 +79,8 @@ public class UserController {
 	public ModelAndView saveUser(Model model, HttpSession session) {
 		int[] selectedRoles = null;
 		model.addAttribute("account", new User());
-		userServiceImpl.setSelectedRolesAttributes(selectedRoles, session);
+		userServiceImpl.setRolesAttributes(selectedRoles, session);
 		return new ModelAndView("user/add", "command", account);
-	}
-	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_USER')")
-	@RequestMapping(value = "/user/add.html", method = RequestMethod.POST)
-	public ModelAndView saveUser(@RequestParam(value = "roles", required = false) int[] roles,
-	                             @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
-	                             HttpSession session) {
-		if (userServiceImpl.checkValidationsAndSave(account, roles, session, model)) {
-			return new ModelAndView("redirect:/user.html");
-		} else {
-			return new ModelAndView("/user/add");
-		}
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
@@ -98,13 +89,13 @@ public class UserController {
 		User account = userServiceImpl.findById(id, "id", User.class);
 		model.addAttribute("account", account);
 		model.addAttribute("id", id);
-		userServiceImpl.setSelectedRolesAttributes(userServiceImpl.getSelectedRoles(account), session);
+		userServiceImpl.setRolesAttributes(userServiceImpl.getSelectedRoles(account), session);
 		return new ModelAndView("user/edit", "command", account);
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
 	@RequestMapping(value = "/user/{id}/edit.html", method = RequestMethod.POST)
-	public ModelAndView editUser(@RequestParam(value = "roles", required = false) int[] roles,
+	public ModelAndView editUser(@RequestParam(value = "roles", required = false) String[] roles,
 	                             @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
 	                             HttpSession session, @PathVariable("id") int id) throws Exception {
 		account.setRoles(userServiceImpl.setRoles(roles));
@@ -136,7 +127,7 @@ public class UserController {
 			account.setRoles(gettingAccount.getRoles());
 			userServiceImpl.updatePassword(account);
 		} else {
-			userServiceImpl.setPasswordNotMatchedAttribute(model);
+			
 			return new ModelAndView("user/password", "command", gettingAccount);
 		}
 		return new ModelAndView("redirect:/user.html");
@@ -156,7 +147,6 @@ public class UserController {
 		return "redirect:/login?logout";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
 	}
 	
-	
 	@RequestMapping(value = "user/search.html", method = RequestMethod.GET)
 	public String providerSearch(Model model, HttpSession session, @RequestParam String name) throws JSONException {
 		
@@ -164,4 +154,5 @@ public class UserController {
 		session.setAttribute("searchedUsers", users);
 		return "user/search";
 	}
+	
 }

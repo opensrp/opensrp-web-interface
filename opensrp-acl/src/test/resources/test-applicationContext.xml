@@ -25,6 +25,6 @@
 
 	
 	<context:component-scan base-package="org.opensrp"/>
-	<util:properties id="opensrp" location="classpath:/opensrp.properties"/>
+	<util:properties id="opensrp" location="classpath:/opensrp.properties,classpath:/project.properties"/>
 
 </beans>

@@ -45,32 +45,27 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		<div class="form-group">				
-				   <a  href="<c:url value="/team/list.html"/>"> <strong> Manage Team</strong> 
-					</a>  |  <a  href="<c:url value="/team/teammember/list.html"/>"> <strong>Manage Team Member</strong>
-					</a>		
+			<jsp:include page="/WEB-INF/views/team/team-member-link.jsp" />		
 		</div>
 			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> Add Team member
 				</div>
 				<div class="card-body">
-				<span> ${uniqueNameErrorMessage}</span><br />
-				<span> ${supervisorUuidErrorMessage}</span><br />
-				<span> ${uniqueIdetifierErrorMessage}</span><br />
-				<span> ${locationSelectErrorMessage}</span>
-					<form:form method="POST" action="${saveUrl}" modelAttribute="teamMember">
+				<form:form method="POST" action="${saveUrl}" modelAttribute="teamMember">
 					
-					<form:hidden path="person" id="person" value="<%=selectedPersonId %>" />					
-						
-						<div class="form-group">							
+					<form:hidden path="person" id="person" value="<%=selectedPersonId %>" />
+					<div class="form-group">							
 							<div class="row">									
 								<div class="col-5">
 									<div id="cm" class="ui-widget">
 										<label>Person </label>
-										<select id="combobox" class="form-control">
-											  
+										<select id="combobox" class="form-control">											  
 										</select>
+										 <span class="text-red">${uniqueNameErrorMessage}</span> 
 									</div>
+	                          		
+	                        	
 								</div>									
 							</div>
 						</div>
@@ -80,10 +75,8 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 								<div class="col-5">
 									<div id="cm" class="ui-widget">
 										<label>Location </label>
-										<div id="locationsTag">
-                          					
-                          				</div>
-										
+										<div id="locationsTag"></div>
+										<span class="text-red">${locationSelectErrorMessage}</span>
 									</div>
 								</div>									
 							</div>
@@ -95,6 +88,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 									<form:input path="identifier" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="identifier" />
+									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
 						</div>
@@ -104,8 +98,8 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 								<div class="row">									
 									<div class="col-5">
 									<label for="exampleInputName">Team</label>
-										<select class="custom-select custom-select-lg mb-3" id="team" name="team">
-									 		<option value="0" selected>Please Select</option>
+										<select class="custom-select custom-select-lg mb-3" id="team" name="team" required="required">
+									 		<option value="" selected>Please Select</option>
 												<%
 												for (Map.Entry<Integer, String> entry : teams.entrySet())
 												{
@@ -171,7 +165,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
           .addClass( "form-control custom-combobox-input ui-widget ui-widget-content  ui-corner-left" )
           .autocomplete({
             delay: 0,
-            minLength: 3,
+            minLength: 1,
             source: $.proxy( this, "_source" )
           })
           .tooltip({
@@ -284,7 +278,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 	        value: <%=selectedLocationList%>,
 	        useCommaKey: true,
 	        allowFreeEntries: false,
-	        maxSelection: 3,
+	        maxSelection: 5,
 	        maxEntryLength: 70,
 	 		maxEntryRenderer: function(v) {
 	 			return '<div style="color:red">Typed Word TOO LONG </div>';

@@ -18,7 +18,9 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<meta name="_csrf" content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 <title>Add user information</title>
 
 <jsp:include page="/WEB-INF/views/css.jsp" />
@@ -31,109 +33,120 @@
 
 	<div class="content-wrapper">
 		<div class="container-fluid">
-		<div class="form-group">				
-				   <a  href="<c:url value="/user.html"/>"> <strong> Manage User</strong> 
-					</a>  |   <a  href="<c:url value="/role.html"/>"> <strong>Manage Role</strong>
-					</a>			
-		</div>
+			<div class="form-group">				
+				<jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />			
+			</div>
 			<div class="card mb-3">
-				<div class="card-header">
+				<div class="card-header" id="data">
 					<i class="fa fa-table"></i> Add User
 				</div>
 				<div class="card-body">
-					<form:form method="POST" action="${saveUrl}"
-						modelAttribute="account">
-						<div class="form-group">
-							<div class="row">
-								<div class="col-3">
-									<label>User Name</label>
-									<form:input path="username" class="form-control"
-										required="required" placeholder="Enter user name" />
-									${unique}
-								</div>
-								<div class="col-3">
-									<label>Email</label>
-									<form:input path="email" class="form-control"
-										required="required" placeholder="Enter email" />
-
-								</div>
-							</div>
-						</div>
-
-						<div class="form-group">
-							<div class="form-row">
-								<div class="col-3">
-									<label>First name</label>
-									<form:input path="firstName" class="form-control"
-										required="required" placeholder="Enter first name" />
-								</div>
-								<div class="col-3">
-									<label>Last name</label>
-									<form:input path="lastName" class="form-control"
-										required="required" placeholder="Enter last name" />
-								</div>
-							</div>
-						</div>
+					
+					<form:form 	modelAttribute="account" id="UserInfo" class="form-inline">	
+										
+						<div class="row col-12 tag-height">						 
+							<div class="form-group required">														
+								<label class="label-width" for="inputPassword6"> First name </label>										 
+								<form:input path="firstName" class="form-control mx-sm-3"
+								required="required" placeholder="Enter first name" />
+							</div>							
+						 </div>
+						 
+						 <div class="row col-12 tag-height">						
+							<div class="form-group required">														
+								<label class="label-width" for="inputPassword6"> Last name </label>										 
+								<form:input path="lastName" class="form-control mx-sm-3"
+											required="required" placeholder="Enter last name" />								
+							 </div>
+						 </div>
+						 
+						 <div class="row col-12 tag-height">						
+							<div class="form-group required">														
+								<label class="label-width"  for="inputPassword6"> Email </label>
+								<input type="email" class="form-control mx-sm-3" name="email" placeholder="Enter your email" required="required">										 
+															
+							 </div>
+						 </div>
 						
-						<div class="form-group">
-							<div class="form-row">
-								<div class="col-3">
-									<label>Mobile Number</label>
-									<form:input path="mobile" class="form-control"
-										placeholder="Enter mobile number" />
-								</div>
-								<div class="col-3">
-									<label>Identifier</label>
-									<form:input path="idetifier" class="form-control"
-										placeholder="Enter identifier" />
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="form-row">
-								<div class="col-3">
-									<label>Password</label>
-									<form:password path="password" class="form-control"
-										placeholder="Password" required="required" />
-								</div>
-								<div class="col-3">
-									<label>Confirm password</label>
-									<form:password path="retypePassword"
-										placeholder="Confirm password" class="form-control"
+						<div class="row col-12 tag-height">						
+							<div class="form-group">														
+								<label class="label-width" for="inputPassword6">Mobile Number</label>										 
+								<form:input path="mobile" class="form-control mx-sm-3"
+											placeholder="Enter mobile number" />								
+							 </div>
+						 </div>	
+						
+						<div class="row col-12 tag-height">						
+							<div class="form-group">														
+								<label class="label-width" for="inputPassword6">Identifier</label>										 
+								<form:input path="idetifier" class="form-control mx-sm-3"
+											placeholder="Enter identifier" />
+								
+							 </div>
+						 </div>
+						 
+						 <div class="row col-12 tag-height">						
+							<div class="form-group required">														
+								<label class="label-width" for="inputPassword6">Username</label>										 
+								<form:input path="username" class="form-control mx-sm-3"
+										required="required" placeholder="Enter user name" />
+								<small id="passwordHelpInline" class="text-muted text-para">
+	                          		<span class="text-red" id="usernameUniqueErrorMessage"></span> User can log in with  Username.
+	                        	</small>
+							 </div>							 
+						 </div>
+						 	
+							
+						<div class="row col-12 tag-height">						
+							<div class="form-group required">														
+								<label class="label-width" for="inputPassword6">Password</label>										 
+								<input type="password" placeholder="Enter password" class="form-control mx-sm-3" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required />
+								<small id="passwordHelpInline" class="text-muted text-para">
+	                          		 Password should be 8 characters long and should have both upper and lower case characters ,
+	                          		 at least one digit , at least one non digit.
+	                        	</small>
+							 </div>
+						 </div>
+						
+						<div class="row col-12 tag-height">						
+							<div class="form-group required">														
+								<label class="label-width"  for="inputPassword6">Confirm password</label>										 
+								<form:password path="retypePassword"
+										placeholder="Confirm password" class="form-control mx-sm-3"
 										required="required" />
-								</div>
-							</div>
-							${passwordNotMatch}
-						</div>
-						<div class="form-group">
-							<div class="form-check">
-								<div class="row">
+								<small id="passwordHelpInline" class="text-muted text-para">
+	                          		 <span class="text-red" id="passwordNotmatchedMessage"></span> Retype the password (for accuracy).
+	                        	</small>
+							 </div>
+							 
+						 </div>
+						
+						<div class="row col-12 tag-height">						
+							<div class="form-group required">
+								<label class="label-width"  for="inputPassword6">Role</label>
 									<%
-										List<Role> roles = (List<Role>) session.getAttribute("roles");
-											int[] selectedRoles = (int[]) session
-													.getAttribute("selectedRoles");
-											for (Role role : roles) {
-									%>
-									<div class="col-3">
-										<form:checkbox class="checkBoxClass form-check-input"
-											path="roles" value="<%=role.getId()%>"
-											checked="<%=CheckboxHelperUtil.checkCheckedBox(selectedRoles,
-							role.getId())%>" />
-										<label class="form-check-label" for="defaultCheck1"> <%=role.getName()%>
-										</label>
-									</div>
+										List<Role> roles = (List<Role>) session.getAttribute("roles");											
+										for (Role role : roles) {
+									%>									
+										<form:checkbox 
+											path="roles" class="chk" value="<%=role.getId()%>" />
+										<label class="form-control mx-sm-3" for="defaultCheck1"> <%=role.getName()%></label>									
 									<%
 										}
 									%>
-								</div>
+								
+							</div>
+							
+						</div>
+						<div class="row col-12 tag-height">	
+							<div class="form-group">
+								<label class="label-width"></label>
+								<div class="text-red" id="roleSelectmessage"></div>
 							</div>
 						</div>
-						<div class="form-group">
-							<div class="row">
-								<div class="col-3">
-									<input type="submit" value="Save"
-										class="btn btn-primary btn-block" />
-								</div>
+						<div class="row col-12 tag-height">						
+							<div class="form-group">
+									<input type="submit" onclick="return Validate()"  value="Save" 	class="btn btn-primary btn-block btn-center" />
 							</div>
 						</div>
 					</form:form>
@@ -145,5 +158,99 @@
 		<!-- /.content-wrapper-->
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 	</div>
+	
+	<script type="text/javascript">
+	$("#UserInfo").submit(function(event) { 
+			var url = "/opensrp-dashboard/rest/api/v1/user/save";			
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			var formData = {
+		            'firstName': $('input[name=firstName]').val(),
+		            'lastName': $('input[name=lastName]').val(),
+		            'email': $('input[name=email]').val(),
+		            'mobile': $('input[name=mobile]').val(),
+		            'idetifier': $('input[name=idetifier]').val(),
+		            'username': $('input[name=username]').val(),
+		            'password': $('input[name=password]').val(),
+		            'roles': getCheckboxValueUsingClass()
+		        };
+			event.preventDefault();
+			
+			$.ajax({
+				contentType : "application/json",
+				type: "POST",
+		        url: url,
+		        data: JSON.stringify(formData), 
+		        dataType : 'json',
+		        
+				timeout : 100000,
+				beforeSend: function(xhr) {				    
+					 xhr.setRequestHeader(header, token);
+				},
+				success : function(data) {
+				   $("#usernameUniqueErrorMessage").html(data);
+				   if(data == ""){					   
+					   window.location.replace("/opensrp-dashboard/user.html");
+					   
+				   }
+				   
+				},
+				error : function(e) {
+				   
+				},
+				done : function(e) {				    
+				    console.log("DONE");				    
+				}
+			});
+		});		
+		 
+	
+	function getCheckboxValueUsingClass(){
+		/* declare an checkbox array */
+		var chkArray = [];
+		
+		/* look for all checkboes that have a class 'chk' attached to it and check if it was checked */
+		$(".chk:checked").each(function() {
+			chkArray.push($(this).val());
+		});
+		
+		/* we join the array separated by the comma */
+		var selected;
+		selected = chkArray.join(',') ;		
+		
+		return selected;
+	}
+	
+	 function Validate() {
+		 
+         var password = document.getElementById("password").value;
+         var confirmPassword = document.getElementById("retypePassword").value;
+         if (password != confirmPassword) {
+        	 $("#passwordNotmatchedMessage").html("Your password is not similar with confirm password. Please enter same password in both");
+        	
+        	 return false;
+         }
+         
+         $("#passwordNotmatchedMessage").html("");
+         var chkArray = [];
+ 		
+ 		/* look for all checkboes that have a class 'chk' attached to it and check if it was checked */
+ 		$(".chk:checked").each(function() {
+ 			chkArray.push($(this).val());
+ 		});
+ 		
+ 		/* we join the array separated by the comma */
+ 		var selected;
+ 		selected = chkArray.join(',') ;		
+ 		if(selected.length > 0){			
+ 		}else{			
+ 			$("#roleSelectmessage").html("Please select at least one role");
+ 			return false;
+ 		}
+ 		$("#roleSelectmessage").html("");
+         return true;
+     }
+	
+		</script>
 </body>
 </html>

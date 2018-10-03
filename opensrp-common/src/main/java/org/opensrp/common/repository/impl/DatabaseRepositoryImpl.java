@@ -24,16 +24,16 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class DatabaseRepositoryImpl implements DatabaseRepository {
-	
+
 	private static final Logger logger = Logger.getLogger(DatabaseRepositoryImpl.class);
-	
+
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 	public DatabaseRepositoryImpl() {
-		
+
 	}
-	
+
 	@Override
 	public <T> long save(T t) throws Exception {
 		Session session = sessionFactory.openSession();
@@ -42,7 +42,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		try {
 			tx = session.beginTransaction();
 			session.saveOrUpdate(t);
-			
+
 			logger.info("saved successfully: " + t.getClass().getName());
 			returnValue = 1;
 			if (!tx.wasCommitted())
@@ -55,11 +55,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		finally {
 			session.close();
-			
+
 		}
 		return returnValue;
 	}
-	
+
 	@Override
 	public <T> int update(T t) {
 		Session session = sessionFactory.openSession();
@@ -83,7 +83,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return returnValue;
 	}
-	
+
 	@Override
 	public <T> boolean delete(T t) {
 		Session session = sessionFactory.openSession();
@@ -103,11 +103,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		finally {
 			session.close();
-			
+
 		}
 		return returnValue;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T findById(int id, String fieldName, Class<?> className) {
@@ -118,7 +118,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		session.close();
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
-	
+
 	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
@@ -129,20 +129,61 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		session.close();
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
-	
-	public <T> List<T> findAllByKeys(Map<String, String> fielaValues, Class<?> className) {
+
+	public <T> T findByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
-		for (Map.Entry<String, String> entry : fielaValues.entrySet()) {
+		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
 			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
 		}
-		
+		@SuppressWarnings("unchecked")
+		List<T> result = criteria.list();
+		session.close();
+		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+	}
+
+	public <T> T findLastByKey(Map<String, Object> fielaValues, String orderByFieldName, Class<?> className) {
+		Session session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(className);
+		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		}
+		criteria.addOrder(Order.desc(orderByFieldName));
+		@SuppressWarnings("unchecked")
+		List<T> result = criteria.list();
+		session.close();
+		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+	}
+
+	public <T> T findLastByKeyLessThanDateConditionOneField(Map<String, Object> fielaValues, Date fieldvalue, String field,
+			String orderByFieldName, Class<?> className) {
+		Session session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(className);
+		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		}
+		criteria.add(Restrictions.lt(field, fieldvalue));
+		criteria.addOrder(Order.desc(orderByFieldName));
+		@SuppressWarnings("unchecked")
+		List<T> result = criteria.list();
+		session.close();
+		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+	}
+// criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY); added to avoid duplicate record
+	public <T> List<T> findAllByKeys(Map<String, Object> fielaValues, Class<?> className) {
+		Session session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(className);
+		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		}
+
 		@SuppressWarnings("unchecked")
 		List<T> result = criteria.list();
 		session.close();
 		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
 	}
-	
+
 	public <T> List<T> findAllByKeysWithALlMatches(boolean isProvider, Map<String, String> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
@@ -152,13 +193,13 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		if (isProvider) {
 			criteria.add(Restrictions.eq("provider", true));
 		}
-		
+
 		@SuppressWarnings("unchecked")
 		List<T> result = criteria.list();
 		session.close();
 		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public boolean findByUserName(String value, String fieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
@@ -168,7 +209,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		session.close();
 		return (result.size() > 0 ? true : false);
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	public <T> boolean entityExists(int id, T value, String fieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
@@ -178,29 +220,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		session.close();
 		return (result.size() > 0 ? true : false);
 	}
-	
-	public <T> T findByCaseIdAndToday(String relationalId, Date today, Class<?> className) {
-		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		criteria.add(Restrictions.eq("relationalId", relationalId));
-		criteria.add(Restrictions.eq("today", today));
-		@SuppressWarnings("unchecked")
-		List<T> result = criteria.list();
-		session.close();
-		return (T) (result.size() > 0 ? (T) result.get(0) : null);
-	}
-	
-	public <T> T findByCaseIdAndBNFDate(String relationalId, Date bnfdate, Class<?> className) {
-		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		criteria.add(Restrictions.eq("relationalId", relationalId));
-		criteria.add(Restrictions.eq("FWBNFDATE", bnfdate));
-		@SuppressWarnings("unchecked")
-		List<T> result = criteria.list();
-		session.close();
-		return (T) (result.size() > 0 ? (T) result.get(0) : null);
-	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> findAll(String tableClass) {
@@ -218,10 +238,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		finally {
 			session.close();
 		}
-		
+
 		return (List<T>) result;
 	}
-	
+
 	public <T> List<T> findAllByKey(String value, String fieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
@@ -231,6 +251,17 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		session.close();
 		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
 	}
+
+	
+	public <T> List<T> findAllTest(Class<?> className) {
+		Session session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(className);
+		@SuppressWarnings("unchecked")
+		List<T> result = criteria.list();
+		session.close();
+		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	public <T> List<T> list(int result, int offsetreal, Class<?> entityClassName) {
@@ -244,12 +275,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			session.close();
 		}
 		catch (Exception e) {
-			
+
 		}
-		
+
 		return products;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Object[]> executeSelectQuery(String sqlQuery, String paramName, int paramValue) {
 		Session session = sessionFactory.openSession();
@@ -267,9 +298,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Object[]> executeSelectQuery(String sqlQuery) {
+	public <T> List<T> executeSelectQuery(String sqlQuery) {
 		Session session = sessionFactory.openSession();
-		List<Object[]> results = null;
+		List<T> results = null;
 		try {
 			SQLQuery query = session.createSQLQuery(sqlQuery);
 			results = query.list();
@@ -283,10 +314,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 	@SuppressWarnings("unchecked")
 	public List<Object[]> executeSelectQuery(String provider, String caseId, String scheduleName, String userType,
-	                                         String sqlQuery) {
-		
+			String sqlQuery) {
+
 		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
-		
+
 		if (!provider.isEmpty()) {
 			query.setParameter("provider", provider);
 		}
@@ -300,39 +331,21 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			query.setParameter("userType", userType);
 		}
 		List<Object[]> results = query.list();
-		
+
 		return results;
 	}
-	
-	@SuppressWarnings("unchecked")
-	public <T> List<T> getDataFromSQLFunction(String procedureName, String params) {
-		Session session = sessionFactory.openSession();
-		List<T> aggregatedData = null;
-		try {
-			String hql = "select * from " + procedureName + "(" + params + ")";
-			Query query = session.createSQLQuery(hql);
-			aggregatedData = query.list();
-			logger.info("data fetched successfully from " + procedureName + ", aggregated data size: "
-			        + aggregatedData.size());
-			session.close();
-		}
-		catch (Exception e) {
-			logger.error("Data fetch from " + procedureName + " error:" + e.getMessage());
-		}
-		return aggregatedData;
-	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <T> List<T> search(SearchBuilder searchBuilder, int result, int offsetreal, Class<?> entityClassName) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(entityClassName);
-		
+
 		criteria = DatabaseServiceImpl.createCriteriaCondition(searchBuilder, criteria);
 		criteria.setFirstResult(offsetreal);
 		criteria.setMaxResults(result);
 		criteria.addOrder(Order.desc("created"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		
+
 		List<T> data = new ArrayList<T>();
 		try {
 			data = (List<T>) criteria.list();
@@ -341,10 +354,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		catch (Exception e) {
 			logger.error(e);
 		}
-		
+
 		return data;
 	}
-	
+
 	public int countBySearch(SearchBuilder searchBuilder, Class<?> entityClassName) {
 		Session session = sessionFactory.openSession();
 		int count = 0;
@@ -357,28 +370,59 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		catch (Exception e) {
 			session.close();
 		}
-		
+
 		return count;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, int result, int offsetreal
-			, String viewName, String entityType) {
+	public <T> List<T> getDataFromViewByBEId(String viewName, String entityType, String baseEntityId) {
 		Session session = sessionFactory.openSession();
 		List<T> viewData = null;
 		try {
-			String hql = "SELECT * FROM core.\"" +  viewName + "\" "
-		    + " where entity_type = '" + entityType + "'";
-
-			hql = setCondition(searchBuilder, hql);
+			String hql = "SELECT * FROM core.\"" + viewName + "\" " + " where entity_type = '" + entityType + "'"
+					+ " and base_entity_id = '" + baseEntityId + "'";
 
 			Query query = session.createSQLQuery(hql);
-			query.setFirstResult(offsetreal);
-			query.setMaxResults(result);
+			viewData = query.list();
+			logger.info("data fetched successfully from " + viewName + ", data size: " + viewData.size());
+			session.close();
+		}
+		catch (Exception e) {
+			logger.error("Data fetch from " + viewName + " error:" + e.getMessage());
+		}
+		return viewData;
+	}
+
+	/**
+	 * maxRange -1 means setMaxResults does not consider. offsetreal -1 means setFirstResult does
+	 * not consider.
+	 * 
+	 * @param searchBuilder fdff maxRange -1 means setMaxResults does not consider. offsetreal -1
+	 *            means setFirstResult does not consider.
+	 */
+
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, int maxRange, int offsetreal, String viewName,
+			String entityType, String orderingBy) {
+		Session session = sessionFactory.openSession();
+		List<T> viewData = null;
+		try {
+			String hql = "SELECT * FROM core.\"" + viewName + "\" " + " where entity_type = '" + entityType + "'  ";
+
+			hql = setCondition(searchBuilder, hql);
+			if (!orderingBy.isEmpty()) {
+				hql += " order by " + orderingBy + " asc";
+			}
+			Query query = session.createSQLQuery(hql);
+			if (offsetreal != -1) {
+				query.setFirstResult(offsetreal);
+			}
+			if (maxRange != -1) {
+				query.setMaxResults(maxRange);
+			}
 
 			viewData = query.list();
-			logger.info("data fetched successfully from " + viewName + ", data size: "
-			        + viewData.size());
+			logger.info("data fetched successfully from " + viewName + ", data size: " + viewData.size());
 			session.close();
 		}
 		catch (Exception e) {
@@ -391,8 +435,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		int count = 0;
 		try {
-			String hql = "SELECT * FROM core.\"" +  viewName + "\""
-					+ " where entity_type = '" + entityType + "'";
+			String hql = "SELECT * FROM core.\"" + viewName + "\"" + " where entity_type = '" + entityType + "'";
 
 			hql = setCondition(searchBuilder, hql);
 
@@ -408,27 +451,49 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	private String setCondition(SearchBuilder searchBuilder, String hql) {
-		if(searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {
+		if (searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {
 			hql = hql + " and division = '" + searchBuilder.getDivision() + "'";
 		}
-		if(searchBuilder.getDistrict() != null && !searchBuilder.getDistrict().isEmpty()) {
+		if (searchBuilder.getDistrict() != null && !searchBuilder.getDistrict().isEmpty()) {
 			hql = hql + " and district = '" + searchBuilder.getDistrict() + "'";
 		}
-		if(searchBuilder.getUpazila() != null && !searchBuilder.getUpazila().isEmpty()) {
+		if (searchBuilder.getUpazila() != null && !searchBuilder.getUpazila().isEmpty()) {
 			hql = hql + " and upazila = '" + searchBuilder.getUpazila() + "'";
 		}
 		/*if(searchBuilder.getUnion() != null && !searchBuilder.getUnion().isEmpty()) {
 			hql = hql + " and union = '" + searchBuilder.getUnion() + "'";
 		}*/
-		if(searchBuilder.getWard() != null && !searchBuilder.getWard().isEmpty()) {
+		if (searchBuilder.getWard() != null && !searchBuilder.getWard().isEmpty()) {
 			hql = hql + " and ward = '" + searchBuilder.getWard() + "'";
 		}
-		if(searchBuilder.getSubunit() != null && !searchBuilder.getSubunit().isEmpty()) {
+		if (searchBuilder.getSubunit() != null && !searchBuilder.getSubunit().isEmpty()) {
 			hql = hql + " and subunit = '" + searchBuilder.getSubunit() + "'";
 		}
-		if(searchBuilder.getMauzapara() != null && !searchBuilder.getMauzapara().isEmpty()) {
+		if (searchBuilder.getMauzapara() != null && !searchBuilder.getMauzapara().isEmpty()) {
 			hql = hql + " and mauzapara = '" + searchBuilder.getMauzapara() + "'";
 		}
+		if (searchBuilder.getServerVersion() != -1) {
+			hql = hql + " and server_version > '" + searchBuilder.getServerVersion() + "'";
+		}
+		if (searchBuilder.getPregStatus() != null && !searchBuilder.getPregStatus().isEmpty()) {
+			hql = hql + " and is_pregnant = '" + searchBuilder.getPregStatus() + "'";
+		}
+
 		return hql;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T> List<T> getDataFromSQLFunction(SearchBuilder searchBuilder, Query query, Session session) {
+
+		List<T> aggregatedList = null;
+		try {
+			aggregatedList = query.list();
+			logger.info("Report Data fetched successfully from , aggregatedList size: " + aggregatedList.size());
+			session.close();
+		}
+		catch (Exception e) {
+			logger.error("Data fetch from  error:" + e.getMessage());
+		}
+		return aggregatedList;
 	}
 }

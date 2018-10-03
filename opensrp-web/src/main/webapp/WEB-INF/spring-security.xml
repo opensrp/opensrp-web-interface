@@ -10,14 +10,16 @@
 <security:http pattern="/favicon.ico" security="none" />
 
 	<security:http auto-config="true">
+		<security:access-denied-handler error-page="/403" />
 		<security:intercept-url pattern="/resources/**"
 			access="permitAll" />
 		<security:intercept-url pattern="/login*"
-			access="isAnonymous()" />
+			access="isAnonymous()" />			
 		<security:intercept-url pattern="/user/add*"
 			access="permitAll" />
 		<security:intercept-url pattern="/**"
 			access="isAuthenticated()" />
+			
 		<security:form-login login-page="/login"
 			username-parameter="username" password-parameter="password"
 			authentication-failure-url="/login" />

@@ -29,6 +29,14 @@ public class SearchBuilder {
 	
 	private String year;
 	
+	private long serverVersion;
+	
+	private String pregStatus;
+	
+	private String start;
+	
+	private String end;
+	
 	public SearchBuilder() {
 		
 	}
@@ -46,8 +54,30 @@ public class SearchBuilder {
 		this.setSearch("");
 		this.setYear("");
 		this.setUserName("");
+		this.setServerVersionn(-1);
+		this.setPregStatus("");
+		this.setStart("");
+		this.setEnd("");
 		return this;
 		
+	}
+	
+	public String getStart() {
+		return start;
+	}
+	
+	public SearchBuilder setStart(String start) {
+		this.start = start;
+		return this;
+	}
+	
+	public String getEnd() {
+		return end;
+	}
+	
+	public SearchBuilder setEnd(String end) {
+		this.end = end;
+		return this;
 	}
 	
 	public String getYear() {
@@ -56,6 +86,15 @@ public class SearchBuilder {
 	
 	public SearchBuilder setYear(String year) {
 		this.year = year;
+		return this;
+	}
+	
+	public long getServerVersion() {
+		return serverVersion;
+	}
+	
+	public SearchBuilder setServerVersionn(long serverVersion) {
+		this.serverVersion = serverVersion;
 		return this;
 	}
 	
@@ -158,16 +197,28 @@ public class SearchBuilder {
 		return this;
 	}
 	
+	public String getPregStatus() {
+		return pregStatus;
+	}
+	
+	public void setPregStatus(String pregStatus) {
+		this.pregStatus = pregStatus;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((district == null) ? 0 : district.hashCode());
 		result = prime * result + ((division == null) ? 0 : division.hashCode());
+		result = prime * result + ((end == null) ? 0 : end.hashCode());
 		result = prime * result + ((mauzapara == null) ? 0 : mauzapara.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((pregStatus == null) ? 0 : pregStatus.hashCode());
 		result = prime * result + ((provider == null) ? 0 : provider.hashCode());
 		result = prime * result + ((search == null) ? 0 : search.hashCode());
+		result = prime * result + (int) (serverVersion ^ (serverVersion >>> 32));
+		result = prime * result + ((start == null) ? 0 : start.hashCode());
 		result = prime * result + ((subunit == null) ? 0 : subunit.hashCode());
 		result = prime * result + ((union == null) ? 0 : union.hashCode());
 		result = prime * result + ((upazila == null) ? 0 : upazila.hashCode());
@@ -196,6 +247,11 @@ public class SearchBuilder {
 				return false;
 		} else if (!division.equals(other.division))
 			return false;
+		if (end == null) {
+			if (other.end != null)
+				return false;
+		} else if (!end.equals(other.end))
+			return false;
 		if (mauzapara == null) {
 			if (other.mauzapara != null)
 				return false;
@@ -206,6 +262,11 @@ public class SearchBuilder {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
+		if (pregStatus == null) {
+			if (other.pregStatus != null)
+				return false;
+		} else if (!pregStatus.equals(other.pregStatus))
+			return false;
 		if (provider == null) {
 			if (other.provider != null)
 				return false;
@@ -215,6 +276,13 @@ public class SearchBuilder {
 			if (other.search != null)
 				return false;
 		} else if (!search.equals(other.search))
+			return false;
+		if (serverVersion != other.serverVersion)
+			return false;
+		if (start == null) {
+			if (other.start != null)
+				return false;
+		} else if (!start.equals(other.start))
 			return false;
 		if (subunit == null) {
 			if (other.subunit != null)
@@ -253,7 +321,8 @@ public class SearchBuilder {
 	public String toString() {
 		return "SearchBuilder [division=" + division + ", district=" + district + ", upazila=" + upazila + ", union="
 		        + union + ", ward=" + ward + ", subunit=" + subunit + ", mauzapara=" + mauzapara + ", provider=" + provider
-		        + ", name=" + name + ", userName=" + userName + ", search=" + search + ", year=" + year + "]";
+		        + ", name=" + name + ", userName=" + userName + ", search=" + search + ", year=" + year + ", serverVersion="
+		        + serverVersion + ", pregStatus=" + pregStatus + ", start=" + start + ", end=" + end + "]";
 	}
 	
 }

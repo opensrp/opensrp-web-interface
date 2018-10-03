@@ -1,0 +1,39 @@
+CREATE MATERIALIZED VIEW core."wonamView"
+AS
+select 
+client.base_entity_id
+,eb.date_created
+,eb.event_date
+,client.division
+,district
+,upazila
+,client_union
+,ward
+,subunit
+,mauzapara
+,member_reg_date
+,CASE
+    WHEN (ef.is_pregnant != 'null' OR ef.is_pregnant != null) THEN ef.is_pregnant
+	ELSE eb.is_pregnant
+    END 
+	as pregnant 
+ from  core."viewJsonDataConversionOfClient" client
+ join 
+ core."viewJsonDataConversionOfEvent" as eb
+ on client.base_entity_id = eb.base_entity_id
+ left join
+ (SELECT *
+ FROM core."viewJsonDataConversionOfEvent" e1
+ WHERE e1.event_type='Woman Member Follow Up' and NOT EXISTS (
+   SELECT *
+   FROM core."viewJsonDataConversionOfEvent" e2
+   WHERE  e1.base_entity_id = e2.base_entity_id
+     AND e1.date_created < e2.date_created
+   ) order by e1.base_entity_id desc) as ef   
+   on eb.base_entity_id = ef.base_entity_id
+   where eb.event_type = 'New Woman Member Registration'
+
+WITH DATA;
+
+GRANT ALL ON TABLE core."wonamView" TO postgres;
+GRANT ALL ON TABLE core."wonamView" TO opensrp_admin;
