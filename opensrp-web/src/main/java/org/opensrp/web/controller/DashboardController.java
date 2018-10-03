@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.common.visualization.SocioEconomicDataVisualizeServiceImpl;
 import org.opensrp.common.visualization.DashboardDataVisualizeServiceImpl;
 import org.opensrp.common.visualization.DataVisualization;
 import org.opensrp.common.visualization.HighChart;
@@ -24,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class DashboardController {
@@ -48,6 +50,10 @@ public class DashboardController {
 
 	@Autowired
 	private DataVisualization dataVisualization;
+	
+	@Autowired
+	private SocioEconomicDataVisualizeServiceImpl socioEconomicDataVisualizeServiceImpl;
+
 
 	@RequestMapping("/")
 	public String showHome(HttpServletRequest request, Model model, HttpSession session) throws JSONException {
@@ -57,7 +63,7 @@ public class DashboardController {
 
 		/*Line chart data*/
 		visualizationService = dashboardDataVisualizeServiceImpl;
-		setHighChartData(request, session);
+		setHighChartDataForMultiLineCharts(request, session);
 		setTitles(model, session, "Child");
 
 		/*Maps data*/
@@ -68,6 +74,14 @@ public class DashboardController {
 		session.setAttribute("featureCollectionOfAdequateGrowth", featureCollectionOfAdequateGrowth);
 
 		return "home";
+	}
+
+	@RequestMapping(value = "visualize/socioeconomic.html", method = RequestMethod.GET)
+	public String visualizeSocioEconomicStatus(HttpServletRequest request, Model model, HttpSession session) throws JSONException {
+		visualizationService = socioEconomicDataVisualizeServiceImpl;
+		setHighChartData(request, session);
+		setTitles(model, session, "Socio Economic Status");
+		return "visualization/socioeconomic";
 	}
 
 	private JSONObject createGeoJSON(boolean flag)
@@ -138,7 +152,7 @@ public class DashboardController {
 		return featureCollection;
 	}
 
-	private void setHighChartData(HttpServletRequest request, HttpSession session)
+	private void setHighChartDataForMultiLineCharts(HttpServletRequest request, HttpSession session)
 			throws JSONException {
 		SearchBuilder searchBuilder = searchUtil.generateSearchBuilderParams(request, session);
 		if (searchBuilder.getYear() == null || searchBuilder.getYear().isEmpty()) {
@@ -152,6 +166,29 @@ public class DashboardController {
 		session.setAttribute("lineChartData", lineChartData);
 		session.setAttribute("lineChartCategory", lineChartCategory);
 	}
+	
+	private void setHighChartData(HttpServletRequest request, HttpSession session)
+            throws JSONException {
+        searchBuilder = searchUtil.generateSearchBuilderParams(request, session);
+        if (searchBuilder.getYear() == null || searchBuilder.getYear().isEmpty()) {
+            searchBuilder.setYear(currentYear.toString());
+        }
+        //searchUtil.setProviderAttribute(session);
+        searchUtil.setDivisionAttribute(session);
+        //searchUtil.setSelectedfilter(request, session);
+
+        List<Object[]> monthWiseData = dataVisualization.getMonthWiseData(searchBuilder, visualizationService);
+        JSONArray monthWiseSeriesData = HighChart.getMonthWiseSeriesData(monthWiseData);
+
+        //List<Object[]> dayWiseData = dataVisualization.getDayWiseData(searchBuilder, visualizationService);
+        //JSONArray dataJsonArray = HighChart.getDayWiseDrilldownSeriesData(dayWiseData);
+        JSONArray lineChartData = HighChart.getLineChartData(monthWiseData, searchBuilder.getYear());
+        JSONArray lineChartCategory = HighChart.getLineChartCategory(monthWiseData);
+        //session.setAttribute("dayWiseData", dataJsonArray);
+        session.setAttribute("lineChartData", lineChartData);
+        session.setAttribute("monthWiseSeriesData", monthWiseSeriesData);
+        session.setAttribute("lineChartCategory", lineChartCategory);
+    }
 
 	private void setTitles(Model model, HttpSession session, String title) {
 		model.addAttribute("title", title + " Search Criteria");

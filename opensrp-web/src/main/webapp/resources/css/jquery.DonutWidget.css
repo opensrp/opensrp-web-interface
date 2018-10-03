@@ -1,0 +1,322 @@
+.donut-widget {
+    display: block;
+    position: relative;
+}
+.donut-widget div.donut-hole {
+    background-color: #fff;
+    z-index: 20;
+    position: absolute;
+}
+.donut-widget span.donut-filling {
+    position: absolute;
+    display: block;
+    vertical-align: middle;
+    font-family: "Open Sans";
+    font-weight: 300;
+    color: #616161;
+    text-align: center;
+    top: 50%;
+    cursor: default;
+    overflow: none;
+}
+.donut-widget div.donut-caption-wrapper{
+    align-content: center;
+    position: relative;
+}
+.donut-widget span.donut-caption{
+    display: block;
+    text-align: center;
+    font-family: "Open Sans";
+    color: #616161;
+    font-weight: 600;
+    cursor: default;
+    margin: 0 auto;
+}
+.donut-widget .donut-bite {
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    -moz-transform-origin: left center;
+    -ms-transform-origin: left center;
+    -o-transform-origin: left center;
+    -webkit-transform-origin: left center;
+    transform-origin: left center;
+}
+.donut-widget .donut-bite.large {
+    left: 0;
+    -moz-transform-origin: center center;
+    -ms-transform-origin: center center;
+    -o-transform-origin: center center;
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+}
+.donut-widget .donut-bite:BEFORE {
+    content: "";
+    position: absolute;
+    -moz-transform-origin: right center;
+    -ms-transform-origin: right center;
+    -o-transform-origin: right center;
+    -webkit-transform-origin: right center;
+    transform-origin: right center;
+    top: 0;
+}
+.donut-widget .donut-bite.large:BEFORE {
+    left: 0;
+}
+.donut-widget .donut-bite.large:AFTER {
+    content: "";
+    position: absolute;
+}
+.tiny.donut-widget {
+    width: 60px;
+    height: 60px;
+}
+.tiny.donut-widget div.donut-hole {
+    height: 46.8px;
+    width: 46.8px;
+    top: 6.6px;
+    left: 6.6px;
+    border-radius: 46.8px;
+    line-height: 15px;
+}
+.tiny.donut-widget span.donut-filling {
+    font-size: 14.6664px;
+    margin-top: -7.5px;
+    width: 46.8px;
+    height: 15px;
+}
+.tiny.donut-widget div.donut-caption-wrapper {
+    width: 60px;
+    top: 73.33333333px;
+}
+.tiny.donut-widget span.donut-caption {
+    font-size: 5.77777778px;
+}
+.tiny.donut-widget .donut-bite {
+    width: 30px;
+    height: 60px;
+    left: 30.5px;
+}
+.tiny.donut-widget .donut-bite:BEFORE {
+    width: 30px;
+    height: 60px;
+    left: -30px;
+    border-radius: 30px 0 0 30px;
+}
+.tiny.donut-widget .donut-bite.large:AFTER {
+    width: 30px;
+    height: 60px;
+    left: 30px;
+    border-radius: 0 30px 30px 0;
+}
+.small.donut-widget {
+    width: 85px;
+    height: 85px;
+}
+.small.donut-widget div.donut-hole {
+    height: 66.3px;
+    width: 66.3px;
+    top: 9.35px;
+    left: 9.35px;
+    border-radius: 66.3px;
+    line-height: 21.25px;
+}
+.small.donut-widget span.donut-filling {
+    font-size: 20.7774px;
+    margin-top: -10.625px;
+    width: 66.3px;
+    height: 21.25px;
+    
+}
+.small.donut-widget div.donut-caption-wrapper {
+    width: 85px;
+    top: 103.88888889px;
+}
+.small.donut-widget span.donut-caption {
+    font-size: 8.18518519px;
+}
+.small.donut-widget .donut-bite {
+    width: 42.5px;
+    height: 85px;
+    left: 43px;
+}
+.small.donut-widget .donut-bite:BEFORE {
+    width: 42.5px;
+    height: 85px;
+    left: -42.5px;
+    border-radius: 42.5px 0 0 42.5px;
+}
+.small.donut-widget .donut-bite.large:AFTER {
+    width: 42.5px;
+    height: 85px;
+    left: 42.5px;
+    border-radius: 0 42.5px 42.5px 0;
+}
+.normal.donut-widget {
+    width: 110px;
+    height: 110px;
+}
+.normal.donut-widget div.donut-hole {
+    height: 85.8px;
+    width: 85.8px;
+    top: 12.1px;
+    left: 12.1px;
+    border-radius: 85.8px;
+    line-height: 27.5px;
+}
+.normal.donut-widget span.donut-filling {
+    font-size: 26.8884px;
+    margin-top: -13.75px;
+    width: 85.8px;
+    height: 27.5px;
+}
+.normal.donut-widget div.donut-caption-wrapper {
+    width: 110px;
+    top: 134.44444444px;
+}
+.normal.donut-widget span.donut-caption {
+    font-size: 10.59259259px;
+}
+.normal.donut-widget .donut-bite {
+    width: 55px;
+    height: 110px;
+    left: 55.5px;
+}
+.normal.donut-widget .donut-bite:BEFORE {
+    width: 55px;
+    height: 110px;
+    left: -55px;
+    border-radius: 55px 0 0 55px;
+}
+.normal.donut-widget .donut-bite.large:AFTER {
+    width: 55px;
+    height: 110px;
+    left: 55px;
+    border-radius: 0 55px 55px 0;
+}
+.large.donut-widget {
+    width: 135px;
+    height: 135px;
+}
+.large.donut-widget div.donut-hole {
+    height: 105.3px;
+    width: 105.3px;
+    top: 14.85px;
+    left: 14.85px;
+    border-radius: 105.3px;
+    line-height: 33.75px;
+}
+.large.donut-widget span.donut-filling {
+    font-size: 32.9994px;
+    margin-top: -16.875px;
+    width: 105.3px;
+    height: 33.75px;
+}
+.large.donut-widget div.donut-caption-wrapper {
+    width: 135px;
+    top: 165px;
+}
+.large.donut-widget span.donut-caption {
+    font-size: 13px;
+}
+.large.donut-widget .donut-bite {
+    width: 67.5px;
+    height: 135px;
+    left: 68px;
+}
+.large.donut-widget .donut-bite:BEFORE {
+    width: 67.5px;
+    height: 135px;
+    left: -67.5px;
+    border-radius: 67.5px 0 0 67.5px;
+}
+.large.donut-widget .donut-bite.large:AFTER {
+    width: 67.5px;
+    height: 135px;
+    left: 67.5px;
+    border-radius: 0 67.5px 67.5px 0;
+}
+.jumbo.donut-widget {
+    width: 160px;
+    height: 160px;
+}
+.jumbo.donut-widget div.donut-hole {
+    height: 96px;
+    width: 96px;
+    top: 32px;
+    left: 32px;
+    border-radius: 96px;
+    line-height: 40px;
+}
+.jumbo.donut-widget span.donut-filling {
+    font-size: 39.1104px;
+    margin-top: -20px;
+    width: 96px;
+    height: 40px;
+}
+.jumbo.donut-widget div.donut-caption-wrapper {
+    width: 160px;
+    top: 195.55555556px;
+}
+.jumbo.donut-widget span.donut-caption {
+    font-size: 15.40740741px;
+}
+.jumbo.donut-widget .donut-bite {
+    width: 80px;
+    height: 160px;
+    left: 80.5px;
+}
+.jumbo.donut-widget .donut-bite:BEFORE {
+    width: 80px;
+    height: 160px;
+    left: -80px;
+    border-radius: 80px 0 0 80px;
+}
+.jumbo.donut-widget .donut-bite.large:AFTER {
+    width: 80px;
+    height: 160px;
+    left: 80px;
+    border-radius: 0 80px 80px 0;
+}
+.giant.donut-widget {
+    width: 350px;
+    height: 350px;
+}
+.giant.donut-widget div.donut-hole {
+    height: 140px;
+    width: 140px;
+    top: 105px;
+    left: 105px;
+    border-radius: 140px;
+    line-height: 87.5px;
+}
+.giant.donut-widget span.donut-filling {
+    font-size: 85.554px;
+    margin-top: -43.75px;
+    width: 140px;
+    height: 87.5px;
+}
+.giant.donut-widget div.donut-caption-wrapper {
+    width: 350px;
+    top: 427.77777778px;
+}
+.giant.donut-widget span.donut-caption {
+    font-size: 33.7037037px;
+}
+.giant.donut-widget .donut-bite {
+    width: 175px;
+    height: 350px;
+    left: 175.5px;
+}
+.giant.donut-widget .donut-bite:BEFORE {
+    width: 175px;
+    height: 350px;
+    left: -175px;
+    border-radius: 175px 0 0 175px;
+}
+.giant.donut-widget .donut-bite.large:AFTER {
+    width: 175px;
+    height: 350px;
+    left: 175px;
+    border-radius: 0 175px 175px 0;
+}

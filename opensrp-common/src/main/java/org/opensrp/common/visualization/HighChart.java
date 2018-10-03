@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.util.DateUtil;
-
 import org.opensrp.common.util.DateUtil.Months;;
 
 public class HighChart {
@@ -75,4 +74,19 @@ public class HighChart {
 
 		return lineChartCategory;
 	}
+
+	public static JSONArray getMonthWiseSeriesData(List<Object[]> monthWiseCountData) throws JSONException {
+
+        JSONArray monthWiseSeriesData = new JSONArray();
+        for (Object[] row : monthWiseCountData) {
+            Double monthNumber = Double.parseDouble(row[0].toString());
+            JSONObject monthWiseData = new JSONObject();
+            monthWiseData.put("name", DateUtil.getMonthName((int) Math.round(monthNumber) - 1));
+            monthWiseData.put("y", row[1]);
+            monthWiseData.put("drilldown", DateUtil.getMonthName((int) Math.round(monthNumber) - 1));
+            monthWiseSeriesData.put(monthWiseData);
+
+        }
+        return monthWiseSeriesData;
+    }
 }

@@ -43,7 +43,7 @@ public class SearchUtil {
 	
 	public void setDivisionAttribute(HttpSession session) {
 		List<Object[]> divisions = locationServiceImpl.getLocationByTagId(DIVISION_TAG_ID);
-		logger.debug("set session attribute divisions: " + divisions.size());
+		logger.info("set session attribute divisions: " + divisions.size());
 		session.setAttribute("divisions", divisions);
 	}
 }
