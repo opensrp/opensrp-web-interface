@@ -19,7 +19,9 @@ List<FacilityWorkerType> workerTypeList= (List<FacilityWorkerType>)session.getAt
 int facilityId= (Integer)session.getAttribute("facilityId");
 String facilityName= (String)session.getAttribute("facilityName");
 Map<Integer,Integer> distinctWorkerCountMap = (Map<Integer,Integer>) session.getAttribute("distinctWorkerCountMap");
-	%>
+
+String selectedPersonName = (String)session.getAttribute("personName");
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -99,11 +101,19 @@ Map<Integer,Integer> distinctWorkerCountMap = (Map<Integer,Integer>) session.get
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">স্বাস্থ্য কর্মীর নাম  </label>
+								
+								<div id="cm" class="ui-widget">
+										<label>স্বাস্থ্য কর্মীর নাম </label>
+										<select id="combobox" name= "name" class="form-control">											  
+										</select>
+										 <span class="text-red">${uniqueNameErrorMessage}</span> 
+									</div>
+								
+									<%-- <label for="exampleInputName">স্বাস্থ্য কর্মীর নাম  </label>
 									<input name="name" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Worker Name" /> 
-									<span class="text-red">${uniqueNameErrorMessage}</span>
+									<span class="text-red">${uniqueNameErrorMessage}</span> --%>
 								</div>
 							</div>
 						</div>
@@ -134,12 +144,6 @@ Map<Integer,Integer> distinctWorkerCountMap = (Map<Integer,Integer>) session.get
 							</div>
 						</div>
 					
-					
-					
-					
-					
-					    
-						
 						
 						<input type="text" id= "trainings" name="trainings" value="" style="display: none;" readonly>
 						<div class="form-group" id="trainingDiv"  style="display: none;">
@@ -168,11 +172,6 @@ Map<Integer,Integer> distinctWorkerCountMap = (Map<Integer,Integer>) session.get
 							
 						</div>
 						
-						
-						
-						
-						
-							
 						
 						<div class="form-group" id="saveButtonDiv">
 							<div class="row">
@@ -237,12 +236,7 @@ Map<Integer,Integer> distinctWorkerCountMap = (Map<Integer,Integer>) session.get
 				</div>
 				<div class="card-footer small text-muted"></div>
 			</div>
-			
-			
-			
-			
-			
-			
+		
 			
 		</div>
 		
@@ -259,7 +253,131 @@ Map<Integer,Integer> distinctWorkerCountMap = (Map<Integer,Integer>) session.get
   
 <script type="text/javascript" charset="utf8" src="<c:url value='/resources/datatables/jquery.dataTables.js'/>" ></script>
 <script src="<c:url value='/resources/js/dataTables.jqueryui.min.js'/>"></script>
-
+<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
+<script>
+  $( function() {
+    $.widget( "custom.combobox", {
+      _create: function() {
+        this.wrapper = $( "<div>" )
+          .addClass( "custom-combobox" )          
+          .insertAfter( this.element );
+ 
+        this.element.hide();
+        this._createAutocomplete();
+       
+      },
+ 
+      _createAutocomplete: function() {
+        var selected = this.element.children( ":selected" ),        
+          value = selected.val() ? selected.text() : "";
+         value = "<%=selectedPersonName%>";
+        this.input = $( "<input required='required'>" )
+          .appendTo( this.wrapper )
+          .val( value )
+          .attr( "title", "" )          
+           .attr( "name", "personName" )
+          .addClass( "form-control custom-combobox-input ui-widget ui-widget-content  ui-corner-left" )
+          .autocomplete({
+            delay: 0,
+            minLength: 1,
+            source: $.proxy( this, "_source" )
+          })
+          .tooltip({
+            classes: {
+              "ui-tooltip": "ui-state-highlight"
+            }
+          });
+ 
+        this._on( this.input, {
+          autocompleteselect: function( event, ui ) {
+            ui.item.option.selected = true;
+ 			$("#person").val(ui.item.option.value);
+            this._trigger( "select", event, {
+              item: ui.item.option
+            });
+          },
+ 
+          autocompletechange: "_removeIfInvalid"
+        });
+      },
+ 
+      
+ 
+      _source: function( request, response ) {
+    	  
+    	  $.ajax({
+              type: "GET",
+              dataType: 'html',
+              url: "/opensrp-dashboard/facility/searchWorkerName.html?name="+request.term,            
+              success: function(res)
+              {
+              
+                $("#combobox").html(res);
+              }
+          });
+        var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+        response( this.element.children( "option" ).map(function() {
+          var text = $( this ).text();
+          if ( this.value && ( !request.term || matcher.test(text) ) )
+            return {
+              label: text,
+              value: text,
+              option: this
+            };
+        }) );
+      },
+ 
+      _removeIfInvalid: function( event, ui ) {
+    	  
+        // Selected an item, nothing to do
+        if ( ui.item ) {
+          return;
+        }
+ 
+        // Search for a match (case-insensitive)
+        var value = this.input.val(),
+          valueLowerCase = value.toLowerCase(),
+          valid = false;
+        this.element.children( "option" ).each(function() {
+          if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+            this.selected = valid = true;
+            return false;
+          }
+        });
+ 
+        // Found a match, nothing to do
+        if ( valid ) {
+          return;
+        }
+ 
+        // Remove invalid value
+        this.input
+          .val( "" )
+          .attr( "title", value + " didn't match any item" )
+          .tooltip( "open" );
+        $("#person").val(0);
+        this.element.val( "" );
+        this._delay(function() {
+          this.input.tooltip( "close" ).attr( "title", "" );
+        }, 2500 );
+        this.input.autocomplete( "instance" ).term = "";
+      },
+ 
+      _destroy: function() {
+        this.wrapper.remove();
+        this.element.show();
+      }
+    });
+ 
+    $( "#combobox" ).combobox();
+    
+    $( "#toggle" ).on( "click", function() {
+      $( "#combobox" ).toggle();
+    });
+    
+    
+  } );
+  </script>
 	
 <script type="text/javascript"> 
 
@@ -268,7 +386,7 @@ $("#workerInfo").submit(function(event) {
 	var url = "/opensrp-dashboard/rest/api/v1/facility/saveWorker";
 	var formData = {
 			'workerId': '-99',
-            'name': $('input[name=name]').val(),
+            'name': $("#combobox").val(),
             'identifier': $('input[name=identifier]').val(),
             'organization': $('input[name=organization]').val(),
             'facilityWorkerTypeId': $("#facilityWorkerTypeId").val(),
@@ -285,7 +403,8 @@ $("#workerInfo").submit(function(event) {
 	
 	
 	if($("#newWorker").val() === "0"){
-		//alert("old worker : "+$("#facilityId").val()+" -> "+$("#workerId").val());
+		/* alert("old worker : "+$("#facilityId").val()+" -> "+$("#workerId").val()
+				+" -> "+$('input[name=trainings]').val()); */
 		url = "/opensrp-dashboard/rest/api/v1/facility/editWorker";
 		formData = {
 				'workerId': $("#workerId").val(),
@@ -303,8 +422,6 @@ $("#workerInfo").submit(function(event) {
 		if(newWorkerType == chcp && distinctWorkerCountArray[newWorkerType-1][1]>0){
 			var messageStr = "Already has a chcp. Please delete the previous one and try again.";
 			alert(messageStr);
-			//$("#msg").text(messageStr);
-			//$("#messageDiv").show();
 			return;
 		}
 	}
@@ -322,7 +439,6 @@ $("#workerInfo").submit(function(event) {
 			 xhr.setRequestHeader(header, token);
 		},
 		success : function(data) {
-		   //getWorkerList($("#facilityId").val());
 		   window.location.replace(addWorkerPageUrl);
 		},
 		error : function(e) {
@@ -341,11 +457,7 @@ var i=0;
 var distinctWorkerCountArray;
 $(document).ready(function() {
 	initializeDistinctWorkerCountArray();
-	//$("#trainings").hide();
-	//$("#trainingDiv").hide();
 	getWorkerList($("#facilityId").val());
-	//$('#dataTable').DataTable();
-	
 });
 
 function initializeDistinctWorkerCountArray(){
@@ -355,7 +467,6 @@ function initializeDistinctWorkerCountArray(){
 	for(var i=0;i<distinctWorkerCountArray.length;i++){
 		distinctWorkerCountArray[i] = stringTOArray(distinctWorkerCountArray[i], "=");
 	}
-	//alert(distinctWorkerCountArray);
 }
 
 function removeBraces(inputString){
@@ -381,8 +492,48 @@ function checkForTraining(){
 	check();
 	hideWarning();
 	$("#saveButtonDiv").show();
-	//alert($("#trainings").val());
-	var chcp = '1';
+	if($("#newWorker").val() === "1"){
+		checkForTrainingNewWorker();
+	}else if($("#newWorker").val() === "0"){
+		checkForTrainingOldWorker();
+	}
+}
+
+function checkForTrainingOldWorker(){
+	var workerType =$("#facilityWorkerTypeId").val();
+	if(workerType === '1'){
+		if(distinctWorkerCountArray[0][1] - 1 >0){
+			warnUser("CHCP", 1);
+		}else{
+			$("#trainingDiv").show();
+			$("#trainings").val(prevTrainings);
+		}
+	}else{
+		$("#trainingDiv").hide();
+		prevTrainings = $("#trainings").val();
+		$("#trainings").val("");
+		
+		if(workerType === '2' && distinctWorkerCountArray[1][1] -1 >0){
+				warnUser("HEALTH ASSISTANT", 1); 
+		}else if(workerType === '3' && distinctWorkerCountArray[2][1] -1 >0){
+				warnUser("ASSISTANT HEALTH INSPECTOR", 1);
+		}else if(workerType === '4' && distinctWorkerCountArray[3][1] -1 >0){
+				warnUser("FAMILY PLANNING ASSISTANT", 1);
+		}else if(workerType === '5' && distinctWorkerCountArray[4][1] -1 >0){
+				warnUser("FAMILY PLANNING INSPECTOR", 1);  
+		}else if(workerType === '6' && distinctWorkerCountArray[5][1] -1 >4){
+				warnUser("MULTIPURPOSE HEALTH VOLUNTEER", 5); 
+		}else if(workerType === '7' && distinctWorkerCountArray[6][1] -1 >0){
+				warnUser("OTHER HEALTH WORKER", 1);
+		}else if(workerType === '8' && distinctWorkerCountArray[7][1] -1 >16){
+				warnUser("COMMUNITY GROUP MEMBER", 17);
+		}else if(workerType === '9' && distinctWorkerCountArray[8][1] -1 >16){
+				warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17); 
+		}	
+	} 
+}
+
+function checkForTrainingNewWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
 	if(workerType === '1'){
 		if(distinctWorkerCountArray[0][1]>0){
@@ -397,7 +548,6 @@ function checkForTraining(){
 		prevTrainings = $("#trainings").val();
 		$("#trainings").val("");
 		
-		//alert(workerType);
 		if(workerType === '2' && distinctWorkerCountArray[1][1]>0){
 				warnUser("HEALTH ASSISTANT", 1); 
 		}else if(workerType === '3' && distinctWorkerCountArray[2][1]>0){
@@ -414,11 +564,8 @@ function checkForTraining(){
 				warnUser("COMMUNITY GROUP MEMBER", 17);
 		}else if(workerType === '9' && distinctWorkerCountArray[8][1]>16){
 				warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17); 
-		}
-		
-			
+		}	
 	} 
-	
 }
 
 function warnUser(workerType, validNumber){
@@ -427,7 +574,6 @@ function warnUser(workerType, validNumber){
 	}else if(validNumber >1){
 		var messageStr = "Number of "+workerType+" cannot be more than "+validNumber+".";
 	}
-	
 	$("#msg").text(messageStr);
 	$("#messageDiv").show();
 	$("#saveButtonDiv").hide();
@@ -441,7 +587,6 @@ function hideWarning(){
 
 function getWorkerList(id) {
 	var workerListURL ="/opensrp-dashboard/facility/"+id+"/getWorkerList.html";
-	//var workerListURL = "/rest/api/v1/facility/"+id+"/getWorkerList.html";
 	
     $.ajax(workerListURL, {
         type: 'GET',
@@ -449,11 +594,9 @@ function getWorkerList(id) {
     }).done(function(workerList) {
     	
     	$("#dataTableBody").html(workerList);
-    	//refreshDataTable();
     	showOnDataTable();
     	
     }).error(function() {
-        //alert('Error');
     });
 }
 
@@ -468,7 +611,6 @@ function editWorker(workerId) {
     	$("#workerInfo").html(workerDetails);
     	
     }).error(function() {
-        //alert('Error');
     });
 }
 
@@ -494,7 +636,6 @@ function deleteWorker(facilityId,workerId) {
 			 xhr.setRequestHeader(header, token);
 		},
 		success : function(data) {
-		   //getWorkerList($("#facilityId").val());
 		   window.location.replace(addWorkerPageUrl);
 		},
 		error : function(e) {
@@ -510,14 +651,6 @@ function deleteWorker(facilityId,workerId) {
 function showOnDataTable(){
 	  $('#dataTable').DataTable();
 }
-function refreshDataTable(){
-	//$("#dataTable").datatable().fnDestroy();
-    //$("#dataTable").dataTable();
-    /* var table = $('#dataTable').DataTable();
-    table.draw(); */
-	
-}
-
 
 </script>	
 	  

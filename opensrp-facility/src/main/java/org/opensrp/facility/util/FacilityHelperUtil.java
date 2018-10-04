@@ -10,11 +10,14 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.opensrp.acl.entity.Location;
 import org.opensrp.acl.entity.LocationTag;
+import org.opensrp.acl.entity.User;
 import org.opensrp.acl.service.impl.LocationServiceImpl;
+import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.opensrp.facility.dto.FacilityWorkerDTO;
 import org.opensrp.facility.entity.Chcp;
 import org.opensrp.facility.entity.Facility;
@@ -30,6 +33,9 @@ public class FacilityHelperUtil {
 	
 	@Autowired
 	private FacilityServiceFactory facilityServiceFactory;
+	
+	@Autowired
+	private DatabaseRepositoryImpl repository;
 	
 
 /*	public void setSessionAttribute(HttpSession session, Facility facility, String locationName) {
@@ -312,4 +318,13 @@ public class FacilityHelperUtil {
 		}
 		return facility;
 	}
+	
+	@Transactional
+	public List<FacilityWorker> getAllWorkersByKeysWithALlMatches(String name) {
+		Map<String, String> fieldValues = new HashMap<String, String>();
+		fieldValues.put("name", name);
+		boolean isProvider = false;
+		return repository.findAllByKeysWithALlMatches(isProvider, fieldValues, FacilityWorker.class);
+	}
+	
 }

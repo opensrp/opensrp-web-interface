@@ -1,4 +1,5 @@
 <%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.opensrp.facility.entity.FacilityWorker"%>
@@ -62,7 +63,7 @@
 	<div class="form-group">
 		<div class="row">
 			<div class="col-5">
-				<label for="exampleInputName">স্বাস্থ্য কর্মীর নাম  </label>
+			 <label for="exampleInputName">স্বাস্থ্য কর্মীর নাম  </label>
 				<input name="name" class="form-control"
 					required="required" aria-describedby="nameHelp"
 					placeholder="Name" value="<%=name%>"/> 
@@ -94,7 +95,7 @@
 		</div>
 	</div>
 					
-	<input type="text" id= "trainings" name="trainings" value="" style="display: none;" readonly>
+	
 	<div class="form-group" id="trainingDiv"  style="display:<%=visualStatus%> ;">
 		<div class="form-check">
 			<div class="row">
@@ -102,9 +103,16 @@
 				<label for="exampleInputName">সিএইচসিপির প্রাপ্ত প্রশিক্ষণ সমূহ:</label><br>
 			    </div>
 				<%
-																
+					String trainingListString = "";
+					int counter = 0;							
 					for (FacilityTraining facilityTraining : CHCPTrainingList) {
 						if(workerToEditTrainings.size()>0 && workerToEditTrainings.contains(facilityTraining)){
+							if(counter == 0){
+								trainingListString += facilityTraining.getId();
+							}else{
+								trainingListString += ","+facilityTraining.getId();
+							}
+							counter++;
 							%>
 							<div class="col-5">
 								<input type="checkbox" value=<%=facilityTraining.getId()%> onclick="check()" checked>
@@ -129,6 +137,8 @@
 			</div>
 		</div>
 	</div>
+	
+	<input type="text" id= "trainings" name="trainings" value="<%=trainingListString %>" style="display: none;" readonly>
 						
 	<div class="form-group">
 		<div class="row">

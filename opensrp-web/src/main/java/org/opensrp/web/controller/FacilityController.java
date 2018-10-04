@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.json.JSONException;
+import org.opensrp.acl.entity.User;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.facility.entity.Facility;
 import org.opensrp.facility.entity.FacilityTraining;
@@ -27,6 +28,7 @@ import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -278,6 +280,13 @@ public class FacilityController {
 			return new ModelAndView("/facility/upload_csv");
 		}
 		return new ModelAndView("redirect:/");
+	}
+	
+	@RequestMapping(value = "facility/searchWorkerName.html", method = RequestMethod.GET)
+	public String providerSearch(Model model, HttpSession session, @RequestParam String name) throws JSONException {
+		List<FacilityWorker> workers = facilityHelperUtil.getAllWorkersByKeysWithALlMatches(name);
+		session.setAttribute("searchedWorkers", workers);
+		return "facility/search-worker-name";
 	}
 
 }
