@@ -69,7 +69,7 @@ if (paginationAtributes.containsKey("name")) {
 			<!-- Example DataTables Card-->
 			<div class="card mb-3">
 				<div class="card-header">
-					 User List
+					 <spring:message code="lbl.userList"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">

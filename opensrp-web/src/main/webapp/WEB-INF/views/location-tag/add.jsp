@@ -17,7 +17,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Add  New Location Tag</title>
+<title><spring:message code="lbl.addLoactionTag"/></title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -34,7 +34,7 @@
 						
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Add  New Location Tag
+					<spring:message code="lbl.addLoactionTag"/>
 				</div>
 				<div class="card-body">
 				<span> ${uniqueErrorMessage}</span>
@@ -42,20 +42,18 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<label for="exampleInputName">Name</label>
+									<label for="exampleInputName"><spring:message code="lbl.name"/></label>
 									<form:input path="name" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="Tag Name" value="${name}" />
+										required="required" value="${name}" />
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<label for="exampleInputName">Description</label>
+									<label for="exampleInputName"><spring:message code="lbl.description"/></label>
 									<form:input path="description" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="Description" />
+										required="required" />
 								</div>
 							</div>
 						</div>
@@ -65,7 +63,7 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<input type="submit" value="Save"
+									<input type="submit" value="<spring:message code="lbl.save"/>"
 										class="btn btn-primary btn-block" />
 								</div>
 							</div>

@@ -33,7 +33,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Edit Team</title>
+<title><spring:message code="lbl.editTeamMember"/></title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 <link type="text/css" href="<c:url value="/resources/css/jqx.base.css"/>" rel="stylesheet">
 <link type="text/css" href="<c:url value="/resources/css/magicsuggest-min.css"/>" rel="stylesheet">
@@ -50,7 +50,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 			</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Add Team
+					<spring:message code="lbl.editTeamMember"/>
 				</div>
 				<div class="card-body">
 				
@@ -60,7 +60,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 							<div class="row">									
 								<div class="col-5">
 									<div id="cm" class="ui-widget">
-										<label>Person </label>
+										<label><spring:message code="lbl.person"/> </label>
 										<select id="combobox" class="form-control">											  
 										</select>
 										<span class="text-red">${uniqueNameErrorMessage}</span> 
@@ -73,7 +73,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 							<div class="row">									
 								<div class="col-5">
 									<div id="cm" class="ui-widget">
-										<label>Location </label>
+										<label><spring:message code="lbl.location"/> </label>
 										<div id="locationsTag">                          					
                           				</div>
 										<span class="text-red">${locationSelectErrorMessage}</span>
@@ -84,10 +84,9 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Identifier</label>
+									<label for="exampleInputName"><spring:message code="lbl.identifier"/></label>
 									<form:input path="identifier" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="identifier" />
+										required="required"  />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
@@ -97,9 +96,9 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 						<div class="form-group">							
 								<div class="row">									
 									<div class="col-5">
-									<label for="exampleInputName">Team</label>
+									<label for="exampleInputName"><spring:message code="lbl.team"/></label>
 										<select class="custom-select custom-select-lg mb-3" id="team" name="team" required="required">
-									 		<option value="" selected>Please Select</option>
+									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 												<%
 												for (Map.Entry<Integer, String> entry : teams.entrySet())
 												{
@@ -125,7 +124,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<input type="submit" value="Save"
+									<input type="submit" value="<spring:message code="lbl.edit"/>"
 										class="btn btn-primary btn-block" />
 								</div>
 							</div>

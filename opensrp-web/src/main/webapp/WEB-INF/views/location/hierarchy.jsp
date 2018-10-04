@@ -17,7 +17,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link type="text/css" href="<c:url value="/resources/css/jtree.min.css"/>" rel="stylesheet">
-<title>Location Hierarchy</title>
+<title><spring:message code="lbl.viewLocationsHierarchy"/> </title>
 <%@page import="org.json.JSONObject" %>
 <%@page import="org.json.JSONArray" %>
 <jsp:include page="/WEB-INF/views/css.jsp" />
@@ -37,7 +37,7 @@ JSONArray locatationTreeData = (JSONArray)session.getAttribute("locatationTreeDa
 		
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Location Hierarchy 
+					<spring:message code="lbl.viewLocationsHierarchy"/> 
 				</div>
 				<div class="card-body">
 					<div id="locationTreee">

@@ -22,7 +22,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link type="text/css" href="<c:url value="/resources/css/jqx.base.css"/>" rel="stylesheet">
 
-<title>Uplaod location</title>
+<title><spring:message code="lbl.uploadLocation"/> </title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -37,7 +37,7 @@
 		</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Upload location
+					<spring:message code="lbl.uploadLocation"/>
 				</div>
 				<div class="card-body">				
 					<form:form method="POST" action="${saveUrl}?${_csrf.parameterName}=${_csrf.token}" modelAttribute="location" enctype="multipart/form-data">

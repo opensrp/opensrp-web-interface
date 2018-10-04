@@ -39,7 +39,7 @@
 							
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Summary Report
+					<spring:message code="lbl.childGrowthSummaryReport"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">

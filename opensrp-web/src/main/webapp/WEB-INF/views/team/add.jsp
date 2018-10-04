@@ -32,7 +32,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link type="text/css" href="<c:url value="/resources/css/jqx.base.css"/>" rel="stylesheet">
 
-<title>Add Team</title>
+<title><spring:message code="lbl.addTeam"/></title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -47,7 +47,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 		</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Add Team
+				   <spring:message code="lbl.addTeam"/>
 				</div>
 				<div class="card-body">
 				
@@ -55,10 +55,8 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Team Name  </label>
-									<form:input path="name" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="Name" /> 
+									<label for="exampleInputName"><spring:message code="lbl.name"/>  </label>
+									<form:input path="name" class="form-control" required="required"/> 
 									<span class="text-red">${uniqueNameErrorMessage}</span>
 								</div>
 							</div>
@@ -66,10 +64,9 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Identifier</label>
+									<label for="exampleInputName"><spring:message code="lbl.identifier"/></label>
 									<form:input path="identifier" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="identifier" />
+										required="required" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
@@ -80,7 +77,7 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 							<div class="row">									
 								<div class="col-5">
 									<div id="cm" class="ui-widget">
-										<label>Search Location </label>
+										<label><spring:message code="lbl.location"/> </label>
 										<select id="combobox" class="form-control">
 										</select>
 										<span class="text-red">${locationUuidErrorMessage}</span>
@@ -91,9 +88,9 @@ Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr")
 						<div class="form-group">							
 								<div class="row">									
 									<div class="col-5">
-									<label for="exampleInputName">Supervisor</label>
+									<label for="exampleInputName"><spring:message code="lbl.supervisor"/></label>
 										<select class="custom-select custom-select-lg mb-3" id="superVisor" name="superVisor" required>
-									 		<option value="" selected>Please Select</option>
+									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 												<%
 												for (Map.Entry<Integer, String> entry : supervisors.entrySet())
 												{

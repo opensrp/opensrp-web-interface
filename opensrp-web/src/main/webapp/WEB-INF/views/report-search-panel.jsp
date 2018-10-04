@@ -1,7 +1,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -16,7 +16,7 @@
 
 <div class="card mb-3">
 	<div class="card-header">
-		<i class="fa fa-table"></i> ${title.toString()} Search
+		<i class="fa fa-table"></i> ${title.toString()} <spring:message code="lbl.searchArea"/>
 	</div>
 	<div class="card-body">
 		
@@ -26,11 +26,11 @@
 			<div class="form-group">
 				<div class="row">
 					<div class="col-3">
-						<label>Start Date</label> <input class="form-control" type=text
+						<label><spring:message code="lbl.startDate"/></label> <input class="form-control" type=text
 							name="start" id="start">
 					</div>
 					<div class="col-3">
-						<label>End Date</label> <input class="form-control" type="text"
+						<label><spring:message code="lbl.endDate"/></label> <input class="form-control" type="text"
 							name="end" id="end">
 
 					</div>
@@ -41,7 +41,7 @@
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="division"
 						name="division">
-						<option value="">Please Select Division</option>
+						<option value=""><spring:message code="lbl.seelctDivision"/></option>
 						<%
 							for (Object[] objects : divisions) {%>
 								<option value="<%=objects[1]%>?<%=objects[0]%>"><%=objects[0]%></option>
@@ -94,7 +94,7 @@
 				
 				<div class="col-6">
 					<button name="search" type="submit" id="bth-search"
-						class="btn btn-primary" value="search">Search</button>
+						class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
 				</div>
 			</div>
 			

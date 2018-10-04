@@ -28,7 +28,7 @@
 <meta name='viewport'
 	content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
-<title><spring:message code="lbl.dashboardPageTitle"/></title>
+<title><spring:message code="lbl.growthMonitoringDashboardPageTitle"/></title>
 
 <script
 	src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.46.0/mapbox-gl.js'></script>
@@ -60,8 +60,8 @@
 		<div class="container-fluid">
 			<!-- Breadcrumbs-->
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><spring:message code="lbl.dashboardPageTitle"/></li>
-				<!-- <li class="breadcrumb-item active">My Dashboard</li> -->
+				<li class="breadcrumb-item"><spring:message code="lbl.growthMonitoringDashboardPageTitle"/></li>
+				
 			</ol>
 			<!-- Icon Cards-->
 			<div class="row">
@@ -125,7 +125,7 @@
 			<!-- Area Chart Example-->
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-area-chart"></i> Growth Faltering Status
+					<spring:message code="lbl.growthfalteringStatus"/>
 				</div>
 				<div class="card-body" style="height: 440px">
 				    <div id='map' style="height: 400px; padding: 0"></div>
@@ -133,10 +133,10 @@
 				<div class="card-footer medium text-muted">
 					<span class="col-6">
 					    <img src="/resources/images/adequate_growth.jpg" width="40"
-					    height="10"></span> Adequate Growth
+					    height="10"></span><spring:message code="lbl.adequateGrowth"/> 
 					<span class="col-6">
 					    <img src="/resources/images/growth_faltering.jpg" width="40"
-					    height="10"></span> Inadequate Growth
+					    height="10"></span> <spring:message code="lbl.inadequateGrowth"/> 
 				</div>
 			</div>
 
@@ -251,7 +251,7 @@
 				type : 'line'
 			},
 			title : {
-				text : '% Children who are growth faltering over time'
+				text : '<spring:message code="lbl.growthFalteringOverTime"/>' 
 			},
 			subtitle : {
 				text : ''
@@ -264,7 +264,7 @@
 		},
 			yAxis : {
 				title : {
-					text : '% Children growth faltering'
+					text : '<spring:message code="lbl.growthFaltering"/>'  
 				}
 			},
 

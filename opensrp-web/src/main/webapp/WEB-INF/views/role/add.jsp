@@ -17,7 +17,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Add permissions</title>
+<title><spring:message code="lbl.addRoleTitle"/></title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -32,17 +32,16 @@
 			</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Add Role
+					<i class="fa fa-table"></i> <spring:message code="lbl.addRoleTitle"/>
 				</div>
 				<div class="card-body">
 					<form:form method="POST" action="${saveUrl}" modelAttribute="role">
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<label for="exampleInputName">Role Name</label>
+									<label for="exampleInputName"><spring:message code="lbl.name"/></label>
 									<form:input path="name" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="Role Name" />
+										required="required" />
 								</div>
 							</div>
 						</div>
@@ -72,7 +71,7 @@
 							</div>
 							<div class="row">
 								<div class="col-3">
-									<label class="form-check-label"> Check All <input
+									<label class="form-check-label"> <spring:message code="lbl.checkAll"/> <input
 										type="checkbox" id="ckbCheckAll" /></label>
 									<p>${errorPermission}</p>
 								</div>
@@ -81,7 +80,7 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<input type="submit" value="Save"
+									<input type="submit" value="<spring:message code="lbl.save"/>"
 										class="btn btn-primary btn-block" />
 								</div>
 							</div>

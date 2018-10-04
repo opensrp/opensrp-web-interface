@@ -18,7 +18,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Location Tag List</title>
+<title><spring:message code="lbl.loactionTagList"/></title>
 
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
@@ -36,34 +36,27 @@
 				
 			</div>
 			<div class="form-group">
-			<h5>Manage Location Tags</h5>
+			<h5><spring:message code="lbl.loactionTagList"/></h5>
 			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_LOCATION_TAG")){ %>			
-			<a  href="<c:url value="/location/tag/add.html?lang=${locale}"/>"> <strong>Add New Location Tag</strong> </a>
+			<a  href="<c:url value="/location/tag/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addNew"/></strong> </a>
 			<%} %>
 			</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					 Location Tags
+					<spring:message code="lbl.loactionTagList"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
 						<table class="table table-bordered" id="dataTable">
 							<thead>
 								<tr>
-									<th>Name</th>
-									<th>Description</th>
-									<th>Created Date</th>
-									<th>Actions</th>
+									<th><spring:message code="lbl.name"/></th>
+									<th><spring:message code="lbl.description"/></th>
+									<th><spring:message code="lbl.createdDate"/></th>
+									<th><spring:message code="lbl.action"/></th>
 								</tr>
 							</thead>
-							<tfoot>
-								<tr>
-									<th>Name</th>
-									<th>Description</th>
-									<th>Created Date</th>
-									<th>Actions</th>
-								</tr>
-							</tfoot>
+							
 							<tbody>
 								<c:forEach var="locationTag" items="${locationTags}" varStatus="loop">
 									<tr>
@@ -72,7 +65,7 @@
 										<td>${locationTag.getCreated()}</td>
 										<td>
 										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_LOCATION_TAG")){ %>
-											<a href="<c:url value="/location/tag/${locationTag.id}/edit.html?lang=${locale}"/>">Edit</a>
+											<a href="<c:url value="/location/tag/${locationTag.id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a>
 										<%} %>
 										</td>
 
