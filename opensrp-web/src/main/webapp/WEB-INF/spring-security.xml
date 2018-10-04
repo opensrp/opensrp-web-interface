@@ -10,6 +10,7 @@
 <security:http pattern="/favicon.ico" security="none" />
 
 	<security:http auto-config="true">
+		<security:access-denied-handler error-page="/403" />
 		<security:intercept-url pattern="/resources/**"
 			access="permitAll" />
 		<security:intercept-url pattern="/login*"
