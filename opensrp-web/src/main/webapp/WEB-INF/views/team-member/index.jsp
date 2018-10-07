@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -24,7 +24,7 @@
 <%@page import="java.util.Map"%>
 <%@page import="java.util.Set"%>
 
-<title>Team List</title>
+<title><spring:message code="lbl.teamMemberList"/></title>
 
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
@@ -46,9 +46,9 @@ if (paginationAtributes.containsKey("name")) {
 			<jsp:include page="/WEB-INF/views/team/team-member-link.jsp" />		
 		</div>
 		<div class="form-group">
-			<h5>Team Member Management</h5>
+			
 			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_TEAM_MEMBER")){ %>
-			<a  href="<c:url value="/team/teammember/add.html"/>"> <strong>Add New Team Member</strong>	</a> <%} %>
+			<a  href="<c:url value="/team/teammember/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addNew"/></strong>	</a> <%} %>
 		</div>
 		<div class="card mb-3">
 				
@@ -61,7 +61,7 @@ if (paginationAtributes.containsKey("name")) {
 							</div>
 							<div class="col-6">
 								<button name="search" type="submit" id="bth-search"
-									class="btn btn-primary" value="search">Search</button>
+									class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
 							</div>
 						</div>			
 					</form>
@@ -70,18 +70,18 @@ if (paginationAtributes.containsKey("name")) {
 			</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					 Team Member List
+					 <spring:message code="lbl.teamMemberList"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
 						<table class="table table-bordered" id="dataTable">
 							<thead>
 								<tr>
-									<th>Name</th>
-									<th>Identifier</th>									
-									<th>Location</th>
-									<th>Team</th>
-									<th>Actions</th>										
+									<th><spring:message code="lbl.name"/></th>
+									<th><spring:message code="lbl.identifier"/></th>									
+									<th><spring:message code="lbl.location"/></th>
+									<th><spring:message code="lbl.team"/></th>
+									<th><spring:message code="lbl.action"/></th>										
 								</tr>
 							</thead>
 							
@@ -117,7 +117,7 @@ if (paginationAtributes.containsKey("name")) {
 										<td><%=team%></td>
 										<td>
 										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_TEAM_MEMBER")){ %>
-											<a href="<c:url value="/team/teammember/${id}/edit.html"/>">Edit</a>
+											<a href="<c:url value="/team/teammember/${id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a>
 										<%} %>	
 										</td>
 

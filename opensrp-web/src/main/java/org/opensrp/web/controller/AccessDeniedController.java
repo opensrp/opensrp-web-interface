@@ -1,8 +1,12 @@
 package org.opensrp.web.controller;
 
 import java.security.Principal;
+import java.util.Locale;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -10,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class AccessDeniedController {
 	
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
-	public String accesssDenied(Principal user) {
+	public String accesssDenied(Principal user,ModelMap model, Locale locale) {
+		model.addAttribute("locale", locale);
 		return "403";
 	}
 }

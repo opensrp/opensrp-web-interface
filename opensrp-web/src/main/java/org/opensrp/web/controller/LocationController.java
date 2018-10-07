@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -57,25 +58,27 @@ public class LocationController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION_LIST')")
 	@RequestMapping(value = "location/location.html", method = RequestMethod.GET)
-	public String locationList(HttpServletRequest request, HttpSession session, Model model) {
-		Class<Location> entityClassName = Location.class;
+	public String locationList(HttpServletRequest request, HttpSession session, Model model,Locale locale) {
+		Class<Location> entityClassName = Location.class;		
+		model.addAttribute("locale", locale);
 		paginationUtil.createPagination(request, session, entityClassName);
 		return "location/index";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_HIERARCHY_LOCATION')")
 	@RequestMapping(value = "location/hierarchy.html", method = RequestMethod.GET)
-	public String locationHierarchy(Model model, HttpSession session) throws JSONException {
+	public String locationHierarchy(Model model, HttpSession session,Locale locale) throws JSONException {
 		String parentIndication = "#";
 		String parentKey = "parent";
 		JSONArray data = locationServiceImpl.getLocationDataAsJson(parentIndication, parentKey);
 		session.setAttribute("locatationTreeData", data);
+		model.addAttribute("locale", locale);
 		return "location/hierarchy";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_LOCATION')")
 	@RequestMapping(value = "location/add.html", method = RequestMethod.GET)
-	public ModelAndView saveLocation(ModelMap model, HttpSession session) throws JSONException {
+	public ModelAndView saveLocation(ModelMap model, HttpSession session,Locale locale) throws JSONException {
 		
 		model.addAttribute("location", new Location());
 		String parentLocationName = "";
@@ -84,6 +87,7 @@ public class LocationController {
 		String parentKey = "parentid";
 		JSONArray data = locationServiceImpl.getLocationDataAsJson(parentIndication, parentKey);
 		session.setAttribute("locatationTreeData", data);
+		model.addAttribute("locale", locale);
 		return new ModelAndView("location/add", "command", location);
 		
 	}
@@ -113,12 +117,13 @@ public class LocationController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_LOCATION')")
 	@RequestMapping(value = "location/{id}/edit.html", method = RequestMethod.GET)
-	public ModelAndView editLocation(ModelMap model, HttpSession session, @PathVariable("id") int id) {
+	public ModelAndView editLocation(ModelMap model, HttpSession session, @PathVariable("id") int id,Locale locale) {
 		Location location = locationServiceImpl.findById(id, "id", Location.class);
 		model.addAttribute("id", id);
 		model.addAttribute("location", location);
 		String parentLocationName = locationServiceImpl.makeParentLocationName(location);
 		locationServiceImpl.setSessionAttribute(session, location, parentLocationName);
+		model.addAttribute("locale", locale);
 		return new ModelAndView("location/edit", "command", location);
 		
 	}
@@ -163,8 +168,9 @@ public class LocationController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_LOCATION')")
 	@RequestMapping(value = "location/upload_csv.html", method = RequestMethod.GET)
-	public String csvUpload(ModelMap model, HttpSession session) throws JSONException {
+	public String csvUpload(ModelMap model, HttpSession session,Locale locale) throws JSONException {
 		model.addAttribute("location", new Location());
+		model.addAttribute("locale", locale);
 		return "/location/upload_csv";
 	}
 	

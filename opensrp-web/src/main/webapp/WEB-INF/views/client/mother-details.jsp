@@ -1,8 +1,8 @@
 <%@page import="org.json.JSONArray"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -44,7 +44,7 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">         
-		 <a  href="<c:url value="/client/mother.html"/>">Mother</a>
+		 <a  href="<c:url value="/client/mother.html?lang=${locale}"/>">Mother</a>
         </li>
         <li class="breadcrumb-item">Mother Details</li>
       </ol>

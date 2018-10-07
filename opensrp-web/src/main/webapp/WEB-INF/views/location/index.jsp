@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -21,7 +21,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
-<title>Location List</title>
+<title><spring:message code="lbl.locationTitle"/></title>
 
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
@@ -43,9 +43,9 @@ if (paginationAtributes.containsKey("name")) {
 			<jsp:include page="/WEB-INF/views/location/location-tag-link.jsp" />
 		</div>
 		<div class="form-group">
-			<h5>Location Management</h5>
+			<h5><spring:message code="lbl.locationTitle"/></h5>
 			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_LOCATION")){ %>
-			<a  href="<c:url value="/location/add.html"/>"> <strong>Add New Location</strong></a>
+			<a  href="<c:url value="/location/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addNew"/></strong></a>
 			<% } %>
 		</div>
 		<div class="card mb-3">
@@ -59,7 +59,7 @@ if (paginationAtributes.containsKey("name")) {
 							</div>
 							<div class="col-6">
 								<button name="search" type="submit" id="bth-search"
-									class="btn btn-primary" value="search">Search</button>
+									class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
 							</div>
 						</div>			
 					</form>
@@ -68,28 +68,20 @@ if (paginationAtributes.containsKey("name")) {
 			</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					 Location List
+					 <spring:message code="lbl.locationTitle"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
 						<table class="table table-bordered" id="dataTable">
 							<thead>
 								<tr>
-									<th>Name</th>
-									<th>Description</th>									
-									<th> Tag</th>									
-									<th> Creator</th>
+									<th><spring:message code="lbl.name"/></th>
+									<th><spring:message code="lbl.description"/></th>									
+									<th> <spring:message code="lbl.tag"/></th>									
+									<th><spring:message code="lbl.action"/></th>
 								</tr>
 							</thead>
-							<tfoot>
-								<tr>
-									<th>Name</th>
-									<th>Description</th>									
-									<th> Tag</th>
-									
-									<th>Actions</th>
-								</tr>
-							</tfoot>
+							
 							<tbody>
 							
 							<%
@@ -116,7 +108,7 @@ if (paginationAtributes.containsKey("name")) {
 										<td><%=tagName%></td>										
 										<td>
 										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_LOCATION")){ %>
-										<a href="<c:url value="/location/${id}/edit.html"/>">Edit</a></td>
+										<a href="<c:url value="/location/${id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a></td>
 										<%} %>
 
 									</tr>

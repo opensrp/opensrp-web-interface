@@ -8,7 +8,7 @@
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
 	id="mainNav">
-	<a class="navbar-brand" href="<c:url value="/"/>"><img
+	<a class="navbar-brand" href="<c:url value="/?lang=${locale}"/>"><img
 		src="<c:url value="/resources/img/ministry.png"/>" style = "height: 46px"></a>
 
 	<div class="collapse navbar-collapse" id="navbarResponsive">
@@ -18,20 +18,20 @@
 						
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
-				href="#" data-toggle="dropdown">Facility </a>
+				href="#" data-toggle="dropdown"><spring:message code="lbl.facility"/> </a>
 				<div class="dropdown-menu">
 					<% if(AuthenticationManagerUtil.isPermitted("FACILITY_REGISTRATION")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/facility/add.html"/>"> <strong>
-							Registration</strong>
+						href="<c:url value="/facility/add.html?lang=${locale}"/>"> <strong>
+							<spring:message code="lbl.registration"/></strong>
 					</a>
 					<% } %>
 					<% if(AuthenticationManagerUtil.isPermitted("COMMUNITY_CLINIC_LIST")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/facility/index.html"/>"> <strong>
-							Community Clinic</strong>
+						href="<c:url value="/facility/index.html?lang=${locale}"/>"> <strong>
+							<spring:message code="lbl.comunityClinic"/> </strong>
 					</a>
 					<% } %>
 
@@ -39,56 +39,56 @@
 
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
-				href="#" data-toggle="dropdown">Client </a>
+				href="#" data-toggle="dropdown"><spring:message code="lbl.client"/> </a>
 				<div class="dropdown-menu">
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_HOUSEHOLD_LIST")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/household.html"/>"> <strong>
-							Household</strong>
+						href="<c:url value="/client/household.html?lang=${locale}"/>"> <strong>
+							<spring:message code="lbl.household"/></strong>
 					</a>
 					<% } %>
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_MOTHER_LIST")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/mother.html"/>"> <strong>Mother</strong>
+						href="<c:url value="/client/mother.html?lang=${locale}"/>"> <strong><spring:message code="lbl.mother"/></strong>
 					</a>
 					<% } %>
 					
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_MOTHER_LIST")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/child.html"/>"> <strong>Child</strong>
+						href="<c:url value="/client/child.html?lang=${locale}"/>"> <strong><spring:message code="lbl.child"/></strong>
 					</a>
 					<% } %>
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_CHILD_LIST")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/member.html"/>"> <strong>Member</strong>
+						href="<c:url value="/client/member.html?lang=${locale}"/>"> <strong><spring:message code="lbl.member"/></strong>
 					</a>
 					<% } %>
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_SIMILAR_CLIENT_LIST")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/duplicateClient.html"/>"> <strong>Similar Client</strong>
+						href="<c:url value="/client/duplicateClient.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarCLient"/></strong>
 					</a>	
 					<% } %>
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_SIMILER_EVENT_LIST")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/duplicateEvent.html"/>"> <strong>Similar Event</strong>
+						href="<c:url value="/client/duplicateEvent.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarEvent"/></strong>
 					</a>
 					<% } %>
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_SIMILER_CLIENT_RULE_DEFINATION")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/duplicateDefinitionOfClient.html"/>"> <strong>Similar Definition Client</strong>
+						href="<c:url value="/client/duplicateDefinitionOfClient.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarclientRuleDefination"/></strong>
 					</a>
 					<% } %>
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_SIMILER_EVENT_RULE_DEFINATION")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Similar Definition Event</strong>
+						href="<c:url value="/client/duplicateDefinitionOfEvent.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similareventRuleDefination"/></strong>
 					</a>		
 					<% } %>
 				</div></li>
@@ -97,22 +97,23 @@
 				
 				<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="reportDropdown" href="#"
-				data-toggle="dropdown">Report </a>
-				<div class="dropdown-menu">
-					<% if(AuthenticationManagerUtil.isPermitted("ANALYTICS")){ %>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/analytics/analytics.html"/>">
-					<strong> Analytics</strong></a>
-					<% } %>
+				data-toggle="dropdown"><spring:message code="lbl.report"/> </a>
+				<div class="dropdown-menu">					
 					<% if(AuthenticationManagerUtil.isPermitted("CHILD_GROWTH_REPORT")){ %>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/report/child-growth.html"/>">
-					<strong> Child Growth Report</strong></a>
+					<a class="dropdown-item" href="<c:url value="/report/child-growth.html?lang=${locale}"/>">
+					<strong> <spring:message code="lbl.childGrowthReport"/></strong></a>
 					<% } %>
 					<% if(AuthenticationManagerUtil.isPermitted("CHILD_GROWTH_SUMMARY_REPORT")){ %>				
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/report/summary.html"/>">
-					<strong> Sumamry Report</strong></a>
+					<a class="dropdown-item" href="<c:url value="/report/summary.html?lang=${locale}"/>">
+					<strong><spring:message code="lbl.childGrowthSummaryReport"/> </strong></a>
+					<% } %>
+					
+					<% if(AuthenticationManagerUtil.isPermitted("ANALYTICS")){ %>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/analytics/analytics.html?lang=${locale}"/>">
+					<strong><spring:message code="lbl.analytics"/></strong></a>
 					<% } %>
 				</div>
 				
@@ -123,67 +124,84 @@
 
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="userDropdown" href="#"
-				data-toggle="dropdown"> User </a>
+				data-toggle="dropdown"> <spring:message code="lbl.user"/> </a>
 				<div class="dropdown-menu">
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_USER_LIST")){ %>	
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/user.html"/>"> <strong>
-							Manage User</strong> </a>
+					<a class="dropdown-item" href="<c:url value="/user.html?lang=${locale}"/>"> <strong>
+							<spring:message code="lbl.manageUuser"/></strong> </a>
 					<% } %>
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_ROLE_LIST")){ %>	
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/role.html"/>"> <strong>Manage
-							Role</strong>
+					<a class="dropdown-item" href="<c:url value="/role.html?lang=${locale}"/>"> <strong>
+					 <spring:message code="lbl.manageRole"/></strong>
 					</a>
 					<% } %>
 				</div></li>
 
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="reportDropdown"
-				href="#" data-toggle="dropdown">Location </a>
+				href="#" data-toggle="dropdown"> <spring:message code="lbl.location"/> </a>
 				<div class="dropdown-menu">
 				<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_LOCATION_TAG_LIST")){ %>	
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/location/tag/list.html"/>"> <strong>
-							Manage Tag</strong>
+						href="<c:url value="/location/tag/list.html?lang=${locale}"/>"> 
+						<strong> <spring:message code="lbl.manageTag"/></strong>
 					</a>
 					<% } %>
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_LOCATION_LIST")){ %>	
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/location/location.html"/>">
-						<strong>Manage Location</strong>
+					<a class="dropdown-item" href="<c:url value="/location/location.html?lang=${locale}"/>">
+						<strong> <spring:message code="lbl.manageLocation"/></strong>
 					</a>
 					<% } %>
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_LOCATION")){ %>	
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/location/upload_csv.html"/>">
-						<strong>Upload location</strong></a>
+					<a class="dropdown-item" href="<c:url value="/location/upload_csv.html?lang=${locale}"/>">
+						<strong><spring:message code="lbl.uploadLocation"/></strong></a>
 					<% } %>
 				</div></li>
 
 				<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="teamDropdown" href="#"
-				data-toggle="dropdown">Team </a>
+				data-toggle="dropdown"><spring:message code="lbl.team"/> </a>
 				<div class="dropdown-menu">
 				<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_TEAM_LIST")){ %>	
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/team/list.html"/>">
-						<strong> Manage Team</strong>
+					<a class="dropdown-item" href="<c:url value="/team/list.html?lang=${locale}"/>">
+						<strong> <spring:message code="lbl.manageTeam"/></strong>
 					</a>
 					<% } %>
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_TEAM_MEMBER_LIST")){ %>	
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/team/teammember/list.html"/>"> <strong>Manage
-							Team Member</strong>
+						href="<c:url value="/team/teammember/list.html?lang=${locale}"/>"> <strong>
+						 <spring:message code="lbl.manageTeammember"/></strong>
 					</a>
 					<% } %>
-				</div></li>
-
+				</div>
+				</li>
+				
+				<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle mr-lg-2" id="teamDropdown" href="#"
+				data-toggle="dropdown"><spring:message code="lbl.language"/> </a>
+				<div class="dropdown-menu">					
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/?lang=bn"/>">
+						<strong> <spring:message code="lbl.bengali"/></strong>
+					</a>			
+					
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/?lang=en"/>"> <strong>	<spring:message code="lbl.english"/></strong>
+					</a>
+					
+				</div>
+				</li>
 
 			<li class="nav-item"><a class="nav-link" data-toggle="modal"
-				data-target="#exampleModal"> <i class="fa fa-fw fa-sign-out"></i>Logout
+				data-target="#exampleModal"> <i class="fa fa-fw fa-sign-out"></i><spring:message code="lbl.logout"/>
 			</a></li>
 		</ul>
 	</div>

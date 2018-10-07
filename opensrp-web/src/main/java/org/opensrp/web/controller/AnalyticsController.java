@@ -5,6 +5,7 @@ package org.opensrp.web.controller;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -33,7 +34,8 @@ public class AnalyticsController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'ANALYTICS')")
 	@RequestMapping(value = "/analytics.html", method = RequestMethod.GET)
-	public String analytics(HttpServletRequest request, HttpSession session, Model model) {
+	public String analytics(HttpServletRequest request, HttpSession session, Model model,Locale locale) {
+		model.addAttribute("locale", locale);
 		return "/analytics/analytics";
 	}
 	
