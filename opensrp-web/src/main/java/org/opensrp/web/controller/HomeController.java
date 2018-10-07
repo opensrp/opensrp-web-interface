@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController extends OpensrpProperties {
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
 	public ModelAndView home(HttpServletRequest request, HttpSession session, Model model) {
 		/*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();

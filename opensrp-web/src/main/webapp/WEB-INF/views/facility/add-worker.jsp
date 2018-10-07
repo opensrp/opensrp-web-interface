@@ -20,7 +20,7 @@ int facilityId= (Integer)session.getAttribute("facilityId");
 String facilityName= (String)session.getAttribute("facilityName");
 Map<Integer,Integer> distinctWorkerCountMap = (Map<Integer,Integer>) session.getAttribute("distinctWorkerCountMap");
 
-String selectedPersonName = (String)session.getAttribute("personName");
+String selectedPersonName = "";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -101,22 +101,16 @@ String selectedPersonName = (String)session.getAttribute("personName");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-								
 								<div id="cm" class="ui-widget">
 										<label>স্বাস্থ্য কর্মীর নাম </label>
-										<select id="combobox" name= "name" class="form-control">											  
+										<select id="combobox" name= "name" class="form-control">									  
 										</select>
 										 <span class="text-red">${uniqueNameErrorMessage}</span> 
 									</div>
-								
-									<%-- <label for="exampleInputName">স্বাস্থ্য কর্মীর নাম  </label>
-									<input name="name" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="Worker Name" /> 
-									<span class="text-red">${uniqueNameErrorMessage}</span> --%>
 								</div>
 							</div>
 						</div>
+						
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
@@ -254,8 +248,11 @@ String selectedPersonName = (String)session.getAttribute("personName");
 <script type="text/javascript" charset="utf8" src="<c:url value='/resources/datatables/jquery.dataTables.js'/>" ></script>
 <script src="<c:url value='/resources/js/dataTables.jqueryui.min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
-<script>
+<script type="text/javascript"> 
   $( function() {
+	initializeDistinctWorkerCountArray();
+	getWorkerList($("#facilityId").val());  
+	
     $.widget( "custom.combobox", {
       _create: function() {
         this.wrapper = $( "<div>" )
@@ -266,7 +263,6 @@ String selectedPersonName = (String)session.getAttribute("personName");
         this._createAutocomplete();
        
       },
- 
       _createAutocomplete: function() {
         var selected = this.element.children( ":selected" ),        
           value = selected.val() ? selected.text() : "";
@@ -287,7 +283,6 @@ String selectedPersonName = (String)session.getAttribute("personName");
               "ui-tooltip": "ui-state-highlight"
             }
           });
- 
         this._on( this.input, {
           autocompleteselect: function( event, ui ) {
             ui.item.option.selected = true;
@@ -301,17 +296,13 @@ String selectedPersonName = (String)session.getAttribute("personName");
         });
       },
  
-      
- 
       _source: function( request, response ) {
-    	  
     	  $.ajax({
               type: "GET",
               dataType: 'html',
               url: "/opensrp-dashboard/facility/searchWorkerName.html?name="+request.term,            
               success: function(res)
               {
-              
                 $("#combobox").html(res);
               }
           });
@@ -328,12 +319,10 @@ String selectedPersonName = (String)session.getAttribute("personName");
       },
  
       _removeIfInvalid: function( event, ui ) {
-    	  
         // Selected an item, nothing to do
         if ( ui.item ) {
           return;
         }
- 
         // Search for a match (case-insensitive)
         var value = this.input.val(),
           valueLowerCase = value.toLowerCase(),
@@ -344,12 +333,10 @@ String selectedPersonName = (String)session.getAttribute("personName");
             return false;
           }
         });
- 
         // Found a match, nothing to do
         if ( valid ) {
           return;
         }
- 
         // Remove invalid value
         this.input
           .val( "" )
@@ -375,12 +362,7 @@ String selectedPersonName = (String)session.getAttribute("personName");
       $( "#combobox" ).toggle();
     });
     
-    
   } );
-  </script>
-	
-<script type="text/javascript"> 
-
 
 $("#workerInfo").submit(function(event) { 
 	var url = "/opensrp-dashboard/rest/api/v1/facility/saveWorker";
@@ -395,16 +377,10 @@ $("#workerInfo").submit(function(event) {
         };
 	var detailsPageUrl = "/opensrp-dashboard/facility/"+$("#facilityId").val()+"/details.html";
 	var addWorkerPageUrl = "/opensrp-dashboard/facility/"+$("#facilityId").val()+"/addWorker.html";
-	
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
-	
 	event.preventDefault();
-	
-	
 	if($("#newWorker").val() === "0"){
-		/* alert("old worker : "+$("#facilityId").val()+" -> "+$("#workerId").val()
-				+" -> "+$('input[name=trainings]').val()); */
 		url = "/opensrp-dashboard/rest/api/v1/facility/editWorker";
 		formData = {
 				'workerId': $("#workerId").val(),
@@ -417,16 +393,7 @@ $("#workerInfo").submit(function(event) {
 	        };
 	}else if($("#newWorker").val() === "1"){
 		//alert("new worker");
-		var newWorkerType = $("#facilityWorkerTypeId").val();
-		var chcp = '1';
-		if(newWorkerType == chcp && distinctWorkerCountArray[newWorkerType-1][1]>0){
-			var messageStr = "Already has a chcp. Please delete the previous one and try again.";
-			alert(messageStr);
-			return;
-		}
 	}
-	
-	
 	$.ajax({
 		contentType : "application/json",
 		type: "POST",
@@ -455,14 +422,12 @@ var trainingList = [];
 var facilityWorkerList;
 var i=0;
 var distinctWorkerCountArray;
-$(document).ready(function() {
-	initializeDistinctWorkerCountArray();
-	getWorkerList($("#facilityId").val());
-});
+var previousWorkerType ;
+var distinctWorkerCountArrayForEdit;
 
 function initializeDistinctWorkerCountArray(){
 	var distinctWorkerCountString = "<%=distinctWorkerCountMap%>" ;
-	var distinctWorkerCountString = removeBraces(distinctWorkerCountString);
+	distinctWorkerCountString = removeBraces(distinctWorkerCountString);
 	distinctWorkerCountArray = stringTOArray(distinctWorkerCountString, ",");
 	for(var i=0;i<distinctWorkerCountArray.length;i++){
 		distinctWorkerCountArray[i] = stringTOArray(distinctWorkerCountArray[i], "=");
@@ -473,6 +438,7 @@ function removeBraces(inputString){
 	inputString = inputString.replace(/{/g, '').replace(/}/g, '');
 	return inputString;
 }
+
 function stringTOArray(inputString, separator){
 	var array = inputString.split(separator);
 	return array;
@@ -502,7 +468,7 @@ function checkForTraining(){
 function checkForTrainingOldWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
 	if(workerType === '1'){
-		if(distinctWorkerCountArray[0][1] - 1 >0){
+		if(distinctWorkerCountArrayForEdit[0][1] >0){
 			warnUser("CHCP", 1);
 		}else{
 			$("#trainingDiv").show();
@@ -512,22 +478,21 @@ function checkForTrainingOldWorker(){
 		$("#trainingDiv").hide();
 		prevTrainings = $("#trainings").val();
 		$("#trainings").val("");
-		
-		if(workerType === '2' && distinctWorkerCountArray[1][1] -1 >0){
+		if(workerType === '2' && distinctWorkerCountArrayForEdit[1][1] >0){
 				warnUser("HEALTH ASSISTANT", 1); 
-		}else if(workerType === '3' && distinctWorkerCountArray[2][1] -1 >0){
+		}else if(workerType === '3' && distinctWorkerCountArrayForEdit[2][1] >0){
 				warnUser("ASSISTANT HEALTH INSPECTOR", 1);
-		}else if(workerType === '4' && distinctWorkerCountArray[3][1] -1 >0){
+		}else if(workerType === '4' && distinctWorkerCountArrayForEdit[3][1] >0){
 				warnUser("FAMILY PLANNING ASSISTANT", 1);
-		}else if(workerType === '5' && distinctWorkerCountArray[4][1] -1 >0){
+		}else if(workerType === '5' && distinctWorkerCountArrayForEdit[4][1] >0){
 				warnUser("FAMILY PLANNING INSPECTOR", 1);  
-		}else if(workerType === '6' && distinctWorkerCountArray[5][1] -1 >4){
+		}else if(workerType === '6' && distinctWorkerCountArrayForEdit[5][1] >4){
 				warnUser("MULTIPURPOSE HEALTH VOLUNTEER", 5); 
-		}else if(workerType === '7' && distinctWorkerCountArray[6][1] -1 >0){
+		}else if(workerType === '7' && distinctWorkerCountArrayForEdit[6][1] >0){
 				warnUser("OTHER HEALTH WORKER", 1);
-		}else if(workerType === '8' && distinctWorkerCountArray[7][1] -1 >16){
+		}else if(workerType === '8' && distinctWorkerCountArrayForEdit[7][1] >16){
 				warnUser("COMMUNITY GROUP MEMBER", 17);
-		}else if(workerType === '9' && distinctWorkerCountArray[8][1] -1 >16){
+		}else if(workerType === '9' && distinctWorkerCountArrayForEdit[8][1] >16){
 				warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17); 
 		}	
 	} 
@@ -539,7 +504,6 @@ function checkForTrainingNewWorker(){
 		if(distinctWorkerCountArray[0][1]>0){
 			warnUser("CHCP", 1);
 		}else{
-
 			$("#trainingDiv").show();
 			$("#trainings").val(prevTrainings);
 		}
@@ -547,7 +511,6 @@ function checkForTrainingNewWorker(){
 		$("#trainingDiv").hide();
 		prevTrainings = $("#trainings").val();
 		$("#trainings").val("");
-		
 		if(workerType === '2' && distinctWorkerCountArray[1][1]>0){
 				warnUser("HEALTH ASSISTANT", 1); 
 		}else if(workerType === '3' && distinctWorkerCountArray[2][1]>0){
@@ -584,10 +547,8 @@ function hideWarning(){
 	$("#messageDiv").hide();
 }
 
-
 function getWorkerList(id) {
 	var workerListURL ="/opensrp-dashboard/facility/"+id+"/getWorkerList.html";
-	
     $.ajax(workerListURL, {
         type: 'GET',
         dataType: 'html',
@@ -602,14 +563,15 @@ function getWorkerList(id) {
 
 function editWorker(workerId) {
 	var workerListURL ="/opensrp-dashboard/facility/"+workerId+"/editWorker.html";
-	
     $.ajax(workerListURL, {
         type: 'GET',
         dataType: 'html',
     }).done(function(workerDetails) {
-    	
     	$("#workerInfo").html(workerDetails);
-    	
+    	previousWorkerType =$("#facilityWorkerTypeId").val();
+    	var prevWorkerTypeId = parseInt(previousWorkerType);
+    	distinctWorkerCountArrayForEdit = JSON.parse(JSON.stringify(distinctWorkerCountArray));
+    	distinctWorkerCountArrayForEdit[prevWorkerTypeId -1][1]--;
     }).error(function() {
     });
 }
@@ -623,7 +585,6 @@ function deleteWorker(facilityId,workerId) {
 	var formData = {
             'workerId': workerId
         };
-	
 	$.ajax({
 		contentType : "application/json",
 		type: "POST",

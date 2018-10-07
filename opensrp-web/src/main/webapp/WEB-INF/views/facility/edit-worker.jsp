@@ -60,6 +60,16 @@
 		</div>
 	</div>
 	
+	<div class="form-group" id="messageDiv"  style="display: none;">
+		<div class="form-check">
+			<div class="row">
+				<div class="col-10">
+					<label for="exampleInputName" id="msg" style="color:Tomato;border:2px solid Tomato;"></label><br>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<div class="form-group">
 		<div class="row">
 			<div class="col-5">
