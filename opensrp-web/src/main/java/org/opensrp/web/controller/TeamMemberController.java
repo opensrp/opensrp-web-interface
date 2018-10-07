@@ -4,6 +4,8 @@
 
 package org.opensrp.web.controller;
 
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -45,18 +47,19 @@ public class TeamMemberController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_TEAM_MEMBER_LIST')")
 	@RequestMapping(value = "/list.html", method = RequestMethod.GET)
-	public String locationList(HttpServletRequest request, HttpSession session, Model model) {
+	public String locationList(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		Class<TeamMember> entityClassName = TeamMember.class;
 		paginationUtil.createPagination(request, session, entityClassName);
+		model.addAttribute("locale", locale);
 		return "team-member/index";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_TEAM_MEMBER')")
 	@RequestMapping(value = "/add.html", method = RequestMethod.GET)
-	public ModelAndView saveTeamMember(ModelMap model, HttpSession session) throws JSONException {
+	public ModelAndView saveTeamMember(ModelMap model, HttpSession session, Locale locale) throws JSONException {
 		model.addAttribute("teamMember", new TeamMember());
 		String personName = "";
-		
+		model.addAttribute("locale", locale);
 		session.setAttribute("locationList", locationServiceImpl.list().toString());
 		int[] locations = new int[0];
 		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
@@ -88,7 +91,8 @@ public class TeamMemberController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_TEAM_MEMBER')")
 	@RequestMapping(value = "/{id}/edit.html", method = RequestMethod.GET)
-	public ModelAndView editTeamMember(ModelMap model, HttpSession session, @PathVariable("id") int id) throws JSONException {
+	public ModelAndView editTeamMember(ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale)
+	    throws JSONException {
 		TeamMember teamMember = teamMemberServiceImpl.findById(id, "id", TeamMember.class);
 		model.addAttribute("id", id);
 		model.addAttribute("teamMember", teamMember);
@@ -96,6 +100,7 @@ public class TeamMemberController {
 		User person = teamMember.getPerson();
 		String personName = person.getUsername() + " (" + person.getFullName() + ")";
 		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+		model.addAttribute("locale", locale);
 		return new ModelAndView("team-member/edit", "command", teamMember);
 		
 	}

@@ -4,6 +4,8 @@
 
 package org.opensrp.web.controller;
 
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -44,8 +46,8 @@ public class TeamController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_TEAM_LIST')")
 	@RequestMapping(value = "/list.html", method = RequestMethod.GET)
-	public String listTeam(HttpServletRequest request, HttpSession session, Model model) {
-		
+	public String listTeam(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
 		Class<Team> entityClassName = Team.class;
 		paginationUtil.createPagination(request, session, entityClassName);
 		return "team/index";
@@ -53,10 +55,11 @@ public class TeamController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_TEAM')")
 	@RequestMapping(value = "/add.html", method = RequestMethod.GET)
-	public ModelAndView saveTeam(ModelMap model, HttpSession session) throws JSONException {
+	public ModelAndView saveTeam(ModelMap model, HttpSession session, Locale locale) throws JSONException {
 		model.addAttribute("team", new Team());
 		String locationName = "";
 		teamServiceImpl.setSessionAttribute(session, team, locationName);
+		model.addAttribute("locale", locale);
 		return new ModelAndView("team/add", "command", team);
 		
 	}
@@ -93,12 +96,13 @@ public class TeamController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_TEAM')")
 	@RequestMapping(value = "/{id}/edit.html", method = RequestMethod.GET)
-	public ModelAndView editTeam(ModelMap model, HttpSession session, @PathVariable("id") int id) {
+	public ModelAndView editTeam(ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale) {
 		Team team = teamServiceImpl.findById(id, "id", Team.class);
 		model.addAttribute("id", id);
 		model.addAttribute("team", team);
 		String locationName = locationServiceImpl.makeLocationName(team.getLocation());
 		teamServiceImpl.setSessionAttribute(session, team, locationName);
+		model.addAttribute("locale", locale);
 		return new ModelAndView("team/edit", "command", team);
 		
 	}

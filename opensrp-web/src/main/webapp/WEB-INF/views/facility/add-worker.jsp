@@ -69,7 +69,7 @@ String selectedPersonName = "";
 					<div class="form-group">							
 								<div class="row">									
 									<div class="col-5">
-									<label for="exampleInputName">স্বাস্থ্য কর্মীর প্রকারভেদ</label>
+									<label for="exampleInputName">à¦¸à§à¦¬à¦¾à¦¸à§à¦¥à§à¦¯ à¦à¦°à§à¦®à§à¦° à¦ªà§à¦°à¦à¦¾à¦°à¦­à§à¦¦</label>
 										<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" onchange="checkForTraining()" required>
 									 		<option value="" selected>Please Select</option>
 												<%
@@ -102,7 +102,7 @@ String selectedPersonName = "";
 							<div class="row">
 								<div class="col-5">
 								<div id="cm" class="ui-widget">
-										<label>স্বাস্থ্য কর্মীর নাম </label>
+										<label>à¦¸à§à¦¬à¦¾à¦¸à§à¦¥à§à¦¯ à¦à¦°à§à¦®à§à¦° à¦¨à¦¾à¦® </label>
 										<select id="combobox" name= "name" class="form-control">									  
 										</select>
 										 <span class="text-red">${uniqueNameErrorMessage}</span> 
@@ -114,7 +114,7 @@ String selectedPersonName = "";
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">স্বাস্থ্য কর্মীর মোবাইল নম্বর / ইমেইল </label>
+									<label for="exampleInputName">à¦¸à§à¦¬à¦¾à¦¸à§à¦¥à§à¦¯ à¦à¦°à§à¦®à§à¦° à¦®à§à¦¬à¦¾à¦à¦² à¦¨à¦®à§à¦¬à¦° / à¦à¦®à§à¦à¦² </label>
 									<input name="identifier" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Identifier (Email/Mobile No.)" />
@@ -129,7 +129,7 @@ String selectedPersonName = "";
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">স্বাস্থ্য কর্মীর প্রতিষ্ঠান</label>
+									<label for="exampleInputName">à¦¸à§à¦¬à¦¾à¦¸à§à¦¥à§à¦¯ à¦à¦°à§à¦®à§à¦° à¦ªà§à¦°à¦¤à¦¿à¦·à§à¦ à¦¾à¦¨</label>
 									<input name="organization" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Organization" />
@@ -144,7 +144,7 @@ String selectedPersonName = "";
 							<div class="form-check">
 								<div class="row">
 								<div class="col-10">
-									<label for="exampleInputName">সিএইচসিপির প্রাপ্ত প্রশিক্ষণ সমূহ:</label><br>
+									<label for="exampleInputName">à¦¸à¦¿à¦à¦à¦à¦¸à¦¿à¦ªà¦¿à¦° à¦ªà§à¦°à¦¾à¦ªà§à¦¤ à¦ªà§à¦°à¦¶à¦¿à¦à§à¦·à¦£ à¦¸à¦®à§à¦¹:</label><br>
 								</div>
 									<%
 										List<FacilityTraining> CHCPTrainingList = (List<FacilityTraining>) session.getAttribute("CHCPTrainingList");											

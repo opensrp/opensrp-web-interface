@@ -2,6 +2,7 @@ package org.opensrp.web.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,8 +68,8 @@ public class UserController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_USER_LIST')")
 	@RequestMapping(value = "/user.html", method = RequestMethod.GET)
-	public String userList(HttpServletRequest request, HttpSession session, Model model) {
-		
+	public String userList(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
 		Class<User> entityClassName = User.class;
 		paginationUtil.createPagination(request, session, entityClassName);
 		return "user/index";
@@ -76,16 +77,17 @@ public class UserController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_USER')")
 	@RequestMapping(value = "/user/add.html", method = RequestMethod.GET)
-	public ModelAndView saveUser(Model model, HttpSession session) {
+	public ModelAndView saveUser(Model model, HttpSession session, Locale locale) {
 		int[] selectedRoles = null;
 		model.addAttribute("account", new User());
 		userServiceImpl.setRolesAttributes(selectedRoles, session);
+		model.addAttribute("locale", locale);
 		return new ModelAndView("user/add", "command", account);
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
 	@RequestMapping(value = "/user/{id}/edit.html", method = RequestMethod.GET)
-	public ModelAndView editUser(Model model, HttpSession session, @PathVariable("id") int id) {
+	public ModelAndView editUser(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
 		User account = userServiceImpl.findById(id, "id", User.class);
 		model.addAttribute("account", account);
 		model.addAttribute("id", id);
@@ -110,9 +112,10 @@ public class UserController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
 	@RequestMapping(value = "/user/{id}/password.html", method = RequestMethod.GET)
-	public ModelAndView editPassword(Model model, HttpSession session, @PathVariable("id") int id) {
+	public ModelAndView editPassword(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
 		User account = userServiceImpl.findById(id, "id", User.class);
 		model.addAttribute("account", account);
+		model.addAttribute("locale", locale);
 		return new ModelAndView("user/password", "command", account);
 	}
 	

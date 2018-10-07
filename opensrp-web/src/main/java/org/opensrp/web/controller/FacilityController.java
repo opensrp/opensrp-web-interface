@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
+import com.google.gson.Gson;
 
 
 @Controller
@@ -52,7 +54,7 @@ public class FacilityController {
 	private PaginationUtil paginationUtil;
 	
 	@Autowired
-    private DatabaseServiceImpl databaseServiceImpl;
+	private DatabaseServiceImpl databaseServiceImpl;
 	
 	@Autowired
 	private Facility facility;
@@ -63,13 +65,14 @@ public class FacilityController {
 	@Autowired
 	private FacilityHelperUtil facilityHelperUtil;
 	
+
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY')")
 	@RequestMapping(value = "/facility/add.html", method = RequestMethod.GET)
 	public ModelAndView addFacility(HttpServletRequest request,ModelMap model, HttpSession session){
 		paginationUtil.createPagination(request, session, Facility.class);
 		//facilityHelperUtil.setSessionAttribute(session, facility, locationName);
 		return new ModelAndView("facility/add", "command", facility);
-       
+		
 	}
 
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY')")
@@ -79,13 +82,13 @@ public class FacilityController {
 	                             //@RequestParam(value = "locationName") String locationName,
 	                             @ModelAttribute("facility") @Valid Facility facility, BindingResult binding, ModelMap model,
 	                             HttpSession session) throws Exception {
-		
 		facility = facilityHelperUtil.setLocationCodesToFacility(facility);
 		facilityServiceFactory.getFacility("FacilityServiceImpl").save(facility);
 		return new RedirectView("/opensrp-dashboard/");
 		
 	}
 	
+
 	//@PostAuthorize("hasPermission(returnObject, 'PERM_READ_FACILITY')")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showFacilityList(HttpServletRequest request, HttpSession session) {
@@ -107,31 +110,30 @@ public class FacilityController {
 		model.addAttribute("facilityWorker", facilityWorkerObject);
 		
 		return new ModelAndView("facility/add-worker", "command", facilityWorker);
-       
+	   
 	}*/
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY_WORKER')")
 	@RequestMapping(value = "/facility/{id}/addWorker.html", method = RequestMethod.GET)
 	public String addWorker(ModelMap model, HttpSession session,@PathVariable("id") int id){
 		
-		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findAll("FacilityWorkerType");
-		List<FacilityTraining> CHCPTrainingList = facilityServiceFactory.getFacility("FacilityWorkerTrainingServiceImpl").findAll("FacilityTraining");
+		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl")
+		        .findAll("FacilityWorkerType");
+		List<FacilityTraining> CHCPTrainingList = facilityServiceFactory.getFacility("FacilityWorkerTrainingServiceImpl")
+		        .findAll("FacilityTraining");
 		facilityHelperUtil.setWorkerTypeListToSession(session, workerTypeList);
 		facilityHelperUtil.setCHCPTrainingListToSession(session, CHCPTrainingList);
 		
 		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
 		session.setAttribute("facilityName", facility.getName());
-		
 		List<FacilityWorker> facilityWorkerList = facilityHelperUtil.getFacilityWorkerList (facility);
 		Map<Integer,Integer> distinctWorkerCountMap = facilityHelperUtil.getDistinctWorkerCount(facilityWorkerList);
 		session.setAttribute("distinctWorkerCountMap", distinctWorkerCountMap);
-		System.out.println(distinctWorkerCountMap.toString());
-		
 		session.setAttribute("facilityId", id);
 		return "facility/add-worker";
-       
+		
 	}
-	
+
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY_WORKER')")
 	@RequestMapping(value = "/facility/saveWorker.html", method = RequestMethod.POST)
@@ -152,18 +154,19 @@ public class FacilityController {
 			if(facilityTraining != null){
 				facilityTrainings.add(facilityTraining);
 			}
-		}
-		facilityWorker.setFacilityTrainings(facilityTrainings);
+			facilityWorker.setFacilityTrainings(facilityTrainings);
 		}
 		
-		FacilityWorkerType facilityWorkerType = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findById(facilityWorkerTypeId, "id", FacilityWorkerType.class);
+		FacilityWorkerType facilityWorkerType = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl")
+		        .findById(facilityWorkerTypeId, "id", FacilityWorkerType.class);
 		facilityWorker.setFacilityWorkerType(facilityWorkerType);
 		facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").save(facilityWorker);
 		
 		//String facilityDetailsUrlString = "/facility/"+facilityWorker.getFacility().getId()+"/details.html";
-		String addWorkerUrlString = "/opensrp-dashboard/facility/"+facilityWorker.getFacility().getId()+"/addWorker.html";
+		String addWorkerUrlString = "/opensrp-dashboard/facility/" + facilityWorker.getFacility().getId()
+		        + "/addWorker.html";
 		return new RedirectView(addWorkerUrlString);
-       
+		
 	}
 	
 	/*@RequestMapping(value = "/{id}/getWorkerList.html", method = RequestMethod.GET)
@@ -176,19 +179,21 @@ public class FacilityController {
 		List<FacilityWorker> facilityWorkerList = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findAllByKeys(facilityMap, FacilityWorker.class);
 		
 		return new ResponseEntity<>(new Gson().toJson(facilityWorkerList), OK);
-       
+	   
 	}*/
 	
+
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_FACILITY_WORKER')")
 	@RequestMapping(value = "/facility/{id}/getWorkerList.html", method = RequestMethod.GET)
-	public String getWorkerList (ModelMap model, HttpSession session,
+	public String getWorkerList (ModelMap model, HttpSession session, Locale locale,
 			@PathVariable("id") int id){
 		
 		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
 		List<FacilityWorker> facilityWorkerList = facilityHelperUtil.getFacilityWorkerList(facility);
 		facilityHelperUtil.setFacilityWorkerListToSession(session, facilityWorkerList);
+		model.addAttribute("locale", locale);
 		return "facility/worker-list";
-       
+		
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY_WORKER')")
@@ -210,8 +215,7 @@ public class FacilityController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_FACILITY')")
 	@RequestMapping(value = "/facility/{id}/details.html", method = RequestMethod.GET)
-	public String facilityDetails(ModelMap model, HttpSession session,@PathVariable("id") int id){
-		
+	public String facilityDetails(ModelMap model, HttpSession session,Locale locale,@PathVariable("id") int id){	
 		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
 		FacilityWorker facilityWorkerObject = facilityWorker;
 		facilityWorkerObject.setFacility(facility);
@@ -219,15 +223,17 @@ public class FacilityController {
 		
 		Map<String, Object> facilityMap = new HashMap<String, Object>();
 		facilityMap.put("facility", facility);
-		List<FacilityWorker> facilityWorkerList = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findAllByKeys(facilityMap, FacilityWorker.class);
+		List<FacilityWorker> facilityWorkerList = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl")
+		        .findAllByKeys(facilityMap, FacilityWorker.class);
 		facilityHelperUtil.setFacilityWorkerListToSession(session, facilityWorkerList);
-		
+		model.addAttribute("locale", locale);
 		model.addAttribute("facility", facility);
 		
 		return "facility/details";
-       
+		
 	}
 	
+
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
 	@RequestMapping(value = "/facility/upload_csv.html", method = RequestMethod.GET)
 	public String csvUpload(HttpSession session) throws JSONException {

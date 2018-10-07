@@ -227,9 +227,11 @@ public class UserServiceImpl implements AclService {
 		boolean isProvider = true;
 		List<User> users = repository.findAllByKeysWithALlMatches(isProvider, fielaValues, User.class);
 		Map<Integer, String> usersMap = new HashMap<Integer, String>();
-		for (User user : users) {
-			usersMap.put(user.getId(), user.getUsername());
-			
+		if (users != null) {
+			for (User user : users) {
+				usersMap.put(user.getId(), user.getUsername());
+				
+			}
 		}
 		return usersMap;
 	}

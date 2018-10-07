@@ -1,6 +1,7 @@
 package org.opensrp.web.controller;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -32,16 +33,18 @@ public class LocationTagController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION_TAG_LIST')")
 	@RequestMapping(value = "location/tag/list.html", method = RequestMethod.GET)
-	public String locationList(Model model) {
+	public String locationList(ModelMap model, Locale locale) {
 		List<LocationTag> locations = locationTagServiceImpl.findAll("LocationTag");
 		model.addAttribute("locationTags", locations);
+		model.addAttribute("locale", locale);
 		return "location-tag/index";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_LOCATION_TAG')")
 	@RequestMapping(value = "location/tag/add.html", method = RequestMethod.GET)
-	public ModelAndView saveLocation(ModelMap model, HttpSession session) {
+	public ModelAndView saveLocation(ModelMap model, HttpSession session, Locale locale) {
 		model.addAttribute("locationTag", new Location());
+		model.addAttribute("locale", locale);
 		return new ModelAndView("location-tag/add", "command", locationTag);
 		
 	}
@@ -64,10 +67,11 @@ public class LocationTagController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_LOCATION_TAG')")
 	@RequestMapping(value = "location/tag/{id}/edit.html", method = RequestMethod.GET)
-	public ModelAndView editRole(ModelMap model, HttpSession session, @PathVariable("id") int id) {
+	public ModelAndView editRole(ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale) {
 		LocationTag locationTag = locationTagServiceImpl.findById(id, "id", LocationTag.class);
 		model.addAttribute("locationTag", locationTag);
 		model.addAttribute("id", id);
+		model.addAttribute("locale", locale);
 		return new ModelAndView("location-tag/edit", "command", locationTag);
 		
 	}

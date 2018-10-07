@@ -3,6 +3,7 @@ package org.opensrp.web.controller;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +51,7 @@ public class DashboardController {
 	private DataVisualization dataVisualization;
 
 	@RequestMapping("/dashboard")
-	public String showHome(HttpServletRequest request, Model model, HttpSession session) throws JSONException {
+	public String showHome(HttpServletRequest request, Model model, HttpSession session, Locale locale) throws JSONException {
 		/*Different types of data counts and percentages*/
 		List<Object> dashboardAggregatedList = databaseServiceImpl
 		        .executeSelectQuery("select * from core.fn_growplus_dashboard_data_count()");
@@ -64,7 +65,7 @@ public class DashboardController {
 		/*Maps data*/
 		JSONObject featureCollectionOfGrowthFaltering = createGeoJSON(false);
 		session.setAttribute("featureCollectionOfGrowthFaltering", featureCollectionOfGrowthFaltering);
-		
+		model.addAttribute("locale", locale);
 		JSONObject featureCollectionOfAdequateGrowth = createGeoJSON(true);
 		session.setAttribute("featureCollectionOfAdequateGrowth", featureCollectionOfAdequateGrowth);
 		

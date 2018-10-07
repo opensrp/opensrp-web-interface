@@ -22,6 +22,7 @@
 
 <% if(AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILARITY_DEFINITION")){ %>  
 <a  href="<c:url value="/client/duplicateDefinitionOfEvent.html"/>"> <strong>Similarity Definition of Event</strong> </a>   <% } %>
+
     
 
 

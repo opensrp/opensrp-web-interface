@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -16,7 +15,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Edit Location</title>
+<title><spring:message code="lbl.editLocation"/></title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 <%
@@ -38,7 +37,7 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 			</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Edit Location
+					<spring:message code="lbl.editLocation"/>
 				</div>
 				<div class="card-body">
 				<span> ${uniqueErrorMessage}</span>
@@ -46,7 +45,7 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Location Name   </label>
+									<label for="exampleInputName"><spring:message code="lbl.name"/></label>
 									<form:input path="name" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Location Name" />
@@ -56,7 +55,7 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Code</label>
+									<label for="exampleInputName"><spring:message code="lbl.code"/></label>
 									<form:input path="code" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Description" />
@@ -66,7 +65,7 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Description</label>
+									<label for="exampleInputName"><spring:message code="lbl.description"/></label>
 									<form:input path="description" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Description" />
@@ -78,7 +77,7 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 								<div class="row">									
 									<div class="col-5">
 										<div id="cm">
-											  <label>Search Parent Location </label>
+											  <label><spring:message code="lbl.parentLocation"/> </label>
 											  <select id="combobox" class="form-control">
 											  
 											    </select>
@@ -90,9 +89,9 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 						<div class="form-group">							
 								<div class="row">									
 									<div class="col-5">
-									<label for="exampleInputName"> Location Tag</label>
+									<label for="exampleInputName"> <spring:message code="lbl.tag"/></label>
 										<select class="custom-select custom-select-lg mb-3" id="locationTag" name="locationTag" required="required">
-									 		<option value="" selected>Please Select</option>
+									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 												<%
 												for (Map.Entry<Integer, String> entry : tags.entrySet())
 												{
@@ -117,7 +116,7 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<input type="submit" value="Save"
+									<input type="submit" value="<spring:message code="lbl.edit"/>"
 										class="btn btn-primary btn-block" />
 								</div>
 							</div>
