@@ -1,5 +1,7 @@
 package org.opensrp.common.dto;
 
+import org.springframework.security.core.userdetails.User;
+
 public class UserDTO {
 	
 	private String firstName;
@@ -17,6 +19,7 @@ public class UserDTO {
 	private String password;
 	
 	private String roles;
+	private int parentUser;
 	
 	public String getFirstName() {
 		return firstName;
@@ -82,11 +85,23 @@ public class UserDTO {
 		this.roles = roles;
 	}
 	
+	public int getParentUser() {
+		return parentUser;
+	}
+
+	public void setParentUser(int parentUser) {
+		this.parentUser = parentUser;
+	}
+
 	@Override
 	public String toString() {
-		return "Usr [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", mobile=" + mobile
-		        + ", idetifier=" + idetifier + ", username=" + username + ", password=" + password + ", roles=" + roles
-		        + "]";
+		return "UserDTO [firstName=" + firstName + ", lastName=" + lastName
+				+ ", email=" + email + ", mobile=" + mobile + ", idetifier="
+				+ idetifier + ", username=" + username + ", password="
+				+ password + ", roles=" + roles + ", parentUser=" + parentUser
+				+ "]";
 	}
+
+	
 	
 }
