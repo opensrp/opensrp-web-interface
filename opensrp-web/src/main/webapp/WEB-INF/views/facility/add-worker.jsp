@@ -297,10 +297,12 @@ String selectedPersonName = "";
       },
  
       _source: function( request, response ) {
+    	  var workerTypeId = $("#facilityWorkerTypeId").val();
     	  $.ajax({
               type: "GET",
               dataType: 'html',
-              url: "/opensrp-dashboard/facility/searchWorkerName.html?name="+request.term,            
+              //url: "/opensrp-dashboard/facility/searchWorkerName.html?name="+request.term,
+              url: "/opensrp-dashboard/facility/searchWorkerName.html?name="+request.term+"&workerTypeId="+workerTypeId,
               success: function(res)
               {
                 $("#combobox").html(res);

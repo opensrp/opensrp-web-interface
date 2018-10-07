@@ -16,11 +16,11 @@
 
 
 <% 
-List<FacilityWorker> workers = (List<FacilityWorker>)session.getAttribute("searchedWorkers");	
+List<String> workers = (List<String>)session.getAttribute("searchedWorkers");	
 	if(workers!=null){
 		String name ="";
-		for (FacilityWorker worker : workers) {	
-			name = worker.getName();
+		for (String workerName : workers) {	
+			name = workerName;
 		%>
 			 <option value="<%=name%>"><%=name%></option>
 		<%}

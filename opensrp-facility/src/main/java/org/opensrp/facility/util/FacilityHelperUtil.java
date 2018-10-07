@@ -321,24 +321,37 @@ public class FacilityHelperUtil {
 	}
 	
 	@Transactional
-	public List<FacilityWorker> getAllWorkersByKeysWithALlMatches(String name) {
-		Map<String, String> fieldValues = new HashMap<String, String>();
-		fieldValues.put("name", name);
-		boolean isProvider = false;
-		return repository.findAllByKeysWithALlMatches(isProvider, fieldValues, FacilityWorker.class);
+	public List<String> getAllWorkersNameByKeysWithALlMatches(String name, String workerTypeId) {
+		int workerTypeIdNum;
+		if(workerTypeId!= null && !workerTypeId.isEmpty()){
+			workerTypeIdNum = Integer.parseInt(workerTypeId);
+			if(workerTypeIdNum ==8 || workerTypeIdNum ==9){
+				return getAllWorkersNameByKeysWithALlMatchesFromView(name);
+			}
+		}
+		return getAllWorkersNameByKeysWithALlMatchesFromTable(name);
 	}
 	
 	@Transactional
-	public List<String> getAllWorkersNameByKeysWithALlMatches(String name) {
+	public List<String> getAllWorkersNameByKeysWithALlMatchesFromTable(String name) {
 		Map<String, String> fieldValues = new HashMap<String, String>();
 		fieldValues.put("name", name);
 		boolean isProvider = false;
 		List<FacilityWorker> workerList = repository.findAllByKeysWithALlMatches(isProvider, fieldValues, FacilityWorker.class);
-		List<String> WorkerNameList = new ArrayList<String>();
+		List<String> workerNameList = new ArrayList<String>();
 		for (FacilityWorker worker : workerList){
-			WorkerNameList.add(worker.getName());
+			workerNameList.add(worker.getName());
 		}
-		return WorkerNameList;
+		return workerNameList;
+	}
+	
+	@Transactional
+	public List<String> getAllWorkersNameByKeysWithALlMatchesFromView(String name) {
+		String query = "select first_name from core.\"viewJsonDataConversionOfClient\""
+						+"where entity_type in ('ec_member', 'ec_woman')"
+						+"and first_name ilike '%"+name+"%'";
+		List<String> workerNameList = repository.executeSelectQuery(query);
+		return workerNameList;
 	}
 	
 }
