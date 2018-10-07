@@ -30,7 +30,7 @@
 					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/facility/index.html?lang=${locale}"/>"> <strong>
+						href="<c:url value="/dashboard?lang=${locale}"/>"> <strong>
 							<spring:message code="lbl.comunityClinic"/> </strong>
 
 					</a>

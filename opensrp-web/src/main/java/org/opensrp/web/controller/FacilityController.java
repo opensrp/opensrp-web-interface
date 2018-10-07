@@ -90,7 +90,7 @@ public class FacilityController {
 	
 
 	//@PostAuthorize("hasPermission(returnObject, 'PERM_READ_FACILITY')")
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
 	public String showFacilityList(HttpServletRequest request, HttpSession session) {
         paginationUtil.createPagination(request, session, Facility.class);
 		return "/facility/index";

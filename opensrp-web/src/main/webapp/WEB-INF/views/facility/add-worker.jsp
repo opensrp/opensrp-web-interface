@@ -69,7 +69,7 @@ String selectedPersonName = "";
 					<div class="form-group">							
 								<div class="row">									
 									<div class="col-5">
-									<label for="exampleInputName">à¦¸à§à¦¬à¦¾à¦¸à§à¦¥à§à¦¯ à¦à¦°à§à¦®à§à¦° à¦ªà§à¦°à¦à¦¾à¦°à¦­à§à¦¦</label>
+									<label for="exampleInputName"><spring:message code="lbl.healthWorkerType"/></label>
 										<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" onchange="checkForTraining()" required>
 									 		<option value="" selected>Please Select</option>
 												<%
@@ -102,7 +102,7 @@ String selectedPersonName = "";
 							<div class="row">
 								<div class="col-5">
 								<div id="cm" class="ui-widget">
-										<label>à¦¸à§à¦¬à¦¾à¦¸à§à¦¥à§à¦¯ à¦à¦°à§à¦®à§à¦° à¦¨à¦¾à¦® </label>
+										<label><spring:message code="lbl.healthWorkerName"/></label>
 										<select id="combobox" name= "name" class="form-control">									  
 										</select>
 										 <span class="text-red">${uniqueNameErrorMessage}</span> 
@@ -114,7 +114,7 @@ String selectedPersonName = "";
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">à¦¸à§à¦¬à¦¾à¦¸à§à¦¥à§à¦¯ à¦à¦°à§à¦®à§à¦° à¦®à§à¦¬à¦¾à¦à¦² à¦¨à¦®à§à¦¬à¦° / à¦à¦®à§à¦à¦² </label>
+									<label for="exampleInputName"><spring:message code="lbl.healthWorkerContact"/></label>
 									<input name="identifier" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Identifier (Email/Mobile No.)" />
@@ -129,7 +129,7 @@ String selectedPersonName = "";
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">à¦¸à§à¦¬à¦¾à¦¸à§à¦¥à§à¦¯ à¦à¦°à§à¦®à§à¦° à¦ªà§à¦°à¦¤à¦¿à¦·à§à¦ à¦¾à¦¨</label>
+									<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/></label>
 									<input name="organization" class="form-control"
 										required="required" aria-describedby="nameHelp"
 										placeholder="Organization" />
