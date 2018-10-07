@@ -194,7 +194,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
     	  $.ajax({
               type: "GET",
               dataType: 'html',
-              url: "/opensrp-dashboard/user/search.html?name="+request.term,            
+              url: "/opensrp-dashboard/user/provider.html?name="+request.term,            
               success: function(res)
               {
               
@@ -280,7 +280,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 	        allowFreeEntries: false,
 	        maxSelection: 5,
 	        maxEntryLength: 70,
-	 		maxEntryRenderer: function(v) {
+	 		maxEntryRenderer: function(v) {search
 	 			return '<div style="color:red">Typed Word TOO LONG </div>';
 	 		}
 	       

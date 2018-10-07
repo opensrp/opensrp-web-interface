@@ -1,9 +1,7 @@
 package org.opensrp.web.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,9 +9,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.acl.entity.Permission;
-import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.entity.User;
 import org.opensrp.acl.service.impl.RoleServiceImpl;
 import org.opensrp.acl.service.impl.UserServiceImpl;
@@ -91,19 +89,27 @@ public class UserController {
 		User account = userServiceImpl.findById(id, "id", User.class);
 		model.addAttribute("account", account);
 		model.addAttribute("id", id);
+		User parentUser = account.getParentUser();
+		String parentUserName = "";
+		if (parentUser != null) {
+			parentUserName = parentUser.getUsername() + " (" + parentUser.getFullName() + ")";
+		}
 		userServiceImpl.setRolesAttributes(userServiceImpl.getSelectedRoles(account), session);
+		session.setAttribute("parentUserName", parentUserName);
 		return new ModelAndView("user/edit", "command", account);
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
 	@RequestMapping(value = "/user/{id}/edit.html", method = RequestMethod.POST)
-	public ModelAndView editUser(@RequestParam(value = "roles", required = false) String[] roles,
+	public ModelAndView editUser(@RequestParam(value = "parentUser", required = false) int parentUserId,
+	                             @RequestParam(value = "roles", required = false) String[] roles,
 	                             @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
 	                             HttpSession session, @PathVariable("id") int id) throws Exception {
 		account.setRoles(userServiceImpl.setRoles(roles));
 		account.setId(id);
 		account.setEnabled(true);
-		
+		User parentUser = userServiceImpl.findById(parentUserId, "id", User.class);
+		account.setParentUser(parentUser);
 		userServiceImpl.update(account);
 		
 		return new ModelAndView("redirect:/user.html");
@@ -141,6 +147,17 @@ public class UserController {
 		return "user/login";
 	}
 	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_USER_HIERARCHY')")
+	@RequestMapping(value = "user/hierarchy.html", method = RequestMethod.GET)
+	public String userHierarchy(Model model, HttpSession session, Locale locale) throws JSONException {
+		String parentIndication = "#";
+		String parentKey = "parent";
+		JSONArray data = userServiceImpl.getUserDataAsJson(parentIndication, parentKey);
+		session.setAttribute("userTreeData", data);
+		model.addAttribute("locale", locale);
+		return "user/hierarchy";
+	}
+	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -150,10 +167,17 @@ public class UserController {
 		return "redirect:/login?logout";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
 	}
 	
-	@RequestMapping(value = "user/search.html", method = RequestMethod.GET)
+	@RequestMapping(value = "user/provider.html", method = RequestMethod.GET)
 	public String providerSearch(Model model, HttpSession session, @RequestParam String name) throws JSONException {
 		
-		List<User> users = userServiceImpl.getAllProviderByKeysWithALlMatches(name);
+		List<User> users = userServiceImpl.findAllByKeysWithALlMatches(name, true);
+		session.setAttribute("searchedUsers", users);
+		return "user/search";
+	}
+	
+	@RequestMapping(value = "user/user.html", method = RequestMethod.GET)
+	public String userSearch(Model model, HttpSession session, @RequestParam String name) throws JSONException {
+		List<User> users = userServiceImpl.findAllByKeysWithALlMatches(name, false);
 		session.setAttribute("searchedUsers", users);
 		return "user/search";
 	}

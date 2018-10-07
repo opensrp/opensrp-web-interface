@@ -78,6 +78,7 @@ if (paginationAtributes.containsKey("name")) {
 								<tr>
 									<th><spring:message code="lbl.fullName"/></th>
 									<th><spring:message code="lbl.userName"/></th>
+									<th><spring:message code="lbl.parentUser"/></th>
 									<th><spring:message code="lbl.email"/></th>
 									<th><spring:message code="lbl.role"/></th>
 									<th><spring:message code="lbl.action"/></th>
@@ -102,6 +103,11 @@ if (paginationAtributes.containsKey("name")) {
 									<tr>
 										<td><%=user.getFullName() %></td>
 										<td><%=user.getUsername()%></td>
+										<td>
+										<%if(user.getParentUser()!=null){ %>
+										<%=user.getParentUser().getFullName()%>
+										<%} %>
+										</td>
 										<td><%=user.getEmail()%></td>
 										<td>
 										<% 
