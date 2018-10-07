@@ -284,9 +284,10 @@ public class FacilityController {
 	
 	@RequestMapping(value = "facility/searchWorkerName.html", method = RequestMethod.GET)
 	public String providerSearch(Model model, HttpSession session, @RequestParam String name) throws JSONException {
-		List<FacilityWorker> workers = facilityHelperUtil.getAllWorkersByKeysWithALlMatches(name);
+		//List<FacilityWorker> workers = facilityHelperUtil.getAllWorkersByKeysWithALlMatches(name);
+		List<String> workers = facilityHelperUtil.getAllWorkersNameByKeysWithALlMatches(name);
 		session.setAttribute("searchedWorkers", workers);
-		return "facility/search-worker-name";
+		return "facility/search-worker-name-string";
 	}
 
 }

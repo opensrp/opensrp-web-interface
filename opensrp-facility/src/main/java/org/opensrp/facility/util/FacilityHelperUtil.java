@@ -3,6 +3,7 @@ package org.opensrp.facility.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -325,6 +326,19 @@ public class FacilityHelperUtil {
 		fieldValues.put("name", name);
 		boolean isProvider = false;
 		return repository.findAllByKeysWithALlMatches(isProvider, fieldValues, FacilityWorker.class);
+	}
+	
+	@Transactional
+	public List<String> getAllWorkersNameByKeysWithALlMatches(String name) {
+		Map<String, String> fieldValues = new HashMap<String, String>();
+		fieldValues.put("name", name);
+		boolean isProvider = false;
+		List<FacilityWorker> workerList = repository.findAllByKeysWithALlMatches(isProvider, fieldValues, FacilityWorker.class);
+		List<String> WorkerNameList = new ArrayList<String>();
+		for (FacilityWorker worker : workerList){
+			WorkerNameList.add(worker.getName());
+		}
+		return WorkerNameList;
 	}
 	
 }
