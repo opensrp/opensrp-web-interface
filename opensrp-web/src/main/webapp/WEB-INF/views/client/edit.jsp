@@ -47,6 +47,11 @@
 
 	<div class="content-wrapper">
 		<div class="container-fluid">
+		
+		<div class="form-group">				
+			 <jsp:include page="/WEB-INF/views/client/client-link.jsp" /> 		
+			</div>
+			
 			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> Edit Mother

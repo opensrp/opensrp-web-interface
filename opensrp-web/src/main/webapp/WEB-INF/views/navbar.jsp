@@ -43,20 +43,32 @@ boolean PERM_READ_TEAM_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM
 				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
 				href="#" data-toggle="dropdown"><spring:message code="lbl.facility"/> </a>
 				<div class="dropdown-menu">
-					<% if(FACILITY_REGISTRATION){ %>
+
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/facility/add.html?lang=${locale}"/>"> <strong>
 							<spring:message code="lbl.registration"/></strong>
 					</a>
 					<% } %>
-					<% if(COMMUNITY_CLINIC_LIST){ %>
+
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/facility/index.html?lang=${locale}"/>"> <strong>
+						href="<c:url value="/dashboard?lang=${locale}"/>"> <strong>
 							<spring:message code="lbl.comunityClinic"/> </strong>
+
 					</a>
 					<% } %>
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV")){ %>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/facility/upload_csv.html"/>"> <strong>
+							Upload Facility</strong>
+					</a>
+		
+					<% } %>
+
 
 				</div></li>
 				<% } %>
@@ -66,51 +78,59 @@ boolean PERM_READ_TEAM_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM
 				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
 				href="#" data-toggle="dropdown"><spring:message code="lbl.client"/> </a>
 				<div class="dropdown-menu">
-					<% if(PERM_READ_HOUSEHOLD_LIST){ %>
+
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_HOUSEHOLD")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/household.html?lang=${locale}"/>"> <strong>
 							<spring:message code="lbl.household"/></strong>
 					</a>
 					<% } %>
-					<% if(PERM_READ_MOTHER_LIST){ %>
+
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_MOTHER")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/mother.html?lang=${locale}"/>"> <strong><spring:message code="lbl.mother"/></strong>
 					</a>
 					<% } %>
-					
-					<% if(PERM_READ_CHILD_LIST){ %>
+
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_CHILD")){ %>
+
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/child.html?lang=${locale}"/>"> <strong><spring:message code="lbl.child"/></strong>
 					</a>
 					<% } %>
-					<% if(PERM_READ_MEMBER_LIST){ %>
+
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_MEMBER")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/member.html?lang=${locale}"/>"> <strong><spring:message code="lbl.member"/></strong>
 					</a>
 					<% } %>
-					<% if(PERM_SIMILAR_CLIENT_LIST){ %>
+
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILAR_EVENT_CLIENT")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/duplicateClient.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarCLient"/></strong>
 					</a>	
 					<% } %>
-					<% if(PERM_SIMILER_EVENT_LIST){ %>
+
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILAR_EVENT_CLIENT")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/duplicateEvent.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarEvent"/></strong>
 					</a>
 					<% } %>
-					<% if(PERM_SIMILER_CLIENT_RULE_DEFINATION){ %>
+
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILARITY_DEFINITION")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/duplicateDefinitionOfClient.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarclientRuleDefination"/></strong>
 					</a>
 					<% } %>
-					<% if(PERM_SIMILER_EVENT_RULE_DEFINATION){ %>
+
+					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILARITY_DEFINITION")){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/client/duplicateDefinitionOfEvent.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similareventRuleDefination"/></strong>

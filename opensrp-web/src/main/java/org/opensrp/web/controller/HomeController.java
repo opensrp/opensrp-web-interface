@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController extends OpensrpProperties {
 	
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView home(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		/*Authentication auth = SecurityContextHolder.getContext().getAuthentication();

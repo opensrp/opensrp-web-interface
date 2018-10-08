@@ -12,15 +12,19 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
-
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <!DOCTYPE html>
 <html> 
 
 <head>
 <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> -->
-<title>HRIS</title>
+<title>CC Profile</title>
 </head>
+<style>
+td{ padding:5px;}
+
+</style>
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <%
 List<Integer> trainingIdList = new ArrayList<Integer>();
@@ -77,22 +81,24 @@ if (session.getAttribute("facilityWorkerList") != null) {
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		
-		<div class="form-group">				
-				   <a  href="<c:url value="/facility/add.html"/>" > <strong>Registration</strong> 
-				   </a>  |  <a  href="<c:url value="/facility/index.html"/>"> <strong>Community Clinic</strong>
-				   </a>		
-		</div>
+		<jsp:include page="/WEB-INF/views/facility-url.jsp" />
 		
 		<div class="form-group">
-		
-		<a  href="/opensrp-dashboard/facility/${facility.id}/addWorker.html"> <strong>Add Worker</strong> </a>		
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
+		<a  href="/opensrp-dashboard/facility/${facility.id}/addWorker.html"> <strong>Add Worker/Training</strong> </a>		
+		<%} %>
 		</div>
 		
 		
 			
   <div class="row">
            	
-  <h2>কমিউনিটি ক্লিনিকের সেবা প্রদানকারী এবং সেবার তথ্য সমূহ: </h2>         	
+<table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="left" valign="top"><h2>কমিউনিটি ক্লিনিকের সেবা প্রদানকারী এবং সেবার তথ্য সমূহ: </h2></td>
+  </tr>
+  <tr>
+    <td>      	
   <table width="100%" border="0" align="center" cellpadding="1" cellspacing="1">
   <tr>
   	<td>1.</td>
@@ -107,7 +113,37 @@ if (session.getAttribute("facilityWorkerList") != null) {
   <tr>
  	<td>3.</td>
     <td>ভৌগোলিক অবস্থা: </td>
-    <td colspan="3">Latitude: ${facility.latitude}<br> Longitude: ${facility.longitude}</td>
+    <td colspan="3"><table width="100%" border="0">
+    <tr>
+    	<td>বিভাগ :</td>
+    	<td> ${facility.division}</td>
+    </tr>
+    <tr>
+    	<td>জেলা :</td>
+    	<td> ${facility.district}</td>
+    </tr>
+    <tr>
+    	<td>উপজেলা :</td>
+    	<td> ${facility.upazila}</td>
+    </tr>
+     <tr>
+    	<td>ইউনিয়ন :</td>
+    	<td> ${facility.union}</td>
+    </tr>
+    <tr>
+    	<td>ওয়ার্ড :</td>
+    	<td> ${facility.ward}</td>
+    </tr>
+     <tr>
+    	<td>অক্ষাংশ :</td>
+    	<td> ${facility.latitude}</td>
+    </tr>
+    <tr>
+    	<td>দ্রাঘিমা :</td>
+    	<td> ${facility.longitude}</td>
+    </tr>
+    </table>
+   	
   </tr>
   <tr>
   	<td>4.</td>
@@ -118,14 +154,14 @@ if (session.getAttribute("facilityWorkerList") != null) {
   </tr>
   <tr>
   	<td>5.</td>
-    <td>স্বাস্থ সহকারীর নাম:</td>
+    <td>স্বাস্থ্য সহকারীর নাম:</td>
     <td><%=(coreWorkers[2][0]!= null)? coreWorkers[2][0] : ""%></td>
     <td>মোবাইল নাম্বার:</td>
     <td><%=(coreWorkers[2][1]!= null)? coreWorkers[2][1] : ""%></td>
   </tr>
   <tr>
     <td>6.</td>
-    <td>সহকারীর স্বাস্থ পরিদর্শকের  নাম:</td>
+    <td>সহকারীর স্বাস্থ্য পরিদর্শকের  নাম:</td>
     <td><%=(coreWorkers[3][0]!= null)? coreWorkers[3][0] : ""%></td>
     <td>মোবাইল নাম্বার:</td>
     <td><%=(coreWorkers[3][1]!= null)? coreWorkers[3][1] : ""%></td>
@@ -173,7 +209,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
   
   <tr>
     <td>10. </td>
-    <td colspan="4">অনন্যা স্বাস্থা কর্মীর নাম: </td>
+    <td colspan="4">অনন্যা স্বাস্থ্য কর্মীর নাম: </td>
   </tr>
  <tr>
     <td>&nbsp;</td>
@@ -199,7 +235,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
   </tr>
   <!-- <tr>
   	<td>10.</td>
-    <td>অনন্যা স্বাস্থা কর্মীর নাম (যদি থাকে):</td>
+    <td>অনন্যা স্বাস্থ্য কর্মীর নাম (যদি থাকে):</td>
     <td>..................................................</td>
     <td>মোবাইল নাম্বার:</td>
     <td>.....................................................</td>
@@ -257,7 +293,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
 %>
       <tr>
         <td><%=i++ %>.</td>
-        <td>দুর্যোক ব্যবস্থাপনা প্রশিক্ষণ</td>
+        <td>দুর্যোগ ব্যবস্থাপনা প্রশিক্ষণ</td>
       </tr>
 <%
 	} 
@@ -273,7 +309,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
 %>
       <tr>
         <td><%=i++ %>.</td>
-        <td>স্বাস্থা শিক্ষা প্রশিক্ষণ</td>
+        <td>স্বাস্থ্য শিক্ষা প্রশিক্ষণ</td>
       </tr>
 <%
 	} 
@@ -297,7 +333,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
 %>
       <tr>
         <td><%=i++ %>.</td>
-        <td>নবজাতকের অত্যাবর্ষকীয় সেবা বিষয়ক প্রশিক্ষণ</td>
+        <td>নবজাতকের অত্যাবশ্যকীয় সেবা বিষয়ক প্রশিক্ষণ</td>
       </tr>
 <%
 	} 
@@ -393,6 +429,8 @@ if (session.getAttribute("facilityWorkerList") != null) {
  %>    
      
     </table></td>
+  </tr>
+</table></td>
   </tr>
 </table>
            	

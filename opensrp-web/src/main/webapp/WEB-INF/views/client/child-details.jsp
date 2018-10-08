@@ -42,15 +42,16 @@
 
   <div class="content-wrapper">
     <div class="container-fluid">
-    
+
     <div class="form-group">				
 		<jsp:include page="/WEB-INF/views/client/client-link.jsp" />		
 	</div>
+
     
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="/client/child.html">Child</a>
+          <a href="/opensrp-dashboard/client/child.html">Child</a>
         </li>
         <li class="breadcrumb-item">Child Details</li>
       </ol>

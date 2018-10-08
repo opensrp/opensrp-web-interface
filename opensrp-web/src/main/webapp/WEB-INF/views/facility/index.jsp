@@ -10,6 +10,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,16 +25,13 @@
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		
-		<div class="form-group">				
-				   <a  href="<c:url value="/facility/add.html"/>" > <strong>Registration</strong> 
-				   </a>  |  <a  href="<c:url value="/facility/index.html"/>"> <strong>Community Clinic</strong>
-				   </a>		
-		</div>
+		<jsp:include page="/WEB-INF/views/facility-url.jsp" />
 			
-
+		<jsp:include page="/WEB-INF/views/searchPanel.jsp" />
+		
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Facility List
+					<i class="fa fa-table"></i> Community Clinic List
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -45,36 +43,25 @@
 										style="width: 100%;">
 										<thead>
 											<tr>
-												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Name</th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">HRM ID</th>
+												    <th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;">CC Name</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Latitude</th>
+													style="width: 106px;">Division</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Longitude</th>
+													style="width: 140px;">District</th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Location</th>
+													style="width: 79px;">Upazilla</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 79px;">Union</th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 79px;">Ward</th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;">Action</th>
 											</tr>
 										</thead>
-										<tfoot>
-											<tr>
-												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Name</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">HRM ID</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Latitude</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Longitude</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Location</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Action</th>
-											</tr>
-										</tfoot>
+									
 										<tbody>
 											<%
 												if (session.getAttribute("dataList") != null) {
@@ -85,25 +72,36 @@
 														
 														Facility facility = (Facility) dataListIterator.next();
 														int id = facility.getId();
-														String name = facility.getName();
-														String hrmId = facility.getHrmId();
-														String latitude = facility.getLatitude();
-														String longitude = facility.getLongitude();
+														String name = facility.getName()!=null ? facility.getName() : "";
+														String hrmId = facility.getHrmId()!=null ? facility.getHrmId() : "";
+														String latitude = facility.getLatitude()!=null? facility.getLatitude() : "";
+														String longitude = facility.getLongitude()!=null? facility.getLongitude() : "";
+														String division = facility.getDivision()!= null? facility.getDivision() : "";
+														String district = facility.getDistrict()!= null? facility.getDistrict() : "";
+														String upazila = facility.getUpazila()!= null? facility.getUpazila() : "";
+														String union = facility.getUnion()!= null? facility.getUnion() : "";
+														String ward = facility.getWard() != null? facility.getWard() : "";
 														
 														//String location = facility.getLocation().getName();
 														String addWorkerURL = "/facility/"+id+"/addWorker.html";
 														String detailsURL = "/facility/"+id+"/details.html";
 											%>
 											<tr>
-												<td><%=name%></td>
 												<td><%=hrmId%></td>
-												<td><%=latitude%></td>
-												<td><%=longitude%></td>
-												<td></td>
+												<td><%=name%></td>
+												<td><%=division%></td>
+												<td><%=district%></td>
+												<td><%=upazila%></td>
+												<td><%=union%></td>
+												<td><%=ward%></td>
 												<td>
-												<a href="<c:url value="<%= detailsURL%>" />">Details</a>
+												<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+												<a href="<c:url value="<%= detailsURL%>" />">CC Profile</a>
 												| 	
-												<a href="<c:url value="<%= addWorkerURL%>" />">Add Worker</a>	
+												<%} %>
+												<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
+												<a href="<c:url value="<%= addWorkerURL%>" />">Add Worker/Training</a>	
+												<%} %>
 												</td> 
 											</tr>
 											<%
