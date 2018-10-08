@@ -157,6 +157,7 @@ public class FacilityController {
 			facilityWorker.setFacilityTrainings(facilityTrainings);
 		}
 		
+		}
 		FacilityWorkerType facilityWorkerType = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl")
 		        .findById(facilityWorkerTypeId, "id", FacilityWorkerType.class);
 		facilityWorker.setFacilityWorkerType(facilityWorkerType);
@@ -168,6 +169,7 @@ public class FacilityController {
 		return new RedirectView(addWorkerUrlString);
 		
 	}
+		
 	
 	/*@RequestMapping(value = "/{id}/getWorkerList.html", method = RequestMethod.GET)
 	public ResponseEntity<String> getWorkerList (ModelMap model, HttpSession session,
