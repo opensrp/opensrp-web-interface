@@ -5,10 +5,8 @@
 package org.opensrp.web.controller;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -21,14 +19,11 @@ import javax.validation.Valid;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.acl.entity.Location;
-import org.opensrp.acl.permission.CustomPermissionEvaluator;
 import org.opensrp.acl.service.impl.LocationServiceImpl;
 import org.opensrp.acl.service.impl.LocationTagServiceImpl;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -58,8 +53,8 @@ public class LocationController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION_LIST')")
 	@RequestMapping(value = "location/location.html", method = RequestMethod.GET)
-	public String locationList(HttpServletRequest request, HttpSession session, Model model,Locale locale) {
-		Class<Location> entityClassName = Location.class;		
+	public String locationList(HttpServletRequest request, HttpSession session, ModelMap model, Locale locale) {
+		Class<Location> entityClassName = Location.class;
 		model.addAttribute("locale", locale);
 		paginationUtil.createPagination(request, session, entityClassName);
 		return "location/index";
@@ -67,19 +62,19 @@ public class LocationController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_HIERARCHY_LOCATION')")
 	@RequestMapping(value = "location/hierarchy.html", method = RequestMethod.GET)
-	public String locationHierarchy(Model model, HttpSession session,Locale locale) throws JSONException {
+	public String locationHierarchy(ModelMap model, HttpSession session, Locale locale) throws JSONException {
+		model.addAttribute("locale", locale);
 		String parentIndication = "#";
 		String parentKey = "parent";
 		JSONArray data = locationServiceImpl.getLocationDataAsJson(parentIndication, parentKey);
 		session.setAttribute("locatationTreeData", data);
-		model.addAttribute("locale", locale);
 		return "location/hierarchy";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_LOCATION')")
 	@RequestMapping(value = "location/add.html", method = RequestMethod.GET)
-	public ModelAndView saveLocation(ModelMap model, HttpSession session,Locale locale) throws JSONException {
-		
+	public ModelAndView saveLocation(ModelMap model, HttpSession session, Locale locale) throws JSONException {
+		model.addAttribute("locale", locale);
 		model.addAttribute("location", new Location());
 		String parentLocationName = "";
 		locationServiceImpl.setSessionAttribute(session, location, parentLocationName);
@@ -87,7 +82,6 @@ public class LocationController {
 		String parentKey = "parentid";
 		JSONArray data = locationServiceImpl.getLocationDataAsJson(parentIndication, parentKey);
 		session.setAttribute("locatationTreeData", data);
-		model.addAttribute("locale", locale);
 		return new ModelAndView("location/add", "command", location);
 		
 	}
@@ -98,7 +92,7 @@ public class LocationController {
 	                                 @RequestParam(value = "locationTag") int tagId,
 	                                 @RequestParam(value = "parentLocationName") String parentLocationName,
 	                                 @ModelAttribute("location") @Valid Location location, BindingResult binding,
-	                                 ModelMap model, HttpSession session) throws Exception {
+	                                 ModelMap model, HttpSession session, Locale locale) throws Exception {
 		location.setName(location.getName().trim());
 		boolean chceckInOpenmrs = false;
 		if (!locationServiceImpl.locationExistsForUpdate(location, chceckInOpenmrs)) {
@@ -111,19 +105,19 @@ public class LocationController {
 			return new ModelAndView("/location/add");
 		}
 		
-		return new ModelAndView("redirect:/location/location.html");
+		return new ModelAndView("redirect:/location/location.html?lang=" + locale);
 		
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_LOCATION')")
 	@RequestMapping(value = "location/{id}/edit.html", method = RequestMethod.GET)
-	public ModelAndView editLocation(ModelMap model, HttpSession session, @PathVariable("id") int id,Locale locale) {
+	public ModelAndView editLocation(ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale) {
+		model.addAttribute("locale", locale);
 		Location location = locationServiceImpl.findById(id, "id", Location.class);
 		model.addAttribute("id", id);
 		model.addAttribute("location", location);
 		String parentLocationName = locationServiceImpl.makeParentLocationName(location);
 		locationServiceImpl.setSessionAttribute(session, location, parentLocationName);
-		model.addAttribute("locale", locale);
 		return new ModelAndView("location/edit", "command", location);
 		
 	}
@@ -134,7 +128,8 @@ public class LocationController {
 	                                 @RequestParam(value = "locationTag") int tagId,
 	                                 @RequestParam(value = "parentLocationName") String parentLocationName,
 	                                 @ModelAttribute("location") @Valid Location location, BindingResult binding,
-	                                 ModelMap model, HttpSession session, @PathVariable("id") int id) throws Exception {
+	                                 ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale)
+	    throws Exception {
 		location.setId(id);
 		location.setName(location.getName().trim());
 		boolean chceckInOpenmrs = true;
@@ -148,7 +143,7 @@ public class LocationController {
 			return new ModelAndView("/location/edit");
 		}
 		
-		return new ModelAndView("redirect:/location/location.html");
+		return new ModelAndView("redirect:/location/location.html?lang=" + locale);
 		
 	}
 	
@@ -168,7 +163,7 @@ public class LocationController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_LOCATION')")
 	@RequestMapping(value = "location/upload_csv.html", method = RequestMethod.GET)
-	public String csvUpload(ModelMap model, HttpSession session,Locale locale) throws JSONException {
+	public String csvUpload(ModelMap model, HttpSession session, Locale locale) throws JSONException {
 		model.addAttribute("location", new Location());
 		model.addAttribute("locale", locale);
 		return "/location/upload_csv";
@@ -176,7 +171,7 @@ public class LocationController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_LOCATION')")
 	@RequestMapping(value = "/location/upload_csv.html", method = RequestMethod.POST)
-	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model)
+	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
 	    throws Exception {
 		if (file.isEmpty()) {
 			model.put("msg", "failed to upload file because its empty");
@@ -215,6 +210,6 @@ public class LocationController {
 			model.put("msg", msg);
 			return new ModelAndView("/location/upload_csv");
 		}
-		return new ModelAndView("redirect:/location/location.html");
+		return new ModelAndView("redirect:/location/location.html?lang=" + locale);
 	}
 }

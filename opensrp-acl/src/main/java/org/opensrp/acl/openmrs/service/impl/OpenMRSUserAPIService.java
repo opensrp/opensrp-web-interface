@@ -12,7 +12,6 @@ import org.opensrp.acl.entity.User;
 import org.opensrp.acl.openmrs.service.OpenMRSConnector;
 import org.opensrp.common.util.DefaultRole;
 import org.opensrp.connector.openmrs.service.APIServiceFactory;
-import org.opensrp.connector.openmrs.service.impl.OpenMRSAPIServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,14 +70,13 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 		JSONObject userJsonObject = new JSONObject();
 		if (!isUpdate) {
 			roleObject.put("role", DefaultRole.Provider);
+			roleArray.put(roleObject);
 			userJsonObject.put(rolesKey, roleArray);
 		}
-		roleArray.put(roleObject);
-		
 		userJsonObject.put(usernameKey, user.getUsername());
 		userJsonObject.put(passwordKey, user.getPassword());
+		userJsonObject.put(personKey, user.getPersonUUid());
 		
-		userJsonObject.put(personKey, generatePersonObject(user));
 		return userJsonObject;
 		
 	}
@@ -92,20 +90,13 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 		    PERSON_URL);
 		logger.info("createdPerson::" + createdPerson);
 		if (createdPerson.has("uuid")) {
-			
+			user.setPersonUUid(createdPerson.getString("uuid"));
 			JSONObject createdUser = apiServiceFactory.getApiService("openmrs").add(PAYLOAD,
 			    generateUserJsonObject(user, isUpdate), USER_URL);
-			
 			if (createdUser.has("uuid")) {
-				JSONObject person = (JSONObject) createdUser.get("person");
-				if (person.has("uuid")) {
-					user.setPersonUUid(person.getString("uuid"));
-				}
-				logger.info("createdUser:" + createdUser);
-				
 				userUuid = (String) createdUser.get("uuid");
 				user.setUuid(userUuid);
-				personDelete(createdPerson.getString("uuid"));
+				
 			}
 		} else {
 			// need to handle exception....
@@ -140,10 +131,6 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 	public String delete(String uuid) throws JSONException {
 		// TODO Auto-generated method stub
 		return null;
-	}
-	
-	private JSONObject personDelete(String uuid) throws JSONException {
-		return apiServiceFactory.getApiService("openmrs").delete(PAYLOAD, uuid, PERSON_URL);
 	}
 	
 	@Override

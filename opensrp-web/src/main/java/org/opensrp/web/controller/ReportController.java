@@ -3,7 +3,6 @@
  */
 package org.opensrp.web.controller;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,11 +42,12 @@ public class ReportController {
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_REPORT')")
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
 	public String childGrowthReport(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
 		searchUtil.setDivisionAttribute(session);
 		searchBuilder.clear();
 		List<Object[]> data = childGrowthServiceImpl.getChildFalteredData(searchBuilder);
 		session.setAttribute("data", data);
-		model.addAttribute("locale", locale);
+		
 		return "/report/child-growth";
 	}
 	
@@ -62,11 +62,12 @@ public class ReportController {
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_SUMMARY_REPORT')")
 	@RequestMapping(value = "/summary.html", method = RequestMethod.GET)
 	public String summaryReport(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
 		searchUtil.setDivisionAttribute(session);
 		searchBuilder.clear();
 		List<Object[]> data = childGrowthServiceImpl.getSummaryData(searchBuilder);
 		session.setAttribute("data", data);
-		model.addAttribute("locale", locale);
+		
 		return "/report/sumamry";
 	}
 	

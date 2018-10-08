@@ -49,8 +49,8 @@ public class DashboardController {
 	
 	@Autowired
 	private DataVisualization dataVisualization;
-
-	@RequestMapping("/dashboard")
+	
+	@RequestMapping("/nutrition-dashboard")
 	public String showHome(HttpServletRequest request, Model model, HttpSession session, Locale locale) throws JSONException {
 		/*Different types of data counts and percentages*/
 		List<Object> dashboardAggregatedList = databaseServiceImpl

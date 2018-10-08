@@ -70,7 +70,7 @@ public class TeamController {
 	                             @RequestParam(value = "superVisor") int supervisorId,
 	                             @RequestParam(value = "locationName") String locationName,
 	                             @ModelAttribute("team") @Valid Team team, BindingResult binding, ModelMap model,
-	                             HttpSession session) throws Exception {
+	                             HttpSession session, Locale locale) throws Exception {
 		
 		if (!teamServiceImpl.isTeamNameAndIdentifierExists(model, team)) {
 			//team.setName(team.getName().trim());
@@ -90,19 +90,19 @@ public class TeamController {
 			return new ModelAndView("/team/add");
 		}
 		
-		return new ModelAndView("redirect:/team/list.html");
+		return new ModelAndView("redirect:/team/list.html?lang=" + locale);
 		
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_TEAM')")
 	@RequestMapping(value = "/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editTeam(ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale) {
+		model.addAttribute("locale", locale);
 		Team team = teamServiceImpl.findById(id, "id", Team.class);
 		model.addAttribute("id", id);
 		model.addAttribute("team", team);
 		String locationName = locationServiceImpl.makeLocationName(team.getLocation());
 		teamServiceImpl.setSessionAttribute(session, team, locationName);
-		model.addAttribute("locale", locale);
 		return new ModelAndView("team/edit", "command", team);
 		
 	}
@@ -113,7 +113,7 @@ public class TeamController {
 	                             @RequestParam(value = "superVisor") int supervisorId,
 	                             @RequestParam(value = "locationName") String locationName,
 	                             @ModelAttribute("team") @Valid Team team, BindingResult binding, ModelMap model,
-	                             HttpSession session, @PathVariable("id") int id) throws Exception {
+	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
 		team.setId(id);
 		team.setName(team.getName().trim());
 		
@@ -132,7 +132,7 @@ public class TeamController {
 			return new ModelAndView("/team/edit");
 		}
 		
-		return new ModelAndView("redirect:/team/list.html");
+		return new ModelAndView("redirect:/team/list.html?lang=" + locale);
 		
 	}
 }
