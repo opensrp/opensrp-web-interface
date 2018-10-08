@@ -132,7 +132,7 @@
 												<td><%=provider%></td>
 												<td bgcolor=<%=bgColor%>><%=gStatusDecoded%></td>
 												<td>
-												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>		
+												<a href="<c:url value="/client/child/${baseEntityId}/details.html?lang=${locale}"/>">Details</a>		
 												</td> 
 											</tr>
 											<%
