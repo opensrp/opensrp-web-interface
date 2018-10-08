@@ -81,16 +81,16 @@ public class FacilityController {
 								 @RequestParam(value = "location", required = false) String locationId,
 	                             //@RequestParam(value = "locationName") String locationName,
 	                             @ModelAttribute("facility") @Valid Facility facility, BindingResult binding, ModelMap model,
-	                             HttpSession session) throws Exception {
+	                             HttpSession session, Locale locale) throws Exception {
 		facility = facilityHelperUtil.setLocationCodesToFacility(facility);
 		facilityServiceFactory.getFacility("FacilityServiceImpl").save(facility);
-		return new RedirectView("/opensrp-dashboard/");
+		return new RedirectView("/opensrp-dashboard/cbhc-dashboard?lang="+locale);
 		
 	}
 	
 
 	//@PostAuthorize("hasPermission(returnObject, 'PERM_READ_FACILITY')")
-	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+	@RequestMapping(value = "/cbhc-dashboard", method = RequestMethod.GET)
 	public String showFacilityList(HttpServletRequest request, HttpSession session) {
         paginationUtil.createPagination(request, session, Facility.class);
 		return "/facility/index";

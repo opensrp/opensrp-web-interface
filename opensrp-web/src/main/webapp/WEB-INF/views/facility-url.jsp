@@ -12,7 +12,7 @@
 				   <a  href="<c:url value="/facility/add.html"/>" > <strong>Registration</strong> </a>  | 
 <%} %>
 <% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>						
-					 <a  href="<c:url value="/"/>"> <strong>Community Clinic</strong> </a>  | 
+					 <a  href="<c:url value="/cbhc-dashboard"/>"> <strong>Community Clinic</strong> </a>  | 
 <%} %>
 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV")){ %>	
 					 <a  href="<c:url value="/facility/upload_csv.html"/>"> <strong>Upload Facility</strong> </a>	
