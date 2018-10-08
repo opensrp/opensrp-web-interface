@@ -27,7 +27,7 @@
 <body class="bg-login">
 
 <div class="col-12" style="text-align:center; margin-top:20px;">
-	   <img  style="height: 124px;margin-top: 20px;" alt="" src="<c:url value="/opensrp-dashboard/resources/img/community.png"/>">
+	   <img  style="height: 124px;margin-top: 20px;" alt="" src="<c:url value="/resources/img/community.png"/>">
 	</div>
 
 
@@ -72,7 +72,7 @@
   </div>
 
 	<div class="col-12" style="text-align:center; margin-top:20px;">
-	   <img  style="height: 100px;margin-top: 20px;" alt="" src="<c:url value="/opensrp-dashboard/resources/img/ministry.png"/>">
+	   <img  style="height: 100px;margin-top: 20px;" alt="" src="<c:url value="/resources/img/ministry.png"/>">
 	</div>
 
  <script src="<c:url value='/resources/vendor/jquery/jquery.min.js' />"></script>
