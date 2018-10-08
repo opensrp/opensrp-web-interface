@@ -86,6 +86,7 @@ public class UserController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
 	@RequestMapping(value = "/user/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editUser(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
+		model.addAttribute("locale", locale);
 		User account = userServiceImpl.findById(id, "id", User.class);
 		model.addAttribute("account", account);
 		model.addAttribute("id", id);
@@ -122,9 +123,9 @@ public class UserController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
 	@RequestMapping(value = "/user/{id}/password.html", method = RequestMethod.GET)
 	public ModelAndView editPassword(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
+		model.addAttribute("locale", locale);
 		User account = userServiceImpl.findById(id, "id", User.class);
 		model.addAttribute("account", account);
-		model.addAttribute("locale", locale);
 		return new ModelAndView("user/password", "command", account);
 	}
 	
@@ -153,11 +154,12 @@ public class UserController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_USER_HIERARCHY')")
 	@RequestMapping(value = "user/hierarchy.html", method = RequestMethod.GET)
 	public String userHierarchy(Model model, HttpSession session, Locale locale) throws JSONException {
+		model.addAttribute("locale", locale);
 		String parentIndication = "#";
 		String parentKey = "parent";
 		JSONArray data = userServiceImpl.getUserDataAsJson(parentIndication, parentKey);
 		session.setAttribute("userTreeData", data);
-		model.addAttribute("locale", locale);
+		
 		return "user/hierarchy";
 	}
 	

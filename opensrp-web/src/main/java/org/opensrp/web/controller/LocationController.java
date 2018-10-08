@@ -63,18 +63,18 @@ public class LocationController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_HIERARCHY_LOCATION')")
 	@RequestMapping(value = "location/hierarchy.html", method = RequestMethod.GET)
 	public String locationHierarchy(ModelMap model, HttpSession session, Locale locale) throws JSONException {
+		model.addAttribute("locale", locale);
 		String parentIndication = "#";
 		String parentKey = "parent";
 		JSONArray data = locationServiceImpl.getLocationDataAsJson(parentIndication, parentKey);
 		session.setAttribute("locatationTreeData", data);
-		model.addAttribute("locale", locale);
 		return "location/hierarchy";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_LOCATION')")
 	@RequestMapping(value = "location/add.html", method = RequestMethod.GET)
 	public ModelAndView saveLocation(ModelMap model, HttpSession session, Locale locale) throws JSONException {
-		
+		model.addAttribute("locale", locale);
 		model.addAttribute("location", new Location());
 		String parentLocationName = "";
 		locationServiceImpl.setSessionAttribute(session, location, parentLocationName);
@@ -82,7 +82,6 @@ public class LocationController {
 		String parentKey = "parentid";
 		JSONArray data = locationServiceImpl.getLocationDataAsJson(parentIndication, parentKey);
 		session.setAttribute("locatationTreeData", data);
-		model.addAttribute("locale", locale);
 		return new ModelAndView("location/add", "command", location);
 		
 	}
@@ -113,12 +112,12 @@ public class LocationController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_LOCATION')")
 	@RequestMapping(value = "location/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editLocation(ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale) {
+		model.addAttribute("locale", locale);
 		Location location = locationServiceImpl.findById(id, "id", Location.class);
 		model.addAttribute("id", id);
 		model.addAttribute("location", location);
 		String parentLocationName = locationServiceImpl.makeParentLocationName(location);
 		locationServiceImpl.setSessionAttribute(session, location, parentLocationName);
-		model.addAttribute("locale", locale);
 		return new ModelAndView("location/edit", "command", location);
 		
 	}

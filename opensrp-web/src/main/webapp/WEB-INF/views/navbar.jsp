@@ -7,8 +7,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <%
-boolean FACILITY_REGISTRATION = AuthenticationManagerUtil.isPermitted("FACILITY_REGISTRATION");
-boolean COMMUNITY_CLINIC_LIST = AuthenticationManagerUtil.isPermitted("COMMUNITY_CLINIC_LIST");
+boolean PERM_WRITE_FACILITY = AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY");
+boolean PERM_UPLOAD_FACILITY_CSV = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV");
+
+boolean PERM_READ_FACILITY = AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY");
 boolean PERM_READ_HOUSEHOLD_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_HOUSEHOLD_LIST");
 boolean PERM_READ_MOTHER_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_MOTHER_LIST");
 boolean PERM_READ_CHILD_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_CHILD_LIST");
@@ -38,13 +40,13 @@ boolean PERM_READ_TEAM_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM
 
 
 		<ul class="navbar-nav ml-auto">
-			<%if(FACILITY_REGISTRATION || COMMUNITY_CLINIC_LIST){ %>			
+			<%if(PERM_WRITE_FACILITY || PERM_READ_FACILITY || PERM_UPLOAD_FACILITY_CSV ){ %>			
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
 				href="#" data-toggle="dropdown"><spring:message code="lbl.facility"/> </a>
 				<div class="dropdown-menu">
 
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY")){ %>
+					<% if(PERM_WRITE_FACILITY){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/facility/add.html?lang=${locale}"/>"> <strong>
@@ -52,7 +54,7 @@ boolean PERM_READ_TEAM_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM
 					</a>
 					<% } %>
 
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+					<% if(PERM_READ_FACILITY){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/cbhc-dashboard?lang=${locale}"/>"> <strong>
@@ -60,11 +62,11 @@ boolean PERM_READ_TEAM_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM
 
 					</a>
 					<% } %>
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV")){ %>
+					<% if(PERM_UPLOAD_FACILITY_CSV){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/facility/upload_csv.html"/>"> <strong>
-							Upload Facility</strong>
+						href="<c:url value="/facility/upload_csv.html?lang=${locale}"/>"> <strong>
+							<spring:message code="lbl.facilityUpload"/> </strong>
 					</a>
 		
 					<% } %>
