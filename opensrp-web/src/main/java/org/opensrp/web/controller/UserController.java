@@ -91,11 +91,14 @@ public class UserController {
 		model.addAttribute("id", id);
 		User parentUser = account.getParentUser();
 		String parentUserName = "";
+		int parentUserId = 0;
 		if (parentUser != null) {
 			parentUserName = parentUser.getUsername() + " (" + parentUser.getFullName() + ")";
+			parentUserId = parentUser.getId();
 		}
 		userServiceImpl.setRolesAttributes(userServiceImpl.getSelectedRoles(account), session);
 		session.setAttribute("parentUserName", parentUserName);
+		session.setAttribute("parentUserId", parentUserId);
 		return new ModelAndView("user/edit", "command", account);
 	}
 	
@@ -104,7 +107,7 @@ public class UserController {
 	public ModelAndView editUser(@RequestParam(value = "parentUser", required = false) int parentUserId,
 	                             @RequestParam(value = "roles", required = false) String[] roles,
 	                             @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
-	                             HttpSession session, @PathVariable("id") int id) throws Exception {
+	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
 		account.setRoles(userServiceImpl.setRoles(roles));
 		account.setId(id);
 		account.setEnabled(true);
@@ -112,7 +115,7 @@ public class UserController {
 		account.setParentUser(parentUser);
 		userServiceImpl.update(account);
 		
-		return new ModelAndView("redirect:/user.html");
+		return new ModelAndView("redirect:/user.html?lang=" + locale);
 		
 	}
 	
@@ -128,7 +131,7 @@ public class UserController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
 	@RequestMapping(value = "/user/{id}/password.html", method = RequestMethod.POST)
 	public ModelAndView editPassword(@Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
-	                                 HttpSession session, @PathVariable("id") int id) throws Exception {
+	                                 HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
 		User gettingAccount = userServiceImpl.findById(id, "id", User.class);
 		if (userServiceImpl.isPasswordMatched(account)) {
 			account.setId(id);
@@ -139,7 +142,7 @@ public class UserController {
 			
 			return new ModelAndView("user/password", "command", gettingAccount);
 		}
-		return new ModelAndView("redirect:/user.html");
+		return new ModelAndView("redirect:/user.html?lang=" + locale);
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -159,12 +162,12 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
+	public String logoutPage(HttpServletRequest request, HttpServletResponse response, Locale locale) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null) {
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
-		return "redirect:/login?logout";//You can redirect wherever you want, but generally it's a good practice to show login screen again.
+		return "redirect:/login?logout?lang=" + locale;//You can redirect wherever you want, but generally it's a good practice to show login screen again.
 	}
 	
 	@RequestMapping(value = "user/provider.html", method = RequestMethod.GET)

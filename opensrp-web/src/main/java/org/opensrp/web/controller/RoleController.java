@@ -64,12 +64,12 @@ public class RoleController {
 	@RequestMapping(value = "/role/add.html", method = RequestMethod.POST)
 	public ModelAndView saveRole(@RequestParam(value = "permissions", required = false) int[] permissions,
 	                             @ModelAttribute("role") @Valid Role role, BindingResult binding, ModelMap model,
-	                             HttpSession session) throws Exception {
+	                             HttpSession session, Locale locale) throws Exception {
 		
 		if (permissions != null) {
 			role.setPermissions(roleServiceImpl.setPermissions(permissions));
 			roleServiceImpl.save(role);
-			return new ModelAndView("redirect:/role.html");
+			return new ModelAndView("redirect:/role.html?lang=" + locale);
 		} else {
 			session.setAttribute("permissions", permissionService.findAll("Permission"));
 			session.setAttribute("selectedPermissions", permissions);
@@ -104,13 +104,13 @@ public class RoleController {
 	@RequestMapping(value = "/role/{id}/edit.html", method = RequestMethod.POST)
 	public ModelAndView editRole(@RequestParam(value = "permissions", required = false) int[] permissions,
 	                             @ModelAttribute("role") @Valid Role role, BindingResult binding, ModelMap model,
-	                             HttpSession session, @PathVariable("id") int id) {
+	                             HttpSession session, @PathVariable("id") int id, Locale locale) {
 		
 		if (permissions != null) {
 			role.setPermissions(roleServiceImpl.setPermissions(permissions));
 			role.setId(id);
 			roleServiceImpl.update(role);
-			return new ModelAndView("redirect:/role.html");
+			return new ModelAndView("redirect:/role.html?lang=" + locale);
 		} else {
 			session.setAttribute("permissions", permissionService.findAll("Permission"));
 			session.setAttribute("selectedPermissions", permissions);
