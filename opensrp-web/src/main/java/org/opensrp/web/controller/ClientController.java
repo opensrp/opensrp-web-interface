@@ -166,7 +166,7 @@ public class ClientController {
 		System.out.println("submit clientEntity: " + baseEntityId);
 		clientServiceImpl.updateClientData(clientEntity, baseEntityId);
 		model.addAttribute("locale", locale);
-		return new ModelAndView("redirect:/client/mother.html");
+		return new ModelAndView("redirect:/client/mother.html?lang="+locale);
 	}
 
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_HOUSEHOLD')")

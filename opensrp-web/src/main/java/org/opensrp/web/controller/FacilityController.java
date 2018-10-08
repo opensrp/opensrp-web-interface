@@ -143,7 +143,7 @@ public class FacilityController {
 			@RequestParam(value = "facilityWorkerTypeId", required = false) int facilityWorkerTypeId,
 		    @RequestParam(value = "trainings", required = false) String trainings,
 			BindingResult binding,
-			HttpSession session) throws Exception{
+			HttpSession session, Locale locale) throws Exception{
 		
 		if(!trainings.equals("")){
 		String[] trainingList = trainings.split(",");
@@ -165,7 +165,7 @@ public class FacilityController {
 		
 		//String facilityDetailsUrlString = "/facility/"+facilityWorker.getFacility().getId()+"/details.html";
 		String addWorkerUrlString = "/opensrp-dashboard/facility/" + facilityWorker.getFacility().getId()
-		        + "/addWorker.html";
+		        + "/addWorker.html?lang="+locale;
 		return new RedirectView(addWorkerUrlString);
 		
 	}
@@ -244,7 +244,7 @@ public class FacilityController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
 	@RequestMapping(value = "/facility/upload_csv.html", method = RequestMethod.POST)
-	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model)
+	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model,  Locale locale)
 	    throws Exception {
 		if (file.isEmpty()) {
 			model.put("msg", "failed to upload file because its empty");
@@ -287,7 +287,7 @@ public class FacilityController {
 			model.put("msg", msg);
 			return new ModelAndView("/facility/upload_csv");
 		}
-		return new ModelAndView("redirect:/");
+		return new ModelAndView("redirect:/cbhc-dashboard?lang="+locale);
 	}
 	
 	@RequestMapping(value = "facility/searchWorkerName.html", method = RequestMethod.GET)
