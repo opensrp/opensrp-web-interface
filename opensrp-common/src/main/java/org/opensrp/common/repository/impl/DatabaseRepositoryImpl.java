@@ -441,10 +441,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 			Query query = session.createSQLQuery(hql);
 			count = query.list().size();
-			session.close();
 		}
 		catch (Exception e) {
 			logger.error("Data fetch from " + viewName + " error:" + e.getMessage());
+		}finally{
+			session.close();
 		}
 
 		return count;

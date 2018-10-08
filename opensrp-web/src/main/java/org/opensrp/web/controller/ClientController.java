@@ -113,7 +113,7 @@ public class ClientController {
 	@RequestMapping(value = "/child.html", method = RequestMethod.GET)
 	public String showChildList(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient",
-		    clientServiceImpl.getHouseholdEntityNamePrefix() + "child");
+			    clientServiceImpl.getHouseholdEntityNamePrefix() + "child");
 		model.addAttribute("locale", locale);
 		return "/client/child";
 	}
