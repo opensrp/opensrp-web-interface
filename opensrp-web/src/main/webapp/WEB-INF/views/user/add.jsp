@@ -92,8 +92,16 @@
 	                        	</small>
 							 </div>							 
 						 </div>
-						 	
-							
+						 
+						 <form:hidden path="parentUser" id="parentUser"/>
+						 <div class="row col-12 tag-height">						
+							<div class="form-group">														
+								<label class="label-width" for="inputPassword6"><spring:message code="lbl.parentUser"/></label>										 
+								<select id="combobox" class="form-control">	</select>								
+							 </div>							 
+						 </div>
+						 
+						
 						<div class="row col-12 tag-height">						
 							<div class="form-group required">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.password"/></label>										 
@@ -152,7 +160,9 @@
 		</div>
 		<!-- /.container-fluid-->
 		<!-- /.content-wrapper-->
+		
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
+		<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
 	</div>
 	
 	<script type="text/javascript">
@@ -168,6 +178,7 @@
 		            'idetifier': $('input[name=idetifier]').val(),
 		            'username': $('input[name=username]').val(),
 		            'password': $('input[name=password]').val(),
+		            'parentUser': $('input[name=parentUser]').val(),
 		            'roles': getCheckboxValueUsingClass()
 		        };
 			event.preventDefault();
@@ -248,5 +259,130 @@
      }
 	
 		</script>
+		
+<script>
+  $( function() {
+    $.widget( "custom.combobox", {
+      _create: function() {
+        this.wrapper = $( "<div>" )
+          .addClass( "custom-combobox" )          
+          .insertAfter( this.element );
+ 
+        this.element.hide();
+        this._createAutocomplete();
+       
+      },
+ 
+      _createAutocomplete: function() {
+        var selected = this.element.children( ":selected" ),        
+          value = selected.val() ? selected.text() : "";
+         value = "";
+        this.input = $( "<input>" )
+          .appendTo( this.wrapper )
+          .val( value )
+          .attr( "title", "" )          
+           .attr( "name", "parentUserName" )
+          .addClass( "form-control mx-sm-3 ui-widget ui-widget-content  ui-corner-left" )
+          .autocomplete({
+            delay: 0,
+            minLength: 1,
+            source: $.proxy( this, "_source" )
+          })
+          .tooltip({
+            classes: {
+              "ui-tooltip": "ui-state-highlight"
+            }
+          });
+ 
+        this._on( this.input, {
+          autocompleteselect: function( event, ui ) {
+            ui.item.option.selected = true;
+ 			$("#parentUser").val(ui.item.option.value);
+            this._trigger( "select", event, {
+              item: ui.item.option
+            });
+          },
+ 
+          autocompletechange: "_removeIfInvalid"
+        });
+      },
+ 
+      
+ 
+      _source: function( request, response ) {
+    	  
+    	  $.ajax({
+              type: "GET",
+              dataType: 'html',
+              url: "/opensrp-dashboard/user/user.html?name="+request.term,            
+              success: function(res)
+              {
+              
+                $("#combobox").html(res);
+              }
+          });
+        var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+        response( this.element.children( "option" ).map(function() {
+          var text = $( this ).text();
+          if ( this.value && ( !request.term || matcher.test(text) ) )
+            return {
+              label: text,
+              value: text,
+              option: this
+            };
+        }) );
+      },
+ 
+      _removeIfInvalid: function( event, ui ) {
+    	  
+        // Selected an item, nothing to do
+        if ( ui.item ) {
+          return;
+        }
+ 
+        // Search for a match (case-insensitive)
+        var value = this.input.val(),
+          valueLowerCase = value.toLowerCase(),
+          valid = false;
+        this.element.children( "option" ).each(function() {
+          if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+            this.selected = valid = true;
+            return false;
+          }
+        });
+ 
+        // Found a match, nothing to do
+        if ( valid ) {
+          return;
+        }
+ 
+        // Remove invalid value
+         this.input
+          .val( "" )
+          .attr( "title", value + " didn't match any item" )
+          .tooltip( "open" );
+        $("#parentUser").val(0);
+        this.element.val( "" );
+        this._delay(function() {
+          this.input.tooltip( "close" ).attr( "title", "" );
+        }, 2500 );
+        this.input.autocomplete( "instance" ).term = "";
+      },
+ 
+      _destroy: function() {
+        this.wrapper.remove();
+        this.element.show();
+      }
+    });
+ 
+    $( "#combobox" ).combobox();
+    
+    $( "#toggle" ).on( "click", function() {
+      $( "#combobox" ).toggle();
+    });
+    
+    
+  } );
+  </script>
 </body>
 </html>
