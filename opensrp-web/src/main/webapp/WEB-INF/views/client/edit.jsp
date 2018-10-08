@@ -2,8 +2,8 @@
 <%@page import="com.google.gson.JsonObject"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="org.json.JSONArray"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
@@ -40,13 +40,18 @@
 	rel="stylesheet">
 </head>
 
-<c:url var="saveUrl" value="/client/mother/${baseEntityId}/edit.html" />
+<c:url var="saveUrl" value="/client/mother/${baseEntityId}/edit.html?lang=${locale}" />
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 
 	<div class="content-wrapper">
 		<div class="container-fluid">
+		
+		<div class="form-group">				
+			 <jsp:include page="/WEB-INF/views/client/client-link.jsp" /> 		
+			</div>
+			
 			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> Edit Mother

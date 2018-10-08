@@ -4,8 +4,8 @@
 <%@page import="org.json.JSONArray"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -42,15 +42,16 @@
 
   <div class="content-wrapper">
     <div class="container-fluid">
-    
+
     <div class="form-group">				
 		<jsp:include page="/WEB-INF/views/client/client-link.jsp" />		
 	</div>
+
     
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="/client/child.html">Child</a>
+          <a href="/opensrp-dashboard/client/child.html">Child</a>
         </li>
         <li class="breadcrumb-item">Child Details</li>
       </ol>

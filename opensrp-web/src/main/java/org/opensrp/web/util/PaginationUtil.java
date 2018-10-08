@@ -47,7 +47,7 @@ public class PaginationUtil {
 	
 	public <T> void pagination(HttpServletRequest request, HttpSession session, SearchBuilder searchBuilder,
 	                           Class<?> entityClassName) {
-		
+		searchUtil.setDivisionAttribute(session);
 		String offset = (String) request.getParameter("offSet");
 		int size = 0;
 		List<Object> data;
@@ -116,7 +116,7 @@ public class PaginationUtil {
 				session.setAttribute("size", size / RESULT_SIZE);
 			}
 		}
-		System.err.println("DataSize:" + data.size());
+		
 		session.setAttribute("dataList", data);
 		
 		createPageList(session, offset);

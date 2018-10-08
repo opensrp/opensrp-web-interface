@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -25,6 +25,12 @@
 
 
 <body class="bg-login">
+
+<div class="col-12" style="text-align:center; margin-top:20px;">
+	   <img  style="height: 124px;margin-top: 20px;" alt="" src="<c:url value="/resources/img/community.png"/>">
+	</div>
+
+
   <div class="container">
     <div class="card card-login mx-auto mt-5">
       <div class="card-header">Login</div>
@@ -61,8 +67,14 @@
         </form>
         
       </div>
+      
     </div>
   </div>
+
+	<div class="col-12" style="text-align:center; margin-top:20px;">
+	   <img  style="height: 100px;margin-top: 20px;" alt="" src="<c:url value="/resources/img/ministry.png"/>">
+	</div>
+
  <script src="<c:url value='/resources/vendor/jquery/jquery.min.js' />"></script>
  <script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.bundle.min.js' />"></script>
  <script src="<c:url value='/resources/vendor/jquery-easing/jquery.easing.min.js' />"></script>

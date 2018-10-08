@@ -3,8 +3,8 @@
  */
 package org.opensrp.web.controller;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -38,30 +38,36 @@ public class ReportController {
 	
 	@Autowired
 	private SearchUtil searchUtil;
+	
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_REPORT')")
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
-	public String childGrowthReport(HttpServletRequest request, HttpSession session, Model model) {
+	public String childGrowthReport(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
 		searchUtil.setDivisionAttribute(session);
 		searchBuilder.clear();
 		List<Object[]> data = childGrowthServiceImpl.getChildFalteredData(searchBuilder);
 		session.setAttribute("data", data);
+		
 		return "/report/child-growth";
 	}
 	
 	@RequestMapping(value = "/child-growth-ajax.html", method = RequestMethod.GET)
-	public String childGrowthReportAjax(HttpServletRequest request, HttpSession session, Model model) {
+	public String childGrowthReportAjax(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		searchBuilder = paginationHelperUtil.setParams(request, session);
 		List<Object[]> data = childGrowthServiceImpl.getChildFalteredData(searchBuilder);
 		session.setAttribute("data", data);
 		return "/report/child-growth-ajax";
 	}
+	
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_SUMMARY_REPORT')")
 	@RequestMapping(value = "/summary.html", method = RequestMethod.GET)
-	public String summaryReport(HttpServletRequest request, HttpSession session, Model model) {
+	public String summaryReport(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
 		searchUtil.setDivisionAttribute(session);
 		searchBuilder.clear();
 		List<Object[]> data = childGrowthServiceImpl.getSummaryData(searchBuilder);
 		session.setAttribute("data", data);
+		
 		return "/report/sumamry";
 	}
 	

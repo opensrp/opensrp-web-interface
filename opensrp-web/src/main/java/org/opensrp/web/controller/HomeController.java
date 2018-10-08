@@ -1,5 +1,7 @@
 package org.opensrp.web.controller;
 
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -13,8 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController extends OpensrpProperties {
 	
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView home(HttpServletRequest request, HttpSession session, Model model) {
+	public ModelAndView home(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		/*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		List<String> roleName = new ArrayList<String>();
@@ -29,7 +32,7 @@ public class HomeController extends OpensrpProperties {
 		} else if (roleName.contains("test")) {
 			targetUrl = "/analytics/analytics.html";
 		}*/
-		
+		model.addAttribute("locale", locale);
 		return new ModelAndView("redirect:" + dashboardUrl);
 		
 	}

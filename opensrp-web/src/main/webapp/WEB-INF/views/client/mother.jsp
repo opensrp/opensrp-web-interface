@@ -1,7 +1,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -9,6 +9,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,10 +20,11 @@
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
 		<div class="container-fluid">
-		
+
 		<div class="form-group">				
 			<jsp:include page="/WEB-INF/views/client/client-link.jsp" /> 		
 			</div>
+
 
 			<jsp:include page="/WEB-INF/views/searchPanel.jsp" />
 
@@ -128,8 +130,11 @@
 												<td><%=phoneNumber%></td>
 												<td><%=provider%></td>												
 												<td>
-												<a href="<c:url value="/client/mother/${baseEntityId}/details.html"/>">Details</a>
-												/<a href="<c:url value="/client/mother/${baseEntityId}/edit.html"/>">Edit</a>
+												<a href="<c:url value="/client/mother/${baseEntityId}/details.html?lang=${locale}"/>">Details</a>
+												<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_MOTHER")){ %>
+												| <a href="<c:url value="/client/mother/${baseEntityId}/edit.html?lang=${locale}"/>">Edit</a>
+												<%} %>
+												
 												</td> 
 											</tr>
 											<%

@@ -49,6 +49,24 @@ public class FacilityRestController {
 		return new ResponseEntity<>(new Gson().toJson(message), OK);
 	}
 	
+	@RequestMapping(value = "/editWorker", method = RequestMethod.POST)
+	public ResponseEntity<String> editWorker(
+			@RequestBody FacilityWorkerDTO facilityWorkerDTO) throws Exception {
+		System.out.println(facilityWorkerDTO.toString());
+		int workerId = Integer.parseInt(facilityWorkerDTO.getWorkerId());
+		FacilityWorker facilityWorker = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findById(workerId, "id", FacilityWorker.class);
+		FacilityWorker editedFacilityWorker = facilityHelperUtil.convertFacilityWorkerDTO(facilityWorkerDTO);
+		facilityWorker.setName(editedFacilityWorker.getName());
+		facilityWorker.setIdentifier(editedFacilityWorker.getIdentifier());
+		facilityWorker.setOrganization(editedFacilityWorker.getOrganization());
+		facilityWorker.setFacilityWorkerType(editedFacilityWorker.getFacilityWorkerType());
+		facilityWorker.setFacilityTrainings(editedFacilityWorker.getFacilityTrainings());
+		facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").save(facilityWorker);
+		String message = "success";
+		
+		return new ResponseEntity<>(new Gson().toJson(message), OK);
+	}
+	
 	@RequestMapping(value = "/{id}/getWorkerList.html", method = RequestMethod.GET)
 	public ResponseEntity<String> getWorkerList (ModelMap model, HttpSession session,
 			@PathVariable("id") int id){

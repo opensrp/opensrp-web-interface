@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -34,7 +34,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link type="text/css" href="<c:url value="/resources/css/jqx.base.css"/>" rel="stylesheet">
 <link type="text/css" href="<c:url value="/resources/css/magicsuggest-min.css"/>" rel="stylesheet">
-<title>Add Team Member</title>
+<title><spring:message code="lbl.addTeamMember"/></title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -49,7 +49,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 		</div>
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Add Team member
+					<spring:message code="lbl.addTeamMember"/>
 				</div>
 				<div class="card-body">
 				<form:form method="POST" action="${saveUrl}" modelAttribute="teamMember">
@@ -59,7 +59,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 							<div class="row">									
 								<div class="col-5">
 									<div id="cm" class="ui-widget">
-										<label>Person </label>
+										<label><spring:message code="lbl.person"/> </label>
 										<select id="combobox" class="form-control">											  
 										</select>
 										 <span class="text-red">${uniqueNameErrorMessage}</span> 
@@ -74,7 +74,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 							<div class="row">									
 								<div class="col-5">
 									<div id="cm" class="ui-widget">
-										<label>Location </label>
+										<label><spring:message code="lbl.location"/> </label>
 										<div id="locationsTag"></div>
 										<span class="text-red">${locationSelectErrorMessage}</span>
 									</div>
@@ -84,10 +84,9 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Identifier</label>
+									<label for="exampleInputName"><spring:message code="lbl.identifier"/></label>
 									<form:input path="identifier" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="identifier" />
+										required="required" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
@@ -97,9 +96,9 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 						<div class="form-group">							
 								<div class="row">									
 									<div class="col-5">
-									<label for="exampleInputName">Team</label>
+									<label for="exampleInputName"><spring:message code="lbl.team"/></label>
 										<select class="custom-select custom-select-lg mb-3" id="team" name="team" required="required">
-									 		<option value="" selected>Please Select</option>
+									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 												<%
 												for (Map.Entry<Integer, String> entry : teams.entrySet())
 												{
@@ -123,7 +122,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<input type="submit" value="Save"
+									<input type="submit" value="<spring:message code="lbl.save"/>"
 										class="btn btn-primary btn-block" />
 								</div>
 							</div>
@@ -194,7 +193,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
     	  $.ajax({
               type: "GET",
               dataType: 'html',
-              url: "/opensrp-dashboard/user/search.html?name="+request.term,            
+              url: "/opensrp-dashboard/user/provider.html?name="+request.term,            
               success: function(res)
               {
               
@@ -287,65 +286,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 	  });
   </script>
   
- <!--  <script>
-  $( function() {
- var availableTags = [{ label: 'nina', id: '5' }, {label: 'sylvie' , id: '9'}];
-    
-    function split( val ) {
-      return val.split( /,\s*/ );
-    }
-    function extractLast( term ) {
-      return split( term ).pop();
-    }
  
-    $( "#locations" )
-      // don't navigate away from the field on tab when selecting an item
-      .on( "keydown", function( event ) {
-        if ( event.keyCode === $.ui.keyCode.TAB &&
-            $( this ).autocomplete( "instance" ).menu.active ) {
-        	
-          event.preventDefault();
-        }
-      })
-      .autocomplete({
-        minLength: 3,
-        source: function( request, response ) {
-          // delegate back to autocomplete, but extract the last term;
-          
-           var inputs = split(request.term);
-           var searchName = inputs[inputs.length-1];
-           console.log(searchName);
-        	$.getJSON( "/opensrp-dashboard/rest/api/v1/location/search?name="+extractLast( request.term ), response );
-        },
-        focus: function() {
-          // prevent value inserted on focus
-         
-          return false;
-        },
-        select: function( event, ui ) {
-          var terms = split( this.value );
-          var ids = $('#locationIds').val();
-          // remove the current input
-          terms.pop();          
-          // add the selected item		 
-          terms.push( ui.item.label );
-          // add placeholder to get the comma-and-space at the end
-          terms.push( "" );
-          if(ids==""){
-        	  ids = ui.item.id;
-          }else{
-          	  ids = ids+","+ui.item.id;
-          }
-          $("#locationIds").val(ids);
-          this.value = terms.join( ", " );
-          return false;
-        },
-        change: function(event, ui) {
-           
-        }
-      });
-  } );
-  </script> -->
  
   <script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
         

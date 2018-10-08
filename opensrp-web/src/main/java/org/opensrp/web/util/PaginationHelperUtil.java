@@ -228,6 +228,13 @@ public class PaginationHelperUtil {
 			nameLink = "&name=" + name;
 			map.put("name", name);
 		}
+		String userName = "";
+		String userNameLink = "";
+		if (request.getParameterMap().containsKey("userName")) {
+			userName = request.getParameter("userName") == null ? "0?" : request.getParameter("userName");
+			userNameLink = "&userName=" + userName;
+			map.put("userName", userName);
+		}
 		String search = "";
 		String searchLink = "";
 		if (request.getParameterMap().containsKey("search")) {
@@ -235,7 +242,7 @@ public class PaginationHelperUtil {
 			searchLink = "&search=" + search;
 		}
 		String paginationLink = divisionLink + districtLink + upazilaLink + unionLink + wardLink + subunitLink
-		        + mauzaparaLink + providerLink + nameLink + searchLink;
+		        + mauzaparaLink + providerLink + nameLink + userNameLink + searchLink;
 		map.put("paginationLink", paginationLink);
 		session.setAttribute("paginationAtributes", map);
 		return map;

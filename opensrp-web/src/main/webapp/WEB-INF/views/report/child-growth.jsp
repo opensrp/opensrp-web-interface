@@ -2,8 +2,8 @@
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Iterator"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -20,7 +20,7 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Child Growth Report</title>
+<title><spring:message code="lbl.childGrowthReport"/></title>
 <link type="text/css"
 	href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/>" rel="stylesheet">
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -38,17 +38,17 @@
 							
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Child Growth Report
+					<i class="fa fa-table"></i> <spring:message code="lbl.childGrowthReport"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
 						<table class="table table-bordered" id="dataTable">
 							<thead>
 								<tr>
-									<th>CHW Name</th>
-									<th>Adequate Growth</th>
-									<th>Inadequate Growth</th>
-									<th>Total</th>
+									<th><spring:message code="lbl.chwName"/></th>
+									<th><spring:message code="lbl.adequateGrowth"/></th>
+									<th><spring:message code="lbl.inadequateGrowth"/></th>
+									<th><spring:message code="lbl.total"/></th>
 									
 								</tr>
 							</thead>

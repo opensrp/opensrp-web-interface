@@ -1,7 +1,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -19,10 +19,11 @@
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
 		<div class="container-fluid">
-		
+
 		<div class="form-group">				
 			 <jsp:include page="/WEB-INF/views/client/client-link.jsp" /> 		
 			</div>
+
 
 			<jsp:include page="/WEB-INF/views/searchPanel.jsp" />
 
@@ -131,7 +132,7 @@
 												<td><%=provider%></td>
 												<td bgcolor=<%=bgColor%>><%=gStatusDecoded%></td>
 												<td>
-												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>		
+												<a href="<c:url value="/client/child/${baseEntityId}/details.html?lang=${locale}"/>">Details</a>		
 												</td> 
 											</tr>
 											<%

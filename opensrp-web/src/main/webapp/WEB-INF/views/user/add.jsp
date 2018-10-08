@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -21,7 +20,7 @@
 <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
-<title>Add user information</title>
+<title><spring:message code="lbl.addUserTitle"/></title>
 
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
@@ -38,7 +37,7 @@
 			</div>
 			<div class="card mb-3">
 				<div class="card-header" id="data">
-					<i class="fa fa-table"></i> Add User
+					<i class="fa fa-table"></i> <spring:message code="lbl.addUser"/>
 				</div>
 				<div class="card-body">
 					
@@ -46,76 +45,81 @@
 										
 						<div class="row col-12 tag-height">						 
 							<div class="form-group required">														
-								<label class="label-width" for="inputPassword6"> First name </label>										 
+								<label class="label-width" for="inputPassword6"> <spring:message code="lbl.firstName"/> </label>										 
 								<form:input path="firstName" class="form-control mx-sm-3"
-								required="required" placeholder="Enter first name" />
+								required="required" />
 							</div>							
 						 </div>
 						 
 						 <div class="row col-12 tag-height">						
 							<div class="form-group required">														
-								<label class="label-width" for="inputPassword6"> Last name </label>										 
+								<label class="label-width" for="inputPassword6"> <spring:message code="lbl.lastName"/> </label>										 
 								<form:input path="lastName" class="form-control mx-sm-3"
-											required="required" placeholder="Enter last name" />								
+											required="required"/>								
 							 </div>
 						 </div>
 						 
 						 <div class="row col-12 tag-height">						
 							<div class="form-group required">														
-								<label class="label-width"  for="inputPassword6"> Email </label>
-								<input type="email" class="form-control mx-sm-3" name="email" placeholder="Enter your email" required="required">										 
+								<label class="label-width"  for="inputPassword6"> <spring:message code="lbl.email"/> </label>
+								<input type="email" class="form-control mx-sm-3" name="email" required="required">										 
 															
 							 </div>
 						 </div>
 						
 						<div class="row col-12 tag-height">						
 							<div class="form-group">														
-								<label class="label-width" for="inputPassword6">Mobile Number</label>										 
-								<form:input path="mobile" class="form-control mx-sm-3"
-											placeholder="Enter mobile number" />								
+								<label class="label-width" for="inputPassword6"><spring:message code="lbl.mobile"/></label>										 
+								<form:input path="mobile" class="form-control mx-sm-3" />								
 							 </div>
 						 </div>	
 						
 						<div class="row col-12 tag-height">						
 							<div class="form-group">														
-								<label class="label-width" for="inputPassword6">Identifier</label>										 
-								<form:input path="idetifier" class="form-control mx-sm-3"
-											placeholder="Enter identifier" />
+								<label class="label-width" for="inputPassword6"><spring:message code="lbl.identifier"/></label>										 
+								<form:input path="idetifier" class="form-control mx-sm-3" />
 								
 							 </div>
 						 </div>
 						 
 						 <div class="row col-12 tag-height">						
 							<div class="form-group required">														
-								<label class="label-width" for="inputPassword6">Username</label>										 
+								<label class="label-width" for="inputPassword6"><spring:message code="lbl.userName"/></label>										 
 								<form:input path="username" class="form-control mx-sm-3"
-										required="required" placeholder="Enter user name" />
+										required="required" />
 								<small id="passwordHelpInline" class="text-muted text-para">
-	                          		<span class="text-red" id="usernameUniqueErrorMessage"></span> User can log in with  Username.
+	                          		<span class="text-red" id="usernameUniqueErrorMessage"></span><spring:message code="lbl.userMessage"/> 
 	                        	</small>
 							 </div>							 
 						 </div>
-						 	
-							
+						 
+						 <form:hidden path="parentUser" id="parentUser"/>
+						 <div class="row col-12 tag-height">						
+							<div class="form-group">														
+								<label class="label-width" for="inputPassword6"><spring:message code="lbl.parentUser"/></label>										 
+								<select id="combobox" class="form-control">	</select>								
+							 </div>							 
+						 </div>
+						 
+						
 						<div class="row col-12 tag-height">						
 							<div class="form-group required">														
-								<label class="label-width" for="inputPassword6">Password</label>										 
-								<input type="password" placeholder="Enter password" class="form-control mx-sm-3" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required />
+								<label class="label-width" for="inputPassword6"><spring:message code="lbl.password"/></label>										 
+								<input type="password" class="form-control mx-sm-3" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required />
 								<small id="passwordHelpInline" class="text-muted text-para">
-	                          		 Password should be 8 characters long and should have both upper and lower case characters ,
-	                          		 at least one digit , at least one non digit.
+								<spring:message code="lbl.passwordMEssage"/>
+	                          		 
 	                        	</small>
 							 </div>
 						 </div>
 						
 						<div class="row col-12 tag-height">						
 							<div class="form-group required">														
-								<label class="label-width"  for="inputPassword6">Confirm password</label>										 
-								<form:password path="retypePassword"
-										placeholder="Confirm password" class="form-control mx-sm-3"
+								<label class="label-width"  for="inputPassword6"><spring:message code="lbl.confirmedPassword"/></label>										 
+								<form:password path="retypePassword" class="form-control mx-sm-3"
 										required="required" />
 								<small id="passwordHelpInline" class="text-muted text-para">
-	                          		 <span class="text-red" id="passwordNotmatchedMessage"></span> Retype the password (for accuracy).
+	                          		 <span class="text-red" id="passwordNotmatchedMessage"></span> <spring:message code="lbl.retypePasswordMessage"/>
 	                        	</small>
 							 </div>
 							 
@@ -123,7 +127,7 @@
 						
 						<div class="row col-12 tag-height">						
 							<div class="form-group required">
-								<label class="label-width"  for="inputPassword6">Role</label>
+								<label class="label-width"  for="inputPassword6"><spring:message code="lbl.role"/></label>
 									<%
 										List<Role> roles = (List<Role>) session.getAttribute("roles");											
 										for (Role role : roles) {
@@ -146,7 +150,7 @@
 						</div>
 						<div class="row col-12 tag-height">						
 							<div class="form-group">
-									<input type="submit" onclick="return Validate()"  value="Save" 	class="btn btn-primary btn-block btn-center" />
+									<input type="submit" onclick="return Validate()"  value="<spring:message code="lbl.save"/>" 	class="btn btn-primary btn-block btn-center" />
 							</div>
 						</div>
 					</form:form>
@@ -156,7 +160,9 @@
 		</div>
 		<!-- /.container-fluid-->
 		<!-- /.content-wrapper-->
+		
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
+		<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
 	</div>
 	
 	<script type="text/javascript">
@@ -172,6 +178,7 @@
 		            'idetifier': $('input[name=idetifier]').val(),
 		            'username': $('input[name=username]').val(),
 		            'password': $('input[name=password]').val(),
+		            'parentUser': $('input[name=parentUser]').val(),
 		            'roles': getCheckboxValueUsingClass()
 		        };
 			event.preventDefault();
@@ -252,5 +259,130 @@
      }
 	
 		</script>
+		
+<script>
+  $( function() {
+    $.widget( "custom.combobox", {
+      _create: function() {
+        this.wrapper = $( "<div>" )
+          .addClass( "custom-combobox" )          
+          .insertAfter( this.element );
+ 
+        this.element.hide();
+        this._createAutocomplete();
+       
+      },
+ 
+      _createAutocomplete: function() {
+        var selected = this.element.children( ":selected" ),        
+          value = selected.val() ? selected.text() : "";
+         value = "";
+        this.input = $( "<input>" )
+          .appendTo( this.wrapper )
+          .val( value )
+          .attr( "title", "" )          
+           .attr( "name", "parentUserName" )
+          .addClass( "form-control mx-sm-3 ui-widget ui-widget-content  ui-corner-left" )
+          .autocomplete({
+            delay: 0,
+            minLength: 1,
+            source: $.proxy( this, "_source" )
+          })
+          .tooltip({
+            classes: {
+              "ui-tooltip": "ui-state-highlight"
+            }
+          });
+ 
+        this._on( this.input, {
+          autocompleteselect: function( event, ui ) {
+            ui.item.option.selected = true;
+ 			$("#parentUser").val(ui.item.option.value);
+            this._trigger( "select", event, {
+              item: ui.item.option
+            });
+          },
+ 
+          autocompletechange: "_removeIfInvalid"
+        });
+      },
+ 
+      
+ 
+      _source: function( request, response ) {
+    	  
+    	  $.ajax({
+              type: "GET",
+              dataType: 'html',
+              url: "/opensrp-dashboard/user/user.html?name="+request.term,            
+              success: function(res)
+              {
+              
+                $("#combobox").html(res);
+              }
+          });
+        var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+        response( this.element.children( "option" ).map(function() {
+          var text = $( this ).text();
+          if ( this.value && ( !request.term || matcher.test(text) ) )
+            return {
+              label: text,
+              value: text,
+              option: this
+            };
+        }) );
+      },
+ 
+      _removeIfInvalid: function( event, ui ) {
+    	  
+        // Selected an item, nothing to do
+        if ( ui.item ) {
+          return;
+        }
+ 
+        // Search for a match (case-insensitive)
+        var value = this.input.val(),
+          valueLowerCase = value.toLowerCase(),
+          valid = false;
+        this.element.children( "option" ).each(function() {
+          if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+            this.selected = valid = true;
+            return false;
+          }
+        });
+ 
+        // Found a match, nothing to do
+        if ( valid ) {
+          return;
+        }
+ 
+        // Remove invalid value
+         this.input
+          .val( "" )
+          .attr( "title", value + " didn't match any item" )
+          .tooltip( "open" );
+        $("#parentUser").val(0);
+        this.element.val( "" );
+        this._delay(function() {
+          this.input.tooltip( "close" ).attr( "title", "" );
+        }, 2500 );
+        this.input.autocomplete( "instance" ).term = "";
+      },
+ 
+      _destroy: function() {
+        this.wrapper.remove();
+        this.element.show();
+      }
+    });
+ 
+    $( "#combobox" ).combobox();
+    
+    $( "#toggle" ).on( "click", function() {
+      $( "#combobox" ).toggle();
+    });
+    
+    
+  } );
+  </script>
 </body>
 </html>

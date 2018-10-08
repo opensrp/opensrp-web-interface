@@ -15,19 +15,17 @@ import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.entity.User;
-import org.opensrp.acl.openmrs.service.OpenMRSConnector;
 import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
-import org.opensrp.acl.openmrs.service.impl.OpenMRSUserAPIService;
 import org.opensrp.acl.service.AclService;
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 @Service
 public class UserServiceImpl implements AclService {
@@ -46,9 +44,6 @@ public class UserServiceImpl implements AclService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	@Autowired
-	private User user;
-	
 	@Transactional
 	@Override
 	public <T> long save(T t) throws Exception {
@@ -60,7 +55,6 @@ public class UserServiceImpl implements AclService {
 		String query = "";
 		String existingUserUUid = "";
 		String existingUserPersonUUid = "";
-		
 		query = "v=full&username=" + user.getUsername();
 		if (isProvider) {
 			existingOpenMRSUser = openMRSServiceFactory.getOpenMRSConnector("user").getByQuery(query);
@@ -156,8 +150,8 @@ public class UserServiceImpl implements AclService {
 	}
 	
 	public User convert(UserDTO userDTO) {
+		User user = new User();
 		String[] roles = userDTO.getRoles().split(",");
-		
 		user.setUsername(userDTO.getUsername());
 		user.setEmail(userDTO.getEmail());
 		user.setEnabled(true);
@@ -168,6 +162,9 @@ public class UserServiceImpl implements AclService {
 		user.setMobile(userDTO.getMobile());
 		user.setPassword(userDTO.getPassword());
 		user.setRoles(setRoles(roles));
+		User parentUser = findById(userDTO.getParentUser(), "id", User.class);
+		user.setParentUser(parentUser);
+		
 		return user;
 		
 	}
@@ -214,10 +211,9 @@ public class UserServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	public List<User> getAllProviderByKeysWithALlMatches(String name) {
+	public List<User> findAllByKeysWithALlMatches(String name, boolean isProvider) {
 		Map<String, String> fielaValues = new HashMap<String, String>();
 		fielaValues.put("username", name);
-		boolean isProvider = true;
 		return repository.findAllByKeysWithALlMatches(isProvider, fielaValues, User.class);
 	}
 	
@@ -227,9 +223,11 @@ public class UserServiceImpl implements AclService {
 		boolean isProvider = true;
 		List<User> users = repository.findAllByKeysWithALlMatches(isProvider, fielaValues, User.class);
 		Map<Integer, String> usersMap = new HashMap<Integer, String>();
-		for (User user : users) {
-			usersMap.put(user.getId(), user.getUsername());
-			
+		if (users != null) {
+			for (User user : users) {
+				usersMap.put(user.getId(), user.getUsername());
+				
+			}
 		}
 		return usersMap;
 	}
@@ -238,5 +236,26 @@ public class UserServiceImpl implements AclService {
 	public void setRolesAttributes(int[] roles, HttpSession session) {
 		session.setAttribute("roles", repository.findAll("Role"));
 		session.setAttribute("selectedRoles", roles);
+	}
+	
+	public JSONArray getUserDataAsJson(String parentIndication, String parentKey) throws JSONException {
+		JSONArray dataArray = new JSONArray();
+		
+		List<User> users = findAll("User");
+		for (User user : users) {
+			JSONObject dataObject = new JSONObject();
+			dataObject.put("id", user.getId());
+			User parentUser = user.getParentUser();
+			if (parentUser != null) {
+				dataObject.put(parentKey, parentUser.getId());
+			} else {
+				dataObject.put(parentKey, parentIndication);
+			}
+			dataObject.put("text", user.getFullName());
+			dataArray.put(dataObject);
+		}
+		
+		return dataArray;
+		
 	}
 }

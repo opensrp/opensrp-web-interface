@@ -7,6 +7,7 @@ public class FacilityWorkerDTO {
 	private String identifier;
 	private String organization;
 	private String facilityId;
+	private String workerId;
 	private String facilityWorkerTypeId;
 	private String facilityTrainings;
 	
@@ -47,12 +48,21 @@ public class FacilityWorkerDTO {
 		this.facilityTrainings = facilityTrainings;
 	}
 	
+	public String getWorkerId() {
+		return workerId;
+	}
+	public void setWorkerId(String workerId) {
+		this.workerId = workerId;
+	}
 	@Override
 	public String toString() {
 		return "FacilityWorkerDTO [name=" + name + ", identifier=" + identifier
 				+ ", organization=" + organization + ", facilityId="
-				+ facilityId + ", facilityWorkerTypeId=" + facilityWorkerTypeId
+				+ facilityId + ", workerId=" + workerId
+				+ ", facilityWorkerTypeId=" + facilityWorkerTypeId
 				+ ", facilityTrainings=" + facilityTrainings + "]";
 	}
+	
+	
 	
 }

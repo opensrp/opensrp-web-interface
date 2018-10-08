@@ -2,7 +2,6 @@ package org.opensrp.web.rest.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
-import org.json.JSONException;
 import org.opensrp.acl.entity.User;
 import org.opensrp.acl.service.impl.UserServiceImpl;
 import org.opensrp.common.dto.UserDTO;
@@ -22,13 +21,12 @@ public class UserRestController {
 	@Autowired
 	private UserServiceImpl userServiceImpl;
 	
-	@Autowired
-	private User user;
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO) throws Exception {
 		boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());
 		String userNameUniqueError = "";
+		User user = new User();		
 		if (!isExists) {
 			user = userServiceImpl.convert(userDTO);
 			userServiceImpl.save(user);
@@ -42,6 +40,7 @@ public class UserRestController {
 	public ResponseEntity<String> editPassword(@RequestBody UserDTO userDTO) throws Exception {
 		boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());
 		String userNameUniqueError = "";
+		User user = new User();
 		if (!isExists) {
 			user = userServiceImpl.convert(userDTO);
 			userServiceImpl.save(user);

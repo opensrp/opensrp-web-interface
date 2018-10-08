@@ -4,6 +4,8 @@
 
 package org.opensrp.web.controller;
 
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -45,18 +47,19 @@ public class TeamMemberController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_TEAM_MEMBER_LIST')")
 	@RequestMapping(value = "/list.html", method = RequestMethod.GET)
-	public String locationList(HttpServletRequest request, HttpSession session, Model model) {
+	public String locationList(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		Class<TeamMember> entityClassName = TeamMember.class;
 		paginationUtil.createPagination(request, session, entityClassName);
+		model.addAttribute("locale", locale);
 		return "team-member/index";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_TEAM_MEMBER')")
 	@RequestMapping(value = "/add.html", method = RequestMethod.GET)
-	public ModelAndView saveTeamMember(ModelMap model, HttpSession session) throws JSONException {
+	public ModelAndView saveTeamMember(ModelMap model, HttpSession session, Locale locale) throws JSONException {
 		model.addAttribute("teamMember", new TeamMember());
 		String personName = "";
-		
+		model.addAttribute("locale", locale);
 		session.setAttribute("locationList", locationServiceImpl.list().toString());
 		int[] locations = new int[0];
 		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
@@ -71,7 +74,7 @@ public class TeamMemberController {
 	                                   @RequestParam(value = "team") int teamId,
 	                                   @RequestParam(value = "locationList[]", required = false) int[] locations,
 	                                   @ModelAttribute("teamMember") @Valid TeamMember teamMember, BindingResult binding,
-	                                   ModelMap model, HttpSession session) throws Exception {
+	                                   ModelMap model, HttpSession session, Locale locale) throws Exception {
 		teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember, personId,
 		    teamId, locations);
 		
@@ -82,13 +85,15 @@ public class TeamMemberController {
 			return new ModelAndView("/team-member/add");
 		}
 		
-		return new ModelAndView("redirect:/team/teammember/list.html");
+		return new ModelAndView("redirect:/team/teammember/list.html?lang=" + locale);
 		
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_TEAM_MEMBER')")
 	@RequestMapping(value = "/{id}/edit.html", method = RequestMethod.GET)
-	public ModelAndView editTeamMember(ModelMap model, HttpSession session, @PathVariable("id") int id) throws JSONException {
+	public ModelAndView editTeamMember(ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
 		TeamMember teamMember = teamMemberServiceImpl.findById(id, "id", TeamMember.class);
 		model.addAttribute("id", id);
 		model.addAttribute("teamMember", teamMember);
@@ -96,6 +101,7 @@ public class TeamMemberController {
 		User person = teamMember.getPerson();
 		String personName = person.getUsername() + " (" + person.getFullName() + ")";
 		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+		
 		return new ModelAndView("team-member/edit", "command", teamMember);
 		
 	}
@@ -107,7 +113,8 @@ public class TeamMemberController {
 	                                   @RequestParam(value = "team") int teamId,
 	                                   @RequestParam(value = "locationList[]", required = false) int[] locations,
 	                                   @ModelAttribute("teamMember") @Valid TeamMember teamMember, BindingResult binding,
-	                                   ModelMap model, HttpSession session, @PathVariable("id") int id) throws Exception {
+	                                   ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale)
+	    throws Exception {
 		teamMember.setId(id);
 		teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember, personId,
 		    teamId, locations);
@@ -119,7 +126,7 @@ public class TeamMemberController {
 			return new ModelAndView("/team-member/edit");
 		}
 		
-		return new ModelAndView("redirect:/team/teammember/list.html");
+		return new ModelAndView("redirect:/team/teammember/list.html?lang=" + locale);
 		
 	}
 }

@@ -1,7 +1,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -20,15 +20,17 @@
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		
+
 		<div class="form-group">				
 			 <jsp:include page="/WEB-INF/views/client/client-link.jsp" />  		
 			</div>
+
 
 			<jsp:include page="/WEB-INF/views/searchPanel.jsp" />
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Child List
+					<i class="fa fa-table"></i> Member List
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -85,11 +87,13 @@
 										<tbody>
 											<%
 												if (session.getAttribute("dataList") != null) {
-													List<Object> dataList = (List<Object>) session
-															.getAttribute("dataList");
+													List<Object> dataList = (List<Object>) session.getAttribute("dataList");
 													Iterator dataListIterator = dataList.iterator();
 													while (dataListIterator.hasNext()) {
 														Object[] clientObject = (Object[]) dataListIterator.next();
+														String baseEntityId = String.valueOf(clientObject[1]);
+														pageContext.setAttribute("baseEntityId", baseEntityId);
+														
 														String birthDate = String.valueOf(clientObject[3]);
 														String firstName = String.valueOf(clientObject[9]);
 														String gender = String.valueOf(clientObject[10]);
@@ -134,7 +138,8 @@
 												<td><%=brid%></td>
 												<td><%=provider%></td>
 												<td>
-												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>		
+												<a href="<c:url value="/client/member/${baseEntityId}/details.html?lang=${locale}"/>">Details</a>	
+
 												</td> 
 											</tr>
 											<%
