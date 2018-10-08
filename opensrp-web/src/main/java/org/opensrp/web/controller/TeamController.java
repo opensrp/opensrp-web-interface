@@ -70,7 +70,7 @@ public class TeamController {
 	                             @RequestParam(value = "superVisor") int supervisorId,
 	                             @RequestParam(value = "locationName") String locationName,
 	                             @ModelAttribute("team") @Valid Team team, BindingResult binding, ModelMap model,
-	                             HttpSession session) throws Exception {
+	                             HttpSession session, Locale locale) throws Exception {
 		
 		if (!teamServiceImpl.isTeamNameAndIdentifierExists(model, team)) {
 			//team.setName(team.getName().trim());
@@ -90,7 +90,7 @@ public class TeamController {
 			return new ModelAndView("/team/add");
 		}
 		
-		return new ModelAndView("redirect:/team/list.html");
+		return new ModelAndView("redirect:/team/list.html?lang=" + locale);
 		
 	}
 	
@@ -113,7 +113,7 @@ public class TeamController {
 	                             @RequestParam(value = "superVisor") int supervisorId,
 	                             @RequestParam(value = "locationName") String locationName,
 	                             @ModelAttribute("team") @Valid Team team, BindingResult binding, ModelMap model,
-	                             HttpSession session, @PathVariable("id") int id) throws Exception {
+	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
 		team.setId(id);
 		team.setName(team.getName().trim());
 		
@@ -132,7 +132,7 @@ public class TeamController {
 			return new ModelAndView("/team/edit");
 		}
 		
-		return new ModelAndView("redirect:/team/list.html");
+		return new ModelAndView("redirect:/team/list.html?lang=" + locale);
 		
 	}
 }

@@ -31,6 +31,8 @@
 <c:url var="saveUrl" value="/user/${id}/edit.html" />
 <%
 String selectedParentUser = (String)session.getAttribute("parentUserName");
+Integer selectedParentId = (Integer)session.getAttribute("parentUserId");
+
 %>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -100,7 +102,7 @@ String selectedParentUser = (String)session.getAttribute("parentUserName");
 	                        	</small>
 							 </div>							 
 						 </div>
-						 <form:hidden path="parentUser" id="parentUser" value="<%=selectedParentUser %>"/>
+						 <form:hidden path="parentUser" id="parentUser" value="<%=selectedParentId %>"/>
 						 <div class="row col-12 tag-height">						
 							<div class="form-group">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.parentUser"/></label>										 

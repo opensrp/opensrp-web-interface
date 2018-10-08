@@ -13,7 +13,6 @@ import org.opensrp.acl.service.impl.LocationTagServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -52,7 +51,7 @@ public class LocationTagController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_LOCATION_TAG')")
 	@RequestMapping(value = "/location/tag/add.html", method = RequestMethod.POST)
 	public ModelAndView saveLocation(@ModelAttribute("locationTag") @Valid LocationTag locationTag, BindingResult binding,
-	                                 ModelMap model, HttpSession session) throws Exception {
+	                                 ModelMap model, HttpSession session, Locale locale) throws Exception {
 		locationTag.setName(locationTag.getName().trim());
 		if (!locationTagServiceImpl.locationTagExists(locationTag)) {
 			locationTagServiceImpl.save(locationTag);
@@ -61,7 +60,7 @@ public class LocationTagController {
 			return new ModelAndView("/location-tag/add");
 		}
 		
-		return new ModelAndView("redirect:/location/tag/list.html");
+		return new ModelAndView("redirect:/location/tag/list.html?lang=" + locale);
 		
 	}
 	
@@ -79,7 +78,8 @@ public class LocationTagController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_LOCATION_TAG')")
 	@RequestMapping(value = "/location/tag/{id}/edit.html", method = RequestMethod.POST)
 	public ModelAndView editRole(@ModelAttribute("locationTag") @Valid LocationTag locationTag, BindingResult binding,
-	                             ModelMap model, HttpSession session, @PathVariable("id") int id) throws JSONException {
+	                             ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale)
+	    throws JSONException {
 		locationTag.setId(id);
 		locationTag.setName(locationTag.getName().trim());
 		
@@ -90,7 +90,7 @@ public class LocationTagController {
 			return new ModelAndView("/location-tag/edit");
 		}
 		
-		return new ModelAndView("redirect:/location/tag/list.html");
+		return new ModelAndView("redirect:/location/tag/list.html?lang=" + locale);
 		
 	}
 	
