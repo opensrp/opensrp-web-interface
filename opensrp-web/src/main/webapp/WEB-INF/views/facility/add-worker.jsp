@@ -53,7 +53,7 @@ String selectedPersonName = "";
 		
 		<div class="form-group">	
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
-		<a  href="/opensrp-dashboard/facility/<%=facilityId%>/details.html"> <strong>CC Profile</strong> </a>		
+		<a  href="<c:url value="/facility/<%=facilityId%>/details.html"/>"> <strong>CC Profile</strong> </a>		
 		<%} %>
 		</div>
 		
