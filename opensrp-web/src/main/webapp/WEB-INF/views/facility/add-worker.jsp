@@ -144,7 +144,7 @@ String selectedPersonName = "";
 							<div class="form-check">
 								<div class="row">
 								<div class="col-10">
-									<label for="exampleInputName">à¦¸à¦¿à¦à¦à¦à¦¸à¦¿à¦ªà¦¿à¦° à¦ªà§à¦°à¦¾à¦ªà§à¦¤ à¦ªà§à¦°à¦¶à¦¿à¦à§à¦·à¦£ à¦¸à¦®à§à¦¹:</label><br>
+									<label for="exampleInputName"><spring:message code="lbl.trainingsOfChcp"/></label><br>
 								</div>
 									<%
 										List<FacilityTraining> CHCPTrainingList = (List<FacilityTraining>) session.getAttribute("CHCPTrainingList");											
@@ -197,19 +197,19 @@ String selectedPersonName = "";
 										<thead>
 											<tr>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Worker Type</th>
+													style="width: 140px;"><spring:message code="lbl.healthWorkerType"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Name</th>
+													style="width: 140px;"><spring:message code="lbl.name"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Identifier</th>
+													style="width: 106px;"><spring:message code="lbl.contact"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Organization</th>
+													style="width: 140px;"><spring:message code="lbl.organization"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Training</th>
+													style="width: 79px;"><spring:message code="lbl.training"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Action</th>
+													style="width: 79px;"><spring:message code="lbl.action"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Action</th>
+													style="width: 79px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</thead>
 										
