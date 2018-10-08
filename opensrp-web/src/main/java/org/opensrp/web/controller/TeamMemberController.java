@@ -93,6 +93,7 @@ public class TeamMemberController {
 	@RequestMapping(value = "/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editTeamMember(ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale)
 	    throws JSONException {
+		model.addAttribute("locale", locale);
 		TeamMember teamMember = teamMemberServiceImpl.findById(id, "id", TeamMember.class);
 		model.addAttribute("id", id);
 		model.addAttribute("teamMember", teamMember);
@@ -100,7 +101,7 @@ public class TeamMemberController {
 		User person = teamMember.getPerson();
 		String personName = person.getUsername() + " (" + person.getFullName() + ")";
 		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
-		model.addAttribute("locale", locale);
+		
 		return new ModelAndView("team-member/edit", "command", teamMember);
 		
 	}

@@ -33,9 +33,9 @@ public class LocationTagController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION_TAG_LIST')")
 	@RequestMapping(value = "location/tag/list.html", method = RequestMethod.GET)
 	public String locationList(ModelMap model, Locale locale) {
+		model.addAttribute("locale", locale);
 		List<LocationTag> locations = locationTagServiceImpl.findAll("LocationTag");
 		model.addAttribute("locationTags", locations);
-		model.addAttribute("locale", locale);
 		return "location-tag/index";
 	}
 	
@@ -67,10 +67,10 @@ public class LocationTagController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_LOCATION_TAG')")
 	@RequestMapping(value = "location/tag/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editRole(ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale) {
+		model.addAttribute("locale", locale);
 		LocationTag locationTag = locationTagServiceImpl.findById(id, "id", LocationTag.class);
 		model.addAttribute("locationTag", locationTag);
 		model.addAttribute("id", id);
-		model.addAttribute("locale", locale);
 		return new ModelAndView("location-tag/edit", "command", locationTag);
 		
 	}

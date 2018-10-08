@@ -97,12 +97,12 @@ public class TeamController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_TEAM')")
 	@RequestMapping(value = "/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editTeam(ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale) {
+		model.addAttribute("locale", locale);
 		Team team = teamServiceImpl.findById(id, "id", Team.class);
 		model.addAttribute("id", id);
 		model.addAttribute("team", team);
 		String locationName = locationServiceImpl.makeLocationName(team.getLocation());
 		teamServiceImpl.setSessionAttribute(session, team, locationName);
-		model.addAttribute("locale", locale);
 		return new ModelAndView("team/edit", "command", team);
 		
 	}
