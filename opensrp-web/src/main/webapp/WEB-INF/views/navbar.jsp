@@ -57,7 +57,7 @@ boolean PERM_READ_TEAM_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM
 					<% if(PERM_READ_FACILITY){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/dashboard?lang=${locale}"/>"> <strong>
+						href="<c:url value="/cbhc-dashboard?lang=${locale}"/>"> <strong>
 							<spring:message code="lbl.comunityClinic"/> </strong>
 
 					</a>

@@ -9,12 +9,12 @@
 
 <div class="form-group">		
 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY")){ %>			
-				   <a  href="<c:url value="/facility/add.html"/>" > <strong>Registration</strong> </a>  | 
+				   <a  href="<c:url value="/facility/add.html?lang=${locale}"/>" > <strong>Registration</strong> </a>  | 
 <%} %>
 <% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>						
-					 <a  href="<c:url value="/"/>"> <strong>Community Clinic</strong> </a>  | 
+					 <a  href="<c:url value="/cbhc-dashboard?lang=${locale}"/>"> <strong>Community Clinic</strong> </a>  | 
 <%} %>
 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV")){ %>	
-					 <a  href="<c:url value="/facility/upload_csv.html"/>"> <strong>Upload Facility</strong> </a>	
+					 <a  href="<c:url value="/facility/upload_csv.html?lang=${locale}"/>"> <strong>Upload Facility</strong> </a>	
 <%} %>		
 		</div>

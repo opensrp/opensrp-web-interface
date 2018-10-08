@@ -68,8 +68,9 @@ public class FacilityController {
 
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY')")
 	@RequestMapping(value = "/facility/add.html", method = RequestMethod.GET)
-	public ModelAndView addFacility(HttpServletRequest request,ModelMap model, HttpSession session){
+	public ModelAndView addFacility(HttpServletRequest request,ModelMap model, HttpSession session, Locale locale){
 		paginationUtil.createPagination(request, session, Facility.class);
+		model.addAttribute("locale", locale);
 		//facilityHelperUtil.setSessionAttribute(session, facility, locationName);
 		return new ModelAndView("facility/add", "command", facility);
 		
@@ -81,41 +82,27 @@ public class FacilityController {
 								 @RequestParam(value = "location", required = false) String locationId,
 	                             //@RequestParam(value = "locationName") String locationName,
 	                             @ModelAttribute("facility") @Valid Facility facility, BindingResult binding, ModelMap model,
-	                             HttpSession session) throws Exception {
+	                             HttpSession session, Locale locale) throws Exception {
 		facility = facilityHelperUtil.setLocationCodesToFacility(facility);
 		facilityServiceFactory.getFacility("FacilityServiceImpl").save(facility);
-		return new RedirectView("/opensrp-dashboard/");
+		model.addAttribute("locale", locale);
+		return new RedirectView("/opensrp-dashboard/cbhc-dashboard?lang="+locale);
 		
 	}
 	
 
 	//@PostAuthorize("hasPermission(returnObject, 'PERM_READ_FACILITY')")
-	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-	public String showFacilityList(HttpServletRequest request, HttpSession session) {
+	@RequestMapping(value = "/cbhc-dashboard", method = RequestMethod.GET)
+	public String showFacilityList(HttpServletRequest request, HttpSession session, ModelMap model, Locale locale) {
         paginationUtil.createPagination(request, session, Facility.class);
+        model.addAttribute("locale", locale);
 		return "/facility/index";
 	}
-	
-	/*@RequestMapping(value = "/{id}/addWorker.html", method = RequestMethod.GET)
-	public ModelAndView addWorker(ModelMap model, HttpSession session,@PathVariable("id") int id){
-		
-		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findAll("FacilityWorkerType");
-		List<FacilityTraining> CHCPTrainingList = facilityServiceFactory.getFacility("FacilityWorkerTrainingServiceImpl").findAll("FacilityTraining");
-		facilityHelperUtil.setWorkerTypeListToSession(session, workerTypeList);
-		facilityHelperUtil.setCHCPTrainingListToSession(session, CHCPTrainingList);
-		
-		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
-		FacilityWorker facilityWorkerObject = new FacilityWorker();
-		facilityWorkerObject.setFacility(facility);
-		model.addAttribute("facilityWorker", facilityWorkerObject);
-		
-		return new ModelAndView("facility/add-worker", "command", facilityWorker);
-	   
-	}*/
+
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY_WORKER')")
 	@RequestMapping(value = "/facility/{id}/addWorker.html", method = RequestMethod.GET)
-	public String addWorker(ModelMap model, HttpSession session,@PathVariable("id") int id){
+	public String addWorker(ModelMap model, HttpSession session, Locale locale,@PathVariable("id") int id){
 		
 		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl")
 		        .findAll("FacilityWorkerType");
@@ -130,6 +117,7 @@ public class FacilityController {
 		Map<Integer,Integer> distinctWorkerCountMap = facilityHelperUtil.getDistinctWorkerCount(facilityWorkerList);
 		session.setAttribute("distinctWorkerCountMap", distinctWorkerCountMap);
 		session.setAttribute("facilityId", id);
+		model.addAttribute("locale", locale);
 		return "facility/add-worker";
 		
 	}
@@ -143,7 +131,7 @@ public class FacilityController {
 			@RequestParam(value = "facilityWorkerTypeId", required = false) int facilityWorkerTypeId,
 		    @RequestParam(value = "trainings", required = false) String trainings,
 			BindingResult binding,
-			HttpSession session) throws Exception{
+			HttpSession session, Locale locale) throws Exception{
 		
 		if(!trainings.equals("")){
 		String[] trainingList = trainings.split(",");
@@ -165,7 +153,8 @@ public class FacilityController {
 		
 		//String facilityDetailsUrlString = "/facility/"+facilityWorker.getFacility().getId()+"/details.html";
 		String addWorkerUrlString = "/opensrp-dashboard/facility/" + facilityWorker.getFacility().getId()
-		        + "/addWorker.html";
+		        + "/addWorker.html?lang="+locale;
+		model.addAttribute("locale", locale);
 		return new RedirectView(addWorkerUrlString);
 		
 	}
@@ -200,7 +189,7 @@ public class FacilityController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY_WORKER')")
 	@RequestMapping(value = "/facility/{workerId}/editWorker.html", method = RequestMethod.GET)
-	public String editWorker (ModelMap model, HttpSession session,
+	public String editWorker (ModelMap model, HttpSession session,Locale locale,
 			@PathVariable("workerId") int workerId){
 		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findAll("FacilityWorkerType");
 		List<FacilityTraining> CHCPTrainingList = facilityServiceFactory.getFacility("FacilityWorkerTrainingServiceImpl").findAll("FacilityTraining");
@@ -210,6 +199,7 @@ public class FacilityController {
 		FacilityWorker facilityWorker = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findById(workerId, "id", FacilityWorker.class);
 		System.out.println(facilityWorker);
 		session.setAttribute("workerToEdit", facilityWorker);
+		model.addAttribute("locale", locale);
 		return "facility/edit-worker";
        
 	}
@@ -238,13 +228,14 @@ public class FacilityController {
 
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
 	@RequestMapping(value = "/facility/upload_csv.html", method = RequestMethod.GET)
-	public String csvUpload(HttpSession session) throws JSONException {
+	public String csvUpload(HttpSession session, ModelMap model, Locale locale) throws JSONException {
+		model.addAttribute("locale", locale);
 		return "/facility/upload_csv";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
 	@RequestMapping(value = "/facility/upload_csv.html", method = RequestMethod.POST)
-	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model)
+	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model,  Locale locale)
 	    throws Exception {
 		if (file.isEmpty()) {
 			model.put("msg", "failed to upload file because its empty");
@@ -282,18 +273,19 @@ public class FacilityController {
 		
 		//used for populating chcp table temporarily
 		//String msg = facilityHelperUtil.uploadChcp(csvFile);
-		
+		model.addAttribute("locale", locale);
 		if (!msg.isEmpty()) {
 			model.put("msg", msg);
 			return new ModelAndView("/facility/upload_csv");
 		}
-		return new ModelAndView("redirect:/");
+		return new ModelAndView("redirect:/cbhc-dashboard?lang="+locale);
 	}
 	
 	@RequestMapping(value = "facility/searchWorkerName.html", method = RequestMethod.GET)
-	public String providerSearch(Model model, HttpSession session, @RequestParam String name, @RequestParam String workerTypeId) throws JSONException {
+	public String providerSearch(Model model, HttpSession session,Locale locale, @RequestParam String name, @RequestParam String workerTypeId) throws JSONException {
 		List<String> workers = facilityHelperUtil.getAllWorkersNameByKeysWithALlMatches(name,workerTypeId);
 		session.setAttribute("searchedWorkers", workers);
+		model.addAttribute("locale", locale);
 		return "facility/search-worker-name";
 	}
 
