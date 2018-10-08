@@ -94,6 +94,7 @@ public class ClientController {
 	@RequestMapping(value = "/duplicateClient.html", method = RequestMethod.GET)
 	public String showDuplicateClient(HttpSession session, ModelMap model, Locale locale) throws JSONException {
 		duplicateRecordServiceImpl.getDuplicateRecord(session, "viewJsonDataConversionOfClient");
+		model.addAttribute("locale", locale);
 		return "client/duplicate-client";
 	}
 
@@ -109,22 +110,25 @@ public class ClientController {
 
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_CHILD')")
 	@RequestMapping(value = "/child.html", method = RequestMethod.GET)
-	public String showChildList(HttpServletRequest request, HttpSession session, Model model) {
+	public String showChildList(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", clientServiceImpl.getHouseholdEntityNamePrefix() + "child");
+		model.addAttribute("locale", locale);
 		return "/client/child";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_MEMBER')")
 	@RequestMapping(value = "/member/{id}/details.html", method = RequestMethod.GET)
-	public String showMemberDetails(HttpServletRequest request, HttpSession session, Model model,@PathVariable("id") String id) throws JSONException {
+	public String showMemberDetails(HttpServletRequest request, HttpSession session, Model model, Locale locale, @PathVariable("id") String id) throws JSONException {
 		session.setAttribute("memberId", id);
+		model.addAttribute("locale", locale);
 		return "client/member-details";
 	}
 
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_MEMBER')")
 	@RequestMapping(value = "/member.html", method = RequestMethod.GET)
-	public String showMemberList(HttpServletRequest request, HttpSession session, Model model) {
+	public String showMemberList(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "ec_member");
+		model.addAttribute("locale", locale);
 		return "/client/member";
 	}
 	
@@ -139,8 +143,9 @@ public class ClientController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_MOTHER')")
 	@RequestMapping(value = "/mother.html", method = RequestMethod.GET)
-	public String showMotherList(HttpServletRequest request, HttpSession session, Model model) {
+	public String showMotherList(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", clientServiceImpl.getWomanEntityName());
+		model.addAttribute("locale", locale);
 		return "/client/mother";
 	}
 	
@@ -166,7 +171,7 @@ public class ClientController {
 		System.out.println("submit clientEntity: " + baseEntityId);
 		clientServiceImpl.updateClientData(clientEntity, baseEntityId);
 		model.addAttribute("locale", locale);
-		return new ModelAndView("redirect:/client/mother.html");
+		return new ModelAndView("redirect:/client/mother.html?lang="+locale);
 	}
 
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_HOUSEHOLD')")

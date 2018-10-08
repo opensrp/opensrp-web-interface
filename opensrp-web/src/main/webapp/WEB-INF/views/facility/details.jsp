@@ -85,7 +85,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		
 		<div class="form-group">
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
-		<a  href="/opensrp-dashboard/facility/${facility.id}/addWorker.html"> <strong>Add Worker/Training</strong> </a>		
+		<a  href="<c:url value="/facility/${facility.id}/addWorker.html"/>"> <strong>Add Worker/Training</strong> </a>		
 		<%} %>
 		</div>
 		
