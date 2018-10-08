@@ -168,7 +168,6 @@ public class ClientController {
 	public ModelAndView editMother(@ModelAttribute("clientEntity") @Valid ClientEntity clientEntity, BindingResult binding,
 	                               ModelMap model, HttpSession session, @PathVariable("baseEntityId") String baseEntityId,
 	                               Locale locale) throws JSONException {
-		System.out.println("submit clientEntity: " + baseEntityId);
 		clientServiceImpl.updateClientData(clientEntity, baseEntityId);
 		model.addAttribute("locale", locale);
 		return new ModelAndView("redirect:/client/mother.html?lang="+locale);
@@ -188,7 +187,6 @@ public class ClientController {
 	public String getChildLocationList(HttpServletRequest request, HttpSession session, ModelMap model,
 	                                   @RequestParam int id, Locale locale) {
 		List<Object[]> parentData = locationServiceImpl.getChildData(id);
-		System.out.println("child data size: " + parentData.size());
 		session.setAttribute("data", parentData);
 		model.addAttribute("locale", locale);
 		return "/location";

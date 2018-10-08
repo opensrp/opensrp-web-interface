@@ -197,7 +197,6 @@ public class FacilityController {
 		facilityHelperUtil.setCHCPTrainingListToSession(session, CHCPTrainingList);
 		
 		FacilityWorker facilityWorker = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findById(workerId, "id", FacilityWorker.class);
-		System.out.println(facilityWorker);
 		session.setAttribute("workerToEdit", facilityWorker);
 		model.addAttribute("locale", locale);
 		return "facility/edit-worker";

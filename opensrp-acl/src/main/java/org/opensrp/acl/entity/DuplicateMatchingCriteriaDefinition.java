@@ -37,11 +37,6 @@ public class DuplicateMatchingCriteriaDefinition implements Serializable {
 	@NotNull
 	@Column(name = "view_name")
 	private String viewName;
-
-/*	@NotNull
-	@Type(type = "jsonb")
-	@Column(name = "matching_keys", columnDefinition = "jsonb")
-	private JSONArray matchingKeys;*/
 	
 	@NotNull
 	@Column(name = "matching_keys")
@@ -76,14 +71,6 @@ public class DuplicateMatchingCriteriaDefinition implements Serializable {
 	public void setViewName(String viewName) {
 		this.viewName = viewName;
 	}
-
-/*	public JSONArray getMatchingKeys() {
-		return matchingKeys;
-	}
-
-	public void setMatchingKeys(JSONArray matchingKeys) {
-		this.matchingKeys = matchingKeys;
-	}*/
 
 	public String getMatchingKeys() {
 		return matchingKeys;

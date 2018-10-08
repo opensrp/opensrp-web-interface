@@ -105,13 +105,11 @@ public class DuplicateRecordServiceImpl implements AclService {
 				//two lines removed and created a new method
 			}
 		}
-		System.out.println("matching criteria for all view >>>>> "
-				+ mapViewNameMatchingCriteria.toString());
 
 		return mapViewNameMatchingCriteria;
 
 	}
-	// working here
+	
 	
 	@Transactional
 	public Map<String, List<String>> getCloumnNameListForAllViewsWithDuplicateRecord() {
@@ -123,8 +121,6 @@ public class DuplicateRecordServiceImpl implements AclService {
 				mapViewNameColumnList.put(viewName, columnNameList);
 			}
 		}
-		System.out.println("cloumn name list for all view >>>>> "
-				+ mapViewNameColumnList.toString());
 
 		return mapViewNameColumnList;
 
@@ -136,8 +132,6 @@ public class DuplicateRecordServiceImpl implements AclService {
 		String query = "SELECT DISTINCT(view_name) "
 				+ "FROM core.\"duplicate_matching_criteria_definition\"";
 		viewNameStringtList = databaseServiceImpl.executeSelectQuery(query);
-		System.out.println("Distinct viewName list >>>>> "
-				+ viewNameStringtList.toString());
 		return viewNameStringtList;
 	}
 	
@@ -158,8 +152,6 @@ public class DuplicateRecordServiceImpl implements AclService {
 				+"' "
 				+" ORDER BY a.attnum";
 		columnNameList = databaseServiceImpl.executeSelectQuery(query);
-		System.out.println("columnNameList list >>>>> "
-				+ columnNameList.toString());
 		return columnNameList;
 	}
 
@@ -188,8 +180,11 @@ public class DuplicateRecordServiceImpl implements AclService {
 		findBy.put("status", true);
 		DuplicateMatchingCriteriaDefinition duplicateMatchingCriteriaDefinition = databaseRepositoryImpl
 				.findByKeys(findBy, DuplicateMatchingCriteriaDefinition.class);
-		System.out.println("in duplicateMatchingCriteriaService  >>>>>  "
-				+duplicateMatchingCriteriaDefinition.getMatchingKeys());
+		//added to resolve null pointer exception
+		if(duplicateMatchingCriteriaDefinition == null){
+			duplicateMatchingCriteriaDefinition = new DuplicateMatchingCriteriaDefinition();
+		}
+		
 		return duplicateMatchingCriteriaDefinition;
 	}
 
@@ -221,7 +216,6 @@ public class DuplicateRecordServiceImpl implements AclService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Updated in db??? >>>>> " + saveStatus);
 		//fetch matching criteria from db and set to static map
 		setMapViewNameColumnNameList(viewName);
 		
@@ -235,7 +229,6 @@ public class DuplicateRecordServiceImpl implements AclService {
 	@Transactional
 	public void saveDuplicateMatchCriteriaForView(String viewName,
 			List<String> criteriaList) {
-		System.out.println("criteriaList >>>>> " + criteriaList.toString());
 
 		DuplicateMatchingCriteriaDefinition duplicateMatchingCriteriaDefinition = new DuplicateMatchingCriteriaDefinition();
 		duplicateMatchingCriteriaDefinition.setViewName(viewName);
@@ -250,7 +243,6 @@ public class DuplicateRecordServiceImpl implements AclService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("saved in db??? >>>>> " + saveStatus);
 	}
 
 	public String getQueryForDuplicateRecord(String viewName,
@@ -263,7 +255,6 @@ public class DuplicateRecordServiceImpl implements AclService {
 				selectString += " , ";
 			}
 		}
-		System.out.println("selectString >>>>> " + selectString);
 
 		String groupIdString = " DENSE_RANK() OVER (ORDER BY  ";
 		for (int i = 0; i < criteriaList.size(); i++) {
@@ -273,7 +264,6 @@ public class DuplicateRecordServiceImpl implements AclService {
 			}
 		}
 		groupIdString += ") AS groupId";
-		System.out.println("groupIdString >>>>> " + groupIdString);
 
 		String joinString = "";
 		for (int i = 0; i < criteriaList.size(); i++) {
@@ -284,7 +274,6 @@ public class DuplicateRecordServiceImpl implements AclService {
 				joinString += " AND ";
 			}
 		}
-		System.out.println("joinString >>>>> " + joinString);
 
 		String query = " SELECT A.* ," + groupIdString + " FROM core.\""
 				+ viewName + "\" A " + " Join " + " (SELECT " + selectString
@@ -297,14 +286,12 @@ public class DuplicateRecordServiceImpl implements AclService {
 
 	@Transactional
 	public void getDuplicateRecord(HttpSession session, String viewName){
-		System.out.println("viewName >>>>> " + viewName);
 		List<Object[]> duplicateRecordList = null;
 
 		Map<String, List<String>> mapViewNameMatchingCriteria = getMapViewNameMatchingCriteria();
 		List<String> criteriaList = mapViewNameMatchingCriteria.get(viewName);
 
 		if (criteriaList != null) {
-			System.out.println("criteriaList >>>>> " + criteriaList.toString());
 			String query = getQueryForDuplicateRecord(viewName, criteriaList);
 			duplicateRecordList = databaseServiceImpl.executeSelectQuery(query);
 		}
@@ -313,16 +300,10 @@ public class DuplicateRecordServiceImpl implements AclService {
 	
 	@Transactional
 	public void getColumnNameList(HttpSession session, String viewName){
-		System.out.println("viewName >>>>> " + viewName);
-
 		Map<String, List<String>> mapViewNameColumnNameList = getMapViewNameColumnNameList();
 		List<String> columnNameList = mapViewNameColumnNameList.get(viewName);
 
-		if (columnNameList != null) {
-			System.out.println("columnNameList >>>>> " + columnNameList.toString());
-		}
 		session.setAttribute("columnNameList", columnNameList);
-		System.out.println(columnNameList.size());
 	}
 
 }
