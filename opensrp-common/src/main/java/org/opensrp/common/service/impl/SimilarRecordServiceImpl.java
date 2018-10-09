@@ -108,7 +108,7 @@ public class SimilarRecordServiceImpl implements DatabaseService {
 	}
 
 	@Transactional
-	public Map<String, List<String>> getCloumnNameListForAllViewsWithDuplicateRecord() {
+	public Map<String, List<String>> getCloumnNameListForAllViewsWithSimilarRecord() {
 		if (mapViewNameColumnList.size() == 0) {
 			List<String> viewNameList = getDistinctViewName();
 			for (int i = 0; i < viewNameList.size(); i++) {
@@ -160,10 +160,10 @@ public class SimilarRecordServiceImpl implements DatabaseService {
 		Map<String, Object> findBy = new HashMap<String, Object>();
 		findBy.put("viewName", viewName);
 		findBy.put("status", true);
-		SimilarityMatchingCriteriaDefinition duplicateMatchingCriteriaDefinition = databaseRepositoryImpl
+		SimilarityMatchingCriteriaDefinition similarityMatchingCriteriaDefinition = databaseRepositoryImpl
 				.findByKeys(findBy, SimilarityMatchingCriteriaDefinition.class);
-		if (duplicateMatchingCriteriaDefinition != null) {
-			String matchingKeys = duplicateMatchingCriteriaDefinition
+		if (similarityMatchingCriteriaDefinition != null) {
+			String matchingKeys = similarityMatchingCriteriaDefinition
 					.getMatchingKeys();
 			List<String> criteriaList = new ArrayList<String>(
 					Arrays.asList(matchingKeys.split(",")));
@@ -174,19 +174,19 @@ public class SimilarRecordServiceImpl implements DatabaseService {
 	}
 
 	@Transactional
-	public SimilarityMatchingCriteriaDefinition getDuplicateMatchingCriteriaDefinitionForView(
+	public SimilarityMatchingCriteriaDefinition getSimilarityMatchingCriteriaDefinitionForView(
 			String viewName) {
 		Map<String, Object> findBy = new HashMap<String, Object>();
 		findBy.put("viewName", viewName);
 		findBy.put("status", true);
-		SimilarityMatchingCriteriaDefinition duplicateMatchingCriteriaDefinition = databaseRepositoryImpl
+		SimilarityMatchingCriteriaDefinition similarityMatchingCriteriaDefinition = databaseRepositoryImpl
 				.findByKeys(findBy, SimilarityMatchingCriteriaDefinition.class);
 		// added to resolve null pointer exception
-		if (duplicateMatchingCriteriaDefinition == null) {
-			duplicateMatchingCriteriaDefinition = new SimilarityMatchingCriteriaDefinition();
+		if (similarityMatchingCriteriaDefinition == null) {
+			similarityMatchingCriteriaDefinition = new SimilarityMatchingCriteriaDefinition();
 		}
 
-		return duplicateMatchingCriteriaDefinition;
+		return similarityMatchingCriteriaDefinition;
 	}
 
 	public String trimBrackets(String inputString) {
@@ -198,16 +198,16 @@ public class SimilarRecordServiceImpl implements DatabaseService {
 	}
 
 	@Transactional
-	public void updateDuplicateMatchCriteriaForView(String id, String viewName,
+	public void updateSimilarityMatchCriteriaForView(String id, String viewName,
 			String criteriaString) {
 
-		SimilarityMatchingCriteriaDefinition duplicateMatchingCriteriaDefinition = getDuplicateMatchingCriteriaDefinitionForView(viewName);
+		SimilarityMatchingCriteriaDefinition similarityMatchingCriteriaDefinition = getSimilarityMatchingCriteriaDefinitionForView(viewName);
 
-		duplicateMatchingCriteriaDefinition.setMatchingKeys(criteriaString);
+		similarityMatchingCriteriaDefinition.setMatchingKeys(criteriaString);
 
 		long saveStatus = 0;
 		try {
-			saveStatus = save(duplicateMatchingCriteriaDefinition);
+			saveStatus = save(similarityMatchingCriteriaDefinition);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -218,25 +218,25 @@ public class SimilarRecordServiceImpl implements DatabaseService {
 	}
 
 	@Transactional
-	public void saveDuplicateMatchCriteriaForView(String viewName,
+	public void saveSimilarityMatchCriteriaForView(String viewName,
 			List<String> criteriaList) {
 
-		SimilarityMatchingCriteriaDefinition duplicateMatchingCriteriaDefinition = new SimilarityMatchingCriteriaDefinition();
-		duplicateMatchingCriteriaDefinition.setViewName(viewName);
+		SimilarityMatchingCriteriaDefinition similarityMatchingCriteriaDefinition = new SimilarityMatchingCriteriaDefinition();
+		similarityMatchingCriteriaDefinition.setViewName(viewName);
 		String stringAfterTrimBrackets = trimBrackets(criteriaList.toString());
-		duplicateMatchingCriteriaDefinition
+		similarityMatchingCriteriaDefinition
 				.setMatchingKeys(stringAfterTrimBrackets);
-		duplicateMatchingCriteriaDefinition.setStatus(true);
+		similarityMatchingCriteriaDefinition.setStatus(true);
 		long saveStatus = 0;
 		try {
-			saveStatus = save(duplicateMatchingCriteriaDefinition);
+			saveStatus = save(similarityMatchingCriteriaDefinition);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public String getQueryForDuplicateRecord(String viewName,
+	public String getQueryForSimilarRecord(String viewName,
 			List<String> criteriaList) {
 
 		String selectString = "";
@@ -284,18 +284,18 @@ public class SimilarRecordServiceImpl implements DatabaseService {
 	}
 
 	@Transactional
-	public void getDuplicateRecord(HttpSession session, String viewName) {
+	public void getSimilarRecord(HttpSession session, String viewName) {
 
-		List<Object[]> duplicateRecordList = null;
+		List<Object[]> similarRecordList = null;
 
 		Map<String, List<String>> mapViewNameMatchingCriteria = getMapViewNameMatchingCriteria();
 		List<String> criteriaList = mapViewNameMatchingCriteria.get(viewName);
 
 		if (criteriaList != null) {
-			String query = getQueryForDuplicateRecord(viewName, criteriaList);
-			duplicateRecordList = databaseServiceImpl.executeSelectQuery(query);
+			String query = getQueryForSimilarRecord(viewName, criteriaList);
+			similarRecordList = databaseServiceImpl.executeSelectQuery(query);
 		}
-		session.setAttribute("duplicateRecordList", duplicateRecordList);
+		session.setAttribute("similarRecordList", similarRecordList);
 	}
 
 	@Transactional

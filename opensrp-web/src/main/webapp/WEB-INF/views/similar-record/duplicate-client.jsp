@@ -72,9 +72,9 @@
 										<tbody>
 											<%
 												String prevGroupId = "";
-												if (session.getAttribute("duplicateRecordList") != null) {
+												if (session.getAttribute("similarRecordList") != null) {
 													List<Object> dataList = (List<Object>) session
-															.getAttribute("duplicateRecordList");
+															.getAttribute("similarRecordList");
 													Iterator dataListIterator = dataList.iterator();
 													while (dataListIterator.hasNext()) {
 														Object[] clientObject = (Object[]) dataListIterator.next();
