@@ -47,12 +47,12 @@
 				%>
 				<li class="paginate_button page-item previous"
 					id="dataTable_previous"><a data-dt-idx="0" tabindex="0"
-					class="page-link" href="?offSet=<%=0%><%=paginationLink%>">Start</a></li>
+					class="page-link" href="?offSet=<%=0%><%=paginationLink%>&lang=${locale}">Start</a></li>
 
 				<li class="paginate_button page-item previous"
 					id="dataTable_previous"><a data-dt-idx="0" tabindex="0"
 					class="page-link"
-					href="?offSet=<%=disabledLINK - 1%><%=paginationLink%>">Previous</a>
+					href="?offSet=<%=disabledLINK - 1%><%=paginationLink%>&lang=${locale}">Previous</a>
 				</li>
 				<%
 					}
@@ -65,14 +65,14 @@
 				%>
 				<li class="paginate_button page-item disabled"><a
 					data-dt-idx="1" tabindex="0" class="page-link"
-					href="${pageName.toString()}?offSet=<%=i%><%=paginationLink%>"><%=i + ""%></a></li>
+					href="${pageName.toString()}?offSet=<%=i%><%=paginationLink%>&lang=${locale}"><%=i + ""%></a></li>
 				<%
 					}
 						} else {
 				%>
 				<li class="paginate_button page-item active"><a data-dt-idx="1"
 					tabindex="0" class="page-link"
-					href="${pageName.toString()}?offSet=<%=i%><%=paginationLink%>"><%=i + ""%></a></li>
+					href="${pageName.toString()}?offSet=<%=i%><%=paginationLink%>&lang=${locale}"><%=i + ""%></a></li>
 				<%
 					}
 					}
@@ -86,11 +86,11 @@
 				%>
 				<li class="paginate_button page-item next" id="dataTable_next"><a
 					data-dt-idx="7" tabindex="0" class="page-link"
-					href="${pageName.toString()}?offSet=<%=disabledLINK + 1%><%=paginationLink%>">Next</a>
+					href="${pageName.toString()}?offSet=<%=disabledLINK + 1%><%=paginationLink%>&lang=${locale}">Next</a>
 				</li>
 				<li class="paginate_button page-item next" id="dataTable_next"><a
 					data-dt-idx="7" tabindex="0" class="page-link"
-					href="${pageName.toString()}?offSet=<%=size%><%=paginationLink%>">End</a>
+					href="${pageName.toString()}?offSet=<%=size%><%=paginationLink%>&lang=${locale}">End</a>
 				</li>
 				<%
 					}

@@ -116,7 +116,7 @@ public class PaginationUtil {
 				session.setAttribute("size", size / RESULT_SIZE);
 			}
 		}
-		System.err.println("DataSize:" + data.size());
+		
 		session.setAttribute("dataList", data);
 		
 		createPageList(session, offset);

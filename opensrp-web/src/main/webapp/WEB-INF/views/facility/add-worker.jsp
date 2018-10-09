@@ -19,7 +19,7 @@ List<FacilityWorkerType> workerTypeList= (List<FacilityWorkerType>)session.getAt
 int facilityId= (Integer)session.getAttribute("facilityId");
 String facilityName= (String)session.getAttribute("facilityName");
 Map<Integer,Integer> distinctWorkerCountMap = (Map<Integer,Integer>) session.getAttribute("distinctWorkerCountMap");
-
+String detailsUrl = "/facility/"+facilityId+"/details.html";
 String selectedPersonName = "";
 %>
 <!DOCTYPE html>
@@ -53,7 +53,7 @@ String selectedPersonName = "";
 		
 		<div class="form-group">	
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
-		<a  href="/opensrp-dashboard/facility/<%=facilityId%>/details.html"> <strong>CC Profile</strong> </a>		
+		<a  href="<c:url value="<%=detailsUrl %>"/>"> <strong>CC Profile</strong> </a>		
 		<%} %>
 		</div>
 		

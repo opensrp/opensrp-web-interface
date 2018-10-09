@@ -74,7 +74,7 @@ public class TeamMemberController {
 	                                   @RequestParam(value = "team") int teamId,
 	                                   @RequestParam(value = "locationList[]", required = false) int[] locations,
 	                                   @ModelAttribute("teamMember") @Valid TeamMember teamMember, BindingResult binding,
-	                                   ModelMap model, HttpSession session) throws Exception {
+	                                   ModelMap model, HttpSession session, Locale locale) throws Exception {
 		teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember, personId,
 		    teamId, locations);
 		
@@ -85,7 +85,7 @@ public class TeamMemberController {
 			return new ModelAndView("/team-member/add");
 		}
 		
-		return new ModelAndView("redirect:/team/teammember/list.html");
+		return new ModelAndView("redirect:/team/teammember/list.html?lang=" + locale);
 		
 	}
 	
@@ -93,6 +93,7 @@ public class TeamMemberController {
 	@RequestMapping(value = "/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editTeamMember(ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale)
 	    throws JSONException {
+		model.addAttribute("locale", locale);
 		TeamMember teamMember = teamMemberServiceImpl.findById(id, "id", TeamMember.class);
 		model.addAttribute("id", id);
 		model.addAttribute("teamMember", teamMember);
@@ -100,7 +101,7 @@ public class TeamMemberController {
 		User person = teamMember.getPerson();
 		String personName = person.getUsername() + " (" + person.getFullName() + ")";
 		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
-		model.addAttribute("locale", locale);
+		
 		return new ModelAndView("team-member/edit", "command", teamMember);
 		
 	}
@@ -112,7 +113,8 @@ public class TeamMemberController {
 	                                   @RequestParam(value = "team") int teamId,
 	                                   @RequestParam(value = "locationList[]", required = false) int[] locations,
 	                                   @ModelAttribute("teamMember") @Valid TeamMember teamMember, BindingResult binding,
-	                                   ModelMap model, HttpSession session, @PathVariable("id") int id) throws Exception {
+	                                   ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale)
+	    throws Exception {
 		teamMember.setId(id);
 		teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember, personId,
 		    teamId, locations);
@@ -124,7 +126,7 @@ public class TeamMemberController {
 			return new ModelAndView("/team-member/edit");
 		}
 		
-		return new ModelAndView("redirect:/team/teammember/list.html");
+		return new ModelAndView("redirect:/team/teammember/list.html?lang=" + locale);
 		
 	}
 }
