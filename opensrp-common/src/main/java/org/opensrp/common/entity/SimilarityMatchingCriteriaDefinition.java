@@ -1,4 +1,4 @@
-package org.opensrp.acl.entity;
+package org.opensrp.common.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Entity
 @Table(name = "duplicate_matching_criteria_definition", schema = "core")
-public class DuplicateMatchingCriteriaDefinition implements Serializable {
+public class SimilarityMatchingCriteriaDefinition implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -133,7 +133,7 @@ public class DuplicateMatchingCriteriaDefinition implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DuplicateMatchingCriteriaDefinition other = (DuplicateMatchingCriteriaDefinition) obj;
+		SimilarityMatchingCriteriaDefinition other = (SimilarityMatchingCriteriaDefinition) obj;
 
 		if (id != other.id)
 			return false;

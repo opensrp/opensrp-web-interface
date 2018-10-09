@@ -127,21 +127,6 @@ function check(){
 	$("#criteriaString").val(checkedViewNames.toString());
 }
 
-//ajax call doesn't work.
-//errro occurs : csrf null 
-function saveMatchingCriteria() {
-    $.ajax("${saveDuplicationDefinitionUrl}", {
-        type: 'POST',
-        data: {
-            viewName : "viewJsonDataConversionOfEvent",
-            matchingCriteria : checkedViewNames
-        }
-    }).done(function(data) {
-        alert("saved");
-    }).error(function() {
-        //alert('Error');
-    });
-}
 </script>
 </body>
 </html>
