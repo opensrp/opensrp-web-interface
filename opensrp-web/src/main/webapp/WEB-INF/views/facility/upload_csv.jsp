@@ -37,14 +37,14 @@
 		
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Upload Facility
+					<i class="fa fa-table"></i> <spring:message code="lbl.facilityUpload"/>
 				</div>
 				<div class="card-body">				
 					<form:form method="POST" action="${saveUrl}?${_csrf.parameterName}=${_csrf.token}" enctype="multipart/form-data">
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">File  </label>
+									<label for="exampleInputName"><spring:message code="lbl.file"/>  </label>
 									<input id="file" type="file" name="file" />										
 								</div>
 								
@@ -54,7 +54,7 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<input type="submit" value="Upload"
+									<input type="submit" value="<spring:message code="lbl.upload"/>"
 										class="btn btn-primary btn-block" />
 								</div>
 							</div>
