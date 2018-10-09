@@ -28,7 +28,7 @@
 		<div class="container-fluid">
 
 			<div class="form-group">				
-			<jsp:include page="/WEB-INF/views/client/client-link.jsp" /> 		
+			<jsp:include page="/WEB-INF/views/similar-record/similar-record-link.jsp" /> 		
 			</div>
 
 			<div class="card mb-3">
