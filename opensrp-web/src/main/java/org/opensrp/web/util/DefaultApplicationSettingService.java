@@ -69,7 +69,7 @@ public class DefaultApplicationSettingService {
 	private WeightVelocityChartServiceImpl weightVelocityChartServiceImpl;
 	
 	@Autowired
-	private SimilarRecordServiceImpl duplicateRecordServiceImpl;
+	private SimilarRecordServiceImpl similarRecordServiceImpl;
 	
 	public DefaultApplicationSettingService() {
 		
@@ -149,8 +149,8 @@ public class DefaultApplicationSettingService {
 		addMarker();
 		
 		growthValocityChart.getAllGrowthValocityChart();
-		duplicateRecordServiceImpl.getMatchingCriteriaForAllViews();
-		duplicateRecordServiceImpl.getCloumnNameListForAllViewsWithSimilarRecord();
+		similarRecordServiceImpl.getMatchingCriteriaForAllViews();
+		similarRecordServiceImpl.getCloumnNameListForAllViewsWithSimilarRecord();
 	}
 	
 	public void runScript(String aSQLScriptFilePath, ScriptRunner sr) throws FileNotFoundException, IOException,

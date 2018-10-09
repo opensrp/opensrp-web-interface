@@ -20,7 +20,7 @@
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
-<c:url var="updateDuplicateDefinitionUrl" value="/client/updateDuplicateDefinition.html" />
+<c:url var="updateSimilarityDefinitionUrl" value="/similarRecord/updateSimilarityDefinition.html" />
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
@@ -28,17 +28,15 @@
 		<div class="container-fluid">
 
 			<div class="form-group">				
-			 <jsp:include page="/WEB-INF/views/similar-record/similar-record-link.jsp" />  		
+			<jsp:include page="/WEB-INF/views/similar-record/similar-record-link.jsp" /> 		
 			</div>
 
-			
-			
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Similarity Matching Criteria of Event
+					<i class="fa fa-table"></i> Similarity Matching Criteria of Client
 				</div>
 				<div class="card-body">
-					<form:form method="POST" action="${updateDuplicateDefinitionUrl}">
+					<form:form method="POST" action="${updateSimilarityDefinitionUrl}">
 					
     				<input type="text" id= "criteriaString" name="criteriaString" value="" readonly>
     
@@ -73,7 +71,9 @@
 						<form:hidden path="viewName"/>
 						<form:hidden path="matchingKeys" id="matchingKeys"/>
 						
-						
+						<%
+									if (session.getAttribute("columnNameList") != null) {
+						%>
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
@@ -82,6 +82,7 @@
 								</div>
 							</div>
 						</div>
+						<%} %>
 					</form:form>
 					
 				</div>
@@ -129,21 +130,6 @@ function check(){
 	$("#criteriaString").val(checkedViewNames.toString());
 }
 
-//ajax call doesn't work.
-//errro occurs : csrf null 
-function saveMatchingCriteria() {
-    $.ajax("${saveDuplicationDefinitionUrl}", {
-        type: 'POST',
-        data: {
-            viewName : "viewJsonDataConversionOfEvent",
-            matchingCriteria : checkedViewNames
-        }
-    }).done(function(data) {
-        alert("saved");
-    }).error(function() {
-        //alert('Error');
-    });
-}
 </script>
 </body>
 </html>

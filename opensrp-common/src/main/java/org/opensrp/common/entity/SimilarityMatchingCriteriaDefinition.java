@@ -173,7 +173,7 @@ public class SimilarityMatchingCriteriaDefinition implements Serializable {
 
 	@Override
 	public String toString() {
-		return "DuplicateMatchingCriteriaDefinition" + " [" + "id=" + id
+		return "SimilarityMatchingCriteriaDefinition" + " [" + "id=" + id
 				+ ", viewName=" + viewName + ", matchingKeys=" + matchingKeys
 				+ ", status=" + status + ", created=" + created + ", updated="
 				+ updated + "]";
