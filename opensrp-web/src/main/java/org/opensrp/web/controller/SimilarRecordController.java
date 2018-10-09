@@ -62,7 +62,7 @@ public class SimilarRecordController {
 		SimilarityMatchingCriteriaDefinition duplicateMatchingCriteriaDefinition = duplicateRecordServiceImpl
 		        .getDuplicateMatchingCriteriaDefinitionForView("viewJsonDataConversionOfClient");
 		
-		return new ModelAndView("client/duplicate-definition-of-client", "command", duplicateMatchingCriteriaDefinition);
+		return new ModelAndView("similar-record/duplicate-definition-of-client", "command", duplicateMatchingCriteriaDefinition);
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_SIMILARITY_DEFINITION')")
@@ -74,7 +74,7 @@ public class SimilarRecordController {
 		SimilarityMatchingCriteriaDefinition duplicateMatchingCriteriaDefinition = duplicateRecordServiceImpl
 		        .getDuplicateMatchingCriteriaDefinitionForView("viewJsonDataConversionOfEvent");
 		
-		return new ModelAndView("client/duplicate-definition-of-event", "command", duplicateMatchingCriteriaDefinition);
+		return new ModelAndView("similar-record/duplicate-definition-of-event", "command", duplicateMatchingCriteriaDefinition);
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_SIMILAR_EVENT_CLIENT')")
@@ -82,7 +82,7 @@ public class SimilarRecordController {
 	public String showDuplicateEvent(HttpSession session, ModelMap model, Locale locale) throws JSONException {
 		duplicateRecordServiceImpl.getDuplicateRecord(session, "viewJsonDataConversionOfEvent");
 		model.addAttribute("locale", locale);
-		return "client/duplicate-event";
+		return "similar-record/duplicate-event";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_SIMILAR_EVENT_CLIENT')")
@@ -90,7 +90,7 @@ public class SimilarRecordController {
 	public String showDuplicateClient(HttpSession session, ModelMap model, Locale locale) throws JSONException {
 		duplicateRecordServiceImpl.getDuplicateRecord(session, "viewJsonDataConversionOfClient");
 		model.addAttribute("locale", locale);
-		return "client/duplicate-client";
+		return "similar-record/duplicate-client";
 	}
 
 	
