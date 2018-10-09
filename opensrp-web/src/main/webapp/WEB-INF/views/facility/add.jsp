@@ -113,7 +113,7 @@
 					<label for="exampleInputName"><spring:message code="lbl.division"/>  </label>
 					<select class="custom-select custom-select-lg mb-3" id="division"
 						name="division">
-						<option value="0?"><spring:message code="lbl.pleaseSelect"/></option>
+						<option value="0?"><spring:message code="lbl.selectDivision"/></option>
 						<%
 										for (Object[] objects : divisions) {
 											if (divId == ((Integer) objects[1]).intValue()) {
@@ -138,7 +138,7 @@
 					<label for="exampleInputName"><spring:message code="lbl.district"/>  </label>
 					<select class="custom-select custom-select-lg mb-3" id="district"
 						name="district">
-						<option value="0?"><spring:message code="lbl.pleaseSelect"/></option>
+						<option value="0?"><spring:message code="lbl.selectDistrict"/></option>
 						<%
 										if (districts != null) {
 											for (Object[] objects : districts) {
@@ -166,7 +166,7 @@
 					<label for="exampleInputName"><spring:message code="lbl.upazila"/>  </label>
 					<select class="custom-select custom-select-lg mb-3" id="upazila"
 						name="upazilla">
-						<option value="0?"><spring:message code="lbl.pleaseSelect"/></option>
+						<option value="0?"><spring:message code="lbl.selectUpazila"/></option>
 						<%
 										if (upazilas != null) {
 											for (Object[] objects : upazilas) {
@@ -194,7 +194,7 @@
 					<label for="exampleInputName"><spring:message code="lbl.union"/>  </label>
 					<select class="custom-select custom-select-lg mb-3" id="union"
 						name="union">
-						<option value="0?"><spring:message code="lbl.pleaseSelect"/></option>
+						<option value="0?"><spring:message code="lbl.selectUnion"/></option>
 						<%
 										if (unions != null) {
 											for (Object[] objects : unions) {
@@ -222,7 +222,7 @@
 					<label for="exampleInputName"><spring:message code="lbl.ward"/>  </label>
 					<select class="custom-select custom-select-lg mb-3" id="ward"
 						name="ward">
-						<option value="0?"><spring:message code="lbl.pleaseSelect"/></option>
+						<option value="0?"><spring:message code="lbl.selectWard"/></option>
 						<%
 										if (wards != null) {
 											for (Object[] objects : wards) {
