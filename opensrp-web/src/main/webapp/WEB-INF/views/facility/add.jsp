@@ -31,7 +31,7 @@
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		
-			<jsp:include page="/WEB-INF/views/facility-url.jsp" />
+			<jsp:include page="/WEB-INF/views/facility/facility-url.jsp" />
 			
 			<div class="card mb-3">
 				<div class="card-header">
