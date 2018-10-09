@@ -18,9 +18,7 @@ import org.opensrp.acl.entity.Location;
 import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.entity.Team;
 import org.opensrp.acl.entity.User;
-import org.opensrp.acl.openmrs.service.OpenMRSConnector;
 import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
-import org.opensrp.acl.openmrs.service.impl.OpenMRSTeamAPIService;
 import org.opensrp.acl.service.AclService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +69,7 @@ public class TeamServiceImpl implements AclService {
 	public <T> int update(T t) throws JSONException {
 		Team team = (Team) t;
 		int updatedTag = 0;
-		String uuid = openMRSServiceFactory.getOpenMRSConnector("team").update(team, team.getUuid());
+		String uuid = openMRSServiceFactory.getOpenMRSConnector("team").update(team, team.getUuid(), null);
 		if (!uuid.isEmpty()) {
 			updatedTag = databaseRepositoryImpl.update(team);
 		} else {

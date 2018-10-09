@@ -108,20 +108,22 @@ public class DefaultApplicationSettingService {
 			logger.error("error saving roles:" + e.getMessage());
 		}
 		
-		/** create provider role */
-		String providerRoleNmme = DefaultRole.Provider.name();
-		Role providerRole = new Role();
-		providerRole.setName(providerRoleNmme);
-		Role findProviderRole = roleServiceImpl.findByKey(providerRole.getName(), "name", Role.class);
-		try {
-			if (findProviderRole == null) {
-				roleServiceImpl.save(providerRole);
-			} else {
-				logger.info("Role Provider exists");
+		/** create OpenMRS Role role */
+		for (DefaultRole defaultRole : DefaultRole.values()) {
+			
+			Role openmrsRole = new Role();
+			openmrsRole.setName(defaultRole.name());
+			Role findProviderRole = roleServiceImpl.findByKey(openmrsRole.getName(), "name", Role.class);
+			try {
+				if (findProviderRole == null) {
+					roleServiceImpl.save(openmrsRole);
+				} else {
+					logger.info("Role Provider exists");
+				}
 			}
-		}
-		catch (Exception e1) {
-			logger.error("problem occured of saving role provder cause:" + e1.getMessage());
+			catch (Exception e1) {
+				logger.error("problem occured of saving role provder cause:" + e1.getMessage());
+			}
 		}
 		
 		User account = userServiceImpl.findByKey(userName, "username", User.class);

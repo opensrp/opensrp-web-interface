@@ -11,14 +11,16 @@ boolean PERM_WRITE_FACILITY = AuthenticationManagerUtil.isPermitted("PERM_WRITE_
 boolean PERM_UPLOAD_FACILITY_CSV = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV");
 
 boolean PERM_READ_FACILITY = AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY");
-boolean PERM_READ_HOUSEHOLD_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_HOUSEHOLD_LIST");
-boolean PERM_READ_MOTHER_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_MOTHER_LIST");
-boolean PERM_READ_CHILD_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_CHILD_LIST");
-boolean PERM_READ_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_MEMBER_LIST");
-boolean PERM_SIMILAR_CLIENT_LIST = AuthenticationManagerUtil.isPermitted("PERM_SIMILAR_CLIENT_LIST");
-boolean PERM_SIMILER_EVENT_LIST = AuthenticationManagerUtil.isPermitted("PERM_SIMILER_EVENT_LIST");
+
+boolean PERM_READ_HOUSEHOLD_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_HOUSEHOLD");
+boolean PERM_READ_MOTHER_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_MOTHER");
+boolean PERM_READ_CHILD_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_CHILD");
+boolean PERM_READ_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_MEMBER");
+boolean PERM_SIMILAR_CLIENT_LIST = AuthenticationManagerUtil.isPermitted("PERM_SIMILAR_CLIENT");
+boolean PERM_SIMILER_EVENT_LIST = AuthenticationManagerUtil.isPermitted("PERM_SIMILER_EVENT");
 boolean PERM_SIMILER_CLIENT_RULE_DEFINATION = AuthenticationManagerUtil.isPermitted("PERM_SIMILER_CLIENT_RULE_DEFINATION");
 boolean PERM_SIMILER_EVENT_RULE_DEFINATION = AuthenticationManagerUtil.isPermitted("PERM_SIMILER_EVENT_RULE_DEFINATION");
+
 boolean CHILD_GROWTH_REPORT = AuthenticationManagerUtil.isPermitted("CHILD_GROWTH_REPORT");
 boolean CHILD_GROWTH_SUMMARY_REPORT = AuthenticationManagerUtil.isPermitted("CHILD_GROWTH_SUMMARY_REPORT");
 boolean ANALYTICS = AuthenticationManagerUtil.isPermitted("ANALYTICS");

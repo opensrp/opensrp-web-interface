@@ -14,7 +14,7 @@ import org.opensrp.acl.entity.Permission;
 import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.service.AclService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
-import org.opensrp.common.util.DefaultRole;
+import org.opensrp.common.util.RoleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,13 +76,14 @@ public class RoleServiceImpl implements AclService {
 		return permissions;
 	}
 	
-	public boolean isProvider(Set<Role> roles) {
-		boolean isProvider = true;
+	public boolean isOpenMRSRole(Set<Role> roles) {
+		boolean isProvider = false;
 		for (Role role : roles) {
-			if (role.getName().equalsIgnoreCase(DefaultRole.Provider.name())) {
+			isProvider = RoleUtil.containsRole(role.getName());
+			if (isProvider) {
 				return isProvider;
 			}
 		}
-		return !isProvider;
+		return isProvider;
 	}
 }

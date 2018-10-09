@@ -73,7 +73,6 @@ public class TeamController {
 	                             HttpSession session, Locale locale) throws Exception {
 		
 		if (!teamServiceImpl.isTeamNameAndIdentifierExists(model, team)) {
-			//team.setName(team.getName().trim());
 			team = teamServiceImpl.setCreatorLocationAndSupervisorAttributeInLocation(team, locationId, supervisorId);
 			if (teamServiceImpl.chckeUuid(team, model)) {
 				teamServiceImpl.save(team);
@@ -82,7 +81,6 @@ public class TeamController {
 				return new ModelAndView("/team/add");
 			}
 		} else {
-			//team.setName(team.getName().trim());
 			team = teamServiceImpl.setCreatorLocationAndSupervisorAttributeInLocation(team, locationId, supervisorId);
 			teamServiceImpl.chckeUuid(team, model);
 			teamServiceImpl.setSessionAttribute(session, team, locationName);
