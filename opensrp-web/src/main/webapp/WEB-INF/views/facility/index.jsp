@@ -31,7 +31,7 @@
 		
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Community Clinic List
+					<i class="fa fa-table"></i> <spring:message code="lbl.communityClinicList"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -44,21 +44,21 @@
 										<thead>
 											<tr>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">HRM ID</th>
+													style="width: 140px;"><spring:message code="lbl.hrmId"/></th>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">CC Name</th>
+													style="width: 140px;"><spring:message code="lbl.communityClinicName"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Division</th>
+													style="width: 106px;"><spring:message code="lbl.division"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">District</th>
+													style="width: 140px;"><spring:message code="lbl.district"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Upazilla</th>
+													style="width: 79px;"><spring:message code="lbl.upazila"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Union</th>
+													style="width: 79px;"><spring:message code="lbl.union"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Ward</th>
+													style="width: 79px;"><spring:message code="lbl.ward"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Action</th>
+													style="width: 140px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</thead>
 									
@@ -96,11 +96,11 @@
 												<td><%=ward%></td>
 												<td>
 												<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
-												<a href="<c:url value="<%= detailsURL%>" />">CC Profile</a>
+												<a href="<c:url value="<%= detailsURL%>" />"><spring:message code="lbl.ccProfile"/></a>
 												| 	
 												<%} %>
 												<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
-												<a href="<c:url value="<%= addWorkerURL%>" />">Add Worker/Training</a>	
+												<a href="<c:url value="<%= addWorkerURL%>" />"><spring:message code="lbl.addWorkerOrTraining"/></a>	
 												<%} %>
 												</td> 
 											</tr>
