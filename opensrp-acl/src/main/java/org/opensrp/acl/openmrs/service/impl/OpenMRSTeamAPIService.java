@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import org.opensrp.acl.entity.Team;
 import org.opensrp.acl.openmrs.service.OpenMRSConnector;
 import org.opensrp.connector.openmrs.service.APIServiceFactory;
-import org.opensrp.connector.openmrs.service.impl.OpenMRSAPIServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +46,7 @@ public class OpenMRSTeamAPIService implements OpenMRSConnector<Object> {
 	}
 	
 	@Override
-	public String update(Object teamOb, String uuid) throws JSONException {
+	public String update(Object teamOb, String uuid, JSONObject jsonObject) throws JSONException {
 		Team team = (Team) teamOb;
 		String teamUuid = "";
 		JSONObject updatedTeam = apiServiceFactory.getApiService("openmrs").update(PAYLOAD, makeTeamObject(team), uuid,
