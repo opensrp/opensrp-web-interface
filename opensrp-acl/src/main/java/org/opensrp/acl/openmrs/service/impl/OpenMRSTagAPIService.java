@@ -10,7 +10,6 @@ import org.json.JSONObject;
 import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.openmrs.service.OpenMRSConnector;
 import org.opensrp.connector.openmrs.service.APIServiceFactory;
-import org.opensrp.connector.openmrs.service.impl.OpenMRSAPIServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +43,7 @@ public class OpenMRSTagAPIService implements OpenMRSConnector<Object> {
 	}
 	
 	@Override
-	public String update(Object tagOb, String uuid) throws JSONException {
+	public String update(Object tagOb, String uuid, JSONObject jsonObject) throws JSONException {
 		LocationTag tag = (LocationTag) tagOb;
 		String tagUuid = "";
 		JSONObject updatedTag = apiServiceFactory.getApiService("openmrs").update(PAYLOAD, makeTagObject(tag.getName()),

@@ -94,6 +94,7 @@ public class LocationController {
 	                                 @ModelAttribute("location") @Valid Location location, BindingResult binding,
 	                                 ModelMap model, HttpSession session, Locale locale) throws Exception {
 		location.setName(location.getName().trim());
+		
 		boolean chceckInOpenmrs = false;
 		if (!locationServiceImpl.locationExistsForUpdate(location, chceckInOpenmrs)) {
 			locationServiceImpl.save(locationServiceImpl.setCreatorParentLocationTagAttributeInLocation(location,

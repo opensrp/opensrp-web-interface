@@ -84,30 +84,8 @@ JSONArray locatationTreeData = (JSONArray)session.getAttribute("locatationTreeDa
 							</div>
 						</div>
 						<form:hidden path="parentLocation" id="parentLocation" value="<%=selectedParentLocation %>" />
-						<%-- <div class="form-group">							
-								<div class="row">									
-									<div class="col-5">
-									<label for="exampleInputName">Parent Location </label>
-										<select class="custom-select custom-select-lg mb-3" id="parentLocation" name="parentLocation">
-										 	<option value="0" selected>Please Select</option>
-											<%
-											for (Map.Entry<Integer, String> entry : parentLocations.entrySet())
-											{
-												if(selectedParentLocation==entry.getKey()){ %>
-													<option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
-												<% }else{
-													%>
-														<option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
-													<%
-												}
-												
-											}
-											%>
-										</select>
-									</div>									
-								</div>
-							</div> --%>
-								<div class="form-group">							
+						
+						<div class="form-group">							
 								<div class="row">									
 									<div class="col-5">
 										<div id="cm" class="ui-widget">
@@ -118,22 +96,7 @@ JSONArray locatationTreeData = (JSONArray)session.getAttribute("locatationTreeDa
 											</div>
 									</div>									
 								</div>
-							</div>	
-									
-							
-						
-						
-						<!-- <div class="form-group">							
-								<div class="row">									
-									<div class="col-5">
-										 <div class="custom-select custom-select-lg mb-3" id="dropDownButton">
-								            <div  id='jqxTree' style="border: none;">
-								            </div>
-								         </div>
-									</div>									
-								</div>
-							
-						</div> -->
+						</div>
 						
 						<div class="form-group">							
 								<div class="row">									
@@ -159,6 +122,20 @@ JSONArray locatationTreeData = (JSONArray)session.getAttribute("locatationTreeDa
 								</div>
 							
 						</div>
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-5">
+									<label for="exampleInputName"><spring:message code="lbl.loginLocation"/>  </label> 
+									<form:checkbox path="loginLocation" class="chk" />
+									
+									<label for="exampleInputName"><spring:message code="lbl.visitLocation"/>  </label> 
+									<form:checkbox path="visitLocation" class="chk" />
+										
+								</div>
+							</div>
+						</div>
+						
 							
 						
 						<div class="form-group">

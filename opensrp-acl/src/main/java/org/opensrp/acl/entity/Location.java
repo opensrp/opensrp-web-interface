@@ -71,6 +71,12 @@ public class Location implements Serializable {
 	@JoinColumn(name = "location_tag_id", referencedColumnName = "id")
 	private LocationTag locationTag;
 	
+	@Column(name = "is_login_location", columnDefinition = "boolean default false", nullable = false)
+	private boolean loginLocation;
+	
+	@Column(name = "is_visit_location", columnDefinition = "boolean default false", nullable = false)
+	private boolean visitLocation;
+	
 	public int getId() {
 		return id;
 		
@@ -150,6 +156,29 @@ public class Location implements Serializable {
 	
 	public void setCode(String code) {
 		this.code = code;
+	}
+	
+	public boolean isLoginLocation() {
+		return loginLocation;
+	}
+	
+	public void setLoginLocation(boolean loginLocation) {
+		this.loginLocation = loginLocation;
+	}
+	
+	public boolean isVisitLocation() {
+		return visitLocation;
+	}
+	
+	public void setVisitLocation(boolean visitLocation) {
+		this.visitLocation = visitLocation;
+	}
+	
+	@Override
+	public String toString() {
+		return "Location [id=" + id + ", name=" + name + ", description=" + description + ", uuid=" + uuid + ", code="
+		        + code + ", created=" + created + ", updated=" + updated + ", creator=" + creator + ", parentLocation="
+		        + parentLocation + ", locationTag=" + locationTag + ", loginLocation=" + loginLocation + "]";
 	}
 	
 }

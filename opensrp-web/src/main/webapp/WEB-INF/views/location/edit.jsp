@@ -110,6 +110,19 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 								</div>
 							
 						</div>
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-5">
+									<label for="exampleInputName"><spring:message code="lbl.loginLocation"/>  </label> 
+									<form:checkbox path="loginLocation" class="chk" />
+									
+									<label for="exampleInputName"><spring:message code="lbl.visitLocation"/>  </label> 
+									<form:checkbox path="visitLocation" class="chk" />
+										
+								</div>
+							</div>
+						</div>
 						<form:hidden path="id" />
 						<form:hidden path="uuid" />
 						<form:label path="uuid"> uuid:${location.getUuid()}</form:label>
