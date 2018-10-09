@@ -9,13 +9,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.acl.entity.Location;
 import org.opensrp.acl.openmrs.service.OpenMRSConnector;
+import org.opensrp.common.util.OpensrpProperties;
 import org.opensrp.connector.openmrs.service.APIServiceFactory;
-import org.opensrp.connector.openmrs.service.impl.OpenMRSAPIServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OpenMRSLocationAPIService implements OpenMRSConnector<Object> {
+public class OpenMRSLocationAPIService extends OpensrpProperties implements OpenMRSConnector<Object> {
 	
 	final String LOCATION_URL = "ws/rest/v1/location";
 	
@@ -51,14 +51,14 @@ public class OpenMRSLocationAPIService implements OpenMRSConnector<Object> {
 			JSONObject locationObject = new JSONObject();
 			locationObject = (JSONObject) existinglocation.get(0);
 			locationUuid = (String) locationObject.get("uuid");
-			update(location, locationUuid);
+			update(location, locationUuid, null);
 			location.setUuid(locationUuid);
 		}
 		return location;
 	}
 	
 	@Override
-	public String update(Object locationOb, String uuid) throws JSONException {
+	public String update(Object locationOb, String uuid, JSONObject jsonObject) throws JSONException {
 		Location location = (Location) locationOb;
 		String locationUuid = "";
 		JSONObject updatedLocation = apiServiceFactory.getApiService("openmrs").update(PAYLOAD,
@@ -83,6 +83,9 @@ public class OpenMRSLocationAPIService implements OpenMRSConnector<Object> {
 		return null;
 	}
 	
+	/**
+	 * loginLocationId and visitLocationId gets from opensrp.properties file
+	 **/
 	public JSONObject makeLocationObject(Location location) throws JSONException {
 		JSONObject locationObject = new JSONObject();
 		JSONArray tagsArray = new JSONArray();
@@ -96,9 +99,17 @@ public class OpenMRSLocationAPIService implements OpenMRSConnector<Object> {
 		
 		if (location.getLocationTag() != null) {
 			tagsArray.put(location.getLocationTag().getUuid());
+		}
+		if (location.isLoginLocation()) {
+			tagsArray.put(loginLocationId);
+		}
+		if (location.isVisitLocation()) {
+			
+			tagsArray.put(visitLocationId);
+		}
+		if (tagsArray.length() != 0) {
 			locationObject.put(tagsKey, tagsArray);
 		}
-		
 		locationObject.put(nameKey, location.getName());
 		locationObject.put(parentLocationKey, parentLocationUuid);
 		

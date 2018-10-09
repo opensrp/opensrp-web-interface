@@ -50,7 +50,7 @@ public class UserServiceImpl implements AclService {
 		User user = (User) t;
 		long createdUser = 0;
 		Set<Role> roles = user.getRoles();
-		boolean isProvider = roleServiceImpl.isProvider(roles);
+		boolean isProvider = roleServiceImpl.isOpenMRSRole(roles);
 		JSONArray existingOpenMRSUser = new JSONArray();
 		String query = "";
 		String existingUserUUid = "";
@@ -77,7 +77,7 @@ public class UserServiceImpl implements AclService {
 				user.setProvider(true);
 				user.setUuid(existingUserUUid);
 				user.setPersonUUid(existingUserPersonUUid);
-				openMRSServiceFactory.getOpenMRSConnector("user").update(user, existingUserUUid);
+				openMRSServiceFactory.getOpenMRSConnector("user").update(user, existingUserUUid, userOb);
 				user.setPassword(passwordEncoder.encode(user.getPassword()));
 				createdUser = repository.save(user);
 			}
@@ -95,9 +95,10 @@ public class UserServiceImpl implements AclService {
 	@Override
 	public <T> int update(T t) throws Exception {
 		User user = (User) t;
-		boolean isProvider = roleServiceImpl.isProvider(user.getRoles());
+		boolean isProvider = roleServiceImpl.isOpenMRSRole(user.getRoles());
 		if (isProvider) {
 			user.setProvider(true);
+			save(user);
 		} else {
 			user.setProvider(false);
 		}
@@ -186,9 +187,9 @@ public class UserServiceImpl implements AclService {
 		User user = (User) t;
 		Set<Role> roles = user.getRoles();
 		
-		boolean isProvider = roleServiceImpl.isProvider(roles);
+		boolean isProvider = roleServiceImpl.isOpenMRSRole(roles);
 		if (isProvider) {
-			String uuid = openMRSServiceFactory.getOpenMRSConnector("user").update(user, user.getUuid());
+			String uuid = openMRSServiceFactory.getOpenMRSConnector("user").update(user, user.getUuid(), null);
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setProvider(true);
 			updatedUser = repository.update(user);

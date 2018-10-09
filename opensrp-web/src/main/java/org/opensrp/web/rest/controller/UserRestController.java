@@ -21,17 +21,22 @@ public class UserRestController {
 	@Autowired
 	private UserServiceImpl userServiceImpl;
 	
-	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO) throws Exception {
-		boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());
 		String userNameUniqueError = "";
-		User user = new User();		
-		if (!isExists) {
-			user = userServiceImpl.convert(userDTO);
-			userServiceImpl.save(user);
-		} else {
-			userNameUniqueError = "User name alreday taken.";
+		try {
+			boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());
+			
+			User user = new User();
+			if (!isExists) {
+				user = userServiceImpl.convert(userDTO);
+				userServiceImpl.save(user);
+			} else {
+				userNameUniqueError = "User name alreday taken.";
+			}
+		}
+		catch (Exception e) {
+			userNameUniqueError = "some Problem ocuured please contact with Admin";
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}

@@ -15,9 +15,7 @@ import org.hibernate.SessionFactory;
 import org.json.JSONException;
 import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.entity.User;
-import org.opensrp.acl.openmrs.service.OpenMRSConnector;
 import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
-import org.opensrp.acl.openmrs.service.impl.OpenMRSTagAPIService;
 import org.opensrp.acl.service.AclService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +66,7 @@ public class LocationTagServiceImpl implements AclService {
 	public <T> int update(T t) throws JSONException {
 		LocationTag locationTag = (LocationTag) t;
 		int updatedTag = 0;
-		String uuid = openMRSServiceFactory.getOpenMRSConnector("tag").update(locationTag, locationTag.getUuid());
+		String uuid = openMRSServiceFactory.getOpenMRSConnector("tag").update(locationTag, locationTag.getUuid(), null);
 		if (!uuid.isEmpty()) {
 			updatedTag = databaseRepositoryImpl.update(locationTag);
 		} else {

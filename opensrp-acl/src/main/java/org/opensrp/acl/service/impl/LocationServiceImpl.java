@@ -7,7 +7,6 @@ package org.opensrp.acl.service.impl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,9 +22,7 @@ import org.json.JSONObject;
 import org.opensrp.acl.entity.Location;
 import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.entity.User;
-import org.opensrp.acl.openmrs.service.OpenMRSConnector;
 import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
-import org.opensrp.acl.openmrs.service.impl.OpenMRSLocationAPIService;
 import org.opensrp.acl.service.AclService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.opensrp.common.util.TreeNode;
@@ -88,7 +85,7 @@ public class LocationServiceImpl implements AclService {
 	public <T> int update(T t) throws JSONException {
 		Location location = (Location) t;
 		int updatedLocation = 0;
-		String uuid = openMRSServiceFactory.getOpenMRSConnector("location").update(location, location.getUuid());
+		String uuid = openMRSServiceFactory.getOpenMRSConnector("location").update(location, location.getUuid(), null);
 		if (!uuid.isEmpty()) {
 			location.setUuid(uuid);
 			updatedLocation = databaseRepositoryImpl.update(location);
@@ -139,9 +136,11 @@ public class LocationServiceImpl implements AclService {
 	public Map<Integer, String> getLocationTreeAsMap() {
 		List<Location> locations = findAll("Location");
 		Map<Integer, String> locationTreeAsMap = new HashMap<Integer, String>();
-		for (Location location : locations) {
-			locationTreeAsMap.put(location.getId(), location.getName());
-			
+		if (locations != null) {
+			for (Location location : locations) {
+				locationTreeAsMap.put(location.getId(), location.getName());
+				
+			}
 		}
 		return locationTreeAsMap;
 	}
