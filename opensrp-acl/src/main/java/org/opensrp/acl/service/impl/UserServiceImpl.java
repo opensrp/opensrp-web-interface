@@ -233,6 +233,11 @@ public class UserServiceImpl implements AclService {
 		return usersMap;
 	}
 	
+	/**
+	 * <p>This method set roles attribute to session, all roles and selected roles.</p>
+	 * @param roles list of selected roles.
+	 * @param session is an argument to the HttpSession's session .
+	 * */
 	@Transactional
 	public void setRolesAttributes(int[] roles, HttpSession session) {
 		session.setAttribute("roles", repository.findAll("Role"));

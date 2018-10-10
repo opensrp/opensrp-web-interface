@@ -411,12 +411,18 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 	
 	/**
-	 * maxRange -1 means setMaxResults does not consider. offsetreal -1 means setFirstResult does
-	 * not consider.
-	 * 
-	 * @param searchBuilder fdff maxRange -1 means setMaxResults does not consider. offsetreal -1
-	 *            means setFirstResult does not consider.
-	 */
+	 * <p>Query to a view and  returns data list.<p>
+	 * <p> maxRange -1 means setMaxResults does not consider. offsetreal -1 means setFirstResult does
+	 * not consider.</p>
+	 * @param searchBuilder is search option list.
+	 * @param offset is number of offset.
+	 * @param maxResults is returned maximum number of data.
+	 * @param viewName is name of target view.
+	 * @param entityType  is name of entity type.
+	 * @param orderingBy is the order by condition of sql query.
+	 * @return List<T>.
+	 * */
+	
 	
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, int maxRange, int offsetreal, String viewName,
@@ -450,6 +456,14 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return viewData;
 	}
+	
+	/**
+	 * <p>get data count with or without search parameter's.</p>
+	 * @param searchBuilder is search option list.
+	 * @param viewName is name of target view.
+	 * @param entityType  is name of entity type.	
+	 * @return dataCount.
+	 * */
 	
 	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType) {
 		Session session = sessionFactory.openSession();
