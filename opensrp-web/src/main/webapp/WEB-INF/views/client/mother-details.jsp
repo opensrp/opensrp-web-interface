@@ -45,9 +45,9 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">         
-		 <a  href="<c:url value="/client/mother.html?lang=${locale}"/>">Mother</a>
+		 <a  href="<c:url value="/client/mother.html?lang=${locale}"/>"><spring:message code="lbl.mother"/></a>
         </li>
-        <li class="breadcrumb-item">Mother Details</li>
+        <li class="breadcrumb-item"><spring:message code="lbl.motherDetails"/></li>
       </ol>
       <!-- Child Register-->
       <div class= "row">
@@ -55,7 +55,7 @@
       
       <div class="card mb-3">
             <div class="card-header">
-               Mother Details</div>
+               <spring:message code="lbl.motherDetails"/></div>
             <div class="list-group list-group-flush small">
               <a class="list-group-item list-group-item-action" href="#">
                 <div class="media">
@@ -92,21 +92,21 @@ String motherId = null;
 %>
            
                   <div class="media-body">
-                    <strong>Name: </strong><%=firstName%><br>
-                    <strong>Birthdate: </strong><%=birthDate%><br>
-                    <strong>Age: </strong><br>
-                    <strong>Marital Status: </strong>Married<br>
-                    <strong>Husband's Name: </strong><%=spouseName%><br>
-                    <strong>Contact Number: </strong><%=phoneNumber%><br>
+                    <strong><spring:message code="lbl.name"/>: </strong><%=firstName%><br>
+                    <strong><spring:message code="lbl.birthDate"/>: </strong><%=birthDate%><br>
+                    <strong><spring:message code="lbl.age"/>: </strong><br>
+                    <strong><spring:message code="lbl.maritalStatus"/>: </strong>Married<br>
+                    <strong><spring:message code="lbl.husbandName"/>: </strong><%=spouseName%><br>
+                    <strong><spring:message code="lbl.phoneNumber"/>: </strong><%=phoneNumber%><br>
                     
                   </div>
                   <div class="media-body">
-                    <strong>Division: </strong><%=division%><br>
-                    <strong>District: </strong><%=district%><br>
-                    <strong>Upazilla: </strong><%=upazilla%><br>
-                    <strong>Union: </strong><%=union%><br>
-                    <strong>Ward: </strong><%=ward%><br>
-                    <strong>Household: </strong><%=householdId%><br>
+                    <strong><spring:message code="lbl.division"/>: </strong><%=division%><br>
+                    <strong><spring:message code="lbl.district"/>: </strong><%=district%><br>
+                    <strong><spring:message code="lbl.upazila"/>: </strong><%=upazilla%><br>
+                    <strong><spring:message code="lbl.union"/>: </strong><%=union%><br>
+                    <strong><spring:message code="lbl.ward"/>: </strong><%=ward%><br>
+                    <strong><spring:message code="lbl.household"/>: </strong><%=householdId%><br>
                     
                   </div>
 <%
@@ -130,7 +130,7 @@ String motherId = null;
           <div class="col-lg-6">
           <div class="card mb-3">
             <div class="card-header">
-               Pregnancy Details</div>
+               <spring:message code="lbl.pregnancyDetails"/></div>
 <%
 
 if (session.getAttribute("NWMRList") != null) {
@@ -148,15 +148,15 @@ while (dataListIterator.hasNext()) {
             <div class="card-body">
              
               <p class="card-text small">
-              <b>Pregnant : <%=isPregnant%></b>
+              <b><spring:message code="lbl.pregnant"/> : <%=isPregnant%></b>
               </p>
               
               <p class="card-text small">
-              <b>EDD : <%=edd%></b>
+              <b><spring:message code="lbl.edd"/> : <%=edd%></b>
               </p>
               
               <p class="card-text small">
-              <b>LMP : <%=lmp%></b>
+              <b><spring:message code="lbl.lmp"/> : <%=lmp%></b>
               </p>
               
             </div>
@@ -180,7 +180,7 @@ while (dataListIterator.hasNext()) {
           <!-- Example Pie Chart Card-->
           <div class="card mb-3">
             <div class="card-header">
-              Counselling</div>
+              <spring:message code="lbl.counselling"/></div>
          
               
                <div class="card-body">
@@ -191,16 +191,16 @@ while (dataListIterator.hasNext()) {
             <table class="table table-bordered" id="counsellingTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>Id No.</th>
-                  <th>Advice</th>
-                  <th>Followed Advice</th>
+                  <th><spring:message code="lbl.idNo"/></th>
+                  <th><spring:message code="lbl.advice"/></th>
+                  <th><spring:message code="lbl.followedAdvice"/></th>
                 </tr>
               </thead>
               <tfoot>
-                <tr>
-                  <th>Id No.</th>
-                  <th>Advice</th>
-                  <th>Followed Advice</th>
+                 <tr>
+                  <th><spring:message code="lbl.idNo"/></th>
+                  <th><spring:message code="lbl.advice"/></th>
+                  <th><spring:message code="lbl.followedAdvice"/></th>
                 </tr>
               </tfoot>
               <tbody> 
@@ -268,14 +268,14 @@ while (dataListIterator.hasNext()) {
             <table class="table table-bordered" id="counsellingTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>Particulars</th>
-                  <th>Value</th>
+                  <th><spring:message code="lbl.particulars"/></th>
+                  <th><spring:message code="lbl.value"/></th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
-                  <th>Particulars</th>
-                  <th>Value</th>
+                  <th><spring:message code="lbl.particulars"/></th>
+                  <th><spring:message code="lbl.value"/></th>
                 </tr>
               </tfoot>
               <tbody> 
@@ -318,27 +318,27 @@ if(obsArr!=null){
       <!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">
-           Follow-up</div>
+           <spring:message code="lbl.followUp"/></div>
         <div class="card-body">
           <div class="table-responsive">
     
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>Sl. No.</th>
-                  <th>Date</th>
-                  <th>Pregnancy Age</th>
-                  <th>Next Appointment Date</th>
-                  <th>Status</th>
+                  <th><spring:message code="lbl.slNo"/></th>
+                  <th><spring:message code="lbl.date"/></th>
+                  <th><spring:message code="lbl.pregnancyAge"/></th>
+                  <th><spring:message code="lbl.nextAppointmentDate"/></th>
+                  <th><spring:message code="lbl.status"/></th>
                 </tr>
               </thead>
               <tfoot>
-                <tr>
-                  <th>Sl. No.</th>
-                  <th>Date</th>
-                  <th>Pregnancy Age</th>
-                  <th>Next Appointment Date</th>
-                  <th>Status</th>
+               <tr>
+                  <th><spring:message code="lbl.slNo"/></th>
+                  <th><spring:message code="lbl.date"/></th>
+                  <th><spring:message code="lbl.pregnancyAge"/></th>
+                  <th><spring:message code="lbl.nextAppointmentDate"/></th>
+                  <th><spring:message code="lbl.status"/></th>
                 </tr>
               </tfoot>
               <tbody>
