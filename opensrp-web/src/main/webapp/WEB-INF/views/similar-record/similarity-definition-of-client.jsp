@@ -16,7 +16,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Similarity Definition of Event</title>
+<title>Similarity Definition of Client</title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -33,7 +33,7 @@
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Similarity Matching Criteria of Client
+					<i class="fa fa-table"></i> <spring:message code="lbl.similarclientRuleDefination"/>
 				</div>
 				<div class="card-body">
 					<form:form method="POST" action="${updateSimilarityDefinitionUrl}">
@@ -77,7 +77,7 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<input type="submit" value="Save"
+									<input type="submit" value="<spring:message code="lbl.save"/>"
 										class="btn btn-primary btn-block" />
 								</div>
 							</div>

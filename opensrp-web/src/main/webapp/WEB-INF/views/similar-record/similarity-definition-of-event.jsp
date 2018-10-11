@@ -35,7 +35,7 @@
 			
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Similarity Matching Criteria of Event
+					<i class="fa fa-table"></i> <spring:message code="lbl.similareventRuleDefination"/>
 				</div>
 				<div class="card-body">
 					<form:form method="POST" action="${updateSimilarityDefinitionUrl}">
@@ -79,7 +79,7 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<input type="submit" value="Save"
+									<input type="submit" value="<spring:message code="lbl.save"/>"
 										class="btn btn-primary btn-block" />
 								</div>
 							</div>
