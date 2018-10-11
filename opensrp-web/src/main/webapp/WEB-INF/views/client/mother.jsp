@@ -30,7 +30,7 @@
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Mother List
+					<i class="fa fa-table"></i> <spring:message code="lbl.motherList"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -43,37 +43,37 @@
 										<thead>
 											<tr>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+													style="width: 140px;"><spring:message code="lbl.firstName"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">NID</th>
+													style="width: 225px;"><spring:message code="lbl.nId"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Spouse Name</th>
+													style="width: 225px;"><spring:message code="lbl.husbandName"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">LMP Date</th>
+													style="width: 225px;"><spring:message code="lbl.lmpDate"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Phone Number</th>
+													style="width: 225px;"><spring:message code="lbl.phoneNumber"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Provider</th>
+													style="width: 140px;"><spring:message code="lbl.provider"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Action</th>
+													style="width: 225px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+													style="width: 140px;"><spring:message code="lbl.firstName"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">NID</th>
+													style="width: 225px;"><spring:message code="lbl.nId"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Spouse Name</th>
+													style="width: 225px;"><spring:message code="lbl.husbandName"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">LMP Date</th>
+													style="width: 225px;"><spring:message code="lbl.lmpDate"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Phone Number</th>
+													style="width: 225px;"><spring:message code="lbl.phoneNumber"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Provider</th>
+													style="width: 140px;"><spring:message code="lbl.provider"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Action</th>
+													style="width: 225px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</tfoot>
 										<tbody>
@@ -130,9 +130,9 @@
 												<td><%=phoneNumber%></td>
 												<td><%=provider%></td>												
 												<td>
-												<a href="<c:url value="/client/mother/${baseEntityId}/details.html?lang=${locale}"/>">Details</a>
+												<a href="<c:url value="/client/mother/${baseEntityId}/details.html?lang=${locale}"/>"><spring:message code="lbl.details"/></a>
 												<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_MOTHER")){ %>
-												| <a href="<c:url value="/client/mother/${baseEntityId}/edit.html?lang=${locale}"/>">Edit</a>
+												| <a href="<c:url value="/client/mother/${baseEntityId}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a>
 												<%} %>
 												
 												</td> 
