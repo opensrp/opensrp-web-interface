@@ -27,7 +27,7 @@
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Similar Client List
+					<i class="fa fa-table"></i> <spring:message code="lbl.similarClientList"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -40,33 +40,29 @@
 										<thead>
 											<tr>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Group Id</th>
+													style="width: 140px;"><spring:message code="lbl.groupId"/></th>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+													style="width: 140px;"><spring:message code="lbl.firstName"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Gender</th>
+													style="width: 140px;"><spring:message code="lbl.gender"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Address Type</th>
+													style="width: 43px;"><spring:message code="lbl.provider"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Provider</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Action</th>
+													style="width: 140px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Group Id</th>
-												   <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+													style="width: 140px;"><spring:message code="lbl.groupId"/></th>
+												    <th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;"><spring:message code="lbl.firstName"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Gender</th>
+													style="width: 140px;"><spring:message code="lbl.gender"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Address Type</th>
+													style="width: 43px;"><spring:message code="lbl.provider"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Provider</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Action</th>
+													style="width: 140px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</tfoot>
 										<tbody>
@@ -117,7 +113,6 @@
 												<td bgcolor=<%=bgColor%>><%=groupId%></td>
 												<td bgcolor=<%=bgColor%>><%=firstName%></td>
 												<td bgcolor=<%=bgColor%>><%=gender%></td>
-												<td bgcolor=<%=bgColor%>><%=addressType%></td>
 												<td bgcolor=<%=bgColor%>><%=provider%></td>
 												<td bgcolor=<%=bgColor%>>
 												<%-- 
