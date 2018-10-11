@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.opensrp.acl.service.impl.LocationServiceImpl;
+import org.opensrp.acl.service.LocationService;
 import org.opensrp.common.util.SearchBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public class PaginationHelperUtil {
 	private static final Logger logger = Logger.getLogger(PaginationHelperUtil.class);
 	
 	@Autowired
-	private LocationServiceImpl locationServiceImpl;
+	private LocationService locationServiceImpl;
 	
 	@Autowired
 	private SearchBuilder searchBuilder;

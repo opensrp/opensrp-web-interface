@@ -2,7 +2,7 @@
  * @author proshanto
  * */
 
-package org.opensrp.acl.service.impl;
+package org.opensrp.acl.service;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,32 +20,30 @@ import org.json.JSONObject;
 import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.entity.User;
 import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
-import org.opensrp.acl.service.AclService;
 import org.opensrp.common.dto.UserDTO;
-import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
+import org.opensrp.common.interfaces.DatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements AclService {
+public class UserService {
 	
-	private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(UserService.class);
 	
 	@Autowired
-	private DatabaseRepositoryImpl repository;
+	private DatabaseRepository repository;
 	
 	@Autowired
 	private OpenMRSServiceFactory openMRSServiceFactory;
 	
 	@Autowired
-	private RoleServiceImpl roleServiceImpl;
+	private RoleService roleServiceImpl;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	@Transactional
-	@Override
 	public <T> long save(T t) throws Exception {
 		User user = (User) t;
 		long createdUser = 0;
@@ -92,7 +90,6 @@ public class UserServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	@Override
 	public <T> int update(T t) throws Exception {
 		User user = (User) t;
 		boolean isProvider = roleServiceImpl.isOpenMRSRole(user.getRoles());
@@ -106,26 +103,22 @@ public class UserServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	@Override
 	public <T> boolean delete(T t) {
 		return repository.delete(t);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findById(int id, String fieldName, Class<?> className) {
 		return repository.findById(id, fieldName, className);
 		
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
 		return repository.findByKey(value, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> List<T> findAll(String tableClass) {
 		return repository.findAll(tableClass);
 	}
@@ -147,7 +140,7 @@ public class UserServiceImpl implements AclService {
 	}
 	
 	public boolean isUserExist(String userName) {
-		return repository.findByUserName(userName, "username", User.class);
+		return repository.isExists(userName, "username", User.class);
 	}
 	
 	public User convert(UserDTO userDTO) {
@@ -234,10 +227,13 @@ public class UserServiceImpl implements AclService {
 	}
 	
 	/**
-	 * <p>This method set roles attribute to session, all roles and selected roles.</p>
+	 * <p>
+	 * This method set roles attribute to session, all roles and selected roles.
+	 * </p>
+	 * 
 	 * @param roles list of selected roles.
 	 * @param session is an argument to the HttpSession's session .
-	 * */
+	 */
 	@Transactional
 	public void setRolesAttributes(int[] roles, HttpSession session) {
 		session.setAttribute("roles", repository.findAll("Role"));

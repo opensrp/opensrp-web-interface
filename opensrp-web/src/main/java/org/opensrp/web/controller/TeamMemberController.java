@@ -13,8 +13,8 @@ import javax.validation.Valid;
 import org.json.JSONException;
 import org.opensrp.acl.entity.TeamMember;
 import org.opensrp.acl.entity.User;
-import org.opensrp.acl.service.impl.LocationServiceImpl;
-import org.opensrp.acl.service.impl.TeamMemberServiceImpl;
+import org.opensrp.acl.service.LocationService;
+import org.opensrp.acl.service.TeamMemberService;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -34,10 +34,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class TeamMemberController {
 	
 	@Autowired
-	private LocationServiceImpl locationServiceImpl;
+	private LocationService locationServiceImpl;
 	
 	@Autowired
-	private TeamMemberServiceImpl teamMemberServiceImpl;
+	private TeamMemberService teamMemberServiceImpl;
 	
 	@Autowired
 	private TeamMember teamMember;

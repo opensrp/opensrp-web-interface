@@ -1,4 +1,4 @@
-package org.opensrp.acl.service.impl;
+package org.opensrp.acl.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,16 +13,15 @@ import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.json.JSONException;
 import org.opensrp.acl.entity.DuplicateMatchingCriteriaDefinition;
-import org.opensrp.acl.service.AclService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DuplicateRecordServiceImpl implements AclService {
+public class DuplicateRecordServiceImpl {
 	
-	private static final Logger logger = Logger.getLogger(LocationServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(LocationService.class);
 	
 	@Autowired
 	private DatabaseServiceImpl databaseServiceImpl;
@@ -42,37 +41,31 @@ public class DuplicateRecordServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	@Override
 	public <T> long save(T t) throws Exception {
 		return databaseRepositoryImpl.save(t);
 	}
 	
 	@Transactional
-	@Override
 	public <T> int update(T t) throws JSONException {
 		return 0;
 	}
 	
 	@Transactional
-	@Override
 	public <T> boolean delete(T t) {
 		return databaseRepositoryImpl.delete(t);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findById(int id, String fieldName, Class<?> className) {
 		return databaseRepositoryImpl.findById(id, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
 		return databaseRepositoryImpl.findByKey(value, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> List<T> findAll(String tableClass) {
 		return databaseRepositoryImpl.findAll(tableClass);
 	}

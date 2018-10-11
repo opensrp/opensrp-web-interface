@@ -13,8 +13,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.acl.entity.Permission;
 import org.opensrp.acl.entity.User;
-import org.opensrp.acl.service.impl.RoleServiceImpl;
-import org.opensrp.acl.service.impl.UserServiceImpl;
+import org.opensrp.acl.service.RoleService;
+import org.opensrp.acl.service.UserService;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,10 +61,10 @@ public class UserController {
 	private Permission permission;
 	
 	@Autowired
-	private UserServiceImpl userServiceImpl;
+	private UserService userServiceImpl;
 	
 	@Autowired
-	private RoleServiceImpl roleServiceImpl;
+	private RoleService roleServiceImpl;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;

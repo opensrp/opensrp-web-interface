@@ -2,25 +2,24 @@
  * @author proshanto
  * */
 
-package org.opensrp.acl.service.impl;
+package org.opensrp.acl.service;
 
 import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.opensrp.acl.service.AclService;
-import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
+import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.util.PermissionName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PermissionServiceImpl implements AclService {
+public class PermissionService {
 	
 	@Autowired
-	private DatabaseRepositoryImpl repository;
+	private DatabaseRepository repository;
 	
-	public PermissionServiceImpl() {
+	public PermissionService() {
 		
 	}
 	
@@ -35,37 +34,34 @@ public class PermissionServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	@Override
 	public <T> long save(T t) throws Exception {
 		return repository.save(t);
 	}
 	
-	@Override
+	@Transactional
 	public <T> int update(T t) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 	
-	@Override
+	@Transactional
 	public <T> boolean delete(T t) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 	
-	@Override
+	@Transactional
 	public <T> T findById(int id, String fieldName, Class<?> className) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
 		return repository.findByKey(value, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> List<T> findAll(String tableClass) {
 		// TODO Auto-generated method stub
 		return repository.findAll("Permission");

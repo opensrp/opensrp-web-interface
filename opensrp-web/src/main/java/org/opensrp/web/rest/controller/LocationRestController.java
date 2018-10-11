@@ -3,7 +3,7 @@ package org.opensrp.web.rest.controller;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
-import org.opensrp.acl.service.impl.LocationServiceImpl;
+import org.opensrp.acl.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LocationRestController {
 	
 	@Autowired
-	private LocationServiceImpl locationServiceImpl;
+	private LocationService locationServiceImpl;
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String getLocationNameAndId(Model model, HttpSession session, @RequestParam String name) throws JSONException {

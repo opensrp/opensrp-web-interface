@@ -77,7 +77,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 	
 	@Transactional
 	public List<Object[]> getQueryData(String provider, String caseId, String scheduleName, String userType, String sqlQuery) {
-		return databaseRepositoryImpl.executeSelectQuery(provider, caseId, scheduleName, userType, sqlQuery);
+		return null;
 	}
 	
 	@Transactional
@@ -144,16 +144,19 @@ public class DatabaseServiceImpl implements DatabaseService {
 	public <T> List<T> getDataFromViewByBEId(String viewName, String entityType, String baseEntityId) {
 		return databaseRepositoryImpl.getDataFromViewByBEId(viewName, entityType, baseEntityId);
 	}
-
+	
 	/**
-	 * <p>returns data list.<p>
+	 * <p>
+	 * returns data list.
+	 * <p>
+	 * 
 	 * @param searchBuilder is search option list.
 	 * @param offset is number of offset.
 	 * @param maxResults is returned maximum number of data.
 	 * @param viewName is name of target view.
-	 * @param entityType  is name of entity type.	 
+	 * @param entityType is name of entity type.
 	 * @return List<T>.
-	 * */
+	 */
 	@Transactional
 	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, Integer offset, Integer maxResults, String viewName,
 	                                   String entityType) {
@@ -162,12 +165,15 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 	
 	/**
-	 * <p>get data count with or without search parameter's.</p>
+	 * <p>
+	 * get data count with or without search parameter's.
+	 * </p>
+	 * 
 	 * @param searchBuilder is search option list.
 	 * @param viewName is name of target view.
-	 * @param entityType  is name of entity type.	
+	 * @param entityType is name of entity type.
 	 * @return dataCount.
-	 * */
+	 */
 	@Transactional
 	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType) {
 		return databaseRepositoryImpl.getViewDataSize(searchBuilder, viewName, entityType);
@@ -183,8 +189,5 @@ public class DatabaseServiceImpl implements DatabaseService {
 		String funcQuery = "SELECT * FROM core.refresh_all_materialized_views()";
 		return databaseRepositoryImpl.executeSelectQuery(funcQuery);
 	}
-
-	public List<Object> findAllTest(Class<?> className) {
-		return databaseRepositoryImpl.findAllTest(className);
-	}
+	
 }

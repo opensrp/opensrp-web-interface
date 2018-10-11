@@ -2,7 +2,7 @@
  * @author proshanto
  * */
 
-package org.opensrp.acl.service.impl;
+package org.opensrp.acl.service;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,8 +24,7 @@ import org.opensrp.acl.entity.Team;
 import org.opensrp.acl.entity.TeamMember;
 import org.opensrp.acl.entity.User;
 import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
-import org.opensrp.acl.service.AclService;
-import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
+import org.opensrp.common.interfaces.DatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,12 +32,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
 @Service
-public class TeamMemberServiceImpl implements AclService {
+public class TeamMemberService {
 	
-	private static final Logger logger = Logger.getLogger(TeamMemberServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(TeamMemberService.class);
 	
 	@Autowired
-	private DatabaseRepositoryImpl databaseRepositoryImpl;
+	private DatabaseRepository repository;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -47,26 +46,25 @@ public class TeamMemberServiceImpl implements AclService {
 	private OpenMRSServiceFactory openMRSServiceFactory;
 	
 	@Autowired
-	private UserServiceImpl userServiceImpl;
+	private UserService userServiceImpl;
 	
 	@Autowired
-	private TeamServiceImpl teamServiceImpl;
+	private TeamService teamServiceImpl;
 	
 	@Autowired
-	private LocationServiceImpl locationServiceImpl;
+	private LocationService locationServiceImpl;
 	
-	public TeamMemberServiceImpl() {
+	public TeamMemberService() {
 		
 	}
 	
 	@Transactional
-	@Override
 	public <T> long save(T t) throws Exception {
 		TeamMember teamMember = (TeamMember) t;
 		long createdTeamMember = 0;
 		teamMember = (TeamMember) openMRSServiceFactory.getOpenMRSConnector("member").add(teamMember);
 		if (!teamMember.getUuid().isEmpty()) {
-			createdTeamMember = databaseRepositoryImpl.save(teamMember);
+			createdTeamMember = repository.save(teamMember);
 		} else {
 			logger.error("No uuid found for team member:" + teamMember.getIdentifier());
 			// TODO
@@ -76,14 +74,13 @@ public class TeamMemberServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	@Override
 	public <T> int update(T t) throws JSONException {
 		TeamMember teamMember = (TeamMember) t;
 		int updatedTag = 0;
 		
 		String uuid = openMRSServiceFactory.getOpenMRSConnector("member").update(teamMember, teamMember.getUuid(), null);
 		if (!uuid.isEmpty()) {
-			updatedTag = databaseRepositoryImpl.update(teamMember);
+			updatedTag = repository.update(teamMember);
 		} else {
 			logger.error("No uuid found for team member:" + teamMember.getIdentifier());
 			// TODO
@@ -92,27 +89,23 @@ public class TeamMemberServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	@Override
 	public <T> boolean delete(T t) {
-		return databaseRepositoryImpl.delete(t);
+		return repository.delete(t);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findById(int id, String fieldName, Class<?> className) {
-		return databaseRepositoryImpl.findById(id, fieldName, className);
+		return repository.findById(id, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
-		return databaseRepositoryImpl.findByKey(value, fieldName, className);
+		return repository.findByKey(value, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> List<T> findAll(String tableClass) {
-		return databaseRepositoryImpl.findAll(tableClass);
+		return repository.findAll(tableClass);
 	}
 	
 	public Map<Integer, String> getLocationTagListAsMap() {
@@ -139,11 +132,11 @@ public class TeamMemberServiceImpl implements AclService {
 		boolean isIdentifierExists = false;
 		boolean isLocationsExists = false;
 		if (teamMember != null) {
-			isPersonExists = databaseRepositoryImpl.entityExists(teamMember.getId(), teamMember.getPerson(), "person",
+			isPersonExists = repository.entityExistsNotEualThisId(teamMember.getId(), teamMember.getPerson(), "person",
 			    TeamMember.class);
 		}
 		if (teamMember != null) {
-			isIdentifierExists = databaseRepositoryImpl.entityExists(teamMember.getId(), teamMember.getIdentifier(),
+			isIdentifierExists = repository.entityExistsNotEualThisId(teamMember.getId(), teamMember.getIdentifier(),
 			    "identifier", TeamMember.class);
 		}
 		if (isPersonExists) {
@@ -193,7 +186,7 @@ public class TeamMemberServiceImpl implements AclService {
 		if (locations != null && locations.length != 0) {
 			
 			for (int locationId : locations) {
-				Location location = (Location) databaseRepositoryImpl.findById(locationId, "id", Location.class);
+				Location location = (Location) repository.findById(locationId, "id", Location.class);
 				String locationName = locationServiceImpl.makeLocationName(location);
 				JSONObject locationJsonObject = new JSONObject();
 				locationJsonObject.put("value", locationName);
@@ -226,13 +219,13 @@ public class TeamMemberServiceImpl implements AclService {
 	public TeamMember setCreatorLocationAndPersonAndTeamAttributeInLocation(TeamMember teamMember, int personId, int teamId,
 	                                                                        int[] locations) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User creator = (User) databaseRepositoryImpl.findByKey(auth.getName(), "username", User.class);
-		User person = (User) databaseRepositoryImpl.findById(personId, "id", User.class);
-		Team team = (Team) databaseRepositoryImpl.findById(teamId, "id", Team.class);
+		User creator = (User) repository.findByKey(auth.getName(), "username", User.class);
+		User person = (User) repository.findById(personId, "id", User.class);
+		Team team = (Team) repository.findById(teamId, "id", Team.class);
 		Set<Location> locationSet = new HashSet<Location>();
 		if (locations != null && locations.length != 0) {
 			for (int locationId : locations) {
-				Location location = (Location) databaseRepositoryImpl.findById(locationId, "id", Location.class);
+				Location location = (Location) repository.findById(locationId, "id", Location.class);
 				if (location != null) {
 					locationSet.add(location);
 					
