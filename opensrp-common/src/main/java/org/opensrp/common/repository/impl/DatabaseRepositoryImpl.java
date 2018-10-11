@@ -22,6 +22,27 @@ import org.opensrp.common.util.SearchBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+/**
+ * <p>
+ * Concrete implementation of a DatabaseRepository.<br/>
+ * The main contract here is the communication with hibernate repository through
+ * {@link #sessionFactory}.currently Various types of query and database operation are supported
+ * both entity class and view, but has a lot of chance to improve it and its gets maturity day by
+ * day.So its only perform Database operation related action.<br/>
+ * </p>
+ * <b>Exposes One interface:</b>
+ * <ul>
+ * <li>{@link DatabaseRepository} to the application</li>
+ * </ul>
+ * <br/>
+ * This class is not thread-safe.
+ * 
+ * @author proshanto
+ * @author nursat
+ * @author prince
+ * @version 0.1.0
+ * @since 2018-05-30
+ */
 @Repository
 public class DatabaseRepositoryImpl implements DatabaseRepository {
 	
@@ -34,6 +55,13 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		
 	}
 	
+	/**
+	 * Save data object to persistent through Hibernate {@link #sessionFactory}
+	 * 
+	 * @param t is data object.
+	 * @exception Exception
+	 * @return 1 for success and -1 for failure.
+	 */
 	@Override
 	public <T> long save(T t) throws Exception {
 		Session session = sessionFactory.openSession();
@@ -42,7 +70,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		try {
 			tx = session.beginTransaction();
 			session.saveOrUpdate(t);
-			
 			logger.info("saved successfully: " + t.getClass().getName());
 			returnValue = 1;
 			if (!tx.wasCommitted())
@@ -60,6 +87,13 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return returnValue;
 	}
 	
+	/**
+	 * Update data object to persistent through Hibernate {@link #sessionFactory}
+	 * 
+	 * @param t is data object.
+	 * @exception Exception
+	 * @return 1 for success and -1 for failure.
+	 */
 	@Override
 	public <T> int update(T t) {
 		Session session = sessionFactory.openSession();
@@ -83,6 +117,14 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return returnValue;
 	}
+	
+	/**
+	 * Delete data object from persistent through Hibernate {@link #sessionFactory}
+	 * 
+	 * @param t is data object.
+	 * @exception Exception
+	 * @return true for success and false for failure.
+	 */
 	
 	@Override
 	public <T> boolean delete(T t) {
@@ -108,6 +150,19 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return returnValue;
 	}
 	
+	/**
+	 * <p>
+	 * {@link #findById(int, String, Class)} fetch entity by {@link #sessionFactory}. This is a
+	 * common method for all Entity class, so it works for any entity class.
+	 * </p>
+	 * <br/>
+	 * <b> How to invoke:</b> findById(12,id,User.class).
+	 * 
+	 * @param id is unique id of a entity (primary key of a table and type should be int).
+	 * @param fieldName is name of primary key of a entity class.
+	 * @param className is name of Entity class who is mapped with database table.
+	 * @return Entity object.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T findById(int id, String fieldName, Class<?> className) {
@@ -118,6 +173,20 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		session.close();
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
+	
+	/**
+	 * <p>
+	 * {@link #findByKey(String, String, Class)} fetch entity by {@link #sessionFactory}. This is a
+	 * common method for all Entity class, so it works for any entity class.
+	 * </p>
+	 * <br/>
+	 * <b> How to invoke:</b> findByKey("john", "name", User.class).
+	 * 
+	 * @param fieldName is field or property name of Entity class and type should be String.
+	 * @param value is given value type String.
+	 * @param className is name of Entity class who is mapped with database table.
+	 * @return Entity object.
+	 */
 	
 	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
@@ -130,6 +199,22 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 	
+	/**
+	 * <p>
+	 * {@link #findByKeys(Map, Class)} fetch entity by {@link #sessionFactory}. This is a common
+	 * method for all Entity class, so it works for any entity class.its returns first record of the
+	 * Record set.
+	 * </p>
+	 * <br/>
+	 * <b> How to invoke:</b> Map<String, Object> params = new HashMap<String, Object>();
+	 * params.put("parentId", parentId); findByKey(params, User.class).
+	 * 
+	 * @param fielaValues is map of field and corresponding value.
+	 * @param className is name of Entity class who is mapped with database table.
+	 * @return Entity object.
+	 */
+	
+	@Override
 	public <T> T findByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
@@ -142,6 +227,22 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 	
+	/**
+	 * <p>
+	 * {@link #findLastByKey(Map, String, Class)} fetch entity by {@link #sessionFactory}. This is a
+	 * common method for all Entity class, so it works for any entity class.its returns last record
+	 * of the Record set.its only support descending order.
+	 * </p>
+	 * <br/>
+	 * <b> How to invoke:</b> Map<String, Object> params = new HashMap<String, Object>();
+	 * params.put("parentId", parentId); findByKey(params, User.class).
+	 * 
+	 * @param fielaValues is map of field and corresponding value.
+	 * @param orderByFieldName is name of field where ordering is applied.
+	 * @param className is name of Entity class who is mapped with database table.
+	 * @return Entity object.
+	 */
+	@Override
 	public <T> T findLastByKey(Map<String, Object> fielaValues, String orderByFieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
@@ -155,6 +256,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 	
+	@Override
 	public <T> T findLastByKeyLessThanDateConditionOneField(Map<String, Object> fielaValues, Date fieldvalue, String field,
 	                                                        String orderByFieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
@@ -170,7 +272,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 	
-	// criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY); added to avoid duplicate record
+	@Override
 	public <T> List<T> findAllByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
@@ -185,6 +287,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
 	}
 	
+	@Override
 	public <T> List<T> findAllByKeysWithALlMatches(boolean isProvider, Map<String, String> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
@@ -201,8 +304,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
-	public boolean findByUserName(String value, String fieldName, Class<?> className) {
+	public boolean isExists(String value, String fieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
 		criteria.add(Restrictions.eq(fieldName, value));
@@ -211,8 +315,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (result.size() > 0 ? true : false);
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
-	public <T> boolean entityExists(int id, T value, String fieldName, Class<?> className) {
+	public <T> boolean entityExistsNotEualThisId(int id, T value, String fieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
 		criteria.add(Restrictions.eq(fieldName, value));
@@ -222,6 +327,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (result.size() > 0 ? true : false);
 	}
 	
+	/**
+	 * 
+	 * 
+	 * */
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> findAll(String tableClass) {
@@ -229,8 +338,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<T> result = null;
 		try {
 			Query query = session.createQuery("from " + tableClass + " t order by t.id desc");
-			//query.setFirstResult(0);
-			//query.setMaxResults(10);
 			result = (List<T>) query.list();
 		}
 		catch (Exception e) {
@@ -243,6 +350,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (List<T>) result;
 	}
 	
+	@Override
 	public <T> List<T> findAllByKey(String value, String fieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
@@ -253,43 +361,18 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
 	}
 	
-	public <T> List<T> findAllTest(Class<?> className) {
-		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		@SuppressWarnings("unchecked")
-		List<T> result = criteria.list();
-		session.close();
-		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
-	}
-	
+	@Override
 	@SuppressWarnings("unchecked")
-	public <T> List<T> list(int result, int offsetreal, Class<?> entityClassName) {
+	public List<Object[]> executeSelectQuery(String sqlQuery, Map<String, Object> params) {
 		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(entityClassName);
-		criteria.setFirstResult(offsetreal);
-		criteria.setMaxResults(result);
-		List<T> products = null;
-		try {
-			products = (List<T>) criteria.list();
-			
-		}
-		catch (Exception e) {
-			
-		}
-		finally {
-			session.close();
-		}
 		
-		return products;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public List<Object[]> executeSelectQuery(String sqlQuery, String paramName, int paramValue) {
-		Session session = sessionFactory.openSession();
 		List<Object[]> results = null;
 		try {
 			SQLQuery query = session.createSQLQuery(sqlQuery);
-			query.setParameter(paramName, paramValue);
+			for (Map.Entry<String, Object> param : params.entrySet()) {
+				query.setParameter(param.getKey(), param.getValue());
+			}
+			
 			results = query.list();
 			
 		}
@@ -302,6 +385,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return results;
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> List<T> executeSelectQuery(String sqlQuery) {
 		Session session = sessionFactory.openSession();
@@ -320,29 +404,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return results;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<Object[]> executeSelectQuery(String provider, String caseId, String scheduleName, String userType,
-	                                         String sqlQuery) {
-		
-		SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery(sqlQuery);
-		
-		if (!provider.isEmpty()) {
-			query.setParameter("provider", provider);
-		}
-		if (!caseId.isEmpty()) {
-			query.setParameter("case_id", caseId);
-		}
-		if (!scheduleName.isEmpty()) {
-			query.setParameter("scheduleName", scheduleName);
-		}
-		if (!userType.isEmpty()) {
-			query.setParameter("userType", userType);
-		}
-		List<Object[]> results = query.list();
-		
-		return results;
-	}
-	
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> List<T> search(SearchBuilder searchBuilder, int result, int offsetreal, Class<?> entityClassName) {
 		Session session = sessionFactory.openSession();
@@ -369,6 +431,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return data;
 	}
 	
+	@Override
 	public int countBySearch(SearchBuilder searchBuilder, Class<?> entityClassName) {
 		Session session = sessionFactory.openSession();
 		int count = 0;
@@ -388,6 +451,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return count;
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getDataFromViewByBEId(String viewName, String entityType, String baseEntityId) {
 		Session session = sessionFactory.openSession();
@@ -411,13 +475,23 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 	
 	/**
+	 * <p>
+	 * Query to a view and returns data list.
+	 * <p>
+	 * <p>
 	 * maxRange -1 means setMaxResults does not consider. offsetreal -1 means setFirstResult does
 	 * not consider.
+	 * </p>
 	 * 
-	 * @param searchBuilder fdff maxRange -1 means setMaxResults does not consider. offsetreal -1
-	 *            means setFirstResult does not consider.
+	 * @param searchBuilder is search option list.
+	 * @param offset is number of offset.
+	 * @param maxResults is returned maximum number of data.
+	 * @param viewName is name of target view.
+	 * @param entityType is name of entity type.
+	 * @param orderingBy is the order by condition of sql query.
+	 * @return List<T>.
 	 */
-	
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, int maxRange, int offsetreal, String viewName,
 	                                   String entityType, String orderingBy) {
@@ -426,7 +500,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		try {
 			String hql = "SELECT * FROM core.\"" + viewName + "\" " + " where entity_type = '" + entityType + "'  ";
 			
-			hql = setCondition(searchBuilder, hql);
+			hql = setViewCondition(searchBuilder, hql);
 			if (!orderingBy.isEmpty()) {
 				hql += " order by " + orderingBy + " asc";
 			}
@@ -451,13 +525,24 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return viewData;
 	}
 	
+	/**
+	 * <p>
+	 * get data count with or without search parameter's.
+	 * </p>
+	 * 
+	 * @param searchBuilder is search option list.
+	 * @param viewName is name of target view.
+	 * @param entityType is name of entity type.
+	 * @return dataCount.
+	 */
+	@Override
 	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType) {
 		Session session = sessionFactory.openSession();
 		int count = 0;
 		try {
 			String hql = "SELECT * FROM core.\"" + viewName + "\"" + " where entity_type = '" + entityType + "'";
 			
-			hql = setCondition(searchBuilder, hql);
+			hql = setViewCondition(searchBuilder, hql);
 			
 			Query query = session.createSQLQuery(hql);
 			count = query.list().size();
@@ -473,7 +558,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return count;
 	}
 	
-	private String setCondition(SearchBuilder searchBuilder, String hql) {
+	private String setViewCondition(SearchBuilder searchBuilder, String hql) {
 		if (searchBuilder.getDivision() != null && !searchBuilder.getDivision().isEmpty()) {
 			hql = hql + " and division = '" + searchBuilder.getDivision() + "'";
 		}
@@ -509,6 +594,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return hql;
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> List<T> getDataFromSQLFunction(SearchBuilder searchBuilder, Query query, Session session) {
 		

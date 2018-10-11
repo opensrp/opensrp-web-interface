@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.opensrp.acl.entity.Location;
 import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.entity.User;
-import org.opensrp.acl.service.impl.LocationServiceImpl;
+import org.opensrp.acl.service.LocationService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.opensrp.facility.dto.FacilityWorkerDTO;
 import org.opensrp.facility.entity.Chcp;
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FacilityHelperUtil {
-	private static final Logger logger = Logger.getLogger(LocationServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(LocationService.class);
 	
 	@Autowired
 	private FacilityServiceFactory facilityServiceFactory;

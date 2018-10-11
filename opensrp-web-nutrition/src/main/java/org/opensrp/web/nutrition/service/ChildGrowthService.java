@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.opensrp.web.nutrition.service.impl;
+package org.opensrp.web.nutrition.service;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -15,13 +15,12 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.opensrp.common.entity.Marker;
-import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
+import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.service.impl.MarkerServiceImpl;
 import org.opensrp.common.util.AllConstant;
 import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.web.nutrition.entity.ChildGrowth;
-import org.opensrp.web.nutrition.service.NutritionService;
 import org.opensrp.web.nutrition.utils.Age;
 import org.opensrp.web.nutrition.utils.GrowthValocityChart;
 import org.opensrp.web.nutrition.utils.Interval;
@@ -34,9 +33,9 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class ChildGrowthServiceImpl implements NutritionService {
+public class ChildGrowthService {
 	
-	private static final Logger logger = Logger.getLogger(ChildGrowthServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(ChildGrowthService.class);
 	
 	@Autowired
 	private MarkerServiceImpl markerServiceImpl;
@@ -45,7 +44,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 	private Marker marker;
 	
 	@Autowired
-	private DatabaseRepositoryImpl databaseRepositoryImpl;
+	private DatabaseRepository repository;
 	
 	@Autowired
 	private SearchBuilder searchBuilder;
@@ -54,45 +53,39 @@ public class ChildGrowthServiceImpl implements NutritionService {
 	private SessionFactory sessionFactory;
 	
 	@Transactional
-	@Override
 	public <T> long save(T t) throws Exception {
 		
-		return databaseRepositoryImpl.save(t);
+		return repository.save(t);
 	}
 	
 	@Transactional
-	@Override
 	public <T> int update(T t) throws Exception {
 		
-		return databaseRepositoryImpl.update(t);
+		return repository.update(t);
 	}
 	
 	@Transactional
-	@Override
 	public <T> boolean delete(T t) {
 		
-		return databaseRepositoryImpl.delete(t);
+		return repository.delete(t);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findById(int id, String fieldName, Class<?> className) {
 		
-		return databaseRepositoryImpl.findById(id, fieldName, className);
+		return repository.findById(id, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
 		
-		return databaseRepositoryImpl.findByKey(value, fieldName, className);
+		return repository.findByKey(value, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> List<T> findAll(String tableClass) {
 		// TODO Auto-generated method stub
-		return databaseRepositoryImpl.findAll(tableClass);
+		return repository.findAll(tableClass);
 	}
 	
 	@Transactional
@@ -101,8 +94,8 @@ public class ChildGrowthServiceImpl implements NutritionService {
 		marker = markerServiceImpl.findByName(AllConstant.MRAKER_NAME);
 		searchBuilder.clear();
 		searchBuilder.setServerVersionn(marker.getTimeStamp());
-		List<Object[]> childWeights = databaseRepositoryImpl.getDataFromView(searchBuilder, -1, -1,
-		    "viewJsonDataConversionOfWeight", "weight", "server_version");
+		List<Object[]> childWeights = repository.getDataFromView(searchBuilder, -1, -1, "viewJsonDataConversionOfWeight",
+		    "weight", "server_version");
 		
 		List<Map<String, Integer>> growthValocityChart = GrowthValocityChart.getGrowthValocityChart();
 		
@@ -146,7 +139,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 				fieldValues.clear();
 				fieldValues.put("provider", provider);
 				fieldValues.put("baseEntityId", baseEntityId);
-				ChildGrowth previousEvent = databaseRepositoryImpl.findLastByKeyLessThanDateConditionOneField(fieldValues,
+				ChildGrowth previousEvent = repository.findLastByKeyLessThanDateConditionOneField(fieldValues,
 				    currentEventDate, "lastEventDate", "lastEventDate", ChildGrowth.class);
 				
 				if (previousEvent != null) {
@@ -208,7 +201,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 				fieldValues.put("lastEventDate", currentEventDate);
 				fieldValues.put("baseEntityId", baseEntityId);
 				
-				ChildGrowth findChildGrowth = databaseRepositoryImpl.findByKeys(fieldValues, ChildGrowth.class);
+				ChildGrowth findChildGrowth = repository.findByKeys(fieldValues, ChildGrowth.class);
 				
 				if (findChildGrowth != null) {
 					findChildGrowth.setAge(age);
@@ -287,7 +280,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 		fielaValues.put("isLastEvent", true);
 		fielaValues.put("baseEntityId", baseEntityId);
 		fielaValues.put("provider", provider);
-		List<ChildGrowth> childGrowths = databaseRepositoryImpl.findAllByKeys(fielaValues, ChildGrowth.class);
+		List<ChildGrowth> childGrowths = repository.findAllByKeys(fielaValues, ChildGrowth.class);
 		
 		if (childGrowths != null) {
 			for (ChildGrowth childGrowth : childGrowths) {
@@ -303,7 +296,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 		fielaValues.clear();
 		fielaValues.put("provider", provider);
 		fielaValues.put("baseEntityId", baseEntityId);
-		ChildGrowth childGrowth = databaseRepositoryImpl.findLastByKey(fielaValues, "lastEventDate", ChildGrowth.class);
+		ChildGrowth childGrowth = repository.findLastByKey(fielaValues, "lastEventDate", ChildGrowth.class);
 		childGrowth.setLastEvent(true);
 		update(childGrowth);
 	}
@@ -318,7 +311,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 		Query query = session.createSQLQuery(hql);
 		setParameter(searchBuilder, query);
 		
-		return databaseRepositoryImpl.getDataFromSQLFunction(searchBuilder, query, session);
+		return repository.getDataFromSQLFunction(searchBuilder, query, session);
 	}
 	
 	@Transactional
@@ -331,7 +324,7 @@ public class ChildGrowthServiceImpl implements NutritionService {
 		Query query = session.createSQLQuery(hql);
 		setParameter(searchBuilder, query);
 		
-		return databaseRepositoryImpl.getDataFromSQLFunction(searchBuilder, query, session);
+		return repository.getDataFromSQLFunction(searchBuilder, query, session);
 	}
 	
 	private void setParameter(SearchBuilder searchBuilder, Query query) {

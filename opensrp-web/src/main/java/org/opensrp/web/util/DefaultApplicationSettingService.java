@@ -18,17 +18,17 @@ import org.hibernate.SessionFactory;
 import org.opensrp.acl.entity.Permission;
 import org.opensrp.acl.entity.Role;
 import org.opensrp.acl.entity.User;
-import org.opensrp.acl.service.impl.DuplicateRecordServiceImpl;
-import org.opensrp.acl.service.impl.LocationServiceImpl;
-import org.opensrp.acl.service.impl.PermissionServiceImpl;
-import org.opensrp.acl.service.impl.RoleServiceImpl;
-import org.opensrp.acl.service.impl.UserServiceImpl;
+import org.opensrp.acl.service.DuplicateRecordServiceImpl;
+import org.opensrp.acl.service.LocationService;
+import org.opensrp.acl.service.PermissionService;
+import org.opensrp.acl.service.RoleService;
+import org.opensrp.acl.service.UserService;
 import org.opensrp.common.entity.Marker;
 import org.opensrp.common.service.impl.MarkerServiceImpl;
 import org.opensrp.common.util.AllConstant;
 import org.opensrp.common.util.DefaultRole;
 import org.opensrp.web.nutrition.entity.WeightVelocityChart;
-import org.opensrp.web.nutrition.service.impl.WeightVelocityChartServiceImpl;
+import org.opensrp.web.nutrition.service.WeightVelocityChartService;
 import org.opensrp.web.nutrition.utils.GrowthValocityChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,13 +42,13 @@ public class DefaultApplicationSettingService {
 	private static final Logger logger = Logger.getLogger(DefaultApplicationSettingService.class);
 	
 	@Autowired
-	private PermissionServiceImpl permissionServiceImpl;
+	private PermissionService permissionServiceImpl;
 	
 	@Autowired
-	private RoleServiceImpl roleServiceImpl;
+	private RoleService roleServiceImpl;
 	
 	@Autowired
-	private UserServiceImpl userServiceImpl;
+	private UserService userServiceImpl;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -60,13 +60,13 @@ public class DefaultApplicationSettingService {
 	private GrowthValocityChart growthValocityChart;
 	
 	@Autowired
-	private LocationServiceImpl locationServiceImpl;
+	private LocationService locationServiceImpl;
 	
 	@Autowired
 	private MarkerServiceImpl markerServiceImpl;
 	
 	@Autowired
-	private WeightVelocityChartServiceImpl weightVelocityChartServiceImpl;
+	private WeightVelocityChartService weightVelocityChartServiceImpl;
 	
 	@Autowired
 	private DuplicateRecordServiceImpl duplicateRecordServiceImpl;

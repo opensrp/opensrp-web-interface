@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.opensrp.web.nutrition.entity.WeightVelocityChart;
-import org.opensrp.web.nutrition.service.impl.WeightVelocityChartServiceImpl;
+import org.opensrp.web.nutrition.service.WeightVelocityChartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class GrowthValocityChart {
 	
 	@Autowired
-	private WeightVelocityChartServiceImpl weightVelocityChartServiceImpl;
+	private WeightVelocityChartService weightVelocityChartServiceImpl;
 	
 	public static List<Map<String, Integer>> growthValocityChart = new ArrayList<Map<String, Integer>>();
 	

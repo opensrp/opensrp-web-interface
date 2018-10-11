@@ -2,7 +2,7 @@
  * @author proshanto
  * */
 
-package org.opensrp.acl.service.impl;
+package org.opensrp.acl.service;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,8 +23,7 @@ import org.opensrp.acl.entity.Location;
 import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.entity.User;
 import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
-import org.opensrp.acl.service.AclService;
-import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
+import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.util.TreeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -33,12 +32,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
 @Service
-public class LocationServiceImpl implements AclService {
+public class LocationService {
 	
-	private static final Logger logger = Logger.getLogger(LocationServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(LocationService.class);
 	
 	@Autowired
-	private DatabaseRepositoryImpl databaseRepositoryImpl;
+	private DatabaseRepository repository;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -47,32 +46,38 @@ public class LocationServiceImpl implements AclService {
 	private OpenMRSServiceFactory openMRSServiceFactory;
 	
 	@Autowired
-	private LocationTagServiceImpl locationTagServiceImpl;
+	private LocationTagService locationTagServiceImpl;
 	
-	public LocationServiceImpl() {
+	public LocationService() {
 		
 	}
 	
 	@Transactional
 	public List<Object[]> getLocationByTagId(int tagId) {
 		String sqlQuery = "SELECT location.name,location.id from core.location " + " WHERE location_tag_id=:location_tag_id";
-		return databaseRepositoryImpl.executeSelectQuery(sqlQuery, "location_tag_id", tagId);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("location_tag_id", tagId);
+		return repository.executeSelectQuery(sqlQuery, params);
 	}
 	
 	@Transactional
 	public List<Object[]> getChildData(int parentId) {
 		String sqlQuery = "SELECT location.name,location.id from core.location where parent_location_id=:parentId";
-		return databaseRepositoryImpl.executeSelectQuery(sqlQuery, "parentId", parentId);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("parentId", parentId);
+		return repository.executeSelectQuery(sqlQuery, params);
 	}
 	
 	@Transactional
-	@Override
 	public <T> long save(T t) throws Exception {
+		
 		Location location = (Location) t;
+		
 		location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
+		System.err.println("" + repository + ",location:" + location);
 		long createdLocation = 0;
 		if (!location.getUuid().isEmpty()) {
-			createdLocation = databaseRepositoryImpl.save(location);
+			createdLocation = repository.save(location);
 		} else {
 			logger.error("No uuid found for location:" + location.getName());
 			// TODO
@@ -81,14 +86,13 @@ public class LocationServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	@Override
 	public <T> int update(T t) throws JSONException {
 		Location location = (Location) t;
 		int updatedLocation = 0;
 		String uuid = openMRSServiceFactory.getOpenMRSConnector("location").update(location, location.getUuid(), null);
 		if (!uuid.isEmpty()) {
 			location.setUuid(uuid);
-			updatedLocation = databaseRepositoryImpl.update(location);
+			updatedLocation = repository.update(location);
 		} else {
 			logger.error("No uuid found for user:" + location.getName());
 			// TODO
@@ -97,35 +101,31 @@ public class LocationServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	@Override
 	public <T> boolean delete(T t) {
-		return databaseRepositoryImpl.delete(t);
+		return repository.delete(t);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findById(int id, String fieldName, Class<?> className) {
-		return databaseRepositoryImpl.findById(id, fieldName, className);
+		return repository.findById(id, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
-		return databaseRepositoryImpl.findByKey(value, fieldName, className);
+		return repository.findByKey(value, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> List<T> findAll(String tableClass) {
-		return databaseRepositoryImpl.findAll(tableClass);
+		return repository.findAll(tableClass);
 	}
 	
 	public Location setCreatorParentLocationTagAttributeInLocation(Location location, int parentLocationId, int tagId) {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User creator = (User) databaseRepositoryImpl.findByKey(auth.getName(), "username", User.class);
-		Location parentLocation = (Location) databaseRepositoryImpl.findById(parentLocationId, "id", Location.class);
-		LocationTag locationTag = (LocationTag) databaseRepositoryImpl.findById(tagId, "id", LocationTag.class);
+		User creator = (User) repository.findByKey(auth.getName(), "username", User.class);
+		Location parentLocation = (Location) repository.findById(parentLocationId, "id", Location.class);
+		LocationTag locationTag = (LocationTag) repository.findById(tagId, "id", LocationTag.class);
 		location.setCreator(creator);
 		location.setParentLocation(parentLocation);
 		location.setLocationTag(locationTag);
@@ -151,7 +151,7 @@ public class LocationServiceImpl implements AclService {
 		JSONArray existinglocation = new JSONArray();
 		String query = "";
 		if (location != null) {
-			exists = databaseRepositoryImpl.entityExists(location.getId(), location.getName(), "name", Location.class);
+			exists = repository.entityExistsNotEualThisId(location.getId(), location.getName(), "name", Location.class);
 			
 			if (isOpenMRSCheck) {
 				Location findLocation = findById(location.getId(), "id", Location.class);
@@ -203,7 +203,7 @@ public class LocationServiceImpl implements AclService {
 	
 	public boolean sameEditedNameAndActualName(int id, String editedName) {
 		boolean sameName = false;
-		Location location = databaseRepositoryImpl.findById(id, "id", Location.class);
+		Location location = repository.findById(id, "id", Location.class);
 		String actualName = location.getName();
 		if (actualName.equalsIgnoreCase(editedName)) {
 			sameName = true;
@@ -258,7 +258,7 @@ public class LocationServiceImpl implements AclService {
 		Map<String, String> fielaValues = new HashMap<String, String>();
 		fielaValues.put("name", name);
 		boolean isProvider = false;
-		return databaseRepositoryImpl.findAllByKeysWithALlMatches(isProvider, fielaValues, Location.class);
+		return repository.findAllByKeysWithALlMatches(isProvider, fielaValues, Location.class);
 	}
 	
 	public String makeParentLocationName(Location location) {
@@ -266,7 +266,7 @@ public class LocationServiceImpl implements AclService {
 		String tagNme = "";
 		String locationName = "";
 		if (location.getParentLocation() != null) {
-			location = databaseRepositoryImpl.findById(location.getParentLocation().getId(), "id", Location.class);
+			location = repository.findById(location.getParentLocation().getId(), "id", Location.class);
 			if (location.getParentLocation() != null) {
 				parentLocationName = location.getParentLocation().getName() + " -> ";
 			}
@@ -381,7 +381,7 @@ public class LocationServiceImpl implements AclService {
 						location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
 						if (!location.getUuid().isEmpty()) {
 							if (isExists == null) {
-								databaseRepositoryImpl.save(location);
+								repository.save(location);
 							} else {
 								logger.info("already exists location:" + location.getName());
 							}
