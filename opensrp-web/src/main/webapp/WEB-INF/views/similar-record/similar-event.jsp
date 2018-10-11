@@ -27,7 +27,7 @@
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Similar Event List
+					<i class="fa fa-table"></i> <spring:message code="lbl.similarEventList"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -40,37 +40,33 @@
 										<thead>
 											<tr>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Group Id</th>
+													style="width: 140px;"><spring:message code="lbl.groupId"/></th>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Entity Type</th>
+													style="width: 140px;"><spring:message code="lbl.entityType"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Event Type</th>
+													style="width: 140px;"><spring:message code="lbl.eventType"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Event Date</th>
+													style="width: 79px;"><spring:message code="lbl.eventDate"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Location</th>
+													style="width: 140px;"><spring:message code="lbl.provider"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Provider</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Action</th>
+													style="width: 140px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Group Id</th>
+													style="width: 140px;"><spring:message code="lbl.groupId"/></th>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Entity Type</th>
+													style="width: 140px;"><spring:message code="lbl.entityType"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Event Type</th>
+													style="width: 140px;"><spring:message code="lbl.eventType"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Event Date</th>
+													style="width: 79px;"><spring:message code="lbl.eventDate"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Location</th>
+													style="width: 140px;"><spring:message code="lbl.provider"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Provider</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Action</th>
+													style="width: 140px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</tfoot>
 										<tbody>
@@ -111,7 +107,6 @@
 												<td bgcolor=<%=bgColor%>><%=entityType%></td>
 												<td bgcolor=<%=bgColor%>><%=eventType%></td>
 												<td bgcolor=<%=bgColor%>><%=eventDate%></td>
-												<td bgcolor=<%=bgColor%>><%=locationId%></td>
 												<td bgcolor=<%=bgColor%>><%=providerId%></td>
 												<td bgcolor=<%=bgColor%>>
 												<%-- <a href="<c:url value=""/>">Details</a> --%>	
