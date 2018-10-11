@@ -51,14 +51,14 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="/opensrp-dashboard/client/child.html">Child</a>
+          <a href="/opensrp-dashboard/client/child.html"><spring:message code="lbl.child"/></a>
         </li>
-        <li class="breadcrumb-item">Child Details</li>
+        <li class="breadcrumb-item"><spring:message code="lbl.childDetails"/></li>
       </ol>
       <!-- Child Register-->
       <div class="card mb-3">
             <div class="card-header">
-               Child Details</div>
+               <spring:message code="lbl.childDetails"/></div>
             <div class="list-group list-group-flush small">
               <a class="list-group-item list-group-item-action" href="#">
                 <div class="media">
@@ -93,20 +93,20 @@ lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
 				String fatherName = "";			
 %>	                  
                   <div class="media-body">
-                    <strong>Name: </strong><%=firstName%><br>
-                    <strong>Age: </strong><br>
-                    <strong>Gender: </strong><%=gender%><br>
+                    <strong><spring:message code="lbl.name"/>: </strong><%=firstName%><br>
+                    <strong><spring:message code="lbl.age"/>: </strong><br>
+                    <strong><spring:message code="lbl.gender"/>: </strong><%=gender%><br>
                   </div>
                   
                   <div class="media-body">
-                     <strong>Birth-date: </strong><%=birthDate%><br>
-                     <strong>Birth-weight: </strong><%=birthWeight%><br>
+                     <strong><spring:message code="lbl.birthDate"/>: </strong><%=birthDate%><br>
+                     <strong><spring:message code="lbl.birthWeight"/>: </strong><%=birthWeight%><br>
                   </div>
                   
                   <div class="media-body">
-                    <strong>Father's Name: </strong><%=fatherName%><br>
-                    <strong>Mother's Name: </strong><br>
-                    <strong>Care-giver's Name: </strong><br>
+                    <strong><spring:message code="lbl.fatherName"/>: </strong><%=fatherName%><br>
+                    <strong><spring:message code="lbl.motherName"/>: </strong><br>
+                    <strong><spring:message code="lbl.caregiverName"/>: </strong><br>
                   </div>
 <%
 		}
@@ -131,26 +131,26 @@ lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
       <!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">
-           Growth</div>
+           <spring:message code="lbl.growth"/></div>
         <div class="card-body">
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>Sl. No.</th>
-                  <th>Visit Date</th>
-                  <th>Weight</th>
-                  <th>Growth/month</th>
-                  <th>Status</th>
+                  <th><spring:message code="lbl.slNo"/></th>
+                  <th><spring:message code="lbl.visitDate"/></th>
+                  <th><spring:message code="lbl.weight"/></th>
+                  <th><spring:message code="lbl.growthPerMonth"/></th>
+                  <th><spring:message code="lbl.status"/></th>
                 </tr>
               </thead>
               <tfoot>
-                <tr>
-                  <th>Sl. No.</th>
-                  <th>Visit Date</th>
-                  <th>Weight</th>
-                  <th>Growth/month</th>
-                  <th>Status</th>
+                 <tr>
+                  <th><spring:message code="lbl.slNo"/></th>
+                  <th><spring:message code="lbl.visitDate"/></th>
+                  <th><spring:message code="lbl.weight"/></th>
+                  <th><spring:message code="lbl.growthPerMonth"/></th>
+                  <th><spring:message code="lbl.status"/></th>
                 </tr>
               </tfoot>
               <tbody>
