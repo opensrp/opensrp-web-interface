@@ -39,7 +39,7 @@
 		<div class="col-5">
 		<label for="exampleInputName">স্বাস্থ্য কর্মীর প্রকারভেদ </label>
 			<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" onchange="checkForTraining()" required>
-		 		<option value="" selected>Please Select</option>
+		 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 					<%
 					for (FacilityWorkerType workerType : workerTypeList)
 					{
@@ -76,7 +76,7 @@
 			 <label for="exampleInputName">স্বাস্থ্য কর্মীর নাম  </label>
 				<input name="name" class="form-control"
 					required="required" aria-describedby="nameHelp"
-					placeholder="Name" value="<%=name%>"/> 
+					placeholder="<spring:message code="lbl.name"/>" value="<%=name%>"/> 
 				<span class="text-red">${uniqueNameErrorMessage}</span>
 			</div>
 		</div>
@@ -87,7 +87,7 @@
 				<label for="exampleInputName">স্বাস্থ্য কর্মীর মোবাইল নম্বর / ইমেইল </label>
 				<input name="identifier" class="form-control"
 					required="required" aria-describedby="nameHelp"
-					placeholder="Identifier (Email/Mobile No.)" value="<%=identifier%>"/>
+					placeholder="<spring:message code="lbl.healthWorkerContact"/>" value="<%=identifier%>"/>
 				<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 			</div>
 		</div>
@@ -99,7 +99,7 @@
 				<label for="exampleInputName">স্বাস্থ্য কর্মীর প্রতিষ্ঠান </label>
 				<input name="organization" class="form-control"
 					required="required" aria-describedby="nameHelp"
-					placeholder="Organization" value="<%=organization%>"/>
+					placeholder="<spring:message code="lbl.healthWorkerOrganization"/>" value="<%=organization%>"/>
 				<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 			</div>
 		</div>
@@ -153,7 +153,7 @@
 	<div class="form-group">
 		<div class="row">
 			<div class="col-3">
-				<input type="submit" value="Save"
+				<input type="submit" value="<spring:message code="lbl.save"/>"
 					class="btn btn-primary btn-block"/>
 			</div>
 		</div>
