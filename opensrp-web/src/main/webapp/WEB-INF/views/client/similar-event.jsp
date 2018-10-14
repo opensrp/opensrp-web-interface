@@ -19,15 +19,15 @@
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
 		<div class="container-fluid">
+		
 
 		<div class="form-group">				
-			 <jsp:include page="/WEB-INF/views/similar-record/similar-record-link.jsp" />  		
+			 <jsp:include page="/WEB-INF/views/client/client-link.jsp" />		
 			</div>
-
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> <spring:message code="lbl.similarClientList"/>
+					<i class="fa fa-table"></i> <spring:message code="lbl.similarEventList"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -42,11 +42,13 @@
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;"><spring:message code="lbl.groupId"/></th>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;"><spring:message code="lbl.firstName"/></th>
+													style="width: 140px;"><spring:message code="lbl.entityType"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;"><spring:message code="lbl.gender"/></th>
+													style="width: 140px;"><spring:message code="lbl.eventType"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;"><spring:message code="lbl.provider"/></th>
+													style="width: 79px;"><spring:message code="lbl.eventDate"/></th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;"><spring:message code="lbl.provider"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;"><spring:message code="lbl.action"/></th>
 											</tr>
@@ -56,11 +58,13 @@
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;"><spring:message code="lbl.groupId"/></th>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;"><spring:message code="lbl.firstName"/></th>
+													style="width: 140px;"><spring:message code="lbl.entityType"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;"><spring:message code="lbl.gender"/></th>
+													style="width: 140px;"><spring:message code="lbl.eventType"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;"><spring:message code="lbl.provider"/></th>
+													style="width: 79px;"><spring:message code="lbl.eventDate"/></th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;"><spring:message code="lbl.provider"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;"><spring:message code="lbl.action"/></th>
 											</tr>
@@ -73,25 +77,14 @@
 															.getAttribute("similarRecordList");
 													Iterator dataListIterator = dataList.iterator();
 													while (dataListIterator.hasNext()) {
-														Object[] clientObject = (Object[]) dataListIterator.next();
-														String baseEntityId = String.valueOf(clientObject[1]);
-														String addressType = String.valueOf(clientObject[2]);
-														String birthDate = String.valueOf(clientObject[3]);
-														String country = String.valueOf(clientObject[4]);
-														String createdDate = String.valueOf(clientObject[5]);
-														String editedDate = String.valueOf(clientObject[6]);
-														String firstName = String.valueOf(clientObject[9]);
-														String gender = String.valueOf(clientObject[10]);
-														String nid = String.valueOf(clientObject[15]);
-
-														String birthWeight = String.valueOf(clientObject[31]);
-														String motherName = String.valueOf(clientObject[32]);
+														Object[] eventObject = (Object[]) dataListIterator.next();
+														String entityType = String.valueOf(eventObject[6]);
+														String eventType = String.valueOf(eventObject[8]);
+														String eventDate = String.valueOf(eventObject[7]);
+														String locationId = String.valueOf(eventObject[9]);
+														String providerId = String.valueOf(eventObject[11]);
 														
-														String latest_growth_status = String.valueOf(clientObject[34]);
-														String provider = String.valueOf(clientObject[27]);
-														pageContext.setAttribute("baseEntityId", baseEntityId);
-														
-														String groupId = String.valueOf(clientObject[35]);
+														String groupId = String.valueOf(eventObject[28]);
 														
 														
 														
@@ -111,13 +104,12 @@
 											%>
 											<tr>
 												<td bgcolor=<%=bgColor%>><%=groupId%></td>
-												<td bgcolor=<%=bgColor%>><%=firstName%></td>
-												<td bgcolor=<%=bgColor%>><%=gender%></td>
-												<td bgcolor=<%=bgColor%>><%=provider%></td>
+												<td bgcolor=<%=bgColor%>><%=entityType%></td>
+												<td bgcolor=<%=bgColor%>><%=eventType%></td>
+												<td bgcolor=<%=bgColor%>><%=eventDate%></td>
+												<td bgcolor=<%=bgColor%>><%=providerId%></td>
 												<td bgcolor=<%=bgColor%>>
-												<%-- 
-												<a href="<c:url value="/client/child/${baseEntityId}/details.html"/>">Details</a>
-												 --%>		
+												<%-- <a href="<c:url value=""/>">Details</a> --%>	
 												</td> 
 											</tr>
 											<%

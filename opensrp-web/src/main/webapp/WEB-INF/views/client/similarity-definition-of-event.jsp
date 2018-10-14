@@ -20,7 +20,7 @@
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
-<c:url var="updateSimilarityDefinitionUrl" value="/similarRecord/updateSimilarityDefinition.html" />
+<c:url var="updateSimilarityDefinitionUrl" value="/client/updateSimilarityDefinition.html" />
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
@@ -28,7 +28,7 @@
 		<div class="container-fluid">
 
 			<div class="form-group">				
-			 <jsp:include page="/WEB-INF/views/similar-record/similar-record-link.jsp" />  		
+			 <jsp:include page="/WEB-INF/views/client/client-link.jsp" />  		
 			</div>
 
 			
@@ -132,21 +132,6 @@ function check(){
 	$("#criteriaString").val(checkedViewNames.toString());
 }
 
-//ajax call doesn't work.
-//errro occurs : csrf null 
-function saveMatchingCriteria() {
-    $.ajax("${saveDuplicationDefinitionUrl}", {
-        type: 'POST',
-        data: {
-            viewName : "viewJsonDataConversionOfEvent",
-            matchingCriteria : checkedViewNames
-        }
-    }).done(function(data) {
-        alert("saved");
-    }).error(function() {
-        //alert('Error');
-    });
-}
 </script>
 </body>
 </html>
