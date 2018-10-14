@@ -18,13 +18,17 @@ import org.opensrp.acl.entity.Location;
 import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.entity.User;
 import org.opensrp.acl.service.LocationService;
-import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
+import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.facility.dto.FacilityWorkerDTO;
 import org.opensrp.facility.entity.Chcp;
 import org.opensrp.facility.entity.Facility;
 import org.opensrp.facility.entity.FacilityTraining;
 import org.opensrp.facility.entity.FacilityWorker;
 import org.opensrp.facility.entity.FacilityWorkerType;
+import org.opensrp.facility.service.FacilityService;
+import org.opensrp.facility.service.FacilityWorkerService;
+import org.opensrp.facility.service.FacilityWorkerTrainingService;
+import org.opensrp.facility.service.FacilityWorkerTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,10 +37,19 @@ public class FacilityHelperUtil {
 	private static final Logger logger = Logger.getLogger(LocationService.class);
 	
 	@Autowired
-	private FacilityServiceFactory facilityServiceFactory;
+	private FacilityService facilityService;
 	
 	@Autowired
-	private DatabaseRepositoryImpl repository;
+	private FacilityWorkerService facilityWorkerService;
+	
+	@Autowired
+	private FacilityWorkerTrainingService facilityWorkerTrainingService;
+	
+	@Autowired
+	private FacilityWorkerTypeService facilityWorkerTypeService;
+	
+	@Autowired
+	private DatabaseRepository repository;
 	
 
 /*	public void setSessionAttribute(HttpSession session, Facility facility, String locationName) {
@@ -63,12 +76,12 @@ public class FacilityHelperUtil {
 	public List<FacilityWorker> getFacilityWorkerList (Facility facility){
 		Map<String, Object> facilityMap = new HashMap<String, Object>();
 		facilityMap.put("facility", facility);
-		List<FacilityWorker> facilityWorkerList = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findAllByKeys(facilityMap, FacilityWorker.class);
+		List<FacilityWorker> facilityWorkerList = facilityWorkerService.findAllByKeys(facilityMap, FacilityWorker.class);
 		return facilityWorkerList;
 	}
 	
 	public Map<Integer,Integer> getDistinctWorkerCount(List<FacilityWorker> facilityWorkerList){
-		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findAll("FacilityWorkerType");
+		List<FacilityWorkerType> workerTypeList = facilityWorkerTypeService.findAll("FacilityWorkerType");
 		Map<Integer,Integer> distinctWorkerCountMap= new HashMap<Integer,Integer>();
 		for(FacilityWorkerType facilityWorkerType : workerTypeList){
 			distinctWorkerCountMap.put(facilityWorkerType.getId(), 0);
@@ -91,11 +104,11 @@ public class FacilityHelperUtil {
 		facilityWorker.setOrganization(facilityWorkerDTO.getOrganization());
 		
 		int facilityId = Integer.parseInt(facilityWorkerDTO.getFacilityId());
-		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(facilityId, "id", Facility.class);
+		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
 		facilityWorker.setFacility(facility);
 		
 		int facilityWorkerTypeId = Integer.parseInt(facilityWorkerDTO.getFacilityWorkerTypeId());
-		FacilityWorkerType facilityWorkerType = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findById(facilityWorkerTypeId, "id", FacilityWorkerType.class);
+		FacilityWorkerType facilityWorkerType = facilityWorkerTypeService.findById(facilityWorkerTypeId, "id", FacilityWorkerType.class);
 		facilityWorker.setFacilityWorkerType(facilityWorkerType);
 		
 		String trainings = facilityWorkerDTO.getFacilityTrainings();
@@ -104,7 +117,7 @@ public class FacilityHelperUtil {
 			
 			Set<FacilityTraining> facilityTrainings = new HashSet<FacilityTraining>();
 			for(int i=0; i< trainingList.length; i++){
-				FacilityTraining facilityTraining = facilityServiceFactory.getFacility("FacilityTrainingServiceImpl").findById(Integer.parseInt(trainingList[i]), "id", FacilityTraining.class);
+				FacilityTraining facilityTraining = facilityWorkerTrainingService.findById(Integer.parseInt(trainingList[i]), "id", FacilityTraining.class);
 				if(facilityTraining != null){
 					facilityTrainings.add(facilityTraining);
 				}
@@ -194,7 +207,7 @@ public class FacilityHelperUtil {
 					}
 					
 					System.out.println(facility.toString());
-					facilityServiceFactory.getFacility("FacilityServiceImpl").save(facility);
+					facilityService.save(facility);
 					
 					if(facilityFromCsv.length >=16){
 						if((facilityFromCsv[13] != null && !facilityFromCsv[13].isEmpty()) && (facilityFromCsv[15] != null && !facilityFromCsv[15].isEmpty())){
@@ -203,9 +216,9 @@ public class FacilityHelperUtil {
 						facilityWorker.setName(facilityFromCsv[13]);
 						facilityWorker.setIdentifier(facilityFromCsv[15]);
 						
-						FacilityWorkerType facilityWorkerType = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findById(1, "id", FacilityWorkerType.class);
+						FacilityWorkerType facilityWorkerType = facilityWorkerTypeService.findById(1, "id", FacilityWorkerType.class);
 						facilityWorker.setFacilityWorkerType(facilityWorkerType);
-						facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").save(facilityWorker);
+						facilityWorkerService.save(facilityWorker);
 						}
 
 					}
@@ -247,7 +260,7 @@ public class FacilityHelperUtil {
 						Chcp chcp = new Chcp();
 						chcp.setName(facilityFromCsv[13]);
 						chcp.setIdentifier(facilityFromCsv[15]);
-						facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").save(chcp);
+						facilityWorkerService.save(chcp);
 						}
 
 					}

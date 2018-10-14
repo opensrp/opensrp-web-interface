@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FacilityService{
+public class FacilityWorkerTrainingService{
 	
-	private static final Logger logger = Logger.getLogger(FacilityService.class);
+	private static final Logger logger = Logger.getLogger(FacilityWorkerTrainingService.class);
 	
 	@Autowired
 	private DatabaseRepository repository;
@@ -62,8 +62,5 @@ public class FacilityService{
 	public <T> List<T> findAll(String tableClass) {
 		return repository.findAll(tableClass);
 	}
-	
-	
-	
 	
 }

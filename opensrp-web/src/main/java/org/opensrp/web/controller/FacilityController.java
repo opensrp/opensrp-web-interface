@@ -17,14 +17,16 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.json.JSONException;
-import org.opensrp.acl.entity.User;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.facility.entity.Facility;
 import org.opensrp.facility.entity.FacilityTraining;
 import org.opensrp.facility.entity.FacilityWorker;
 import org.opensrp.facility.entity.FacilityWorkerType;
+import org.opensrp.facility.service.FacilityService;
+import org.opensrp.facility.service.FacilityWorkerService;
+import org.opensrp.facility.service.FacilityWorkerTrainingService;
+import org.opensrp.facility.service.FacilityWorkerTypeService;
 import org.opensrp.facility.util.FacilityHelperUtil;
-import org.opensrp.facility.util.FacilityServiceFactory;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -40,15 +42,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-import com.google.gson.Gson;
 
 
 @Controller
 //@RequestMapping(value = "facility")
 public class FacilityController {
+	@Autowired
+	private FacilityService facilityService;
 	
 	@Autowired
-	private FacilityServiceFactory facilityServiceFactory;
+	private FacilityWorkerService facilityWorkerService;
+	
+	@Autowired
+	private FacilityWorkerTrainingService facilityWorkerTrainingService;
+	
+	@Autowired
+	private FacilityWorkerTypeService facilityWorkerTypeService;
 	
 	@Autowired
 	private PaginationUtil paginationUtil;
@@ -84,7 +93,7 @@ public class FacilityController {
 	                             @ModelAttribute("facility") @Valid Facility facility, BindingResult binding, ModelMap model,
 	                             HttpSession session, Locale locale) throws Exception {
 		facility = facilityHelperUtil.setLocationCodesToFacility(facility);
-		facilityServiceFactory.getFacility("FacilityServiceImpl").save(facility);
+		facilityService.save(facility);
 		model.addAttribute("locale", locale);
 		return new RedirectView("/opensrp-dashboard/cbhc-dashboard?lang="+locale);
 		
@@ -104,14 +113,12 @@ public class FacilityController {
 	@RequestMapping(value = "/facility/{id}/addWorker.html", method = RequestMethod.GET)
 	public String addWorker(ModelMap model, HttpSession session, Locale locale,@PathVariable("id") int id){
 		
-		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl")
-		        .findAll("FacilityWorkerType");
-		List<FacilityTraining> CHCPTrainingList = facilityServiceFactory.getFacility("FacilityWorkerTrainingServiceImpl")
-		        .findAll("FacilityTraining");
+		List<FacilityWorkerType> workerTypeList = facilityWorkerTypeService.findAll("FacilityWorkerType");
+		List<FacilityTraining> CHCPTrainingList = facilityWorkerTrainingService.findAll("FacilityTraining");
 		facilityHelperUtil.setWorkerTypeListToSession(session, workerTypeList);
 		facilityHelperUtil.setCHCPTrainingListToSession(session, CHCPTrainingList);
 		
-		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
+		Facility facility = facilityService.findById(id, "id", Facility.class);
 		session.setAttribute("facilityName", facility.getName());
 		List<FacilityWorker> facilityWorkerList = facilityHelperUtil.getFacilityWorkerList (facility);
 		Map<Integer,Integer> distinctWorkerCountMap = facilityHelperUtil.getDistinctWorkerCount(facilityWorkerList);
@@ -138,7 +145,7 @@ public class FacilityController {
 		
 		Set<FacilityTraining> facilityTrainings = new HashSet<FacilityTraining>();
 		for(int i=0; i< trainingList.length; i++){
-			FacilityTraining facilityTraining = facilityServiceFactory.getFacility("FacilityTrainingServiceImpl").findById(Integer.parseInt(trainingList[i]), "id", FacilityTraining.class);
+			FacilityTraining facilityTraining = facilityWorkerTrainingService.findById(Integer.parseInt(trainingList[i]), "id", FacilityTraining.class);
 			if(facilityTraining != null){
 				facilityTrainings.add(facilityTraining);
 			}
@@ -146,10 +153,9 @@ public class FacilityController {
 		}
 		
 		}
-		FacilityWorkerType facilityWorkerType = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl")
-		        .findById(facilityWorkerTypeId, "id", FacilityWorkerType.class);
+		FacilityWorkerType facilityWorkerType = facilityWorkerTypeService.findById(facilityWorkerTypeId, "id", FacilityWorkerType.class);
 		facilityWorker.setFacilityWorkerType(facilityWorkerType);
-		facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").save(facilityWorker);
+		facilityWorkerService.save(facilityWorker);
 		
 		//String facilityDetailsUrlString = "/facility/"+facilityWorker.getFacility().getId()+"/details.html";
 		String addWorkerUrlString = "/opensrp-dashboard/facility/" + facilityWorker.getFacility().getId()
@@ -179,7 +185,7 @@ public class FacilityController {
 	public String getWorkerList (ModelMap model, HttpSession session, Locale locale,
 			@PathVariable("id") int id){
 		
-		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
+		Facility facility = facilityService.findById(id, "id", Facility.class);
 		List<FacilityWorker> facilityWorkerList = facilityHelperUtil.getFacilityWorkerList(facility);
 		facilityHelperUtil.setFacilityWorkerListToSession(session, facilityWorkerList);
 		model.addAttribute("locale", locale);
@@ -191,12 +197,12 @@ public class FacilityController {
 	@RequestMapping(value = "/facility/{workerId}/editWorker.html", method = RequestMethod.GET)
 	public String editWorker (ModelMap model, HttpSession session,Locale locale,
 			@PathVariable("workerId") int workerId){
-		List<FacilityWorkerType> workerTypeList = facilityServiceFactory.getFacility("FacilityWorkerTypeServiceImpl").findAll("FacilityWorkerType");
-		List<FacilityTraining> CHCPTrainingList = facilityServiceFactory.getFacility("FacilityWorkerTrainingServiceImpl").findAll("FacilityTraining");
+		List<FacilityWorkerType> workerTypeList = facilityWorkerTypeService.findAll("FacilityWorkerType");
+		List<FacilityTraining> CHCPTrainingList = facilityWorkerTrainingService.findAll("FacilityTraining");
 		facilityHelperUtil.setWorkerTypeListToSession(session, workerTypeList);
 		facilityHelperUtil.setCHCPTrainingListToSession(session, CHCPTrainingList);
 		
-		FacilityWorker facilityWorker = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl").findById(workerId, "id", FacilityWorker.class);
+		FacilityWorker facilityWorker = facilityWorkerService.findById(workerId, "id", FacilityWorker.class);
 		session.setAttribute("workerToEdit", facilityWorker);
 		model.addAttribute("locale", locale);
 		return "facility/edit-worker";
@@ -207,15 +213,14 @@ public class FacilityController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_FACILITY')")
 	@RequestMapping(value = "/facility/{id}/details.html", method = RequestMethod.GET)
 	public String facilityDetails(ModelMap model, HttpSession session,Locale locale,@PathVariable("id") int id){	
-		Facility facility = facilityServiceFactory.getFacility("FacilityServiceImpl").findById(id, "id", Facility.class);
+		Facility facility = facilityService.findById(id, "id", Facility.class);
 		FacilityWorker facilityWorkerObject = facilityWorker;
 		facilityWorkerObject.setFacility(facility);
 		model.addAttribute("facilityWorker", facilityWorkerObject);
 		
 		Map<String, Object> facilityMap = new HashMap<String, Object>();
 		facilityMap.put("facility", facility);
-		List<FacilityWorker> facilityWorkerList = facilityServiceFactory.getFacility("FacilityWorkerServiceImpl")
-		        .findAllByKeys(facilityMap, FacilityWorker.class);
+		List<FacilityWorker> facilityWorkerList = facilityWorkerService.findAllByKeys(facilityMap, FacilityWorker.class);
 		facilityHelperUtil.setFacilityWorkerListToSession(session, facilityWorkerList);
 		model.addAttribute("locale", locale);
 		model.addAttribute("facility", facility);
