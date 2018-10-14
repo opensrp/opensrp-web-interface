@@ -311,7 +311,7 @@ public class ChildGrowthService {
 		Query query = session.createSQLQuery(hql);
 		setParameter(searchBuilder, query);
 		
-		return repository.getDataFromSQLFunction(searchBuilder, query, session);
+		return repository.getDataFromSQLFunction(query, session);
 	}
 	
 	@Transactional
@@ -324,7 +324,7 @@ public class ChildGrowthService {
 		Query query = session.createSQLQuery(hql);
 		setParameter(searchBuilder, query);
 		
-		return repository.getDataFromSQLFunction(searchBuilder, query, session);
+		return repository.getDataFromSQLFunction(query, session);
 	}
 	
 	private void setParameter(SearchBuilder searchBuilder, Query query) {
