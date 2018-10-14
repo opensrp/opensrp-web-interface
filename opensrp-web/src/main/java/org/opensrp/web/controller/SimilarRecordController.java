@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.opensrp.common.entity.SimilarityMatchingCriteriaDefinition;
 import org.opensrp.common.service.impl.SimilarRecordServiceImpl;
-import org.opensrp.acl.service.impl.LocationServiceImpl;
+import org.opensrp.acl.service.LocationService;
 import org.opensrp.common.service.impl.ClientServiceImpl;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.web.util.PaginationUtil;
@@ -32,7 +32,7 @@ public class SimilarRecordController {
 	private PaginationUtil paginationUtil;
 	
 	@Autowired
-	private LocationServiceImpl locationServiceImpl;
+	private LocationService locationServiceImpl;
 	
 	@Autowired
 	private ClientServiceImpl clientServiceImpl;
