@@ -2,7 +2,7 @@
  * @author proshanto
  * */
 
-package org.opensrp.acl.service.impl;
+package org.opensrp.acl.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,8 +16,7 @@ import org.json.JSONException;
 import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.entity.User;
 import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
-import org.opensrp.acl.service.AclService;
-import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
+import org.opensrp.common.interfaces.DatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,12 +24,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
 @Service
-public class LocationTagServiceImpl implements AclService {
+public class LocationTagService {
 	
-	private static final Logger logger = Logger.getLogger(LocationTagServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(LocationTagService.class);
 	
 	@Autowired
-	private DatabaseRepositoryImpl databaseRepositoryImpl;
+	private DatabaseRepository repository;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -38,21 +37,20 @@ public class LocationTagServiceImpl implements AclService {
 	@Autowired
 	private OpenMRSServiceFactory openMRSServiceFactory;
 	
-	public LocationTagServiceImpl() {
+	public LocationTagService() {
 		
 	}
 	
 	@Transactional
-	@Override
 	public <T> long save(T t) throws Exception {
 		LocationTag locationTag = (LocationTag) t;
 		locationTag = (LocationTag) openMRSServiceFactory.getOpenMRSConnector("tag").add(locationTag);
 		long createdTag = 0;
 		if (!locationTag.getUuid().isEmpty()) {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			User creator = (User) databaseRepositoryImpl.findByKey(auth.getName(), "username", User.class);
+			User creator = (User) repository.findByKey(auth.getName(), "username", User.class);
 			locationTag.setCreator(creator);
-			createdTag = databaseRepositoryImpl.save(t);
+			createdTag = repository.save(t);
 		} else {
 			logger.error("No uuid found for user:" + locationTag.getName());
 			// TODO
@@ -62,13 +60,12 @@ public class LocationTagServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	@Override
 	public <T> int update(T t) throws JSONException {
 		LocationTag locationTag = (LocationTag) t;
 		int updatedTag = 0;
 		String uuid = openMRSServiceFactory.getOpenMRSConnector("tag").update(locationTag, locationTag.getUuid(), null);
 		if (!uuid.isEmpty()) {
-			updatedTag = databaseRepositoryImpl.update(locationTag);
+			updatedTag = repository.update(locationTag);
 		} else {
 			logger.error("No uuid found for user:" + locationTag.getName());
 			// TODO
@@ -77,27 +74,23 @@ public class LocationTagServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	@Override
 	public <T> boolean delete(T t) {
-		return databaseRepositoryImpl.delete(t);
+		return repository.delete(t);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findById(int id, String fieldName, Class<?> className) {
-		return databaseRepositoryImpl.findById(id, fieldName, className);
+		return repository.findById(id, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
-		return databaseRepositoryImpl.findByKey(value, fieldName, className);
+		return repository.findByKey(value, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> List<T> findAll(String tableClass) {
-		return databaseRepositoryImpl.findAll(tableClass);
+		return repository.findAll(tableClass);
 	}
 	
 	public Map<Integer, String> getLocationTagListAsMap() {
@@ -114,7 +107,7 @@ public class LocationTagServiceImpl implements AclService {
 	public boolean locationTagExists(LocationTag locationTag) {
 		boolean exists = false;
 		if (locationTag != null) {
-			exists = databaseRepositoryImpl.entityExists(locationTag.getId(), locationTag.getName(), "name",
+			exists = repository.entityExistsNotEualThisId(locationTag.getId(), locationTag.getName(), "name",
 			    LocationTag.class);
 		}
 		return exists;
@@ -128,7 +121,7 @@ public class LocationTagServiceImpl implements AclService {
 	
 	public boolean sameEditedNameAndActualName(int id, String editedName) {
 		boolean sameName = false;
-		LocationTag location = databaseRepositoryImpl.findById(id, "id", LocationTag.class);
+		LocationTag location = repository.findById(id, "id", LocationTag.class);
 		String actualName = location.getName();
 		if (actualName.equalsIgnoreCase(editedName)) {
 			sameName = true;

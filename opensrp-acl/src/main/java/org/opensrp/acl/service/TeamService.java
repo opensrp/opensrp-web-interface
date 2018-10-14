@@ -2,7 +2,7 @@
  * @author proshanto
  * */
 
-package org.opensrp.acl.service.impl;
+package org.opensrp.acl.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +19,7 @@ import org.opensrp.acl.entity.LocationTag;
 import org.opensrp.acl.entity.Team;
 import org.opensrp.acl.entity.User;
 import org.opensrp.acl.openmrs.service.OpenMRSServiceFactory;
-import org.opensrp.acl.service.AclService;
-import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
+import org.opensrp.common.interfaces.DatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,12 +27,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
 @Service
-public class TeamServiceImpl implements AclService {
+public class TeamService {
 	
-	private static final Logger logger = Logger.getLogger(TeamServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(TeamService.class);
 	
 	@Autowired
-	private DatabaseRepositoryImpl databaseRepositoryImpl;
+	private DatabaseRepository repository;
 	
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -42,20 +41,19 @@ public class TeamServiceImpl implements AclService {
 	private OpenMRSServiceFactory openMRSServiceFactory;
 	
 	@Autowired
-	private UserServiceImpl userServiceImpl;
+	private UserService userServiceImpl;
 	
-	public TeamServiceImpl() {
+	public TeamService() {
 		
 	}
 	
 	@Transactional
-	@Override
 	public <T> long save(T t) throws Exception {
 		Team team = (Team) t;
 		team = (Team) openMRSServiceFactory.getOpenMRSConnector("team").add(team);
 		long createdTeam = 0;
 		if (!team.getUuid().isEmpty()) {
-			createdTeam = databaseRepositoryImpl.save(team);
+			createdTeam = repository.save(team);
 		} else {
 			logger.error("No uuid found for user:" + team.getName());
 			// TODO
@@ -65,13 +63,12 @@ public class TeamServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	@Override
 	public <T> int update(T t) throws JSONException {
 		Team team = (Team) t;
 		int updatedTag = 0;
 		String uuid = openMRSServiceFactory.getOpenMRSConnector("team").update(team, team.getUuid(), null);
 		if (!uuid.isEmpty()) {
-			updatedTag = databaseRepositoryImpl.update(team);
+			updatedTag = repository.update(team);
 		} else {
 			logger.error("No uuid found for team:" + team.getName());
 			// TODO
@@ -80,27 +77,23 @@ public class TeamServiceImpl implements AclService {
 	}
 	
 	@Transactional
-	@Override
 	public <T> boolean delete(T t) {
-		return databaseRepositoryImpl.delete(t);
+		return repository.delete(t);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findById(int id, String fieldName, Class<?> className) {
-		return databaseRepositoryImpl.findById(id, fieldName, className);
+		return repository.findById(id, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
-		return databaseRepositoryImpl.findByKey(value, fieldName, className);
+		return repository.findByKey(value, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> List<T> findAll(String tableClass) {
-		return databaseRepositoryImpl.findAll(tableClass);
+		return repository.findAll(tableClass);
 	}
 	
 	public Map<Integer, String> getLocationTagListAsMap() {
@@ -125,10 +118,10 @@ public class TeamServiceImpl implements AclService {
 		boolean isNameExists = false;
 		boolean isIdentifierExists = false;
 		if (team != null) {
-			isNameExists = databaseRepositoryImpl.entityExists(team.getId(), team.getName(), "name", Team.class);
+			isNameExists = repository.entityExistsNotEualThisId(team.getId(), team.getName(), "name", Team.class);
 		}
 		if (team != null) {
-			isIdentifierExists = databaseRepositoryImpl.entityExists(team.getId(), team.getIdentifier(), "identifier",
+			isIdentifierExists = repository.entityExistsNotEualThisId(team.getId(), team.getIdentifier(), "identifier",
 			    Team.class);
 		}
 		if (isNameExists) {
@@ -174,7 +167,7 @@ public class TeamServiceImpl implements AclService {
 		boolean isSame = false;
 		boolean sameName = false;
 		boolean sameIdentifier = false;
-		Team team = databaseRepositoryImpl.findById(id, "id", Team.class);
+		Team team = repository.findById(id, "id", Team.class);
 		String actualName = team.getName();
 		String actualIdentifier = team.getIdentifier();
 		if (actualName.equalsIgnoreCase(editedName)) {
@@ -193,9 +186,9 @@ public class TeamServiceImpl implements AclService {
 	
 	public Team setCreatorLocationAndSupervisorAttributeInLocation(Team team, int locationId, int supervisorId) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User creator = (User) databaseRepositoryImpl.findByKey(auth.getName(), "username", User.class);
-		Location location = (Location) databaseRepositoryImpl.findById(locationId, "id", Location.class);
-		User supervisor = (User) databaseRepositoryImpl.findById(supervisorId, "id", User.class);
+		User creator = (User) repository.findByKey(auth.getName(), "username", User.class);
+		Location location = (Location) repository.findById(locationId, "id", Location.class);
+		User supervisor = (User) repository.findById(supervisorId, "id", User.class);
 		team.setCreator(creator);
 		team.setLocation(location);
 		team.setSuperVisor(supervisor);

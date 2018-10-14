@@ -3,7 +3,7 @@ package org.opensrp.web.rest.controller;
 import static org.springframework.http.HttpStatus.OK;
 
 import org.opensrp.acl.entity.User;
-import org.opensrp.acl.service.impl.UserServiceImpl;
+import org.opensrp.acl.service.UserService;
 import org.opensrp.common.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 public class UserRestController {
 	
 	@Autowired
-	private UserServiceImpl userServiceImpl;
+	private UserService userServiceImpl;
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO) throws Exception {
@@ -36,6 +36,7 @@ public class UserRestController {
 			}
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			userNameUniqueError = "some Problem ocuured please contact with Admin";
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);

@@ -11,6 +11,14 @@ import org.opensrp.common.util.SearchBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * <p>
+ * The PaginationUtil program implements an application
+ * that simply contains the data list pagination with searching criteria .
+ * </p>
+ * @version 0.1.0
+ * @since   2018-05-30 
+ * */
 @Component
 public class PaginationUtil {
 	
@@ -32,6 +40,16 @@ public class PaginationUtil {
 		
 	}
 	
+	/**
+	 * <p>This method exactly make a decision where search criteria is involved or not.
+	 * Communicate with {@link #PaginationHelperUtil} to prepare pagination link and invoke {@link #pagination(HttpServletRequest, HttpSession, SearchBuilder, Class)}
+	 * </p>
+	 * @param request is an argument to the servlet's service.
+	 * @param session is an argument to the HttpSession's session.
+	 * @param entityClassName name of entity class name.
+	 *  * @param searchBuilder is parameter builder class
+	 * @return {@link Void}
+	 * */
 	public <T> void createPagination(HttpServletRequest request, HttpSession session, Class<T> entityClassName) {
 		String search = "";
 		search = (String) request.getParameter("search");
@@ -44,6 +62,20 @@ public class PaginationUtil {
 		
 		pagination(request, session, searchBuilder, entityClassName);
 	}
+	
+	/**
+	 * <h2>This method makes a decision of offset number. </h2>
+	 * <h1><b>Algorithm structure:</b></h1>
+	 * #1. <h5> offset number is null then take default action means get data list and page number from database.</h5>
+	 * #2. <h2> Searching is same as #1 </h2>
+	 * #3.<h2> clicked on page number then total count does get from get from database instead get from session.</h2>	 
+	 * finally invoked {@link #createPageList(HttpSession, String)}
+	 * @param request is an argument to the servlet's service.
+	 * @param session is an argument to the HttpSession's session.
+	 * @param entityClassName name of entity class name.
+	 * @param searchBuilder is parameter builder class on behave of builder pattern
+	 * @return {@link Void}
+	 * */
 	
 	public <T> void pagination(HttpServletRequest request, HttpSession session, SearchBuilder searchBuilder,
 	                           Class<?> entityClassName) {
@@ -76,6 +108,18 @@ public class PaginationUtil {
 		createPageList(session, offset);
 	}
 	
+
+	/**
+	 * <p>This method exactly make a decision where search criteria is involved or not.
+	 * Communicate with {@link #PaginationHelperUtil} to prepare pagination link and invoke {@link #pagination(HttpServletRequest, HttpSession, SearchBuilder, Class)}
+	 * </p>
+	 * @param request is an argument to the servlet's service.
+	 * @param session is an argument to the HttpSession's session.
+	 * @param viewName name of materialized view.
+	 * @param searchBuilder is parameter builder class
+	 * @return {@link Void}
+	 * */
+	
 	public <T> void createPagination(HttpServletRequest request, HttpSession session, String viewName, String entityType) {
 		String search = "";
 		search = (String) request.getParameter("search");
@@ -89,15 +133,27 @@ public class PaginationUtil {
 		pagination(request, session, searchBuilder, viewName, entityType);
 	}
 	
+	
+	/**
+	 * <h2>This method makes a decision of offset number. </h2>
+	 * <h1><b>Algorithm structure:</b></h1>
+	 * #1. <h5> offset number is null then take default action means get data list and page number from database.</h5>
+	 * #2. <h2> Searching is same as #1 </h2>
+	 * #3.<h2> clicked on page number then total count does get from get from database instead get from session.</h2>	 
+	 * finally invoked {@link #createPageList(HttpSession, String)}
+	 * @param request is an argument to the servlet's service.
+	 * @param session is an argument to the HttpSession's session.
+	 * @param viewName name of materialized view.
+	 * @param searchBuilder is parameter builder class on behave of builder pattern
+	 * @return {@link Void}
+	 * */
+	
 	public <T> void pagination(HttpServletRequest request, HttpSession session, SearchBuilder searchBuilder,
-	                           String viewName, String entityType) {
-		
-		searchUtil.setDivisionAttribute(session);
-		
+	                           String viewName, String entityType) {		
+		searchUtil.setDivisionAttribute(session);		
 		String offset = (String) request.getParameter("offSet");
 		int size = 0;
-		List<Object> data;
-		
+		List<Object> data;		
 		if (offset != null) {
 			int offsetReal = Integer.parseInt(offset);
 			offsetReal = offsetReal * RESULT_SIZE;
@@ -105,8 +161,7 @@ public class PaginationUtil {
 			if (session.getAttribute("size") == null) {
 				size = databaseServiceImpl.getViewDataSize(searchBuilder, viewName, entityType);
 				session.setAttribute("size", size / RESULT_SIZE);
-			}
-			
+			}			
 		} else {
 			data = databaseServiceImpl.getDataFromView(searchBuilder, RESULT_SIZE, 0, viewName, entityType);
 			size = databaseServiceImpl.getViewDataSize(searchBuilder, viewName, entityType);
@@ -115,17 +170,22 @@ public class PaginationUtil {
 			} else {
 				session.setAttribute("size", size / RESULT_SIZE);
 			}
-		}
-		session.setAttribute("dataList", data);
-		
+		}		
+		session.setAttribute("dataList", data);		
+
 		createPageList(session, offset);
 	}
+	/**
+	 *<p> This methods calculate number of pages.</p>  
+	 *<p>when user click on any page number then this part will be executed. 
+	 * else part will be executed on load i.e first time on page </p>
+	 * @param session is an argument to the HttpSession's session.
+	 * @param offset is current offset number.
+	 * @return {@link Void}
+	 **/
 	
-	private void createPageList(HttpSession session, String offset) {
-		/*when user click on any page number then this part will be executed. 
-		 * else part will be executed on load i.e first time on page*/
-		List<Integer> pageList = new ArrayList<Integer>();
-		
+	private void createPageList(HttpSession session, String offset) {		
+		List<Integer> pageList = new ArrayList<Integer>();		
 		if (offset != null) {
 			int listsize = Integer.parseInt(session.getAttribute("size").toString());
 			if (Integer.parseInt(offset) < 6) {
