@@ -82,9 +82,9 @@
 							<select name="from[]" id="multiselect" class="form-control"
 								size="8" multiple="multiple">
 								<%
-									if (session.getAttribute("exportAttributes") != null) {
-										List<Object> exportAttributes = (List<Object>) session.getAttribute("exportAttributes");
-										Iterator exportAttributesIterator = exportAttributes.iterator();
+									if (session.getAttribute("exportAttributesForHousehold") != null) {
+										List<Object> exportAttributesForHousehold = (List<Object>) session.getAttribute("exportAttributesForHousehold");
+										Iterator exportAttributesIterator = exportAttributesForHousehold.iterator();
 										while (exportAttributesIterator.hasNext()) {
 										    String item = String.valueOf(exportAttributesIterator.next());
 								%>
