@@ -34,7 +34,7 @@
 				<%
 					if (AuthenticationManagerUtil.isPermitted("PERM_WRITE_EXPORT_LIST")) {
 				%>
-				<a href="<c:url value="/export/export.html?lang=${locale}"/>"> <strong><spring:message
+				<a href="<c:url value="/export/add.html?lang=${locale}"/>"> <strong><spring:message
 							code="lbl.addNew" /></strong></a>
 				<%
 					}
@@ -76,21 +76,24 @@
 										<tbody>
 											<%
 												if (session.getAttribute("exportList") != null) {
-													ExportEntity exportEntity = (ExportEntity) session
-															.getAttribute("exportList");
+													List<ExportEntity> exportEntity = (List<ExportEntity>) session.getAttribute("exportList");
+													for(ExportEntity e: exportEntity) {
+														String Id = String.valueOf(e.getId());
+														session.setAttribute("Id", Id);
 											%>
 											<tr>
-												<td><%=exportEntity.getEntity_type()%></td>
-												<td><%=exportEntity.getColumn_names()%></td>
+												<td><%=e.getEntity_type()%></td>
+												<td><%=e.getColumn_names()%></td>
 												<td>
 													<%
 														if (AuthenticationManagerUtil
 																	.isPermitted("PERM_WRITE_EXPORT_LIST")) {
 													%>
 													<a
-													href="<c:url value="/export/export.html?lang=${locale}"/>">Edit</a>
+													href="<c:url value="/export/${Id}/edit.html?lang=${locale}"/>">Edit</a>
 													<%
-														}
+														    }
+													    }
 													%>
 												</td>
 											</tr>

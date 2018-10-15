@@ -26,11 +26,11 @@
 
 </head>
 
-<c:url var="saveUrl" value="/export/export.html" />
+<c:url var="saveUrl" value="/export/add.html?lang=${locale}" />
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 	<%
-		String items = "'this', 'is', 'household'";
+		String items = "{ ValueA : 'Household 1', ValueB : 'Household 2', ValueC : 'Household 3' }";
 	%>
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
@@ -68,17 +68,11 @@
 				<div class="form-group">
 					<div class="row">
 						<div class="col-sm-5">
-							<div id="app">
-								<select @change="handleChange">
-									<option v-for="selectValue in selectValues"
-										:value="selectValue">{{ selectValue }}</option>
-								</select> <select>
-									<option v-for="secondarySelectValue in secondarySelectValues"
-										:value="secondarySelectValue">{{ secondarySelectValue
-										}}</option>
-								</select>
-
-							</div>
+							Source: <form:select path="entity_type" id="source" name="source">
+								<option>Household</option>
+								<option>Mother</option>
+								<option>Child</option>
+							</form:select>
 						</div>
 					</div>
 
@@ -155,20 +149,6 @@
 				</div>
 			</form:form>
 
-
-
-
-			Source: <select id="source" name="source">
-				<option>Household</option>
-				<option>Mother</option>
-				<option>Child</option>
-			</select> 
-			Status: <select id="status" name="status">
-				<option>household1</option>
-				<option>household2</option>
-				<option>household3</option>
-			</select>
-
 			<!-- </div>
 				<div class="card-footer small text-muted"></div>
 			</div>
@@ -194,23 +174,19 @@
 
 		    var el = $(this) ;
 		    
-		    var changedHtml = document.getElementById('status');
+		    var changedHtml = document.getElementById('multiselect');
 
 		    if(el.val() === "Household" ) {
-		    	$("#status option").remove();
-		    	var myobject = {
-		    		    ValueA : 'Household 1',
-		    		    ValueB : 'Household 2',
-		    		    ValueC : 'Household 3'
-		    		};
+		    	$("#multiselect option").remove();
+		    	var myobject = <%=items%>;
 		    	for(index in myobject) {
 		    		changedHtml.options[changedHtml.options.length] = new Option(myobject[index], index);
 		    	}
 		    }
 		    else if(el.val() === "Mother" ) {
-		        $("#status option").remove();
+		        $("#multiselect option").remove();
 		        var myobject = {
-		    		    ValueA : 'Text A',
+		    		    mother_name : 'Text A',
 		    		    ValueB : 'Text B',
 		    		    ValueC : 'Text C'
 		    		};
@@ -219,40 +195,19 @@
 		    	}
 		    }
 		    else if(el.val() === "Child" ) {
-		        $("#status option").remove();
-		        $("#status").append("<option>Child</option>");
+		        $("#multiselect option").remove();
+		        var myobject = {
+		    		    ValueA : 'Child 1',
+		    		    ValueB : 'Child 2',
+		    		    ValueC : 'Child 3'
+		    		};
+		    	for(index in myobject) {
+		    		changedHtml.options[changedHtml.options.length] = new Option(myobject[index], index);
+		    	}
 		    }
 		  });
 
 		});
-	</script>
-
-	<script type="text/javascript">
-		new Vue({
-			el : '#app',
-			data : {
-				selectValues : [ 'Household', 'Mother', 'Child' ],
-				secondarySelectValues : [<%=items%>],
-			},
-			methods : {
-				handleChange : function(e) {
-					switch (e.target.value) {
-					case 'Household':
-						this.secondarySelectValues = [];
-						this.secondarySelectValues.push(<%=items%>);
-						break;
-					case 'Mother':
-						this.secondarySelectValues = [];
-						this.secondarySelectValues.push('this', 'is', 'world')
-						break;
-					case 'Child':
-						this.secondarySelectValues = [];
-						this.secondarySelectValues.push('this', 'is', 'etc')
-						break;
-					}
-				}
-			}
-		})
 	</script>
 </body>
 </html>
