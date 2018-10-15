@@ -1,4 +1,4 @@
-package org.opensrp.common.entity;
+package org.opensrp.core.entity;
 
 import java.util.Date;
 
@@ -28,6 +28,9 @@ public class FormUpload {
 	
 	@Column(name = "name")
 	private String name;
+	
+	@Column(name = "user")
+	private User user;
 	
 	@Column(name = "time_stamp")
 	private long timeStamp;
