@@ -140,7 +140,9 @@ public class UserService {
 	}
 	
 	public boolean isUserExist(String userName) {
-		return repository.isExists(userName, "username", User.class);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("username", userName);
+		return repository.isExists(params, User.class);
 	}
 	
 	public User convert(UserDTO userDTO) {

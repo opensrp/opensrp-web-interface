@@ -23,7 +23,6 @@ import org.opensrp.common.util.SearchBuilder;
  * <li>{@link #findById(int, String, Class)}</li>
  * <li>{@link #findAllByKey(String, String, Class)}</li>
  * <li>{@link #findByKey(String, String, Class)}</li>
- * <li>{@link #findAll(String)}</li>
  * <li>{@link #findByKeys(Map, Class)}</li>
  * <li>{@link #findLastByKey(Map, String, Class)}</li>
  * <li>{@link #findLastByKeyLessThanDateConditionOneField(Map, Date, String, String, Class)}</li>
@@ -32,8 +31,6 @@ import org.opensrp.common.util.SearchBuilder;
  * <li>{@link #isExists(String, String, Class)}</li>
  * <li>{@link #entityExistsNotEualThisId(int, Object, String, Class)}</li>
  * <li>{@link #findAllByKey(String, String, Class)}</li>
- * <li>{@link #executeSelectQuery(String, Map)}</li>
- * <li>{@link #executeSelectQuery(String)}</li>
  * <li>{@link #search(SearchBuilder, int, int, Class)}</li>
  * <li>{@link #countBySearch(SearchBuilder, Class)}</li>
  * <li>{@link #countBySearch(SearchBuilder, Class)}</li>
@@ -53,6 +50,9 @@ import org.opensrp.common.util.SearchBuilder;
  * <h1>Some Query API for RAW :
  * <h1><br />
  * <ul>
+ * <li>{@link #findAll(String)}</li>
+ * <li>{@link #executeSelectQuery(String, Map)}</li>
+ * <li>{@link #executeSelectQuery(String)}</li>
  * <li>{@link #getDataFromSQLFunction(SearchBuilder, Query, Session)}</li>
  * </ul>
  * </p>
@@ -88,7 +88,7 @@ public interface DatabaseRepository {
 	
 	public <T> List<T> findAllByKeysWithALlMatches(boolean isProvider, Map<String, String> fielaValues, Class<?> className);
 	
-	public boolean isExists(String value, String fieldName, Class<?> className);
+	public boolean isExists(Map<String, Object> fielaValues, Class<?> className);
 	
 	public <T> boolean entityExistsNotEualThisId(int id, T value, String fieldName, Class<?> className);
 	
@@ -109,6 +109,6 @@ public interface DatabaseRepository {
 	
 	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType);
 	
-	public <T> List<T> getDataFromSQLFunction(SearchBuilder searchBuilder, Query query, Session session);
+	public <T> List<T> getDataFromSQLFunction(Query query, Session session);
 	
 }

@@ -44,7 +44,7 @@ public class OpenMRSTeamMemberAPIService implements OpenMRSConnector<Object> {
 		String teamMemberUuid = "";
 		JSONObject createdTeamMember = apiServiceFactory.getApiService("openmrs").add(PAYLOAD,
 		    makeTeamMemebrObject(teamMember), TEAM_MEMBER_URL);
-		System.err.println(createdTeamMember);
+		
 		if (createdTeamMember.has("uuid")) {
 			teamMemberUuid = (String) createdTeamMember.get("uuid");
 			teamMember.setUuid(teamMemberUuid);
