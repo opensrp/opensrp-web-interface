@@ -522,6 +522,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * of records defined to the configuration (default 10).This method supports pagination with
 	 * search option.
 	 * </p>
+	 * *
+	 * <p>
+	 * maxRange -1 means maxResult does not consider. offsetreal -1 means setFirstResult does not
+	 * consider.
+	 * </p>
 	 * <br/>
 	 * <b> How to invoke:</b> SearchBuilder searchBuilder; searchBuilder.setDistrict("DHAKA");
 	 * search(searchBuilder,1,1, User.class).
@@ -540,8 +545,13 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Criteria criteria = session.createCriteria(entityClassName);
 		
 		criteria = DatabaseServiceImpl.createCriteriaCondition(searchBuilder, criteria);
-		criteria.setFirstResult(offsetreal);
-		criteria.setMaxResults(maxResult);
+		
+		if (offsetreal != -1) {
+			criteria.setFirstResult(offsetreal);
+		}
+		if (maxResult != -1) {
+			criteria.setMaxResults(maxResult);
+		}
 		criteria.addOrder(Order.desc("created"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		
@@ -633,9 +643,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	/**
 	 * <p>
 	 * {@link #getDataFromView(SearchBuilder, int, int, String, String, String)} fetch entity by
-	 * {@link #sessionFactory}. This is a common method for all Entity class, so it works for any
-	 * entity class.its returns count of the result.This method supports search option. Query to a
-	 * view and returns data list.
+	 * {@link #sessionFactory}.This is a common method for all View, so it works for any View.This
+	 * method supports pagination with search option.
 	 * <p>
 	 * <p>
 	 * maxRange -1 means setMaxResults does not consider. offsetreal -1 means setFirstResult does
@@ -644,10 +653,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * 
 	 * @param searchBuilder is search option list.
 	 * @param offset is number of offset.
-	 * @param maxResults is returned maximum number of data.
+	 * @param maxRange is returned maximum number of data.
 	 * @param viewName is name of target view.
-	 * @param entityType is name of entity type.
-	 * @param orderingBy is the order by condition of sql query.
+	 * @param orderingBy is the order by condition of query.
+	 * @param entityType is name of ENtity Type Such as "child,member".
 	 * @return List<T>.
 	 */
 	@Override
@@ -686,14 +695,20 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	
 	/**
 	 * <p>
-	 * get data count with or without search parameter's.
+	 * {@link #getViewDataSize(SearchBuilder, String, String)} fetch entity by
+	 * {@link #sessionFactory}. This is a common method for all View, so it works for any View.This
+	 * method supports search option.
 	 * </p>
+	 * <br/>
+	 * <b> How to invoke:</b> SearchBuilder searchBuilder; searchBuilder.setDistrict("DHAKA");
+	 * search(searchBuilder, User.class).
 	 * 
-	 * @param searchBuilder is search option list.
+	 * @param entityType is name of ENtity Type Such as "child,member".
+	 * @param searchBuilder is object of search option.
 	 * @param viewName is name of target view.
-	 * @param entityType is name of entity type.
-	 * @return dataCount.
+	 * @return total count.
 	 */
+	
 	@Override
 	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType) {
 		Session session = sessionFactory.openSession();
