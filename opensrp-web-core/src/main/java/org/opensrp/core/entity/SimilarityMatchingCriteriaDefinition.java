@@ -1,4 +1,4 @@
-package org.opensrp.common.entity;
+package org.opensrp.core.entity;
 
 import java.io.Serializable;
 import java.util.Date;

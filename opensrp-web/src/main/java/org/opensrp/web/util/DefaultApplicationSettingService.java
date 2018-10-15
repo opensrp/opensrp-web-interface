@@ -15,7 +15,6 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
-
 import org.opensrp.common.entity.Marker;
 import org.opensrp.common.service.impl.MarkerServiceImpl;
 import org.opensrp.common.util.AllConstant;
@@ -23,10 +22,10 @@ import org.opensrp.common.util.DefaultRole;
 import org.opensrp.core.entity.Permission;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
-import org.opensrp.core.service.DuplicateRecordServiceImpl;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.PermissionService;
 import org.opensrp.core.service.RoleService;
+import org.opensrp.core.service.SimilarRecordServiceImpl;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.entity.WeightVelocityChart;
 import org.opensrp.web.nutrition.service.WeightVelocityChartService;
@@ -70,7 +69,7 @@ public class DefaultApplicationSettingService {
 	private WeightVelocityChartService weightVelocityChartServiceImpl;
 	
 	@Autowired
-	private DuplicateRecordServiceImpl similarRecordServiceImpl;
+	private SimilarRecordServiceImpl similarRecordServiceImpl;
 	
 	public DefaultApplicationSettingService() {
 		
@@ -153,7 +152,7 @@ public class DefaultApplicationSettingService {
 		
 		growthValocityChart.getAllGrowthValocityChart();
 		similarRecordServiceImpl.getMatchingCriteriaForAllViews();
-		similarRecordServiceImpl.getCloumnNameListForAllViewsWithDuplicateRecord();
+		similarRecordServiceImpl.getCloumnNameListForAllViewsWithSimilarRecord();
 	}
 	
 	public void runScript(String aSQLScriptFilePath, ScriptRunner sr) throws FileNotFoundException, IOException,

@@ -9,11 +9,11 @@ import javax.validation.Valid;
 
 import org.json.JSONException;
 import org.opensrp.common.entity.ClientEntity;
-import org.opensrp.common.entity.SimilarityMatchingCriteriaDefinition;
-import org.opensrp.common.service.impl.ClientServiceImpl;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
-import org.opensrp.common.service.impl.SimilarRecordServiceImpl;
+import org.opensrp.core.entity.SimilarityMatchingCriteriaDefinition;
+import org.opensrp.core.service.ClientServiceImpl;
 import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.SimilarRecordServiceImpl;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
