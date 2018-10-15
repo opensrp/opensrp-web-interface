@@ -24,7 +24,7 @@ public class FacilityService {
 
 	@Autowired
 	private FacilityWorkerService facilityWorkerService;
-
+	
 	@Transactional
 	public <T> long save(T t) throws Exception {
 		return repository.save(t);
@@ -74,12 +74,37 @@ public class FacilityService {
 		return repository.findAll(tableClass);
 	}
 
+	/**
+	 * Fulfill all the prerequisites and save new Facility
+	 * <p>
+	 * <ol>
+	 *	<li> Set location codes to Facility </li>
+	 *	<li> Save Facility</li>
+	 * </ol>
+	 * </p>
+	 * @param facility Facility-object
+	 * @return 1 for success and -1 for failure.
+	 */
 	@Transactional
 	public long saveFacility(Facility facility) throws Exception {
 		facility = setLocationCodesToFacility(facility);
 		return save(facility);
 	}
 
+	/**
+	 * <p>
+	 * Set location codes to Facility. 
+	 * Location code stays in the same string with location name.
+	 * This method separates the location-name and code and put them in different fields.
+	 * Example:
+	 * In input Facility-object:  divisionName= Dhaka?32
+	 * 							  divisionCode= null
+	 * In output Facility-object: divisionName= Dhaka
+	 * 			  		 		  divisionCode= 32
+	 * </p>
+	 * @param facility Facility-object in which location name and location code is in the same field
+	 * @return Facility Facility-object in which location name and location code is in two fields
+	 */
 	public Facility setLocationCodesToFacility(Facility facility) {
 		if (facility.getDivision() != null && !facility.getDivision().isEmpty()) {
 			String[] division = facility.getDivision().split("\\?");
@@ -135,6 +160,13 @@ public class FacilityService {
 		return facility;
 	}
 
+	/**
+	 * <p>
+	 * Get list of all FacilityWorker of a specific Facility.
+	 * </p>
+	 * @param facilityId is id of the Facility
+	 * @return List<FacilityWorker> list of FacilityWorker of that Facility
+	 */
 	public List<FacilityWorker> getFacilityWorkerList(int facilityId) {
 		Facility facility = findById(facilityId, "id", Facility.class);
 		Map<String, Object> facilityMap = new HashMap<String, Object>();
