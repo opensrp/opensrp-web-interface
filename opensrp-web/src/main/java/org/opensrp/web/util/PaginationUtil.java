@@ -172,6 +172,7 @@ public class PaginationUtil {
 			}
 		}		
 		session.setAttribute("dataList", data);		
+
 		createPageList(session, offset);
 	}
 	/**

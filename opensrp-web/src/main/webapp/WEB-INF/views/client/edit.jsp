@@ -54,7 +54,7 @@
 			
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Edit Mother
+					<i class="fa fa-table"></i> <spring:message code="lbl.editMother"/>
 				</div>
 				<div class="card-body">
 					<form:form method="POST" action="${saveUrl}"
@@ -102,35 +102,35 @@
 													fatherName = "";
 												}
 									%>
-									<label for="First Name">First Name</label>
+									<label for="First Name"><spring:message code="lbl.firstName"/></label>
 									<form:input path="firstName" class="form-control"
 										placeholder="First Name" value="<%=firstName%>" />
 										
-									<label for="Last Name">Last Name</label>
+									<label for="Last Name"><spring:message code="lbl.lastName"/></label>
 									<form:input path="lastName" class="form-control"
 										placeholder="Last Name" value="<%=lastName%>" />
 
-                                    <label for="Household ID">Household ID</label>
+                                    <label for="Household ID"><spring:message code="lbl.household"/></label>
 									<form:input path="householdCode" class="form-control"
 									    placeholder="Household ID" value="<%=householdCode%>" />
 
-                                    <label for="Phone Number">Phone Number</label>
+                                    <label for="Phone Number"><spring:message code="lbl.phoneNumber"/></label>
 									<form:input path="phoneNumber" class="form-control"
 										placeholder="Phone Number" value="<%=phoneNumber%>" />
 
-									<label for="NID">NID</label>
+									<label for="NID"><spring:message code="lbl.nId"/></label>
 									<form:input path="nid" class="form-control"
 									    placeholder="NID" value="<%=nid%>" />
 
-									<label for="Spouse Name">Spouse Name</label>
+									<label for="Spouse Name"><spring:message code="lbl.husbandName"/></label>
 									<form:input path="spouseName" class="form-control"
 										placeholder="Spouse Name" value="<%=spouseName%>" />
 
-									<label for="Mother Name">Mother Name</label>
+									<label for="Mother Name"><spring:message code="lbl.motherName"/></label>
 									<form:input path="motherName" class="form-control"
 										placeholder="Mother Name" value="<%=motherNumber%>" />
 
-                                    <label for="Father Name">Father Name</label>
+                                    <label for="Father Name"><spring:message code="lbl.fatherName"/></label>
 									<form:input path="fatherName" class="form-control"
 										placeholder="Father Name" value="<%=fatherName%>" />
 
@@ -146,7 +146,7 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<input type="submit" value="Save"
+									<input type="submit" value="<spring:message code="lbl.save"/>"
 										class="btn btn-primary btn-block" />
 								</div>
 							</div>

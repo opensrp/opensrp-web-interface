@@ -9,11 +9,11 @@ import javax.validation.Valid;
 
 import org.json.JSONException;
 import org.opensrp.common.entity.ClientEntity;
-import org.opensrp.common.service.impl.ClientServiceImpl;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
-import org.opensrp.core.entity.DuplicateMatchingCriteriaDefinition;
-import org.opensrp.core.service.DuplicateRecordServiceImpl;
+import org.opensrp.core.entity.SimilarityMatchingCriteriaDefinition;
+import org.opensrp.core.service.ClientServiceImpl;
 import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.SimilarRecordServiceImpl;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -39,66 +39,13 @@ public class ClientController {
 	private PaginationUtil paginationUtil;
 	
 	@Autowired
-	private LocationService locationServiceImpl;
-	
-	@Autowired
 	private ClientServiceImpl clientServiceImpl;
 	
 	@Autowired
-	private DuplicateRecordServiceImpl duplicateRecordServiceImpl;
+	private LocationService locationService;
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_SIMILARITY_DEFINITION')")
-	@RequestMapping(value = "/updateDuplicateDefinition.html", method = RequestMethod.POST)
-	public String updateDuplicateDefinition(@RequestParam(value = "criteriaString", required = false) String criteriaString,
-	                                        @RequestParam(value = "id", required = false) String id,
-	                                        @RequestParam(value = "viewName", required = false) String viewName,
-	                                        HttpSession session, ModelMap model, Locale locale) throws JSONException {
-		duplicateRecordServiceImpl.updateDuplicateMatchCriteriaForView(id, viewName, criteriaString);
-		if (viewName.equals("viewJsonDataConversionOfEvent")) {
-			return showDuplicateEvent(session, model, locale);
-		}
-		return showDuplicateClient(session, model, locale);
-	}
-	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_SIMILARITY_DEFINITION')")
-	@RequestMapping(value = "/duplicateDefinitionOfClient.html", method = RequestMethod.GET)
-	public ModelAndView showDuplicateDefinitionOfClient(HttpServletRequest request, HttpSession session, ModelMap model,
-	                                                    Locale locale) throws JSONException {
-		model.addAttribute("locale", locale);
-		duplicateRecordServiceImpl.getColumnNameList(session, "viewJsonDataConversionOfClient");
-		DuplicateMatchingCriteriaDefinition duplicateMatchingCriteriaDefinition = duplicateRecordServiceImpl
-		        .getDuplicateMatchingCriteriaDefinitionForView("viewJsonDataConversionOfClient");
-		
-		return new ModelAndView("client/duplicate-definition-of-client", "command", duplicateMatchingCriteriaDefinition);
-	}
-	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_SIMILARITY_DEFINITION')")
-	@RequestMapping(value = "/duplicateDefinitionOfEvent.html", method = RequestMethod.GET)
-	public ModelAndView showDuplicateDefinitionOfEvent(HttpServletRequest request, HttpSession session, ModelMap model,
-	                                                   Locale locale) throws JSONException {
-		model.addAttribute("locale", locale);
-		duplicateRecordServiceImpl.getColumnNameList(session, "viewJsonDataConversionOfEvent");
-		DuplicateMatchingCriteriaDefinition duplicateMatchingCriteriaDefinition = duplicateRecordServiceImpl
-		        .getDuplicateMatchingCriteriaDefinitionForView("viewJsonDataConversionOfEvent");
-		
-		return new ModelAndView("client/duplicate-definition-of-event", "command", duplicateMatchingCriteriaDefinition);
-	}
-	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_SIMILAR_EVENT_CLIENT')")
-	@RequestMapping(value = "/duplicateEvent.html", method = RequestMethod.GET)
-	public String showDuplicateEvent(HttpSession session, ModelMap model, Locale locale) throws JSONException {
-		duplicateRecordServiceImpl.getDuplicateRecord(session, "viewJsonDataConversionOfEvent");
-		model.addAttribute("locale", locale);
-		return "client/duplicate-event";
-	}
-	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_SIMILAR_EVENT_CLIENT')")
-	@RequestMapping(value = "/duplicateClient.html", method = RequestMethod.GET)
-	public String showDuplicateClient(HttpSession session, ModelMap model, Locale locale) throws JSONException {
-		duplicateRecordServiceImpl.getDuplicateRecord(session, "viewJsonDataConversionOfClient");
-		model.addAttribute("locale", locale);
-		return "client/duplicate-client";
-	}
+	@Autowired
+	private SimilarRecordServiceImpl similarRecordServiceImpl;
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_CHILD')")
 	@RequestMapping(value = "/child/{id}/details.html", method = RequestMethod.GET)
@@ -171,7 +118,6 @@ public class ClientController {
 	public ModelAndView editMother(@ModelAttribute("clientEntity") @Valid ClientEntity clientEntity, BindingResult binding,
 	                               ModelMap model, HttpSession session, @PathVariable("baseEntityId") String baseEntityId,
 	                               Locale locale) throws JSONException {
-		System.out.println("submit clientEntity: " + baseEntityId);
 		clientServiceImpl.updateClientData(clientEntity, baseEntityId);
 		model.addAttribute("locale", locale);
 		return new ModelAndView("redirect:/client/mother.html?lang=" + locale);
@@ -190,11 +136,63 @@ public class ClientController {
 	@RequestMapping(value = "/location", method = RequestMethod.GET)
 	public String getChildLocationList(HttpServletRequest request, HttpSession session, ModelMap model,
 	                                   @RequestParam int id, Locale locale) {
-		List<Object[]> parentData = locationServiceImpl.getChildData(id);
-		System.out.println("child data size: " + parentData.size());
+		List<Object[]> parentData = locationService.getChildData(id);
 		session.setAttribute("data", parentData);
 		model.addAttribute("locale", locale);
 		return "/location";
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_SIMILARITY_DEFINITION')")
+	@RequestMapping(value = "/updateSimilarityDefinition.html", method = RequestMethod.POST)
+	public String updateSimilarityDefinition(@RequestParam(value = "criteriaString", required = false) String criteriaString,
+	                                         @RequestParam(value = "id", required = false) String id,
+	                                         @RequestParam(value = "viewName", required = false) String viewName,
+	                                         HttpSession session, ModelMap model, Locale locale) throws JSONException {
+		similarRecordServiceImpl.updateSimilarityMatchCriteriaForView(id, viewName, criteriaString);
+		if (viewName.equals("viewJsonDataConversionOfEvent")) {
+			return showSimilarEvent(session, model, locale);
+		}
+		return showSimilarClient(session, model, locale);
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_SIMILARITY_DEFINITION')")
+	@RequestMapping(value = "/similarityDefinitionOfClient.html", method = RequestMethod.GET)
+	public ModelAndView showSimilarityDefinitionOfClient(HttpServletRequest request, HttpSession session, ModelMap model,
+	                                                     Locale locale) throws JSONException {
+		model.addAttribute("locale", locale);
+		similarRecordServiceImpl.getColumnNameList(session, "viewJsonDataConversionOfClient");
+		SimilarityMatchingCriteriaDefinition similarityMatchingCriteriaDefinition = similarRecordServiceImpl
+		        .getSimilarityMatchingCriteriaDefinitionForView("viewJsonDataConversionOfClient");
+		
+		return new ModelAndView("client/similarity-definition-of-client", "command", similarityMatchingCriteriaDefinition);
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_SIMILARITY_DEFINITION')")
+	@RequestMapping(value = "/similarityDefinitionOfEvent.html", method = RequestMethod.GET)
+	public ModelAndView showSimilarityDefinitionOfEvent(HttpServletRequest request, HttpSession session, ModelMap model,
+	                                                    Locale locale) throws JSONException {
+		model.addAttribute("locale", locale);
+		similarRecordServiceImpl.getColumnNameList(session, "viewJsonDataConversionOfEvent");
+		SimilarityMatchingCriteriaDefinition similarityMatchingCriteriaDefinition = similarRecordServiceImpl
+		        .getSimilarityMatchingCriteriaDefinitionForView("viewJsonDataConversionOfEvent");
+		
+		return new ModelAndView("client/similarity-definition-of-event", "command", similarityMatchingCriteriaDefinition);
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_SIMILAR_EVENT_CLIENT')")
+	@RequestMapping(value = "/similarEvent.html", method = RequestMethod.GET)
+	public String showSimilarEvent(HttpSession session, ModelMap model, Locale locale) throws JSONException {
+		similarRecordServiceImpl.getSimilarRecord(session, "viewJsonDataConversionOfEvent");
+		model.addAttribute("locale", locale);
+		return "client/similar-event";
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_SIMILAR_EVENT_CLIENT')")
+	@RequestMapping(value = "/similarClient.html", method = RequestMethod.GET)
+	public String showSimilarClient(HttpSession session, ModelMap model, Locale locale) throws JSONException {
+		similarRecordServiceImpl.getSimilarRecord(session, "viewJsonDataConversionOfClient");
+		model.addAttribute("locale", locale);
+		return "client/similar-client";
 	}
 	
 }

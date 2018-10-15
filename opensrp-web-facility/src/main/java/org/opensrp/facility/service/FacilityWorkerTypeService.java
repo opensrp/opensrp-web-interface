@@ -1,4 +1,4 @@
-package org.opensrp.facility.service.impl;
+package org.opensrp.facility.service;
 
 import java.util.List;
 import java.util.Map;
@@ -6,71 +6,61 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
-import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
-import org.opensrp.facility.service.FacilityService;
+import org.opensrp.common.interfaces.DatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FacilityWorkerServiceImpl implements FacilityService {
+public class FacilityWorkerTypeService{
 	
-	private static final Logger logger = Logger.getLogger(FacilityWorkerServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(FacilityWorkerTypeService.class);
 	
 	@Autowired
-	private DatabaseRepositoryImpl databaseRepositoryImpl;
+	private DatabaseRepository repository;
 	
 	@Transactional
-	@Override
 	public <T> long save(T t) throws Exception {
-		return databaseRepositoryImpl.save(t);
+		return repository.save(t);
 	}
 	
 	@Transactional
-	@Override
 	public <T> int update(T t) throws Exception {
-		return databaseRepositoryImpl.update(t);
+		return repository.update(t);
 	}
 	
 	@Transactional
-	@Override
 	public <T> boolean delete(T t) {
-		return databaseRepositoryImpl.delete(t);
+		return repository.delete(t);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findById(int id, String fieldName, Class<?> className) {
-		return databaseRepositoryImpl.findById(id, fieldName, className);
+		return repository.findById(id, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
-		return databaseRepositoryImpl.findByKey(value, fieldName, className);
+		return repository.findByKey(value, fieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findOneByKeys(Map<String, Object> fielaValues, Class<?> className) {
-		return databaseRepositoryImpl.findByKeys(fielaValues, className);
+		return repository.findByKeys(fielaValues, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> List<T> findAllByKeys(Map<String, Object> fielaValues, Class<?> className) {
-		return databaseRepositoryImpl.findAllByKeys(fielaValues, className);
+		return repository.findAllByKeys(fielaValues, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> T findLastByKeys(Map<String, Object> fielaValues, String orderByFieldName, Class<?> className) {
-		return databaseRepositoryImpl.findLastByKey(fielaValues, orderByFieldName, className);
+		return repository.findLastByKey(fielaValues, orderByFieldName, className);
 	}
 	
 	@Transactional
-	@Override
 	public <T> List<T> findAll(String tableClass) {
-		return databaseRepositoryImpl.findAll(tableClass);
+		return repository.findAll(tableClass);
 	}
 	
 }

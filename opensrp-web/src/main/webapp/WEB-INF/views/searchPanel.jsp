@@ -74,7 +74,7 @@
 
 <div class="card mb-3">
 	<div class="card-header">
-		<i class="fa fa-table"></i> ${title.toString()} Search
+		<i class="fa fa-table"></i> ${title.toString()} <spring:message code="lbl.search"/>
 	</div>
 	<div class="card-body">
 		<form id="search-form">
@@ -82,7 +82,7 @@
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="division"
 						name="division">
-						<option value="0?">Please Select Division</option>
+						<option value="0?"><spring:message code="lbl.selectDivision"/></option>
 						<%
 										for (Object[] objects : divisions) {
 											if (divId == ((Integer) objects[1]).intValue()) {
@@ -101,7 +101,7 @@
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="district"
 						name="district">
-						<option value="0?">Please Select District</option>
+						<option value="0?"><spring:message code="lbl.selectDistrict"/></option>
 						<%
 										if (districts != null) {
 											for (Object[] objects : districts) {
@@ -122,7 +122,7 @@
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="upazila"
 						name="upazila">
-						<option value="0?">Please Select Upazilla</option>
+						<option value="0?"><spring:message code="lbl.selectUpazila"/></option>
 						<%
 										if (upazilas != null) {
 											for (Object[] objects : upazilas) {
@@ -143,7 +143,7 @@
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="union"
 						name="union">
-						<option value="0?">Please Select Union</option>
+						<option value="0?"><spring:message code="lbl.selectUnion"/></option>
 						<%
 										if (unions != null) {
 											for (Object[] objects : unions) {
@@ -164,7 +164,7 @@
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="ward"
 						name="ward">
-						<option value="0?">Please Select Ward</option>
+						<option value="0?"><spring:message code="lbl.selectWard"/></option>
 						<%
 										if (wards != null) {
 											for (Object[] objects : wards) {
@@ -185,7 +185,7 @@
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="subunit"
 						name="subunit">
-						<option value="0?">Please Select Subunit</option>
+						<option value="0?"><spring:message code="lbl.selectSubunit"/></option>
 						<%
 										if (subuits != null) {
 											for (Object[] objects : subuits) {
@@ -206,7 +206,7 @@
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="mauzapara"
 						name="mauzapara">
-						<option value="0?">Please Select Mauzapara</option>
+						<option value="0?"><spring:message code="lbl.selectMauzapara"/></option>
 						<%
 										if (mauzaparas != null) {
 											for (Object[] objects : mauzaparas) {
@@ -236,7 +236,7 @@
 				</div>
 				<div class="col-6">
 					<button name="search" type="submit" id="bth-search"
-						class="btn btn-primary" value="search">Search</button>
+						class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
 				</div>
 			</div>
 		</form>

@@ -29,7 +29,7 @@
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Child List
+					<i class="fa fa-table"></i> <spring:message code="lbl.childList"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -42,45 +42,41 @@
 										<thead>
 											<tr>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+													style="width: 140px;"><spring:message code="lbl.firstName"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Gender</th>
+													style="width: 140px;"><spring:message code="lbl.gender"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Birth Date</th>
+													style="width: 106px;"><spring:message code="lbl.birthDate"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Birth Weight</th>
+													style="width: 140px;"><spring:message code="lbl.birthWeight"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Address Type</th>
+													style="width: 140px;"><spring:message code="lbl.motherName"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Mother Name</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Provider</th>
+													style="width: 43px;"><spring:message code="lbl.provider"/></th>
 												 	<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Latest Growth Status</th>
+													style="width: 140px;"><spring:message code="lbl.latestGrowthStatus"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Action</th>
+													style="width: 140px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+													style="width: 140px;"><spring:message code="lbl.firstName"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Gender</th>
+													style="width: 140px;"><spring:message code="lbl.gender"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Birth Date</th>
+													style="width: 106px;"><spring:message code="lbl.birthDate"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Birth Weight</th>
+													style="width: 140px;"><spring:message code="lbl.birthWeight"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Address Type</th>
+													style="width: 140px;"><spring:message code="lbl.motherName"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Mother Name</th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Provider</th>
+													style="width: 43px;"><spring:message code="lbl.provider"/></th>
 												 	<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Latest Growth Status</th>
+													style="width: 140px;"><spring:message code="lbl.latestGrowthStatus"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Action</th>
+													style="width: 140px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</tfoot>
 										<tbody>
@@ -127,12 +123,11 @@
 												<td><%=gender%></td>
 												<td><%=birthDate%></td>
 												<td><%=birthWeight%></td>
-												<td><%=addressType%></td>
 												<td><%=motherName%></td>
 												<td><%=provider%></td>
 												<td bgcolor=<%=bgColor%>><%=gStatusDecoded%></td>
 												<td>
-												<a href="<c:url value="/client/child/${baseEntityId}/details.html?lang=${locale}"/>">Details</a>		
+												<a href="<c:url value="/client/child/${baseEntityId}/details.html?lang=${locale}"/>"><spring:message code="lbl.details"/></a>		
 												</td> 
 											</tr>
 											<%

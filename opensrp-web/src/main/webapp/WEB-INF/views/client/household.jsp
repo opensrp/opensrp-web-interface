@@ -29,7 +29,7 @@
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Household List
+					<i class="fa fa-table"></i> <spring:message code="lbl.householdList"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -42,37 +42,37 @@
 										<thead>
 											<tr>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Created Date</th>
+													style="width: 140px;"><spring:message code="lbl.createdDate"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Ward</th>
+													style="width: 79px;"><spring:message code="lbl.ward"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">HHID</th>
+													style="width: 43px;"><spring:message code="lbl.hhId"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Household Code</th>
+													style="width: 43px;"><spring:message code="lbl.householdCode"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+													style="width: 140px;"><spring:message code="lbl.firstName"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Phone Number</th>
+													style="width: 140px;"><spring:message code="lbl.phoneNumber"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Provider</th>
+													style="width: 225px;"><spring:message code="lbl.provider"/></th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Created Date</th>
+													style="width: 140px;"><spring:message code="lbl.createdDate"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Ward</th>
+													style="width: 79px;"><spring:message code="lbl.ward"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">HHID</th>
+													style="width: 43px;"><spring:message code="lbl.hhId"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Household Code</th>
+													style="width: 43px;"><spring:message code="lbl.householdCode"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+													style="width: 140px;"><spring:message code="lbl.firstName"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Phone Number</th>
+													style="width: 140px;"><spring:message code="lbl.phoneNumber"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Provider</th>
+													style="width: 225px;"><spring:message code="lbl.provider"/></th>
 											</tr>
 										</tfoot>
 										<tbody>

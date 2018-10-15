@@ -2,6 +2,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Set"%>
+<%@page import="java.util.HashSet"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.opensrp.facility.entity.FacilityWorker"%>
 <%@page import="org.opensrp.facility.entity.FacilityTraining"%>
@@ -18,7 +19,6 @@
 <html> 
 
 <head>
-<!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> -->
 <title>CC Profile</title>
 </head>
 <style>
@@ -33,6 +33,7 @@ List<FacilityWorker> otherHealthWorkerList = new ArrayList<FacilityWorker>();
 List<FacilityWorker> communityGroupMemberList = new ArrayList<FacilityWorker>();
 List<FacilityWorker> communitySupportGroupMemberList = new ArrayList<FacilityWorker>();
 String[][] coreWorkers = new String[6][2];
+Set<FacilityTraining> trainings = new HashSet<FacilityTraining>();
 
 if (session.getAttribute("facilityWorkerList") != null) {
 	FacilityWorker prevFacilityWorker = null;
@@ -61,13 +62,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		}
 		
 		if(workerTypeId==1){
-			Set<FacilityTraining> trainings = facilityWorker.getFacilityTrainings();
-			List<Integer> trainingListOfLatestChcp = new ArrayList<Integer>();
-			for(FacilityTraining training : trainings){
-		    	//trainingIdList.add(training.getId());
-		    	trainingListOfLatestChcp.add(training.getId());
-		    	}
-			trainingIdList = trainingListOfLatestChcp;
+			trainings = facilityWorker.getFacilityTrainings();
 		}
 		
 	}
@@ -81,11 +76,11 @@ if (session.getAttribute("facilityWorkerList") != null) {
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		
-		<jsp:include page="/WEB-INF/views/facility-url.jsp" />
+		<jsp:include page="/WEB-INF/views/facility/facility-url.jsp" />
 		
 		<div class="form-group">
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
-		<a  href="<c:url value="/facility/${facility.id}/addWorker.html"/>"> <strong>Add Worker/Training</strong> </a>		
+		<a  href="<c:url value="/facility/${facility.id}/addWorker.html"/>"> <strong><spring:message code="lbl.addWorkerOrTraining"/></strong> </a>		
 		<%} %>
 		</div>
 		
@@ -249,108 +244,13 @@ if (session.getAttribute("facilityWorkerList") != null) {
     <td colspan="4"><table width="100%" border="0">
 <%
 	int i=1;
-	if(trainingIdList.contains(1)){
+    for(FacilityTraining training : trainings){
 %>
       <tr>
         <td><%=i++ %>.</td>
-        <td>মৈলিক প্রশিক্ষণ</td>
+        <td><%=training.getName() %></td>
       </tr>
-<%
-	} 
-	if(trainingIdList.contains(2)){
-%>
-      <tr>
-        <td><%=i++ %>.</td>
-        <td>রিফ্রেসার প্রশিক্ষণ</td>
-      </tr>
-<%
-	} 
-	if(trainingIdList.contains(3)){
-%>
-      <tr>
-        <td><%=i++ %>.</td>
-        <td>সিএসবিএ প্রশিক্ষণ</td>
-      </tr>
-<%
-	} 
-	if(trainingIdList.contains(4)){
-%>
-      <tr>
-        <td><%=i++ %>.</td>
-        <td>এমআইএস বিষয়ক প্রশিক্ষণ</td>
-      </tr>
-<%
-	} 
-	if(trainingIdList.contains(5)){
-%>
-      <tr>
-        <td><%=i++ %>.</td>
-        <td>এনসিডি প্রশিক্ষণ</td>
-      </tr>
-<%
-	} 
-	if(trainingIdList.contains(6)){
-%>
-      <tr>
-        <td><%=i++ %>.</td>
-        <td>দুর্যোগ ব্যবস্থাপনা প্রশিক্ষণ</td>
-      </tr>
-<%
-	} 
-	if(trainingIdList.contains(7)){
-%>
-      <tr>
-        <td><%=i++ %>.</td>
-        <td>যক্ষা ও কুষ্ঠ নিয়ন্ত্রন  প্রশিক্ষণ</td>
-      </tr>
-<%
-	} 
-	if(trainingIdList.contains(8)){
-%>
-      <tr>
-        <td><%=i++ %>.</td>
-        <td>স্বাস্থ্য শিক্ষা প্রশিক্ষণ</td>
-      </tr>
-<%
-	} 
-	if(trainingIdList.contains(9)){
-%>
-      <tr>
-        <td><%=i++ %>.</td>
-        <td>ভিটামিন এ প্রশিক্ষণ</td>
-      </tr>
-<%
-	} 
-	if(trainingIdList.contains(10)){
-%>
-      <tr>
-        <td><%=i++ %>.</td>
-        <td>পুষ্টি বিষয়ক প্রশিক্ষণ</td>
-      </tr>
-<%
-	} 
-	if(trainingIdList.contains(11)){
-%>
-      <tr>
-        <td><%=i++ %>.</td>
-        <td>নবজাতকের অত্যাবশ্যকীয় সেবা বিষয়ক প্রশিক্ষণ</td>
-      </tr>
-<%
-	} 
-	if(trainingIdList.contains(12)){
-%>
-      <tr>
-        <td><%=i++ %>.</td>
-        <td>ই লার্নিং প্রশিক্ষণ</td>
-      </tr>
-<%
-	} 
-	if(trainingIdList.contains(13)){
-%>
-      <tr>
-        <td><%=i++ %>.</td>
-        <td>অন্যান্য (উল্লেখ করুন)</td>
-      </tr>
+
 <%
 	} 
 %>      
@@ -433,15 +333,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
 </table></td>
   </tr>
 </table>
-           	
-           	
-           	
-           	</div>
-           
-			
-			
-			
-			
+     	</div>
 
 			
 		</div>

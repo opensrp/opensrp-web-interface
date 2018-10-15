@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Entity
 @Table(name = "duplicate_matching_criteria_definition", schema = "core")
-public class DuplicateMatchingCriteriaDefinition implements Serializable {
+public class SimilarityMatchingCriteriaDefinition implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -37,11 +37,6 @@ public class DuplicateMatchingCriteriaDefinition implements Serializable {
 	@NotNull
 	@Column(name = "view_name")
 	private String viewName;
-
-/*	@NotNull
-	@Type(type = "jsonb")
-	@Column(name = "matching_keys", columnDefinition = "jsonb")
-	private JSONArray matchingKeys;*/
 	
 	@NotNull
 	@Column(name = "matching_keys")
@@ -76,14 +71,6 @@ public class DuplicateMatchingCriteriaDefinition implements Serializable {
 	public void setViewName(String viewName) {
 		this.viewName = viewName;
 	}
-
-/*	public JSONArray getMatchingKeys() {
-		return matchingKeys;
-	}
-
-	public void setMatchingKeys(JSONArray matchingKeys) {
-		this.matchingKeys = matchingKeys;
-	}*/
 
 	public String getMatchingKeys() {
 		return matchingKeys;
@@ -146,7 +133,7 @@ public class DuplicateMatchingCriteriaDefinition implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DuplicateMatchingCriteriaDefinition other = (DuplicateMatchingCriteriaDefinition) obj;
+		SimilarityMatchingCriteriaDefinition other = (SimilarityMatchingCriteriaDefinition) obj;
 
 		if (id != other.id)
 			return false;
@@ -186,7 +173,7 @@ public class DuplicateMatchingCriteriaDefinition implements Serializable {
 
 	@Override
 	public String toString() {
-		return "DuplicateMatchingCriteriaDefinition" + " [" + "id=" + id
+		return "SimilarityMatchingCriteriaDefinition" + " [" + "id=" + id
 				+ ", viewName=" + viewName + ", matchingKeys=" + matchingKeys
 				+ ", status=" + status + ", created=" + created + ", updated="
 				+ updated + "]";
