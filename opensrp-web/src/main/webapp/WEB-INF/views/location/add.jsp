@@ -8,7 +8,7 @@
 <%@page import="org.opensrp.common.util.CheckboxHelperUtil"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
-<%@page import="org.opensrp.acl.entity.LocationTag"%>
+<%@page import="org.opensrp.core.entity.LocationTag"%>
 <%@page import="org.json.JSONObject" %>
 <%@page import="org.json.JSONArray" %>
 <%

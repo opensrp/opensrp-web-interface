@@ -39,22 +39,22 @@
 		</dependency>
 		<dependency>
 			<groupId>org.opensrp.dashboard</groupId>
-			<artifactId>opensrp-common</artifactId>
+			<artifactId>opensrp-web-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.opensrp.dashboard</groupId>
-			<artifactId>opensrp-facility</artifactId>
+			<artifactId>opensrp-web-facility</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.opensrp.dashboard</groupId>
-			<artifactId>opensrp-acl</artifactId>
+			<artifactId>opensrp-web-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.opensrp.dashboard</groupId>
-			<artifactId>opensrp-connector</artifactId>
+			<artifactId>opensrp-web-connector</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		

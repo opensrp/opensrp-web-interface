@@ -11,9 +11,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.json.JSONException;
-import org.opensrp.acl.entity.Team;
-import org.opensrp.acl.service.LocationService;
-import org.opensrp.acl.service.TeamService;
+import org.opensrp.core.entity.Team;
+import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.TeamService;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;

@@ -7,10 +7,10 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.opensrp.acl.entity.Permission;
-import org.opensrp.acl.entity.Role;
-import org.opensrp.acl.service.PermissionService;
-import org.opensrp.acl.service.RoleService;
+import org.opensrp.core.entity.Permission;
+import org.opensrp.core.entity.Role;
+import org.opensrp.core.service.PermissionService;
+import org.opensrp.core.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;

@@ -7,7 +7,7 @@
 <%@page import="org.opensrp.common.util.CheckboxHelperUtil"%>
 
 <%@page import="java.util.List"%>
-<%@page import="org.opensrp.acl.entity.Role"%>
+<%@page import="org.opensrp.core.entity.Role"%>
 
 <!DOCTYPE html>
 <html lang="en">

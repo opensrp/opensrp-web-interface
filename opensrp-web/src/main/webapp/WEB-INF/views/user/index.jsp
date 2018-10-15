@@ -8,8 +8,8 @@
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>	
-<%@page import="org.opensrp.acl.entity.User"%>
-<%@page import="org.opensrp.acl.entity.Role"%>
+<%@page import="org.opensrp.core.entity.User"%>
+<%@page import="org.opensrp.core.entity.Role"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
 

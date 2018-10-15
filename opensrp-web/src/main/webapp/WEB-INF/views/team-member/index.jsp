@@ -9,8 +9,8 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 	
-<%@page import="org.opensrp.acl.entity.TeamMember"%>
-<%@page import="org.opensrp.acl.entity.Location"%>
+<%@page import="org.opensrp.core.entity.TeamMember"%>
+<%@page import="org.opensrp.core.entity.Location"%>
 
 <!DOCTYPE html>
 <html lang="en">

@@ -52,7 +52,7 @@ public class FacilityRestController {
 	
 	@RequestMapping(value = "/saveWorker", method = RequestMethod.POST)
 	public ResponseEntity<String> saveWorker(@RequestBody FacilityWorkerDTO facilityWorkerDTO) throws Exception {
-	
+		
 		facilityWorker = facilityHelperUtil.convertFacilityWorkerDTO(facilityWorkerDTO);
 		facilityWorkerService.save(facilityWorker);
 		String message = "success";
@@ -61,8 +61,7 @@ public class FacilityRestController {
 	}
 	
 	@RequestMapping(value = "/editWorker", method = RequestMethod.POST)
-	public ResponseEntity<String> editWorker(
-			@RequestBody FacilityWorkerDTO facilityWorkerDTO) throws Exception {
+	public ResponseEntity<String> editWorker(@RequestBody FacilityWorkerDTO facilityWorkerDTO) throws Exception {
 		System.out.println(facilityWorkerDTO.toString());
 		int workerId = Integer.parseInt(facilityWorkerDTO.getWorkerId());
 		FacilityWorker facilityWorker = facilityWorkerService.findById(workerId, "id", FacilityWorker.class);
@@ -79,8 +78,7 @@ public class FacilityRestController {
 	}
 	
 	@RequestMapping(value = "/{id}/getWorkerList.html", method = RequestMethod.GET)
-	public ResponseEntity<String> getWorkerList (ModelMap model, HttpSession session,
-			@PathVariable("id") int id){
+	public ResponseEntity<String> getWorkerList(ModelMap model, HttpSession session, @PathVariable("id") int id) {
 		
 		Facility facility = facilityService.findById(id, "id", Facility.class);
 		Map<String, Object> facilityMap = new HashMap<String, Object>();
@@ -88,13 +86,14 @@ public class FacilityRestController {
 		List<FacilityWorker> facilityWorkerList = facilityWorkerService.findAllByKeys(facilityMap, FacilityWorker.class);
 		
 		return new ResponseEntity<>(new Gson().toJson(facilityWorkerList), OK);
-       
+		
 	}
 	
 	@RequestMapping(value = "/deleteWorker", method = RequestMethod.POST)
-	public ResponseEntity<String> deleteWorker (@RequestBody WorkerIdDTO workerIdDTO){
+	public ResponseEntity<String> deleteWorker(@RequestBody WorkerIdDTO workerIdDTO) {
 		System.out.println(workerIdDTO.getWorkerId());
-		FacilityWorker facilityWorker = facilityWorkerService.findById(workerIdDTO.getWorkerId(), "id", FacilityWorker.class);
+		FacilityWorker facilityWorker = facilityWorkerService
+		        .findById(workerIdDTO.getWorkerId(), "id", FacilityWorker.class);
 		System.out.println(facilityWorker);
 		boolean isDeleted = facilityWorkerService.delete(facilityWorker);
 		return new ResponseEntity<>(new Gson().toJson(isDeleted), OK);

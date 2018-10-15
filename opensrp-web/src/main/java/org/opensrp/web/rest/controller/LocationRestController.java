@@ -3,7 +3,7 @@ package org.opensrp.web.rest.controller;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
-import org.opensrp.acl.service.LocationService;
+import org.opensrp.core.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;

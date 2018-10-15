@@ -7,9 +7,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.json.JSONException;
-import org.opensrp.acl.entity.Location;
-import org.opensrp.acl.entity.LocationTag;
-import org.opensrp.acl.service.LocationTagService;
+import org.opensrp.core.entity.Location;
+import org.opensrp.core.entity.LocationTag;
+import org.opensrp.core.service.LocationTagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
