@@ -7,7 +7,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page import="org.opensrp.common.util.CheckboxHelperUtil"%>
 <%@page import="java.util.List"%>
-<%@page import="org.opensrp.acl.entity.Permission"%>
+<%@page import="org.opensrp.core.entity.Permission"%>
 <!DOCTYPE html>
 <html lang="en">
 

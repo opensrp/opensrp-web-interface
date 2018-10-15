@@ -2,9 +2,9 @@ package org.opensrp.web.rest.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
-import org.opensrp.acl.entity.User;
-import org.opensrp.acl.service.UserService;
 import org.opensrp.common.dto.UserDTO;
+import org.opensrp.core.entity.User;
+import org.opensrp.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;

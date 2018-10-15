@@ -18,9 +18,9 @@ import javax.validation.Valid;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.opensrp.acl.entity.Location;
-import org.opensrp.acl.service.LocationService;
-import org.opensrp.acl.service.LocationTagService;
+import org.opensrp.core.entity.Location;
+import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.LocationTagService;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
