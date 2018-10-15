@@ -9,7 +9,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
-<%@page import="org.opensrp.acl.entity.Permission"%>
+<%@page import="org.opensrp.core.entity.Permission"%>
 
 <!DOCTYPE html>
 <html lang="en">

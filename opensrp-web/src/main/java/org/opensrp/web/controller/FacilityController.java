@@ -17,8 +17,8 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.json.JSONException;
-import org.opensrp.acl.entity.User;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.core.entity.User;
 import org.opensrp.facility.entity.Facility;
 import org.opensrp.facility.entity.FacilityTraining;
 import org.opensrp.facility.entity.FacilityWorker;

@@ -11,7 +11,7 @@
 
 <%@page import="org.json.JSONObject" %>
 <%@page import="org.json.JSONArray" %>
-<%@page import="org.opensrp.acl.entity.User" %>
+<%@page import="org.opensrp.core.entity.User" %>
 <%@page import="java.util.List"%>
 
 

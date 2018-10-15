@@ -11,10 +11,10 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.json.JSONException;
-import org.opensrp.acl.entity.TeamMember;
-import org.opensrp.acl.entity.User;
-import org.opensrp.acl.service.LocationService;
-import org.opensrp.acl.service.TeamMemberService;
+import org.opensrp.core.entity.TeamMember;
+import org.opensrp.core.entity.User;
+import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.TeamMemberService;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;

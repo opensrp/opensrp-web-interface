@@ -3,9 +3,9 @@ package org.opensrp.web.util;
 import java.util.List;
 import java.util.Map;
 
-import org.opensrp.acl.entity.Location;
 import org.opensrp.common.util.Tree;
 import org.opensrp.common.util.TreeNode;
+import org.opensrp.core.entity.Location;
 
 /**
  * {@link LocationTree} is an specification of {@link Tree} which provides helper methods for

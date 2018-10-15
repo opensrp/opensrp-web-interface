@@ -10,7 +10,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 
 <%@page import="java.util.List"%>
-<%@page import="org.opensrp.acl.entity.Role"%>
+<%@page import="org.opensrp.core.entity.Role"%>
 
 <!DOCTYPE html>
 <html lang="en">

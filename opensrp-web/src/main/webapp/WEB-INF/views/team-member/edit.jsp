@@ -8,7 +8,7 @@
 
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
-<%@page import="org.opensrp.acl.entity.Location"%>
+<%@page import="org.opensrp.core.entity.Location"%>
 <%@page import="org.json.JSONObject" %>
 <%@page import="org.json.JSONArray" %>
 <%
