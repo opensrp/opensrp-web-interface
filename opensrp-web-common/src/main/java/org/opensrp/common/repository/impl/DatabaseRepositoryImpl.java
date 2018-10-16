@@ -717,13 +717,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			String hql = "SELECT * FROM core.\"" + viewName + "\"" + " where entity_type = '" + entityType + "'";
 			
 			hql = setViewCondition(searchBuilder, hql);
-			
 			Query query = session.createSQLQuery(hql);
 			count = query.list().size();
-			
 		}
 		catch (Exception e) {
-			logger.error(e);
+			logger.error("Data fetch from " + viewName + " error:" + e.getMessage());
 		}
 		finally {
 			session.close();

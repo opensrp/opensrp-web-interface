@@ -9,13 +9,13 @@
 
 <div class="form-group">		
 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY")){ %>			
-				   <a  href="<c:url value="/facility/add.html?lang=${locale}"/>" > <strong>Registration</strong> </a>  | 
+				   <a  href="<c:url value="/facility/add.html?lang=${locale}"/>" > <strong><spring:message code="lbl.registration"/></strong> </a>  | 
 <%} %>
 <% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>						
-					 <a  href="<c:url value="/cbhc-dashboard?lang=${locale}"/>"> <strong>Community Clinic</strong> </a>  | 
+					 <a  href="<c:url value="/cbhc-dashboard?lang=${locale}"/>"> <strong><spring:message code="lbl.comunityClinic"/></strong> </a>  | 
 <%} %>
 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV")){ %>	
-					 <a  href="<c:url value="/facility/upload_csv.html?lang=${locale}"/>"> <strong>Upload Facility</strong> </a>	
+					 <a  href="<c:url value="/facility/upload_csv.html?lang=${locale}"/>"> <strong><spring:message code="lbl.facilityUpload"/></strong> </a>	
 <%} %>		
 
 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV")){ %>	

@@ -30,7 +30,7 @@
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Member List
+					<i class="fa fa-table"></i> <spring:message code="lbl.memberList"/>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -43,45 +43,45 @@
 										<thead>
 											<tr>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+													style="width: 140px;"><spring:message code="lbl.firstName"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Last Name</th>
+													style="width: 79px;"><spring:message code="lbl.lastName"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Gender</th>
+													style="width: 140px;"><spring:message code="lbl.gender"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Birth Date</th>
+													style="width: 106px;"><spring:message code="lbl.birthDate"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Ward</th>
+													style="width: 140px;"><spring:message code="lbl.ward"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">NID</th>
+													style="width: 140px;"><spring:message code="lbl.nId"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">BRID</th>
+													style="width: 140px;"><spring:message code="lbl.brId"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Provider</th>
+													style="width: 43px;"><spring:message code="lbl.provider"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Action</th>
+													style="width: 140px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
 												    <th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">First Name</th>
+													style="width: 140px;"><spring:message code="lbl.firstName"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;">Last Name</th>
+													style="width: 79px;"><spring:message code="lbl.lastName"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Gender</th>
+													style="width: 140px;"><spring:message code="lbl.gender"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;">Birth Date</th>
+													style="width: 106px;"><spring:message code="lbl.birthDate"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Ward</th>
+													style="width: 140px;"><spring:message code="lbl.ward"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">NID</th>
+													style="width: 140px;"><spring:message code="lbl.nId"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">BRID</th>
+													style="width: 140px;"><spring:message code="lbl.brId"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 43px;">Provider</th>
+													style="width: 43px;"><spring:message code="lbl.provider"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Action</th>
+													style="width: 140px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</tfoot>
 										<tbody>
@@ -138,7 +138,7 @@
 												<td><%=brid%></td>
 												<td><%=provider%></td>
 												<td>
-												<a href="<c:url value="/client/member/${baseEntityId}/details.html?lang=${locale}"/>">Details</a>	
+												<a href="<c:url value="/client/member/${baseEntityId}/details.html?lang=${locale}"/>"><spring:message code="lbl.details"/></a>	
 
 												</td> 
 											</tr>

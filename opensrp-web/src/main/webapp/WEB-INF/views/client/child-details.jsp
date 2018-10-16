@@ -51,14 +51,14 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="/opensrp-dashboard/client/child.html">Child</a>
+          <a href="/opensrp-dashboard/client/child.html"><spring:message code="lbl.child"/></a>
         </li>
-        <li class="breadcrumb-item">Child Details</li>
+        <li class="breadcrumb-item"><spring:message code="lbl.childDetails"/></li>
       </ol>
       <!-- Child Register-->
       <div class="card mb-3">
             <div class="card-header">
-               Child Details</div>
+               <spring:message code="lbl.childDetails"/></div>
             <div class="list-group list-group-flush small">
               <a class="list-group-item list-group-item-action" href="#">
                 <div class="media">
@@ -90,26 +90,23 @@ lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
 				String nid = String.valueOf(clientObject[15]);
 				String birthWeight = String.valueOf(clientObject[31]);
 				String motherName = String.valueOf(clientObject[32]);
-				String fatherName = "";
-				//String fatherName = String.valueOf(clientObject[33]);
-				
-		
+				String fatherName = "";			
 %>	                  
                   <div class="media-body">
-                    <strong>Name: </strong><%=firstName%><br>
-                    <strong>Age: </strong><br>
-                    <strong>Gender: </strong><%=gender%><br>
+                    <strong><spring:message code="lbl.name"/>: </strong><%=firstName%><br>
+                    <strong><spring:message code="lbl.age"/>: </strong><br>
+                    <strong><spring:message code="lbl.gender"/>: </strong><%=gender%><br>
                   </div>
                   
                   <div class="media-body">
-                     <strong>Birth-date: </strong><%=birthDate%><br>
-                     <strong>Birth-weight: </strong><%=birthWeight%><br>
+                     <strong><spring:message code="lbl.birthDate"/>: </strong><%=birthDate%><br>
+                     <strong><spring:message code="lbl.birthWeight"/>: </strong><%=birthWeight%><br>
                   </div>
                   
                   <div class="media-body">
-                    <strong>Father's Name: </strong><%=fatherName%><br>
-                    <strong>Mother's Name: </strong><br>
-                    <strong>Care-giver's Name: </strong><br>
+                    <strong><spring:message code="lbl.fatherName"/>: </strong><%=fatherName%><br>
+                    <strong><spring:message code="lbl.motherName"/>: </strong><br>
+                    <strong><spring:message code="lbl.caregiverName"/>: </strong><br>
                   </div>
 <%
 		}
@@ -125,82 +122,35 @@ lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
           </div>
       
       
-      
        <!-- Area Chart Example-->
 			<div class="card mb-3">
 				<div id="lineChart" class="card-body"></div>
 			</div>
       
       
-     <%--  <h1><%=lineChartWeightData%></h1></br>
-      <h1><%=lineChartGrowthData.getJSONObject(0)%></h1> --%>
-      
-      <!-- Area Chart Example-->
-      <!-- <div class="row">
-        <div class="col-lg-6">
-          Example Bar Chart Card
-          <div class="card mb-3">
-            <div class="card-header">
-               Siblings</div>
-            <div class="card-body">
-              <p class="card-text small">1. These waves are looking pretty good today!
-                  <a href="#">#surfsup</a>
-                </p>
-                <p class="card-text small">2. These waves are looking pretty good today!
-                  <a href="#">#surfsup</a>
-                </p>
-            </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-          </div>
-          Card Columns Example Social Feed
-          
-          
-          
-          /Card Columns
-        </div>
-        <div class="col-lg-6">
-          Example Pie Chart Card
-          <div class="card mb-3">
-            <div class="card-header">
-              Counseling</div>
-            <div class="card-body">
-             <p class="card-text small">These waves are looking pretty good today!
-                  <a href="#">#surfsup</a>
-                </p>
-                <p class="card-text small">These waves are looking pretty good today!
-                  <a href="#">#surfsup</a>
-                </p>
-            </div>
-            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-          </div>
-          Example Notifications Card
-          
-        </div>
-      </div> -->
-      
       <!-- Example DataTables Card-->
       <div class="card mb-3">
         <div class="card-header">
-           Growth</div>
+           <spring:message code="lbl.growth"/></div>
         <div class="card-body">
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>Sl. No.</th>
-                  <th>Visit Date</th>
-                  <th>Weight</th>
-                  <th>Growth/month</th>
-                  <th>Status</th>
+                  <th><spring:message code="lbl.slNo"/></th>
+                  <th><spring:message code="lbl.visitDate"/></th>
+                  <th><spring:message code="lbl.weight"/></th>
+                  <th><spring:message code="lbl.growthPerMonth"/></th>
+                  <th><spring:message code="lbl.status"/></th>
                 </tr>
               </thead>
               <tfoot>
-                <tr>
-                  <th>Sl. No.</th>
-                  <th>Visit Date</th>
-                  <th>Weight</th>
-                  <th>Growth/month</th>
-                  <th>Status</th>
+                 <tr>
+                  <th><spring:message code="lbl.slNo"/></th>
+                  <th><spring:message code="lbl.visitDate"/></th>
+                  <th><spring:message code="lbl.weight"/></th>
+                  <th><spring:message code="lbl.growthPerMonth"/></th>
+                  <th><spring:message code="lbl.status"/></th>
                 </tr>
               </tfoot>
               <tbody>
@@ -224,13 +174,6 @@ lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
 		
 		double growthGram = Double.parseDouble(growth);
 		double growthKg = growthGram / 1000.00;
-		
-		/* String gStatusDecoded = null;
-		if(growthStatus.equals("true")){
-			gStatusDecoded = "Adequate";
-		}else{
-			gStatusDecoded = "Inadequate";
-		} */
 		
 		String gStatusDecoded = "No data found";
 		String bgColor = "#ff9800";
@@ -260,8 +203,6 @@ lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
 	i=0;
 		}
 %>
-                
-                
               </tbody>
             </table>
           </div>
@@ -278,49 +219,9 @@ lineChartWeightData.put(lineChartGrowthData.getJSONObject(0));
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
 
-   
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-      <i class="fa fa-angle-up"></i>
-    </a>
-    <!-- Logout Modal-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <a class="btn btn-primary" href="login.html">Logout</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    
     <jsp:include page="/WEB-INF/views/footer.jsp" />
-    
-    <!-- Bootstrap core JavaScript-->
-    <script src="/resources/vendor/jquery/jquery.min.js"></script>
-    <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- Core plugin JavaScript-->
-    <script src="/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
-    <!-- Page level plugin JavaScript-->
-    <script src="/resources/vendor/chart.js/Chart.min.js"></script>
-    <script src="/resources/vendor/datatables/jquery.dataTables.js"></script>
-    <script src="/resources/vendor/datatables/dataTables.bootstrap4.js"></script>
-    <!-- Custom scripts for all pages-->
-    <script src="/resources/js/sb-admin.min.js"></script>
-    <!-- Custom scripts for this page-->
-    <script src="/resources/js/sb-admin-datatables.min.js"></script>
-    <script src="/resources/js/sb-admin-charts.min.js"></script>
-  </div>
   
-  
+
   	<script src="<c:url value='/resources/chart/highcharts.js'/>"></script>
 	<script src="<c:url value='/resources/chart/data.js'/>"></script>
 	<script src="<c:url value='/resources/chart/drilldown.js'/>"></script>
