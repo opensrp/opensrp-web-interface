@@ -29,6 +29,8 @@ boolean PERM_READ_LOCATION_LIST = AuthenticationManagerUtil.isPermitted("PERM_RE
 boolean PERM_UPLOAD_LOCATION = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_LOCATION");
 boolean PERM_READ_TEAM_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_TEAM_LIST");
 boolean PERM_READ_TEAM_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_TEAM_MEMBER_LIST");
+boolean PERM_READ_EXPORT_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_EXPORT_LIST");
+boolean PERM_EXPORT_LIST = AuthenticationManagerUtil.isPermitted("PERM_EXPORT_LIST");
 
 
 
@@ -231,6 +233,28 @@ boolean PERM_READ_TEAM_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM
 					<a class="dropdown-item"
 						href="<c:url value="/team/teammember/list.html?lang=${locale}"/>"> <strong>
 						 <spring:message code="lbl.manageTeammember"/></strong>
+					</a>
+					<% } %>
+				</div>
+				</li>
+				<% } %>
+
+				<%if(PERM_READ_EXPORT_LIST){ %>
+				<li class="nav-item dropdown"><a
+				class="nav-link dropdown-toggle mr-lg-2" id="teamDropdown" href="#"
+				data-toggle="dropdown"><spring:message code="lbl.exportTitle"/> </a>
+				<div class="dropdown-menu">
+				<% if(PERM_READ_EXPORT_LIST){ %>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/export/exportlist.html?lang=${locale}"/>">
+						<strong> <spring:message code="lbl.exportList"/></strong>
+					</a>
+					<% } %>
+					<% if(PERM_EXPORT_LIST){ %>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/team/teammember/list.html?lang=${locale}"/>"> <strong>
+						 <spring:message code="lbl.exportFile"/></strong>
 					</a>
 					<% } %>
 				</div>
