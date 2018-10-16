@@ -8,18 +8,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.opensrp.acl.service.impl.LocationServiceImpl;
 import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.core.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+/**
+ * <p> The PaginationHelperUtil program implements an application
+ * that simply contains the pagination related information.</p>
+ * @author proshanto
+ * @author nursat
+ * @version 0.1.0
+ * @since   2018-06-30 
+ * */
 @Component
 public class PaginationHelperUtil {
 	
 	private static final Logger logger = Logger.getLogger(PaginationHelperUtil.class);
 	
 	@Autowired
-	private LocationServiceImpl locationServiceImpl;
+	private LocationService locationServiceImpl;
 	
 	@Autowired
 	private SearchBuilder searchBuilder;
@@ -27,14 +34,17 @@ public class PaginationHelperUtil {
 	public PaginationHelperUtil() {
 		
 	}
-	
+	/**
+	 * <p>This method return parent location id from parsing location name.(example parse form 29?Rajbari)</p>
+	 * @param locationName name of location.
+	 * @return parentId.
+	 * */
 	public static int getParentId(String locationName) {
 		int parentId = 0;
 		try {
 			if (locationName != null && !locationName.isEmpty() && !locationName.equalsIgnoreCase("0?")) {
 				String[] div = locationName.split("\\?");
-				parentId = Integer.parseInt(div[0]);
-				logger.info("parentId::" + parentId);
+				parentId = Integer.parseInt(div[0]);				
 			}
 		}
 		catch (Exception e) {
@@ -44,6 +54,11 @@ public class PaginationHelperUtil {
 		
 	}
 	
+	/**
+	 * <p>This method return parent location name from parsing location.(example parse form 29?Rajbari)</p>
+	 * @param locationName name of location.
+	 * @return name.
+	 * */
 	public static String locationName(String locationName) {
 		String name = "";
 		try {
@@ -59,16 +74,25 @@ public class PaginationHelperUtil {
 		return name;
 	}
 	
-	public void setParentLocationToSession(String location, String sessionName, HttpSession session) {
+	/**
+	 * <p>Set selected search option and corresponding child location list to session,so that selected option retain selected after refresh browser.</p>
+	 * @param session is an argument to the HttpSession's session.
+	 * @param sessionName is name of session (example division).
+	 * @param location selected location.
+	 * */
+	public void setChildLocationToSession(String location, String sessionName, HttpSession session) {
 		if (location != null && !location.isEmpty() && !location.equalsIgnoreCase("0?")) {
 			String[] divisionName = location.split("\\?");
-			List<Object[]> parentLOcationListByParent = locationServiceImpl.getChildData(Integer.parseInt(divisionName[0]));
-			session.setAttribute(sessionName, parentLOcationListByParent);
+			List<Object[]> childLocationListByParent = locationServiceImpl.getChildData(Integer.parseInt(divisionName[0]));
+			session.setAttribute(sessionName, childLocationListByParent);
 		}
 	}
 	
 	/**
-	 * Set Params to session & return search option
+	 * <p>Set search parameter's to searchBuilder for query and add search parameter's to session.</p>
+	 * @param session is an argument to the HttpSession's session
+	 * @param request is an argument to the servlet's service
+	 * @return {@link #searchBuilder}
 	 */
 	public SearchBuilder setParams(HttpServletRequest request, HttpSession session) {
 		String division = "";
@@ -87,27 +111,27 @@ public class PaginationHelperUtil {
 		
 		if (request.getParameterMap().containsKey("division")) {
 			division = (String) request.getParameter("division");
-			this.setParentLocationToSession(division, "districtListByParent", session);
+			this.setChildLocationToSession(division, "districtListByParent", session);
 		}
 		if (request.getParameterMap().containsKey("district")) {
 			district = (String) request.getParameter("district");
-			this.setParentLocationToSession(district, "upazilasListByParent", session);
+			this.setChildLocationToSession(district, "upazilasListByParent", session);
 		}
 		if (request.getParameterMap().containsKey("upazila")) {
 			upazila = (String) request.getParameter("upazila");
-			this.setParentLocationToSession(upazila, "unionsListByParent", session);
+			this.setChildLocationToSession(upazila, "unionsListByParent", session);
 		}
 		if (request.getParameterMap().containsKey("union")) {
 			union = (String) request.getParameter("union");
-			this.setParentLocationToSession(union, "wardsListByParent", session);
+			this.setChildLocationToSession(union, "wardsListByParent", session);
 		}
 		if (request.getParameterMap().containsKey("ward")) {
 			ward = (String) request.getParameter("ward");
-			this.setParentLocationToSession(ward, "subunitListByParent", session);
+			this.setChildLocationToSession(ward, "subunitListByParent", session);
 		}
 		if (request.getParameterMap().containsKey("subunit")) {
 			subunit = (String) request.getParameter("subunit");
-			this.setParentLocationToSession(subunit, "mauzaparaListByParent", session);
+			this.setChildLocationToSession(subunit, "mauzaparaListByParent", session);
 		}
 		if (request.getParameterMap().containsKey("mauzapara")) {
 			mauzapara = (String) request.getParameter("mauzapara");
@@ -140,11 +164,17 @@ public class PaginationHelperUtil {
 		        .setUpazila(locationName(upazila)).setUnion(locationName(union)).setWard(locationName(ward))
 		        .setSubunit(locationName(subunit)).setMauzapara(locationName(mauzapara)).setProvider(provider).setName(name)
 		        .setYear(year).setUserName(userName).setStart(start_date).setEnd(end_date);
-		logger.debug("set searchBuilder: " + searchBuilder.toString());
+		
 		return searchBuilder;
 		
 	}
 	
+	/**
+	 * <p>Creates pagination link with search parameter's</p>
+	 * @param session is an argument to the HttpSession's session
+	 * @param request is an argument to the servlet's service
+	 * @return paginationLink
+	 * */
 	public static Map<String, String> getPaginationLink(HttpServletRequest request, HttpSession session) {
 		Map<String, String> map = new HashMap<>();
 		String division = "";

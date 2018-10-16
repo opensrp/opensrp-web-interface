@@ -2,9 +2,9 @@ package org.opensrp.web.rest.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
-import org.opensrp.acl.entity.User;
-import org.opensrp.acl.service.impl.UserServiceImpl;
 import org.opensrp.common.dto.UserDTO;
+import org.opensrp.core.entity.User;
+import org.opensrp.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,19 +19,25 @@ import com.google.gson.Gson;
 public class UserRestController {
 	
 	@Autowired
-	private UserServiceImpl userServiceImpl;
-	
+	private UserService userServiceImpl;
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO) throws Exception {
-		boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());
 		String userNameUniqueError = "";
-		User user = new User();		
-		if (!isExists) {
-			user = userServiceImpl.convert(userDTO);
-			userServiceImpl.save(user);
-		} else {
-			userNameUniqueError = "User name alreday taken.";
+		try {
+			boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());
+			
+			User user = new User();
+			if (!isExists) {
+				user = userServiceImpl.convert(userDTO);
+				userServiceImpl.save(user);
+			} else {
+				userNameUniqueError = "User name alreday taken.";
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			userNameUniqueError = "some Problem ocuured please contact with Admin";
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}

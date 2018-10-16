@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.opensrp.common.util.SearchBuilder;
-import org.opensrp.web.nutrition.service.impl.ChildGrowthServiceImpl;
+import org.opensrp.web.nutrition.service.ChildGrowthService;
 import org.opensrp.web.util.PaginationHelperUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class ReportController {
 	private PaginationHelperUtil paginationHelperUtil;
 	
 	@Autowired
-	private ChildGrowthServiceImpl childGrowthServiceImpl;
+	private ChildGrowthService childGrowthServiceImpl;
 	
 	@Autowired
 	private SearchBuilder searchBuilder;

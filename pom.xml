@@ -7,12 +7,12 @@
   <packaging>pom</packaging>
   <name>opensrp web interface</name>
   <modules>    
-    <module>opensrp-common</module> 
-    <module>opensrp-connector</module>    
-    <module>opensrp-acl</module>      
+    <module>opensrp-web-common</module> 
+    <module>opensrp-web-connector</module>    
+    <module>opensrp-web-core</module>      
     <module>opensrp-web</module>
     <module>opensrp-web-nutrition</module>
-    <module>opensrp-facility</module>
+    <module>opensrp-web-facility</module>
   </modules>
   
   <properties>

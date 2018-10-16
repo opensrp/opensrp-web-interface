@@ -4,8 +4,8 @@
 <%@page import="org.json.JSONArray"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -51,14 +51,14 @@
       <!-- Breadcrumbs-->
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <a href="/opensrp-dashboard/client/member.html">Member</a>
+          <a href="/opensrp-dashboard/client/member.html"><spring:message code="lbl.member"/></a>
         </li>
-        <li class="breadcrumb-item">Member Details</li>
+        <li class="breadcrumb-item"><spring:message code="lbl.memberDetails"/></li>
       </ol>
       <!-- Child Register-->
       <div class="card mb-3">
             <div class="card-header">
-               Member Details</div>
+               <spring:message code="lbl.memberDetails"/></div>
             <div class="list-group list-group-flush small">
               <a class="list-group-item list-group-item-action" href="#">
                 <div class="media">
@@ -89,17 +89,17 @@ String memberId = null;
 		
 %>	                  
                   <div class="media-body">
-                    <strong>Name: </strong><%=firstName%><br>
-                    <strong>Gender: </strong><%=gender%><br>
+                    <strong><spring:message code="lbl.name"/>: </strong><%=firstName%><br>
+                    <strong><spring:message code="lbl.gender"/>: </strong><%=gender%><br>
                   </div>
                   
                   <div class="media-body">
-                     <strong>NID: </strong><%=nid%><br>
-                     <strong>Phone Number: </strong><%=phoneNumber%><br>
+                     <strong><spring:message code="lbl.nId"/>: </strong><%=nid%><br>
+                     <strong><spring:message code="lbl.phoneNumber"/>: </strong><%=phoneNumber%><br>
                   </div>
                   
                   <div class="media-body">
-                    <strong>Birth-date: </strong><%=birthDate%><br>
+                    <strong><spring:message code="lbl.birthDate"/>: </strong><%=birthDate%><br>
                   </div>
 <%
 		}

@@ -18,9 +18,9 @@ import javax.validation.Valid;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.opensrp.acl.entity.Location;
-import org.opensrp.acl.service.impl.LocationServiceImpl;
-import org.opensrp.acl.service.impl.LocationTagServiceImpl;
+import org.opensrp.core.entity.Location;
+import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.LocationTagService;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -40,10 +40,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class LocationController {
 	
 	@Autowired
-	private LocationServiceImpl locationServiceImpl;
+	private LocationService locationServiceImpl;
 	
 	@Autowired
-	private LocationTagServiceImpl locationTagServiceImpl;
+	private LocationTagService locationTagServiceImpl;
 	
 	@Autowired
 	private Location location;
@@ -94,6 +94,7 @@ public class LocationController {
 	                                 @ModelAttribute("location") @Valid Location location, BindingResult binding,
 	                                 ModelMap model, HttpSession session, Locale locale) throws Exception {
 		location.setName(location.getName().trim());
+		
 		boolean chceckInOpenmrs = false;
 		if (!locationServiceImpl.locationExistsForUpdate(location, chceckInOpenmrs)) {
 			locationServiceImpl.save(locationServiceImpl.setCreatorParentLocationTagAttributeInLocation(location,

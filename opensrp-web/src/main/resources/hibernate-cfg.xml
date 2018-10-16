@@ -27,16 +27,16 @@
 			<list>
 				<value>org.opensrp.common.entity.Marker</value>
 				<value>org.opensrp.common.entity.ExportEntity</value>
+				<value>org.opensrp.core.entity.SimilarityMatchingCriteriaDefinition</value>
 				<value>org.opensrp.web.nutrition.entity.ChildGrowth</value>
 				<value>org.opensrp.web.nutrition.entity.WeightVelocityChart</value>
-				<value>org.opensrp.acl.entity.Team</value>
-				<value>org.opensrp.acl.entity.TeamMember</value>							
-				<value>org.opensrp.acl.entity.User</value>
-				<value>org.opensrp.acl.entity.Role</value>
-				<value>org.opensrp.acl.entity.Permission</value>
-				<value>org.opensrp.acl.entity.Location</value>
-				<value>org.opensrp.acl.entity.LocationTag</value>	
-				<value>org.opensrp.acl.entity.DuplicateMatchingCriteriaDefinition</value>	
+				<value>org.opensrp.core.entity.Team</value>
+				<value>org.opensrp.core.entity.TeamMember</value>							
+				<value>org.opensrp.core.entity.User</value>
+				<value>org.opensrp.core.entity.Role</value>
+				<value>org.opensrp.core.entity.Permission</value>
+				<value>org.opensrp.core.entity.Location</value>
+				<value>org.opensrp.core.entity.LocationTag</value>				
 				<value>org.opensrp.facility.entity.Facility</value>	
 				<value>org.opensrp.facility.entity.FacilityWorker</value>
 				<value>org.opensrp.facility.entity.FacilityTraining</value>

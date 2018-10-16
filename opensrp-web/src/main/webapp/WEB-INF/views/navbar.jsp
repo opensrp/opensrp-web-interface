@@ -11,14 +11,14 @@ boolean PERM_WRITE_FACILITY = AuthenticationManagerUtil.isPermitted("PERM_WRITE_
 boolean PERM_UPLOAD_FACILITY_CSV = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV");
 
 boolean PERM_READ_FACILITY = AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY");
-boolean PERM_READ_HOUSEHOLD_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_HOUSEHOLD_LIST");
-boolean PERM_READ_MOTHER_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_MOTHER_LIST");
-boolean PERM_READ_CHILD_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_CHILD_LIST");
-boolean PERM_READ_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_MEMBER_LIST");
-boolean PERM_SIMILAR_CLIENT_LIST = AuthenticationManagerUtil.isPermitted("PERM_SIMILAR_CLIENT_LIST");
-boolean PERM_SIMILER_EVENT_LIST = AuthenticationManagerUtil.isPermitted("PERM_SIMILER_EVENT_LIST");
-boolean PERM_SIMILER_CLIENT_RULE_DEFINATION = AuthenticationManagerUtil.isPermitted("PERM_SIMILER_CLIENT_RULE_DEFINATION");
-boolean PERM_SIMILER_EVENT_RULE_DEFINATION = AuthenticationManagerUtil.isPermitted("PERM_SIMILER_EVENT_RULE_DEFINATION");
+
+boolean PERM_READ_HOUSEHOLD_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_HOUSEHOLD");
+boolean PERM_READ_MOTHER_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_MOTHER");
+boolean PERM_READ_CHILD_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_CHILD");
+boolean PERM_READ_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_MEMBER");
+boolean PERM_READ_SIMILAR_EVENT_CLIENT = AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILAR_EVENT_CLIENT");
+boolean PERM_READ_SIMILARITY_DEFINITION = AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILARITY_DEFINITION");
+
 boolean CHILD_GROWTH_REPORT = AuthenticationManagerUtil.isPermitted("CHILD_GROWTH_REPORT");
 boolean CHILD_GROWTH_SUMMARY_REPORT = AuthenticationManagerUtil.isPermitted("CHILD_GROWTH_SUMMARY_REPORT");
 boolean ANALYTICS = AuthenticationManagerUtil.isPermitted("ANALYTICS");
@@ -31,6 +31,8 @@ boolean PERM_READ_TEAM_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_T
 boolean PERM_READ_TEAM_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_TEAM_MEMBER_LIST");
 boolean PERM_READ_EXPORT_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_EXPORT_LIST");
 boolean PERM_EXPORT_LIST = AuthenticationManagerUtil.isPermitted("PERM_EXPORT_LIST");
+
+
 
 %>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
@@ -76,8 +78,8 @@ boolean PERM_EXPORT_LIST = AuthenticationManagerUtil.isPermitted("PERM_EXPORT_LI
 
 				</div></li>
 				<% } %>
-			   <%if(PERM_READ_HOUSEHOLD_LIST || PERM_READ_MOTHER_LIST || PERM_READ_CHILD_LIST || PERM_READ_MEMBER_LIST ||PERM_SIMILAR_CLIENT_LIST
-					    || PERM_SIMILER_EVENT_LIST || PERM_SIMILER_CLIENT_RULE_DEFINATION || PERM_SIMILER_EVENT_RULE_DEFINATION ){ %>
+			   <%if(PERM_READ_HOUSEHOLD_LIST || PERM_READ_MOTHER_LIST || PERM_READ_CHILD_LIST || PERM_READ_MEMBER_LIST
+					   ||PERM_READ_SIMILAR_EVENT_CLIENT || PERM_READ_SIMILARITY_DEFINITION ){ %>
 			    <li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
 				href="#" data-toggle="dropdown"><spring:message code="lbl.client"/> </a>
@@ -112,36 +114,38 @@ boolean PERM_EXPORT_LIST = AuthenticationManagerUtil.isPermitted("PERM_EXPORT_LI
 						href="<c:url value="/client/member.html?lang=${locale}"/>"> <strong><spring:message code="lbl.member"/></strong>
 					</a>
 					<% } %>
-
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILAR_EVENT_CLIENT")){ %>
+					
+					<% if(PERM_READ_SIMILAR_EVENT_CLIENT){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/duplicateClient.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarCLient"/></strong>
+						href="<c:url value="/client/similarClient.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarCLient"/></strong>
 					</a>	
 					<% } %>
 
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILAR_EVENT_CLIENT")){ %>
+					<% if(PERM_READ_SIMILAR_EVENT_CLIENT){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/duplicateEvent.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarEvent"/></strong>
+						href="<c:url value="/client/similarEvent.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarEvent"/></strong>
 					</a>
 					<% } %>
 
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILARITY_DEFINITION")){ %>
+					<% if(PERM_READ_SIMILARITY_DEFINITION){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/duplicateDefinitionOfClient.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarclientRuleDefination"/></strong>
+						href="<c:url value="/client/similarityDefinitionOfClient.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarclientRuleDefination"/></strong>
 					</a>
 					<% } %>
 
-					<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_SIMILARITY_DEFINITION")){ %>
+					<% if(PERM_READ_SIMILARITY_DEFINITION){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
-						href="<c:url value="/client/duplicateDefinitionOfEvent.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similareventRuleDefination"/></strong>
+						href="<c:url value="/client/similarityDefinitionOfEvent.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similareventRuleDefination"/></strong>
 					</a>		
 					<% } %>
+					
 				</div></li>
 			<% } %>
+			
 			
 				<%if(CHILD_GROWTH_REPORT || CHILD_GROWTH_SUMMARY_REPORT || ANALYTICS){ %>
 				<li class="nav-item dropdown"><a

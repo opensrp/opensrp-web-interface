@@ -7,7 +7,7 @@
 <%@page import="org.opensrp.common.util.CheckboxHelperUtil"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
-<%@page import="org.opensrp.acl.entity.Location"%>
+<%@page import="org.opensrp.core.entity.Location"%>
 <%@page import="org.json.JSONObject" %>
 <%@page import="org.json.JSONArray" %>
 <%@page import="org.opensrp.facility.entity.FacilityTraining" %>
@@ -49,17 +49,17 @@ String selectedPersonName = "";
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		
-		<jsp:include page="/WEB-INF/views/facility-url.jsp" />
+		<jsp:include page="/WEB-INF/views/facility/facility-url.jsp" />
 		
 		<div class="form-group">	
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
-		<a  href="<c:url value="<%=detailsUrl %>"/>"> <strong>CC Profile</strong> </a>		
+		<a  href="<c:url value="<%=detailsUrl %>"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>		
 		<%} %>
 		</div>
 		
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Add Worker (<b><%=facilityName %></b>)
+					<i class="fa fa-table"></i> <spring:message code="lbl.addWorker"/> (<b><%=facilityName %></b>)
 				</div>
 				<div class="card-body">
 				
@@ -71,7 +71,7 @@ String selectedPersonName = "";
 									<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerType"/></label>
 										<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" onchange="checkForTraining()" required>
-									 		<option value="" selected>Please Select</option>
+									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 												<%
 												for (FacilityWorkerType workerType : workerTypeList)
 												{
@@ -117,7 +117,7 @@ String selectedPersonName = "";
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerContact"/></label>
 									<input name="identifier" class="form-control"
 										required="required" aria-describedby="nameHelp"
-										placeholder="Identifier (Email/Mobile No.)" />
+										placeholder="<spring:message code="lbl.healthWorkerContact"/>" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
@@ -132,7 +132,7 @@ String selectedPersonName = "";
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/></label>
 									<input name="organization" class="form-control"
 										required="required" aria-describedby="nameHelp"
-										placeholder="Organization" />
+										placeholder="<spring:message code="lbl.healthWorkerOrganization"/>" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
@@ -170,7 +170,7 @@ String selectedPersonName = "";
 						<div class="form-group" id="saveButtonDiv">
 							<div class="row">
 								<div class="col-3">
-									<input type="submit" value="Save"
+									<input type="submit" value="<spring:message code="lbl.save"/>"
 										class="btn btn-primary btn-block"/>
 								</div>
 							</div>
@@ -184,7 +184,7 @@ String selectedPersonName = "";
 			
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Worker List (<b><%=facilityName %></b>)
+					<i class="fa fa-table"></i> <spring:message code="lbl.workerList"/> (<b><%=facilityName %></b>)
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">

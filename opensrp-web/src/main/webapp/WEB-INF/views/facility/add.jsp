@@ -9,7 +9,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
-<%@page import="org.opensrp.acl.entity.Permission"%>
+<%@page import="org.opensrp.core.entity.Permission"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,11 +31,11 @@
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		
-			<jsp:include page="/WEB-INF/views/facility-url.jsp" />
+			<jsp:include page="/WEB-INF/views/facility/facility-url.jsp" />
 			
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Community Clinic Registration
+					<i class="fa fa-table"></i> <spring:message code="lbl.communityClinicRegistration"/>
 				</div>
 				<div class="card-body">
 					<form:form method="POST" action="${saveUrl}" >
@@ -110,10 +110,10 @@
 		<div class="form-group">
 			<div class="row">
 				<div class="col-5">
-					<label for="exampleInputName">Division  </label>
+					<label for="exampleInputName"><spring:message code="lbl.division"/>  </label>
 					<select class="custom-select custom-select-lg mb-3" id="division"
 						name="division">
-						<option value="0?">Please Select Division</option>
+						<option value="0?"><spring:message code="lbl.selectDivision"/></option>
 						<%
 										for (Object[] objects : divisions) {
 											if (divId == ((Integer) objects[1]).intValue()) {
@@ -135,10 +135,10 @@
 		<div class="form-group">
 			<div class="row">
 				<div class="col-5">
-					<label for="exampleInputName">District  </label>
+					<label for="exampleInputName"><spring:message code="lbl.district"/>  </label>
 					<select class="custom-select custom-select-lg mb-3" id="district"
 						name="district">
-						<option value="0?">Please Select District</option>
+						<option value="0?"><spring:message code="lbl.selectDistrict"/></option>
 						<%
 										if (districts != null) {
 											for (Object[] objects : districts) {
@@ -163,10 +163,10 @@
 		<div class="form-group">
 			<div class="row">
 				<div class="col-5">
-					<label for="exampleInputName">Upazilla  </label>
+					<label for="exampleInputName"><spring:message code="lbl.upazila"/>  </label>
 					<select class="custom-select custom-select-lg mb-3" id="upazila"
 						name="upazilla">
-						<option value="0?">Please Select Upazilla</option>
+						<option value="0?"><spring:message code="lbl.selectUpazila"/></option>
 						<%
 										if (upazilas != null) {
 											for (Object[] objects : upazilas) {
@@ -191,10 +191,10 @@
 		<div class="form-group">
 			<div class="row">
 				<div class="col-5">
-					<label for="exampleInputName">Union  </label>
+					<label for="exampleInputName"><spring:message code="lbl.union"/>  </label>
 					<select class="custom-select custom-select-lg mb-3" id="union"
 						name="union">
-						<option value="0?">Please Select Union</option>
+						<option value="0?"><spring:message code="lbl.selectUnion"/></option>
 						<%
 										if (unions != null) {
 											for (Object[] objects : unions) {
@@ -219,10 +219,10 @@
 		<div class="form-group">
 			<div class="row">
 				<div class="col-5">
-					<label for="exampleInputName">Ward  </label>
+					<label for="exampleInputName"><spring:message code="lbl.ward"/>  </label>
 					<select class="custom-select custom-select-lg mb-3" id="ward"
 						name="ward">
-						<option value="0?">Please Select Ward</option>
+						<option value="0?"><spring:message code="lbl.selectWard"/></option>
 						<%
 										if (wards != null) {
 											for (Object[] objects : wards) {
@@ -255,10 +255,10 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Community Clinic Name  </label>
+									<label for="exampleInputName"><spring:message code="lbl.communityClinicName"/></label>
 									<form:input path="name" class="form-control"
 										required="required" aria-describedby="nameHelp"
-										placeholder="Community Clinic Name" value="${name}" />
+										value="${name}" />
 								</div>
 							</div>
 						</div>
@@ -266,10 +266,10 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">HRM ID  </label>
+									<label for="exampleInputName"><spring:message code="lbl.hrmId"/></label>
 									<form:input path="hrmId" class="form-control"
 										required="required" aria-describedby="nameHelp"
-										placeholder="HRM ID" value="${hrmId}" />
+										value="${hrmId}" />
 								</div>
 							</div>
 						</div>
@@ -277,10 +277,10 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Latitude  </label>
+									<label for="exampleInputName"><spring:message code="lbl.latitude"/></label>
 									<form:input path="latitude" class="form-control"
 										 aria-describedby="nameHelp"
-										placeholder="Latitude" value="${latitude}" />
+										 value="${latitude}" />
 								</div>
 							</div>
 						</div>
@@ -288,10 +288,10 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName">Longitude  </label>
+									<label for="exampleInputName"><spring:message code="lbl.longitude"/></label>
 									<form:input path="longitude" class="form-control"
 										aria-describedby="nameHelp"
-										placeholder="Longitude" value="${longitude}" />
+										value="${longitude}" />
 								</div>
 							</div>
 						</div>
@@ -305,7 +305,7 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
-									<input type="submit" value="Save"
+									<input type="submit" value="<spring:message code="lbl.save"/>"
 										class="btn btn-primary btn-block" />
 								</div>
 							</div>

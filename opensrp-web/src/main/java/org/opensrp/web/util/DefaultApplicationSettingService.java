@@ -7,33 +7,28 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
-import org.opensrp.acl.entity.Permission;
-import org.opensrp.acl.entity.Role;
-import org.opensrp.acl.entity.User;
-import org.opensrp.acl.service.impl.DuplicateRecordServiceImpl;
-import org.opensrp.acl.service.impl.LocationServiceImpl;
-import org.opensrp.acl.service.impl.PermissionServiceImpl;
-import org.opensrp.acl.service.impl.RoleServiceImpl;
-import org.opensrp.acl.service.impl.UserServiceImpl;
 import org.opensrp.common.entity.Marker;
 import org.opensrp.common.service.impl.MarkerServiceImpl;
 import org.opensrp.common.util.AllConstant;
 import org.opensrp.common.util.DefaultRole;
-import org.opensrp.facility.service.impl.FacilityWorkerTrainingServiceImpl;
-import org.opensrp.facility.service.impl.FacilityWorkerTypeServiceImpl;
+import org.opensrp.core.entity.Permission;
+import org.opensrp.core.entity.Role;
+import org.opensrp.core.entity.User;
+import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.PermissionService;
+import org.opensrp.core.service.RoleService;
+import org.opensrp.core.service.SimilarRecordServiceImpl;
+import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.entity.WeightVelocityChart;
-import org.opensrp.web.nutrition.service.impl.WeightVelocityChartServiceImpl;
+import org.opensrp.web.nutrition.service.WeightVelocityChartService;
 import org.opensrp.web.nutrition.utils.GrowthValocityChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,13 +42,13 @@ public class DefaultApplicationSettingService {
 	private static final Logger logger = Logger.getLogger(DefaultApplicationSettingService.class);
 	
 	@Autowired
-	private PermissionServiceImpl permissionServiceImpl;
+	private PermissionService permissionServiceImpl;
 	
 	@Autowired
-	private RoleServiceImpl roleServiceImpl;
+	private RoleService roleServiceImpl;
 	
 	@Autowired
-	private UserServiceImpl userServiceImpl;
+	private UserService userServiceImpl;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -65,16 +60,16 @@ public class DefaultApplicationSettingService {
 	private GrowthValocityChart growthValocityChart;
 	
 	@Autowired
-	private LocationServiceImpl locationServiceImpl;
+	private LocationService locationServiceImpl;
 	
 	@Autowired
 	private MarkerServiceImpl markerServiceImpl;
 	
 	@Autowired
-	private WeightVelocityChartServiceImpl weightVelocityChartServiceImpl;
+	private WeightVelocityChartService weightVelocityChartServiceImpl;
 	
 	@Autowired
-	private DuplicateRecordServiceImpl duplicateRecordServiceImpl;
+	private SimilarRecordServiceImpl similarRecordServiceImpl;
 	
 	public DefaultApplicationSettingService() {
 		
@@ -113,20 +108,22 @@ public class DefaultApplicationSettingService {
 			logger.error("error saving roles:" + e.getMessage());
 		}
 		
-		/** create provider role */
-		String providerRoleNmme = DefaultRole.Provider.name();
-		Role providerRole = new Role();
-		providerRole.setName(providerRoleNmme);
-		Role findProviderRole = roleServiceImpl.findByKey(providerRole.getName(), "name", Role.class);
-		try {
-			if (findProviderRole == null) {
-				roleServiceImpl.save(providerRole);
-			} else {
-				logger.info("Role Provider exists");
+		/** create OpenMRS Role role */
+		for (DefaultRole defaultRole : DefaultRole.values()) {
+			
+			Role openmrsRole = new Role();
+			openmrsRole.setName(defaultRole.name());
+			Role findProviderRole = roleServiceImpl.findByKey(openmrsRole.getName(), "name", Role.class);
+			try {
+				if (findProviderRole == null) {
+					roleServiceImpl.save(openmrsRole);
+				} else {
+					logger.info("Role Provider exists");
+				}
 			}
-		}
-		catch (Exception e1) {
-			logger.error("problem occured of saving role provder cause:" + e1.getMessage());
+			catch (Exception e1) {
+				logger.error("problem occured of saving role provder cause:" + e1.getMessage());
+			}
 		}
 		
 		User account = userServiceImpl.findByKey(userName, "username", User.class);
@@ -154,8 +151,8 @@ public class DefaultApplicationSettingService {
 		addMarker();
 		
 		growthValocityChart.getAllGrowthValocityChart();
-		duplicateRecordServiceImpl.getMatchingCriteriaForAllViews();
-		duplicateRecordServiceImpl.getCloumnNameListForAllViewsWithDuplicateRecord();
+		similarRecordServiceImpl.getMatchingCriteriaForAllViews();
+		similarRecordServiceImpl.getCloumnNameListForAllViewsWithSimilarRecord();
 	}
 	
 	public void runScript(String aSQLScriptFilePath, ScriptRunner sr) throws FileNotFoundException, IOException,

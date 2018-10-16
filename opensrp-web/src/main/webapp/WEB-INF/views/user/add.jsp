@@ -7,7 +7,7 @@
 <%@page import="org.opensrp.common.util.CheckboxHelperUtil"%>
 
 <%@page import="java.util.List"%>
-<%@page import="org.opensrp.acl.entity.Role"%>
+<%@page import="org.opensrp.core.entity.Role"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -41,6 +41,12 @@
 				</div>
 				<div class="card-body">
 					
+	                          <span class="text-red" id="usernameUniqueErrorMessage"></span>
+	                    
+	                 <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%"> 
+							<img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
+							
+					</div>
 					<form:form 	modelAttribute="account" id="UserInfo" class="form-inline">	
 										
 						<div class="row col-12 tag-height">						 
@@ -88,7 +94,7 @@
 								<form:input path="username" class="form-control mx-sm-3"
 										required="required" />
 								<small id="passwordHelpInline" class="text-muted text-para">
-	                          		<span class="text-red" id="usernameUniqueErrorMessage"></span><spring:message code="lbl.userMessage"/> 
+	                          		<spring:message code="lbl.userMessage"/> 
 	                        	</small>
 							 </div>							 
 						 </div>
@@ -167,6 +173,7 @@
 	
 	<script type="text/javascript">
 	$("#UserInfo").submit(function(event) { 
+			$("#loading").show();
 			var url = "/opensrp-dashboard/rest/api/v1/user/save";			
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
@@ -196,6 +203,7 @@
 				},
 				success : function(data) {
 				   $("#usernameUniqueErrorMessage").html(data);
+				   $("#loading").hide();
 				   if(data == ""){					   
 					   window.location.replace("/opensrp-dashboard/user.html");
 					   

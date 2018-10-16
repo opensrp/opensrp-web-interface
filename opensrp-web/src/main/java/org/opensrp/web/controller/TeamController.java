@@ -11,9 +11,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.json.JSONException;
-import org.opensrp.acl.entity.Team;
-import org.opensrp.acl.service.impl.LocationServiceImpl;
-import org.opensrp.acl.service.impl.TeamServiceImpl;
+import org.opensrp.core.entity.Team;
+import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.TeamService;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -33,10 +33,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class TeamController {
 	
 	@Autowired
-	private LocationServiceImpl locationServiceImpl;
+	private LocationService locationServiceImpl;
 	
 	@Autowired
-	private TeamServiceImpl teamServiceImpl;
+	private TeamService teamServiceImpl;
 	
 	@Autowired
 	private Team team;
@@ -73,7 +73,6 @@ public class TeamController {
 	                             HttpSession session, Locale locale) throws Exception {
 		
 		if (!teamServiceImpl.isTeamNameAndIdentifierExists(model, team)) {
-			//team.setName(team.getName().trim());
 			team = teamServiceImpl.setCreatorLocationAndSupervisorAttributeInLocation(team, locationId, supervisorId);
 			if (teamServiceImpl.chckeUuid(team, model)) {
 				teamServiceImpl.save(team);
@@ -82,7 +81,6 @@ public class TeamController {
 				return new ModelAndView("/team/add");
 			}
 		} else {
-			//team.setName(team.getName().trim());
 			team = teamServiceImpl.setCreatorLocationAndSupervisorAttributeInLocation(team, locationId, supervisorId);
 			teamServiceImpl.chckeUuid(team, model);
 			teamServiceImpl.setSessionAttribute(session, team, locationName);
