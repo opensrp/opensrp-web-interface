@@ -17,4 +17,8 @@
 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV")){ %>	
 					 <a  href="<c:url value="/facility/upload_csv.html?lang=${locale}"/>"> <strong>Upload Facility</strong> </a>	
 <%} %>		
+
+<% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV")){ %>	
+					| <a  href="<c:url value="/formUpload/uploadFile.html?lang=${locale}"/>"> <strong>Upload File</strong> </a>	
+<%} %>	
 		</div>

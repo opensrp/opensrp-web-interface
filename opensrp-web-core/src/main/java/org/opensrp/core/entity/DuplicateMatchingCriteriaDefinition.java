@@ -25,110 +25,102 @@ import org.springframework.stereotype.Service;
 @Entity
 @Table(name = "duplicate_matching_criteria_definition", schema = "core")
 public class DuplicateMatchingCriteriaDefinition implements Serializable {
-
+	
 	private static final long serialVersionUID = 1L;
-
+	
 	@NotNull
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dup_matching_criteria_def_id_seq")
 	@SequenceGenerator(name = "dup_matching_criteria_def_id_seq", sequenceName = "dup_matching_criteria_def_id_seq", allocationSize = 1)
 	private int id;
-
+	
 	@NotNull
 	@Column(name = "view_name")
 	private String viewName;
-
-/*	@NotNull
-	@Type(type = "jsonb")
-	@Column(name = "matching_keys", columnDefinition = "jsonb")
-	private JSONArray matchingKeys;*/
 	
 	@NotNull
 	@Column(name = "matching_keys")
 	private String matchingKeys;
-
+	
 	@NotNull
 	@Column(name = "status")
 	private Boolean status;
-
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
 	@CreationTimestamp
 	private Date created = new Date();
-
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "MODIFIED_DATE", insertable = true, updatable = true)
 	@UpdateTimestamp
 	private Date updated = new Date();
-
+	
 	public int getId() {
 		return id;
 	}
-
+	
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	
 	public String getViewName() {
 		return viewName;
 	}
-
+	
 	public void setViewName(String viewName) {
 		this.viewName = viewName;
 	}
+	
+	/*	public JSONArray getMatchingKeys() {
+			return matchingKeys;
+		}
 
-/*	public JSONArray getMatchingKeys() {
-		return matchingKeys;
-	}
-
-	public void setMatchingKeys(JSONArray matchingKeys) {
-		this.matchingKeys = matchingKeys;
-	}*/
-
+		public void setMatchingKeys(JSONArray matchingKeys) {
+			this.matchingKeys = matchingKeys;
+		}*/
+	
 	public String getMatchingKeys() {
 		return matchingKeys;
 	}
-
+	
 	public void setMatchingKeys(String matchingKeys) {
 		this.matchingKeys = matchingKeys;
 	}
 	
-
 	public Boolean getStatus() {
 		return status;
 	}
-
 	
-
 	public void setStatus(Boolean status) {
 		this.status = status;
 	}
-
+	
 	public Date getCreated() {
 		return created;
 	}
-
+	
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-
+	
 	public Date getUpdated() {
 		return updated;
 	}
-
+	
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-
+	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-
+		
 		result = prime * result + id;
 		result = prime * result + ((viewName == null) ? 0 : viewName.hashCode());
 		result = prime * result + ((matchingKeys == null) ? 0 : matchingKeys.hashCode());
@@ -137,7 +129,7 @@ public class DuplicateMatchingCriteriaDefinition implements Serializable {
 		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -147,49 +139,47 @@ public class DuplicateMatchingCriteriaDefinition implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		DuplicateMatchingCriteriaDefinition other = (DuplicateMatchingCriteriaDefinition) obj;
-
+		
 		if (id != other.id)
 			return false;
-
+		
 		if (viewName == null) {
 			if (other.viewName != null)
 				return false;
 		} else if (!viewName.equals(other.viewName))
 			return false;
-
+		
 		if (matchingKeys == null) {
 			if (other.matchingKeys != null)
 				return false;
 		} else if (!matchingKeys.equals(other.matchingKeys))
 			return false;
-
+		
 		if (status == null) {
 			if (other.status != null)
 				return false;
 		} else if (!status.equals(other.status))
 			return false;
-
+		
 		if (created == null) {
 			if (other.created != null)
 				return false;
 		} else if (!created.equals(other.created))
 			return false;
-
+		
 		if (updated == null) {
 			if (other.updated != null)
 				return false;
 		} else if (!updated.equals(other.updated))
 			return false;
-
+		
 		return true;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "DuplicateMatchingCriteriaDefinition" + " [" + "id=" + id
-				+ ", viewName=" + viewName + ", matchingKeys=" + matchingKeys
-				+ ", status=" + status + ", created=" + created + ", updated="
-				+ updated + "]";
+		return "DuplicateMatchingCriteriaDefinition" + " [" + "id=" + id + ", viewName=" + viewName + ", matchingKeys="
+		        + matchingKeys + ", status=" + status + ", created=" + created + ", updated=" + updated + "]";
 	}
-
+	
 }

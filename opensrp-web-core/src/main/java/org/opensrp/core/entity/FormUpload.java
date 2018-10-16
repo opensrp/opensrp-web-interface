@@ -1,5 +1,6 @@
 package org.opensrp.core.entity;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -28,15 +29,15 @@ public class FormUpload {
 	@SequenceGenerator(name = "form_upload_id_seq", sequenceName = "form_upload_id_seq", allocationSize = 1)
 	private int id;
 	
-	@Column(name = "name")
-	private String name;
+	@Column(name = "file_name")
+	private String fileName;
+	
+	@Column(name = "file_content")
+	private byte[] fileContent;
 	
 	@ManyToOne()
 	@JoinColumn(name = "user", referencedColumnName = "id")
 	private User user;
-	
-	@Column(name = "time_stamp")
-	private long timeStamp;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
@@ -47,4 +48,108 @@ public class FormUpload {
 	@Column(name = "MODIFIED_DATE", insertable = true, updatable = true)
 	@UpdateTimestamp
 	private Date updated = new Date();
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public String getFileName() {
+		return fileName;
+	}
+	
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	
+	public byte[] getFileContent() {
+		return fileContent;
+	}
+	
+	public void setFileContent(byte[] fileContent) {
+		this.fileContent = fileContent;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public Date getCreated() {
+		return created;
+	}
+	
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+	
+	public Date getUpdated() {
+		return updated;
+	}
+	
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((created == null) ? 0 : created.hashCode());
+		result = prime * result + Arrays.hashCode(fileContent);
+		result = prime * result + ((fileName == null) ? 0 : fileName.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FormUpload other = (FormUpload) obj;
+		if (created == null) {
+			if (other.created != null)
+				return false;
+		} else if (!created.equals(other.created))
+			return false;
+		if (!Arrays.equals(fileContent, other.fileContent))
+			return false;
+		if (fileName == null) {
+			if (other.fileName != null)
+				return false;
+		} else if (!fileName.equals(other.fileName))
+			return false;
+		if (id != other.id)
+			return false;
+		if (updated == null) {
+			if (other.updated != null)
+				return false;
+		} else if (!updated.equals(other.updated))
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "FormUpload [id=" + id + ", fileName=" + fileName + ", fileContent=" + Arrays.toString(fileContent)
+		        + ", user=" + user + ", created=" + created + ", updated=" + updated + "]";
+	}
+	
 }
