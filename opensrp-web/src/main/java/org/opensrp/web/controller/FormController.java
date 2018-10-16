@@ -31,20 +31,24 @@ public class FormController {
 		return "form/upload-form";
 	}
 	
-	/*@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
-	@RequestMapping(value = "/facility/upload_csv.html", method = RequestMethod.POST)
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
+	@RequestMapping(value = "/uploadForm.html", method = RequestMethod.POST)
 	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
 	    throws Exception {
 		if (file.isEmpty()) {
 			model.put("msg", "failed to upload file because its empty");
 			model.addAttribute("msg", "failed to upload file because its empty");
-			return new ModelAndView("/facility/upload_csv");
-		} else if (!"text/csv".equalsIgnoreCase(file.getContentType())) {
-			model.addAttribute("msg", "file type should be '.csv'");
-			return new ModelAndView("/facility/upload_csv");
+			return new ModelAndView("form/upload-form");
+		} else if (!("text/csv".equalsIgnoreCase(file.getContentType())
+		        || "application/json".equalsIgnoreCase(file.getContentType()) || "application/xml".equalsIgnoreCase(file
+		        .getContentType()))) {
+			model.addAttribute("msg", "file type should be '.csv/.xml/.json'");
+			return new ModelAndView("form/upload-form");
+		} else {
+			System.out.println(file.getContentType());
 		}
 		
-		String rootPath = request.getSession().getServletContext().getRealPath("/");
+		/*String rootPath = request.getSession().getServletContext().getRealPath("/");
 		File dir = new File(rootPath + File.separator + "uploadedfile");
 		if (!dir.exists()) {
 			dir.mkdirs();
@@ -76,7 +80,9 @@ public class FormController {
 			model.put("msg", msg);
 			return new ModelAndView("/facility/upload_csv");
 		}
-		return new ModelAndView("redirect:/cbhc-dashboard?lang=" + locale);
-	}*/
+		return new ModelAndView("redirect:/cbhc-dashboard?lang=" + locale);*/
+		
+		return new ModelAndView("redirect:/form/uploadForm.html?lang=" + locale);
+	}
 	
 }
