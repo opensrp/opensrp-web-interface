@@ -164,15 +164,25 @@ public class DefaultApplicationSettingService {
 		similarRecordServiceImpl.getMatchingCriteriaForAllViews();
 		similarRecordServiceImpl.getCloumnNameListForAllViewsWithSimilarRecord();
 
-		Connection con = sessionFactory.getSessionFactoryOptions().getServiceRegistry().getService(ConnectionProvider.class)
+		/*Connection con = sessionFactory.getSessionFactoryOptions().getServiceRegistry().getService(ConnectionProvider.class)
 				.getConnection();
-		BufferedReader in = new BufferedReader(new FileReader("src/main/resources/scripts/script_for_grow_plus.sql"));
+		
+		//Execute some location, form and provider SQL script automatically
+		String rootPath = "";
+		try {
+			rootPath = new File(".").getCanonicalPath();
+			System.out.println("rootPath: " + rootPath);
+		}
+		catch (IOException e) {
+			logger.error("error getting rootPath: " + e);
+		}
+		BufferedReader in = new BufferedReader(new FileReader(rootPath + "/src/main/resources/scripts/script_for_grow_plus.sql"));
 		LineNumberReader fileReader = new LineNumberReader(in);
 		String query = ScriptUtils.readScript(fileReader, ScriptUtils.DEFAULT_COMMENT_PREFIX, ScriptUtils.DEFAULT_STATEMENT_SEPARATOR);
 
 		Statement stmt = null;
 		stmt = con.createStatement();
-		stmt.execute(query);
+		stmt.execute(query);*/
 	}
 
 	public void runScript(String aSQLScriptFilePath, ScriptRunner sr) throws FileNotFoundException, IOException,
