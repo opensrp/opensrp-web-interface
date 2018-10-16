@@ -1,8 +1,9 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Iterator"%>
+<%@page import="org.json.JSONObject"%>
 <%@page import="org.opensrp.common.entity.ExportEntity"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -31,7 +32,15 @@
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 	<%
-		String items = "{ ValueA : 'Household 1', ValueB : 'Household 2', ValueC : 'Household 3' }";
+		String items = "{ ValueA : \"Household 1\", ValueB : 'Household 2', ValueC : 'Household 3' }";
+		JSONObject exportAttributesForMother = new JSONObject();
+		if (session.getAttribute("exportAttributesForMother") != null) {
+			exportAttributesForMother = (JSONObject) session.getAttribute("exportAttributesForMother");
+		}
+		JSONObject exportAttributesForChild = new JSONObject();
+		if (session.getAttribute("exportAttributesForChild") != null) {
+			exportAttributesForChild = (JSONObject) session.getAttribute("exportAttributesForChild");
+		}
 	%>
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
@@ -197,22 +206,14 @@
 		    }
 		    else if(el.val() === "Mother" ) {
 		        $("#multiselect option").remove();
-		        var myobject = {
-		    		    mother_name : 'Text A',
-		    		    ValueB : 'Text B',
-		    		    ValueC : 'Text C'
-		    		};
+		        var myobject = <%=exportAttributesForMother%>;
 		    	for(index in myobject) {
 		    		changedHtml.options[changedHtml.options.length] = new Option(myobject[index], index);
 		    	}
 		    }
 		    else if(el.val() === "Child" ) {
 		        $("#multiselect option").remove();
-		        var myobject = {
-		    		    ValueA : 'Child 1',
-		    		    ValueB : 'Child 2',
-		    		    ValueC : 'Child 3'
-		    		};
+		        var myobject = <%=exportAttributesForChild%>;
 		    	for(index in myobject) {
 		    		changedHtml.options[changedHtml.options.length] = new Option(myobject[index], index);
 		    	}
