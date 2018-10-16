@@ -4,6 +4,7 @@
 
 package org.opensrp.web.listener;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
@@ -29,7 +30,7 @@ public class ApplicationStartupListener implements ApplicationListener<ContextRe
 			try {
 				defaultSystemSettingService.saveDefaultAppSetting();
 			}
-			catch (ClassNotFoundException | SQLException e) {
+			catch (ClassNotFoundException | SQLException | IOException e) {
 				e.printStackTrace();
 			}
 		}
