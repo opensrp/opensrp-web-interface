@@ -21,14 +21,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping(value = "formUpload")
-public class FormUploadController {
+@RequestMapping(value = "form")
+public class FormController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
-	@RequestMapping(value = "/uploadFile.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/uploadForm.html", method = RequestMethod.GET)
 	public String csvUpload(HttpSession session, ModelMap model, Locale locale) throws JSONException {
 		model.addAttribute("locale", locale);
-		return "form-upload/upload-file";
+		return "form/upload-form";
 	}
 	
 	/*@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")

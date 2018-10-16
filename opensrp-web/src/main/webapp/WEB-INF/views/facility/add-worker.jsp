@@ -49,7 +49,7 @@ String selectedPersonName = "";
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		
-		<jsp:include page="/WEB-INF/views/facility/facility-url.jsp" />
+		<jsp:include page="/WEB-INF/views/facility/facility-link.jsp" />
 		
 		<div class="form-group">	
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>

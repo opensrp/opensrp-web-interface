@@ -21,11 +21,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link type="text/css" href="<c:url value="/resources/css/jqx.base.css"/>" rel="stylesheet">
 
-<title>Uplaod File</title>
+<title>Uplaod Form</title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
-<c:url var="saveUrl" value="/facility/upload_csv.html" />
+<c:url var="saveUrl" value="/form/upload-form.html" />
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
@@ -33,11 +33,11 @@
 		<div class="container-fluid">
 		
 
-		<jsp:include page="/WEB-INF/views/facility-url.jsp" />
+		<jsp:include page="/WEB-INF/views/form/form-link.jsp" />
 		
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> Upload File
+					<i class="fa fa-table"></i> Upload Form
 				</div>
 				<div class="card-body">				
 					<form:form method="POST" action="${saveUrl}?${_csrf.parameterName}=${_csrf.token}" enctype="multipart/form-data">
