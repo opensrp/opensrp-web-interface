@@ -8,21 +8,34 @@ import java.io.InputStream;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
+import org.opensrp.core.entity.FormUpload;
+import org.opensrp.core.service.FormService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import org.springframework.util.FileCopyUtils;
+
 @Controller
 @RequestMapping(value = "form")
 public class FormController {
+	
+	@Autowired
+	FormUpload formUpload;
+	
+	@Autowired
+	FormService formService;
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
 	@RequestMapping(value = "/uploadForm.html", method = RequestMethod.GET)
@@ -46,6 +59,19 @@ public class FormController {
 			return new ModelAndView("form/upload-form");
 		} else {
 			System.out.println(file.getContentType());
+		}
+		
+		byte[] bytes = file.getBytes();
+		System.out.println(bytes.length);
+		formUpload = new FormUpload();
+		formUpload.setFileName(file.getOriginalFilename().toString());
+		formUpload.setFileContent(bytes);
+		
+		try {
+			formService.save(formUpload);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		/*String rootPath = request.getSession().getServletContext().getRealPath("/");
@@ -83,6 +109,27 @@ public class FormController {
 		return new ModelAndView("redirect:/cbhc-dashboard?lang=" + locale);*/
 		
 		return new ModelAndView("redirect:/form/uploadForm.html?lang=" + locale);
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
+	@RequestMapping(value = "/{formId}/downloadForm.html", method = RequestMethod.GET)
+	public void getAttachmenFromDatabase(@PathVariable("formId") int formId, HttpServletResponse response) {
+		System.out.println("in controller " + formId);
+		response.setContentType("text/csv");
+		try {
+			
+			// Below object has the bytea data, I just want to convert it into a file and send it to user. 
+			FormUpload attachment = formService.findById(formId, "id", FormUpload.class);
+			
+			response.setHeader("Content-Disposition", "inline; filename=\"" + attachment.getFileName() + "\"");
+			response.setContentLength(attachment.getFileContent().length);
+			
+			FileCopyUtils.copy(attachment.getFileContent(), response.getOutputStream());
+			response.flushBuffer();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

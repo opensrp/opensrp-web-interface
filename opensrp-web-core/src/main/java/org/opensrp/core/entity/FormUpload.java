@@ -36,8 +36,8 @@ public class FormUpload {
 	private byte[] fileContent;
 	
 	@ManyToOne()
-	@JoinColumn(name = "user", referencedColumnName = "id")
-	private User user;
+	@JoinColumn(name = "creator", referencedColumnName = "id")
+	private User creator;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
@@ -74,11 +74,11 @@ public class FormUpload {
 	}
 	
 	public User getUser() {
-		return user;
+		return creator;
 	}
 	
 	public void setUser(User user) {
-		this.user = user;
+		this.creator = user;
 	}
 	
 	public Date getCreated() {
@@ -106,7 +106,7 @@ public class FormUpload {
 		result = prime * result + ((fileName == null) ? 0 : fileName.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
 		return result;
 	}
 	
@@ -138,10 +138,10 @@ public class FormUpload {
 				return false;
 		} else if (!updated.equals(other.updated))
 			return false;
-		if (user == null) {
-			if (other.user != null)
+		if (creator == null) {
+			if (other.creator != null)
 				return false;
-		} else if (!user.equals(other.user))
+		} else if (!creator.equals(other.creator))
 			return false;
 		return true;
 	}
@@ -149,7 +149,7 @@ public class FormUpload {
 	@Override
 	public String toString() {
 		return "FormUpload [id=" + id + ", fileName=" + fileName + ", fileContent=" + Arrays.toString(fileContent)
-		        + ", user=" + user + ", created=" + created + ", updated=" + updated + "]";
+		        + ", creator=" + creator + ", created=" + created + ", updated=" + updated + "]";
 	}
 	
 }

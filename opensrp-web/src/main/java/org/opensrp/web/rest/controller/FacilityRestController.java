@@ -62,7 +62,6 @@ public class FacilityRestController {
 	
 	@RequestMapping(value = "/editWorker", method = RequestMethod.POST)
 	public ResponseEntity<String> editWorker(@RequestBody FacilityWorkerDTO facilityWorkerDTO) throws Exception {
-		System.out.println(facilityWorkerDTO.toString());
 		int workerId = Integer.parseInt(facilityWorkerDTO.getWorkerId());
 		FacilityWorker facilityWorker = facilityWorkerService.findById(workerId, "id", FacilityWorker.class);
 		FacilityWorker editedFacilityWorker = facilityHelperUtil.convertFacilityWorkerDTO(facilityWorkerDTO);
@@ -91,10 +90,8 @@ public class FacilityRestController {
 	
 	@RequestMapping(value = "/deleteWorker", method = RequestMethod.POST)
 	public ResponseEntity<String> deleteWorker(@RequestBody WorkerIdDTO workerIdDTO) {
-		System.out.println(workerIdDTO.getWorkerId());
 		FacilityWorker facilityWorker = facilityWorkerService
 		        .findById(workerIdDTO.getWorkerId(), "id", FacilityWorker.class);
-		System.out.println(facilityWorker);
 		boolean isDeleted = facilityWorkerService.delete(facilityWorker);
 		return new ResponseEntity<>(new Gson().toJson(isDeleted), OK);
 	}
