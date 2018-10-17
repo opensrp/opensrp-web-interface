@@ -21,9 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClientServiceImpl extends EntityProperties implements DatabaseService {
+public class ClientService extends EntityProperties implements DatabaseService {
 	
-	private static final Logger logger = Logger.getLogger(ClientServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(ClientService.class);
 	
 	@Autowired
 	private DatabaseRepository repository;
@@ -31,7 +31,7 @@ public class ClientServiceImpl extends EntityProperties implements DatabaseServi
 	@Autowired
 	private OpenSRPClientServiceImpl openSRPClientServiceImpl;
 	
-	public ClientServiceImpl() {
+	public ClientService() {
 		
 	}
 	

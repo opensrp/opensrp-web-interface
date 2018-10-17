@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SimilarRecordServiceImpl implements DatabaseService {
 	
-	private static final Logger logger = Logger.getLogger(ClientServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(ClientService.class);
 	
 	@Autowired
 	private DatabaseServiceImpl databaseServiceImpl;
