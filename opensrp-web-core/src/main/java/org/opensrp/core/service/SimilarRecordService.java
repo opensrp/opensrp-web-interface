@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SimilarRecordServiceImpl implements DatabaseService {
+public class SimilarRecordService implements DatabaseService {
 	
 	private static final Logger logger = Logger.getLogger(ClientService.class);
 	
@@ -37,7 +37,7 @@ public class SimilarRecordServiceImpl implements DatabaseService {
 	
 	public static Map<String, List<String>> mapViewNameColumnList = new HashMap<String, List<String>>();
 	
-	public SimilarRecordServiceImpl() {
+	public SimilarRecordService() {
 		
 	}
 	

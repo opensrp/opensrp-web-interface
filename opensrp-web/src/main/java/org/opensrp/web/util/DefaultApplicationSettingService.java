@@ -32,7 +32,7 @@ import org.opensrp.core.entity.User;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.PermissionService;
 import org.opensrp.core.service.RoleService;
-import org.opensrp.core.service.SimilarRecordServiceImpl;
+import org.opensrp.core.service.SimilarRecordService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.entity.WeightVelocityChart;
 import org.opensrp.web.nutrition.service.WeightVelocityChartService;
@@ -78,7 +78,7 @@ public class DefaultApplicationSettingService {
 	private WeightVelocityChartService weightVelocityChartServiceImpl;
 
 	@Autowired
-	private SimilarRecordServiceImpl similarRecordServiceImpl;
+	private SimilarRecordService similarRecordService;
 
 	public DefaultApplicationSettingService() {
 
@@ -161,8 +161,8 @@ public class DefaultApplicationSettingService {
 
 		growthValocityChart.getAllGrowthValocityChart();
 
-		similarRecordServiceImpl.getMatchingCriteriaForAllViews();
-		similarRecordServiceImpl.getCloumnNameListForAllViewsWithSimilarRecord();
+		similarRecordService.getMatchingCriteriaForAllViews();
+		similarRecordService.getCloumnNameListForAllViewsWithSimilarRecord();
 
 		/*Connection con = sessionFactory.getSessionFactoryOptions().getServiceRegistry().getService(ConnectionProvider.class)
 				.getConnection();
