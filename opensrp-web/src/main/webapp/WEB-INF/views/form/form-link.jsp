@@ -17,8 +17,6 @@ boolean PERM_UPLOAD_FACILITY_CSV = AuthenticationManagerUtil.isPermitted("PERM_U
 <%} %>	
 <% if(PERM_UPLOAD_FACILITY_CSV){ %>	
 					| <a  href="<c:url value="/form/downloadForm.html?lang=${locale}"/>"> <strong><spring:message code="lbl.downloadForm"/> </strong> </a>	
-<%} %>	
-
- |<a  href="<c:url value="/form/2/downloadForm.html"/>"> <strong>DF </strong> </a>	
+<%} %>
 
 </div>
