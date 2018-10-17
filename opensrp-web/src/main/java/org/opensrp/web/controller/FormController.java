@@ -60,7 +60,7 @@ public class FormController {
 			model.addAttribute("msg", "file type should be '.csv/.xml/.json'");
 			return new ModelAndView("form/upload-form");
 		} else {
-			System.out.println(file.getContentType());
+			//System.out.println(file.getContentType());
 		}
 		
 		byte[] bytes = file.getBytes();
@@ -73,7 +73,6 @@ public class FormController {
 		formUpload.setCreator(creator);
 		
 		try {
-			System.out.println(formUpload.toString());
 			formService.save(formUpload);
 		}
 		catch (Exception e) {
@@ -94,7 +93,6 @@ public class FormController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_DOWNLOAD_FORM')")
 	@RequestMapping(value = "/{formId}/downloadForm.html", method = RequestMethod.GET)
 	public void getAttachmenFromDatabase(@PathVariable("formId") int formId, HttpServletResponse response) {
-		System.out.println("in controller " + formId);
 		response.setContentType("application/octet-stream");
 		try {
 			FormUpload attachment = formService.findById(formId, "id", FormUpload.class);
