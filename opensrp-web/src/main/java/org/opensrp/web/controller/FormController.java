@@ -9,10 +9,13 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.opensrp.core.entity.FormUpload;
+import org.opensrp.core.entity.User;
 import org.opensrp.core.service.FormService;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
@@ -65,7 +68,12 @@ public class FormController {
 		formUpload.setFileName(file.getOriginalFilename().toString());
 		formUpload.setFileContent(bytes);
 		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User creator = (User) auth.getPrincipal();
+		formUpload.setCreator(creator);
+		
 		try {
+			System.out.println(formUpload.toString());
 			formService.save(formUpload);
 		}
 		catch (Exception e) {

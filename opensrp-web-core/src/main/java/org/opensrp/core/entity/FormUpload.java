@@ -73,12 +73,12 @@ public class FormUpload {
 		this.fileContent = fileContent;
 	}
 	
-	public User getUser() {
+	public User getCreator() {
 		return creator;
 	}
 	
-	public void setUser(User user) {
-		this.creator = user;
+	public void setCreator(User creator) {
+		this.creator = creator;
 	}
 	
 	public Date getCreated() {

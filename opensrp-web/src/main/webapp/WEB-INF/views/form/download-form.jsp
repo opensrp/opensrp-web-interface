@@ -46,8 +46,6 @@
 												    <th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;"><spring:message code="lbl.formName"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 106px;"><spring:message code="lbl.formType"/></th>
-													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;"><spring:message code="lbl.creator"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;"><spring:message code="lbl.action"/></th>
@@ -65,13 +63,16 @@
 														FormUpload formUpload = (FormUpload) dataListIterator.next();
 														int id = formUpload.getId();
 														String name = formUpload.getFileName()!=null ? formUpload.getFileName() : "";
+														String creator = "";
+														if(formUpload.getCreator()!= null){
+															creator = formUpload.getCreator().getUsername()!=null ? formUpload.getCreator().getUsername() : ""; 
+														}
 														String downloadFormURL = "/form/"+id+"/downloadForm.html";
 											%>
 											<tr>
 												<td><%=id%></td>
 												<td><%=name%></td>
-												<td></td>
-												<td></td>
+												<td><%=creator%></td>
 												<td>
 												<% if(AuthenticationManagerUtil.isPermitted("PERM_DOWNLOAD_FORM")){ %>
 												<a href="<c:url value="<%= downloadFormURL%>" />"><spring:message code="lbl.downloadForm"/></a>
