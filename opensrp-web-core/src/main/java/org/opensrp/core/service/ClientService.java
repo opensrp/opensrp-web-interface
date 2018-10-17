@@ -66,13 +66,31 @@ public class ClientService extends EntityProperties {
 		return repository.update(t);
 	}
 	
+	/**
+	 * Get child's weight and growth related data and set them to session. The data will be used to
+	 * show growth related graphs and charts for any individual child.
+	 * <p>
+	 * <ol>
+	 * <li>Set childId to session</li>
+	 * <li>Get weightList by childId</li>
+	 * <li>Separate weight and growth related data in two different lists</li>
+	 * <li>Format growth-list and weight-list according to highChart's requirement and save them in
+	 * json arrays</li>
+	 * <li>Set weightList and json arrays for growth and weight to session</li>
+	 * </ol>
+	 * </p>
+	 * 
+	 * @param session HttpSession
+	 * @param childId base-entity-id of child
+	 * @return
+	 */
 	@Transactional
-	public void getChildWeightList(HttpSession session, String id) throws JSONException {
-		session.setAttribute("childId", id);
+	public void getChildWeightList(HttpSession session, String childId) throws JSONException {
+		session.setAttribute("childId", childId);
 		
 		List<Object[]> weightList;
 		
-		String weightQuery = "SELECT * FROM core.child_growth " + " WHERE base_entity_id = '" + id + "' "
+		String weightQuery = "SELECT * FROM core.child_growth " + " WHERE base_entity_id = '" + childId + "' "
 		        + " ORDER BY event_date ASC";
 		weightList = repository.executeSelectQuery(weightQuery);
 		
@@ -105,12 +123,29 @@ public class ClientService extends EntityProperties {
 		session.setAttribute("lineChartGrowthData", lineChartGrowthData);
 	}
 	
+	/**
+	 * Get all events of a mother, separate the events in different lists and set the event-lists to
+	 * session. These lists will be used to show pregnancy , follow-up and counselling related info
+	 * of individual mother.
+	 * <p>
+	 * <ol>
+	 * <li>Get all events of a mother by id</li>
+	 * <li>Set the event-list to session</li>
+	 * <li>Create three different list of events from that event-list</li>
+	 * <li>Set those lists to session</li>
+	 * </ol>
+	 * </p>
+	 * 
+	 * @param session HttpSession
+	 * @param motherId base-entity-id of mother
+	 * @return
+	 */
 	@Transactional
-	public void getMotherDetails(HttpSession session, String id) {
-		session.setAttribute("motherId", id);
+	public void getMotherDetails(HttpSession session, String motherId) {
+		session.setAttribute("motherId", motherId);
 		
 		List<Object> data;
-		data = repository.getDataFromViewByBEId("viewJsonDataConversionOfEvent", "mother", id);
+		data = repository.getDataFromViewByBEId("viewJsonDataConversionOfEvent", "mother", motherId);
 		session.setAttribute("eventList", data);
 		
 		List<Object> NWMRList = new ArrayList<Object>();
