@@ -56,21 +56,21 @@
 										<thead>
 											<tr>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Entity Type</th>
+													style="width: 140px;"><spring:message code="lbl.entityType"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">column name</th>
+													style="width: 225px;"><spring:message code="lbl.columnName"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Action</th>
+													style="width: 225px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 140px;">Entity Type</th>
+													style="width: 140px;"><spring:message code="lbl.entityType"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">column name</th>
+													style="width: 225px;"><spring:message code="lbl.columnName"/></th>
 												<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 225px;">Action</th>
+													style="width: 225px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</tfoot>
 										<tbody>
@@ -90,7 +90,7 @@
 																	.isPermitted("PERM_WRITE_EXPORT_LIST")) {
 													%>
 													<a
-													href="<c:url value="/export/${Id}/edit.html?lang=${locale}"/>">Edit</a>
+													href="<c:url value="/export/${Id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a>
 													<%
 														    }
 													    }
