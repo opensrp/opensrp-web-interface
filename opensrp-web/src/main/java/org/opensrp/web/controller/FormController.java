@@ -36,14 +36,14 @@ public class FormController {
 	@Autowired
 	FormService formService;
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FORM')")
 	@RequestMapping(value = "/uploadForm.html", method = RequestMethod.GET)
 	public String csvUpload(HttpSession session, ModelMap model, Locale locale) throws JSONException {
 		model.addAttribute("locale", locale);
 		return "form/upload-form";
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FORM')")
 	@RequestMapping(value = "/uploadForm.html", method = RequestMethod.POST)
 	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
 	    throws Exception {
@@ -52,7 +52,7 @@ public class FormController {
 			model.addAttribute("msg", "failed to upload file because its empty");
 			return new ModelAndView("form/upload-form");
 		} else if (!("text/csv".equalsIgnoreCase(file.getContentType())
-		        || "application/json".equalsIgnoreCase(file.getContentType()) || "application/xml".equalsIgnoreCase(file
+		        || "application/json".equalsIgnoreCase(file.getContentType()) || "text/xml".equalsIgnoreCase(file
 		        .getContentType()))) {
 			model.addAttribute("msg", "file type should be '.csv/.xml/.json'");
 			return new ModelAndView("form/upload-form");
@@ -75,7 +75,7 @@ public class FormController {
 		return new ModelAndView("form/upload-form");
 	}
 	
-	// @PostAuthorize("hasPermission(returnObject, 'PERM_READ_FACILITY')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_DOWNLOAD_FORM')")
 	@RequestMapping(value = "/downloadForm.html", method = RequestMethod.GET)
 	public String showFacilityList(HttpServletRequest request, HttpSession session, ModelMap model, Locale locale) {
 		paginationUtil.createPagination(request, session, FormUpload.class);
@@ -83,7 +83,7 @@ public class FormController {
 		return "/form/download-form";
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FACILITY_CSV')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_DOWNLOAD_FORM')")
 	@RequestMapping(value = "/{formId}/downloadForm.html", method = RequestMethod.GET)
 	public void getAttachmenFromDatabase(@PathVariable("formId") int formId, HttpServletResponse response) {
 		System.out.println("in controller " + formId);

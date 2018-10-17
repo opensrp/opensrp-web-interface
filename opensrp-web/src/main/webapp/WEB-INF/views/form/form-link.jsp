@@ -8,14 +8,15 @@
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <% 
-boolean PERM_UPLOAD_FACILITY_CSV = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV");
+boolean PERM_DOWNLOAD_FORM = AuthenticationManagerUtil.isPermitted("PERM_DOWNLOAD_FORM");
+boolean PERM_UPLOAD_FORM = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FORM");
 %>
 <div class="form-group">	
 
-<% if(PERM_UPLOAD_FACILITY_CSV){ %>	
+<% if(PERM_UPLOAD_FORM){ %>	
 					  <a  href="<c:url value="/form/uploadForm.html?lang=${locale}"/>"> <strong><spring:message code="lbl.uploadForm"/> </strong> </a>	
 <%} %>	
-<% if(PERM_UPLOAD_FACILITY_CSV){ %>	
+<% if(PERM_DOWNLOAD_FORM){ %>	
 					| <a  href="<c:url value="/form/downloadForm.html?lang=${locale}"/>"> <strong><spring:message code="lbl.downloadForm"/> </strong> </a>	
 <%} %>
 

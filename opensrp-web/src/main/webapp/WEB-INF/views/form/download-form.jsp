@@ -73,7 +73,7 @@
 												<td></td>
 												<td></td>
 												<td>
-												<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+												<% if(AuthenticationManagerUtil.isPermitted("PERM_DOWNLOAD_FORM")){ %>
 												<a href="<c:url value="<%= downloadFormURL%>" />"><spring:message code="lbl.downloadForm"/></a>
 												<%} %>
 												</td> 

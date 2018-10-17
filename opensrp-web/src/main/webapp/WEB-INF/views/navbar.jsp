@@ -31,9 +31,8 @@ boolean PERM_READ_TEAM_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_T
 boolean PERM_READ_TEAM_MEMBER_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_TEAM_MEMBER_LIST");
 boolean PERM_READ_EXPORT_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_EXPORT_LIST");
 boolean PERM_EXPORT_LIST = AuthenticationManagerUtil.isPermitted("PERM_EXPORT_LIST");
-
-
-
+boolean PERM_DOWNLOAD_FORM = AuthenticationManagerUtil.isPermitted("PERM_DOWNLOAD_FORM");
+boolean PERM_UPLOAD_FORM = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FORM");
 %>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
 	id="mainNav">
@@ -78,19 +77,19 @@ boolean PERM_EXPORT_LIST = AuthenticationManagerUtil.isPermitted("PERM_EXPORT_LI
 				<% } %>
 				
 				
-				<%if(PERM_UPLOAD_FACILITY_CSV ){ %>			
+				<%if(PERM_UPLOAD_FORM || PERM_DOWNLOAD_FORM ){ %>			
 				<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
 				href="#" data-toggle="dropdown"><spring:message code="lbl.form"/> </a>
 				<div class="dropdown-menu">
-					<% if(PERM_UPLOAD_FACILITY_CSV){ %>
+					<% if(PERM_UPLOAD_FORM){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/form/uploadForm.html?lang=${locale}"/>"> <strong>
 							<spring:message code="lbl.uploadForm"/> </strong>
 					</a>
 					<% } %>
-					<% if(PERM_UPLOAD_FACILITY_CSV){ %>
+					<% if(PERM_DOWNLOAD_FORM){ %>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/form/downloadForm.html?lang=${locale}"/>"> <strong>
