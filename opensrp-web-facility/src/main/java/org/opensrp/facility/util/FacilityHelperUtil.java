@@ -212,7 +212,7 @@ public class FacilityHelperUtil {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			logger.info("Some problem occured, please contact with admin..");
+			logger.info("Some problem occured, please contact admin..");
 			msg = "Some problem occured, please contact with admin..";
 		}
 		return msg;
@@ -256,7 +256,7 @@ public class FacilityHelperUtil {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			logger.info("Some problem occured, please contact with admin..");
+			logger.info("Some problem occured, please contact admin..");
 			msg = "Some problem occured, please contact with admin..";
 		}
 		return msg;
