@@ -1,8 +1,13 @@
 package org.opensrp.web.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Locale;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -78,6 +83,11 @@ public class FormController {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		//for saving in file system
+		formService.saveToFileSystem(request, file);
+		//end 
+		
 		model.addAttribute("msg", "Form saved successfully");
 		return new ModelAndView("form/upload-form");
 	}
@@ -92,19 +102,27 @@ public class FormController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_DOWNLOAD_FORM')")
 	@RequestMapping(value = "/{formId}/downloadForm.html", method = RequestMethod.GET)
-	public void getAttachmenFromDatabase(@PathVariable("formId") int formId, HttpServletResponse response) {
+	public void getAttachmenFromDatabase(@PathVariable("formId") int formId, HttpServletResponse response,
+	                                     HttpServletRequest request) {
 		response.setContentType("application/octet-stream");
 		try {
 			FormUpload attachment = formService.findById(formId, "id", FormUpload.class);
-			response.setHeader("Content-Disposition", "inline; filename=\"" + attachment.getFileName() + "\"");
-			response.setContentLength(attachment.getFileContent().length);
+			String fileName = attachment.getFileName();
+			//fetch file from database
+			//byte[] fileContent = attachment.getFileContent();
 			
-			FileCopyUtils.copy(attachment.getFileContent(), response.getOutputStream());
+			//fetch file from fileSystem
+			byte[] fileContent = formService.getFileFromFileSystem(request, fileName);
+			response.setHeader("Content-Disposition", "inline; filename=\"" + fileName + "\"");
+			response.setContentLength(fileContent.length);
+			
+			FileCopyUtils.copy(fileContent, response.getOutputStream());
 			response.flushBuffer();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 }
