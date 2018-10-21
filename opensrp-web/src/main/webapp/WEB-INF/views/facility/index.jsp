@@ -25,7 +25,7 @@
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		
-		<jsp:include page="/WEB-INF/views/facility/facility-url.jsp" />
+		<jsp:include page="/WEB-INF/views/facility/facility-link.jsp" />
 			
 		<jsp:include page="/WEB-INF/views/searchPanel.jsp" />
 		
