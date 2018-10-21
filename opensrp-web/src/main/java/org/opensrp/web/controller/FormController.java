@@ -1,13 +1,8 @@
 package org.opensrp.web.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Locale;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -55,40 +50,16 @@ public class FormController {
 	@RequestMapping(value = "/uploadForm.html", method = RequestMethod.POST)
 	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
 	    throws Exception {
-		if (file.isEmpty()) {
-			model.put("msg", "failed to upload file because its empty");
-			model.addAttribute("msg", "failed to upload file because its empty");
-			return new ModelAndView("form/upload-form");
-		} else if (!("text/csv".equalsIgnoreCase(file.getContentType())
-		        || "application/json".equalsIgnoreCase(file.getContentType()) || "text/xml".equalsIgnoreCase(file
-		        .getContentType()))) {
-			model.addAttribute("msg", "file type should be '.csv/.xml/.json'");
-			return new ModelAndView("form/upload-form");
-		} else {
-			//System.out.println(file.getContentType());
-		}
-		
-		byte[] bytes = file.getBytes();
-		formUpload = new FormUpload();
-		formUpload.setFileName(file.getOriginalFilename().toString());
-		formUpload.setFileContent(bytes);
-		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User creator = (User) auth.getPrincipal();
-		formUpload.setCreator(creator);
-		
+		String responseMessage = "";
 		try {
-			formService.save(formUpload);
+			responseMessage = formService.saveForm(file, request);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			responseMessage = "Some error occured";
 		}
-		
-		//for saving in file system
-		formService.saveToFileSystem(request, file);
-		//end 
-		
-		model.addAttribute("msg", "Form saved successfully");
+		model.addAttribute("msg", responseMessage);
+		model.addAttribute("locale", locale);
 		return new ModelAndView("form/upload-form");
 	}
 	
@@ -108,11 +79,13 @@ public class FormController {
 		try {
 			FormUpload attachment = formService.findById(formId, "id", FormUpload.class);
 			String fileName = attachment.getFileName();
+			
 			//fetch file from database
 			//byte[] fileContent = attachment.getFileContent();
 			
 			//fetch file from fileSystem
 			byte[] fileContent = formService.getFileFromFileSystem(request, fileName);
+			
 			response.setHeader("Content-Disposition", "inline; filename=\"" + fileName + "\"");
 			response.setContentLength(fileContent.length);
 			
