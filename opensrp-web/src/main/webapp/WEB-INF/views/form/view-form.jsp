@@ -33,14 +33,40 @@ JSONObject jsonObj=new JSONObject(new String(fileContent));
 		<div class="container-fluid">
 		
 		<jsp:include page="/WEB-INF/views/form/form-link.jsp" />
+		
+		 <div class="row">
+	        <div class="col-md-7">
+	            <h4>Form</h4>
+	            <div id="formDiv"></div>
+	        </div>
+   		 </div>
+   		 
 		<div><%= jsonObj%></div>
 		</div>
 
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 	</div>
+	
+<script src="<c:url value='/resources/form-viewer/jquery.medea.js'/>"></script>
+<script src="<c:url value='/resources/form-viewer/converter.js'/>"></script>
 <script type="text/javascript"> 
 var temp = <%=jsonObj%>;
 console.log(temp);
+
+$(function() {
+    //var form = $("#formDiv").medea(obj);
+    var convertedObj = convertForMedea(temp);
+    var form = $("#formDiv").medea(convertedObj);
+   /*  var form = $("#formDiv").medea(convertedObj); 
+    console.log(JSON.stringify(fieldAttributeArrayGlobal));
+    manageReleventInputs();
+    manageFieldAttributes();*/
+
+/* $("#formDiv").on("medea.submit", function(e, objUp) { 
+alert(JSON.stringify(objUp));
+}); */
+
+});
 </script>
 </body>
 </html>
