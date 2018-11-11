@@ -41,14 +41,14 @@ public class FormController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FORM')")
 	@RequestMapping(value = "/uploadForm.html", method = RequestMethod.GET)
-	public String csvUpload(HttpSession session, ModelMap model, Locale locale) throws JSONException {
+	public String uploadForm(HttpSession session, ModelMap model, Locale locale) throws JSONException {
 		model.addAttribute("locale", locale);
 		return "form/upload-form";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FORM')")
 	@RequestMapping(value = "/uploadForm.html", method = RequestMethod.POST)
-	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
+	public ModelAndView saveForm(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
 	    throws Exception {
 		String responseMessage = "";
 		try {
@@ -65,7 +65,7 @@ public class FormController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_DOWNLOAD_FORM')")
 	@RequestMapping(value = "/downloadForm.html", method = RequestMethod.GET)
-	public String showFacilityList(HttpServletRequest request, HttpSession session, ModelMap model, Locale locale) {
+	public String downloadForm(HttpServletRequest request, HttpSession session, ModelMap model, Locale locale) {
 		paginationUtil.createPagination(request, session, FormUpload.class);
 		model.addAttribute("locale", locale);
 		return "/form/download-form";
@@ -73,8 +73,8 @@ public class FormController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_DOWNLOAD_FORM')")
 	@RequestMapping(value = "/{formId}/downloadForm.html", method = RequestMethod.GET)
-	public void getAttachmenFromDatabase(@PathVariable("formId") int formId, HttpServletResponse response,
-	                                     HttpServletRequest request) {
+	public void getAttachmentFromDatabase(@PathVariable("formId") int formId, HttpServletResponse response,
+	                                      HttpServletRequest request) {
 		response.setContentType("application/octet-stream");
 		try {
 			FormUpload attachment = formService.findById(formId, "id", FormUpload.class);
@@ -96,6 +96,24 @@ public class FormController {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_DOWNLOAD_FORM')")
+	@RequestMapping(value = "/{formId}/viewForm.html", method = RequestMethod.GET)
+	public String viewForm(@PathVariable("formId") int formId, HttpServletRequest request, HttpSession session,
+	                       ModelMap model, Locale locale) {
+		FormUpload attachment = formService.findById(formId, "id", FormUpload.class);
+		String fileName = attachment.getFileName();
+		
+		//fetch file from database
+		//byte[] fileContent = attachment.getFileContent();
+		
+		//fetch file from fileSystem
+		byte[] fileContent = formService.getFileFromFileSystem(request, fileName);
+		session.setAttribute("jsonForm", fileContent);
+		
+		model.addAttribute("locale", locale);
+		return "/form/view-form";
 	}
 	
 }

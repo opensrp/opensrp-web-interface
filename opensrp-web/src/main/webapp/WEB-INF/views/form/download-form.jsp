@@ -68,6 +68,7 @@
 															creator = formUpload.getCreator().getUsername()!=null ? formUpload.getCreator().getUsername() : ""; 
 														}
 														String downloadFormURL = "/form/"+id+"/downloadForm.html";
+														String viewFormURL = "/form/"+id+"/viewForm.html";
 											%>
 											<tr>
 												<td><%=id%></td>
@@ -76,6 +77,12 @@
 												<td>
 												<% if(AuthenticationManagerUtil.isPermitted("PERM_DOWNLOAD_FORM")){ %>
 												<a href="<c:url value="<%= downloadFormURL%>" />"><spring:message code="lbl.downloadForm"/></a>
+												<%} %>
+												<% if(AuthenticationManagerUtil.isPermitted("PERM_DOWNLOAD_FORM")){ %>
+												| <a href="<c:url value="<%= downloadFormURL%>" />"><spring:message code="lbl.deleteForm"/></a>
+												<%} %>
+												<% if(AuthenticationManagerUtil.isPermitted("PERM_DOWNLOAD_FORM")){ %>
+												| <a href="<c:url value="<%= viewFormURL%>" />"><spring:message code="lbl.viewForm"/></a>
 												<%} %>
 												</td> 
 											</tr>

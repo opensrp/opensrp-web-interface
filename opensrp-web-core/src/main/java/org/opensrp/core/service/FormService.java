@@ -1,7 +1,9 @@
 package org.opensrp.core.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,7 +46,13 @@ public class FormService {
 	
 	@Transactional
 	public <T> int delete(T t) {
-		return 0;
+		int i = 0;
+		if (repository.delete(t)) {
+			i = 1;
+		} else {
+			i = -1;
+		}
+		return i;
 	}
 	
 	@Transactional
