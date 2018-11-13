@@ -190,7 +190,7 @@ window.Medea = (function($) {
             var result = container.triggerHandler(events.MEDEA_CANCELLED, [ processedObject ]);
         });
 
-        buttonWrapperRight.append(cancelButton);
+       // buttonWrapperRight.append(cancelButton);
         //for submit button 
         var submitBtn = $("<button>")
             .attr("type", "submit")
@@ -403,7 +403,9 @@ window.Medea = (function($) {
                 }
             });
 
-        return $("<div>").append(label).append(input);
+        //append input field to edit label-text
+        //return $("<div>").append(label).append(input);
+        return $("<div>").append(label);
 
     }
 
@@ -418,8 +420,8 @@ window.Medea = (function($) {
             .attr("type", type)
             .attr("data-json-type", $.type(value))
             .attr("name", name)
-            .attr("value", value)
-            .attr("placeholder", "- new value here -");
+            .attr("value", value);
+            //.attr("placeholder", "- new value here -");
 
         if(type === "checkbox") { 
             inp.prop("checked", value);
@@ -434,7 +436,7 @@ window.Medea = (function($) {
         inputGroupHTML.append(inputFieldElement(name, value, type));
         //inputGroupHTML.append(inputGroupAddon(cloneButton()));
         //inputGroupHTML.append(inputGroupAddon(togglerButton()));
-       // inputGroupHTML.append(inputGroupAddon(trashButton()));
+        //inputGroupHTML.append(inputGroupAddon(trashButton()));
         return inputGroupHTML;
     }
 

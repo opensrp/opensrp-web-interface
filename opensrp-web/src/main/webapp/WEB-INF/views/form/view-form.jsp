@@ -15,14 +15,22 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <jsp:include page="/WEB-INF/views/header.jsp" />
 
 <%
 byte[] fileContent = null;
-if (session.getAttribute("jsonForm") != null) {
-	fileContent = (byte[])session.getAttribute("jsonForm");
+String formName ="";
+if (session.getAttribute("formName") != null) {
+	 String formNameWithExtension = (String)session.getAttribute("formName");
+	 String[] formNameArray = formNameWithExtension.split("\\.");
+	 formName = formNameArray[0];
 }
+try{
+	if (session.getAttribute("jsonForm") != null) {
+		fileContent = (byte[])session.getAttribute("jsonForm");
+	}
+}catch(Exception e){}
+
 JSONObject jsonObj=new JSONObject(new String(fileContent));
 %>
 
@@ -34,33 +42,28 @@ JSONObject jsonObj=new JSONObject(new String(fileContent));
 		
 		<jsp:include page="/WEB-INF/views/form/form-link.jsp" />
 		
-		 <div class="row">
+		<div class="row">
 	        <div class="col-md-7">
-	            <h4>Form</h4>
+	            <h4><%=formName %></h4>
 	            <div id="formDiv"></div>
 	        </div>
    		 </div>
    		 
-		<div><%= jsonObj%></div>
 		</div>
 
-		<jsp:include page="/WEB-INF/views/footer.jsp" />
+	<jsp:include page="/WEB-INF/views/footer.jsp" />
 	</div>
 	
 <script src="<c:url value='/resources/form-viewer/jquery.medea.js'/>"></script>
 <script src="<c:url value='/resources/form-viewer/converter.js'/>"></script>
 <script type="text/javascript"> 
-var temp = <%=jsonObj%>;
-console.log(temp);
+var jsonObj = <%=jsonObj%>;
 
 $(function() {
-    //var form = $("#formDiv").medea(obj);
-    var convertedObj = convertForMedea(temp);
+    var convertedObj = convertForMedea(jsonObj);
     var form = $("#formDiv").medea(convertedObj);
-   /*  var form = $("#formDiv").medea(convertedObj); 
-    console.log(JSON.stringify(fieldAttributeArrayGlobal));
     manageReleventInputs();
-    manageFieldAttributes();*/
+    manageFieldAttributes();
 
 /* $("#formDiv").on("medea.submit", function(e, objUp) { 
 alert(JSON.stringify(objUp));

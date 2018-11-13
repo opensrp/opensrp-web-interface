@@ -110,7 +110,14 @@ public class FormController {
 		
 		//fetch file from fileSystem
 		byte[] fileContent = formService.getFileFromFileSystem(request, fileName);
-		session.setAttribute("jsonForm", fileContent);
+		try {
+			session.setAttribute("jsonForm", fileContent);
+			session.setAttribute("formName", fileName);
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			// e.printStackTrace();
+		}
 		
 		model.addAttribute("locale", locale);
 		return "/form/view-form";
