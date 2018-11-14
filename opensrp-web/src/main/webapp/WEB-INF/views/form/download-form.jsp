@@ -123,7 +123,6 @@
 	</div>
 <script type="text/javascript"> 
 function deleteForm(formId){
-	alert(formId);
 	var downloadFormUrl = "/opensrp-dashboard/form/downloadForm.html";
 	var deleteFormUrl = "/opensrp-dashboard/rest/api/v1/form/deleteForm";
 	
