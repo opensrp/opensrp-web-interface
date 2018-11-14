@@ -88,18 +88,18 @@
 
   function showDivOfInputField(fieldName){
       enableInputField(fieldName);
-      var divToHide = "#"+fieldName+"_div";
-      $(divToHide).show();
+      var divToShow = "#"+fieldName+"_div";
+      $(divToShow).show();
   }
 
   function disableInputField(fieldName){
-      var fieldNameToHide = '[name='+fieldName+']';
-      $(fieldNameToHide).prop('disabled', true);
+      var fieldNameToDisable = '[name='+fieldName+']';
+      $(fieldNameToDisable).prop('disabled', true);
   }
 
   function enableInputField(fieldName){
-      var fieldNameToHide = '[name='+fieldName+']';
-      $(fieldNameToHide).prop('disabled', false);
+      var fieldNameToEnable = '[name='+fieldName+']';
+      $(fieldNameToEnable).prop('disabled', false);
   }
 
   function hideAllDependentInputs(){

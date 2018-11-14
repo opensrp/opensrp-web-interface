@@ -93,7 +93,7 @@ boolean PERM_UPLOAD_FORM = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FO
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item"
 						href="<c:url value="/form/downloadForm.html?lang=${locale}"/>"> <strong>
-							<spring:message code="lbl.downloadForm"/> </strong>
+							<spring:message code="lbl.formList"/> </strong>
 					</a>
 					<% } %>
 				</div></li>

@@ -17,7 +17,7 @@ boolean PERM_UPLOAD_FORM = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FO
 					  <a  href="<c:url value="/form/uploadForm.html?lang=${locale}"/>"> <strong><spring:message code="lbl.uploadForm"/> </strong> </a>	
 <%} %>	
 <% if(PERM_DOWNLOAD_FORM){ %>	
-					| <a  href="<c:url value="/form/downloadForm.html?lang=${locale}"/>"> <strong><spring:message code="lbl.downloadForm"/> </strong> </a>	
+					| <a  href="<c:url value="/form/downloadForm.html?lang=${locale}"/>"> <strong><spring:message code="lbl.formList"/> </strong> </a>	
 <%} %>
 
 </div>
