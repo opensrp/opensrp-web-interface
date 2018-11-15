@@ -14,8 +14,6 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
-<%-- <jsp:include page="/WEB-INF/views/header.jsp" /> --%>
 <head>
 <meta charset="utf-8">
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -27,7 +25,7 @@
 <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
-<title>Download Form</title>
+<title>Form List</title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 

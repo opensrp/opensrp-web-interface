@@ -12,7 +12,7 @@
         <div class="text-center">
           <small><img
 		src="<c:url value="/resources/img/community.png"/>" style = "height: 46px">
-		Copyright © mPower Social Enterprise Ltd. 2018</small>
+		Copyright © mPower Social Enterprises Ltd. 2018</small>
         </div>
       </div>
     </footer>
