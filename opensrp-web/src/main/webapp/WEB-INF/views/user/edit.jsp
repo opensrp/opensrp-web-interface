@@ -142,7 +142,6 @@ Integer selectedParentId = (Integer)session.getAttribute("parentUserId");
 						<div class="row col-12 tag-height">						
 							<div class="form-group">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.activeUser"/></label>										 
-								<%-- <form:input path="idetifier" class="form-control mx-sm-3" /> --%>
 								<form:checkbox class="checkBoxClass form-check-input"
 											path="enabled" value="${account.isEnabled()}"/>
 							 </div>

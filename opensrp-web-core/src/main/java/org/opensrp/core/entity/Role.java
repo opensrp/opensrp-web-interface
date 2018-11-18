@@ -67,6 +67,9 @@ public class Role implements GrantedAuthority {
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
+	@Column(name = "IS_ACTIVE")
+	private boolean active;
+	
 	public int getId() {
 		return id;
 		
@@ -122,10 +125,19 @@ public class Role implements GrantedAuthority {
 		return name;
 	}
 	
+	public boolean isActive() {
+		return active;
+	}
+	
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (active ? 1231 : 1237);
 		result = prime * result + ((created == null) ? 0 : created.hashCode());
 		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
 		result = prime * result + id;
@@ -145,6 +157,8 @@ public class Role implements GrantedAuthority {
 		if (getClass() != obj.getClass())
 			return false;
 		Role other = (Role) obj;
+		if (active != other.active)
+			return false;
 		if (created == null) {
 			if (other.created != null)
 				return false;
