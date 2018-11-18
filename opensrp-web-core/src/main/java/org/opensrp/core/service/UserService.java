@@ -239,10 +239,10 @@ public class UserService {
 	@Transactional
 	public void setRolesAttributes(int[] roles, HttpSession session) {
 		//session.setAttribute("roles", repository.findAll("Role"));
-		Map<String, Object> findCriteria = new HashMap<String, Object>();
-		findCriteria.put("active", true);
-		repository.findAllByKeys(findCriteria, Role.class);
-		session.setAttribute("roles", repository.findAllByKeys(findCriteria, Role.class));
+		//fetch active roles to show on user edit view
+		Map<String, Object> findCriteriaMap = new HashMap<String, Object>();
+		findCriteriaMap.put("active", true);
+		session.setAttribute("roles", repository.findAllByKeys(findCriteriaMap, Role.class));
 		
 		session.setAttribute("selectedRoles", roles);
 	}
