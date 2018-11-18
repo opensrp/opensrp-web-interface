@@ -132,10 +132,10 @@
 				</div>
 				<div class="card-footer medium text-muted">
 					<span class="col-6">
-					    <img src="/resources/images/adequate_growth.jpg" width="40"
+					    <img src="<c:url value="/resources/images/adequate_growth.jpg"/>" width="40"
 					    height="10"></span><spring:message code="lbl.adequateGrowth"/> 
 					<span class="col-6">
-					    <img src="/resources/images/growth_faltering.jpg" width="40"
+					   <img src="<c:url value="/resources/images/growth_faltering.jpg"/>" width="40"
 					    height="10"></span> <spring:message code="lbl.inadequateGrowth"/> 
 				</div>
 			</div>
