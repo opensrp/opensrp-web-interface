@@ -44,7 +44,7 @@ public class UserService {
 	private PasswordEncoder passwordEncoder;
 	
 	@Transactional
-	public <T> long save(T t) throws Exception {
+	public <T> long save(T t, boolean isUpdate) throws Exception {
 		User user = (User) t;
 		long createdUser = 0;
 		Set<Role> roles = user.getRoles();
@@ -76,7 +76,13 @@ public class UserService {
 				user.setUuid(existingUserUUid);
 				user.setPersonUUid(existingUserPersonUUid);
 				openMRSServiceFactory.getOpenMRSConnector("user").update(user, existingUserUUid, userOb);
-				user.setPassword(passwordEncoder.encode(user.getPassword()));
+				//before encoding
+				logger.info("before>>>>> " + user.getPassword());
+				if (!isUpdate) {
+					user.setPassword(passwordEncoder.encode(user.getPassword()));
+				}
+				//after encoding
+				logger.info("after>>>>> " + user.getPassword());
 				createdUser = repository.save(user);
 			}
 			
@@ -95,7 +101,7 @@ public class UserService {
 		boolean isProvider = roleServiceImpl.isOpenMRSRole(user.getRoles());
 		if (isProvider) {
 			user.setProvider(true);
-			save(user);
+			save(user, true);
 		} else {
 			user.setProvider(false);
 		}
