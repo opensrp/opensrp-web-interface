@@ -181,10 +181,6 @@ public class UserController {
 	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
 		account.setRoles(userServiceImpl.setRoles(roles));
 		account.setId(id);
-		//enabled is set from the view
-		//will be true in case of active user
-		// in case of inactive user enabled will be false
-		//account.setEnabled(true);
 		User parentUser = userServiceImpl.findById(parentUserId, "id", User.class);
 		account.setParentUser(parentUser);
 		userServiceImpl.update(account);
