@@ -76,13 +76,11 @@ public class UserService {
 				user.setUuid(existingUserUUid);
 				user.setPersonUUid(existingUserPersonUUid);
 				openMRSServiceFactory.getOpenMRSConnector("user").update(user, existingUserUUid, userOb);
-				//before encoding
-				logger.info("before>>>>> " + user.getPassword());
+				//password is once encoded during save. No need to encode it again during update.
+				//updatePassword() - is the dedicated function to reset password
 				if (!isUpdate) {
 					user.setPassword(passwordEncoder.encode(user.getPassword()));
 				}
-				//after encoding
-				logger.info("after>>>>> " + user.getPassword());
 				createdUser = repository.save(user);
 			}
 			
