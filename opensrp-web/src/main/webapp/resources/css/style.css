@@ -509,6 +509,7 @@ footer .footer-below {
     position: relative;
     top: 1px;
 }
+
 /*for inner page*/
 .bg-red, .bg-yellow, .bg-aqua, .bg-blue, .bg-light-blue, .bg-green, .bg-navy, .bg-teal, .bg-olive, .bg-lime, .bg-orange, .bg-fuchsia, .bg-purple, .bg-maroon, .bg-black, .bg-lgreen {
     color: #f9f9f9 !important;

@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="ISO-8859-1"%>ISO-8859-1"%>
-
+    pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -8,7 +7,8 @@
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
-	
+<%@page import="java.util.List"%>
+<%@page import="java.util.Map"%>
 <%@page import="org.opensrp.core.entity.Team"%>
 
 <!DOCTYPE html>
@@ -19,15 +19,12 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<%@page import="java.util.List"%>
-<%@page import="java.util.Map"%>
 <title><spring:message code="lbl.teamList"/></title>
 
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 <%
-Map<String, String> paginationAtributes = (Map<String, String>) session
-.getAttribute("paginationAtributes");
+Map<String, String> paginationAtributes = (Map<String, String>) session.getAttribute("paginationAtributes");
 String name = "";
 if (paginationAtributes.containsKey("name")) {
 	name = paginationAtributes.get("name");
@@ -85,8 +82,7 @@ if (paginationAtributes.containsKey("name")) {
 							<tbody>
 							
 							<%
-								List<Team> teams = (List<Team>) session
-														.getAttribute("dataList");
+								List<Team> teams = (List<Team>) session.getAttribute("dataList");
 								String location = "";
 								String superVisor = "";
 							

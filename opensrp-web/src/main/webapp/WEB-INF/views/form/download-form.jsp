@@ -14,9 +14,20 @@
 
 <!DOCTYPE html>
 <html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link type="text/css" href="<c:url value="/resources/css/jqx.base.css"/>" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/>">
 
-<jsp:include page="/WEB-INF/views/header.jsp" />
-
+<meta name="_csrf" content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+<title>Form List</title>
+<jsp:include page="/WEB-INF/views/css.jsp" />
+</head>
 
 
 
@@ -49,6 +60,8 @@
 													style="width: 140px;"><spring:message code="lbl.creator"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 140px;"><spring:message code="lbl.action"/></th>
+													<th tabindex="0" rowspan="1" colspan="1"
+													style="width: 140px;"><spring:message code="lbl.action"/></th>
 											</tr>
 										</thead>
 									
@@ -68,6 +81,7 @@
 															creator = formUpload.getCreator().getUsername()!=null ? formUpload.getCreator().getUsername() : ""; 
 														}
 														String downloadFormURL = "/form/"+id+"/downloadForm.html";
+														String viewFormURL = "/form/"+id+"/viewForm.html";
 											%>
 											<tr>
 												<td><%=id%></td>
@@ -77,7 +91,12 @@
 												<% if(AuthenticationManagerUtil.isPermitted("PERM_DOWNLOAD_FORM")){ %>
 												<a href="<c:url value="<%= downloadFormURL%>" />"><spring:message code="lbl.downloadForm"/></a>
 												<%} %>
+												<% if(AuthenticationManagerUtil.isPermitted("PERM_DOWNLOAD_FORM")){ %>
+												| <a href="<c:url value="<%= viewFormURL%>" />"><spring:message code="lbl.viewForm"/></a>
+												<%} %>
 												</td> 
+												<td><button onclick="deleteForm(<%=id%>)" class="btn btn-primary btn-block"><spring:message code="lbl.delete"/></button></td>
+									
 											</tr>
 											<%
 												}
@@ -100,5 +119,39 @@
 
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 	</div>
+<script type="text/javascript"> 
+function deleteForm(formId){
+	var downloadFormUrl = "/opensrp-dashboard/form/downloadForm.html";
+	var deleteFormUrl = "/opensrp-dashboard/rest/api/v1/form/deleteForm";
+	
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	var formData = {
+            'formId': formId
+        };
+	$.ajax({
+		contentType : "application/json",
+		type: "POST",
+        url: deleteFormUrl,
+        data: JSON.stringify(formData), 
+        dataType : 'json',
+        
+		timeout : 100000,
+		beforeSend: function(xhr) {				    
+			 xhr.setRequestHeader(header, token);
+		},
+		success : function(data) {
+		   window.location.replace(downloadFormUrl);
+		},
+		error : function(e) {
+		   
+		},
+		done : function(e) {				    
+		    console.log("DONE");				    
+		}
+	});
+	
+}
+</script>
 </body>
 </html>

@@ -30,7 +30,7 @@ public class UserRestController {
 			User user = new User();
 			if (!isExists) {
 				user = userServiceImpl.convert(userDTO);
-				userServiceImpl.save(user);
+				userServiceImpl.save(user, false);
 			} else {
 				userNameUniqueError = "User name alreday taken.";
 			}
@@ -49,7 +49,7 @@ public class UserRestController {
 		User user = new User();
 		if (!isExists) {
 			user = userServiceImpl.convert(userDTO);
-			userServiceImpl.save(user);
+			userServiceImpl.save(user, false);
 		} else {
 			userNameUniqueError = "User name alreday taken.";
 		}

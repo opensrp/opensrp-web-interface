@@ -36,14 +36,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- *
- *<p> The UserController program implements an application
- * that simply contains the user related information
- * such as(show user list, add user, edit user etc).</p>
+ * <p>
+ * The UserController program implements an application that simply contains the user related
+ * information such as(show user list, add user, edit user etc).
+ * </p>
+ * 
  * @author proshanto.
  * @version 0.1.0
- * @since   2018-03-30 
- * 
+ * @since 2018-03-30
  */
 
 @Controller
@@ -71,14 +71,18 @@ public class UserController {
 	
 	@Autowired
 	private PaginationUtil paginationUtil;
+	
 	/**
-	 * <p>showing user list, support pagination with search by user name </p>
+	 * <p>
+	 * showing user list, support pagination with search by user name
+	 * </p>
+	 * 
 	 * @param request is an argument to the servlet's service
 	 * @param session is an argument to the HttpSession's session
 	 * @param model defines a holder for model attributes.
 	 * @param locale is an argument to holds locale.
-	 * @return  user list view page 
-	 * */
+	 * @return user list view page
+	 */
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_USER_LIST')")
 	@RequestMapping(value = "/user.html", method = RequestMethod.GET)
 	public String userList(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
@@ -89,15 +93,18 @@ public class UserController {
 	}
 	
 	/**
-	 * <p>This method render user html form for addition, where login user can fill up user information 
-	 * to save it in permanent storage.This is a get request method, there is a 
-	 * post request method at {@UserRestController} named @saveUser which actually 
-	 * save the user information in to permanent storage as ajax call.</p>	 
+	 * <p>
+	 * This method render user html form for addition, where login user can fill up user information
+	 * to save it in permanent storage.This is a get request method, there is a post request method
+	 * at {@UserRestController} named @saveUser which actually save the user
+	 * information in to permanent storage as ajax call.
+	 * </p>
+	 * 
 	 * @param session is an argument to the HttpSession's session
 	 * @param model defines a holder for model attributes.
 	 * @param locale is an argument to holds locale.
 	 * @return user html form.
-	 * */
+	 */
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_USER')")
 	@RequestMapping(value = "/user/add.html", method = RequestMethod.GET)
@@ -110,17 +117,20 @@ public class UserController {
 	}
 	
 	/**
-	 * <p>This method render user html form for user information to edit, where login user can update user information 
-	 * to save it in permanent storage.This is a get request method, there is a 
-	 * post request method at {@UserController} named @editUser which actually 
-	 * update the user information in to permanent storage.</p>	
-	 * @param request is an argument to the servlet's service 
+	 * <p>
+	 * This method render user html form for user information to edit, where login user can update
+	 * user information to save it in permanent storage.This is a get request method, there is a
+	 * post request method at {@UserController} named @editUser which actually
+	 * update the user information in to permanent storage.
+	 * </p>
+	 * 
+	 * @param request is an argument to the servlet's service
 	 * @param session is an argument to the HttpSession's session
 	 * @param model defines a holder for model attributes.
 	 * @param locale is an argument to holds locale.
 	 * @param id is unique id of a user.
 	 * @return user html form.
-	 * */
+	 */
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
 	@RequestMapping(value = "/user/{id}/edit.html", method = RequestMethod.GET)
@@ -129,38 +139,39 @@ public class UserController {
 		User account = userServiceImpl.findById(id, "id", User.class);
 		model.addAttribute("account", account);
 		model.addAttribute("id", id);
-		/**Parent user section start .
-		 * this section prepare parent user information
-		 * and render to view for showing.
-		 * parentUserName shows to the parent user text field named "parentUserName".
-		 * parentUserId goes to the hidden field "parentUser"
-		 * 
-		 * */
+		/**
+		 * Parent user section start . this section prepare parent user information and render to
+		 * view for showing. parentUserName shows to the parent user text field named
+		 * "parentUserName". parentUserId goes to the hidden field "parentUser"
+		 */
 		User parentUser = account.getParentUser();
 		String parentUserName = "";
 		int parentUserId = 0;
 		if (parentUser != null) {
 			parentUserName = parentUser.getUsername() + " (" + parentUser.getFullName() + ")";
 			parentUserId = parentUser.getId();
-		}		
+		}
 		session.setAttribute("parentUserName", parentUserName);
 		session.setAttribute("parentUserId", parentUserId);
-		/** end parent user section*/
+		/** end parent user section */
 		userServiceImpl.setRolesAttributes(userServiceImpl.getSelectedRoles(account), session);
 		return new ModelAndView("user/edit", "command", account);
 	}
 	
 	/**
-	 * <p>This method is a post request of corresponding of get request method @editUser 
-	 * which actually  update the user information in to permanent storage.</p>	
-	 * @param request is an argument to the servlet's service 
+	 * <p>
+	 * This method is a post request of corresponding of get request method @editUser which actually
+	 * update the user information in to permanent storage.
+	 * </p>
+	 * 
+	 * @param request is an argument to the servlet's service
 	 * @param session is an argument to the HttpSession's session
 	 * @param model defines a holder for model attributes.
 	 * @param locale is an argument to holds locale.
 	 * @param id is unique id of a user.
 	 * @param parentUserId unique id of parent user.
 	 * @return user html form.
-	 * */
+	 */
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
 	@RequestMapping(value = "/user/{id}/edit.html", method = RequestMethod.POST)
@@ -170,7 +181,6 @@ public class UserController {
 	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
 		account.setRoles(userServiceImpl.setRoles(roles));
 		account.setId(id);
-		account.setEnabled(true);
 		User parentUser = userServiceImpl.findById(parentUserId, "id", User.class);
 		account.setParentUser(parentUser);
 		userServiceImpl.update(account);
@@ -180,16 +190,19 @@ public class UserController {
 	}
 	
 	/**
-	 * <p>This method render user html form for user password to edit, where login user can update user password 
-	 * to save it in permanent storage.This is a get request method, there is a 
-	 * post request method at {@link UserController#editPassword(model,session,id,locale)}  which actually 
-	 * update the user password in to permanent storage.</p>
+	 * <p>
+	 * This method render user html form for user password to edit, where login user can update user
+	 * password to save it in permanent storage.This is a get request method, there is a post
+	 * request method at {@link UserController#editPassword(model,session,id,locale)} which actually
+	 * update the user password in to permanent storage.
+	 * </p>
+	 * 
 	 * @param session is an argument to the HttpSession's session
 	 * @param model defines a holder for model attributes.
 	 * @param locale is an argument to holds locale.
 	 * @param id is unique id of a user.
 	 * @return user html password form.
-	 * */
+	 */
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
 	@RequestMapping(value = "/user/{id}/password.html", method = RequestMethod.GET)
 	public ModelAndView editPassword(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
@@ -200,16 +213,19 @@ public class UserController {
 	}
 	
 	/**
-	 * <p>This method is a post request of corresponding of get request method #editPassword
-	 * which actually  update the user information in to permanent storage.</p>	
-	 * @param request is an argument to the servlet's service 
+	 * <p>
+	 * This method is a post request of corresponding of get request method #editPassword which
+	 * actually update the user information in to permanent storage.
+	 * </p>
+	 * 
+	 * @param request is an argument to the servlet's service
 	 * @param session is an argument to the HttpSession's session
 	 * @param model defines a holder for model attributes.
 	 * @param locale is an argument to holds locale.
 	 * @param id is unique id of a user.
 	 * @param account is submitted user object.
-	 * @param binding Serves as result holder for a {@link DataBinder}. 
-	 * */
+	 * @param binding Serves as result holder for a {@link DataBinder}.
+	 */
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
 	@RequestMapping(value = "/user/{id}/password.html", method = RequestMethod.POST)
 	public ModelAndView editPassword(@Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,

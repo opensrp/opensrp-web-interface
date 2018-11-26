@@ -76,9 +76,11 @@ if (paginationAtributes.containsKey("name")) {
 						<table class="table table-bordered" id="dataTable">
 							<thead>
 								<tr>
+									<th><spring:message code="lbl.slNo"/></th>
 									<th><spring:message code="lbl.fullName"/></th>
 									<th><spring:message code="lbl.userName"/></th>
 									<th><spring:message code="lbl.parentUser"/></th>
+									<th><spring:message code="lbl.phoneNumber"/></th>
 									<th><spring:message code="lbl.email"/></th>
 									<th><spring:message code="lbl.role"/></th>
 									<th><spring:message code="lbl.action"/></th>
@@ -87,10 +89,10 @@ if (paginationAtributes.containsKey("name")) {
 							
 							<tbody>
 							<%
-								List<User> users = (List<User>) session
-														.getAttribute("dataList");
+								List<User> users = (List<User>) session.getAttribute("dataList");
 								
 								String creator = "";
+								int serialNumber =0;
 								for (User user : users) 
 									{
 									pageContext.setAttribute("id", user.getId());
@@ -101,11 +103,18 @@ if (paginationAtributes.containsKey("name")) {
 							%>
 								
 									<tr>
+										
+										<td><%= ++serialNumber %></td>
 										<td><%=user.getFullName() %></td>
 										<td><%=user.getUsername()%></td>
 										<td>
 										<%if(user.getParentUser()!=null){ %>
 										<%=user.getParentUser().getFullName()%>
+										<%} %>
+										</td>
+										<td>
+										<%if(user.getMobile()!=null && !user.getMobile().isEmpty()){ %>
+										<%=user.getMobile() %>
 										<%} %>
 										</td>
 										<td><%=user.getEmail()%></td>

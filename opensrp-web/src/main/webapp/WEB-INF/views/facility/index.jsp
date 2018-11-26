@@ -15,7 +15,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<jsp:include page="/WEB-INF/views/header.jsp" />
+<jsp:include page="/WEB-INF/views/header.jsp">
+<jsp:param name="title" value="Community Clinic List" />
+</jsp:include>
 
 
 

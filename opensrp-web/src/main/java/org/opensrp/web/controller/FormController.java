@@ -1,26 +1,18 @@
 package org.opensrp.web.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Locale;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.opensrp.core.entity.FormUpload;
-import org.opensrp.core.entity.User;
 import org.opensrp.core.service.FormService;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
@@ -46,55 +38,31 @@ public class FormController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FORM')")
 	@RequestMapping(value = "/uploadForm.html", method = RequestMethod.GET)
-	public String csvUpload(HttpSession session, ModelMap model, Locale locale) throws JSONException {
+	public String uploadForm(HttpSession session, ModelMap model, Locale locale) throws JSONException {
 		model.addAttribute("locale", locale);
 		return "form/upload-form";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_FORM')")
 	@RequestMapping(value = "/uploadForm.html", method = RequestMethod.POST)
-	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
+	public ModelAndView saveForm(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
 	    throws Exception {
-		if (file.isEmpty()) {
-			model.put("msg", "failed to upload file because its empty");
-			model.addAttribute("msg", "failed to upload file because its empty");
-			return new ModelAndView("form/upload-form");
-		} else if (!("text/csv".equalsIgnoreCase(file.getContentType())
-		        || "application/json".equalsIgnoreCase(file.getContentType()) || "text/xml".equalsIgnoreCase(file
-		        .getContentType()))) {
-			model.addAttribute("msg", "file type should be '.csv/.xml/.json'");
-			return new ModelAndView("form/upload-form");
-		} else {
-			//System.out.println(file.getContentType());
-		}
-		
-		byte[] bytes = file.getBytes();
-		formUpload = new FormUpload();
-		formUpload.setFileName(file.getOriginalFilename().toString());
-		formUpload.setFileContent(bytes);
-		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User creator = (User) auth.getPrincipal();
-		formUpload.setCreator(creator);
-		
+		String responseMessage = "";
 		try {
-			formService.save(formUpload);
+			responseMessage = formService.saveForm(file, request);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			responseMessage = "Some error occured";
 		}
-		
-		//for saving in file system
-		formService.saveToFileSystem(request, file);
-		//end 
-		
-		model.addAttribute("msg", "Form saved successfully");
+		model.addAttribute("msg", responseMessage);
+		model.addAttribute("locale", locale);
 		return new ModelAndView("form/upload-form");
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_DOWNLOAD_FORM')")
 	@RequestMapping(value = "/downloadForm.html", method = RequestMethod.GET)
-	public String showFacilityList(HttpServletRequest request, HttpSession session, ModelMap model, Locale locale) {
+	public String downloadForm(HttpServletRequest request, HttpSession session, ModelMap model, Locale locale) {
 		paginationUtil.createPagination(request, session, FormUpload.class);
 		model.addAttribute("locale", locale);
 		return "/form/download-form";
@@ -102,17 +70,19 @@ public class FormController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_DOWNLOAD_FORM')")
 	@RequestMapping(value = "/{formId}/downloadForm.html", method = RequestMethod.GET)
-	public void getAttachmenFromDatabase(@PathVariable("formId") int formId, HttpServletResponse response,
-	                                     HttpServletRequest request) {
+	public void getAttachmentFromDatabase(@PathVariable("formId") int formId, HttpServletResponse response,
+	                                      HttpServletRequest request) {
 		response.setContentType("application/octet-stream");
 		try {
 			FormUpload attachment = formService.findById(formId, "id", FormUpload.class);
 			String fileName = attachment.getFileName();
+			
 			//fetch file from database
 			//byte[] fileContent = attachment.getFileContent();
 			
 			//fetch file from fileSystem
 			byte[] fileContent = formService.getFileFromFileSystem(request, fileName);
+			
 			response.setHeader("Content-Disposition", "inline; filename=\"" + fileName + "\"");
 			response.setContentLength(fileContent.length);
 			
@@ -123,6 +93,31 @@ public class FormController {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_DOWNLOAD_FORM')")
+	@RequestMapping(value = "/{formId}/viewForm.html", method = RequestMethod.GET)
+	public String viewForm(@PathVariable("formId") int formId, HttpServletRequest request, HttpSession session,
+	                       ModelMap model, Locale locale) {
+		FormUpload attachment = formService.findById(formId, "id", FormUpload.class);
+		String fileName = attachment.getFileName();
+		
+		//fetch file from database
+		//byte[] fileContent = attachment.getFileContent();
+		
+		//fetch file from fileSystem
+		byte[] fileContent = formService.getFileFromFileSystem(request, fileName);
+		try {
+			session.setAttribute("jsonForm", fileContent);
+			session.setAttribute("formName", fileName);
+		}
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			// e.printStackTrace();
+		}
+		
+		model.addAttribute("locale", locale);
+		return "/form/view-form";
 	}
 	
 }

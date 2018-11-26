@@ -36,6 +36,7 @@
 				</div>
 				<div class="card-body">
 					<form:form method="POST" action="${saveUrl}" modelAttribute="role">
+					
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">
@@ -45,11 +46,23 @@
 								</div>
 							</div>
 						</div>
+						
+						
+						<div class="form-group">										
+							<label class="label-width" for="inputPassword6"><spring:message code="lbl.activeRole"/></label>										 
+							<form:checkbox class="checkBoxClass form-check-input"
+										path="active" value="${role.isActive()}"/>
+						 </div>
+						
+						
 						<form:hidden path="id" />
 						<div class="form-group">
+							<div class="row col-5">
+								<label for="exampleInputName"><h6><spring:message code="lbl.permissions"/></h6></label>
+							</div>
 							<div class="form-check">
+							
 								<div class="row">
-
 									<%
 											List<Permission> permissions = (List<Permission>) session
 														.getAttribute("permissions");

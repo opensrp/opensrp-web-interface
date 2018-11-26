@@ -218,10 +218,13 @@ public class ChildGrowthService {
 					findChildGrowth.setInterval(interval);
 					findChildGrowth.setProvider(provider);
 					findChildGrowth.setLastEvent(false);
-					if (!gps.equalsIgnoreCase("null")) {
-						findChildGrowth.setLat(Double.parseDouble(latlon[0]));
-						findChildGrowth.setLon(Double.parseDouble(latlon[1]));
+					try {
+						if (!gps.equalsIgnoreCase("null")) {
+							findChildGrowth.setLat(Double.parseDouble(latlon[0]));
+							findChildGrowth.setLon(Double.parseDouble(latlon[1]));
+						}
 					}
+					catch (Exception e) {}
 					
 					update(findChildGrowth);
 					
@@ -241,12 +244,15 @@ public class ChildGrowthService {
 					childGrowth.setInterval(interval);
 					childGrowth.setProvider(provider);
 					childGrowth.setLastEvent(false);
-					if (!gps.equalsIgnoreCase("null")) {
-						
-						childGrowth.setLat(Double.parseDouble(latlon[0]));
-						childGrowth.setLon(Double.parseDouble(latlon[1]));
-						
+					try {
+						if (!gps.equalsIgnoreCase("null")) {
+							
+							childGrowth.setLat(Double.parseDouble(latlon[0]));
+							childGrowth.setLon(Double.parseDouble(latlon[1]));
+							
+						}
 					}
+					catch (Exception e) {}
 					
 					save(childGrowth);
 					

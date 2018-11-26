@@ -44,7 +44,7 @@ public class UserService {
 	private PasswordEncoder passwordEncoder;
 	
 	@Transactional
-	public <T> long save(T t) throws Exception {
+	public <T> long save(T t, boolean isUpdate) throws Exception {
 		User user = (User) t;
 		long createdUser = 0;
 		Set<Role> roles = user.getRoles();
@@ -76,7 +76,11 @@ public class UserService {
 				user.setUuid(existingUserUUid);
 				user.setPersonUUid(existingUserPersonUUid);
 				openMRSServiceFactory.getOpenMRSConnector("user").update(user, existingUserUUid, userOb);
-				user.setPassword(passwordEncoder.encode(user.getPassword()));
+				//password is once encoded during save. No need to encode it again during update.
+				//updatePassword() - is the dedicated function to reset password
+				if (!isUpdate) {
+					user.setPassword(passwordEncoder.encode(user.getPassword()));
+				}
 				createdUser = repository.save(user);
 			}
 			
@@ -95,7 +99,7 @@ public class UserService {
 		boolean isProvider = roleServiceImpl.isOpenMRSRole(user.getRoles());
 		if (isProvider) {
 			user.setProvider(true);
-			save(user);
+			save(user, true);
 		} else {
 			user.setProvider(false);
 		}
@@ -238,7 +242,12 @@ public class UserService {
 	 */
 	@Transactional
 	public void setRolesAttributes(int[] roles, HttpSession session) {
-		session.setAttribute("roles", repository.findAll("Role"));
+		//session.setAttribute("roles", repository.findAll("Role"));
+		//fetch active roles to show on user edit view
+		Map<String, Object> findCriteriaMap = new HashMap<String, Object>();
+		findCriteriaMap.put("active", true);
+		session.setAttribute("roles", repository.findAllByKeys(findCriteriaMap, Role.class));
+		
 		session.setAttribute("selectedRoles", roles);
 	}
 	

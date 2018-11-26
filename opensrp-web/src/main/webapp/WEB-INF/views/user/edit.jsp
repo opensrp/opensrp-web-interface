@@ -122,22 +122,32 @@ Integer selectedParentId = (Integer)session.getAttribute("parentUserId");
 							<div class="form-group required">
 							<label class="label-width"  for="inputPassword6"><spring:message code="lbl.role"/></label>								
 								<%
-									List<Role> roles = (List<Role>) session.getAttribute("roles");
-									int[] selectedRoles = (int[]) session.getAttribute("selectedRoles");
-									for (Role role : roles) {
+									if(session.getAttribute("roles")!=null){
+										List<Role> roles = (List<Role>) session.getAttribute("roles");
+										int[] selectedRoles = (int[]) session.getAttribute("selectedRoles");
+										for (Role role : roles) {
 								%>
-									
-										<form:checkbox class="checkBoxClass form-check-input"
-											path="roles" value="<%=role.getId()%>"
-											checked="<%=CheckboxHelperUtil.checkCheckedBox(selectedRoles,role.getId())%>" />
-										<label class="form-control mx-sm-3" for="defaultCheck1"> <%=role.getName()%>
-										</label>
-									
+										
+											<form:checkbox class="checkBoxClass form-check-input"
+												path="roles" value="<%=role.getId()%>"
+												checked="<%=CheckboxHelperUtil.checkCheckedBox(selectedRoles,role.getId())%>" />
+											<label class="form-control mx-sm-3" for="defaultCheck1"> <%=role.getName()%>
+											</label>
+										
 									<%
-										}
+											}
+									}
 									%>
 							</div>
 						</div>
+						
+						<div class="row col-12 tag-height">						
+							<div class="form-group">														
+								<label class="label-width" for="inputPassword6"><spring:message code="lbl.activeUser"/></label>										 
+								<form:checkbox class="checkBoxClass form-check-input"
+											path="enabled" value="${account.isEnabled()}"/>
+							 </div>
+						 </div>
 						
 						<div class="row col-12 tag-height">	
 							<div class="form-group">								
