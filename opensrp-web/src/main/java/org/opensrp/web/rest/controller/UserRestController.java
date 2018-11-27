@@ -23,6 +23,7 @@ public class UserRestController {
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO) throws Exception {
+		System.out.println(userDTO.toString());
 		String userNameUniqueError = "";
 		try {
 			boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());

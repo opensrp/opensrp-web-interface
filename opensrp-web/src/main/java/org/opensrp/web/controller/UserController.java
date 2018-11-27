@@ -13,8 +13,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.entity.Permission;
+import org.opensrp.core.entity.TeamMember;
 import org.opensrp.core.entity.User;
+import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.RoleService;
+import org.opensrp.core.service.TeamMemberService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +75,15 @@ public class UserController {
 	@Autowired
 	private PaginationUtil paginationUtil;
 	
+	@Autowired
+	private LocationService locationServiceImpl;
+	
+	@Autowired
+	private TeamMemberService teamMemberServiceImpl;
+	
+	@Autowired
+	private TeamMember teamMember;
+	
 	/**
 	 * <p>
 	 * showing user list, support pagination with search by user name
@@ -104,15 +116,24 @@ public class UserController {
 	 * @param model defines a holder for model attributes.
 	 * @param locale is an argument to holds locale.
 	 * @return user html form.
+	 * @throws JSONException
 	 */
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_USER')")
 	@RequestMapping(value = "/user/add.html", method = RequestMethod.GET)
-	public ModelAndView saveUser(Model model, HttpSession session, Locale locale) {
+	public ModelAndView saveUser(Model model, HttpSession session, Locale locale) throws JSONException {
 		int[] selectedRoles = null;
 		model.addAttribute("account", new User());
 		userServiceImpl.setRolesAttributes(selectedRoles, session);
 		model.addAttribute("locale", locale);
+		
+		//for adding location and team
+		model.addAttribute("teamMember", new TeamMember());
+		String personName = "";
+		session.setAttribute("locationList", locationServiceImpl.list().toString());
+		int[] locations = new int[0];
+		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+		//end: adding location and team
 		return new ModelAndView("user/add", "command", account);
 	}
 	

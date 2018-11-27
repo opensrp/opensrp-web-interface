@@ -7,10 +7,24 @@
 <%@page import="org.opensrp.common.util.CheckboxHelperUtil"%>
 
 <%@page import="java.util.List"%>
+<%@page import="java.util.Map"%>
 <%@page import="org.opensrp.core.entity.Role"%>
 
 <!DOCTYPE html>
 <html lang="en">
+<%
+Integer selectedPersonId = (Integer)session.getAttribute("selectedPersonId");
+String locationList = (String)session.getAttribute("locationList"); 
+String selectedLocationList = (String)session.getAttribute("selectedLocationList"); 
+
+Map<Integer, String> teams =  (Map<Integer, String>)session.getAttribute("teams");
+
+String selectedPersonName = (String)session.getAttribute("personName");
+
+Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
+
+
+	%>
 
 <head>
 <meta charset="utf-8">
@@ -79,6 +93,53 @@
 								<form:input path="mobile" class="form-control mx-sm-3" />								
 							 </div>
 						 </div>	
+						 
+						 
+						 
+						 <!-- for location -->
+						 <div class="row col-12 tag-height">						
+							<div class="form-group">														
+								<label class="label-width" for="inputPassword6"><spring:message code="lbl.location"/></label>										 
+								<div id="locationsTag" class="form-control mx-sm-3"></div>
+								<span class="text-red">${locationSelectErrorMessage}</span>								
+							 </div>
+						 </div>	
+						 
+						<%--  <div id="cm" class="ui-widget">
+										<label><spring:message code="lbl.location"/> </label>
+										<div id="locationsTag"></div>
+										<span class="text-red">${locationSelectErrorMessage}</span>
+						</div> --%>
+						 
+						 <!-- end: for location -->
+						 <!-- for team -->
+						 <div class="form-group">							
+								<div class="row">									
+									<div class="col-5">
+									<label for="exampleInputName"><spring:message code="lbl.team"/></label>
+										<select class="custom-select custom-select-lg mb-3" id="team" name="team" required="required">
+									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
+												<%
+												for (Map.Entry<Integer, String> entry : teams.entrySet())
+												{
+													if(selectetTeamId==entry.getKey()){ %>
+														<option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
+													<% }else{
+														%>
+															<option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
+														<%
+													}
+													
+												}
+												%>
+											</select>
+									</div>									
+								</div>
+							
+						</div>
+						 <!--end: for team -->
+						 
+						 
 						
 						<div class="row col-12 tag-height">						
 							<div class="form-group">														
@@ -169,14 +230,18 @@
 		
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 		<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
+		<script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
 	</div>
 	
 	<script type="text/javascript">
+	var locationMagicSuggest;
 	$("#UserInfo").submit(function(event) { 
 			$("#loading").show();
 			var url = "/opensrp-dashboard/rest/api/v1/user/save";			
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
+			//alert(locationMagicSuggest.getValue());
+			//alert($('#team').val());
 			var formData = {
 		            'firstName': $('input[name=firstName]').val(),
 		            'lastName': $('input[name=lastName]').val(),
@@ -186,7 +251,9 @@
 		            'username': $('input[name=username]').val(),
 		            'password': $('input[name=password]').val(),
 		            'parentUser': $('input[name=parentUser]').val(),
-		            'roles': getCheckboxValueUsingClass()
+		            'roles': getCheckboxValueUsingClass(),
+		            'locationList': locationMagicSuggest.getValue(),
+		            'team': $('#team').val()
 		        };
 			event.preventDefault();
 			
@@ -267,6 +334,28 @@
      }
 	
 		</script>
+		
+ <script type="text/javascript">
+  
+ locationMagicSuggest = $('#locationsTag').magicSuggest({ 
+		 	required: true,
+			//placeholder: 'Type Locations',
+     		data: <%=locationList%>,
+	        valueField: 'id',
+	        displayField: 'value',
+	        name: 'locationList',
+	        inputCfg: {"class":"magicInput"},
+	        value: <%=selectedLocationList%>,
+	        useCommaKey: true,
+	        allowFreeEntries: false,
+	        maxSelection: 2,
+	        maxEntryLength: 70,
+	 		maxEntryRenderer: function(v) {
+	 			return '<div style="color:red">Typed Word TOO LONG </div>';
+	 		}
+	       
+	  });
+  </script>
 		
 <script>
   $( function() {
@@ -392,5 +481,7 @@
     
   } );
   </script>
+  
+ 
 </body>
 </html>
