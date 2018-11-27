@@ -1,9 +1,6 @@
 package org.opensrp.common.dto;
 
 import java.util.Arrays;
-import java.util.List;
-
-import org.springframework.security.core.userdetails.User;
 
 public class UserDTO {
 	
@@ -28,6 +25,16 @@ public class UserDTO {
 	private int[] locationList;
 	
 	private int team;
+	
+	private boolean teamMember;
+	
+	public boolean isTeamMember() {
+		return teamMember;
+	}
+	
+	public void setTeamMember(boolean teamMember) {
+		this.teamMember = teamMember;
+	}
 	
 	public int[] getLocationList() {
 		return locationList;
@@ -121,7 +128,8 @@ public class UserDTO {
 	public String toString() {
 		return "UserDTO [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", mobile=" + mobile
 		        + ", idetifier=" + idetifier + ", username=" + username + ", password=" + password + ", roles=" + roles
-		        + ", parentUser=" + parentUser + ", locationList=" + Arrays.toString(locationList) + ", team=" + team + "]";
+		        + ", parentUser=" + parentUser + ", locationList=" + Arrays.toString(locationList) + ", team=" + team
+		        + ", teamMember=" + teamMember + "]";
 	}
 	
 }

@@ -200,7 +200,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 										for (Role role : roles) {
 									%>									
 										<form:checkbox 
-											path="roles" class="chk" value="<%=role.getId()%>" />
+											path="roles" class="chk" value="<%=role.getId()%>" onclick='roleSelect(this)'/>
 										<label class="form-control mx-sm-3" for="defaultCheck1"> <%=role.getName()%></label>									
 									<%
 										}
@@ -235,6 +235,11 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 	
 	<script type="text/javascript">
 	var locationMagicSuggest;
+	
+	function roleSelect(cBox){
+		alert(cBox.checked);
+	}
+	
 	$("#UserInfo").submit(function(event) { 
 			$("#loading").show();
 			var url = "/opensrp-dashboard/rest/api/v1/user/save";			
