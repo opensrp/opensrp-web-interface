@@ -34,6 +34,7 @@ int roleIdProvider= -1;
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link type="text/css" href="<c:url value="/resources/css/magicsuggest-min.css"/>" rel="stylesheet">
 <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
@@ -182,8 +183,10 @@ int roleIdProvider= -1;
 						 <div class="row col-12 tag-height" id="locationDiv" style="display:none">						
 							<div class="form-group">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.location"/></label>										 
-								<div id="locationsTag" class="form-control mx-sm-3"></div>
-								<span class="text-red">${locationSelectErrorMessage}</span>								
+								<div id="cm" class="ui-widget ">
+									<div id="locationsTag" ></div>
+									<span class="text-red">${locationSelectErrorMessage}</span>		
+								</div>						
 							 </div>
 						 </div>	
 						 
@@ -233,16 +236,17 @@ int roleIdProvider= -1;
 						</div>
 					</form:form>
 				</div>
-				<div class="card-footer small text-muted"></div>
+				
 			</div>
 		</div>
 		<!-- /.container-fluid-->
 		<!-- /.content-wrapper-->
 		
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
-		<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
 		<script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
-	</div>
+		<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
+		
+
 	
 	<script type="text/javascript">
 	var locationMagicSuggest;
