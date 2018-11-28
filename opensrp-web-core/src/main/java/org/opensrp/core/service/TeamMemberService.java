@@ -103,6 +103,12 @@ public class TeamMemberService {
 		return repository.findByKey(value, fieldName, className);
 	}
 	
+	//this method was added on nov 28, 2018
+	@Transactional
+	public <T> T findByKeys(Map<String, Object> fieldValues, Class<?> className) {
+		return repository.findByKeys(fieldValues, className);
+	}
+	
 	@Transactional
 	public <T> List<T> findAll(String tableClass) {
 		return repository.findAll(tableClass);

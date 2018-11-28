@@ -2,8 +2,6 @@ package org.opensrp.web.rest.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
-import javax.validation.Valid;
-
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.core.entity.TeamMember;
 import org.opensrp.core.entity.User;
@@ -12,7 +10,6 @@ import org.opensrp.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
