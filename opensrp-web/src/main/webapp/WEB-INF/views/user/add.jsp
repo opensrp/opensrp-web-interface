@@ -276,12 +276,14 @@ int roleIdProvider= -1;
 	function showTeamAndLocationDiv(){
 		if(isTeamMember()){
 			$("#locationDiv").show();
-			$("#teamDiv").show();
+			$("#team").prop('required',true);
 			$("#team").prop('disabled', false);
+			$("#teamDiv").show();
 		}else{
 			$("#locationDiv").hide();
-			$("#teamDiv").hide();
+			$("#team").prop('required',false);
 			$("#team").prop('disabled', true);
+			$("#teamDiv").hide();
 		}
 	}
 	
@@ -299,20 +301,37 @@ int roleIdProvider= -1;
 			var header = $("meta[name='_csrf_header']").attr("content");
 			//alert(locationMagicSuggest.getValue());
 			//alert($('#team').val());
-			var formData = {
-		            'firstName': $('input[name=firstName]').val(),
-		            'lastName': $('input[name=lastName]').val(),
-		            'email': $('input[name=email]').val(),
-		            'mobile': $('input[name=mobile]').val(),
-		            'idetifier': $('input[name=idetifier]').val(),
-		            'username': $('input[name=username]').val(),
-		            'password': $('input[name=password]').val(),
-		            'parentUser': $('input[name=parentUser]').val(),
-		            'roles': getCheckboxValueUsingClass(),
-		            'locationList': locationMagicSuggest.getValue(),
-		            'team': $('#team').val(),
-		            'teamMember': isTeamMember()
-		        };
+			var formData;
+			if(isTeamMember()){
+				formData = {
+			            'firstName': $('input[name=firstName]').val(),
+			            'lastName': $('input[name=lastName]').val(),
+			            'email': $('input[name=email]').val(),
+			            'mobile': $('input[name=mobile]').val(),
+			            'idetifier': $('input[name=idetifier]').val(),
+			            'username': $('input[name=username]').val(),
+			            'password': $('input[name=password]').val(),
+			            'parentUser': $('input[name=parentUser]').val(),
+			            'roles': getCheckboxValueUsingClass(),
+			            'locationList': locationMagicSuggest.getValue(),
+			            'team': $('#team').val(),
+			            'teamMember': isTeamMember()
+			        };
+			}else{
+				formData = {
+			            'firstName': $('input[name=firstName]').val(),
+			            'lastName': $('input[name=lastName]').val(),
+			            'email': $('input[name=email]').val(),
+			            'mobile': $('input[name=mobile]').val(),
+			            'idetifier': $('input[name=idetifier]').val(),
+			            'username': $('input[name=username]').val(),
+			            'password': $('input[name=password]').val(),
+			            'parentUser': $('input[name=parentUser]').val(),
+			            'roles': getCheckboxValueUsingClass(),
+			            'teamMember': isTeamMember()
+			        };
+			}
+			
 			event.preventDefault();
 			
 			$.ajax({
