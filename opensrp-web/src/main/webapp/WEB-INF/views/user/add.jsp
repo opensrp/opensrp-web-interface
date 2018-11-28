@@ -23,6 +23,9 @@ String selectedPersonName = (String)session.getAttribute("personName");
 
 Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 
+int roleIdCHCP= -1;
+int roleIdProvider= -1;
+
 
 	%>
 
@@ -96,48 +99,7 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 						 
 						 
 						 
-						 <!-- for location -->
-						 <div class="row col-12 tag-height">						
-							<div class="form-group">														
-								<label class="label-width" for="inputPassword6"><spring:message code="lbl.location"/></label>										 
-								<div id="locationsTag" class="form-control mx-sm-3"></div>
-								<span class="text-red">${locationSelectErrorMessage}</span>								
-							 </div>
-						 </div>	
-						 
-						<%--  <div id="cm" class="ui-widget">
-										<label><spring:message code="lbl.location"/> </label>
-										<div id="locationsTag"></div>
-										<span class="text-red">${locationSelectErrorMessage}</span>
-						</div> --%>
-						 
-						 <!-- end: for location -->
-						 <!-- for team -->
-						 <div class="form-group">							
-								<div class="row">									
-									<div class="col-5">
-									<label for="exampleInputName"><spring:message code="lbl.team"/></label>
-										<select class="custom-select custom-select-lg mb-3" id="team" name="team" required="required">
-									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
-												<%
-												for (Map.Entry<Integer, String> entry : teams.entrySet())
-												{
-													if(selectetTeamId==entry.getKey()){ %>
-														<option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
-													<% }else{
-														%>
-															<option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
-														<%
-													}
-													
-												}
-												%>
-											</select>
-									</div>									
-								</div>
-							
-						</div>
-						 <!--end: for team -->
+						
 						 
 						 
 						
@@ -198,6 +160,11 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 									<%
 										List<Role> roles = (List<Role>) session.getAttribute("roles");											
 										for (Role role : roles) {
+											if(role.getName().equals("Provider")){
+												roleIdProvider = role.getId();
+											}else if(role.getName().equals("CHCP")){
+												roleIdCHCP = role.getId();
+											}
 									%>									
 										<form:checkbox 
 											path="roles" class="chk" value="<%=role.getId()%>" onclick='roleSelect(this)'/>
@@ -207,8 +174,54 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 									%>
 								
 							</div>
+						</div>
+						
+						
+						
+						 <!-- for location -->
+						 <div class="row col-12 tag-height" id="locationDiv" style="display:none">						
+							<div class="form-group">														
+								<label class="label-width" for="inputPassword6"><spring:message code="lbl.location"/></label>										 
+								<div id="locationsTag" class="form-control mx-sm-3"></div>
+								<span class="text-red">${locationSelectErrorMessage}</span>								
+							 </div>
+						 </div>	
+						 
+						<%--  <div id="cm" class="ui-widget">
+										<label><spring:message code="lbl.location"/> </label>
+										<div id="locationsTag"></div>
+										<span class="text-red">${locationSelectErrorMessage}</span>
+						</div> --%>
+						 
+						 <!-- end: for location -->
+						 <!-- for team -->
+						 <div class="form-group" id="teamDiv" style="display:none">							
+								<div class="row">									
+									<div class="col-5">
+									<label for="exampleInputName"><spring:message code="lbl.team"/></label>
+										<select class="custom-select custom-select-lg mb-3" id="team" name="team" required="required">
+									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
+												<%
+												for (Map.Entry<Integer, String> entry : teams.entrySet())
+												{
+													if(selectetTeamId==entry.getKey()){ %>
+														<option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
+													<% }else{
+														%>
+															<option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
+														<%
+													}
+													
+												}
+												%>
+											</select>
+									</div>									
+								</div>
 							
 						</div>
+						 <!--end: for team -->
+						
+						
 						<div class="row col-12 tag-height">	
 							<div class="form-group">
 								<label class="label-width"></label>
@@ -235,9 +248,48 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 	
 	<script type="text/javascript">
 	var locationMagicSuggest;
-	
+	var isCHCP= 0;
+	var isProvider= 0;
 	function roleSelect(cBox){
-		alert(cBox.checked);
+		//alert(cBox.checked+" - "+cBox.value);
+		//alert(<%=roleIdCHCP%>+" - "+<%=roleIdProvider%>);
+		var roleIdOfCHCP = <%=roleIdCHCP%>;
+		var roleIdOfProvider = <%=roleIdProvider%>;
+		var roleIdOfClickedCheckbox = cBox.value;
+		
+		if(roleIdOfClickedCheckbox == roleIdOfCHCP){
+			if(cBox.checked){
+				isCHCP= 1;
+			}else{
+				isCHCP= 0;
+			}
+		}
+		
+		if(roleIdOfClickedCheckbox == roleIdOfProvider){
+			if(cBox.checked){
+				isProvider= 1;
+			}else{
+				isProvider= 0;
+			}
+		}
+		showTeamAndLocationDiv();
+	}
+	
+	function showTeamAndLocationDiv(){
+		if(isTeamMember()){
+			$("#locationDiv").show();
+			$("#teamDiv").show();
+		}else{
+			$("#locationDiv").hide();
+			$("#teamDiv").hide();
+		}
+	}
+	
+	function isTeamMember(){
+		if(isCHCP== 1 || isProvider== 1){
+			return true;
+		}
+		return false;
 	}
 	
 	$("#UserInfo").submit(function(event) { 
@@ -258,7 +310,8 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 		            'parentUser': $('input[name=parentUser]').val(),
 		            'roles': getCheckboxValueUsingClass(),
 		            'locationList': locationMagicSuggest.getValue(),
-		            'team': $('#team').val()
+		            'team': $('#team').val(),
+		            'teamMember': isTeamMember()
 		        };
 			event.preventDefault();
 			
