@@ -49,6 +49,7 @@ public class UserRestController {
 					user = userServiceImpl.findById(user.getId(), "id", User.class);
 					teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
 					    user.getId(), userDTO.getTeam(), userDTO.getLocationList());
+					teamMember.setIdentifier(userDTO.getIdetifier());
 					
 					if (!teamMemberServiceImpl.isPersonAndIdentifierExists(model, teamMember, userDTO.getLocationList())) {
 						teamMemberServiceImpl.save(teamMember);

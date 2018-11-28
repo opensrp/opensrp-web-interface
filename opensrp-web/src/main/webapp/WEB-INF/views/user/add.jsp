@@ -195,11 +195,10 @@ int roleIdProvider= -1;
 						 
 						 <!-- end: for location -->
 						 <!-- for team -->
-						 <div class="form-group" id="teamDiv" style="display:none">							
-								<div class="row">									
-									<div class="col-5">
-									<label for="exampleInputName"><spring:message code="lbl.team"/></label>
-										<select class="custom-select custom-select-lg mb-3" id="team" name="team" required="required">
+						 <div class="row col-12 tag-height" id="teamDiv" style="display:none">							
+								<div class="form-group">
+									<label class="label-width" for="inputPassword6"><spring:message code="lbl.team"/></label>
+										<select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
 									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 												<%
 												for (Map.Entry<Integer, String> entry : teams.entrySet())
@@ -214,8 +213,7 @@ int roleIdProvider= -1;
 													
 												}
 												%>
-											</select>
-									</div>									
+											</select>								
 								</div>
 							
 						</div>
@@ -279,9 +277,11 @@ int roleIdProvider= -1;
 		if(isTeamMember()){
 			$("#locationDiv").show();
 			$("#teamDiv").show();
+			$("#team").prop('disabled', false);
 		}else{
 			$("#locationDiv").hide();
 			$("#teamDiv").hide();
+			$("#team").prop('disabled', true);
 		}
 	}
 	
