@@ -254,7 +254,6 @@ int roleIdProvider= -1;
 	var isProvider= 0;
 	function roleSelect(cBox){
 		//alert(cBox.checked+" - "+cBox.value);
-		//alert(<%=roleIdCHCP%>+" - "+<%=roleIdProvider%>);
 		var roleIdOfCHCP = <%=roleIdCHCP%>;
 		var roleIdOfProvider = <%=roleIdProvider%>;
 		var roleIdOfClickedCheckbox = cBox.value;

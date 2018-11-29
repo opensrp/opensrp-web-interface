@@ -29,7 +29,7 @@ public class UserRestController {
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO, ModelMap model) throws Exception {
-		System.out.println(userDTO.toString());
+		//System.out.println(userDTO.toString());
 		TeamMember teamMember = new TeamMember();
 		String userNameUniqueError = "";
 		try {
