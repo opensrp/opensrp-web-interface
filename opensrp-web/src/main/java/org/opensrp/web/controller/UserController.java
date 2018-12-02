@@ -247,7 +247,7 @@ public class UserController {
 		Map<String, Object> fieldValues = new HashMap<String, Object>();
 		fieldValues.put("person", account);
 		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
-		if (teamMember != null) {
+		if (teamMember != null && teamId != null) {
 			teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
 			    account.getId(), teamId, locations);
 			teamMember.setIdentifier(account.getIdetifier());
