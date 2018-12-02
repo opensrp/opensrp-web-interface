@@ -1,7 +1,9 @@
 package org.opensrp.web.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,8 +15,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.entity.Permission;
+import org.opensrp.core.entity.TeamMember;
 import org.opensrp.core.entity.User;
+import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.RoleService;
+import org.opensrp.core.service.TeamMemberService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +77,15 @@ public class UserController {
 	@Autowired
 	private PaginationUtil paginationUtil;
 	
+	@Autowired
+	private LocationService locationServiceImpl;
+	
+	@Autowired
+	private TeamMemberService teamMemberServiceImpl;
+	
+	@Autowired
+	private TeamMember teamMember;
+	
 	/**
 	 * <p>
 	 * showing user list, support pagination with search by user name
@@ -104,15 +118,24 @@ public class UserController {
 	 * @param model defines a holder for model attributes.
 	 * @param locale is an argument to holds locale.
 	 * @return user html form.
+	 * @throws JSONException
 	 */
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_USER')")
 	@RequestMapping(value = "/user/add.html", method = RequestMethod.GET)
-	public ModelAndView saveUser(Model model, HttpSession session, Locale locale) {
+	public ModelAndView saveUser(Model model, HttpSession session, Locale locale) throws JSONException {
 		int[] selectedRoles = null;
 		model.addAttribute("account", new User());
 		userServiceImpl.setRolesAttributes(selectedRoles, session);
 		model.addAttribute("locale", locale);
+		
+		//for adding location and team
+		model.addAttribute("teamMember", new TeamMember());
+		String personName = "";
+		session.setAttribute("locationList", locationServiceImpl.list().toString());
+		int[] locations = new int[0];
+		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+		//end: adding location and team
 		return new ModelAndView("user/add", "command", account);
 	}
 	
@@ -130,11 +153,13 @@ public class UserController {
 	 * @param locale is an argument to holds locale.
 	 * @param id is unique id of a user.
 	 * @return user html form.
+	 * @throws JSONException
 	 */
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
 	@RequestMapping(value = "/user/{id}/edit.html", method = RequestMethod.GET)
-	public ModelAndView editUser(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
+	public ModelAndView editUser(Model model, HttpSession session, @PathVariable("id") int id, Locale locale)
+	    throws JSONException {
 		model.addAttribute("locale", locale);
 		User account = userServiceImpl.findById(id, "id", User.class);
 		model.addAttribute("account", account);
@@ -155,6 +180,37 @@ public class UserController {
 		session.setAttribute("parentUserId", parentUserId);
 		/** end parent user section */
 		userServiceImpl.setRolesAttributes(userServiceImpl.getSelectedRoles(account), session);
+		
+		//for teamMember
+		Map<String, Object> fieldValues = new HashMap<String, Object>();
+		fieldValues.put("person", account);
+		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
+		if (teamMember != null) {
+			
+			//System.out.println(teamMember.toString());
+			//model.addAttribute("id", id);
+			teamMember.setPerson(account);
+			model.addAttribute("teamMember", teamMember);
+			int[] locations = teamMemberServiceImpl.getLocationIds(teamMember.getLocations());
+			//User person = teamMember.getPerson();
+			String personName = account.getUsername() + " (" + account.getFullName() + ")";
+			teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+			
+			//return new ModelAndView("team-member/edit", "command", teamMember);
+		} else {
+			//for adding location and team
+			TeamMember newTeamMember = new TeamMember();
+			newTeamMember.setPerson(account);
+			model.addAttribute("teamMember", newTeamMember);
+			String personName = "";
+			session.setAttribute("locationList", locationServiceImpl.list().toString());
+			int[] locations = new int[0];
+			teamMemberServiceImpl.setSessionAttribute(session, newTeamMember, personName, locations);
+			//end: adding location and team
+		}
+		//end: for teamMember
+		
+		//return new ModelAndView("user/edit", "command", teamMember);
 		return new ModelAndView("user/edit", "command", account);
 	}
 	
@@ -175,15 +231,53 @@ public class UserController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
 	@RequestMapping(value = "/user/{id}/edit.html", method = RequestMethod.POST)
-	public ModelAndView editUser(@RequestParam(value = "parentUser", required = false) int parentUserId,
+	public ModelAndView editUser(@RequestParam(value = "parentUser", required = false) Integer parentUserId,
 	                             @RequestParam(value = "roles", required = false) String[] roles,
+	                             @RequestParam(value = "team", required = false) Integer teamId,
+	                             @RequestParam(value = "locationList[]", required = false) int[] locations,
 	                             @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
 	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
+		
 		account.setRoles(userServiceImpl.setRoles(roles));
 		account.setId(id);
 		User parentUser = userServiceImpl.findById(parentUserId, "id", User.class);
 		account.setParentUser(parentUser);
 		userServiceImpl.update(account);
+		
+		Map<String, Object> fieldValues = new HashMap<String, Object>();
+		fieldValues.put("person", account);
+		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
+		if (teamMember != null && teamId != null) {
+			teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
+			    account.getId(), teamId, locations);
+			teamMember.setIdentifier(account.getIdetifier());
+			
+			//teamMember.setId(id);
+			if (!teamMemberServiceImpl.isPersonAndIdentifierExists(model, teamMember, locations)) {
+				teamMemberServiceImpl.update(teamMember);
+				
+			} else {
+				teamMemberServiceImpl.setSessionAttribute(session, teamMember, teamMember.getPerson().getFullName(),
+				    locations);
+				return new ModelAndView("/team-member/edit");
+			}
+		} else {
+			if (teamId != null && teamId > 0) {
+				TeamMember newTeamMember = new TeamMember();
+				newTeamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(newTeamMember,
+				    account.getId(), teamId, locations);
+				newTeamMember.setIdentifier(account.getIdetifier());
+				
+				if (!teamMemberServiceImpl.isPersonAndIdentifierExists(model, newTeamMember, locations)) {
+					teamMemberServiceImpl.save(newTeamMember);
+				}
+			}
+		}
+		
+		System.out.println(account.toString());
+		System.out.println(teamMember.getPerson().toString());
+		System.out.println(teamMember.getLocations());
+		System.out.println(teamMember.getTeam());
 		
 		return new ModelAndView("redirect:/user.html?lang=" + locale);
 		

@@ -9,6 +9,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 
 <%@page import="java.util.List"%>
+<%@page import="java.util.Map"%>
 <%@page import="org.opensrp.core.entity.Role"%>
 
 <!DOCTYPE html>
@@ -19,6 +20,7 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link type="text/css" href="<c:url value="/resources/css/magicsuggest-min.css"/>" rel="stylesheet">
 
 <title><spring:message code="lbl.editUserTitle"/></title>
 
@@ -32,6 +34,19 @@
 <%
 String selectedParentUser = (String)session.getAttribute("parentUserName");
 Integer selectedParentId = (Integer)session.getAttribute("parentUserId");
+
+//for teamMember
+Integer selectedPersonId = (Integer)session.getAttribute("selectedPersonId");
+String locationList = (String)session.getAttribute("locationList"); 
+String selectedLocationList = (String)session.getAttribute("selectedLocationList"); 
+
+Map<Integer, String> teams =  (Map<Integer, String>)session.getAttribute("teams");
+
+String selectedPersonName = (String)session.getAttribute("personName");
+
+Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
+int roleIdCHCP= -1;
+int roleIdProvider= -1;
 
 %>
 
@@ -126,10 +141,15 @@ Integer selectedParentId = (Integer)session.getAttribute("parentUserId");
 										List<Role> roles = (List<Role>) session.getAttribute("roles");
 										int[] selectedRoles = (int[]) session.getAttribute("selectedRoles");
 										for (Role role : roles) {
+											if(role.getName().equals("Provider")){
+												roleIdProvider = role.getId();
+											}else if(role.getName().equals("CHCP")){
+												roleIdCHCP = role.getId();
+											}
 								%>
 										
 											<form:checkbox class="checkBoxClass form-check-input"
-												path="roles" value="<%=role.getId()%>"
+												path="roles" value="<%=role.getId()%>" onclick='roleSelect(this)'
 												checked="<%=CheckboxHelperUtil.checkCheckedBox(selectedRoles,role.getId())%>" />
 											<label class="form-control mx-sm-3" for="defaultCheck1"> <%=role.getName()%>
 											</label>
@@ -140,6 +160,53 @@ Integer selectedParentId = (Integer)session.getAttribute("parentUserId");
 									%>
 							</div>
 						</div>
+						
+						
+						
+						<!-- for location -->
+						 <div class="row col-12 tag-height" id="locationDiv" style="display:none">						
+							<div class="form-group">														
+								<label class="label-width" for="inputPassword6"><spring:message code="lbl.location"/></label>										 
+								<div id="cm" class="ui-widget ">
+									<div id="locationsTag" ></div>
+									<span class="text-red">${locationSelectErrorMessage}</span>		
+								</div>						
+							 </div>
+						 </div>	
+						 
+						<%--  <div id="cm" class="ui-widget">
+										<label><spring:message code="lbl.location"/> </label>
+										<div id="locationsTag"></div>
+										<span class="text-red">${locationSelectErrorMessage}</span>
+						</div> --%>
+						 
+						 <!-- end: for location -->
+						 <!-- for team -->
+						 <div class="row col-12 tag-height" id="teamDiv" style="display:none">							
+								<div class="form-group">
+									<label class="label-width" for="inputPassword6"><spring:message code="lbl.team"/></label>
+										<select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
+									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
+												<%
+												for (Map.Entry<Integer, String> entry : teams.entrySet())
+												{
+													if(selectetTeamId==entry.getKey()){ %>
+														<option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
+													<% }else{
+														%>
+															<option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
+														<%
+													}
+													
+												}
+												%>
+											</select>								
+								</div>
+							
+						</div>
+						 <!--end: for team -->
+						
+						
 						
 						<div class="row col-12 tag-height">						
 							<div class="form-group">														
@@ -164,11 +231,65 @@ Integer selectedParentId = (Integer)session.getAttribute("parentUserId");
 		<!-- /.container-fluid-->
 		<!-- /.content-wrapper-->
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
+		<script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
 		<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
 	</div>
 </body>
 
 <script>
+var locationMagicSuggest;
+var isCHCP= 0;
+var isProvider= 0;
+function roleSelect(cBox){
+	//alert(cBox.checked+" - "+cBox.value);
+	var roleIdOfCHCP = <%=roleIdCHCP%>;
+	var roleIdOfProvider = <%=roleIdProvider%>;
+	var roleIdOfClickedCheckbox = cBox.value;
+	
+	if(roleIdOfClickedCheckbox == roleIdOfCHCP){
+		if(cBox.checked){
+			isCHCP= 1;
+		}else{
+			isCHCP= 0;
+		}
+	}
+	
+	if(roleIdOfClickedCheckbox == roleIdOfProvider){
+		if(cBox.checked){
+			isProvider= 1;
+		}else{
+			isProvider= 0;
+		}
+	}
+	showTeamAndLocationDiv();
+}
+
+function showTeamAndLocationDiv(){
+	if(isTeamMember()){
+		$("#locationDiv").show();
+		$("#team").prop('required',true);
+		$("#team").prop('disabled', false);
+		$("#teamDiv").show();
+	}else{
+		$("#locationDiv").hide();
+		$("#team").prop('required',false);
+		$("#team").prop('disabled', true);
+		$("#teamDiv").hide();
+	}
+}
+
+function isTeamMember(){
+	if(isCHCP== 1 || isProvider== 1){
+		return true;
+	}
+	return false;
+}
+
+
+
+
+
+
   $( function() {
     $.widget( "custom.combobox", {
       _create: function() {
@@ -291,5 +412,26 @@ Integer selectedParentId = (Integer)session.getAttribute("parentUserId");
     
     
   } );
+  </script>
+   <script type="text/javascript">
+  
+ locationMagicSuggest = $('#locationsTag').magicSuggest({ 
+		 	required: true,
+			//placeholder: 'Type Locations',
+     		data: <%=locationList%>,
+	        valueField: 'id',
+	        displayField: 'value',
+	        name: 'locationList',
+	        inputCfg: {"class":"magicInput"},
+	        value: <%=selectedLocationList%>,
+	        useCommaKey: true,
+	        allowFreeEntries: false,
+	        maxSelection: 2,
+	        maxEntryLength: 70,
+	 		maxEntryRenderer: function(v) {
+	 			return '<div style="color:red">Typed Word TOO LONG </div>';
+	 		}
+	       
+	  });
   </script>
 </html>
