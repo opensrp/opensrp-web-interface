@@ -89,8 +89,19 @@ public class TeamMemberService {
 	}
 	
 	@Transactional
-	public <T> boolean delete(T t) {
-		return repository.delete(t);
+	public <T> boolean delete(T t) throws JSONException {
+		TeamMember teamMember = (TeamMember) t;
+		boolean deletedTag = false;
+		logger.info(teamMember.getUuid());
+		String uuid = openMRSServiceFactory.getOpenMRSConnector("member").delete(teamMember.getUuid());
+		if (!uuid.isEmpty()) {
+			deletedTag = repository.delete(teamMember);
+		} else {
+			logger.error("In case of delete: No uuid found for team member:" + teamMember.getIdentifier());
+			// TODO
+		}
+		return deletedTag;
+		//return repository.delete(t);
 	}
 	
 	@Transactional

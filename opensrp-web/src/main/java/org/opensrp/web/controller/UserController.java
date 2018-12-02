@@ -247,19 +247,23 @@ public class UserController {
 		Map<String, Object> fieldValues = new HashMap<String, Object>();
 		fieldValues.put("person", account);
 		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
-		if (teamMember != null && teamId != null) {
-			teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
-			    account.getId(), teamId, locations);
-			teamMember.setIdentifier(account.getIdetifier());
-			
-			//teamMember.setId(id);
-			if (!teamMemberServiceImpl.isPersonAndIdentifierExists(model, teamMember, locations)) {
-				teamMemberServiceImpl.update(teamMember);
+		if (teamMember != null) {
+			if (teamId != null) {
+				teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
+				    account.getId(), teamId, locations);
+				teamMember.setIdentifier(account.getIdetifier());
 				
+				//teamMember.setId(id);
+				if (!teamMemberServiceImpl.isPersonAndIdentifierExists(model, teamMember, locations)) {
+					teamMemberServiceImpl.update(teamMember);
+					
+				} else {
+					teamMemberServiceImpl.setSessionAttribute(session, teamMember, teamMember.getPerson().getFullName(),
+					    locations);
+					return new ModelAndView("/team-member/edit");
+				}
 			} else {
-				teamMemberServiceImpl.setSessionAttribute(session, teamMember, teamMember.getPerson().getFullName(),
-				    locations);
-				return new ModelAndView("/team-member/edit");
+				teamMemberServiceImpl.delete(teamMember);
 			}
 		} else {
 			if (teamId != null && teamId > 0) {
@@ -274,10 +278,10 @@ public class UserController {
 			}
 		}
 		
-		System.out.println(account.toString());
+		/*System.out.println(account.toString());
 		System.out.println(teamMember.getPerson().toString());
 		System.out.println(teamMember.getLocations());
-		System.out.println(teamMember.getTeam());
+		System.out.println(teamMember.getTeam());*/
 		
 		return new ModelAndView("redirect:/user.html?lang=" + locale);
 		
