@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,11 +16,14 @@ import org.opensrp.connector.openmrs.service.APIServiceFactory;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.TeamMember;
 import org.opensrp.core.openmrs.service.OpenMRSConnector;
+import org.opensrp.core.service.TeamMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class OpenMRSTeamMemberAPIService implements OpenMRSConnector<Object> {
+	
+	private static final Logger logger = Logger.getLogger(OpenMRSTeamMemberAPIService.class);
 	
 	private static final String TEAM_MEMBER_URL = "ws/rest/v1/team/teammember";
 	
@@ -74,8 +78,14 @@ public class OpenMRSTeamMemberAPIService implements OpenMRSConnector<Object> {
 	
 	@Override
 	public String delete(String uuid) throws JSONException {
-		// TODO Auto-generated method stub
-		return null;
+		//added on : December 2, 2018
+		JSONObject deletedTeamMember = apiServiceFactory.getApiService("openmrs").delete(PAYLOAD, uuid, TEAM_MEMBER_URL);
+		logger.info(deletedTeamMember.toString());
+		String teamMemberUuid = "";
+		if (deletedTeamMember.has("uuid")) {
+			teamMemberUuid = (String) deletedTeamMember.get("uuid");
+		}
+		return teamMemberUuid;
 	}
 	
 	public JSONObject makeTeamMemebrObject(TeamMember teamMember) throws JSONException {

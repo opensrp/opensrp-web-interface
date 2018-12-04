@@ -259,10 +259,9 @@ public class OpenmrsUserServiceTest {
 		
 	}
 	
-	@Ignore
 	@Test
 	public void createUpdateGetAndDeleteProvider() throws JSONException {
-		String personUuid = createUpdateAndGetPerson();
+		/*String personUuid = createUpdateAndGetPerson();
 		String userUuid = createUpdateGetAndDeleteUser();
 		String idetifier = userName;
 		JSONObject createdProvider = createProvider(personUuid, idetifier);
@@ -279,10 +278,10 @@ public class OpenmrsUserServiceTest {
 		String gePproviderUuid = (String) getProviderObject.get("uuid");
 		Assert.assertEquals(providerUuid, gePproviderUuid);
 		
-		openMRSAPIService.delete("", personUuid, PROVIDER_URL);
+		openMRSAPIService.delete("", personUuid, PROVIDER_URL);*/
 		
-		openMRSAPIService.delete("", personUuid, PERSON_URL);
-		openMRSAPIService.delete("", userUuid, USER_URL);
+		openMRSAPIService.delete("", "add842ef-ffa5-4cb2-bb85-e7f575615ab0", PERSON_URL);
+		//openMRSAPIService.delete("", userUuid, USER_URL);
 	}
 	
 	@Ignore
