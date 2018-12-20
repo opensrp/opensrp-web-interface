@@ -110,9 +110,13 @@ public class User implements UserDetails {
 	
 	@Column(name = "person_uuid")
 	public String personUUid;
+	
 	@ManyToOne()
 	@JoinColumn(name = "parent_user_id", referencedColumnName = "id")
 	private User parentUser;
+	
+	@Column(name = "chcp")
+	private String chcp;
 	
 	public User() {
 	}
@@ -268,11 +272,19 @@ public class User implements UserDetails {
 	public User getParentUser() {
 		return parentUser;
 	}
-
+	
 	public void setParentUser(User parentUser) {
 		this.parentUser = parentUser;
 	}
-
+	
+	public String getChcp() {
+		return chcp;
+	}
+	
+	public void setChcp(String chcp) {
+		this.chcp = chcp;
+	}
+	
 	@Transient
 	public Set<Permission> getPermissions() {
 		Set<Permission> perms = new HashSet<Permission>();
@@ -289,7 +301,7 @@ public class User implements UserDetails {
 		authorities.addAll(getPermissions());
 		return authorities;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -298,32 +310,24 @@ public class User implements UserDetails {
 		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + (enabled ? 1231 : 1237);
-		result = prime * result
-				+ ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result
-				+ ((idetifier == null) ? 0 : idetifier.hashCode());
-		result = prime * result
-				+ ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((idetifier == null) ? 0 : idetifier.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((mobile == null) ? 0 : mobile.hashCode());
-		result = prime * result
-				+ ((parentUser == null) ? 0 : parentUser.hashCode());
-		result = prime * result
-				+ ((password == null) ? 0 : password.hashCode());
-		result = prime * result
-				+ ((personUUid == null) ? 0 : personUUid.hashCode());
+		result = prime * result + ((parentUser == null) ? 0 : parentUser.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + ((personUUid == null) ? 0 : personUUid.hashCode());
 		result = prime * result + (provider ? 1231 : 1237);
-		result = prime * result
-				+ ((retypePassword == null) ? 0 : retypePassword.hashCode());
+		result = prime * result + ((retypePassword == null) ? 0 : retypePassword.hashCode());
 		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
 		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
-		result = prime * result
-				+ ((username == null) ? 0 : username.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -424,18 +428,15 @@ public class User implements UserDetails {
 			return false;
 		return true;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", uuid=" + uuid
-				+ ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", email=" + email + ", password=" + password
-				+ ", retypePassword=" + retypePassword + ", enabled=" + enabled
-				+ ", created=" + created + ", updated=" + updated + ", roles="
-				+ roles + ", creator=" + creator + ", gender=" + gender
-				+ ", mobile=" + mobile + ", idetifier=" + idetifier
-				+ ", provider=" + provider + ", personUUid=" + personUUid
-				+ ", parentUser=" + parentUser + "]";
+		return "User [id=" + id + ", username=" + username + ", uuid=" + uuid + ", firstName=" + firstName + ", lastName="
+		        + lastName + ", email=" + email + ", password=" + password + ", retypePassword=" + retypePassword
+		        + ", enabled=" + enabled + ", created=" + created + ", updated=" + updated + ", roles=" + roles
+		        + ", creator=" + creator + ", gender=" + gender + ", mobile=" + mobile + ", idetifier=" + idetifier
+		        + ", provider=" + provider + ", personUUid=" + personUUid + ", parentUser=" + parentUser + ", chcp=" + chcp
+		        + "]";
 	}
 	
 }

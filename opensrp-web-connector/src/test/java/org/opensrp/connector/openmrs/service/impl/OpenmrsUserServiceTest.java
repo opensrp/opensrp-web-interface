@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath:test-applicationContext.xml" })
 public class OpenmrsUserServiceTest {
@@ -258,7 +258,7 @@ public class OpenmrsUserServiceTest {
 		return userUuid;
 		
 	}
-	
+	@Ignore
 	@Test
 	public void createUpdateGetAndDeleteProvider() throws JSONException {
 		/*String personUuid = createUpdateAndGetPerson();

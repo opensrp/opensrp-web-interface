@@ -20,7 +20,7 @@ String selectedLocationList = (String)session.getAttribute("selectedLocationList
 Map<Integer, String> teams =  (Map<Integer, String>)session.getAttribute("teams");
 
 String selectedPersonName = (String)session.getAttribute("personName");
-
+Integer communityId = (Integer)session.getAttribute("communityId");
 Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 
 int roleIdCHCP= -1;
@@ -146,82 +146,9 @@ int roleIdProvider= -1;
 	                        	</small>
 							 </div>
 							 
-						 </div>
-						
-						<div class="row col-12 tag-height">						
-							<div class="form-group required">
-								<label class="label-width"  for="inputPassword6"><spring:message code="lbl.role"/></label>
-									<%
-										List<Role> roles = (List<Role>) session.getAttribute("roles");											
-										for (Role role : roles) {
-											if(role.getName().equals("Provider")){
-												roleIdProvider = role.getId();
-											}else if(role.getName().equals("CHCP")){
-												roleIdCHCP = role.getId();
-											}
-									%>									
-										<form:checkbox 
-											path="roles" class="chk" value="<%=role.getId()%>" onclick='roleSelect(this)'/>
-										<label class="form-control mx-sm-3" for="defaultCheck1"> <%=role.getName()%></label>									
-									<%
-										}
-									%>
-								
-							</div>
-						</div>
+						 </div>						
 						
 						
-						
-						<%--  <!-- for location -->
-						 <div class="row col-12 tag-height" id="locationDiv" style="display:none">						
-							<div class="form-group">														
-								<label class="label-width" for="inputPassword6"><spring:message code="lbl.location"/></label>										 
-								<div id="cm" class="ui-widget ">
-									<div id="locationsTag" ></div>
-									<span class="text-red">${locationSelectErrorMessage}</span>		
-								</div>						
-							 </div>
-						 </div>	 --%>
-						 
-						<%--  <div id="cm" class="ui-widget">
-										<label><spring:message code="lbl.location"/> </label>
-										<div id="locationsTag"></div>
-										<span class="text-red">${locationSelectErrorMessage}</span>
-						</div> --%>
-						 
-						 <!-- end: for location -->
-						 <!-- for team -->
-						 <div class="row col-12 tag-height" id="teamDiv" style="display:none">							
-								<div class="form-group">
-									<label class="label-width" for="inputPassword6"><spring:message code="lbl.cc"/></label>
-										<select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
-									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
-												<%
-												for (Map.Entry<Integer, String> entry : teams.entrySet())
-												{
-													if(selectetTeamId==entry.getKey()){ %>
-														<option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
-													<% }else{
-														%>
-															<option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
-														<%
-													}
-													
-												}
-												%>
-											</select>								
-								</div>
-							
-						</div>
-						 <!--end: for team -->
-						
-						
-						<div class="row col-12 tag-height">	
-							<div class="form-group">
-								<label class="label-width"></label>
-								<div class="text-red" id="roleSelectmessage"></div>
-							</div>
-						</div>
 						<div class="row col-12 tag-height">						
 							<div class="form-group">
 									<input type="submit" onclick="return Validate()"  value="<spring:message code="lbl.save"/>" 	class="btn btn-primary btn-block btn-center" />
@@ -292,13 +219,13 @@ int roleIdProvider= -1;
 	
 	$("#UserInfo").submit(function(event) { 
 			$("#loading").show();
-			var url = "/opensrp-dashboard/rest/api/v1/user/save";			
+			var url = "/opensrp-dashboard/rest/api/v1/user/<%=communityId%>/mhv";			
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			//alert(locationMagicSuggest.getValue());
 			//alert($('#team').val());
 			var formData;
-			if(isTeamMember()){
+			
 				formData = {
 			            'firstName': $('input[name=firstName]').val(),
 			            'lastName': $('input[name=lastName]').val(),
@@ -307,25 +234,11 @@ int roleIdProvider= -1;
 			            'idetifier': $('input[name=idetifier]').val(),
 			            'username': $('input[name=username]').val(),
 			            'password': $('input[name=password]').val(),
-			            'parentUser': $('input[name=parentUser]').val(),
-			            'roles': getCheckboxValueUsingClass(),			            
-			            'team': $('#team').val(),
-			            'teamMember': isTeamMember()
+			            'parentUser': "",
+			            'roles': "",
+			            'teamMember': ""
 			        };
-			}else{
-				formData = {
-			            'firstName': $('input[name=firstName]').val(),
-			            'lastName': $('input[name=lastName]').val(),
-			            'email': $('input[name=email]').val(),
-			            'mobile': $('input[name=mobile]').val(),
-			            'idetifier': $('input[name=idetifier]').val(),
-			            'username': $('input[name=username]').val(),
-			            'password': $('input[name=password]').val(),
-			            'parentUser': $('input[name=parentUser]').val(),
-			            'roles': getCheckboxValueUsingClass(),
-			            'teamMember': isTeamMember()
-			        };
-			}
+			
 			
 			event.preventDefault();
 			
@@ -344,7 +257,7 @@ int roleIdProvider= -1;
 				   $("#usernameUniqueErrorMessage").html(data);
 				   $("#loading").hide();
 				   if(data == ""){					   
-					   window.location.replace("/opensrp-dashboard/facility/2422/details.html");
+					   window.location.replace("/opensrp-dashboard/facility/<%=communityId%>/addWorker.html");
 					   
 				   }
 				   
@@ -386,23 +299,7 @@ int roleIdProvider= -1;
          }
          
          $("#passwordNotmatchedMessage").html("");
-         var chkArray = [];
- 		
- 		/* look for all checkboes that have a class 'chk' attached to it and check if it was checked */
- 		$(".chk:checked").each(function() {
- 			chkArray.push($(this).val());
- 		});
- 		
- 		/* we join the array separated by the comma */
- 		var selected;
- 		selected = chkArray.join(',') ;		
- 		if(selected.length > 0){			
- 		}else{			
- 			$("#roleSelectmessage").html("Please select at least one role");
- 			return false;
- 		}
- 		$("#roleSelectmessage").html("");
-         return true;
+         
      }
 	
 		</script>

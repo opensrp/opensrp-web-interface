@@ -139,6 +139,25 @@ public class UserController {
 		return new ModelAndView("user/add", "command", account);
 	}
 	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_USER')")
+	@RequestMapping(value = "/user/{id}/add.html", method = RequestMethod.GET)
+	public ModelAndView saveUserAsCC(Model model, HttpSession session, @PathVariable("id") int id, Locale locale)
+	    throws JSONException {
+		int[] selectedRoles = null;
+		model.addAttribute("account", new User());
+		userServiceImpl.setRolesAttributes(selectedRoles, session);
+		model.addAttribute("locale", locale);
+		session.setAttribute("communityId", id);
+		//for adding location and team
+		model.addAttribute("teamMember", new TeamMember());
+		String personName = "";
+		session.setAttribute("locationList", locationServiceImpl.list().toString());
+		int[] locations = new int[0];
+		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+		//end: adding location and team
+		return new ModelAndView("user/add-provider", "command", account);
+	}
+	
 	/**
 	 * <p>
 	 * This method render user html form for user information to edit, where login user can update
@@ -277,11 +296,6 @@ public class UserController {
 				}
 			}
 		}
-		
-		/*System.out.println(account.toString());
-		System.out.println(teamMember.getPerson().toString());
-		System.out.println(teamMember.getLocations());
-		System.out.println(teamMember.getTeam());*/
 		
 		return new ModelAndView("redirect:/user.html?lang=" + locale);
 		

@@ -16,7 +16,7 @@ public class SearchUtil {
 	
 	private static final Logger logger = Logger.getLogger(SearchUtil.class);
 	
-	private static final int DIVISION_TAG_ID = 3;
+	private static final int DIVISION_TAG_ID = 16;
 	
 	@Autowired
 	private SearchBuilder searchBuilder;

@@ -21,6 +21,7 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
 	@Override
 	public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
 		Collection<? extends GrantedAuthority> role = authentication.getAuthorities();
+		logger.info("OKKK"+role.toString());
 		for (GrantedAuthority grantedAuthority : role) {
 			if (grantedAuthority.getAuthority().equalsIgnoreCase(permission.toString())) {
 				return true;

@@ -4,104 +4,115 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javassist.tools.framedump;
+
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.opensrp.common.interfaces.DatabaseRepository;
+import org.opensrp.core.entity.Location;
+import org.opensrp.core.entity.Team;
+import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.TeamService;
 import org.opensrp.facility.entity.Facility;
 import org.opensrp.facility.entity.FacilityWorker;
+import org.opensrp.facility.util.FacilityHelperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FacilityService {
-
-	private static final Logger logger = Logger
-			.getLogger(FacilityService.class);
-
+	
+	private static final Logger logger = Logger.getLogger(FacilityService.class);
+	
 	@Autowired
 	private DatabaseRepository repository;
-
+	
 	@Autowired
 	private FacilityWorkerService facilityWorkerService;
+	
+	@Autowired
+	private TeamService teamService;
+	
+	@Autowired
+	private LocationService locationService;
+	
+	@Autowired
+	private FacilityHelperUtil facilityHelperUtil;
 	
 	@Transactional
 	public <T> long save(T t) throws Exception {
 		return repository.save(t);
 	}
-
+	
 	@Transactional
 	public <T> int update(T t) throws Exception {
 		return repository.update(t);
 	}
-
+	
 	@Transactional
 	public <T> boolean delete(T t) {
 		return repository.delete(t);
 	}
-
+	
 	@Transactional
 	public <T> T findById(int id, String fieldName, Class<?> className) {
 		return repository.findById(id, fieldName, className);
 	}
-
+	
 	@Transactional
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
 		return repository.findByKey(value, fieldName, className);
 	}
-
+	
 	@Transactional
-	public <T> T findOneByKeys(Map<String, Object> fielaValues,
-			Class<?> className) {
+	public <T> T findOneByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		return repository.findByKeys(fielaValues, className);
 	}
-
+	
 	@Transactional
-	public <T> List<T> findAllByKeys(Map<String, Object> fielaValues,
-			Class<?> className) {
+	public <T> List<T> findAllByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		return repository.findAllByKeys(fielaValues, className);
 	}
-
+	
 	@Transactional
-	public <T> T findLastByKeys(Map<String, Object> fielaValues,
-			String orderByFieldName, Class<?> className) {
-		return repository.findLastByKey(fielaValues, orderByFieldName,
-				className);
+	public <T> T findLastByKeys(Map<String, Object> fielaValues, String orderByFieldName, Class<?> className) {
+		return repository.findLastByKey(fielaValues, orderByFieldName, className);
 	}
-
+	
 	@Transactional
 	public <T> List<T> findAll(String tableClass) {
 		return repository.findAll(tableClass);
 	}
-
+	
 	/**
 	 * Fulfill all the prerequisites and save new Facility
 	 * <p>
 	 * <ol>
-	 *	<li> Set location codes to Facility </li>
-	 *	<li> Save Facility</li>
+	 * <li>Set location codes to Facility</li>
+	 * <li>Save Facility</li>
 	 * </ol>
 	 * </p>
+	 * 
 	 * @param facility Facility-object
 	 * @return 1 for success and -1 for failure.
 	 */
 	@Transactional
 	public long saveFacility(Facility facility) throws Exception {
 		facility = setLocationCodesToFacility(facility);
-		return save(facility);
+		long returnValue = save(facility);
+		facilityHelperUtil.addTeamFromCommunity(facility);
+		return returnValue;
 	}
-
+	
 	/**
 	 * <p>
-	 * Set location codes to Facility. 
-	 * Location code stays in the same string with location name.
-	 * This method separates the location-name and code and put them in different fields.
-	 * Example:
-	 * In input Facility-object:  divisionName= Dhaka?32
-	 * 							  divisionCode= null
-	 * In output Facility-object: divisionName= Dhaka
-	 * 			  		 		  divisionCode= 32
+	 * Set location codes to Facility. Location code stays in the same string with location name.
+	 * This method separates the location-name and code and put them in different fields. Example:
+	 * In input Facility-object: divisionName= Dhaka?32 divisionCode= null In output
+	 * Facility-object: divisionName= Dhaka divisionCode= 32
 	 * </p>
+	 * 
 	 * @param facility Facility-object in which location name and location code is in the same field
 	 * @return Facility Facility-object in which location name and location code is in two fields
 	 */
@@ -155,15 +166,16 @@ public class FacilityService {
 				facility.setWard("");
 				facility.setWardCode("");
 			}
-
+			
 		}
 		return facility;
 	}
-
+	
 	/**
 	 * <p>
 	 * Get list of all FacilityWorker of a specific Facility.
 	 * </p>
+	 * 
 	 * @param facilityId is id of the Facility
 	 * @return List<FacilityWorker> list of FacilityWorker of that Facility
 	 */
@@ -171,9 +183,8 @@ public class FacilityService {
 		Facility facility = findById(facilityId, "id", Facility.class);
 		Map<String, Object> facilityMap = new HashMap<String, Object>();
 		facilityMap.put("facility", facility);
-		List<FacilityWorker> facilityWorkerList = facilityWorkerService
-				.findAllByKeys(facilityMap, FacilityWorker.class);
+		List<FacilityWorker> facilityWorkerList = facilityWorkerService.findAllByKeys(facilityMap, FacilityWorker.class);
 		return facilityWorkerList;
 	}
-
+	
 }

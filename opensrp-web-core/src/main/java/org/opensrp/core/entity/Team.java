@@ -46,6 +46,9 @@ public class Team implements Serializable {
 	@JoinColumn(name = "location_id", referencedColumnName = "id")
 	private Location location;
 	
+	@Column(name = "location_uuid")
+	private String locationUuid;
+	
 	@ManyToOne()
 	@JoinColumn(name = "supervisor_id", referencedColumnName = "id")
 	private User superVisor;
@@ -137,6 +140,14 @@ public class Team implements Serializable {
 	
 	public void setCreator(User creator) {
 		this.creator = creator;
+	}
+	
+	public String getLocationUuid() {
+		return locationUuid;
+	}
+	
+	public void setLocationUuid(String locationUuid) {
+		this.locationUuid = locationUuid;
 	}
 	
 	@Override

@@ -22,8 +22,9 @@
 <title>CC Profile</title>
 </head>
 <style>
-td{ padding:5px;}
-
+td{ padding:5px;
+font-size: 20px;
+font-family: ShonarBangla;}
 </style>
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <%

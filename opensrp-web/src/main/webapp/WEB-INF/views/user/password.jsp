@@ -46,7 +46,7 @@
 						<div class="row col-12 tag-height">						
 							<div class="form-group required">														
 								<label class="label-width" for="inputPassword6">Password</label>										 
-								<input type="password" placeholder="Enter password" class="form-control mx-sm-3" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required />
+								<input type="password" placeholder="Enter password" class="form-control mx-sm-3" id="password" name="password"  title="" required />
 								<small id="passwordHelpInline" class="text-muted text-para">
 	                          		 Password should be 8 characters long and should have both upper and lower case characters ,
 	                          		 at least one digit , at least one non digit.

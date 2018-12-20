@@ -6,6 +6,15 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
+<style>
+strong{ padding:5px;
+font-size: 13px;
+font-family: ShonarBangla;}
+
+li{
+font-size: 13px;
+font-family: ShonarBangla;}
+</style>
 <%
 boolean PERM_WRITE_FACILITY = AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY");
 boolean PERM_UPLOAD_FACILITY_CSV = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV");

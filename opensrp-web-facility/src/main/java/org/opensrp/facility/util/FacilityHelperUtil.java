@@ -15,6 +15,10 @@ import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.opensrp.common.interfaces.DatabaseRepository;
+import org.opensrp.core.entity.Location;
+import org.opensrp.core.entity.Team;
+import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.TeamService;
 import org.opensrp.facility.dto.FacilityWorkerDTO;
 import org.opensrp.facility.entity.Chcp;
 import org.opensrp.facility.entity.Facility;
@@ -47,6 +51,12 @@ public class FacilityHelperUtil {
 	
 	@Autowired
 	private DatabaseRepository repository;
+	
+	@Autowired
+	private TeamService teamService;
+	
+	@Autowired
+	private LocationService locationService;
 	
 	public void setCHCPTrainingListToSession(HttpSession session, List<FacilityTraining> CHCPTrainingList) {
 		session.setAttribute("CHCPTrainingList", CHCPTrainingList);
@@ -133,10 +143,9 @@ public class FacilityHelperUtil {
 				String[] facilityFromCsv = line.split(cvsSplitBy);
 				if (position == 0) {
 					tags = facilityFromCsv;
-					System.out.println("tags >> " + facilityFromCsv[0] + " >> " + facilityFromCsv[1] + " >> "
-					        + facilityFromCsv[3]);
+					logger.info("tags >> " + facilityFromCsv[0] + " >> " + facilityFromCsv[1] + " >> " + facilityFromCsv[3]);
 				} else {
-					System.out.println(facilityFromCsv[0] + " >> " + facilityFromCsv[1] + " >> " + facilityFromCsv[3]);
+					logger.info(facilityFromCsv[0] + " >> " + facilityFromCsv[1] + " >> " + facilityFromCsv[3]);
 					Facility facility = new Facility();
 					if (facilityFromCsv.length >= 1) {
 						facility.setName(facilityFromCsv[0]);
@@ -186,10 +195,11 @@ public class FacilityHelperUtil {
 						facility.setWardCode(facilityFromCsv[12]);
 					}
 					
-					System.out.println(facility.toString());
+					logger.info(facility.toString());
 					facilityService.save(facility);
+					addTeamFromCommunity(facility);
 					
-					if (facilityFromCsv.length >= 16) {
+					/*if (facilityFromCsv.length >= 16) {
 						if ((facilityFromCsv[13] != null && !facilityFromCsv[13].isEmpty())
 						        && (facilityFromCsv[15] != null && !facilityFromCsv[15].isEmpty())) {
 							FacilityWorker facilityWorker = new FacilityWorker();
@@ -203,7 +213,7 @@ public class FacilityHelperUtil {
 							facilityWorkerService.save(facilityWorker);
 						}
 						
-					}
+					}*/
 					
 				}
 				position++;
@@ -294,6 +304,22 @@ public class FacilityHelperUtil {
 		        + "where entity_type in ('ec_member', 'ec_woman')" + "and first_name ilike '%" + name + "%'";
 		List<String> workerNameList = repository.executeSelectQuery(query);
 		return workerNameList;
+	}
+	
+	public void addTeamFromCommunity(Facility facility) {
+		try {
+			Location location = (Location) locationService.findByKey(facility.getWard(), "name", Location.class);
+			
+			Team team = new Team();
+			team.setIdentifier(facility.getName());
+			team.setName(facility.getName());
+			team.setLocation(location);
+			team.setLocationUuid(location.getUuid());
+			teamService.save(team);
+		}
+		catch (Exception e) {
+			logger.info("team created message:" + e.getMessage());
+		}
 	}
 	
 }
