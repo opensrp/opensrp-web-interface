@@ -177,16 +177,16 @@ int roleIdProvider= -1;
 							</div>
 						</div>
 						
+						 
 						
 						
 						 <!-- for location -->
-						 <div class="row col-12 tag-height" id="locationDiv" style="display:none">						
+						 <div class="row col-12 tag-height" id="locationDiv"  style="display:none">						
 							<div class="form-group">														
-								<label class="label-width" for="inputPassword6"><spring:message code="lbl.location"/></label>										 
-								<div id="cm" class="ui-widget ">
-									<div id="locationsTag" ></div>
-									<span class="text-red">${locationSelectErrorMessage}</span>		
-								</div>						
+								<label class="label-width" for="inputPassword6"><spring:message code="lbl.location"/></label>
+								<div id="locationsTag" ></div>										 
+								<!-- <div class="ms-ctn form-control" style="left: 16px;" id="ms-tagbox"><span class="ms-helper " style="display: none;"></span><div class="ms-sel-ctn"><input type="text" class="" placeholder="Location" style="width: 117px;"><div style="display: none;"></div></div><div class="ms-trigger"><div class="ms-trigger-ico"></div></div></div>					
+								 -->
 							 </div>
 						 </div>	
 						 
@@ -197,6 +197,7 @@ int roleIdProvider= -1;
 						</div> --%>
 						 
 						 <!-- end: for location -->
+						 
 						 <!-- for team -->
 						 <div class="row col-12 tag-height" id="teamDiv" style="display:none">							
 								<div class="form-group">
