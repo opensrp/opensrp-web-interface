@@ -69,7 +69,8 @@ public class ClientController {
 	@RequestMapping(value = "/member/{id}/details.html", method = RequestMethod.GET)
 	public String showMemberDetails(HttpServletRequest request, HttpSession session, Model model, Locale locale,
 	                                @PathVariable("id") String id) throws JSONException {
-		session.setAttribute("memberId", id);
+		//session.setAttribute("memberId", id);
+		clientService.getMemberDetails(session, id);
 		model.addAttribute("locale", locale);
 		return "client/member-details";
 	}
