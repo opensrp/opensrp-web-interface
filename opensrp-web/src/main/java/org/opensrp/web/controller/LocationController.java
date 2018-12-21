@@ -93,7 +93,7 @@ public class LocationController {
 	                                 @RequestParam(value = "parentLocationName") String parentLocationName,
 	                                 @ModelAttribute("location") @Valid Location location, BindingResult binding,
 	                                 ModelMap model, HttpSession session, Locale locale) throws Exception {
-		location.setName(location.getName().trim());
+		location.setName(location.getName().toUpperCase().trim());
 		
 		boolean chceckInOpenmrs = false;
 		if (!locationServiceImpl.locationExistsForUpdate(location, chceckInOpenmrs)) {

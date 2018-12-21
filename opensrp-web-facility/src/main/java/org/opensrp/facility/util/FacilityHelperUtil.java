@@ -147,53 +147,29 @@ public class FacilityHelperUtil {
 				} else {
 					logger.info(facilityFromCsv[0] + " >> " + facilityFromCsv[1] + " >> " + facilityFromCsv[3]);
 					Facility facility = new Facility();
-					if (facilityFromCsv.length >= 1) {
-						facility.setName(facilityFromCsv[0]);
-					}
+					facility.setName(facilityFromCsv[0].trim()); // name
 					
-					if (facilityFromCsv.length >= 2) {
-						facility.setHrmId(facilityFromCsv[1]);
-					}
+					facility.setHrmId(facilityFromCsv[1].trim());// code
 					
-					if (facilityFromCsv.length >= 4) {
-						facility.setDivision(facilityFromCsv[3].toUpperCase());
-					}
+					facility.setDivision(facilityFromCsv[3].toUpperCase().trim());// division
 					
-					if (facilityFromCsv.length >= 5) {
-						facility.setDivisionCode(facilityFromCsv[4]);
-					}
+					facility.setDivisionCode(facilityFromCsv[4].trim()); // division code
 					
-					if (facilityFromCsv.length >= 6) {
-						facility.setDistrict(facilityFromCsv[5].toUpperCase());
-					}
+					facility.setDistrict(facilityFromCsv[5].toUpperCase()); // district 
 					
-					if (facilityFromCsv.length >= 7) {
-						facility.setDistrictCode(facilityFromCsv[6]);
-					}
+					facility.setDistrictCode(facilityFromCsv[6].trim()); // district code
 					
-					if (facilityFromCsv.length >= 8) {
-						facility.setUpazila(facilityFromCsv[7].toUpperCase());
-					}
+					facility.setUpazila(facilityFromCsv[7].toUpperCase()); // upazilla
 					
-					if (facilityFromCsv.length >= 9) {
-						facility.setUpazilaCode(facilityFromCsv[8]);
-					}
+					facility.setUpazilaCode(facilityFromCsv[8].trim()); // upazilla code
 					
-					if (facilityFromCsv.length >= 10) {
-						facility.setUnion(facilityFromCsv[9].toUpperCase());
-					}
+					facility.setUnion(facilityFromCsv[9].toUpperCase()); //union 
 					
-					if (facilityFromCsv.length >= 11) {
-						facility.setUnionCode(facilityFromCsv[10]);
-					}
+					facility.setUnionCode(facilityFromCsv[10].trim()); // union code
 					
-					if (facilityFromCsv.length >= 12) {
-						facility.setWard(facilityFromCsv[11].toUpperCase());
-					}
+					facility.setWard(facilityFromCsv[11].toUpperCase().trim());// ward
 					
-					if (facilityFromCsv.length >= 13) {
-						facility.setWardCode(facilityFromCsv[12]);
-					}
+					facility.setWardCode(facilityFromCsv[12].trim());// ward code
 					
 					logger.info(facility.toString());
 					facilityService.save(facility);
@@ -221,7 +197,7 @@ public class FacilityHelperUtil {
 			
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			
 			logger.info("Some problem occured, please contact admin..");
 			msg = "Some problem occured, please contact with admin..";
 		}

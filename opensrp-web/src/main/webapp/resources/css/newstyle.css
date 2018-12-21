@@ -14,6 +14,7 @@
        url('ShonarBangla.svg#svgFontName') format('svg'); /* Legacy iOS */
 }
 
+
 body {
     overflow-x: hidden;
 }
@@ -42,7 +43,7 @@ h4,
 h5,
 h6 {
    
-    font-family: ShonarBangla, Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: ShonarBangla;
     font-weight: 700;
 }
 
@@ -100,7 +101,7 @@ header img {
 header .intro-text .name {
     display: block;
     text-transform: uppercase;
-    font-family: ShonarBangla,Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: ShonarBangla;
     font-size: 2em;
     font-weight: 700;
 }
@@ -150,7 +151,7 @@ header .intro-text .skills {
 
 .navbar {
     text-transform: uppercase;
-    font-family: ShonarBangla,Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: ShonarBangla;
     font-weight: 700;
 }
 
@@ -505,7 +506,7 @@ footer .footer-below {
     z-index: 5;
 }
 .btn, a.btn {
-    font-family: "Montserrat",arial,sans-serif;
+    font-family: ShonarBangla;
     font-weight: bold;
     padding: 8px 16px;
     transition: all 0.4s ease-in-out 0s;
@@ -519,6 +520,7 @@ footer .footer-below {
     position: relative;
     top: 1px;
 }
+
 /*for inner page*/
 .bg-red, .bg-yellow, .bg-aqua, .bg-blue, .bg-light-blue, .bg-green, .bg-navy, .bg-teal, .bg-olive, .bg-lime, .bg-orange, .bg-fuchsia, .bg-purple, .bg-maroon, .bg-black, .bg-lgreen {
     color: #f9f9f9 !important;
@@ -846,7 +848,7 @@ th {
 	padding:8px;
  }
 .box_buttom {
-    font-family:ShonarBangla, impact, Arial, Helvetica, sans-serif;
+    font-family: ShonarBangla;
 	height:90px;
 	background-color:#a0bce0;
 	font-size:45px;
@@ -867,7 +869,7 @@ th {
 	padding:8px;
  }
 .box_buttom1 {
-	font-family:ShonarBangla, impact, Arial, Helvetica, sans-serif;
+	font-family: ShonarBangla;
 	/* height:90px; */
 	background-color:#fab58b;
 	font-size:30px;
@@ -887,7 +889,7 @@ th {
 	padding:8px;
  }
 .box_buttom2 {
-	font-family:ShonarBangla, impact, Arial, Helvetica, sans-serif;
+	font-family: ShonarBangla;
 	/* height:90px; */
 	background-color:#e5e4ac;
 	font-size:30px;
@@ -904,7 +906,7 @@ th {
 	text-align:center;
 	font-size:50px;
 	color:#fff;
-	font-family:ShonarBangla, impact, Arial, Helvetica, sans-serif
+	font-family: ShonarBangla;
 }
 .inner_button {
 	height: 25px;
@@ -927,7 +929,7 @@ th {
    float:left;
    font-size:15px;
    text-align:center;
-   font-family:ShonarBangla, impact, Arial, Helvetica, sans-serif;
+   font-family: ShonarBangla;
    border:1px solid #003e76
 }
 
@@ -979,8 +981,7 @@ th {
 	font-size:50px;
 	text-align:center;
 	font-weight:bold;
-	font-family: impact, Arial, Helvetica, sans-serif
- }
+	font-family: ShonarBangla;
  .box_buttom_c {
 	height:83px;
 	background-color: #a2a474;
@@ -988,7 +989,7 @@ th {
 	font-size:50px;
 	text-align:center;
 	font-weight:bold;
-	font-family: impact, Arial, Helvetica, sans-serif
+	font-family: ShonarBangla;
  }
 .inner_b {
     width:100px;
@@ -999,7 +1000,7 @@ th {
 	font-size:30px;
 	color:#fff;
 	background-color:#6a2500;
-	font-family: impact, Arial, Helvetica, sans-serif
+	font-family: ShonarBangla;
 }
 .inner_top_d{
 	height: 45px;
@@ -1007,8 +1008,7 @@ th {
 	font-size:30px;
 	color:#fff;
 	background-color:#696d27;
-	font-family: impact, Arial, Helvetica, sans-serif
-}
+	font-family: ShonarBangla;
 .inner_button_b {
 	height: 25px;
 	color:#fff;
@@ -1040,7 +1040,7 @@ th {
    float:left;
    font-size:15px;
    text-align:center;
-   font-family: impact, Arial, Helvetica, sans-serif;
+   font-family: ShonarBangla;
    border:1px solid #6a2500
 }
 .inner_buttom_left_c {
@@ -1050,7 +1050,7 @@ th {
    float:left;
    font-size:15px;
    text-align:center;
-   font-family: impact, Arial, Helvetica, sans-serif;
+   font-family: ShonarBangla;
    border:1px solid #696d27
 }
 @media (max-width:650px) {.col-xs-6{width:100%}}
@@ -1065,7 +1065,7 @@ th {
 	color:#fff;
 	background-color:#696d27;
 	border:1px solid #696d27
-	font-family: impact, Arial, Helvetica, sans-serif
+	font-family: ShonarBangla;
 }
 .box_buttom_c {
 	height:83px;
@@ -1074,7 +1074,7 @@ th {
 	font-size:50px;
 	text-align:center;
 	font-weight:bold;
-	font-family: impact, Arial, Helvetica, sans-serif
+	font-family: ShonarBangla;
  }
  .box_top_c {
 	height:25px;
@@ -1109,7 +1109,7 @@ th {
   font-size:75px;
   font-weight:bold;
   text-align:center;
-  font-family: impact, Arial, Helvetica, sans-serif;
+  font-family: ShonarBangla;
   margin:o;
   padding:0;
  }
@@ -1126,7 +1126,7 @@ th {
   color:#004e77;
   font-weight:bold;
   text-align:right;
-  font-family: impact, Arial, Helvetica, sans-serif;
+  font-family: ShonarBangla;
   float:left;
   padding-left:15px;
  }
@@ -1143,7 +1143,7 @@ th {
   font-size:70px;
   font-weight:bold;
   color:#520052;
-  font-family: impact, Arial, Helvetica, sans-serif;
+  font-family: ShonarBangla;
   float:left;
   padding-left:15px;
 

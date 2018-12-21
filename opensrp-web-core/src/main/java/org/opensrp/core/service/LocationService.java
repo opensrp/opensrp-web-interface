@@ -370,11 +370,11 @@ public class LocationService {
 						}
 						tag = tags[i + 1];
 						LocationTag locationTag = findByKey(tag, "name", LocationTag.class);
-						Location parentLocation = findByKey(parent, "name", Location.class);
-						Location isExists = findByKey(name, "name", Location.class);
+						Location parentLocation = findByKey(parent.toUpperCase().trim(), "name", Location.class);
+						Location isExists = findByKey(name.toUpperCase().trim(), "name", Location.class);
 						Location location = new Location();
 						location.setCode(code);
-						location.setName(name);
+						location.setName(name.toUpperCase().trim());
 						location.setLocationTag(locationTag);
 						location.setParentLocation(parentLocation);
 						location.setDescription(name);
