@@ -28,11 +28,12 @@
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
+	
 	<div class="content-wrapper">
 		<div class="container-fluid">
 		
 			<jsp:include page="/WEB-INF/views/facility/facility-link.jsp" />
-			
+			</ol>
 			<div class="card mb-3">
 				<div class="card-header">
 					<i class="fa fa-table"></i> <spring:message code="lbl.communityClinicRegistration"/>

@@ -8,7 +8,7 @@
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <div class="form-group">
-<ol class="breadcrumb">		
+	<ol class="breadcrumb">		
 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY")){ %>			
 		<li class="breadcrumb-item">
 		<a  href="<c:url value="/facility/add.html?lang=${locale}"/>" > <strong><spring:message code="lbl.registration"/></strong> </a>  

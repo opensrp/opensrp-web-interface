@@ -28,7 +28,7 @@
 		<div class="container-fluid">
 		
 		<jsp:include page="/WEB-INF/views/facility/facility-link.jsp" />
-			
+		</ol>
 		<jsp:include page="/WEB-INF/views/searchPanel.jsp" />
 		
 			<div class="card mb-3">

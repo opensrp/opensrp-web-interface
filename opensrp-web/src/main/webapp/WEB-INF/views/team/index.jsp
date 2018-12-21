@@ -39,13 +39,11 @@ if (paginationAtributes.containsKey("name")) {
 		<div class="form-group">				
 			<jsp:include page="/WEB-INF/views/team/team-member-link.jsp" />		
 		</div>
-		<div class="form-group">
-			
+		<div class="form-group">			
 			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_TEAM")){ %>			
 			<a  href="<c:url value="/team/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addNew"/></strong></a> <%} %>
 		</div>
-		<div class="card mb-3">
-				
+		<div class="card mb-3">				
 				<div class="card-body">
 					<form id="search-form">
 						<div class="row">

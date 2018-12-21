@@ -12,12 +12,16 @@ boolean PERM_DOWNLOAD_FORM = AuthenticationManagerUtil.isPermitted("PERM_DOWNLOA
 boolean PERM_UPLOAD_FORM = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FORM");
 %>
 <div class="form-group">	
-
-<% if(PERM_UPLOAD_FORM){ %>	
-					  <a  href="<c:url value="/form/uploadForm.html?lang=${locale}"/>"> <strong><spring:message code="lbl.uploadForm"/> </strong> </a>	
+<ol class="breadcrumb">
+<% if(PERM_UPLOAD_FORM){ %>
+	<li class="breadcrumb-item">
+		<a  href="<c:url value="/form/uploadForm.html?lang=${locale}"/>"> <strong><spring:message code="lbl.uploadForm"/> </strong> </a>
+	</li>	
 <%} %>	
-<% if(PERM_DOWNLOAD_FORM){ %>	
-					| <a  href="<c:url value="/form/downloadForm.html?lang=${locale}"/>"> <strong><spring:message code="lbl.formList"/> </strong> </a>	
+<% if(PERM_DOWNLOAD_FORM){ %>
+	<li class="breadcrumb-item">	
+		<a  href="<c:url value="/form/downloadForm.html?lang=${locale}"/>"> <strong><spring:message code="lbl.formList"/> </strong> </a>
+	</li>	
 <%} %>
-
+</ol>
 </div>

@@ -52,15 +52,22 @@ int roleIdProvider= -1;
 		<div class="container-fluid">
 		<jsp:include page="/WEB-INF/views/facility/facility-link.jsp" />
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
-		<a  href="<c:url value="/facility/${communityId}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorkerOrTraining"/></strong> </a>	 | 	
+		<li class="breadcrumb-item">
+		<a  href="<c:url value="/facility/${communityId}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorkerOrTraining"/></strong> </a>	
+		</li> 	
 		<%} %>	
 		
 		<% if(AuthenticationManagerUtil.isPermitted("CRAETE_MULTIPURPOSE_VOLUNTEER")){ %>
-				<a  href="<c:url value="/facility/mhv/${communityId}/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.createMHV"/></strong> </a>	| 	
+			<li class="breadcrumb-item">		
+				<a  href="<c:url value="/facility/mhv/${communityId}/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.createMHV"/></strong> </a>	
+			</li>
 		<%} %>	
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
-				<a  href="<c:url value="/facility/${communityId}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>		
-				<%} %>
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>		
+			<li class="breadcrumb-item">
+				<a  href="<c:url value="/facility/${communityId}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>
+				</li>		
+			<%} %>
+		</ol>
 		</div>
 			<div class="card mb-3">
 				<div class="card-header" id="data">

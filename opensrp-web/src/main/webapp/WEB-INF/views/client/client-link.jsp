@@ -12,29 +12,44 @@ boolean PERM_READ_CHILD = AuthenticationManagerUtil.isPermitted("PERM_READ_CHILD
 boolean PERM_READ_MEMBER = AuthenticationManagerUtil.isPermitted("PERM_READ_MEMBER");
 %>
 
-
+<ol class="breadcrumb">	
 <% if(PERM_READ_HOUSEHOLD){ %>
-<a  href="<c:url value="/client/household.html?lang=${locale}"/>"> <strong><spring:message code="lbl.household"/></strong> </a><% } %>
-
+	<li class="breadcrumb-item">
+		<a  href="<c:url value="/client/household.html?lang=${locale}"/>"> <strong><spring:message code="lbl.household"/></strong> </a><% } %>
+	</li>
 <% if(PERM_READ_MOTHER){ %>
-  |  <a  href="<c:url value="/client/mother.html?lang=${locale}"/>"> <strong><spring:message code="lbl.mother"/></strong>  </a><% } %>
+  	<li class="breadcrumb-item">
+    	<a  href="<c:url value="/client/mother.html?lang=${locale}"/>"> <strong><spring:message code="lbl.mother"/></strong>  </a><% } %>
+    </li>
 
 <% if(PERM_READ_CHILD){ %>
-  |  <a  href="<c:url value="/client/child.html?lang=${locale}"/>"> <strong><spring:message code="lbl.child"/></strong>  </a><% } %>
+   <li class="breadcrumb-item">
+   	<a  href="<c:url value="/client/child.html?lang=${locale}"/>"> <strong><spring:message code="lbl.child"/></strong>  </a><% } %>
+   </li>
 
 <% if(PERM_READ_MEMBER){ %>
-  |  <a href="<c:url value="/client/member.html?lang=${locale}"/>"> <strong><spring:message code="lbl.member"/></strong></a><% } %>
+	<li class="breadcrumb-item">
+   		<a href="<c:url value="/client/member.html?lang=${locale}"/>"> <strong><spring:message code="lbl.member"/></strong></a><% } %>
+   	</li>
 
 <% if(PERM_READ_SIMILAR_EVENT_CLIENT){ %>
-  |	<a  href="<c:url value="/client/similarClient.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarCLient"/></strong>  </a><% } %>
+  <li class="breadcrumb-item">
+  		<a  href="<c:url value="/client/similarClient.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarCLient"/></strong>  </a><% } %>
+  </li>
 
 <% if(PERM_READ_SIMILAR_EVENT_CLIENT){ %> 
-  | <a  href="<c:url value="/client/similarEvent.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarEvent"/></strong>  </a><% } %>
+  <li class="breadcrumb-item">
+  	<a  href="<c:url value="/client/similarEvent.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarEvent"/></strong>  </a><% } %>
+  </li>
 
 <% if(PERM_READ_SIMILARITY_DEFINITION){ %> 
-  | <a  href="<c:url value="/client/similarityDefinitionOfClient.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarclientRuleDefination"/></strong>  </a><% } %>
+ 	<li class="breadcrumb-item">
+ 		<a  href="<c:url value="/client/similarityDefinitionOfClient.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similarclientRuleDefination"/></strong>  </a><% } %>
+ 	</li>
 
 <% if(PERM_READ_SIMILARITY_DEFINITION){ %>  
-  | <a  href="<c:url value="/client/similarityDefinitionOfEvent.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similareventRuleDefination"/></strong> </a>   <% } %>
+  <li class="breadcrumb-item">
+  	<a  href="<c:url value="/client/similarityDefinitionOfEvent.html?lang=${locale}"/>"> <strong><spring:message code="lbl.similareventRuleDefination"/></strong> </a>   <% } %>
+  </li>
 
-
+</ol>
