@@ -83,48 +83,96 @@ String memberId = null;
 				String firstName = String.valueOf(clientObject[9])!=null? String.valueOf(clientObject[9]) : "";
 				String gender = String.valueOf(clientObject[10])!= null? String.valueOf(clientObject[10]) : "";
 				String nid = String.valueOf(clientObject[15])!= null ? String.valueOf(clientObject[15]) : "";
+				//String nid = clientObject[15]!= null ? String.valueOf(clientObject[15]) : "";
+				String division = (String.valueOf(clientObject[8])!= null)?String.valueOf(clientObject[8]) : "";
+				String district = (String.valueOf(clientObject[7])!= null)?String.valueOf(clientObject[7]) : "";
+				String upazilla = (String.valueOf(clientObject[22])!= null)?String.valueOf(clientObject[22]) : "";
+				String union = (String.valueOf(clientObject[21])!= null)?String.valueOf(clientObject[21]) : "";
+				String ward = (String.valueOf(clientObject[23])!= null)?String.valueOf(clientObject[23]) : "";
+				String householdId = (String.valueOf(clientObject[12])!= null)?String.valueOf(clientObject[12]) : "";
 				
-				//String fatherName = String.valueOf(clientObject[33]);
 				
 		
 %>	                  
                   <div class="media-body">
                     <strong><spring:message code="lbl.name"/>: </strong><%=firstName%><br>
                     <strong><spring:message code="lbl.gender"/>: </strong><%=gender%><br>
-                  </div>
-                  
-                  <div class="media-body">
-                     <strong><spring:message code="lbl.nId"/>: </strong><%=nid%><br>
-                     <strong><spring:message code="lbl.phoneNumber"/>: </strong><%=phoneNumber%><br>
-                  </div>
-                  
-                  <div class="media-body">
+                    <strong><spring:message code="lbl.nId"/>: </strong><%=nid%><br>
                     <strong><spring:message code="lbl.birthDate"/>: </strong><%=birthDate%><br>
                   </div>
+                  
+                  <div class="media-body">
+                   <strong><spring:message code="lbl.phoneNumber"/>: </strong><%=phoneNumber%><br>
+                    <strong><spring:message code="lbl.division"/>: </strong><%=division%><br>
+                    <strong><spring:message code="lbl.district"/>: </strong><%=district%><br>
+                  </div>
+                  <div class="media-body">
+                    <strong><spring:message code="lbl.upazila"/>: </strong><%=upazilla%><br>
+                    <strong><spring:message code="lbl.union"/>: </strong><%=union%><br>
+                    <strong><spring:message code="lbl.ward"/>: </strong><%=ward%><br>
+                  </div>
+                  
+                  
 <%
 		}
 		}
 }
-%>                     
-                </div>
-              </a>
+%>            
+</div>
+              
 
               
-            </div>
-            <div class="card-footer small text-muted"></div>
+           
+
+<%
+
+if (session.getAttribute("eventList") != null) {
+List<Object> eventList = (List<Object>) session.getAttribute("eventList");
+Iterator eventListIterator = eventList.iterator();
+while (eventListIterator.hasNext()) {
+	Object[] eventObject = (Object[]) eventListIterator.next();
+	String registrationDate = (String.valueOf(eventObject[28])!= null)?String.valueOf(eventObject[28]) : "";
+	String motherName = (String.valueOf(eventObject[29])!= null)?String.valueOf(eventObject[29]) : "";
+	String fatherName = (String.valueOf(eventObject[30])!= null)?String.valueOf(eventObject[30]) : "";
+	String age = (String.valueOf(eventObject[31])!= null)?String.valueOf(eventObject[31]) : "";
+	String relationWithHouseholdHead = (String.valueOf(eventObject[32])!= null)?String.valueOf(eventObject[32]) : "";
+	String disability = (String.valueOf(eventObject[33])!= null)?String.valueOf(eventObject[33]) : "";
+	String educationalQualification = (String.valueOf(eventObject[34])!= null)?String.valueOf(eventObject[34]) : "";
+	String occupation = (String.valueOf(eventObject[35])!= null)?String.valueOf(eventObject[35]) : "";
+	String bloodGroup = (String.valueOf(eventObject[36])!= null)?String.valueOf(eventObject[36]) : "";
+	String illnessInformation = (String.valueOf(eventObject[37])!= null)?String.valueOf(eventObject[37]) : "";
+	
+%>	
+           <div class="media">
+           <img class="d-flex mr-3 rounded-circle" src="/resources/img/child.png" alt="">
+           		<div class="media-body">
+                    <strong><spring:message code="lbl.registrationDate"/>: </strong><%=registrationDate%><br>
+                    <strong><spring:message code="lbl.fatherName"/>: </strong><%=fatherName%><br>
+                    <strong><spring:message code="lbl.motherName"/>: </strong><%=motherName%><br>
+          	   </div>
+          	   <div class="media-body">
+          	   <strong><spring:message code="lbl.age"/>: </strong><%=age%><br>
+                    <strong><spring:message code="lbl.relationWithHouseholdHead"/>: </strong><%=relationWithHouseholdHead%><br>
+                    <strong><spring:message code="lbl.disability"/>: </strong><%=disability%><br>
+                    <strong><spring:message code="lbl.educationalQualification"/>: </strong><%=educationalQualification%><br>
+          	   </div>
+          	   <div class="media-body">
+          	   <strong><spring:message code="lbl.occupation"/>: </strong><%=occupation%><br>
+                    <strong><spring:message code="lbl.occupation"/>: </strong><%=bloodGroup%><br>
+                    <strong><spring:message code="lbl.occupation"/>: </strong><%=illnessInformation%><br>
+          	   </div>
+         </div>
+<%
+		}
+		}
+%>
+</a>
+ </div>
           </div>
       
       
       
-      
-  
-      
-
-      
-      
-      
-     
-      
+ 
       
     </div>
     <!-- /.container-fluid-->
@@ -142,9 +190,7 @@ String memberId = null;
     
   </div>
   
-  
-  	
-	
+
 </body>
 
 </html>

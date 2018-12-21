@@ -171,6 +171,14 @@ public class ClientService extends EntityProperties {
 		session.setAttribute("followUpList", followUpList);
 	}
 	
+	@Transactional
+	public void getMemberDetails(HttpSession session, String memberId) throws JSONException {
+		session.setAttribute("memberId", memberId);
+		List<Object> data;
+		data = repository.getDataFromViewByBEId("viewJsonDataConversionOfEvent", "ec_member", memberId);
+		session.setAttribute("eventList", data);
+	}
+	
 	public void updateClientData(ClientEntity clientEntity, String baseEntityId) throws JSONException {
 		List<Object> clientData = repository
 		        .executeSelectQuery("select id, cast(json as character varying) from core.client "
