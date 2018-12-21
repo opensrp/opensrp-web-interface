@@ -71,6 +71,7 @@ public class UserRestController {
 			User user = new User();
 			if (!isExists) {
 				user = userServiceImpl.convert(userDTO);
+				System.err.println(user.toString());
 				user.setChcp(facility.getId() + "");
 				userServiceImpl.save(user, false);
 				

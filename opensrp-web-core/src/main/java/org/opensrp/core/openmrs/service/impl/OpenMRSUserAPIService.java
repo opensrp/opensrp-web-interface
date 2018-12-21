@@ -116,7 +116,7 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 				}
 				if (roleArray.length() != 0) {
 					/**
-					 * when update passowrd..
+					 * when update password..
 					 */
 					userJsonObject.put(rolesKey, roleArray);
 				}

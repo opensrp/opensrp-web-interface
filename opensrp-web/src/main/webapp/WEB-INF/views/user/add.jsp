@@ -344,7 +344,7 @@ int roleIdProvider= -1;
 				   $("#usernameUniqueErrorMessage").html(data);
 				   $("#loading").hide();
 				   if(data == ""){					   
-					   window.location.replace("/opensrp-dashboard/facility/2422/details.html");
+					   window.location.replace("/opensrp-dashboard/user.html");
 					   
 				   }
 				   

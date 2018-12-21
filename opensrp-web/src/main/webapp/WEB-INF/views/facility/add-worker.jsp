@@ -50,12 +50,24 @@ String selectedPersonName = "";
 		<div class="container-fluid">
 		
 		<jsp:include page="/WEB-INF/views/facility/facility-link.jsp" />
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
+		<li class="breadcrumb-item">
+		<a  href="<c:url value="/facility/${facility.id}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorkerOrTraining"/></strong> </a>	 
+		</li> 	
+		<%} %>	
 		
-		<div class="form-group">	
+		<% if(AuthenticationManagerUtil.isPermitted("CRAETE_MULTIPURPOSE_VOLUNTEER")){ %>
+			<li class="breadcrumb-item">
+			<a  href="<c:url value="/facility/mhv/${facility.id}/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.createMHV"/></strong> </a>	
+			</li> 	
+		<%} %>	
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
-		<a  href="<c:url value="<%=detailsUrl %>"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>		
-		<%} %>
-		</div>
+				<li class="breadcrumb-item">
+				<a  href="<c:url value="/facility/${facility.id}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>
+				</li>		
+				<%} %>
+		</ol>
+		</div>		
 		
 			<div class="card mb-3">
 				<div class="card-header">

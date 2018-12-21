@@ -78,15 +78,23 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		<div class="container-fluid">
 		
 		<jsp:include page="/WEB-INF/views/facility/facility-link.jsp" />
-		
-		<div class="form-group">
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
-		<a  href="<c:url value="/facility/${facility.id}/addWorker.html"/>"> <strong><spring:message code="lbl.addWorkerOrTraining"/></strong> </a>		
-		<%} %>
+		<li class="breadcrumb-item">
+			<a  href="<c:url value="/facility/${facility.id}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorkerOrTraining"/></strong> </a>	 
+			</li> 	
+		<%} %>	
+		
+		<% if(AuthenticationManagerUtil.isPermitted("CRAETE_MULTIPURPOSE_VOLUNTEER")){ %>
+			<li class="breadcrumb-item"><a  href="<c:url value="/facility/mhv/${facility.id}/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.createMHV"/></strong> </a>	
+			</li> 	
+		<%} %>	
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+			<li class="breadcrumb-item"> <a  href="<c:url value="/facility/${facility.id}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>
+			</li>		
+				<%} %>
+		</ol>
 		</div>
-		
-		
-			
+					
   <div class="row">
            	
 <table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">

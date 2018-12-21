@@ -96,6 +96,8 @@ public class FacilityController {
 	@RequestMapping(value = "/facility/{id}/addWorker.html", method = RequestMethod.GET)
 	public String addWorker(ModelMap model, HttpSession session, Locale locale, @PathVariable("id") int facilityId) {
 		facilityWorkerService.setWorkerToAddToSession(session, facilityId);
+		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
+		model.addAttribute("facility", facility);
 		model.addAttribute("locale", locale);
 		return "facility/add-worker";
 	}

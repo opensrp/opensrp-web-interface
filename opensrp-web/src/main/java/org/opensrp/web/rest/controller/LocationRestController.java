@@ -29,4 +29,5 @@ public class LocationRestController {
 		return locationServiceImpl.list().toString();
 		
 	}
+	
 }

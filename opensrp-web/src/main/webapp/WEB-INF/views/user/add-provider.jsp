@@ -5,7 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page import="org.opensrp.common.util.CheckboxHelperUtil"%>
-
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="org.opensrp.core.entity.Role"%>
@@ -38,7 +38,7 @@ int roleIdProvider= -1;
 <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
-<title><spring:message code="lbl.addUserTitle"/></title>
+<title><spring:message code="lbl.createMHV"/></title>
 
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
@@ -46,16 +46,25 @@ int roleIdProvider= -1;
 <c:url var="saveUrl" value="/user/add.html" />
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
-	<jsp:include page="/WEB-INF/views/navbar.jsp" />
-
+	
+   <jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
 		<div class="container-fluid">
-			<div class="form-group">				
-				<jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />			
-			</div>
+		<jsp:include page="/WEB-INF/views/facility/facility-link.jsp" />
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
+		<a  href="<c:url value="/facility/${communityId}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorkerOrTraining"/></strong> </a>	 | 	
+		<%} %>	
+		
+		<% if(AuthenticationManagerUtil.isPermitted("CRAETE_MULTIPURPOSE_VOLUNTEER")){ %>
+				<a  href="<c:url value="/facility/mhv/${communityId}/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.createMHV"/></strong> </a>	| 	
+		<%} %>	
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+				<a  href="<c:url value="/facility/${communityId}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>		
+				<%} %>
+		</div>
 			<div class="card mb-3">
 				<div class="card-header" id="data">
-					<i class="fa fa-table"></i> <spring:message code="lbl.addUser"/>
+					<spring:message code="lbl.createMHV"/>
 				</div>
 				<div class="card-body">
 					
@@ -128,9 +137,9 @@ int roleIdProvider= -1;
 						<div class="row col-12 tag-height">						
 							<div class="form-group required">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.password"/></label>										 
-								<input type="password" class="form-control mx-sm-3" id="password" name="password"  title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required />
+								<input type="password" class="form-control mx-sm-3" id="password" name="password"  title="" required />
 								<small id="passwordHelpInline" class="text-muted text-para">
-								<spring:message code="lbl.passwordMEssage"/>
+								<%-- <spring:message code="lbl.passwordMEssage"/> --%>
 	                          		 
 	                        	</small>
 							 </div>

@@ -139,8 +139,8 @@ public class UserController {
 		return new ModelAndView("user/add", "command", account);
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_USER')")
-	@RequestMapping(value = "/user/{id}/add.html", method = RequestMethod.GET)
+	@PostAuthorize("hasPermission(returnObject, 'CRAETE_MULTIPURPOSE_VOLUNTEER')")
+	@RequestMapping(value = "/facility/mhv/{id}/add.html", method = RequestMethod.GET)
 	public ModelAndView saveUserAsCC(Model model, HttpSession session, @PathVariable("id") int id, Locale locale)
 	    throws JSONException {
 		int[] selectedRoles = null;

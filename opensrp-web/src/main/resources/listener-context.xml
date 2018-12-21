@@ -14,7 +14,7 @@
 	 <bean id="customListener" class="org.opensrp.web.listener.CustomListener"></bean>
 	 
 	 <task:scheduled-tasks scheduler="childGrowthCalculate">
-        <task:scheduled ref="customListener" method="startCalculateChildGrowth" cron="0 0 0 25 12 ?" />
+        <task:scheduled ref="customListener" method="startCalculateChildGrowth" cron="0 0/12 * * * ?" />
     </task:scheduled-tasks>
     
    <task:scheduler pool-size="1" id="childGrowthCalculate"/>
