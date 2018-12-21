@@ -119,7 +119,7 @@ String memberId = null;
 }
 %>            
 </div>
-              
+	</a>           
 
               
            
@@ -142,7 +142,8 @@ while (eventListIterator.hasNext()) {
 	String bloodGroup = (String.valueOf(eventObject[36])!= null)?String.valueOf(eventObject[36]) : "";
 	String illnessInformation = (String.valueOf(eventObject[37])!= null)?String.valueOf(eventObject[37]) : "";
 	
-%>	
+%>
+<a class="list-group-item list-group-item-action" href="#">
            <div class="media">
            <img class="d-flex mr-3 rounded-circle" src="/resources/img/child.png" alt="">
            		<div class="media-body">
@@ -162,11 +163,12 @@ while (eventListIterator.hasNext()) {
                     <strong><spring:message code="lbl.occupation"/>: </strong><%=illnessInformation%><br>
           	   </div>
          </div>
+         </a>
 <%
 		}
 		}
 %>
-</a>
+
  </div>
           </div>
       
