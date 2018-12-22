@@ -152,9 +152,12 @@
 						
 	<div class="form-group">
 		<div class="row">
-			<div class="col-3">
+		<div class="col-2">
+				<button onclick="cancelWorkerEdit(<%=facilityId %>)" class="btn btn-danger btn-block"><spring:message code="lbl.cancel"/></button>
+		</div>
+			<div class="col-2" id="saveButtonDiv">
 				<input type="submit" value="<spring:message code="lbl.save"/>"
-					class="btn btn-primary btn-block"/>
+					class="btn btn-success btn-block"/>
 			</div>
 		</div>
 	</div>
