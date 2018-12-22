@@ -128,9 +128,9 @@ int roleIdProvider= -1;
 						<div class="row col-12 tag-height">						
 							<div class="form-group required">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.password"/></label>										 
-								<input type="password" class="form-control mx-sm-3" id="password" name="password"  title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required />
+								<input type="password" class="form-control mx-sm-3" id="password" name="password"  required />
 								<small id="passwordHelpInline" class="text-muted text-para">
-								<spring:message code="lbl.passwordMEssage"/>
+								<%-- <spring:message code="lbl.passwordMEssage"/> --%>
 	                          		 
 	                        	</small>
 							 </div>
