@@ -418,7 +418,8 @@ $("#workerInfo").submit(function(event) {
 	var url = "/opensrp-dashboard/rest/api/v1/facility/saveWorker";
 	var workerName = "";
 	if(isSuggestionActive==1){
-		workerName = $("#combobox").val();
+		//workerName = $("#combobox").val();
+		workerName = document.getElementsByName("personName")[0].value;
 	}else{
 		workerName = $("#comboboxWithoutSuggestion").val();
 	}
@@ -647,7 +648,7 @@ function checkForTrainingNewWorker(){
 
 function warnUser(workerType, validNumber){
 	if(workerType == "CHCP" || workerType == "MULTIPURPOSE HEALTH VOLUNTEER"){
-		var messageStr = workerType + " cannot be added in this interface. Go to 'ADD USER'";
+		var messageStr = workerType + " cannot be added in this interface. Please go to 'ADD USER'";
 	}else if(validNumber === 1){
 		var messageStr = "Already has a "+workerType+". Please delete the previous one and try again.";
 	}else if(validNumber >1){
