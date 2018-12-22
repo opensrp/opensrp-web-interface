@@ -155,7 +155,7 @@
 		<div class="col-2">
 				<button onclick="cancelWorkerEdit(<%=facilityId %>)" class="btn btn-danger btn-block"><spring:message code="lbl.cancel"/></button>
 		</div>
-			<div class="col-2">
+			<div class="col-2" id="saveButtonDiv">
 				<input type="submit" value="<spring:message code="lbl.save"/>"
 					class="btn btn-success btn-block"/>
 			</div>

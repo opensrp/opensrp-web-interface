@@ -13,6 +13,8 @@
 <%@page import="org.opensrp.facility.entity.FacilityTraining" %>
 <%@page import="org.opensrp.facility.entity.FacilityWorkerType" %>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
+<%@page import="java.util.Iterator"%>
+
 
 <%
 List<FacilityWorkerType> workerTypeList= (List<FacilityWorkerType>)session.getAttribute("workerTypeList");
@@ -85,6 +87,15 @@ String selectedPersonName = "";
 										<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" onchange="checkForTraining()" required>
 									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 												<%
+												//for removing chcp and multiPurposeHealthVolunteer from dropdown
+												Iterator<FacilityWorkerType> i = workerTypeList.iterator();
+												while (i.hasNext()) {
+													FacilityWorkerType workerType = i.next();
+													if(workerType.getName().equals("CHCP") || workerType.getName().equals("MULTIPURPOSE HEALTH VOLUNTEER")){
+														i.remove();
+													}
+												}
+												//end:  removing chcp and multiPurposeHealthVolunteer from dropdown
 												for (FacilityWorkerType workerType : workerTypeList)
 												{
 														%>
@@ -192,12 +203,12 @@ String selectedPersonName = "";
 						</div>
 						
 						
-						<div class="form-group" id="saveButtonDiv">
+						<div class="form-group" >
 							<div class="row">
 								<div class="col-2">
 									<button onclick="cancelWorkerEdit(<%=facilityId %>)" class="btn btn-danger btn-block"><spring:message code="lbl.cancel"/></button>
 								</div>
-								<div class="col-2">
+								<div class="col-2" id="saveButtonDiv">
 									<input type="submit" value="<spring:message code="lbl.save"/>"
 										class="btn btn-success btn-block"/>
 								</div>
@@ -556,6 +567,7 @@ function checkForTrainingOldWorker(){
 	}
 	//end:for name suggestion
 	if(workerType === '1'){
+		warnUser("CHCP", -1);
 		if(distinctWorkerCountArrayForEdit[0][1] >0){
 			warnUser("CHCP", 1);
 		}else{
@@ -574,8 +586,11 @@ function checkForTrainingOldWorker(){
 				warnUser("FAMILY PLANNING ASSISTANT", 1);
 		}else if(workerType === '5' && distinctWorkerCountArrayForEdit[4][1] >0){
 				warnUser("FAMILY PLANNING INSPECTOR", 1);  
-		}else if(workerType === '6' && distinctWorkerCountArrayForEdit[5][1] >4){
-				warnUser("MULTIPURPOSE HEALTH VOLUNTEER", 5); 
+		}else if(workerType === '6' ){
+				warnUser("MULTIPURPOSE HEALTH VOLUNTEER", -1); 
+				if(distinctWorkerCountArrayForEdit[5][1] >4){
+					warnUser("MULTIPURPOSE HEALTH VOLUNTEER", 5); 
+				}
 		}else if(workerType === '7' && distinctWorkerCountArrayForEdit[6][1] >0){
 				warnUser("OTHER HEALTH WORKER", 1);
 		}else if(workerType === '8' && distinctWorkerCountArrayForEdit[7][1] >16){
@@ -596,6 +611,7 @@ function checkForTrainingNewWorker(){
 	}
 	//end:for name suggestion
 	if(workerType === '1'){
+		warnUser("CHCP", -1);
 		if(distinctWorkerCountArray[0][1]>0){
 			warnUser("CHCP", 1);
 		}else{
@@ -614,8 +630,11 @@ function checkForTrainingNewWorker(){
 				warnUser("FAMILY PLANNING ASSISTANT", 1);
 		}else if(workerType === '5' && distinctWorkerCountArray[4][1]>0){
 				warnUser("FAMILY PLANNING INSPECTOR", 1);  
-		}else if(workerType === '6' && distinctWorkerCountArray[5][1]>4){
-				warnUser("MULTIPURPOSE HEALTH VOLUNTEER", 5); 
+		}else if(workerType === '6' ){
+				warnUser("MULTIPURPOSE HEALTH VOLUNTEER", -1); 
+				if(distinctWorkerCountArray[5][1]>4){
+					warnUser("MULTIPURPOSE HEALTH VOLUNTEER", 5); 
+				}
 		}else if(workerType === '7' && distinctWorkerCountArray[6][1]>0){
 				warnUser("OTHER HEALTH WORKER", 1);
 		}else if(workerType === '8' && distinctWorkerCountArray[7][1]>16){
@@ -627,7 +646,9 @@ function checkForTrainingNewWorker(){
 }
 
 function warnUser(workerType, validNumber){
-	if(validNumber === 1){
+	if(workerType == "CHCP" || workerType == "MULTIPURPOSE HEALTH VOLUNTEER"){
+		var messageStr = workerType + " cannot be added in this interface. Go to 'ADD USER'";
+	}else if(validNumber === 1){
 		var messageStr = "Already has a "+workerType+". Please delete the previous one and try again.";
 	}else if(validNumber >1){
 		var messageStr = "Number of "+workerType+" cannot be more than "+validNumber+".";

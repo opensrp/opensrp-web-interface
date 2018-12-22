@@ -73,14 +73,14 @@ public class FacilityHelperUtil {
 	
 	public void setFacilityWorkerTypeAndTrainingsToSession(HttpSession session) {
 		List<FacilityWorkerType> workerTypeList = facilityWorkerTypeService.findAll("FacilityWorkerType");
-		//added on dec 21, 2018
-		Iterator<FacilityWorkerType> i = workerTypeList.iterator();
+		//added on dec 21, 2018: remove chcp and multiPurposeHealthVolunteer form dropdown
+		/*Iterator<FacilityWorkerType> i = workerTypeList.iterator();
 		while (i.hasNext()) {
 			FacilityWorkerType workerType = i.next();
 			if(workerType.getName().equals("CHCP") || workerType.getName().equals("MULTIPURPOSE HEALTH VOLUNTEER")){
 				i.remove();
 			}
-		}
+		}*/
 		//end
 		List<FacilityTraining> CHCPTrainingList = facilityWorkerTrainingService.findAll("FacilityTraining");
 		setWorkerTypeListToSession(session, workerTypeList);
