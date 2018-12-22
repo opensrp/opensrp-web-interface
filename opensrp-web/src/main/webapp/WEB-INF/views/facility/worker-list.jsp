@@ -48,7 +48,7 @@
 	%>
 										<td><%=trainingString %></td>
 										<td><button onclick="editWorker(<%=worker.getId() %>)" class="btn btn-primary btn-block"><spring:message code="lbl.edit"/></button></td>
-										<td><button onclick="deleteWorker(<%=worker.getFacility().getId()%>,<%=worker.getId() %>)" class="btn btn-primary btn-block"><spring:message code="lbl.delete"/></button></td>
+										<td><button onclick="deleteWorker(<%=worker.getFacility().getId()%>,<%=worker.getId() %>)" class="btn btn-danger btn-block"><spring:message code="lbl.delete"/></button></td>
 									</tr>
 									<%
 									

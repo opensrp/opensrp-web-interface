@@ -69,11 +69,11 @@ String selectedPersonName = "";
 		</ol>
 		</div>		
 		
-			<div class="card mb-3">
+			<div class="card mb-3" id="addWorkerDiv" style="display : none">
 				<div class="card-header">
 					<i class="fa fa-table"></i> <spring:message code="lbl.addWorker"/> (<b><%=facilityName %></b>)
 				</div>
-				<div class="card-body">
+				<div class="card-body" >
 				
 					<%-- <form:form method="POST" action="${saveUrl}" modelAttribute="facilityWorker"> --%>
 					<form:form id="workerInfo" >
@@ -194,9 +194,12 @@ String selectedPersonName = "";
 						
 						<div class="form-group" id="saveButtonDiv">
 							<div class="row">
-								<div class="col-3">
+								<div class="col-2">
+									<button onclick="cancelWorkerEdit(<%=facilityId %>)" class="btn btn-danger btn-block"><spring:message code="lbl.cancel"/></button>
+								</div>
+								<div class="col-2">
 									<input type="submit" value="<spring:message code="lbl.save"/>"
-										class="btn btn-primary btn-block"/>
+										class="btn btn-success btn-block"/>
 								</div>
 							</div>
 						</div>
@@ -209,7 +212,14 @@ String selectedPersonName = "";
 			
 			<div class="card mb-3">
 				<div class="card-header">
+				<div class="row">
+					<div class="col-10">
 					<i class="fa fa-table"></i> <spring:message code="lbl.workerList"/> (<b><%=facilityName %></b>)
+					</div>
+						<div class="col-2">
+							<button onclick="showAddWorkerDiv()" class="btn btn-primary btn-block"><spring:message code="lbl.addNew"/></button>
+						</div>
+				</div>
 				</div>
 				<div class="card-body">
 					<div class="table-responsive">
@@ -460,6 +470,10 @@ var distinctWorkerCountArray;
 var previousWorkerType ;
 var distinctWorkerCountArrayForEdit;
 
+function showAddWorkerDiv(){
+			 $("#addWorkerDiv").show();
+}
+
 function initializeDistinctWorkerCountArray(){
 	var distinctWorkerCountString = "<%=distinctWorkerCountMap%>" ;
 	distinctWorkerCountString = removeBraces(distinctWorkerCountString);
@@ -502,7 +516,7 @@ function checkForTraining(){
 
 var isSuggestionActive =0;
 function showNameWithSuggestionDiv(){
-	alert("suggestion");
+	//alert("suggestion");
 	$("#combobox").combobox("option", "disabled", false); 
 	isSuggestionActive =1;
 	
@@ -518,7 +532,7 @@ function showNameWithSuggestionDiv(){
 }
 
 function showNameWithoutSuggestionDiv(){
-	alert("without Suggestion");
+	//alert("without Suggestion");
 	$("#combobox").combobox("option", "disabled", true); 
 	isSuggestionActive =0;
 	
@@ -648,6 +662,7 @@ function editWorker(workerId) {
         type: 'GET',
         dataType: 'html',
     }).done(function(workerDetails) {
+    	$("#addWorkerDiv").show();
     	$("#workerInfo").html(workerDetails);
     	previousWorkerType =$("#facilityWorkerTypeId").val();
     	var prevWorkerTypeId = parseInt(previousWorkerType);
@@ -688,6 +703,11 @@ function deleteWorker(facilityId,workerId) {
 		}
 	});
     
+}
+
+function cancelWorkerEdit(facilityId){
+	var addWorkerPageUrl = "/opensrp-dashboard/facility/"+facilityId+"/addWorker.html";
+	window.location.replace(addWorkerPageUrl);
 }
 
 function showOnDataTable(){

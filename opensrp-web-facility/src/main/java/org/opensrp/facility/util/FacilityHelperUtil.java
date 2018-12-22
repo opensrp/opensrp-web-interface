@@ -105,7 +105,6 @@ public class FacilityHelperUtil {
 	
 	public FacilityWorker convertFacilityWorkerDTO(FacilityWorkerDTO facilityWorkerDTO) {
 		FacilityWorker facilityWorker = new FacilityWorker();
-		System.out.println("name : "+facilityWorkerDTO.getName());
 		facilityWorker.setName(facilityWorkerDTO.getName());
 		facilityWorker.setIdentifier(facilityWorkerDTO.getIdentifier());
 		facilityWorker.setOrganization(facilityWorkerDTO.getOrganization());
@@ -229,10 +228,10 @@ public class FacilityHelperUtil {
 				String[] facilityFromCsv = line.split(cvsSplitBy);
 				if (position == 0) {
 					tags = facilityFromCsv;
-					System.out.println("tags >> " + facilityFromCsv[0] + " >> " + facilityFromCsv[1] + " >> "
+					logger.info("tags >> " + facilityFromCsv[0] + " >> " + facilityFromCsv[1] + " >> "
 					        + facilityFromCsv[3]);
 				} else {
-					System.out.println(facilityFromCsv[0] + " >> " + facilityFromCsv[1] + " >> " + facilityFromCsv[3]);
+					logger.info(facilityFromCsv[0] + " >> " + facilityFromCsv[1] + " >> " + facilityFromCsv[3]);
 					
 					if (facilityFromCsv.length >= 16) {
 						if ((facilityFromCsv[13] != null && !facilityFromCsv[13].isEmpty())
