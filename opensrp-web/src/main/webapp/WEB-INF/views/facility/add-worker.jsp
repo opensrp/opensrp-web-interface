@@ -110,13 +110,26 @@ String selectedPersonName = "";
 						</div>
 						
 						
-						<div class="form-group">
+						<div class="form-group" id="workerNameWithSuggestionDiv" style="display: none;">
 							<div class="row">
 								<div class="col-5">
 								<div id="cm" class="ui-widget">
 										<label><spring:message code="lbl.healthWorkerName"/></label>
-										<select id="combobox" name= "name" class="form-control">									  
+										<select id="combobox" name= "name" class="form-control" disabled>									  
 										</select>
+										 <span class="text-red">${uniqueNameErrorMessage}</span> 
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group" id="workerNameWithoutSuggestionDiv">
+							<div class="row">
+								<div class="col-5">
+								<div id="cm" class="ui-widget">
+										<label><spring:message code="lbl.healthWorkerName"/></label>
+										<input name="name" class="form-control" required="required" 
+										aria-describedby="nameHelp" id="comboboxWithoutSuggestion" />
 										 <span class="text-red">${uniqueNameErrorMessage}</span> 
 									</div>
 								</div>
@@ -278,7 +291,7 @@ String selectedPersonName = "";
       _createAutocomplete: function() {
         var selected = this.element.children( ":selected" ),        
           value = selected.val() ? selected.text() : "";
-         value = "<%=selectedPersonName%>";
+          value = "<%=selectedPersonName%>";
         this.input = $( "<input required='required'>" )
           .appendTo( this.wrapper )
           .val( value )
@@ -370,7 +383,9 @@ String selectedPersonName = "";
       }
     });
  
+    
     $( "#combobox" ).combobox();
+   // $("#combobox").combobox("option", "disabled", true); 
     
     $( "#toggle" ).on( "click", function() {
       $( "#combobox" ).toggle();
@@ -380,9 +395,15 @@ String selectedPersonName = "";
 
 $("#workerInfo").submit(function(event) { 
 	var url = "/opensrp-dashboard/rest/api/v1/facility/saveWorker";
+	var workerName = "";
+	if(isSuggestionActive==1){
+		workerName = $("#combobox").val();
+	}else{
+		workerName = $("#comboboxWithoutSuggestion").val();
+	}
 	var formData = {
 			'workerId': '-99',
-            'name': $("#combobox").val(),
+            'name': workerName,
             'identifier': $('input[name=identifier]').val(),
             'organization': $('input[name=organization]').val(),
             'facilityWorkerTypeId': $("#facilityWorkerTypeId").val(),
@@ -479,8 +500,47 @@ function checkForTraining(){
 	}
 }
 
+var isSuggestionActive =0;
+function showNameWithSuggestionDiv(){
+	alert("suggestion");
+	$("#combobox").combobox("option", "disabled", false); 
+	isSuggestionActive =1;
+	
+	$("#workerNameWithoutSuggestionDiv").hide();
+	$( "#comboboxWithoutSuggestion" ).prop( "disabled", true );
+	
+	$("#workerNameWithSuggestionDiv").show();
+	//$( "#combobox" ).prop( "disabled", false );
+	$("#combobox").parent().find("input.ui-autocomplete-input").autocomplete("option", "disabled", false).prop("disabled",false);
+	$("#combobox").parent().find("a.ui-button").button("enable");
+	
+	
+}
+
+function showNameWithoutSuggestionDiv(){
+	alert("without Suggestion");
+	$("#combobox").combobox("option", "disabled", true); 
+	isSuggestionActive =0;
+	
+	$("#workerNameWithoutSuggestionDiv").show();
+	$( "#comboboxWithoutSuggestion" ).prop( "disabled", false );
+	
+	$("#workerNameWithSuggestionDiv").hide();
+	//$( "#combobox" ).prop( "disabled", true );
+	$("#combobox").parent().find("input.ui-autocomplete-input").autocomplete("option", "disabled", true).prop("disabled",true);
+	$("#combobox").parent().find("a.ui-button").button("disable");
+}
+
+
 function checkForTrainingOldWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
+	
+	if(workerType === '7' || workerType === '8' || workerType === '9'){
+		showNameWithSuggestionDiv();
+	}else{
+		showNameWithoutSuggestionDiv();
+	}
+	//end:for name suggestion
 	if(workerType === '1'){
 		if(distinctWorkerCountArrayForEdit[0][1] >0){
 			warnUser("CHCP", 1);
@@ -514,6 +574,13 @@ function checkForTrainingOldWorker(){
 
 function checkForTrainingNewWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
+	
+	if(workerType === '7' || workerType === '8' || workerType === '9'){
+		showNameWithSuggestionDiv();
+	}else{
+		showNameWithoutSuggestionDiv();
+	}
+	//end:for name suggestion
 	if(workerType === '1'){
 		if(distinctWorkerCountArray[0][1]>0){
 			warnUser("CHCP", 1);

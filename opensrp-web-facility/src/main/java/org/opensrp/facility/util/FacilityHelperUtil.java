@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -72,6 +73,15 @@ public class FacilityHelperUtil {
 	
 	public void setFacilityWorkerTypeAndTrainingsToSession(HttpSession session) {
 		List<FacilityWorkerType> workerTypeList = facilityWorkerTypeService.findAll("FacilityWorkerType");
+		//added on dec 21, 2018
+		Iterator<FacilityWorkerType> i = workerTypeList.iterator();
+		while (i.hasNext()) {
+			FacilityWorkerType workerType = i.next();
+			if(workerType.getName().equals("CHCP") || workerType.getName().equals("MULTIPURPOSE HEALTH VOLUNTEER")){
+				i.remove();
+			}
+		}
+		//end
 		List<FacilityTraining> CHCPTrainingList = facilityWorkerTrainingService.findAll("FacilityTraining");
 		setWorkerTypeListToSession(session, workerTypeList);
 		setCHCPTrainingListToSession(session, CHCPTrainingList);
@@ -95,7 +105,7 @@ public class FacilityHelperUtil {
 	
 	public FacilityWorker convertFacilityWorkerDTO(FacilityWorkerDTO facilityWorkerDTO) {
 		FacilityWorker facilityWorker = new FacilityWorker();
-		
+		System.out.println("name : "+facilityWorkerDTO.getName());
 		facilityWorker.setName(facilityWorkerDTO.getName());
 		facilityWorker.setIdentifier(facilityWorkerDTO.getIdentifier());
 		facilityWorker.setOrganization(facilityWorkerDTO.getOrganization());
