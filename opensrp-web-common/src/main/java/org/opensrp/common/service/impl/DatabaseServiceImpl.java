@@ -189,5 +189,10 @@ public class DatabaseServiceImpl implements DatabaseService {
 		String funcQuery = "SELECT * FROM core.refresh_all_materialized_views()";
 		return databaseRepositoryImpl.executeSelectQuery(funcQuery);
 	}
-	
+
+	@Transactional
+	public <T> List<T> getReportData(SearchBuilder searchBuilder) {
+		return databaseRepositoryImpl.getReportData(searchBuilder, "test2_report");
+	}
+
 }

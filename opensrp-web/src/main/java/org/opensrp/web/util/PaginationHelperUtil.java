@@ -152,11 +152,12 @@ public class PaginationHelperUtil {
 		if (request.getParameterMap().containsKey("userName")) {
 			userName = (String) request.getParameter("userName");
 		}
-		if (request.getParameterMap().containsKey("start_date")) {
-			start_date = (String) request.getParameter("start_date");
+		if (request.getParameterMap().containsKey("start")) {
+			start_date = (String) request.getParameter("start");
+			System.out.println("start date: " + start_date);
 		}
-		if (request.getParameterMap().containsKey("end_date")) {
-			end_date = (String) request.getParameter("end_date");
+		if (request.getParameterMap().containsKey("end")) {
+			end_date = (String) request.getParameter("end");
 			
 		}
 		
