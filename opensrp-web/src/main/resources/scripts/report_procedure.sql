@@ -86,6 +86,59 @@ BEGIN
                              || end_date ||')';   
    END IF;
 
+   /*Total counts*/
+   EXECUTE E'INSERT INTO helper_table (providerName)
+   VALUES (\'Total\')';
+
+   EXECUTE E'update helper_table
+    set householdCount = population_count.counts from
+    (SELECT count(*) FROM core."viewJsonDataConversionOfClient"
+     where entity_type = \'ec_household\' '
+     || filterString
+     || E' ) as population_count(counts)
+    where helper_table.providerName = \'Total\'';
+
+	EXECUTE E'update helper_table
+    set population = population_count.counts from
+    (SELECT count(*) FROM core."viewJsonDataConversionOfClient"
+     where entity_type != \'ec_household\' '
+     || filterString
+     || E' ) as population_count(counts)
+    where helper_table.providerName = \'Total\'';
+
+	EXECUTE E'update helper_table
+    set femalePercentage = population_count.counts from
+    (SELECT count(*) FROM core."viewJsonDataConversionOfClient"
+     where entity_type != \'ec_household\'
+	 and gender = \'F\' '
+	 || filterString
+     || E' ) as population_count(counts)
+    where helper_table.providerName = \'Total\'';
+
+	/*updating temporary table with male count count*/
+    EXECUTE E'update helper_table
+    set malePercentage = population_count.counts from
+    (SELECT count(*) FROM core."viewJsonDataConversionOfClient"
+     where entity_type != \'ec_household\'
+	 and gender = \'M\' '
+	 || filterString
+     || E' ) as population_count(counts)
+    where helper_table.providerName = \'Total\'';
+
+	UPDATE helper_table
+    SET femalePercentage=(SELECT round(cast (subquery.femalePercentage as numeric)/cast ((subquery.population)as numeric)*100, 2))
+    FROM (SELECT t.providerName, t.population, t.femalePercentage FROM helper_table t)
+    AS subquery(providerName, population, femalePercentage)
+    WHERE helper_table.providerName = 'Total';
+
+	UPDATE helper_table
+    SET malePercentage=(SELECT round(cast (subquery.malePercentage as numeric)/cast ((subquery.population)as numeric)*100, 2))
+    FROM (SELECT t.providerName, t.population, t.malePercentage FROM helper_table t)
+    AS subquery(providerName, population, malePercentage)
+    WHERE helper_table.providerName = 'Total';
+	/*Total counts End*/
+
+   /*Counts of households by providers*/
    EXECUTE E'INSERT INTO helper_table (providerName , householdCount)
    SELECT provider_id, count(*) FROM core."viewJsonDataConversionOfClient"
    where entity_type = \'ec_household\' '
@@ -131,17 +184,19 @@ BEGIN
     SET femalePercentage=(SELECT round(cast (subquery.femalePercentage as numeric)/cast ((subquery.population)as numeric)*100, 2))
     FROM (SELECT t.providerName, t.population, t.femalePercentage FROM helper_table t)
     AS subquery(providerName, population, femalePercentage)
-    WHERE helper_table.providerName = subquery.providerName;
+    WHERE helper_table.providerName = subquery.providerName
+	and helper_table.providerName != 'Total';
 						   
 	UPDATE helper_table
     SET malePercentage=(SELECT round(cast (subquery.malePercentage as numeric)/cast ((subquery.population)as numeric)*100, 2))
     FROM (SELECT t.providerName, t.population, t.malePercentage FROM helper_table t)
     AS subquery(providerName, population, malePercentage)
-    WHERE helper_table.providerName = subquery.providerName;
+    WHERE helper_table.providerName = subquery.providerName
+	and helper_table.providerName != 'Total';
 
    /*Return whole dashboard_data_count data*/
    RETURN QUERY SELECT ttable.providerName
-       , ttable.householdCount
+       , coalesce(ttable.householdCount, 0) as householdCount
        , coalesce(ttable.population, 0) as population
 	   , coalesce(ttable.femalePercentage, 0) as femalePercentage
 	   , coalesce(ttable.malePercentage, 0) as malePercentage
