@@ -1248,4 +1248,30 @@ th {
 }
 .text-red {	
 	color:red;
+	
+}	
+	
+	
+	
+	
+	.custom-select-lg {
+height: calc(1.875rem + 2px);
+padding-top: .375rem;
+padding-bottom: .375rem;
+font-size: 100%;
 }
+
+
+
+.container-fluid {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-top: 20px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+
+

@@ -104,7 +104,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
            	
 <table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td align="left" valign="top"><h2>কমিউনিটি ক্লিনিকের সেবা প্রদানকারী এবং সেবার তথ্য সমূহ: </h2></td>
+    <td align="left" valign="top"><h4>কমিউনিটি ক্লিনিকের সেবা প্রদানকারী এবং সেবার তথ্য সমূহ: </h4></td>
   </tr>
   <tr>
     <td>      	

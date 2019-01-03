@@ -629,20 +629,20 @@ function checkForTrainingNewWorker(){
 		prevTrainings = $("#trainings").val();
 		$("#trainings").val("");
 		if(workerType === '2' && distinctWorkerCountArray[1][1]>0){
-				warnUser("HEALTH ASSISTANT", 1); 
+				//warnUser("HEALTH ASSISTANT", 1); 
 		}else if(workerType === '3' && distinctWorkerCountArray[2][1]>0){
-				warnUser("ASSISTANT HEALTH INSPECTOR", 1);
+				//warnUser("ASSISTANT HEALTH INSPECTOR", 1);
 		}else if(workerType === '4' && distinctWorkerCountArray[3][1]>0){
-				warnUser("FAMILY PLANNING ASSISTANT", 1);
+				//warnUser("FAMILY PLANNING ASSISTANT", 1);
 		}else if(workerType === '5' && distinctWorkerCountArray[4][1]>0){
-				warnUser("FAMILY PLANNING INSPECTOR", 1);  
+				//warnUser("FAMILY PLANNING INSPECTOR", 1);  
 		}else if(workerType === '6' ){
 				warnUser("MULTIPURPOSE HEALTH VOLUNTEER", -1); 
 				if(distinctWorkerCountArray[5][1]>4){
 					warnUser("MULTIPURPOSE HEALTH VOLUNTEER", 5); 
 				}
 		}else if(workerType === '7' && distinctWorkerCountArray[6][1]>0){
-				warnUser("OTHER HEALTH WORKER", 1);
+				//warnUser("OTHER HEALTH WORKER", 1);
 		}else if(workerType === '8' && distinctWorkerCountArray[7][1]>16){
 				warnUser("COMMUNITY GROUP MEMBER", 17);
 		}else if(workerType === '9' && distinctWorkerCountArray[8][1]>16){
