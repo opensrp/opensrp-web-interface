@@ -18,6 +18,7 @@ import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.openmrs.service.OpenMRSConnector;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,6 +29,8 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 	final String PERSON_URL = "ws/rest/v1/person";
 	
 	final String USER_URL = "ws/rest/v1/user";
+	
+	final String ROLE_URL = "ws/rest/v1/role";
 	
 	final String PROVIDER_URL = "ws/rest/v1/provider";
 	
@@ -54,6 +57,9 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 	String rolesKey = "roles";
 	
 	JSONObject person = new JSONObject();
+	
+	@Value("#{opensrp['openmrs.bahmni.uid']}")
+	protected String OPENMRS_BAHMNI_UID;
 	
 	@Autowired
 	private APIServiceFactory apiServiceFactory;
@@ -150,6 +156,7 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 			user.setPersonUUid(createdPerson.getString("uuid"));
 			JSONObject createdUser = apiServiceFactory.getApiService("openmrs").add(PAYLOAD,
 			    generateUserJsonObject(user, isUpdate, null), USER_URL);
+			roleUpdate();
 			if (createdUser.has("uuid")) {
 				userUuid = (String) createdUser.get("uuid");
 				user.setUuid(userUuid);
@@ -157,6 +164,7 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 				 * make user as a provider
 				 */
 				apiServiceFactory.getApiService("openmrs").add(PAYLOAD, makeProviderObject(user), PROVIDER_URL);
+				
 			}
 		} else {
 			// need to handle exception....
@@ -172,7 +180,7 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 		boolean isUpdate = true;
 		JSONObject updatedUser = apiServiceFactory.getApiService("openmrs").update(PAYLOAD,
 		    generateUserJsonObject(user, isUpdate, jsonOb), uuid, USER_URL);
-		
+		roleUpdate();
 		if (updatedUser.has("uuid")) {
 			userUuid = (String) updatedUser.get("uuid");
 		} else {
@@ -200,5 +208,40 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 		JSONArray userArray = new JSONArray();
 		userArray = (JSONArray) user.get("results");
 		return userArray;
+	}
+	
+	public void roleUpdate() {
+		
+		try {
+			JSONObject user = apiServiceFactory.getApiService("openmrs").get("", "", ROLE_URL);
+			JSONArray userArray = new JSONArray();
+			userArray = (JSONArray) user.get("results");
+			String name = "";
+			String roleUid = "";
+			String bahmniID = "";
+			for (int i = 0; i < userArray.length(); i++) {
+				JSONObject jsonOb = (JSONObject) userArray.get(i);
+				name = (String) jsonOb.get("display");
+				if (name.equalsIgnoreCase("CHCP")) {
+					roleUid = (String) jsonOb.get("uuid");
+					
+				}
+				if (name.equalsIgnoreCase("Bahmni-App")) {
+					bahmniID = (String) jsonOb.get("uuid");
+					;
+				}
+			}
+			List<String> list = new ArrayList<String>();
+			list.add(bahmniID);
+			JSONObject roleOb = new JSONObject();
+			roleOb.put("inheritedRoles", list);
+			System.err.println("roleOb:" + roleOb);
+			JSONObject updatedUser = apiServiceFactory.getApiService("openmrs").update(PAYLOAD, roleOb, roleUid, ROLE_URL);
+			
+		}
+		catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

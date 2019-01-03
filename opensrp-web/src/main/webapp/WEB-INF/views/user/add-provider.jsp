@@ -66,7 +66,12 @@ int roleIdProvider= -1;
 			<li class="breadcrumb-item">
 				<a  href="<c:url value="/facility/${communityId}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>
 				</li>		
-			<%} %>
+		<%} %>
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+				<li class="breadcrumb-item">
+				<a  href="https://192.168.19.44/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.consultationLink"/></strong> </a>
+				</li>		
+		<%} %>
 		</ol>
 		</div>
 			<div class="card mb-3">
@@ -117,7 +122,9 @@ int roleIdProvider= -1;
 							<div class="form-group">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.identifier"/></label>										 
 								<form:input path="idetifier" class="form-control mx-sm-3" />
-								
+								<small id="passwordHelpInline" class="text-muted text-para">
+	                          		<spring:message code="lbl.identifierMsg"/> 
+	                        	</small>
 							 </div>
 						 </div>
 						 

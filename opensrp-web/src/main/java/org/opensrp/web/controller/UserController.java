@@ -126,6 +126,7 @@ public class UserController {
 	public ModelAndView saveUser(Model model, HttpSession session, Locale locale) throws JSONException {
 		int[] selectedRoles = null;
 		model.addAttribute("account", new User());
+		System.err.println("okkk");
 		userServiceImpl.setRolesAttributes(selectedRoles, session);
 		model.addAttribute("locale", locale);
 		

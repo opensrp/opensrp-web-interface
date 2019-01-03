@@ -101,7 +101,9 @@ int roleIdProvider= -1;
 							<div class="form-group">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.identifier"/></label>										 
 								<form:input path="idetifier" class="form-control mx-sm-3" />
-								
+								<small id="passwordHelpInline" class="text-muted text-para">
+	                          		<spring:message code="lbl.identifierMsg"/> 
+	                        	</small>
 							 </div>
 						 </div>
 						
