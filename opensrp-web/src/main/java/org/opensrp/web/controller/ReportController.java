@@ -83,7 +83,7 @@ public class ReportController {
 		return "/report/sumamry-ajax";
 	}
 
-	//@PostAuthorize("hasPermission(returnObject, 'PERM_READ_REPORT')")
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_AGGREGATED_REPORT')")
 	@RequestMapping(value = "/householdDataReport.html", method = RequestMethod.GET)
 	public String showFormWiseReport(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);

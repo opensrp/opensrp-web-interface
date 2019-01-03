@@ -79,6 +79,7 @@
 									</div>
 									<div class="mr-5">
 										<h3><%=householdCount%></h3>
+										<h5>Total Registered Household</h5>
 									</div>
 								</div>
 							</div>
@@ -91,6 +92,7 @@
 									</div>
 									<div class="mr-5">
 										<h3><%=population%></h3>
+										<h5>Total Population</h5>
 									</div>
 								</div>
 							</div>
@@ -103,7 +105,7 @@
 									</div>
 									<div class="mr-5">
 									    <h3><%=femalePercentage%></h3>
-										<h3>Female Percentage</h3>
+										<h5>Total Female Percentage</h5>
 									</div>
 								</div>
 							</div>
@@ -116,7 +118,7 @@
 									</div>
 									<div class="mr-5">
 										<h3><%=malePercentage%></h3>
-										<h5>Male Percentage</h5>
+										<h5>Total Male Percentage</h5>
 									</div>
 								</div>
 							</div>
@@ -128,7 +130,7 @@
 										<!-- <i class="fa fa-fw fa-female"></i>  -->
 									</div>
 									<div class="mr-5">
-										<h3>Other</h3>
+										<h5>Other Percentage</h5>
 									</div>
 								</div>
 							</div>

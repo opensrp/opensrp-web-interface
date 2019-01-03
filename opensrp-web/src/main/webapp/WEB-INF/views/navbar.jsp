@@ -42,6 +42,7 @@ boolean PERM_READ_EXPORT_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ
 boolean PERM_EXPORT_LIST = AuthenticationManagerUtil.isPermitted("PERM_EXPORT_LIST");
 boolean PERM_DOWNLOAD_FORM = AuthenticationManagerUtil.isPermitted("PERM_DOWNLOAD_FORM");
 boolean PERM_UPLOAD_FORM = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FORM");
+boolean PERM_READ_AGGREGATED_REPORT = AuthenticationManagerUtil.isPermitted("PERM_READ_AGGREGATED_REPORT");
 %>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
 	id="mainNav">
@@ -178,7 +179,7 @@ boolean PERM_UPLOAD_FORM = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FO
 			<% } %>
 			
 			
-				<%if(CHILD_GROWTH_REPORT || CHILD_GROWTH_SUMMARY_REPORT || ANALYTICS){ %>
+				<%if(CHILD_GROWTH_REPORT || CHILD_GROWTH_SUMMARY_REPORT || ANALYTICS || PERM_READ_AGGREGATED_REPORT){ %>
 				<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="reportDropdown" href="#"
 				data-toggle="dropdown"><spring:message code="lbl.report"/> </a>
@@ -198,6 +199,12 @@ boolean PERM_UPLOAD_FORM = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FO
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="<c:url value="/analytics/analytics.html?lang=${locale}"/>">
 					<strong><spring:message code="lbl.analytics"/></strong></a>
+					<% } %>
+					
+					<% if(PERM_READ_AGGREGATED_REPORT){ %>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/report/householdDataReport.html?lang=${locale}"/>">
+					<strong><spring:message code="lbl.aggregatedReport"/></strong></a>
 					<% } %>
 				</div>				
 				</li>
