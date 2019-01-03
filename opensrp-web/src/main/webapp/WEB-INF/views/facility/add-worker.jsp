@@ -67,7 +67,12 @@ String selectedPersonName = "";
 				<li class="breadcrumb-item">
 				<a  href="<c:url value="/facility/${facility.id}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>
 				</li>		
-				<%} %>
+		<%} %>
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+				<li class="breadcrumb-item">
+				<a  href="https://192.168.19.44/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.consultationLink"/></strong> </a>
+				</li>		
+		<%} %>
 		</ol>
 		</div>		
 		

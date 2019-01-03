@@ -37,7 +37,8 @@ public class TeamRestController {
 	    throws JSONException {
 		
 		try {
-			Location location = locationServiceImpl.findByKey(name.trim(), "name", Location.class);
+			
+			Location location = locationServiceImpl.findByKey(name.toUpperCase().trim(), "name", Location.class);
 			Team team = teamService.findByKey(location.getUuid(), "locationUuid", Team.class);
 			JSONObject teamObject = new JSONObject();
 			teamObject.put("teamUuid", team.getUuid());
@@ -46,7 +47,7 @@ public class TeamRestController {
 			return new ResponseEntity<>(new Gson().toJson(teamObject), OK);
 		}
 		catch (Exception e) {
-			
+			e.printStackTrace();
 			return new ResponseEntity<>(new Gson().toJson(e.getMessage()), BAD_REQUEST);
 		}
 		

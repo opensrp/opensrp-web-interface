@@ -218,18 +218,24 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 			userArray = (JSONArray) user.get("results");
 			String name = "";
 			String roleUid = "";
+			String bahmniID = "";
 			for (int i = 0; i < userArray.length(); i++) {
 				JSONObject jsonOb = (JSONObject) userArray.get(i);
 				name = (String) jsonOb.get("display");
 				if (name.equalsIgnoreCase("CHCP")) {
 					roleUid = (String) jsonOb.get("uuid");
-					break;
+					
+				}
+				if (name.equalsIgnoreCase("Bahmni-App")) {
+					bahmniID = (String) jsonOb.get("uuid");
+					;
 				}
 			}
 			List<String> list = new ArrayList<String>();
-			list.add(OPENMRS_BAHMNI_UID);
+			list.add(bahmniID);
 			JSONObject roleOb = new JSONObject();
 			roleOb.put("inheritedRoles", list);
+			System.err.println("roleOb:" + roleOb);
 			JSONObject updatedUser = apiServiceFactory.getApiService("openmrs").update(PAYLOAD, roleOb, roleUid, ROLE_URL);
 			
 		}

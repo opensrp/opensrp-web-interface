@@ -246,6 +246,7 @@ public class UserService {
 		//fetch active roles to show on user edit view
 		Map<String, Object> findCriteriaMap = new HashMap<String, Object>();
 		findCriteriaMap.put("active", true);
+		System.err.println(repository.findAllByKeys(findCriteriaMap, Role.class).toString());
 		session.setAttribute("roles", repository.findAllByKeys(findCriteriaMap, Role.class));
 		
 		session.setAttribute("selectedRoles", roles);

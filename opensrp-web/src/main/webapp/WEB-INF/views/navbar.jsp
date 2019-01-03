@@ -8,12 +8,12 @@
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <style>
 strong{ padding:5px;
-font-size: 13px;
-font-family: ShonarBangla;}
+font-size: 17px;
+font-family: ShonarBangla, Helvetica,Arial,sans-serif;}
 
 li{
 font-size: 13px;
-font-family: ShonarBangla;}
+font-family: ShonarBangla,Helvetica,Arial,sans-serif;}
 </style>
 <%
 boolean PERM_WRITE_FACILITY = AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY");
