@@ -113,6 +113,9 @@ public class UserRestController {
 		String userNameUniqueError = "";
 		Team team = new Team();
 		Facility facility = new Facility();
+		User user = new User();
+		String firstName="";
+		String lastName="";
 		try {
 			boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());
 			Role role = roleService.findByKey("Provider", "name", Role.class);
@@ -120,11 +123,14 @@ public class UserRestController {
 			facility = (Facility) facilityService.findById(facilityId, "id", Facility.class);
 			Location location = locationService.findByKey(facility.getWard(), "name", Location.class);
 			team = teamService.findByKey(location.getUuid(), "locationUuid", Team.class);
-			User user = new User();
+			
 			if (!isExists) {
 				user = userServiceImpl.convert(userDTO);
 				user.setChcp(facility.getId() + "");
+				firstName = user.getFirstName();
+				lastName = user.getLastName();
 				userServiceImpl.save(user, false);
+				//System.out.println("in controller :"+user.toString());
 				
 				user = userServiceImpl.findById(user.getId(), "id", User.class);
 				teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
@@ -149,7 +155,15 @@ public class UserRestController {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			userNameUniqueError = "some Problem ocuured please contact with Admin";
+			String errorMessage = "";
+			if(user.getUuid()==null && user.getFirstName().equals("error")){
+				errorMessage = user.getLastName();
+				userNameUniqueError = errorMessage;
+				user.setFirstName(firstName);
+				user.setLastName(lastName);
+			}else{
+				userNameUniqueError = "some Problem ocuured please contact with Admin";
+			}
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}
