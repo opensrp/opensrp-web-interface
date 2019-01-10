@@ -164,11 +164,20 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 				 */
 				apiServiceFactory.getApiService("openmrs").add(PAYLOAD, makeProviderObject(user), PROVIDER_URL);
 				
+			}else {
+				// need to handle exception....
+				user.setFirstName("error");
+				String errorMessage =createdUser.toString();
+				errorMessage = errorMessage.split("\\[")[1];
+				errorMessage = errorMessage.split("\\]")[0];
+				user.setLastName(errorMessage);
 			}
 		} else {
 			// need to handle exception....
 			user.setFirstName("error");
-			user.setLastName(createdPerson.toString());
+			String errorMessage = "Invalid First Name / Last Name";
+			user.setLastName(errorMessage);
+			//user.setLastName(createdPerson.toString());
 		}
 		
 		return user;
