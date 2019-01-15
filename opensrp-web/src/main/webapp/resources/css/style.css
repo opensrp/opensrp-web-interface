@@ -1271,7 +1271,9 @@ font-size: 100%;
     margin-right: auto;
     margin-left: auto;
 }
-
+.mt-5, .my-5 {
+    margin-top: 3rem!important;
+}
 
 
 
