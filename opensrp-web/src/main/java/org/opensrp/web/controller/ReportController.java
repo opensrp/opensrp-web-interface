@@ -92,7 +92,9 @@ public class ReportController {
 		List<Object> formWiseAggregatedList = (List<Object>) databaseServiceImpl.getReportData(searchBuilder);
 		session.setAttribute("formWiseAggregatedList", formWiseAggregatedList);
 
-		System.out.println("size of report data: " + formWiseAggregatedList.size());
+		if (formWiseAggregatedList != null && !formWiseAggregatedList.isEmpty()) {
+			System.out.println("size of report data: " + formWiseAggregatedList.size());
+		}
 
 		return "report/householdDataReport";
 	}
