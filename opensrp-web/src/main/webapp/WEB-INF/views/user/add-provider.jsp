@@ -69,7 +69,7 @@ int roleIdProvider= -1;
 		<%} %>
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
-				<a  href="https://192.168.19.44/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.consultationLink"/></strong> </a>
+				<a  href="https://27.147.129.56/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.consultationLink"/></strong> </a>
 				</li>		
 		<%} %>
 		</ol>

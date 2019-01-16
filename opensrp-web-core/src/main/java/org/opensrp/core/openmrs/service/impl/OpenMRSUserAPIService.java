@@ -151,7 +151,6 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 		boolean isUpdate = false;
 		JSONObject createdPerson = apiServiceFactory.getApiService("openmrs").add(PAYLOAD, generatePersonObject(user),
 		    PERSON_URL);
-		
 		if (createdPerson.has("uuid")) {
 			user.setPersonUUid(createdPerson.getString("uuid"));
 			JSONObject createdUser = apiServiceFactory.getApiService("openmrs").add(PAYLOAD,
@@ -165,9 +164,20 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 				 */
 				apiServiceFactory.getApiService("openmrs").add(PAYLOAD, makeProviderObject(user), PROVIDER_URL);
 				
+			}else {
+				// need to handle exception....
+				user.setFirstName("error");
+				String errorMessage =createdUser.toString();
+				errorMessage = errorMessage.split("\\[")[1];
+				errorMessage = errorMessage.split("\\]")[0];
+				user.setLastName(errorMessage);
 			}
 		} else {
 			// need to handle exception....
+			user.setFirstName("error");
+			String errorMessage = "Invalid First Name / Last Name";
+			user.setLastName(errorMessage);
+			//user.setLastName(createdPerson.toString());
 		}
 		
 		return user;
