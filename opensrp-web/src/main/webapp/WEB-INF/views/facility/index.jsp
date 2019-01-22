@@ -86,6 +86,7 @@
 														
 														//String location = facility.getLocation().getName();
 														String addWorkerURL = "/facility/"+id+"/addWorker.html";
+														String updateProfileURL = "/facility/"+id+"/updateProfile.html";
 														String detailsURL = "/facility/"+id+"/details.html";
 											%>
 											<tr>
@@ -102,7 +103,11 @@
 												| 	
 												<%} %>
 												<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
-												<a href="<c:url value="<%= addWorkerURL%>" />"><spring:message code="lbl.addWorkerOrTraining"/></a>	
+												<a href="<c:url value="<%= addWorkerURL%>" />"><spring:message code="lbl.addWorker"/></a>	
+												<%} %>
+												
+												<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
+												| <a href="<c:url value="<%= updateProfileURL%>" />"><spring:message code="lbl.updateProfile"/></a>	
 												<%} %>
 												</td> 
 											</tr>
