@@ -216,8 +216,8 @@ String selectedPersonName = "";
 						
 						<div class="form-group" >
 							<div class="row">
-								<div class="col-2" >
-								<a  href="<c:url value="/facility/${facility.id}/updateProfile.html?lang=${locale}"/>"> <strong><spring:message code="lbl.cancel"/></strong> </a>	 
+								<div class="col-2">
+									<button onclick="cancelWorkerEdit(<%=facilityId %>)" class="btn btn-danger btn-block"><spring:message code="lbl.cancel"/></button>
 								</div>
 								<div class="col-2" id="saveButtonDiv">
 									<input type="submit" value="<spring:message code="lbl.save"/>"
