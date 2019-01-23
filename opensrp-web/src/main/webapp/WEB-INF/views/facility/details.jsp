@@ -330,10 +330,10 @@ if (session.getAttribute("facilityWorkerList") != null) {
   </tr>
   
   
-  <tr>
+	<tr>
   	<td>13.</td>
     <td colspan="4">কমিউনিটি সাপোর্ট গ্রূপ-১ এর  সদস্যদের তালিকা</td>
-  </tr>
+    </tr>
   
      <tr>
     <td>&nbsp;</td>
@@ -356,6 +356,64 @@ if (session.getAttribute("facilityWorkerList") != null) {
  %>    
     </table></td>
   </tr>
+  
+  
+  <tr>
+  	<td>14.</td>
+    <td colspan="4">কমিউনিটি সাপোর্ট গ্রূপ-২ এর  সদস্যদের তালিকা</td>
+    </tr>
+  
+     <tr>
+    <td>&nbsp;</td>
+    <td colspan="4"><table width="100%" border="0">
+ <%
+ 	for(FacilityWorker worker : communitySupportGroupTwoMemberList){
+ 		String workerName = worker.getName();
+ 		String workerIdentifier = worker.getIdentifier();
+ 		workerName = (workerName != null) ? workerName : "";
+ 		workerIdentifier = (workerIdentifier != null) ? workerIdentifier : "";
+ %>     
+      <tr>
+      	<td>নাম: </td>
+        <td><%=workerName %></td>
+        <td>মোবাইল নাম্বার:</td>
+        <td><%=workerIdentifier %></td>
+      </tr>
+ <%
+ 	}
+ %>    
+    </table></td>
+  </tr>
+  
+  
+  
+    <tr>
+  	<td>15.</td>
+    <td colspan="4">কমিউনিটি সাপোর্ট গ্রূপ-৩ এর  সদস্যদের তালিকা</td>
+    </tr>
+  
+     <tr>
+    <td>&nbsp;</td>
+    <td colspan="4"><table width="100%" border="0">
+ <%
+ 	for(FacilityWorker worker : communitySupportGroupThreeMemberList){
+ 		String workerName = worker.getName();
+ 		String workerIdentifier = worker.getIdentifier();
+ 		workerName = (workerName != null) ? workerName : "";
+ 		workerIdentifier = (workerIdentifier != null) ? workerIdentifier : "";
+ %>     
+      <tr>
+      	<td>নাম: </td>
+        <td><%=workerName %></td>
+        <td>মোবাইল নাম্বার:</td>
+        <td><%=workerIdentifier %></td>
+      </tr>
+ <%
+ 	}
+ %>    
+    </table></td>
+  </tr>
+  
   
   
 </table></td>

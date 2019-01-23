@@ -573,7 +573,7 @@ function showNameWithoutSuggestionDiv(){
 function checkForTrainingOldWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
 	
-	if(workerType === '7' || workerType === '8' || workerType === '9'){
+	if(workerType === '7' || workerType === '8' || workerType === '9' || workerType === '10' || workerType === '11'){
 		showNameWithSuggestionDiv();
 	}else{
 		showNameWithoutSuggestionDiv();
@@ -609,8 +609,12 @@ function checkForTrainingOldWorker(){
 		}else if(workerType === '8' && distinctWorkerCountArrayForEdit[7][1] >16){
 				warnUser("COMMUNITY GROUP MEMBER", 17);
 		}else if(workerType === '9' && distinctWorkerCountArrayForEdit[8][1] >16){
-				warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17); 
-		}	
+				warnUser("COMMUNITY SUPPORT-GROUP-1 MEMBER", 17); 
+		}else if(workerType === '10' && distinctWorkerCountArrayForEdit[8][1] >16){
+				warnUser("COMMUNITY SUPPORT-GROUP-2 MEMBER", 17); 
+		}else if(workerType === '11' && distinctWorkerCountArrayForEdit[8][1] >16){
+				warnUser("COMMUNITY SUPPORT-GROUP-3 MEMBER", 17); 
+		}			
 	} 
 }
 
