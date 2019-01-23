@@ -32,7 +32,10 @@ List<Integer> trainingIdList = new ArrayList<Integer>();
 List<FacilityWorker> multipurposeHealthVolunteerList = new ArrayList<FacilityWorker>();
 List<FacilityWorker> otherHealthWorkerList = new ArrayList<FacilityWorker>();
 List<FacilityWorker> communityGroupMemberList = new ArrayList<FacilityWorker>();
-List<FacilityWorker> communitySupportGroupMemberList = new ArrayList<FacilityWorker>();
+List<FacilityWorker> communitySupportGroupOneMemberList = new ArrayList<FacilityWorker>();
+List<FacilityWorker> communitySupportGroupTwoMemberList = new ArrayList<FacilityWorker>();
+List<FacilityWorker> communitySupportGroupThreeMemberList = new ArrayList<FacilityWorker>();
+
 String[][] coreWorkers = new String[6][2];
 Set<FacilityTraining> trainings = new HashSet<FacilityTraining>();
 
@@ -59,7 +62,11 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		}else if(workerTypeId == 8){
 			communityGroupMemberList.add(facilityWorker);
 		}else if(workerTypeId == 9){
-			communitySupportGroupMemberList.add(facilityWorker);
+			communitySupportGroupOneMemberList.add(facilityWorker);
+		}else if(workerTypeId == 10){
+			communitySupportGroupTwoMemberList.add(facilityWorker);
+		}else if(workerTypeId == 11){
+			communitySupportGroupThreeMemberList.add(facilityWorker);
 		}
 		
 		if(workerTypeId==1){
@@ -100,7 +107,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		<%} %>
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
-				<a  href="https://27.147.129.56/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.consultationLink"/></strong> </a>
+				<a  href="https://27.147.129.56/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
 				</li>		
 		<%} %>
 		</ol>
@@ -325,14 +332,14 @@ if (session.getAttribute("facilityWorkerList") != null) {
   
   <tr>
   	<td>13.</td>
-    <td colspan="4">কমিউনিটি সাপোর্ট গ্রূপের সদস্যদের তালিকা -১৭ জন (আইডি অনুসারে)</td>
+    <td colspan="4">কমিউনিটি সাপোর্ট গ্রূপ-১ এর  সদস্যদের তালিকা</td>
   </tr>
   
      <tr>
     <td>&nbsp;</td>
     <td colspan="4"><table width="100%" border="0">
  <%
- 	for(FacilityWorker worker : communitySupportGroupMemberList){
+ 	for(FacilityWorker worker : communitySupportGroupOneMemberList){
  		String workerName = worker.getName();
  		String workerIdentifier = worker.getIdentifier();
  		workerName = (workerName != null) ? workerName : "";
@@ -347,9 +354,10 @@ if (session.getAttribute("facilityWorkerList") != null) {
  <%
  	}
  %>    
-     
     </table></td>
   </tr>
+  
+  
 </table></td>
   </tr>
 </table>
