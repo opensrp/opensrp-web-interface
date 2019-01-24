@@ -3,11 +3,20 @@ package org.opensrp.core.service;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.json.JSONObject;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.core.entity.HealthId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +29,9 @@ public class HealthIdService {
 	
 	@Autowired
 	private DatabaseRepository repository;
+	
+	@Autowired
+	private SessionFactory sessionFactory;
 	
 	@Autowired
 	HealthId healthId;
@@ -71,12 +83,12 @@ public class HealthIdService {
 		BufferedReader br = null;
 		String line = "";
 		String cvsSplitBy = ",";
-
+		
 		int position = 0;
 		String[] tags = null;
 		try {
 			br = new BufferedReader(new FileReader(csvFile));
-			int count =0;
+			int count = 0;
 			while ((line = br.readLine()) != null) {
 				String[] healthIdFromCsv = line.split(cvsSplitBy);
 				if (position == 0) {
@@ -85,13 +97,14 @@ public class HealthIdService {
 				} else {
 					
 					String hId = healthIdFromCsv[0].trim();
-					if(!hId.isEmpty() && hId!= null){
+					if (!hId.isEmpty() && hId != null) {
 						HealthId matchedHealthId = findByKey(hId, "hId", HealthId.class);
-						if(matchedHealthId != null){
-							logger.info("<><><> Similar hId :"+ matchedHealthId.toString());
-						}else{
+						if (matchedHealthId != null) {
+							logger.info("<><><> Similar hId :" + matchedHealthId.toString());
+						} else {
 							HealthId healthId = new HealthId();
 							healthId.sethId(healthIdFromCsv[0].trim()); // health_id
+							healthId.setType("Reserved");
 							logger.info(healthId.toString());
 							save(healthId);
 							count++;
@@ -100,16 +113,40 @@ public class HealthIdService {
 				}
 				position++;
 			}
-			msg = "Number of health-id uploaded successfully :  "+count;
+			msg = "Number of health-id uploaded successfully :  " + count;
 			
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			msg = "Exception occured - " + e.getMessage() + " - "+ e.toString();
+			msg = "Exception occured - " + e.getMessage() + " - " + e.toString();
 			logger.info(msg);
 		}
 		return msg;
 	}
-
 	
+	public synchronized Map<String, Object> getHealthIdAndUpdateRecrd() throws Exception {
+		Session session = sessionFactory.openSession();
+		Criteria criteria = session.createCriteria(HealthId.class);
+		Map<String, Object> healthIds = new HashMap<>();
+		
+		criteria.setMaxResults(100);
+		criteria.add(Restrictions.eq("status", false));
+		criteria.add(Restrictions.eq("type", "Reserved"));
+		criteria.addOrder(Order.asc("id"));
+		List<HealthId> result = criteria.list();
+		List<String> list = new ArrayList<String>();
+		for (HealthId healthId : result) {
+			healthId.setStatus(true);
+			if (update(healthId) == 1) {
+				list.add(healthId.gethId().toString());
+			}
+			;
+			
+		}
+		if (list.size() != 0) {
+			healthIds.put("identifiers", list.toString());
+		}
+		return healthIds;
+		
+	}
 }
