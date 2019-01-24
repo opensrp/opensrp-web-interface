@@ -92,6 +92,7 @@ public class HealthIdService {
 						}else{
 							HealthId healthId = new HealthId();
 							healthId.sethId(healthIdFromCsv[0].trim()); // health_id
+							healthId.setType("RESERVED");
 							logger.info(healthId.toString());
 							save(healthId);
 							count++;
