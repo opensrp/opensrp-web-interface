@@ -57,7 +57,7 @@ String selectedPersonName = "";
 		<a  href="<c:url value="/facility/${facility.id}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorker"/></strong> </a>	 
 		</li> 	
 		<%} %>	
-				
+		
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
 		<li class="breadcrumb-item">
 		<a  href="<c:url value="/facility/${facility.id}/updateProfile.html?lang=${locale}"/>"> <strong><spring:message code="lbl.updateProfile"/></strong> </a>	 
@@ -82,9 +82,9 @@ String selectedPersonName = "";
 		</ol>
 		</div>		
 		
-			<div class="card mb-3" id="addWorkerDiv" style="display : none">
+			<div class="card mb-3" id="addWorkerDiv">
 				<div class="card-header">
-					<i class="fa fa-table"></i> <spring:message code="lbl.updateProfile"/> (<b><%=facilityName %></b>)
+					<i class="fa fa-table"></i> <spring:message code="lbl.addWorker"/> (<b><%=facilityName %></b>)
 				</div>
 				<div class="card-body" >
 				
@@ -232,15 +232,15 @@ String selectedPersonName = "";
 			
 			
 			
-			<div class="card mb-3">
+			<%-- <div class="card mb-3">
 				<div class="card-header">
 				<div class="row">
 					<div class="col-10">
 					<i class="fa fa-table"></i> <spring:message code="lbl.workerList"/> (<b><%=facilityName %></b>)
 					</div>
-						<%-- <div class="col-2">
+						<div class="col-2">
 							<button onclick="showAddWorkerDiv()" class="btn btn-primary btn-block"><spring:message code="lbl.addNew"/></button>
-						</div> --%>
+						</div>
 				</div>
 				</div>
 				<div class="card-body">
@@ -284,9 +284,9 @@ String selectedPersonName = "";
 
 						</div>
 					</div>
-				</div>
+				</div> 
 				<div class="card-footer small text-muted"></div>
-			</div>
+			</div> --%>
 		
 			
 		</div>
@@ -573,7 +573,7 @@ function showNameWithoutSuggestionDiv(){
 function checkForTrainingOldWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
 	
-	if(workerType === '7' || workerType === '8' || workerType === '9'){
+	if(workerType === '7' || workerType === '8' || workerType === '9' || workerType === '10' || workerType === '11'){
 		showNameWithSuggestionDiv();
 	}else{
 		showNameWithoutSuggestionDiv();
@@ -609,8 +609,12 @@ function checkForTrainingOldWorker(){
 		}else if(workerType === '8' && distinctWorkerCountArrayForEdit[7][1] >16){
 				warnUser("COMMUNITY GROUP MEMBER", 17);
 		}else if(workerType === '9' && distinctWorkerCountArrayForEdit[8][1] >16){
-				warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17); 
-		}	
+				warnUser("COMMUNITY SUPPORT-GROUP-1 MEMBER", 17); 
+		}else if(workerType === '10' && distinctWorkerCountArrayForEdit[8][1] >16){
+				warnUser("COMMUNITY SUPPORT-GROUP-2 MEMBER", 17); 
+		}else if(workerType === '11' && distinctWorkerCountArrayForEdit[8][1] >16){
+				warnUser("COMMUNITY SUPPORT-GROUP-3 MEMBER", 17); 
+		}			
 	} 
 }
 
@@ -709,7 +713,6 @@ function editWorker(workerId) {
 function deleteWorker(facilityId,workerId) {
 	var detailsPageUrl = "/opensrp-dashboard/facility/"+facilityId+"/details.html";
 	var addWorkerPageUrl = "/opensrp-dashboard/facility/"+facilityId+"/addWorker.html";
-	var updateProfilePageUrl = "/opensrp-dashboard/facility/"+facilityId+"/updateProfile.html";
 	var url = "/opensrp-dashboard/rest/api/v1/facility/deleteWorker";			
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
@@ -728,7 +731,7 @@ function deleteWorker(facilityId,workerId) {
 			 xhr.setRequestHeader(header, token);
 		},
 		success : function(data) {
-		   window.location.replace(updateProfilePageUrl);
+		   window.location.replace(addWorkerPageUrl);
 		},
 		error : function(e) {
 		   
@@ -742,8 +745,7 @@ function deleteWorker(facilityId,workerId) {
 
 function cancelWorkerEdit(facilityId){
 	var addWorkerPageUrl = "/opensrp-dashboard/facility/"+facilityId+"/addWorker.html";
-	var updateProfilePageUrl = "/opensrp-dashboard/facility/"+facilityId+"/updateProfile.html";
-	//window.location.replace(updateProfilePageUrl);
+	//window.location.replace(addWorkerPageUrl);
 	$("#workerInfo").trigger('reset');
 }
 

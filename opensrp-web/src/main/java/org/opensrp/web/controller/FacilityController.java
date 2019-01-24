@@ -99,6 +99,16 @@ public class FacilityController {
 		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
 		model.addAttribute("facility", facility);
 		model.addAttribute("locale", locale);
+		return "facility/add-new-worker";
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY_WORKER')")
+	@RequestMapping(value = "/facility/{id}/updateProfile.html", method = RequestMethod.GET)
+	public String updateWorker(ModelMap model, HttpSession session, Locale locale, @PathVariable("id") int facilityId) {
+		facilityWorkerService.setWorkerToAddToSession(session, facilityId);
+		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
+		model.addAttribute("facility", facility);
+		model.addAttribute("locale", locale);
 		return "facility/add-worker";
 	}
 	
