@@ -158,6 +158,13 @@ public class HealthId {
 		    return false;
 	    return true;
     }
+
+
+	@Override
+    public String toString() {
+	    return "HealthId [id=" + id + ", hId=" + hId + ", type=" + type + ", status=" + status + ", created=" + created
+	            + ", updated=" + updated + "]";
+    }
 	
 	
 }
