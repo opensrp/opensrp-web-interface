@@ -26,11 +26,11 @@ public class HealthIdRestController {
 	public ResponseEntity<String> getResearvedHealthId() throws Exception {
 		
 		try {
-			return new ResponseEntity<>(new Gson().toJson(healthIdService.getHealthIdAndUpdateRecrd()), OK);
+			return new ResponseEntity<>(healthIdService.getHealthIdAndUpdateRecrd().toString(), OK);
 		}
 		catch (Exception e) {
 			logger.error("health id error:" + e);
 		}
-		return new ResponseEntity<>(new Gson().toJson("No Data Found"), HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>("No Data Found", HttpStatus.NO_CONTENT);
 	}
 }

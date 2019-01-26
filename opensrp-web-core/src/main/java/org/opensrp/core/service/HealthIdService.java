@@ -124,12 +124,12 @@ public class HealthIdService {
 		return msg;
 	}
 	
-	public synchronized Map<String, Object> getHealthIdAndUpdateRecrd() throws Exception {
+	public synchronized JSONObject getHealthIdAndUpdateRecrd() throws Exception {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(HealthId.class);
-		Map<String, Object> healthIds = new HashMap<>();
+		JSONObject healthIds = new JSONObject();
 		
-		criteria.setMaxResults(100);
+		criteria.setMaxResults(20);
 		criteria.add(Restrictions.eq("status", false));
 		criteria.add(Restrictions.eq("type", "Reserved"));
 		criteria.addOrder(Order.asc("id"));
@@ -138,13 +138,13 @@ public class HealthIdService {
 		for (HealthId healthId : result) {
 			healthId.setStatus(true);
 			if (update(healthId) == 1) {
-				list.add(healthId.gethId().toString());
+				list.add(healthId.gethId());
 			}
 			;
 			
 		}
 		if (list.size() != 0) {
-			healthIds.put("identifiers", list.toString());
+			healthIds.put("identifiers", list);
 		}
 		return healthIds;
 		
