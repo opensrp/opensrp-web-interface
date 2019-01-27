@@ -100,13 +100,14 @@ public class OpenMRSLocationAPIService extends OpensrpProperties implements Open
 		if (location.getLocationTag() != null) {
 			tagsArray.put(location.getLocationTag().getUuid());
 		}
-		if (location.isLoginLocation()) {
+		if (location.getLocationTag().getName().equalsIgnoreCase("Ward")) {
 			tagsArray.put(loginLocationId);
-		}
-		if (location.isVisitLocation()) {
-			
 			tagsArray.put(visitLocationId);
 		}
+		/*if (location.isVisitLocation()) {
+			
+			tagsArray.put(visitLocationId);
+		}*/
 		if (tagsArray.length() != 0) {
 			locationObject.put(tagsKey, tagsArray);
 		}
