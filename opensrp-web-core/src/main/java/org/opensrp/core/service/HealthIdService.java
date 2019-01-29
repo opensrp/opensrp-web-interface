@@ -125,26 +125,36 @@ public class HealthIdService {
 	}
 	
 	public synchronized JSONObject getHealthIdAndUpdateRecrd() throws Exception {
-		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(HealthId.class);
-		JSONObject healthIds = new JSONObject();
 		
-		criteria.setMaxResults(20);
-		criteria.add(Restrictions.eq("status", false));
-		criteria.add(Restrictions.eq("type", "Reserved"));
-		criteria.addOrder(Order.asc("id"));
-		List<HealthId> result = criteria.list();
-		List<String> list = new ArrayList<String>();
-		for (HealthId healthId : result) {
-			healthId.setStatus(true);
-			if (update(healthId) == 1) {
-				list.add(healthId.gethId());
+		JSONObject healthIds = new JSONObject();
+		Session session = sessionFactory.openSession();
+		
+		try {
+			Criteria criteria = session.createCriteria(HealthId.class);
+			criteria.setMaxResults(20);
+			criteria.add(Restrictions.eq("status", false));
+			criteria.add(Restrictions.eq("type", "Reserved"));
+			criteria.addOrder(Order.asc("id"));
+			List<HealthId> result = criteria.list();
+			List<String> list = new ArrayList<String>();
+			for (HealthId healthId : result) {
+				healthId.setStatus(true);
+				if (update(healthId) == 1) {
+					list.add(healthId.gethId());
+				}
+				;
+				
 			}
-			;
 			
+			if (list.size() != 0) {
+				healthIds.put("identifiers", list);
+			}
 		}
-		if (list.size() != 0) {
-			healthIds.put("identifiers", list);
+		catch (Exception e) {
+			logger.error("health id fetch error:" + e.fillInStackTrace());
+		}
+		finally {
+			session.close();
 		}
 		return healthIds;
 		
