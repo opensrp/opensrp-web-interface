@@ -24,7 +24,19 @@ public class HealthIdRestController {
 	public ResponseEntity<String> getResearvedHealthId() throws Exception {
 		
 		try {
-			return new ResponseEntity<>(healthIdService.getHealthIdAndUpdateRecrd().toString(), OK);
+			return new ResponseEntity<>(healthIdService.getHealthIdAndUpdateRecord().toString(), OK);
+		}
+		catch (Exception e) {
+			logger.error("health id error:" + e);
+		}
+		return new ResponseEntity<>("No Data Found", HttpStatus.NO_CONTENT);
+	}
+	
+	@RequestMapping(value = "/reserved/single", method = RequestMethod.GET)
+	public ResponseEntity<String> getSingleResearvedHealthId() throws Exception {
+		
+		try {
+			return new ResponseEntity<>(healthIdService.getSingleHealthIdAndUpdateRecord().toString(), OK);
 		}
 		catch (Exception e) {
 			logger.error("health id error:" + e);

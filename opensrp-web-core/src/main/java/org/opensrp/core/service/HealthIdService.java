@@ -124,11 +124,10 @@ public class HealthIdService {
 		return msg;
 	}
 	
-	public synchronized JSONObject getHealthIdAndUpdateRecrd() throws Exception {
+	public synchronized JSONObject getHealthIdAndUpdateRecord() throws Exception {
 		
 		JSONObject healthIds = new JSONObject();
 		Session session = sessionFactory.openSession();
-		
 		try {
 			Criteria criteria = session.createCriteria(HealthId.class);
 			criteria.setMaxResults(20);
@@ -143,9 +142,7 @@ public class HealthIdService {
 					list.add(healthId.gethId());
 				}
 				;
-				
 			}
-			
 			if (list.size() != 0) {
 				healthIds.put("identifiers", list);
 			}
@@ -157,6 +154,34 @@ public class HealthIdService {
 			session.close();
 		}
 		return healthIds;
+	}
+	
+	public JSONObject getSingleHealthIdAndUpdateRecord() throws Exception {
+		JSONObject healthIds = new JSONObject();
+		Session session = sessionFactory.openSession();
+		try {
+			Criteria criteria = session.createCriteria(HealthId.class);
+			criteria.setMaxResults(1);
+			criteria.add(Restrictions.eq("status", false));
+			criteria.add(Restrictions.eq("type", "Reserved"));
+			criteria.addOrder(Order.asc("id"));
+			List<HealthId> result = criteria.list();
+			for (HealthId healthId : result) {
+				healthId.setStatus(true);
+				if (update(healthId) == 1) {
+					healthIds.put("identifiers", healthId.gethId());
+				}
+				;
+			}
+		}
+		catch (Exception e) {
+			logger.error("health id fetch error:" + e.fillInStackTrace());
+		}
+		finally {
+			session.close();
+		}
+		return healthIds;
 		
 	}
+	
 }
