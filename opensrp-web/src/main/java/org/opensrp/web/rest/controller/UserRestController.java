@@ -101,6 +101,13 @@ public class UserRestController {
 					facilityWorker.setFacility(facility);
 					facilityWorker.setFacilityWorkerType(facilityWorkerType);
 					facilityWorkerTypeService.save(facilityWorker);
+					String mailBody = "Dear "+user.getFullName()
+							+",\n\nYour login credentials for CBHC are given below -\nusername : "
+							+user.getUsername()
+							+"\npassword : "
+							+userDTO.getPassword();
+					logger.info("<><><><><> in user rest controller before sending mail to-"+user.getEmail());
+					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
 					
 				}
 			} else {
