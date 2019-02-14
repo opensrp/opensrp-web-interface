@@ -2,6 +2,7 @@ package org.opensrp.web.rest.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import org.apache.log4j.Logger;
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.Role;
@@ -13,11 +14,13 @@ import org.opensrp.core.service.RoleService;
 import org.opensrp.core.service.TeamMemberService;
 import org.opensrp.core.service.TeamService;
 import org.opensrp.core.service.UserService;
+import org.opensrp.core.service.EmailService;
 import org.opensrp.facility.entity.Facility;
 import org.opensrp.facility.entity.FacilityWorker;
 import org.opensrp.facility.entity.FacilityWorkerType;
 import org.opensrp.facility.service.FacilityService;
 import org.opensrp.facility.service.FacilityWorkerTypeService;
+import org.opensrp.web.controller.UserController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
@@ -53,6 +56,11 @@ public class UserRestController {
 	
 	@Autowired
 	private LocationService locationService;
+	
+	@Autowired
+	private EmailService emailService;
+	
+	private static final Logger logger = Logger.getLogger(UserRestController.class);
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO, ModelMap model) throws Exception {
@@ -148,6 +156,13 @@ public class UserRestController {
 				facilityWorker.setFacility(facility);
 				facilityWorker.setFacilityWorkerType(facilityWorkerType);
 				facilityWorkerTypeService.save(facilityWorker);
+				String mailBody = "Dear "+user.getFullName()
+						+",\n\nYour login credentials for CBHC are given below -\nusername : "
+						+user.getUsername()
+						+"\npassword : "
+						+userDTO.getPassword();
+				logger.info("<><><><><> in user rest controller before sending mail to-"+user.getEmail());
+				emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
 				
 			} else {
 				userNameUniqueError = "User name already taken.";
