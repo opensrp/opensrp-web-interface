@@ -81,7 +81,7 @@ public class UserRestController {
 				user = userServiceImpl.convert(userDTO);
 				System.err.println(user.toString());
 				user.setChcp(facility.getId() + "");
-				userServiceImpl.save(user, false);
+				int numberOfUserSaved =(int)userServiceImpl.save(user, false);
 				
 				if (userDTO.isTeamMember()) {
 					
@@ -106,9 +106,11 @@ public class UserRestController {
 							+user.getUsername()
 							+"\npassword : "
 							+userDTO.getPassword();
-					logger.info("<><><><><> in user rest controller before sending mail to-"+user.getEmail());
-					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
-					
+					if(numberOfUserSaved > 0){
+						logger.info("<><><><><> in user rest controller before sending mail to-"+user.getEmail());
+						emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
+
+					}	
 				}
 			} else {
 				userNameUniqueError = "User name already taken.";
@@ -144,7 +146,7 @@ public class UserRestController {
 				user.setChcp(facility.getId() + "");
 				firstName = user.getFirstName();
 				lastName = user.getLastName();
-				userServiceImpl.save(user, false);
+				int numberOfUserSaved =(int)userServiceImpl.save(user, false);
 				//System.out.println("in controller :"+user.toString());
 				
 				user = userServiceImpl.findById(user.getId(), "id", User.class);
@@ -168,8 +170,10 @@ public class UserRestController {
 						+user.getUsername()
 						+"\npassword : "
 						+userDTO.getPassword();
-				logger.info("<><><><><> in user rest controller before sending mail to-"+user.getEmail());
-				emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
+				if(numberOfUserSaved>0){
+					logger.info("<><><><><> in user rest controller before sending mail to-"+user.getEmail());
+					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
+				}
 				
 			} else {
 				userNameUniqueError = "User name already taken.";
