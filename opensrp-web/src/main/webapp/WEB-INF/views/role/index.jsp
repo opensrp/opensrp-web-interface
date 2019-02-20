@@ -61,7 +61,7 @@
 										<td>${role.getName()}</td>
 										<td><c:forEach var="permission"
 												items="${role.getPermissions()}" varStatus="loop">
-												<b> ${permission.getName()} , </b>
+												<b> ${permission.getSimpleName()}  , </b>
 											</c:forEach></td>
 										<td>
 										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_ROLE")){ %>

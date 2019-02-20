@@ -47,6 +47,19 @@ public class Permission implements GrantedAuthority {
 		return name;
 	}
 	
+	public String getSimpleName() {
+		String[] nameArray = name.split("_");
+		String simplifiedName = "";
+		int initialIndex = 0;
+		if(nameArray[0].equals("PERM")){
+			initialIndex = 1;
+		}
+		for(int i = initialIndex; i<nameArray.length;i++){
+			simplifiedName = simplifiedName + " " + nameArray[i].toLowerCase();
+		}
+		return simplifiedName;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -60,7 +60,7 @@
 											path="permissions" value="<%=permission.getId()%>"
 											checked="<%=CheckboxHelperUtil.checkCheckedBox(
 							selectedPermissions, permission.getId())%>" />
-										<label class="form-check-label" for="defaultCheck1"> <%=permission.getName()%>
+										<label class="form-check-label" for="defaultCheck1"> <%=permission.getSimpleName()%>
 										</label>
 									</div>
 									<%
