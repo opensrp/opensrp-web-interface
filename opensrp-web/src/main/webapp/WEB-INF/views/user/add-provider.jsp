@@ -16,11 +16,11 @@
 Integer selectedPersonId = (Integer)session.getAttribute("selectedPersonId");
 String locationList = (String)session.getAttribute("locationList"); 
 String selectedLocationList = (String)session.getAttribute("selectedLocationList"); 
-
 Map<Integer, String> teams =  (Map<Integer, String>)session.getAttribute("teams");
 
 String selectedPersonName = (String)session.getAttribute("personName");
-Integer communityId = (Integer)session.getAttribute("communityId");
+Integer facilityId= (Integer)session.getAttribute("facilityId");
+//Integer communityId = (Integer)session.getAttribute("communityId");
 Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 
 int roleIdCHCP= -1;
@@ -53,18 +53,24 @@ int roleIdProvider= -1;
 		<jsp:include page="/WEB-INF/views/facility/facility-link.jsp" />
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
 		<li class="breadcrumb-item">
-		<a  href="<c:url value="/facility/${communityId}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorkerOrTraining"/></strong> </a>	
+		<a  href="<c:url value="/facility/${facilityId}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorker"/></strong> </a>	 
 		</li> 	
 		<%} %>	
+				
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
+		<li class="breadcrumb-item">
+		<a  href="<c:url value="/facility/${facilityId}/updateProfile.html?lang=${locale}"/>"> <strong><spring:message code="lbl.updateProfile"/></strong> </a>	 
+		</li> 	
+		<%} %>
 		
 		<% if(AuthenticationManagerUtil.isPermitted("CRAETE_MULTIPURPOSE_VOLUNTEER")){ %>
-			<li class="breadcrumb-item">		
-				<a  href="<c:url value="/facility/mhv/${communityId}/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.createMHV"/></strong> </a>	
-			</li>
-		<%} %>	
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>		
 			<li class="breadcrumb-item">
-				<a  href="<c:url value="/facility/${communityId}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>
+			<a  href="<c:url value="/facility/mhv/${facilityId}/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.createMHV"/></strong> </a>	
+			</li> 	
+		<%} %>	
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+				<li class="breadcrumb-item">
+				<a  href="<c:url value="/facility/${facilityId}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>
 				</li>		
 		<%} %>
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
@@ -121,7 +127,8 @@ int roleIdProvider= -1;
 						<div class="row col-12 tag-height">						
 							<div class="form-group">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.identifier"/></label>										 
-								<form:input path="idetifier" class="form-control mx-sm-3" />
+								<form:input path="idetifier" class="form-control mx-sm-3" pattern="^[0-9]{10}|[0-9]{13}|[0-9]{17}$"
+								title="10, 13 or 17 Digit"/>
 								<small id="passwordHelpInline" class="text-muted text-para">
 	                          		<spring:message code="lbl.identifierMsg"/> 
 	                        	</small>
@@ -242,7 +249,7 @@ int roleIdProvider= -1;
 	
 	$("#UserInfo").submit(function(event) { 
 			$("#loading").show();
-			var url = "/opensrp-dashboard/rest/api/v1/user/<%=communityId%>/mhv";			
+			var url = "/opensrp-dashboard/rest/api/v1/user/<%=facilityId%>/mhv";			
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			//alert(locationMagicSuggest.getValue());
@@ -280,7 +287,7 @@ int roleIdProvider= -1;
 				   $("#usernameUniqueErrorMessage").html(data);
 				   $("#loading").hide();
 				   if(data == ""){					   
-					   window.location.replace("/opensrp-dashboard/facility/<%=communityId%>/addWorker.html");
+					   window.location.replace("/opensrp-dashboard/facility/<%=facilityId%>/addWorker.html");
 					   
 				   }
 				   
