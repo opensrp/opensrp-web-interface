@@ -54,6 +54,13 @@ boolean PERM_READ_AGGREGATED_REPORT = AuthenticationManagerUtil.isPermitted("PER
 
 
 		<ul class="navbar-nav ml-auto">
+		
+		<li class="nav-item dropdown">
+		<a class="nav-link dropdown-toggle mr-lg-2" href="<c:url value="/?lang=${locale}"/>" >
+		 <spring:message code="lbl.home"/></strong>
+		</a></li>
+		
+		
 			<%if(PERM_WRITE_FACILITY || PERM_READ_FACILITY || PERM_UPLOAD_FACILITY_CSV ){ %>			
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
