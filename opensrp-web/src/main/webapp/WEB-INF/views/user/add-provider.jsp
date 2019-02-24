@@ -121,7 +121,8 @@ int roleIdProvider= -1;
 						<div class="row col-12 tag-height">						
 							<div class="form-group">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.mobile"/></label>										 
-								<form:input path="mobile" class="form-control mx-sm-3" />								
+								<form:input path="mobile" class="form-control mx-sm-3" pattern="^01[135-9]\d{8}$"
+								title="11 digit valid mobile number"/>								
 							 </div>
 						 </div>	
 						<div class="row col-12 tag-height">						
