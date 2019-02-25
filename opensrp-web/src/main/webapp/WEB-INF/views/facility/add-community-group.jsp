@@ -102,7 +102,7 @@ String selectedPersonName = "";
 					<div class="form-group">							
 								<div class="row">									
 									<div class="col-5">
-									<label for="exampleInputName"><spring:message code="lbl.healthWorkerType"/></label>
+									<label for="exampleInputName"><spring:message code="lbl.groupMemberType"/></label>
 										<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" onchange="checkForTraining()" required>
 									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 												<%
@@ -149,7 +149,7 @@ String selectedPersonName = "";
 							<div class="row">
 								<div class="col-5">
 								<div id="cm" class="ui-widget">
-										<label><spring:message code="lbl.healthWorkerName"/></label>
+										<label><spring:message code="lbl.name"/></label>
 										<select id="combobox" name= "name" class="form-control" disabled>									  
 										</select>
 										 <span class="text-red">${uniqueNameErrorMessage}</span> 
@@ -162,7 +162,7 @@ String selectedPersonName = "";
 							<div class="row">
 								<div class="col-5">
 								<div id="cm" class="ui-widget">
-										<label><spring:message code="lbl.healthWorkerName"/></label>
+										<label><spring:message code="lbl.name"/></label>
 										<input name="name" class="form-control" required="required" 
 										aria-describedby="nameHelp" id="comboboxWithoutSuggestion" />
 										 <span class="text-red">${uniqueNameErrorMessage}</span> 
@@ -174,10 +174,9 @@ String selectedPersonName = "";
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName"><spring:message code="lbl.healthWorkerContact"/></label>
+									<label for="exampleInputName"><spring:message code="lbl.contact"/></label>
 									<input name="identifier" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="<spring:message code="lbl.healthWorkerContact"/>" />
+										required="required" aria-describedby="nameHelp" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
@@ -186,7 +185,7 @@ String selectedPersonName = "";
 						<input name="facilityId" id="facilityId" value="<%=facilityId%>" style="display: none;"/>
 						<input name="newWorker" id="newWorker" value="1" style="display: none;"/>
 						
-						<div class="form-group">
+						<%-- <div class="form-group">
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/></label>
@@ -196,7 +195,7 @@ String selectedPersonName = "";
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
-						</div>
+						</div> --%>
 					
 						
 						<input type="text" id= "trainings" name="trainings" value="" style="display: none;" readonly>
@@ -451,7 +450,7 @@ $("#workerInfo").submit(function(event) {
 			'workerId': '-99',
             'name': workerName,
             'identifier': $('input[name=identifier]').val(),
-            'organization': $('input[name=organization]').val(),
+            'organization': "",
             'facilityWorkerTypeId': $("#facilityWorkerTypeId").val(),
             'facilityTrainings': $('input[name=trainings]').val(),
             'facilityId': $("#facilityId").val()
@@ -468,7 +467,7 @@ $("#workerInfo").submit(function(event) {
 				'workerId': $("#workerId").val(),
 	            'name': $('input[name=name]').val(),
 	            'identifier': $('input[name=identifier]').val(),
-	            'organization': $('input[name=organization]').val(),
+	            'organization': "",
 	            'facilityWorkerTypeId': $("#facilityWorkerTypeId").val(),
 	            'facilityTrainings': $('input[name=trainings]').val(),
 	            'facilityId': $("#facilityId").val()
