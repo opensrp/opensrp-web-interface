@@ -52,11 +52,11 @@ String selectedPersonName = "";
 		<div class="container-fluid">
 		
 		<jsp:include page="/WEB-INF/views/facility/facility-link.jsp" />
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
-		<li class="breadcrumb-item">
-		<a  href="<c:url value="/facility/${facility.id}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorker"/></strong> </a>	 
-		</li> 	
-		<%} %>	
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+				<li class="breadcrumb-item">
+				<a  href="<c:url value="/facility/${facility.id}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>
+				</li>		
+		<%} %>
 		
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
 		<li class="breadcrumb-item">
@@ -64,16 +64,24 @@ String selectedPersonName = "";
 		</li> 	
 		<%} %>
 		
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
+		<li class="breadcrumb-item">
+		<a  href="<c:url value="/facility/${facility.id}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorker"/></strong> </a>	 
+		</li> 	
+		<%} %>	
+		
 		<% if(AuthenticationManagerUtil.isPermitted("CRAETE_MULTIPURPOSE_VOLUNTEER")){ %>
 			<li class="breadcrumb-item">
 			<a  href="<c:url value="/facility/mhv/${facility.id}/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.createMHV"/></strong> </a>	
 			</li> 	
 		<%} %>	
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
-				<li class="breadcrumb-item">
-				<a  href="<c:url value="/facility/${facility.id}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>
-				</li>		
-		<%} %>
+		
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
+		<li class="breadcrumb-item">
+			<a  href="<c:url value="/facility/${facility.id}/addCgCsg.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addCgCsg"/></strong> </a>	 
+			</li> 	
+		<%} %>	
+		
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
 				<a  href="https://27.147.129.56/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
@@ -102,7 +110,12 @@ String selectedPersonName = "";
 												Iterator<FacilityWorkerType> i = workerTypeList.iterator();
 												while (i.hasNext()) {
 													FacilityWorkerType workerType = i.next();
-													if(workerType.getName().equals("CHCP") || workerType.getName().equals("MULTIPURPOSE HEALTH VOLUNTEER")){
+													if(workerType.getName().equals("CHCP") 
+															|| workerType.getName().equals("MULTIPURPOSE HEALTH VOLUNTEER")
+															|| workerType.getName().equals("COMMUNITY GROUP MEMBER") 
+															|| workerType.getName().equals("COMMUNITY SUPPORT-GROUP 1")
+															|| workerType.getName().equals("COMMUNITY SUPPORT-GROUP 2")
+															|| workerType.getName().equals("COMMUNITY SUPPORT-GROUP 3")){
 														i.remove();
 													}
 												}
