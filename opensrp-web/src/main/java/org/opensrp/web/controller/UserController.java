@@ -147,7 +147,8 @@ public class UserController {
 		model.addAttribute("account", new User());
 		userServiceImpl.setRolesAttributes(selectedRoles, session);
 		model.addAttribute("locale", locale);
-		session.setAttribute("communityId", id);
+		session.setAttribute("facilityId", id);
+		model.addAttribute("facilityId", id);
 		//for adding location and team
 		model.addAttribute("teamMember", new TeamMember());
 		String personName = "";

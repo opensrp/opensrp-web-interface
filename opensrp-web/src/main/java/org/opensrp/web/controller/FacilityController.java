@@ -103,6 +103,16 @@ public class FacilityController {
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY_WORKER')")
+	@RequestMapping(value = "/facility/{id}/addCgCsg.html", method = RequestMethod.GET)
+	public String addCgCsg(ModelMap model, HttpSession session, Locale locale, @PathVariable("id") int facilityId) {
+		facilityWorkerService.setWorkerToAddToSession(session, facilityId);
+		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
+		model.addAttribute("facility", facility);
+		model.addAttribute("locale", locale);
+		return "facility/add-community-group";
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY_WORKER')")
 	@RequestMapping(value = "/facility/{id}/updateProfile.html", method = RequestMethod.GET)
 	public String updateWorker(ModelMap model, HttpSession session, Locale locale, @PathVariable("id") int facilityId) {
 		facilityWorkerService.setWorkerToAddToSession(session, facilityId);

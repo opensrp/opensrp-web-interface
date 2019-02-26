@@ -90,9 +90,9 @@ String selectedPersonName = "";
 		</ol>
 		</div>		
 		
-			<div class="card mb-3" id="addWorkerDiv" style="display : none">
+			<div class="card mb-3" id="addWorkerDiv">
 				<div class="card-header">
-					<i class="fa fa-table"></i> <spring:message code="lbl.updateProfile"/> (<b><%=facilityName %></b>)
+					<i class="fa fa-table"></i> <spring:message code="lbl.addCgCsg"/> (<b><%=facilityName %></b>)
 				</div>
 				<div class="card-body" >
 				
@@ -102,19 +102,24 @@ String selectedPersonName = "";
 					<div class="form-group">							
 								<div class="row">									
 									<div class="col-5">
-									<label for="exampleInputName"><spring:message code="lbl.healthWorkerType"/></label>
+									<label for="exampleInputName"><spring:message code="lbl.groupMemberType"/></label>
 										<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" onchange="checkForTraining()" required>
 									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 												<%
-												//for removing chcp and multiPurposeHealthVolunteer from dropdown
+												//for removing workers other than cg and csg from dropdown
 												Iterator<FacilityWorkerType> i = workerTypeList.iterator();
 												while (i.hasNext()) {
 													FacilityWorkerType workerType = i.next();
-													if(workerType.getName().equals("CHCP") || workerType.getName().equals("MULTIPURPOSE HEALTH VOLUNTEER")){
+													if(workerType.getName().equals("COMMUNITY GROUP MEMBER") 
+															|| workerType.getName().equals("COMMUNITY SUPPORT-GROUP 1")
+															|| workerType.getName().equals("COMMUNITY SUPPORT-GROUP 2")
+															|| workerType.getName().equals("COMMUNITY SUPPORT-GROUP 3")){
+														//do nothing
+													}else{
 														i.remove();
 													}
 												}
-												//end:  removing chcp and multiPurposeHealthVolunteer from dropdown
+												//end:  for removing workers other than cg and csg from dropdown
 												for (FacilityWorkerType workerType : workerTypeList)
 												{
 														%>
@@ -144,7 +149,7 @@ String selectedPersonName = "";
 							<div class="row">
 								<div class="col-5">
 								<div id="cm" class="ui-widget">
-										<label><spring:message code="lbl.healthWorkerName"/></label>
+										<label><spring:message code="lbl.name"/></label>
 										<select id="combobox" name= "name" class="form-control" disabled>									  
 										</select>
 										 <span class="text-red">${uniqueNameErrorMessage}</span> 
@@ -157,7 +162,7 @@ String selectedPersonName = "";
 							<div class="row">
 								<div class="col-5">
 								<div id="cm" class="ui-widget">
-										<label><spring:message code="lbl.healthWorkerName"/></label>
+										<label><spring:message code="lbl.name"/></label>
 										<input name="name" class="form-control" required="required" 
 										aria-describedby="nameHelp" id="comboboxWithoutSuggestion" />
 										 <span class="text-red">${uniqueNameErrorMessage}</span> 
@@ -169,10 +174,9 @@ String selectedPersonName = "";
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName"><spring:message code="lbl.healthWorkerContact"/></label>
+									<label for="exampleInputName"><spring:message code="lbl.contact"/></label>
 									<input name="identifier" class="form-control"
-										required="required" aria-describedby="nameHelp"
-										placeholder="<spring:message code="lbl.healthWorkerContact"/>" />
+										required="required" aria-describedby="nameHelp" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
@@ -181,7 +185,7 @@ String selectedPersonName = "";
 						<input name="facilityId" id="facilityId" value="<%=facilityId%>" style="display: none;"/>
 						<input name="newWorker" id="newWorker" value="1" style="display: none;"/>
 						
-						<div class="form-group">
+						<%-- <div class="form-group">
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/></label>
@@ -191,7 +195,7 @@ String selectedPersonName = "";
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
-						</div>
+						</div> --%>
 					
 						
 						<input type="text" id= "trainings" name="trainings" value="" style="display: none;" readonly>
@@ -240,15 +244,15 @@ String selectedPersonName = "";
 			
 			
 			
-			<div class="card mb-3">
+			<%-- <div class="card mb-3">
 				<div class="card-header">
 				<div class="row">
 					<div class="col-10">
 					<i class="fa fa-table"></i> <spring:message code="lbl.workerList"/> (<b><%=facilityName %></b>)
 					</div>
-						<%-- <div class="col-2">
+						<div class="col-2">
 							<button onclick="showAddWorkerDiv()" class="btn btn-primary btn-block"><spring:message code="lbl.addNew"/></button>
-						</div> --%>
+						</div>
 				</div>
 				</div>
 				<div class="card-body">
@@ -292,9 +296,9 @@ String selectedPersonName = "";
 
 						</div>
 					</div>
-				</div>
+				</div> 
 				<div class="card-footer small text-muted"></div>
-			</div>
+			</div> --%>
 		
 			
 		</div>
@@ -446,7 +450,7 @@ $("#workerInfo").submit(function(event) {
 			'workerId': '-99',
             'name': workerName,
             'identifier': $('input[name=identifier]').val(),
-            'organization': $('input[name=organization]').val(),
+            'organization': "",
             'facilityWorkerTypeId': $("#facilityWorkerTypeId").val(),
             'facilityTrainings': $('input[name=trainings]').val(),
             'facilityId': $("#facilityId").val()
@@ -463,7 +467,7 @@ $("#workerInfo").submit(function(event) {
 				'workerId': $("#workerId").val(),
 	            'name': $('input[name=name]').val(),
 	            'identifier': $('input[name=identifier]').val(),
-	            'organization': $('input[name=organization]').val(),
+	            'organization': "",
 	            'facilityWorkerTypeId': $("#facilityWorkerTypeId").val(),
 	            'facilityTrainings': $('input[name=trainings]').val(),
 	            'facilityId': $("#facilityId").val()
@@ -581,7 +585,7 @@ function showNameWithoutSuggestionDiv(){
 function checkForTrainingOldWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
 	
-	if(workerType === '7' || workerType === '8' || workerType === '9'){
+	if(workerType === '7' || workerType === '8' || workerType === '9' || workerType === '10' || workerType === '11'){
 		showNameWithSuggestionDiv();
 	}else{
 		showNameWithoutSuggestionDiv();
@@ -617,8 +621,12 @@ function checkForTrainingOldWorker(){
 		}else if(workerType === '8' && distinctWorkerCountArrayForEdit[7][1] >16){
 				warnUser("COMMUNITY GROUP MEMBER", 17);
 		}else if(workerType === '9' && distinctWorkerCountArrayForEdit[8][1] >16){
-				warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17); 
-		}	
+				warnUser("COMMUNITY SUPPORT-GROUP-1 MEMBER", 17); 
+		}else if(workerType === '10' && distinctWorkerCountArrayForEdit[8][1] >16){
+				warnUser("COMMUNITY SUPPORT-GROUP-2 MEMBER", 17); 
+		}else if(workerType === '11' && distinctWorkerCountArrayForEdit[8][1] >16){
+				warnUser("COMMUNITY SUPPORT-GROUP-3 MEMBER", 17); 
+		}			
 	} 
 }
 
@@ -717,7 +725,6 @@ function editWorker(workerId) {
 function deleteWorker(facilityId,workerId) {
 	var detailsPageUrl = "/opensrp-dashboard/facility/"+facilityId+"/details.html";
 	var addWorkerPageUrl = "/opensrp-dashboard/facility/"+facilityId+"/addWorker.html";
-	var updateProfilePageUrl = "/opensrp-dashboard/facility/"+facilityId+"/updateProfile.html";
 	var url = "/opensrp-dashboard/rest/api/v1/facility/deleteWorker";			
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
@@ -736,7 +743,7 @@ function deleteWorker(facilityId,workerId) {
 			 xhr.setRequestHeader(header, token);
 		},
 		success : function(data) {
-		   window.location.replace(updateProfilePageUrl);
+		   window.location.replace(addWorkerPageUrl);
 		},
 		error : function(e) {
 		   
@@ -750,8 +757,7 @@ function deleteWorker(facilityId,workerId) {
 
 function cancelWorkerEdit(facilityId){
 	var addWorkerPageUrl = "/opensrp-dashboard/facility/"+facilityId+"/addWorker.html";
-	var updateProfilePageUrl = "/opensrp-dashboard/facility/"+facilityId+"/updateProfile.html";
-	//window.location.replace(updateProfilePageUrl);
+	//window.location.replace(addWorkerPageUrl);
 	$("#workerInfo").trigger('reset');
 }
 

@@ -85,11 +85,10 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		<div class="container-fluid">
 		
 		<jsp:include page="/WEB-INF/views/facility/facility-link.jsp" />
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
-		<li class="breadcrumb-item">
-			<a  href="<c:url value="/facility/${facility.id}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorker"/></strong> </a>	 
-			</li> 	
-		<%} %>	
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+			<li class="breadcrumb-item"> <a  href="<c:url value="/facility/${facility.id}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>
+			</li>		
+		<%} %>
 		
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
 		<li class="breadcrumb-item">
@@ -97,14 +96,23 @@ if (session.getAttribute("facilityWorkerList") != null) {
 			</li> 	
 		<%} %>	
 		
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
+		<li class="breadcrumb-item">
+			<a  href="<c:url value="/facility/${facility.id}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorker"/></strong> </a>	 
+			</li> 	
+		<%} %>	
+		
 		<% if(AuthenticationManagerUtil.isPermitted("CRAETE_MULTIPURPOSE_VOLUNTEER")){ %>
 			<li class="breadcrumb-item"><a  href="<c:url value="/facility/mhv/${facility.id}/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.createMHV"/></strong> </a>	
 			</li> 	
 		<%} %>	
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
-			<li class="breadcrumb-item"> <a  href="<c:url value="/facility/${facility.id}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>
-			</li>		
-		<%} %>
+		
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
+		<li class="breadcrumb-item">
+			<a  href="<c:url value="/facility/${facility.id}/addCgCsg.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addCgCsg"/></strong> </a>	 
+			</li> 	
+		<%} %>	
+		
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
 				<a  href="https://27.147.129.56/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
