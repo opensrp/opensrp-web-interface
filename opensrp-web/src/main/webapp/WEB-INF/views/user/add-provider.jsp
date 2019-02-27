@@ -296,7 +296,7 @@ int roleIdProvider= -1;
 				   $("#usernameUniqueErrorMessage").html(data);
 				   $("#loading").hide();
 				   if(data == ""){					   
-					   window.location.replace("/opensrp-dashboard/facility/<%=facilityId%>/addWorker.html");
+					   window.location.replace("/opensrp-dashboard/facility/<%=facilityId%>/details.html");
 					   
 				   }
 				   
