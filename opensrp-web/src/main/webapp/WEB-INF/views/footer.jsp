@@ -6,16 +6,19 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
  
- 
  <footer class="sticky-footer">
       <div class="container">
         <div class="text-center">
           <small><img
 		src="<c:url value="/resources/img/community.png"/>" style = "height: 46px">
-		Copyright © mPower Social Enterprises Ltd. 2018</small>
+		Copyright © mPower Social Enterprises Ltd. 2019</small>
         </div>
       </div>
     </footer>
+    <!-- got to previous page -->
+    <a class="scroll-to-left rounded" href="#" onclick="history.back()" style="display: inline;"> 
+    	<i class="fa fa-angle-left"></i>
+    </a>
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
       <i class="fa fa-angle-up"></i>
