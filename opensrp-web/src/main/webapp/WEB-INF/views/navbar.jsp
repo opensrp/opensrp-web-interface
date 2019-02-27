@@ -18,6 +18,7 @@ font-family: ShonarBangla,Helvetica,Arial,sans-serif;}
 <%
 boolean PERM_WRITE_FACILITY = AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY");
 boolean PERM_UPLOAD_FACILITY_CSV = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FACILITY_CSV");
+boolean PERM_UPLOAD_HEALTH_ID = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_HEALTH_ID");
 
 boolean PERM_READ_FACILITY = AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY_LIST");
 
@@ -53,6 +54,13 @@ boolean PERM_READ_AGGREGATED_REPORT = AuthenticationManagerUtil.isPermitted("PER
 
 
 		<ul class="navbar-nav ml-auto">
+		
+		<li class="nav-item dropdown">
+		<a class="nav-link dropdown-toggle mr-lg-2" href="<c:url value="/?lang=${locale}"/>" >
+		 <spring:message code="lbl.home"/></strong>
+		</a></li>
+		
+		
 			<%if(PERM_WRITE_FACILITY || PERM_READ_FACILITY || PERM_UPLOAD_FACILITY_CSV ){ %>			
 			<li class="nav-item dropdown"><a
 				class="nav-link dropdown-toggle mr-lg-2" id="clientDropdown"
@@ -80,6 +88,15 @@ boolean PERM_READ_AGGREGATED_REPORT = AuthenticationManagerUtil.isPermitted("PER
 					<a class="dropdown-item"
 						href="<c:url value="/facility/upload_csv.html?lang=${locale}"/>"> <strong>
 							<spring:message code="lbl.facilityUpload"/> </strong>
+					</a>
+					
+					</a>
+					<% } %>
+					<% if(PERM_UPLOAD_HEALTH_ID){ %>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item"
+						href="<c:url value="/healthId/upload_csv.html?lang=${locale}"/>"> <strong>
+							<spring:message code="lbl.healthIdUpload"/> </strong>
 					</a>
 		
 					<% } %>

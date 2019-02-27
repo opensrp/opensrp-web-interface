@@ -32,7 +32,10 @@ List<Integer> trainingIdList = new ArrayList<Integer>();
 List<FacilityWorker> multipurposeHealthVolunteerList = new ArrayList<FacilityWorker>();
 List<FacilityWorker> otherHealthWorkerList = new ArrayList<FacilityWorker>();
 List<FacilityWorker> communityGroupMemberList = new ArrayList<FacilityWorker>();
-List<FacilityWorker> communitySupportGroupMemberList = new ArrayList<FacilityWorker>();
+List<FacilityWorker> communitySupportGroupOneMemberList = new ArrayList<FacilityWorker>();
+List<FacilityWorker> communitySupportGroupTwoMemberList = new ArrayList<FacilityWorker>();
+List<FacilityWorker> communitySupportGroupThreeMemberList = new ArrayList<FacilityWorker>();
+
 String[][] coreWorkers = new String[6][2];
 Set<FacilityTraining> trainings = new HashSet<FacilityTraining>();
 
@@ -59,7 +62,11 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		}else if(workerTypeId == 8){
 			communityGroupMemberList.add(facilityWorker);
 		}else if(workerTypeId == 9){
-			communitySupportGroupMemberList.add(facilityWorker);
+			communitySupportGroupOneMemberList.add(facilityWorker);
+		}else if(workerTypeId == 10){
+			communitySupportGroupTwoMemberList.add(facilityWorker);
+		}else if(workerTypeId == 11){
+			communitySupportGroupThreeMemberList.add(facilityWorker);
 		}
 		
 		if(workerTypeId==1){
@@ -78,9 +85,20 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		<div class="container-fluid">
 		
 		<jsp:include page="/WEB-INF/views/facility/facility-link.jsp" />
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+			<li class="breadcrumb-item"> <a  href="<c:url value="/facility/${facility.id}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>
+			</li>		
+		<%} %>
+		
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
 		<li class="breadcrumb-item">
-			<a  href="<c:url value="/facility/${facility.id}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorkerOrTraining"/></strong> </a>	 
+			<a  href="<c:url value="/facility/${facility.id}/updateProfile.html?lang=${locale}"/>"> <strong><spring:message code="lbl.updateProfile"/></strong> </a>	 
+			</li> 	
+		<%} %>	
+		
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
+		<li class="breadcrumb-item">
+			<a  href="<c:url value="/facility/${facility.id}/addWorker.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addWorker"/></strong> </a>	 
 			</li> 	
 		<%} %>	
 		
@@ -88,13 +106,16 @@ if (session.getAttribute("facilityWorkerList") != null) {
 			<li class="breadcrumb-item"><a  href="<c:url value="/facility/mhv/${facility.id}/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.createMHV"/></strong> </a>	
 			</li> 	
 		<%} %>	
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
-			<li class="breadcrumb-item"> <a  href="<c:url value="/facility/${facility.id}/details.html?lang=${locale}"/>"> <strong><spring:message code="lbl.ccProfile"/></strong> </a>
-			</li>		
-		<%} %>
+		
+		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
+		<li class="breadcrumb-item">
+			<a  href="<c:url value="/facility/${facility.id}/addCgCsg.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addCgCsg"/></strong> </a>	 
+			</li> 	
+		<%} %>	
+		
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
-				<a  href="https://27.147.129.56/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.consultationLink"/></strong> </a>
+				<a  href="https://27.147.129.56/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
 				</li>		
 		<%} %>
 		</ol>
@@ -317,16 +338,16 @@ if (session.getAttribute("facilityWorkerList") != null) {
   </tr>
   
   
-  <tr>
+	<tr>
   	<td>13.</td>
-    <td colspan="4">কমিউনিটি সাপোর্ট গ্রূপের সদস্যদের তালিকা -১৭ জন (আইডি অনুসারে)</td>
-  </tr>
+    <td colspan="4">কমিউনিটি সাপোর্ট গ্রূপ-১ এর  সদস্যদের তালিকা</td>
+    </tr>
   
      <tr>
     <td>&nbsp;</td>
     <td colspan="4"><table width="100%" border="0">
  <%
- 	for(FacilityWorker worker : communitySupportGroupMemberList){
+ 	for(FacilityWorker worker : communitySupportGroupOneMemberList){
  		String workerName = worker.getName();
  		String workerIdentifier = worker.getIdentifier();
  		workerName = (workerName != null) ? workerName : "";
@@ -341,9 +362,68 @@ if (session.getAttribute("facilityWorkerList") != null) {
  <%
  	}
  %>    
-     
     </table></td>
   </tr>
+  
+  
+  <tr>
+  	<td>14.</td>
+    <td colspan="4">কমিউনিটি সাপোর্ট গ্রূপ-২ এর  সদস্যদের তালিকা</td>
+    </tr>
+  
+     <tr>
+    <td>&nbsp;</td>
+    <td colspan="4"><table width="100%" border="0">
+ <%
+ 	for(FacilityWorker worker : communitySupportGroupTwoMemberList){
+ 		String workerName = worker.getName();
+ 		String workerIdentifier = worker.getIdentifier();
+ 		workerName = (workerName != null) ? workerName : "";
+ 		workerIdentifier = (workerIdentifier != null) ? workerIdentifier : "";
+ %>     
+      <tr>
+      	<td>নাম: </td>
+        <td><%=workerName %></td>
+        <td>মোবাইল নাম্বার:</td>
+        <td><%=workerIdentifier %></td>
+      </tr>
+ <%
+ 	}
+ %>    
+    </table></td>
+  </tr>
+  
+  
+  
+    <tr>
+  	<td>15.</td>
+    <td colspan="4">কমিউনিটি সাপোর্ট গ্রূপ-৩ এর  সদস্যদের তালিকা</td>
+    </tr>
+  
+     <tr>
+    <td>&nbsp;</td>
+    <td colspan="4"><table width="100%" border="0">
+ <%
+ 	for(FacilityWorker worker : communitySupportGroupThreeMemberList){
+ 		String workerName = worker.getName();
+ 		String workerIdentifier = worker.getIdentifier();
+ 		workerName = (workerName != null) ? workerName : "";
+ 		workerIdentifier = (workerIdentifier != null) ? workerIdentifier : "";
+ %>     
+      <tr>
+      	<td>নাম: </td>
+        <td><%=workerName %></td>
+        <td>মোবাইল নাম্বার:</td>
+        <td><%=workerIdentifier %></td>
+      </tr>
+ <%
+ 	}
+ %>    
+    </table></td>
+  </tr>
+  
+  
+  
 </table></td>
   </tr>
 </table>

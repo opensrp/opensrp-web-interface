@@ -37,7 +37,8 @@
 				<value>org.opensrp.core.entity.Permission</value>
 				<value>org.opensrp.core.entity.Location</value>
 				<value>org.opensrp.core.entity.LocationTag</value>	
-				<value>org.opensrp.core.entity.FormUpload</value>			
+				<value>org.opensrp.core.entity.FormUpload</value>	
+				<value>org.opensrp.core.entity.HealthId</value>				
 				<value>org.opensrp.facility.entity.Facility</value>	
 				<value>org.opensrp.facility.entity.FacilityWorker</value>
 				<value>org.opensrp.facility.entity.FacilityTraining</value>

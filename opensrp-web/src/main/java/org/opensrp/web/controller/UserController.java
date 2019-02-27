@@ -126,7 +126,6 @@ public class UserController {
 	public ModelAndView saveUser(Model model, HttpSession session, Locale locale) throws JSONException {
 		int[] selectedRoles = null;
 		model.addAttribute("account", new User());
-		System.err.println("okkk");
 		userServiceImpl.setRolesAttributes(selectedRoles, session);
 		model.addAttribute("locale", locale);
 		
@@ -148,7 +147,8 @@ public class UserController {
 		model.addAttribute("account", new User());
 		userServiceImpl.setRolesAttributes(selectedRoles, session);
 		model.addAttribute("locale", locale);
-		session.setAttribute("communityId", id);
+		session.setAttribute("facilityId", id);
+		model.addAttribute("facilityId", id);
 		//for adding location and team
 		model.addAttribute("teamMember", new TeamMember());
 		String personName = "";

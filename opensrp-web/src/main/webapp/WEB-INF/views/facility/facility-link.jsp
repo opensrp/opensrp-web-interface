@@ -24,3 +24,8 @@
 		 <a  href="<c:url value="/facility/upload_csv.html?lang=${locale}"/>"> <strong><spring:message code="lbl.facilityUpload"/></strong> </a>
 		 </li> 	
 <%} %>		
+<% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_HEALTH_ID")){ %>	
+		<li class="breadcrumb-item">
+		 <a  href="<c:url value="/healthId/upload_csv.html?lang=${locale}"/>"> <strong><spring:message code="lbl.healthIdUpload"/></strong> </a>
+		 </li> 	
+<%} %>	
