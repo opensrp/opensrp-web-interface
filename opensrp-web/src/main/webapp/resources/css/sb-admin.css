@@ -39,6 +39,29 @@ body.fixed-nav {
 .scroll-to-top i {
 	font-weight: 800;
 }
+
+.scroll-to-left {
+	position: fixed;
+	left: 15px;
+	bottom: 3px;
+	display: none;
+	width: 50px;
+	height: 50px;
+	text-align: center;
+	color: white;
+	background: rgba(52, 58, 64, 0.5);
+	line-height: 45px;
+}
+.scroll-to-left:focus, .scroll-to-left:hover {
+	color: white;
+}
+.scroll-to-left:hover {
+	background: #343a40;
+}
+.scroll-to-left i {
+	font-weight: 800;
+}
+
 .smaller {
 	font-size: 0.7rem;
 }
