@@ -134,6 +134,18 @@ String selectedPersonName = "";
 						</div>
 						
 						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-3">
+									<label class="form-check-label"><spring:message code="lbl.assigned"/> 
+									<input type="checkbox" id="assigned" checked onchange="checkAssigned()"/></label>
+									<p>${errorPermission}</p>
+								</div>
+							</div>
+						</div>
+						
+						
+						
 						<div class="form-group" id="messageDiv"  style="display: none;">
 							<div class="form-check">
 								<div class="row">
@@ -171,11 +183,11 @@ String selectedPersonName = "";
 							</div>
 						</div>
 						
-						<div class="form-group">
+						<div class="form-group" id="contactDiv">
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerContact"/></label>
-									<input name="identifier" class="form-control"
+									<input name="identifier" class="form-control" id="contact"
 										required="required" aria-describedby="nameHelp"
 										placeholder="<spring:message code="lbl.healthWorkerContact"/>" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
@@ -186,11 +198,11 @@ String selectedPersonName = "";
 						<input name="facilityId" id="facilityId" value="<%=facilityId%>" style="display: none;"/>
 						<input name="newWorker" id="newWorker" value="1" style="display: none;"/>
 						
-						<div class="form-group">
+						<div class="form-group" id="organizationDiv">
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/></label>
-									<input name="organization" class="form-control"
+									<input name="organization" class="form-control" id="organization"
 										required="required" aria-describedby="nameHelp"
 										placeholder="<spring:message code="lbl.healthWorkerOrganization"/>" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
@@ -538,6 +550,25 @@ function check(){
 	trainingList = allVals;
 	$("#trainings").val(trainingList.toString());
 }
+
+function checkAssigned(){
+	if($("#assigned").is(':checked')){
+		$("#workerNameWithoutSuggestionDiv").show();
+		$( "#comboboxWithoutSuggestion" ).prop( "disabled", false );
+		$("#contactDiv").show();
+		$( "#contact").prop( "disabled", false );
+		$("#organizationDiv").show();
+		$( "#organization" ).prop( "disabled", false );
+	}else{
+		$("#workerNameWithoutSuggestionDiv").hide();
+		$( "#comboboxWithoutSuggestion" ).prop( "disabled", true );
+		$("#contactDiv").hide();
+		$( "#contact").prop( "disabled", true );
+		$("#organizationDiv").hide();
+		$( "#organization" ).prop( "disabled", true );
+	}
+}
+
 
 var prevTrainings ="";
 function checkForTraining(){
