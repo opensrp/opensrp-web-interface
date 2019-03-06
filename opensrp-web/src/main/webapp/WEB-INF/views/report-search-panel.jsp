@@ -41,7 +41,7 @@
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="division"
 						name="division">
-						<option value=""><spring:message code="lbl.seelctDivision"/></option>
+						<option value=""><spring:message code="lbl.selectDivision"/></option>
 						<%
 							for (Object[] objects : divisions) {%>
 								<option value="<%=objects[1]%>?<%=objects[0]%>"><%=objects[0]%></option>
@@ -54,12 +54,14 @@
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="district"
 						name="district">
+						<option value="0?"><spring:message code="lbl.selectDistrict"/></option>
 						<option value=""></option>
 					</select>
 				</div>
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="upazila"
 						name="upazila">
+						<option value="0?"><spring:message code="lbl.selectUpazila"/></option>
 						<option value=""></option>
 						
 					</select>
@@ -67,27 +69,31 @@
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="union"
 						name="union">
+						<option value="0?"><spring:message code="lbl.selectUnion"/></option>
 						<option value=""></option>
 					</select>
 				</div>
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="ward"
 						name="ward">
+						<option value="0?"><spring:message code="lbl.selectWard"/></option>
 						<option value=""></option>
 					</select>
 				</div>
-				<div class="col-3">
+				<!-- <div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="subunit"
 						name="subunit">
+						<option value="0?"><spring:message code="lbl.selectSubunit"/></option>
 						<option value=""></option>
 					</select>
 				</div>
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="mauzapara"
 						name="mauzapara">
+						<option value="0?"><spring:message code="lbl.selectMauzapara"/></option>
 						<option value=""></option>
 					</select>
-				</div>
+				</div>  -->
 			</div>
 
 			<div class="row">

@@ -339,22 +339,34 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * @param className is name of Entity class who is mapped with database table.
 	 * @return List of Entity object or null.
 	 */
+
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> findAllByKeysWithALlMatches(boolean isProvider, Map<String, String> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		for (Map.Entry<String, String> entry : fielaValues.entrySet()) {
-			criteria.add(Restrictions.ilike(entry.getKey(), entry.getValue(), MatchMode.ANYWHERE));
+		List<T> result = null;
+		try {
+			Criteria criteria = session.createCriteria(className);
+			for (Map.Entry<String, String> entry : fielaValues.entrySet()) {
+				criteria.add(Restrictions.ilike(entry.getKey(), entry.getValue(), MatchMode.ANYWHERE));
+			}
+			if (isProvider) {
+				criteria.add(Restrictions.eq("provider", true));
+			}
+			result = criteria.list();
+		}catch (Exception e) {
+			logger.error(e);
 		}
-		if (isProvider) {
-			criteria.add(Restrictions.eq("provider", true));
+		finally {
+			session.close();
 		}
 		
-		@SuppressWarnings("unchecked")
-		List<T> result = criteria.list();
-		session.close();
-		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
+		if(result!= null){
+			return (List<T>) (result.size() > 0 ? (List<T>) result : null);
+		}
+		
+		return null;
 	}
 	
 	/**

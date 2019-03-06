@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -73,6 +74,7 @@ public class FacilityHelperUtil {
 	
 	public void setFacilityWorkerTypeAndTrainingsToSession(HttpSession session) {
 		List<FacilityWorkerType> workerTypeList = facilityWorkerTypeService.findAll("FacilityWorkerType");
+		 Collections.reverse(workerTypeList); 
 		//added on dec 21, 2018: remove chcp and multiPurposeHealthVolunteer form dropdown
 		/*Iterator<FacilityWorkerType> i = workerTypeList.iterator();
 		while (i.hasNext()) {
@@ -262,7 +264,10 @@ public class FacilityHelperUtil {
 		int workerTypeIdNum;
 		if (workerTypeId != null && !workerTypeId.isEmpty()) {
 			workerTypeIdNum = Integer.parseInt(workerTypeId);
-			if (workerTypeIdNum == 8 || workerTypeIdNum == 9) {
+			if (workerTypeIdNum == 8 
+					|| workerTypeIdNum == 9
+					|| workerTypeIdNum == 10
+					|| workerTypeIdNum == 11) {
 				return getAllWorkersNameByKeysWithALlMatchesFromView(name);
 			}
 		}
@@ -277,8 +282,10 @@ public class FacilityHelperUtil {
 		List<FacilityWorker> workerList = repository.findAllByKeysWithALlMatches(isProvider, fieldValues,
 		    FacilityWorker.class);
 		List<String> workerNameList = new ArrayList<String>();
-		for (FacilityWorker worker : workerList) {
-			workerNameList.add(worker.getName());
+		if(workerList!= null){
+			for (FacilityWorker worker : workerList) {
+				workerNameList.add(worker.getName());
+			}
 		}
 		return workerNameList;
 	}
@@ -286,7 +293,7 @@ public class FacilityHelperUtil {
 	@Transactional
 	public List<String> getAllWorkersNameByKeysWithALlMatchesFromView(String name) {
 		String query = "select first_name from core.\"viewJsonDataConversionOfClient\""
-		        + "where entity_type in ('ec_member', 'ec_woman')" + "and first_name ilike '%" + name + "%'";
+		        + " where entity_type in ('ec_member', 'ec_woman')" + "and first_name ilike '%" + name + "%'";
 		List<String> workerNameList = repository.executeSelectQuery(query);
 		return workerNameList;
 	}

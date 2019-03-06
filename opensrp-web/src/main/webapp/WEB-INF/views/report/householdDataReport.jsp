@@ -123,18 +123,18 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-xl-4 col-sm-6 mb-4">
+						<!-- <div class="col-xl-4 col-sm-6 mb-4">
 							<div class="card text-white o-hidden h-100 bg-primary">
 								<div class="card-body">
-									<div class="card-body-icon">
+									<div class="card-body-icon">  -->
 										<!-- <i class="fa fa-fw fa-female"></i>  -->
-									</div>
+									<!-- </div>
 									<div class="mr-5">
 										<h5>Other Percentage</h5>
 									</div>
 								</div>
 							</div>
-						</div>
+						</div>  -->
 						<%
 							}
 						}
