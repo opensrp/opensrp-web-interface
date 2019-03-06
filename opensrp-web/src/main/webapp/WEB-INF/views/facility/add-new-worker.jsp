@@ -456,9 +456,9 @@ String selectedPersonName = "";
 
 $("#workerInfo").submit(function(event) { 
 	var url = "/opensrp-dashboard/rest/api/v1/facility/saveWorker";
-	var workerName = "N/A";
-	var workerIdentifier = "N/A";
-	var workerOrganization = "N/A";
+	var workerName = "Not Assigned";
+	var workerIdentifier = "-";
+	var workerOrganization = "-";
 	
 	if(isAssigned === 1){
 		console.log("an worker is assigned");
