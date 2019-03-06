@@ -1,15 +1,13 @@
 package org.opensrp.web.rest.controller;
 
-import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.OK;
 
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.core.entity.Location;
-import org.opensrp.core.entity.Team;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +37,11 @@ public class TeamRestController {
 		try {
 			
 			Location location = locationServiceImpl.findByKey(name.toUpperCase().trim(), "name", Location.class);
-			Team team = teamService.findByKey(location.getUuid(), "locationUuid", Team.class);
+			//Team team = teamService.findByKey(location.getUuid(), "locationUuid", Team.class);
 			JSONObject teamObject = new JSONObject();
-			teamObject.put("teamUuid", team.getUuid());
-			teamObject.put("locationUuid", team.getLocationUuid());
-			teamObject.put("team", team.getName());
+			//teamObject.put("teamUuid", team.getUuid());
+			teamObject.put("locationUuid", location.getUuid());
+			//teamObject.put("team", team.getName());
 			return new ResponseEntity<>(new Gson().toJson(teamObject), OK);
 		}
 		catch (Exception e) {
