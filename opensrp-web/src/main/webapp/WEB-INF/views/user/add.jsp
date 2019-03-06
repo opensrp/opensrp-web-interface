@@ -120,12 +120,12 @@ int roleIdProvider= -1;
 						 </div>
 						 
 						 <form:hidden path="parentUser" id="parentUser"/>
-						 <div class="row col-12 tag-height">						
+						 <%-- <div class="row col-12 tag-height">						
 							<div class="form-group">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.parentUser"/></label>										 
 								<select id="combobox" class="form-control">	</select>								
 							 </div>							 
-						 </div>
+						 </div> --%>
 						 
 						
 						<div class="row col-12 tag-height">						

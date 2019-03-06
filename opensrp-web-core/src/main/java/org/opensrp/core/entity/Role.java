@@ -68,7 +68,7 @@ public class Role implements GrantedAuthority {
 	private User creator;
 	
 	@Column(name = "IS_ACTIVE")
-	private boolean active;
+	private boolean active = true;
 	
 	public int getId() {
 		return id;
