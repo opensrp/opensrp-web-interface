@@ -452,18 +452,26 @@ String selectedPersonName = "";
 
 $("#workerInfo").submit(function(event) { 
 	var url = "/opensrp-dashboard/rest/api/v1/facility/saveWorker";
-	var workerName = "";
-	if(isSuggestionActive==1){
-		//workerName = $("#combobox").val();
-		workerName = document.getElementsByName("personName")[0].value;
-	}else{
-		workerName = $("#comboboxWithoutSuggestion").val();
+	var workerName = "N/A";
+	var workerIdentifier = "N/A";
+	var workerOrganization = "N/A";
+	
+	if(isAssigned === 1){
+		console.log("an worker is assigned");
+		if(isSuggestionActive==1){
+			//workerName = $("#combobox").val();
+			workerName = document.getElementsByName("personName")[0].value;
+		}else{
+			workerName = $("#comboboxWithoutSuggestion").val();
+		}
+		workerIdentifier = $('input[name=identifier]').val();
+		workerOrganization = $('input[name=organization]').val();
 	}
 	var formData = {
 			'workerId': '-99',
             'name': workerName,
-            'identifier': $('input[name=identifier]').val(),
-            'organization': $('input[name=organization]').val(),
+            'identifier': workerIdentifier,
+            'organization': workerOrganization,
             'facilityWorkerTypeId': $("#facilityWorkerTypeId").val(),
             'facilityTrainings': $('input[name=trainings]').val(),
             'facilityId': $("#facilityId").val()
@@ -474,7 +482,7 @@ $("#workerInfo").submit(function(event) {
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	event.preventDefault();
-	if($("#newWorker").val() === "0"){
+	/* if($("#newWorker").val() === "0"){
 		url = "/opensrp-dashboard/rest/api/v1/facility/editWorker";
 		formData = {
 				'workerId': $("#workerId").val(),
@@ -487,7 +495,7 @@ $("#workerInfo").submit(function(event) {
 	        };
 	}else if($("#newWorker").val() === "1"){
 		//alert("new worker");
-	}
+	} */
 	$.ajax({
 		contentType : "application/json",
 		type: "POST",
@@ -551,17 +559,25 @@ function check(){
 	$("#trainings").val(trainingList.toString());
 }
 
+var isAssigned = 1;
 function checkAssigned(){
 	if($("#assigned").is(':checked')){
-		$("#workerNameWithoutSuggestionDiv").show();
-		$( "#comboboxWithoutSuggestion" ).prop( "disabled", false );
+		isAssigned = 1;
+		//$("#workerNameWithoutSuggestionDiv").show();
+		//$( "#comboboxWithoutSuggestion" ).prop( "disabled", false );
+		checkForTraining();
+		
 		$("#contactDiv").show();
 		$( "#contact").prop( "disabled", false );
 		$("#organizationDiv").show();
 		$( "#organization" ).prop( "disabled", false );
 	}else{
-		$("#workerNameWithoutSuggestionDiv").hide();
-		$( "#comboboxWithoutSuggestion" ).prop( "disabled", true );
+		isAssigned = 0;
+		//$("#workerNameWithoutSuggestionDiv").hide();
+		//$( "#comboboxWithoutSuggestion" ).prop( "disabled", true );
+		hideNameWithoutSuggestionDiv();
+		hideNameWithSuggestionDiv();
+		
 		$("#contactDiv").hide();
 		$( "#contact").prop( "disabled", true );
 		$("#organizationDiv").hide();
@@ -613,6 +629,21 @@ function showNameWithoutSuggestionDiv(){
 	$("#combobox").parent().find("a.ui-button").button("disable");
 }
 
+function hideNameWithoutSuggestionDiv(){
+	$("#workerNameWithoutSuggestionDiv").hide();
+	$( "#comboboxWithoutSuggestion" ).prop( "disabled", true );
+}
+
+function hideNameWithSuggestionDiv(){
+	$("#combobox").combobox("option", "disabled", true); 
+	
+	$("#workerNameWithSuggestionDiv").hide();
+	//$( "#combobox" ).prop( "disabled", true );
+	$("#combobox").parent().find("input.ui-autocomplete-input").autocomplete("option", "disabled", true).prop("disabled",true);
+	$("#combobox").parent().find("a.ui-button").button("disable");
+	
+	
+}
 
 function checkForTrainingOldWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
@@ -665,11 +696,14 @@ function checkForTrainingOldWorker(){
 function checkForTrainingNewWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
 	
-	if(workerType === '7' || workerType === '8' || workerType === '9'){
-		showNameWithSuggestionDiv();
-	}else{
-		showNameWithoutSuggestionDiv();
+	if(isAssigned === 1){
+		if(workerType === '7' || workerType === '8' || workerType === '9'){
+			showNameWithSuggestionDiv();
+		}else{
+			showNameWithoutSuggestionDiv();
+		}
 	}
+	
 	//end:for name suggestion
 	if(workerType === '1'){
 		warnUser("CHCP", -1);
