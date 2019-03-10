@@ -26,8 +26,8 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 int roleIdCHCP= -1;
 int roleIdProvider= -1;
 
-
-	%>
+List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
+%>
 
 <head>
 <meta charset="utf-8">
@@ -185,7 +185,24 @@ int roleIdProvider= -1;
 	                        	</small>
 							 </div>
 							 
-						 </div>						
+						 </div>	
+						 <div class="row col-12 tag-height">						
+							<div class="form-group required">
+								<label class="label-width"  for="location"><spring:message code="lbl.location"/></label>
+									<%																					
+									    for (Object[] objects : wards) {
+									    	String[] ward = objects[0].toString().split(":");
+									    	int length = ward.length-1;
+									%>									
+										<form:checkbox 
+											path="roles" class="chk" value="<%=objects[1]%>"/>
+										<label class="form-control mx-sm-3" for="defaultCheck1"> <%=ward[length]%></label>									
+									<%
+										}
+									%>
+								
+							</div>
+						</div>					
 						
 						
 						<div class="row col-12 tag-height">						
@@ -274,11 +291,11 @@ int roleIdProvider= -1;
 			            'username': $('input[name=username]').val(),
 			            'password': $('input[name=password]').val(),
 			            'parentUser': "",
-			            'roles': "",
+			            'locationList': getCheckboxValueUsingClass(),
 			            'teamMember': ""
 			        };
 			
-			
+			console.log(formData)
 			event.preventDefault();
 			
 			$.ajax({

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javassist.tools.framedump;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.Permission;
 import org.opensrp.core.entity.TeamMember;
 import org.opensrp.core.entity.User;
@@ -21,6 +24,8 @@ import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.RoleService;
 import org.opensrp.core.service.TeamMemberService;
 import org.opensrp.core.service.UserService;
+import org.opensrp.facility.entity.Facility;
+import org.opensrp.facility.service.FacilityService;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -84,6 +89,9 @@ public class UserController {
 	private TeamMemberService teamMemberServiceImpl;
 	
 	@Autowired
+	private FacilityService facilityService;
+	
+	@Autowired
 	private TeamMember teamMember;
 	
 	/**
@@ -143,6 +151,10 @@ public class UserController {
 	@RequestMapping(value = "/facility/mhv/{id}/add.html", method = RequestMethod.GET)
 	public ModelAndView saveUserAsCC(Model model, HttpSession session, @PathVariable("id") int id, Locale locale)
 	    throws JSONException {
+		Facility facility = facilityService.findById(id, "id", Facility.class);
+		Location location = locationServiceImpl.findByKey(facility.getUnion(), "name", Location.class);
+		List<Object[]> wards = locationServiceImpl.getChildData(location.getId());
+		session.setAttribute("wards", wards);
 		int[] selectedRoles = null;
 		model.addAttribute("account", new User());
 		userServiceImpl.setRolesAttributes(selectedRoles, session);

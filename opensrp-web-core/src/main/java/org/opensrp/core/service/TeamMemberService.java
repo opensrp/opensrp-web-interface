@@ -258,16 +258,21 @@ public class TeamMemberService {
 	}
 	
 	public TeamMember setCreatorLocationAndPersonAndTeamAttributeInLocation(TeamMember teamMember, int personId, Team team,
-	                                                                        Location location) {
+	                                                                        int[] locations) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User creator = (User) repository.findByKey(auth.getName(), "username", User.class);
 		User person = (User) repository.findById(personId, "id", User.class);
 		Set<Location> locationSet = new HashSet<Location>();
-		
-		if (location != null) {
-			locationSet.add(location);
+		if (locations != null && locations.length != 0) {
+			for (int locationId : locations) {
+				Location location = (Location) repository.findById(locationId, "id", Location.class);
+				if (location != null) {
+					locationSet.add(location);
+					
+				}
+			}
+			teamMember.setLocations(locationSet);
 		}
-		teamMember.setLocations(locationSet);
 		
 		teamMember.setCreator(creator);
 		teamMember.setPerson(person);

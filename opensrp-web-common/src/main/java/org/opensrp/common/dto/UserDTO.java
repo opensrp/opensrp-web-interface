@@ -22,7 +22,7 @@ public class UserDTO {
 	
 	private int parentUser;
 	
-	private int[] locationList;
+	private String locationList;
 	
 	private int team;
 	
@@ -36,11 +36,11 @@ public class UserDTO {
 		this.teamMember = teamMember;
 	}
 	
-	public int[] getLocationList() {
+	public String getLocationList() {
 		return locationList;
 	}
 	
-	public void setLocationList(int[] locationList) {
+	public void setLocationList(String locationList) {
 		this.locationList = locationList;
 	}
 	
@@ -128,8 +128,8 @@ public class UserDTO {
 	public String toString() {
 		return "UserDTO [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", mobile=" + mobile
 		        + ", idetifier=" + idetifier + ", username=" + username + ", password=" + password + ", roles=" + roles
-		        + ", parentUser=" + parentUser + ", locationList=" + Arrays.toString(locationList) + ", team=" + team
-		        + ", teamMember=" + teamMember + "]";
+		        + ", parentUser=" + parentUser + ", locationList=" + locationList + ", team=" + team + ", teamMember="
+		        + teamMember + "]";
 	}
 	
 }

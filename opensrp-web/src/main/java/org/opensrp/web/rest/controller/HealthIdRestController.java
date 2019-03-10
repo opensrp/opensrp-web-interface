@@ -45,4 +45,17 @@ public class HealthIdRestController {
 		}
 		return new ResponseEntity<>(noContent.toString(), HttpStatus.NO_CONTENT);
 	}
+	
+	@RequestMapping(value = "/reserved/single/migration", method = RequestMethod.GET)
+	public ResponseEntity<String> getSingleResearvedHealthIdForMigration() throws Exception {
+		JSONObject noContent = new JSONObject();
+		noContent.put("identifiers", "");
+		try {
+			return new ResponseEntity<>(healthIdService.getSingleHealthIdAndUpdateRecord().toString(), OK);
+		}
+		catch (Exception e) {
+			logger.error("health id error:" + e);
+		}
+		return new ResponseEntity<>(noContent.toString(), HttpStatus.NO_CONTENT);
+	}
 }

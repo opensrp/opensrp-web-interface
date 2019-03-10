@@ -79,15 +79,15 @@ public class UserRestController {
 			User user = new User();
 			if (!isExists) {
 				user = userServiceImpl.convert(userDTO);
-				System.err.println(user.toString());
 				user.setChcp(facility.getId() + "");
-				int numberOfUserSaved =(int)userServiceImpl.save(user, false);
+				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
 				
 				if (userDTO.isTeamMember()) {
-					
+					int[] locations = new int[5];
+					locations[0] = team.getLocation().getId();
 					user = userServiceImpl.findById(user.getId(), "id", User.class);
 					teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
-					    user.getId(), team, team.getLocation());
+					    user.getId(), team, locations);
 					teamMember.setIdentifier(userDTO.getIdetifier());
 					
 					teamMemberServiceImpl.save(teamMember);
@@ -101,16 +101,14 @@ public class UserRestController {
 					facilityWorker.setFacility(facility);
 					facilityWorker.setFacilityWorkerType(facilityWorkerType);
 					facilityWorkerTypeService.save(facilityWorker);
-					String mailBody = "Dear "+user.getFullName()
-							+",\n\nYour login credentials for CBHC are given below -\nusername : "
-							+user.getUsername()
-							+"\npassword : "
-							+userDTO.getPassword();
-					if(numberOfUserSaved > 0){
-						logger.info("<><><><><> in user rest controller before sending mail to-"+user.getEmail());
+					String mailBody = "Dear " + user.getFullName()
+					        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + user.getUsername()
+					        + "\npassword : " + userDTO.getPassword();
+					if (numberOfUserSaved > 0) {
+						logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
 						emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
-
-					}	
+						
+					}
 				}
 			} else {
 				userNameUniqueError = "User name already taken.";
@@ -131,8 +129,8 @@ public class UserRestController {
 		Team team = new Team();
 		Facility facility = new Facility();
 		User user = new User();
-		String firstName="";
-		String lastName="";
+		String firstName = "";
+		String lastName = "";
 		try {
 			boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());
 			Role role = roleService.findByKey("Provider", "name", Role.class);
@@ -146,12 +144,16 @@ public class UserRestController {
 				user.setChcp(facility.getId() + "");
 				firstName = user.getFirstName();
 				lastName = user.getLastName();
-				int numberOfUserSaved =(int)userServiceImpl.save(user, false);
+				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
 				//System.out.println("in controller :"+user.toString());
-				
+				String[] locations = userDTO.getLocationList().split(",");
+				int[] locationList = new int[locations.length];
+				for (int i = 0; i < locations.length; i++) {
+					locationList[i] = Integer.parseInt(locations[i]);
+				}
 				user = userServiceImpl.findById(user.getId(), "id", User.class);
 				teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
-				    user.getId(), team, location);
+				    user.getId(), team, locationList);
 				teamMember.setIdentifier(userDTO.getIdetifier());
 				
 				teamMemberServiceImpl.save(teamMember);
@@ -165,13 +167,11 @@ public class UserRestController {
 				facilityWorker.setFacility(facility);
 				facilityWorker.setFacilityWorkerType(facilityWorkerType);
 				facilityWorkerTypeService.save(facilityWorker);
-				String mailBody = "Dear "+user.getFullName()
-						+",\n\nYour login credentials for CBHC are given below -\nusername : "
-						+user.getUsername()
-						+"\npassword : "
-						+userDTO.getPassword();
-				if(numberOfUserSaved>0){
-					logger.info("<><><><><> in user rest controller before sending mail to-"+user.getEmail());
+				String mailBody = "Dear " + user.getFullName()
+				        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + user.getUsername()
+				        + "\npassword : " + userDTO.getPassword();
+				if (numberOfUserSaved > 0) {
+					logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
 					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
 				}
 				
@@ -182,12 +182,12 @@ public class UserRestController {
 		catch (Exception e) {
 			e.printStackTrace();
 			String errorMessage = "";
-			if(user.getUuid()==null && user.getFirstName().equals("error")){
+			if (user.getUuid() == null && user.getFirstName().equals("error")) {
 				errorMessage = user.getLastName();
 				userNameUniqueError = errorMessage;
 				user.setFirstName(firstName);
 				user.setLastName(lastName);
-			}else{
+			} else {
 				userNameUniqueError = "some Problem ocuured please contact with Admin";
 			}
 		}

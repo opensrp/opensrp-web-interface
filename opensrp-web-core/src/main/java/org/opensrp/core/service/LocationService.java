@@ -74,7 +74,6 @@ public class LocationService {
 		Location location = (Location) t;
 		
 		location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
-		System.err.println("" + repository + ",location:" + location);
 		long createdLocation = 0;
 		if (!location.getUuid().isEmpty()) {
 			createdLocation = repository.save(location);
