@@ -134,6 +134,18 @@ String selectedPersonName = "";
 						</div>
 						
 						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-3">
+									<label class="form-check-label"><spring:message code="lbl.assigned"/> 
+									<input type="checkbox" id="assigned" checked onchange="checkAssigned()"/></label>
+									<p>${errorPermission}</p>
+								</div>
+							</div>
+						</div>
+						
+						
+						
 						<div class="form-group" id="messageDiv"  style="display: none;">
 							<div class="form-check">
 								<div class="row">
@@ -171,11 +183,11 @@ String selectedPersonName = "";
 							</div>
 						</div>
 						
-						<div class="form-group">
+						<div class="form-group" id="contactDiv">
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerContact"/></label>
-									<input name="identifier" class="form-control"
+									<input name="identifier" class="form-control" id="contact"
 										required="required" aria-describedby="nameHelp"
 										placeholder="<spring:message code="lbl.healthWorkerContact"/>" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
@@ -186,11 +198,11 @@ String selectedPersonName = "";
 						<input name="facilityId" id="facilityId" value="<%=facilityId%>" style="display: none;"/>
 						<input name="newWorker" id="newWorker" value="1" style="display: none;"/>
 						
-						<div class="form-group">
+						<div class="form-group" id="organizationDiv">
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/></label>
-									<input name="organization" class="form-control"
+									<input name="organization" class="form-control" id="organization"
 										required="required" aria-describedby="nameHelp"
 										placeholder="<spring:message code="lbl.healthWorkerOrganization"/>" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
@@ -230,8 +242,12 @@ String selectedPersonName = "";
 						<div class="form-group" >
 							<div class="row">
 								<div class="col-2">
-									<button onclick="cancelWorkerEdit(<%=facilityId %>)" class="btn btn-danger btn-block"><spring:message code="lbl.cancel"/></button>
-								</div>
+									<%-- <button onclick="cancelWorkerEdit(<%=facilityId %>)" class="btn btn-danger btn-block"><spring:message code="lbl.cancel"/></button>
+								 --%>
+								 <a  href="<c:url value="/facility/${facility.id}/details.html?lang=${locale}"/>" class="btn btn-danger btn-block">
+								 	 <strong><spring:message code="lbl.cancel"/></strong>
+								 </a>
+								 </div>
 								<div class="col-2" id="saveButtonDiv">
 									<input type="submit" value="<spring:message code="lbl.save"/>"
 										class="btn btn-success btn-block"/>
@@ -440,18 +456,26 @@ String selectedPersonName = "";
 
 $("#workerInfo").submit(function(event) { 
 	var url = "/opensrp-dashboard/rest/api/v1/facility/saveWorker";
-	var workerName = "";
-	if(isSuggestionActive==1){
-		//workerName = $("#combobox").val();
-		workerName = document.getElementsByName("personName")[0].value;
-	}else{
-		workerName = $("#comboboxWithoutSuggestion").val();
+	var workerName = "Not Assigned";
+	var workerIdentifier = "-";
+	var workerOrganization = "-";
+	
+	if(isAssigned === 1){
+		console.log("an worker is assigned");
+		if(isSuggestionActive==1){
+			//workerName = $("#combobox").val();
+			workerName = document.getElementsByName("personName")[0].value;
+		}else{
+			workerName = $("#comboboxWithoutSuggestion").val();
+		}
+		workerIdentifier = $('input[name=identifier]').val();
+		workerOrganization = $('input[name=organization]').val();
 	}
 	var formData = {
 			'workerId': '-99',
             'name': workerName,
-            'identifier': $('input[name=identifier]').val(),
-            'organization': $('input[name=organization]').val(),
+            'identifier': workerIdentifier,
+            'organization': workerOrganization,
             'facilityWorkerTypeId': $("#facilityWorkerTypeId").val(),
             'facilityTrainings': $('input[name=trainings]').val(),
             'facilityId': $("#facilityId").val()
@@ -462,7 +486,7 @@ $("#workerInfo").submit(function(event) {
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	event.preventDefault();
-	if($("#newWorker").val() === "0"){
+	/* if($("#newWorker").val() === "0"){
 		url = "/opensrp-dashboard/rest/api/v1/facility/editWorker";
 		formData = {
 				'workerId': $("#workerId").val(),
@@ -475,7 +499,7 @@ $("#workerInfo").submit(function(event) {
 	        };
 	}else if($("#newWorker").val() === "1"){
 		//alert("new worker");
-	}
+	} */
 	$.ajax({
 		contentType : "application/json",
 		type: "POST",
@@ -539,6 +563,33 @@ function check(){
 	$("#trainings").val(trainingList.toString());
 }
 
+var isAssigned = 1;
+function checkAssigned(){
+	if($("#assigned").is(':checked')){
+		isAssigned = 1;
+		//$("#workerNameWithoutSuggestionDiv").show();
+		//$( "#comboboxWithoutSuggestion" ).prop( "disabled", false );
+		checkForTraining();
+		
+		$("#contactDiv").show();
+		$( "#contact").prop( "disabled", false );
+		$("#organizationDiv").show();
+		$( "#organization" ).prop( "disabled", false );
+	}else{
+		isAssigned = 0;
+		//$("#workerNameWithoutSuggestionDiv").hide();
+		//$( "#comboboxWithoutSuggestion" ).prop( "disabled", true );
+		hideNameWithoutSuggestionDiv();
+		hideNameWithSuggestionDiv();
+		
+		$("#contactDiv").hide();
+		$( "#contact").prop( "disabled", true );
+		$("#organizationDiv").hide();
+		$( "#organization" ).prop( "disabled", true );
+	}
+}
+
+
 var prevTrainings ="";
 function checkForTraining(){
 	check();
@@ -582,6 +633,21 @@ function showNameWithoutSuggestionDiv(){
 	$("#combobox").parent().find("a.ui-button").button("disable");
 }
 
+function hideNameWithoutSuggestionDiv(){
+	$("#workerNameWithoutSuggestionDiv").hide();
+	$( "#comboboxWithoutSuggestion" ).prop( "disabled", true );
+}
+
+function hideNameWithSuggestionDiv(){
+	$("#combobox").combobox("option", "disabled", true); 
+	
+	$("#workerNameWithSuggestionDiv").hide();
+	//$( "#combobox" ).prop( "disabled", true );
+	$("#combobox").parent().find("input.ui-autocomplete-input").autocomplete("option", "disabled", true).prop("disabled",true);
+	$("#combobox").parent().find("a.ui-button").button("disable");
+	
+	
+}
 
 function checkForTrainingOldWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
@@ -634,11 +700,14 @@ function checkForTrainingOldWorker(){
 function checkForTrainingNewWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
 	
-	if(workerType === '7' || workerType === '8' || workerType === '9'){
-		showNameWithSuggestionDiv();
-	}else{
-		showNameWithoutSuggestionDiv();
+	if(isAssigned === 1){
+		if(workerType === '7' || workerType === '8' || workerType === '9'){
+			showNameWithSuggestionDiv();
+		}else{
+			showNameWithoutSuggestionDiv();
+		}
 	}
+	
 	//end:for name suggestion
 	if(workerType === '1'){
 		warnUser("CHCP", -1);
