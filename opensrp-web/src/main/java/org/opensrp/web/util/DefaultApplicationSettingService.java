@@ -99,6 +99,7 @@ public class DefaultApplicationSettingService {
 		String roleName = DefaultRole.Admin.name();
 		Role role = new Role();
 		role.setName(roleName);
+		role.setActive(true);
 		Role gettingRole = roleServiceImpl.findByKey(role.getName(), "name", Role.class);
 		
 		try {

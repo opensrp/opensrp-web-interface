@@ -69,6 +69,11 @@ public class LocationService {
 	}
 	
 	@Transactional
+	public List<Object[]> executeSelectQuery(String sqlQuery, Map<String, Object> params) {
+		return repository.executeSelectQuery(sqlQuery, params);
+	}
+	
+	@Transactional
 	public <T> long save(T t) throws Exception {
 		
 		Location location = (Location) t;
