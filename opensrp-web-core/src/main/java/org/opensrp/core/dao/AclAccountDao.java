@@ -30,7 +30,12 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
 		User account = null;
 		try {
-			account = getByUsername(username);
+			logger.info("usernameAndPassword:" + username);
+			String[] credentials = username.split("\\$\\#\\$");
+			String usernameStr = credentials[0];
+			String passwordStr = credentials[1];
+			logger.info(credentials.length+ " -> username: " + usernameStr+ " -> password: "+ passwordStr);
+			account = getByUsername(usernameStr);
 			logger.info("username:" + account.toString());
 			
 		}

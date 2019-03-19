@@ -52,7 +52,7 @@
           </div>
           <div class="form-group">
             <label>Password</label>
-            <input type="password" class="form-control"id="password" name="password" placeholder="Password">
+            <input type="password" class="form-control"id="password" name="password" placeholder="Password" >
           </div>
           <!--<div class="form-group">
             <div class="form-check">
@@ -62,7 +62,7 @@
           </div> -->
           
           <input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
-          <input type="submit" class="btn btn-primary btn-block"  value="Log in">
+          <input type="submit" class="btn btn-primary btn-block" onclick="concatPasswordWithUsername()"  value="Log in">
           
         </form>
         
@@ -78,6 +78,15 @@
  <script src="<c:url value='/resources/vendor/jquery/jquery.min.js' />"></script>
  <script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.bundle.min.js' />"></script>
  <script src="<c:url value='/resources/vendor/jquery-easing/jquery.easing.min.js' />"></script>
+ <script type="text/javascript"> 
+ function concatPasswordWithUsername(){
+	 var password = $("#password").val();
+	 var username = $("#username").val();
+	 var usernameAndPassword = username + "$#$" + password;
+	 $("#username").val(usernameAndPassword);
+	 console.log(usernameAndPassword);
+ }
+ </script>
  
  </body>
 </html>
