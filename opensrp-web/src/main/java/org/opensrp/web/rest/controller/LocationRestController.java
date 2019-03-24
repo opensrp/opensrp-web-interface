@@ -2,8 +2,6 @@ package org.opensrp.web.rest.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,10 +75,8 @@ public class LocationRestController {
 				}
 				i++;
 			}
-			List<String> address = new ArrayList<String>();
-			address = new ArrayList<String>(Arrays.asList(stringBuilder.toString().split(",")));
-			System.err.println("address:" + address);
-			response.put("locations", stringBuilder.toString().replaceAll(", $", ""));
+			
+			response.put("locations", stringBuilder);
 			response.put("role", roleName);
 			return new ResponseEntity<>(response.toString(), OK);
 		}
