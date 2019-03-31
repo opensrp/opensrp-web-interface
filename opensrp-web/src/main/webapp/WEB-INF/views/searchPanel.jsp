@@ -182,7 +182,7 @@
 									%>
 					</select>
 				</div>
-				<div class="col-3">
+				<%-- <div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="subunit"
 						name="subunit">
 						<option value="0?"><spring:message code="lbl.selectSubunit"/></option>
@@ -223,7 +223,7 @@
 										}
 									%>
 					</select>
-				</div>
+				</div> --%>
 			</div>
 
 

@@ -122,9 +122,13 @@ String selectedPersonName = "";
 												//end:  removing chcp and multiPurposeHealthVolunteer from dropdown
 												for (FacilityWorkerType workerType : workerTypeList)
 												{
+													if(workerType.getName().equals("HEALTH ASSISTANT")
+															|| workerType.getName().equals("FAMILY WELFARE ASSISTANT")
+															|| workerType.getName().equals("OTHER HEALTH WORKER")) {
 														%>
-															<option value="<%=workerType.getId() %>"><%=workerType.getName()%></option>
+															<option id="<%=workerType.getName()%>" value="<%=workerType.getId() %>"><%=workerType.getName()%></option>
 														<%
+													}
 												}
 												%>
 											</select>
@@ -198,7 +202,7 @@ String selectedPersonName = "";
 						<input name="facilityId" id="facilityId" value="<%=facilityId%>" style="display: none;"/>
 						<input name="newWorker" id="newWorker" value="1" style="display: none;"/>
 						
-						<div class="form-group" id="organizationDiv">
+						<div class="form-group" id="organizationDiv" style="visibility: hidden">
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/></label>
@@ -835,6 +839,19 @@ function showOnDataTable(){
 	  $('#dataTable').DataTable();
 }
 
+</script>
+
+<script type='text/javascript'>
+  $(document).ready(function(){
+       $('#facilityWorkerTypeId').change(function(){
+           if ($(this).children(":selected").attr("id") == 'OTHER HEALTH WORKER') {
+               $('#organizationDiv').css({'visibility':'visible'});      
+           } else {
+        	   $('#organizationDiv').css({'visibility':'hidden'});
+        	   $('#organization').val("");
+           }
+        });
+  });
 </script>	
 	  
 </body>
