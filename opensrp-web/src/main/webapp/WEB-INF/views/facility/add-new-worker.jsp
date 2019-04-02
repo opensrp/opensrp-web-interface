@@ -707,7 +707,8 @@ function checkForTrainingNewWorker(){
 	
 	if(isAssigned === 1){
 		if(workerType === '7' || workerType === '8' || workerType === '9'){
-			showNameWithSuggestionDiv();
+			// showNameWithSuggestionDiv();
+			showNameWithoutSuggestionDiv();
 		}else{
 			showNameWithoutSuggestionDiv();
 		}
