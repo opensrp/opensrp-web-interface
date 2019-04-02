@@ -179,40 +179,40 @@ if (session.getAttribute("facilityWorkerList") != null) {
   	<td>4.</td>
     <td>সিএইচসিপির নাম:	</td>
     <td><%=(coreWorkers[1][0]!= null)? coreWorkers[1][0] : ""%></td>
-    <td>মোবাইল নাম্বার:</td>
+    <td>মোবাইল নম্বর:</td>
     <td><%=(coreWorkers[1][1]!= null)? coreWorkers[1][1] : ""%></td>
   </tr>
   <tr>
   	<td>5.</td>
     <td>স্বাস্থ্য সহকারীর নাম:</td>
     <td><%=(coreWorkers[2][0]!= null)? coreWorkers[2][0] : ""%></td>
-    <td>মোবাইল নাম্বার:</td>
+    <td>মোবাইল নম্বর:</td>
     <td><%=(coreWorkers[2][1]!= null)? coreWorkers[2][1] : ""%></td>
   </tr>
-  <tr>
+  <%-- <tr>
     <td>6.</td>
     <td>সহকারীর স্বাস্থ্য পরিদর্শকের  নাম:</td>
     <td><%=(coreWorkers[3][0]!= null)? coreWorkers[3][0] : ""%></td>
-    <td>মোবাইল নাম্বার:</td>
+    <td>মোবাইল নম্বর:</td>
     <td><%=(coreWorkers[3][1]!= null)? coreWorkers[3][1] : ""%></td>
-  </tr>
+  </tr> --%>
   <tr>
     <td>7.</td>
     <td>পরিবার পরিকল্পনা সহকারীর নাম :</td>
     <td><%=(coreWorkers[4][0]!= null)? coreWorkers[4][0] : ""%></td>
-    <td>মোবাইল নাম্বার:</td>
+    <td>মোবাইল নম্বর:</td>
     <td><%=(coreWorkers[4][1]!= null)? coreWorkers[4][1] : ""%></td>
   </tr>
-  <tr>
+  <%-- <tr>
     <td>8.</td>
     <td>পরিবার পরিকল্পনা পরিদর্শকের নাম:</td>
      <td><%=(coreWorkers[5][0]!= null)? coreWorkers[5][0] : ""%></td>
-    <td>মোবাইল নাম্বার:</td>
+    <td>মোবাইল নম্বর:</td>
      <td><%=(coreWorkers[5][1]!= null)? coreWorkers[5][1] : ""%></td>
-  </tr>
+  </tr> --%>
   <tr>
     <td>9. </td>
-    <td colspan="4">মাল্টিপারপাস হেলথ ভলেন্টিয়ারের নাম ও মোবাইল নাম্বার: </td>
+    <td colspan="4">মাল্টিপারপাস হেলথ ভলেন্টিয়ারের নাম ও মোবাইল নম্বর: </td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -227,7 +227,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
       <tr>
       	<td>নাম: </td>
         <td><%=workerName %></td>
-        <td>মোবাইল নাম্বার:</td>
+        <td>মোবাইল নম্বর:</td>
         <td><%=workerIdentifier %></td>
       </tr>
  <%
@@ -239,7 +239,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
   
   <tr>
     <td>10. </td>
-    <td colspan="4">অনন্যা স্বাস্থ্য কর্মীর নাম: </td>
+    <td colspan="4">অন্যান্য স্বাস্থ্যকর্মীর নাম: </td>
   </tr>
  <tr>
     <td>&nbsp;</td>
@@ -254,7 +254,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
       <tr>
       	<td>নাম: </td>
         <td><%=workerName %></td>
-        <td>মোবাইল নাম্বার:</td>
+        <td>মোবাইল নম্বর:</td>
         <td><%=workerIdentifier %></td>
       </tr>
  <%
@@ -267,7 +267,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
   	<td>10.</td>
     <td>অনন্যা স্বাস্থ্য কর্মীর নাম (যদি থাকে):</td>
     <td>..................................................</td>
-    <td>মোবাইল নাম্বার:</td>
+    <td>মোবাইল নম্বর:</td>
     <td>.....................................................</td>
   </tr> -->
   <tr>
@@ -327,7 +327,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
       <tr>
       	<td>নাম: </td>
         <td><%=workerName %></td>
-        <td>মোবাইল নাম্বার:</td>
+        <td>মোবাইল নম্বর:</td>
         <td><%=workerIdentifier %></td>
       </tr>
  <%
@@ -356,7 +356,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
       <tr>
       	<td>নাম: </td>
         <td><%=workerName %></td>
-        <td>মোবাইল নাম্বার:</td>
+        <td>মোবাইল নম্বর:</td>
         <td><%=workerIdentifier %></td>
       </tr>
  <%
@@ -384,7 +384,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
       <tr>
       	<td>নাম: </td>
         <td><%=workerName %></td>
-        <td>মোবাইল নাম্বার:</td>
+        <td>মোবাইল নম্বর:</td>
         <td><%=workerIdentifier %></td>
       </tr>
  <%
@@ -413,7 +413,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
       <tr>
       	<td>নাম: </td>
         <td><%=workerName %></td>
-        <td>মোবাইল নাম্বার:</td>
+        <td>মোবাইল নম্বর:</td>
         <td><%=workerIdentifier %></td>
       </tr>
  <%

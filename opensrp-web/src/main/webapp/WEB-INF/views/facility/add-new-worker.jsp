@@ -192,7 +192,8 @@ String selectedPersonName = "";
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerContact"/></label>
 									<input name="identifier" class="form-control" id="contact"
-										required="required" aria-describedby="nameHelp"
+										required="required" aria-describedby="nameHelp" 
+										pattern="^01[3-9]\d{8}$" title="mobile number must be 11 digit"
 										placeholder="<spring:message code="lbl.healthWorkerContact"/>" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
@@ -207,7 +208,7 @@ String selectedPersonName = "";
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/></label>
 									<input name="organization" class="form-control" id="organization"
-										required="required" aria-describedby="nameHelp"
+										 aria-describedby="nameHelp"
 										placeholder="<spring:message code="lbl.healthWorkerOrganization"/>" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
