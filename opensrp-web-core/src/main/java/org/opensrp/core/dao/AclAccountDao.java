@@ -4,7 +4,17 @@
 
 package org.opensrp.core.dao;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -35,6 +45,9 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			String usernameStr = credentials[0];
 			String passwordStr = credentials[1];
 			logger.info(credentials.length+ " -> username: " + usernameStr+ " -> password: "+ passwordStr);
+			//api call
+			String accessToken = getAccessToken();
+			//end: api call
 			account = getByUsername(usernameStr);
 			logger.info("username:" + account.toString());
 			
@@ -43,6 +56,53 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			logger.error("account null: " + e);
 		}
 		return account;
+	}
+	
+	public String getAccessToken(){
+		String accessToken ="";
+		try {
+			//check api conn
+			URL url = new URL("https://hrm.dghs.gov.bd/api/1.0/sso/signin");
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			con.setRequestProperty("Content-Language", "en-US");
+			con.setRequestProperty( "charset", "utf-8");  
+			con.setInstanceFollowRedirects( false );
+			con.setUseCaches(false);
+			con.setDoInput(true);
+			con.setDoOutput(true);
+			//header
+			con.setRequestProperty("X-Auth-Token", "13f983a019cb9fe661a77d251daa63f70b894bd2843bd76b7cef4f732bd7739e");
+			con.setRequestProperty("client_id", "151880");
+			//end: header
+			//form-data
+			String urlParameters  = "email=shr.gazipur@hospi.dghs.gov.bd&password=SukhenM1S@9876";
+			byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
+			int    postDataLength = postData.length;
+			con.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));
+			con.setUseCaches( false );
+			try( DataOutputStream wr = new DataOutputStream( con.getOutputStream())) {
+			   wr.write( postData );
+			}catch (Exception e) {
+				logger.error("api error : " + e);
+			}
+			//end: form-data
+			//response
+			String json_response = "";
+			InputStreamReader in = new InputStreamReader(con.getInputStream());
+			BufferedReader br = new BufferedReader(in);
+			String text = "";
+			while ((text = br.readLine()) != null) {
+			  json_response += text;
+			}
+			logger.info("\n\n<><><><> "+json_response);
+			//end: response
+			//end: check api conn
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return accessToken;
 	}
 	
 	@Override
