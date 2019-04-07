@@ -18,6 +18,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.opensrp.core.entity.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,6 +49,7 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			logger.info(credentials.length+ " -> username: " + usernameStr+ " -> password: "+ passwordStr);
 			//api call
 			String accessToken = getAccessToken();
+			logger.info("\nAccessToken : "+ accessToken);
 			//end: api call
 			account = getByUsername(usernameStr);
 			logger.info("username:" + account.toString());
@@ -56,6 +59,12 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			logger.error("account null: " + e);
 		}
 		return account;
+	}
+	
+	public JSONObject convertStringToJSONObject(String inputString) throws JSONException{
+		JSONObject outputJSONObject = null;
+		outputJSONObject = new JSONObject(inputString);
+		return outputJSONObject;
 	}
 	
 	public String getAccessToken(){
@@ -89,14 +98,16 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			}
 			//end: form-data
 			//response
-			String json_response = "";
+			String responseString = "";
 			InputStreamReader in = new InputStreamReader(con.getInputStream());
 			BufferedReader br = new BufferedReader(in);
 			String text = "";
 			while ((text = br.readLine()) != null) {
-			  json_response += text;
+			  responseString += text;
 			}
-			logger.info("\n\n<><><><> "+json_response);
+			logger.info("\n\nJSON Response from api <><><><> "+responseString);
+			JSONObject responseJSON = convertStringToJSONObject(responseString);
+			accessToken = responseJSON.getString("access_token");
 			//end: response
 			//end: check api conn
 		} catch (Exception e) {
