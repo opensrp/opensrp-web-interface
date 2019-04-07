@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.core.entity.User;
@@ -49,11 +50,14 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			logger.info(credentials.length+ " -> username: " + usernameStr+ " -> password: "+ passwordStr);
 			//api call
 			String accessToken = getAccessToken();
-			logger.info("\nAccessToken : "+ accessToken);
+			logger.info("\n\nAccessToken : "+ accessToken);
+			String facilityId = getFacilityId(accessToken);
+			logger.info("\n\nFacilityId : "+ facilityId);
+			JSONObject ccInfo = getCCInfo(facilityId);
+			logger.info("\n\nCCInfo : "+ ccInfo.toString());
 			//end: api call
 			account = getByUsername(usernameStr);
 			logger.info("username:" + account.toString());
-			
 		}
 		catch (Exception e) {
 			logger.error("account null: " + e);
@@ -67,6 +71,14 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 		return outputJSONObject;
 	}
 	
+	public JSONArray convertStringToJSONArray(String inputString) throws JSONException{
+		JSONArray outputJSONArray = null;
+		outputJSONArray = new JSONArray(inputString);
+		return outputJSONArray;
+	}
+	
+	private static String xAuthToken = "13f983a019cb9fe661a77d251daa63f70b894bd2843bd76b7cef4f732bd7739e";
+	private static String clientId = "151880";
 	public String getAccessToken(){
 		String accessToken ="";
 		try {
@@ -82,8 +94,8 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			con.setDoInput(true);
 			con.setDoOutput(true);
 			//header
-			con.setRequestProperty("X-Auth-Token", "13f983a019cb9fe661a77d251daa63f70b894bd2843bd76b7cef4f732bd7739e");
-			con.setRequestProperty("client_id", "151880");
+			con.setRequestProperty("X-Auth-Token", xAuthToken);
+			con.setRequestProperty("client_id", clientId);
 			//end: header
 			//form-data
 			String urlParameters  = "email=shr.gazipur@hospi.dghs.gov.bd&password=SukhenM1S@9876";
@@ -114,6 +126,80 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			e.printStackTrace();
 		}
 		return accessToken;
+	}
+	
+	public String getFacilityId(String accessToken){
+		String facilityId ="";
+		try {
+			//check api conn
+			String urlParam = accessToken+"?client_id="+clientId;
+			URL url = new URL("https://hrm.dghs.gov.bd/api/1.0/sso/token/"+ urlParam);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			con.setRequestProperty("Content-Language", "en-US");
+			con.setRequestProperty( "charset", "utf-8");  
+			con.setInstanceFollowRedirects( false );
+			con.setUseCaches(false);
+			con.setDoInput(true);
+			con.setDoOutput(true);
+			//header
+			con.setRequestProperty("X-Auth-Token", xAuthToken);
+			//end: header
+			//response
+			String responseString = "";
+			InputStreamReader in = new InputStreamReader(con.getInputStream());
+			BufferedReader br = new BufferedReader(in);
+			String text = "";
+			while ((text = br.readLine()) != null) {
+			  responseString += text;
+			}
+			logger.info("\n\nJSON Response from api FacilityId<><><><> "+responseString);
+			JSONObject responseJSON = convertStringToJSONObject(responseString);
+			facilityId = responseJSON.getString("facility_id");
+			//end: response
+			//end: check api conn
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return facilityId;
+	}
+	
+	public JSONObject getCCInfo(String facilityId){
+		JSONObject ccInfo = null;
+		try {
+			//check api conn
+			String urlParam = "&fieldValue="+facilityId+"&client_id="+clientId+".json";
+			URL url = new URL("https://hrm.dghs.gov.bd/api/1.0/facilities/get?fieldName=id"+ urlParam);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			con.setRequestProperty("Content-Language", "en-US");
+			con.setRequestProperty( "charset", "utf-8");  
+			con.setInstanceFollowRedirects( false );
+			con.setUseCaches(false);
+			con.setDoInput(true);
+			con.setDoOutput(true);
+			//header
+			con.setRequestProperty("X-Auth-Token", xAuthToken);
+			//end: header
+			//response
+			String responseString = "";
+			InputStreamReader in = new InputStreamReader(con.getInputStream());
+			BufferedReader br = new BufferedReader(in);
+			String text = "";
+			while ((text = br.readLine()) != null) {
+			  responseString += text;
+			}
+			logger.info("\n\nJSON Response from api FacilityId<><><><> "+responseString);
+			JSONArray responseJSON = convertStringToJSONArray(responseString);
+			ccInfo = responseJSON.getJSONObject(0);
+			//end: response
+			//end: check api conn
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ccInfo;
 	}
 	
 	@Override
