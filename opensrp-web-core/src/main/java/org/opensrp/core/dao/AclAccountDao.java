@@ -6,13 +6,9 @@ package org.opensrp.core.dao;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -50,11 +46,11 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			logger.info(credentials.length+ " -> username: " + usernameStr+ " -> password: "+ passwordStr);
 			//api call
 			String accessToken = getAccessToken();
-			logger.info("\n\nAccessToken : "+ accessToken);
+			logger.info("\nAccessToken : "+ accessToken+"\n");
 			String facilityId = getFacilityId(accessToken);
-			logger.info("\n\nFacilityId : "+ facilityId);
+			logger.info("\nFacilityId : "+ facilityId+"\n");
 			JSONObject ccInfo = getCCInfo(facilityId);
-			logger.info("\n\nCCInfo : "+ ccInfo.toString());
+			logger.info("\nCCInfo : "+ ccInfo.toString()+"\n");
 			//end: api call
 			account = getByUsername(usernameStr);
 			logger.info("username:" + account.toString());
@@ -117,7 +113,7 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			while ((text = br.readLine()) != null) {
 			  responseString += text;
 			}
-			logger.info("\n\nJSON Response from api <><><><> "+responseString);
+			logger.info("\nJSON Response from api - Access Token <><><><> "+responseString+"\n");
 			JSONObject responseJSON = convertStringToJSONObject(responseString);
 			accessToken = responseJSON.getString("access_token");
 			//end: response
@@ -154,7 +150,7 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			while ((text = br.readLine()) != null) {
 			  responseString += text;
 			}
-			logger.info("\n\nJSON Response from api FacilityId<><><><> "+responseString);
+			logger.info("\nJSON Response from api - FacilityId<><><><> "+responseString+"\n");
 			JSONObject responseJSON = convertStringToJSONObject(responseString);
 			facilityId = responseJSON.getString("facility_id");
 			//end: response
@@ -191,7 +187,7 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			while ((text = br.readLine()) != null) {
 			  responseString += text;
 			}
-			logger.info("\n\nJSON Response from api FacilityId<><><><> "+responseString);
+			logger.info("\nJSON Response from api - CC info <><><><> "+responseString+"\n");
 			JSONArray responseJSON = convertStringToJSONArray(responseString);
 			ccInfo = responseJSON.getJSONObject(0);
 			//end: response
