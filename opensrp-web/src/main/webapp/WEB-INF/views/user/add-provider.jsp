@@ -127,10 +127,10 @@ List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
 						 </div>
 						
 						<div class="row col-12 tag-height">						
-							<div class="form-group">														
+							<div class="form-group required">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.mobile"/></label>										 
 								<form:input path="mobile" class="form-control mx-sm-3" pattern="^01[3-9]\d{8}$"
-								title="11 digit valid mobile number"/>								
+								title="11 digit valid mobile number" required="required"/>								
 							 </div>
 						 </div>	
 						<div class="row col-12 tag-height">						

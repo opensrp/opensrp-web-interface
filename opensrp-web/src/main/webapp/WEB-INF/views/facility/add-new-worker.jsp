@@ -122,9 +122,13 @@ String selectedPersonName = "";
 												//end:  removing chcp and multiPurposeHealthVolunteer from dropdown
 												for (FacilityWorkerType workerType : workerTypeList)
 												{
+													if(workerType.getName().equals("HEALTH ASSISTANT")
+															|| workerType.getName().equals("FAMILY WELFARE ASSISTANT")
+															|| workerType.getName().equals("OTHER HEALTH WORKER")) {
 														%>
-															<option value="<%=workerType.getId() %>"><%=workerType.getName()%></option>
+															<option id="<%=workerType.getName()%>" value="<%=workerType.getId() %>"><%=workerType.getName()%></option>
 														<%
+													}
 												}
 												%>
 											</select>
@@ -188,7 +192,8 @@ String selectedPersonName = "";
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerContact"/></label>
 									<input name="identifier" class="form-control" id="contact"
-										required="required" aria-describedby="nameHelp"
+										required="required" aria-describedby="nameHelp" 
+										pattern="^01[3-9]\d{8}$" title="mobile number must be 11 digit"
 										placeholder="<spring:message code="lbl.healthWorkerContact"/>" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
@@ -198,12 +203,12 @@ String selectedPersonName = "";
 						<input name="facilityId" id="facilityId" value="<%=facilityId%>" style="display: none;"/>
 						<input name="newWorker" id="newWorker" value="1" style="display: none;"/>
 						
-						<div class="form-group" id="organizationDiv">
+						<div class="form-group" id="organizationDiv" style="visibility: hidden">
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/></label>
 									<input name="organization" class="form-control" id="organization"
-										required="required" aria-describedby="nameHelp"
+										 aria-describedby="nameHelp"
 										placeholder="<spring:message code="lbl.healthWorkerOrganization"/>" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
@@ -702,7 +707,8 @@ function checkForTrainingNewWorker(){
 	
 	if(isAssigned === 1){
 		if(workerType === '7' || workerType === '8' || workerType === '9'){
-			showNameWithSuggestionDiv();
+			// showNameWithSuggestionDiv();
+			showNameWithoutSuggestionDiv();
 		}else{
 			showNameWithoutSuggestionDiv();
 		}
@@ -835,6 +841,19 @@ function showOnDataTable(){
 	  $('#dataTable').DataTable();
 }
 
+</script>
+
+<script type='text/javascript'>
+  $(document).ready(function(){
+       $('#facilityWorkerTypeId').change(function(){
+           if ($(this).children(":selected").attr("id") == 'OTHER HEALTH WORKER') {
+               $('#organizationDiv').css({'visibility':'visible'});      
+           } else {
+        	   $('#organizationDiv').css({'visibility':'hidden'});
+        	   $('#organization').val("");
+           }
+        });
+  });
 </script>	
 	  
 </body>

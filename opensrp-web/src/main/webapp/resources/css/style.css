@@ -1276,4 +1276,8 @@ font-size: 100%;
 }
 
 
+.ml-sm-3, .mx-sm-3 {
+    margin-left: .2rem!important;
+}
+
 
