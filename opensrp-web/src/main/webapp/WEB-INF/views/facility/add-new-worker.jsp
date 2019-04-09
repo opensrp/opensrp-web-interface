@@ -10,8 +10,8 @@
 <%@page import="org.opensrp.core.entity.Location"%>
 <%@page import="org.json.JSONObject" %>
 <%@page import="org.json.JSONArray" %>
-<%@page import="org.opensrp.facility.entity.FacilityTraining" %>
-<%@page import="org.opensrp.facility.entity.FacilityWorkerType" %>
+<%@page import="org.opensrp.core.entity.FacilityTraining" %>
+<%@page import="org.opensrp.core.entity.FacilityWorkerType" %>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <%@page import="java.util.Iterator"%>
 

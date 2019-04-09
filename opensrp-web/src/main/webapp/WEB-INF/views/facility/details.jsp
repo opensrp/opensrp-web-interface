@@ -4,8 +4,8 @@
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="org.opensrp.facility.entity.FacilityWorker"%>
-<%@page import="org.opensrp.facility.entity.FacilityTraining"%>
+<%@page import="org.opensrp.core.entity.FacilityWorker"%>
+<%@page import="org.opensrp.core.entity.FacilityTraining"%>
 
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>

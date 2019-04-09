@@ -2,9 +2,9 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="org.opensrp.facility.entity.FacilityWorker"%>
-<%@page import="org.opensrp.facility.entity.FacilityTraining"%>
-<%@page import="org.opensrp.facility.entity.FacilityWorkerType" %>
+<%@page import="org.opensrp.core.entity.FacilityWorker"%>
+<%@page import="org.opensrp.core.entity.FacilityTraining"%>
+<%@page import="org.opensrp.core.entity.FacilityWorkerType" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>

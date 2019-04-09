@@ -1,5 +1,5 @@
 
-package org.opensrp.facility.entity;
+package org.opensrp.core.entity;
 
 import java.io.Serializable;
 import java.util.Date;

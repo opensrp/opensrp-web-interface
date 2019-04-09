@@ -1,4 +1,4 @@
-package org.opensrp.facility.service;
+package org.opensrp.core.service;
 
 import java.util.List;
 import java.util.Map;
@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FacilityWorkerTrainingService{
+public class FacilityWorkerTypeService{
 	
-	private static final Logger logger = Logger.getLogger(FacilityWorkerTrainingService.class);
+	private static final Logger logger = Logger.getLogger(FacilityWorkerTypeService.class);
 	
 	@Autowired
 	private DatabaseRepository repository;

@@ -1,4 +1,4 @@
-package org.opensrp.facility.util;
+package org.opensrp.core.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,16 +22,16 @@ import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.Team;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.TeamService;
-import org.opensrp.facility.dto.FacilityWorkerDTO;
-import org.opensrp.facility.entity.Chcp;
-import org.opensrp.facility.entity.Facility;
-import org.opensrp.facility.entity.FacilityTraining;
-import org.opensrp.facility.entity.FacilityWorker;
-import org.opensrp.facility.entity.FacilityWorkerType;
-import org.opensrp.facility.service.FacilityService;
-import org.opensrp.facility.service.FacilityWorkerService;
-import org.opensrp.facility.service.FacilityWorkerTrainingService;
-import org.opensrp.facility.service.FacilityWorkerTypeService;
+import org.opensrp.core.dto.FacilityWorkerDTO;
+import org.opensrp.core.entity.Chcp;
+import org.opensrp.core.entity.Facility;
+import org.opensrp.core.entity.FacilityTraining;
+import org.opensrp.core.entity.FacilityWorker;
+import org.opensrp.core.entity.FacilityWorkerType;
+import org.opensrp.core.service.FacilityService;
+import org.opensrp.core.service.FacilityWorkerService;
+import org.opensrp.core.service.FacilityWorkerTrainingService;
+import org.opensrp.core.service.FacilityWorkerTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -207,7 +207,7 @@ public class FacilityHelperUtil {
 				facility.setWard(ward);// ward
 			}
 			
-			logger.info(facility.toString());
+			logger.info("\n<><><><> "+facility.toString()+"\n");
 			//facilityService.save(facility);
 			//addTeamFromCommunity(facility);
 		} catch (Exception e) {

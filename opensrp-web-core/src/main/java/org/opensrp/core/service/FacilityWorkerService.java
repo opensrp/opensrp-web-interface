@@ -1,4 +1,4 @@
-package org.opensrp.facility.service;
+package org.opensrp.core.service;
 
 import java.util.HashSet;
 import java.util.List;
@@ -10,11 +10,11 @@ import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
-import org.opensrp.facility.entity.Facility;
-import org.opensrp.facility.entity.FacilityTraining;
-import org.opensrp.facility.entity.FacilityWorker;
-import org.opensrp.facility.entity.FacilityWorkerType;
-import org.opensrp.facility.util.FacilityHelperUtil;
+import org.opensrp.core.entity.Facility;
+import org.opensrp.core.entity.FacilityTraining;
+import org.opensrp.core.entity.FacilityWorker;
+import org.opensrp.core.entity.FacilityWorkerType;
+import org.opensrp.core.util.FacilityHelperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

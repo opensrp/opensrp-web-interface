@@ -18,6 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.core.entity.User;
+import org.opensrp.core.util.FacilityHelperUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,6 +30,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 	
 	private static final Logger logger = Logger.getLogger(AclAccountDao.class);
+	
+	@Autowired
+	private FacilityHelperUtil facilityHelperUtil;
 	
 	@Override
 	public User getByUsername(String username) {
@@ -49,12 +54,22 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 				logger.info("\nUsername:" + account.toString()+"\n");
 			}else{
 				//api call
-				String accessToken = getAccessToken();
+				String accessToken= null;
+				String facilityId= null;
+				JSONObject ccInfo= null;
+			    accessToken = getAccessToken(usernameStr, passwordStr);
 				logger.info("\nAccessToken : "+ accessToken+"\n");
-				String facilityId = getFacilityId(accessToken);
-				logger.info("\nFacilityId : "+ facilityId+"\n");
-				JSONObject ccInfo = getCCInfo(facilityId);
-				logger.info("\nCCInfo : "+ ccInfo.toString()+"\n");
+				if(accessToken != null && !accessToken.isEmpty()){
+					facilityId = getFacilityId(accessToken);
+					logger.info("\nFacilityId : "+ facilityId+"\n");
+					if(accessToken != null && !accessToken.isEmpty()){
+						ccInfo = getCCInfo(facilityId);
+						logger.info("\nCCInfo : "+ ccInfo.toString()+"\n");
+						if(ccInfo != null){
+							facilityHelperUtil.saveCCFromJSONObject(ccInfo);
+						}
+					}
+				}
 				//end: api call
 			}
 		}
@@ -78,7 +93,7 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 	
 	private static String xAuthToken = "13f983a019cb9fe661a77d251daa63f70b894bd2843bd76b7cef4f732bd7739e";
 	private static String clientId = "151880";
-	public String getAccessToken(){
+	public String getAccessToken(String username, String password){
 		String accessToken ="";
 		try {
 			//check api conn
@@ -97,7 +112,7 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			con.setRequestProperty("client_id", clientId);
 			//end: header
 			//form-data
-			String urlParameters  = "email=shr.gazipur@hospi.dghs.gov.bd&password=SukhenM1S@9876";
+			String urlParameters  = "email="+username+"&password="+password;
 			byte[] postData       = urlParameters.getBytes( StandardCharsets.UTF_8 );
 			int    postDataLength = postData.length;
 			con.setRequestProperty( "Content-Length", Integer.toString( postDataLength ));

@@ -8,15 +8,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.opensrp.facility.dto.FacilityWorkerDTO;
-import org.opensrp.facility.dto.WorkerIdDTO;
-import org.opensrp.facility.entity.Facility;
-import org.opensrp.facility.entity.FacilityWorker;
-import org.opensrp.facility.service.FacilityService;
-import org.opensrp.facility.service.FacilityWorkerService;
-import org.opensrp.facility.service.FacilityWorkerTrainingService;
-import org.opensrp.facility.service.FacilityWorkerTypeService;
-import org.opensrp.facility.util.FacilityHelperUtil;
+import org.opensrp.core.dto.FacilityWorkerDTO;
+import org.opensrp.core.dto.WorkerIdDTO;
+import org.opensrp.core.entity.Facility;
+import org.opensrp.core.entity.FacilityWorker;
+import org.opensrp.core.service.FacilityService;
+import org.opensrp.core.service.FacilityWorkerService;
+import org.opensrp.core.service.FacilityWorkerTrainingService;
+import org.opensrp.core.service.FacilityWorkerTypeService;
+import org.opensrp.core.util.FacilityHelperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;

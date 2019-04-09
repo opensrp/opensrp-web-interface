@@ -1,8 +1,8 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="org.opensrp.facility.entity.FacilityWorker"%>
-<%@page import="org.opensrp.facility.entity.FacilityTraining"%>
+<%@page import="org.opensrp.core.entity.FacilityWorker"%>
+<%@page import="org.opensrp.core.entity.FacilityTraining"%>
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 
 
