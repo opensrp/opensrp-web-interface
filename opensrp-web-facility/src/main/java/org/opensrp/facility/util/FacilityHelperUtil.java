@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.Team;
@@ -139,6 +140,96 @@ public class FacilityHelperUtil {
 		
 	}
 	
+	//save cc form jsonObject - April 9, 2019
+	public String saveCCFromJSONObject (JSONObject inputJSONObject){
+	String msg = "";
+	if(inputJSONObject != null){
+		try {
+			Facility facility = new Facility();
+			
+			String name = inputJSONObject.getString("name");
+			if(name!= null && !name.isEmpty()){
+				facility.setName(name); // name
+			}
+			
+			String hrmId = inputJSONObject.getString("code");
+			if(hrmId!= null && !hrmId.isEmpty()){
+				facility.setHrmId(hrmId);// code
+			}
+			
+			String division = inputJSONObject.getString("division_name");
+			if(division!= null && !division.isEmpty()){
+				facility.setDivision(trimAndUpper(division));// division
+			}
+			
+			String divisionCode = inputJSONObject.getString("division_code");
+			if(divisionCode!= null && !divisionCode.isEmpty()){
+				facility.setDivisionCode(divisionCode); // division code
+			}
+			
+			String district = inputJSONObject.getString("district_name");
+			if(district!= null && !district.isEmpty()){
+				facility.setDistrict(trimAndUpper(district)); // district 
+			}
+			
+			String districtCode = inputJSONObject.getString("district_code");
+			if(districtCode!= null && !districtCode.isEmpty()){
+				facility.setDistrictCode(districtCode); // district code 
+			}
+			
+			String upazila = inputJSONObject.getString("upazila_name");
+			if(upazila!= null && !upazila.isEmpty()){
+				facility.setUpazila(trimAndUpper(upazila)); // upazilla
+			}
+			
+			String upazilaCode = inputJSONObject.getString("upazila_code");
+			if(upazilaCode!= null && !upazilaCode.isEmpty()){
+				facility.setUpazilaCode(upazilaCode); // upazilla code
+			}
+			
+			String union = inputJSONObject.getString("union_name");
+			if(union!= null && !union.isEmpty()){
+				facility.setUnion(trimAndUpper(union)); //union 
+			}
+			
+			String unionCode = inputJSONObject.getString("union_code");
+			if(unionCode!= null && !unionCode.isEmpty()){
+				facility.setUnionCode(unionCode); // union code
+			}
+			
+			String wardCode = inputJSONObject.getString("ward_code");
+			if(wardCode!= null && !wardCode.isEmpty()){
+				facility.setWardCode(wardCode);// ward code
+			}
+			
+			String ward = trimAndUpper(union) + ":WARD " + removeLeadingZeroes(wardCode);
+			if(ward!= null && !ward.isEmpty()){
+				facility.setWard(ward);// ward
+			}
+			
+			logger.info(facility.toString());
+			//facilityService.save(facility);
+			//addTeamFromCommunity(facility);
+		} catch (Exception e) {
+			logger.info("Some problem occured, please contact admin..");
+			msg = "Some problem occured, please contact with admin..";
+			e.printStackTrace();
+		}
+	}
+	return msg;
+	}
+	//end : save cc form JSONObject
+	
+	public String trimAndUpper(String inputString){
+		String outputString;
+		outputString = inputString.trim().toUpperCase();
+		return outputString;
+	}
+	
+	public String removeLeadingZeroes(String value) {
+	     return new Integer(value).toString();
+	}
+	
 	@SuppressWarnings("resource")
 	public String uploadFacility(File csvFile) throws Exception {
 		String msg = "";
@@ -208,7 +299,6 @@ public class FacilityHelperUtil {
 			
 		}
 		catch (Exception e) {
-			
 			logger.info("Some problem occured, please contact admin..");
 			msg = "Some problem occured, please contact with admin..";
 		}

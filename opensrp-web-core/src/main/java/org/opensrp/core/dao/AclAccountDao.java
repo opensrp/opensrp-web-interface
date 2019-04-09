@@ -43,17 +43,20 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 			String[] credentials = username.split("\\$\\#\\$");
 			String usernameStr = credentials[0];
 			String passwordStr = credentials[1];
-			logger.info(credentials.length+ " -> username: " + usernameStr+ " -> password: "+ passwordStr);
-			//api call
-			String accessToken = getAccessToken();
-			logger.info("\nAccessToken : "+ accessToken+"\n");
-			String facilityId = getFacilityId(accessToken);
-			logger.info("\nFacilityId : "+ facilityId+"\n");
-			JSONObject ccInfo = getCCInfo(facilityId);
-			logger.info("\nCCInfo : "+ ccInfo.toString()+"\n");
-			//end: api call
+			logger.info(credentials.length+ " -> username: " + usernameStr+ " -> password: "+ passwordStr);			
 			account = getByUsername(usernameStr);
-			logger.info("username:" + account.toString());
+			if(account!= null){
+				logger.info("\nUsername:" + account.toString()+"\n");
+			}else{
+				//api call
+				String accessToken = getAccessToken();
+				logger.info("\nAccessToken : "+ accessToken+"\n");
+				String facilityId = getFacilityId(accessToken);
+				logger.info("\nFacilityId : "+ facilityId+"\n");
+				JSONObject ccInfo = getCCInfo(facilityId);
+				logger.info("\nCCInfo : "+ ccInfo.toString()+"\n");
+				//end: api call
+			}
 		}
 		catch (Exception e) {
 			logger.error("account null: " + e);
