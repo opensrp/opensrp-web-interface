@@ -169,6 +169,45 @@ public class UserService {
 		
 	}
 	
+	//for setting user attributes from jsonObject
+	public User setUserInfoFromJSONObject(JSONObject inputJSONObject, String password) throws JSONException {
+		User user = new User();
+		String[] roles = {"1"};
+		String username = inputJSONObject.getString("email1");
+		if(username!= null && !username.isEmpty()){
+			user.setUsername(username);
+		}
+		if(username!= null && !username.isEmpty()){
+			user.setEmail(username);
+		}
+
+		user.setEnabled(true);
+		String facilityHeadDesignation = inputJSONObject.getString("facility_head_designation_name");
+		String facilityHeadName = inputJSONObject.getString("facility_head_provider_name");
+		String[] nameArray = facilityHeadName.split("\\s+");
+		String firstName = nameArray[0];
+		String lastName = nameArray[nameArray.length-1];
+		
+		if(firstName!= null && !firstName.isEmpty()){
+			user.setFirstName(firstName);
+		}
+		if(lastName!= null && !lastName.isEmpty()){
+			user.setLastName(lastName);
+		}
+		
+		user.setGender("");
+		user.setIdetifier("");
+		user.setMobile("");
+		user.setPassword(password);
+		user.setRoles(setRoles(roles));
+		//User parentUser = findById(userDTO.getParentUser(), "id", User.class);
+		//user.setParentUser("");
+		
+		return user;
+		
+	}
+	//end: setting user attributes from jsonObject
+	
 	public int[] getSelectedRoles(User account) {
 		int[] selectedRoles = new int[200];
 		Set<Role> getRoles = account.getRoles();

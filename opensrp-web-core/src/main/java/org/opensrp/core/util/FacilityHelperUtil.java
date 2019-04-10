@@ -198,6 +198,7 @@ public class FacilityHelperUtil {
 			}
 			
 			String wardCode = inputJSONObject.getString("ward_code");
+			wardCode = removeLeadingZeroes(wardCode);
 			if(wardCode!= null && !wardCode.isEmpty()){
 				facility.setWardCode(wardCode);// ward code
 			}
