@@ -19,7 +19,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
+import org.opensrp.core.entity.Facility;
+import org.opensrp.core.entity.FacilityWorker;
+import org.opensrp.core.entity.FacilityWorkerType;
 import org.opensrp.core.entity.Role;
+import org.opensrp.core.entity.Team;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.openmrs.service.OpenMRSServiceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,9 @@ import org.springframework.stereotype.Service;
 public class UserService {
 	
 	private static final Logger logger = Logger.getLogger(UserService.class);
+	
+	@Autowired
+	private TeamService teamService;
 	
 	@Autowired
 	private DatabaseRepository repository;
@@ -169,8 +176,8 @@ public class UserService {
 		
 	}
 	
-	//for setting user attributes from jsonObject
-	public User setUserInfoFromJSONObject(JSONObject inputJSONObject, String password) throws JSONException {
+	//for setting user attributes from jsonObject -- April 10, 2019
+	public User setUserInfoFromJSONObject(JSONObject inputJSONObject, String password, Facility facility) throws JSONException {
 		User user = new User();
 		String[] roles = {"1"};
 		String username = inputJSONObject.getString("email1");
@@ -203,8 +210,42 @@ public class UserService {
 		//User parentUser = findById(userDTO.getParentUser(), "id", User.class);
 		//user.setParentUser("");
 		
-		return user;
+		//from user rest controller -- April 11, 2019
+		/*user.setChcp(facility.getId() + "");
+		int numberOfUserSaved = (int) save(user, false);
 		
+		Team team = new Team();
+		team = teamService.findById(userDTO.getTeam(), "id", Team.class);
+		
+			int[] locations = new int[5];
+			locations[0] = team.getLocation().getId();
+			user = findById(user.getId(), "id", User.class);
+			teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
+			    user.getId(), team, locations);
+			teamMember.setIdentifier(userDTO.getIdetifier());
+			
+			teamMemberServiceImpl.save(teamMember);
+			
+			FacilityWorker facilityWorker = new FacilityWorker();
+			facilityWorker.setName(user.getFullName());
+			facilityWorker.setIdentifier(user.getMobile());
+			facilityWorker.setOrganization("Community Clinic");
+			FacilityWorkerType facilityWorkerType = facilityWorkerTypeService.findByKey("CHCP", "name",
+			    FacilityWorkerType.class);
+			facilityWorker.setFacility(facility);
+			facilityWorker.setFacilityWorkerType(facilityWorkerType);
+			facilityWorkerTypeService.save(facilityWorker);
+			String mailBody = "Dear " + user.getFullName()
+			        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + user.getUsername()
+			        + "\npassword : " + userDTO.getPassword();
+			if (numberOfUserSaved > 0) {
+				logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
+				emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
+				
+			}
+			*/
+		//end: from user rest controller
+		return user;
 	}
 	//end: setting user attributes from jsonObject
 	

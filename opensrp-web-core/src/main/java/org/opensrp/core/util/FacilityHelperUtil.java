@@ -209,8 +209,8 @@ public class FacilityHelperUtil {
 			}
 			
 			logger.info("\n<><><><> "+facility.toString()+"\n");
-			//facilityService.save(facility);
-			//addTeamFromCommunity(facility);
+			facilityService.save(facility);
+			addTeamFromCommunity(facility);
 		} catch (Exception e) {
 			logger.info("Some problem occured, please contact admin..");
 			msg = "Some problem occured, please contact with admin..";
