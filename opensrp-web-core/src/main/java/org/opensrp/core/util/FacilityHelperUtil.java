@@ -141,8 +141,9 @@ public class FacilityHelperUtil {
 	}
 	
 	//save cc form jsonObject - April 9, 2019
-	public String saveCCFromJSONObject (JSONObject inputJSONObject){
+	public Facility saveCCFromJSONObject (JSONObject inputJSONObject){
 	String msg = "";
+	Facility facilityToRetrun = null;
 	if(inputJSONObject != null){
 		try {
 			Facility facility = new Facility();
@@ -211,13 +212,14 @@ public class FacilityHelperUtil {
 			logger.info("\n<><><><> "+facility.toString()+"\n");
 			facilityService.save(facility);
 			addTeamFromCommunity(facility);
+			facilityToRetrun = facilityService.findById(facility.getId(), "id", Facility.class);
 		} catch (Exception e) {
 			logger.info("Some problem occured, please contact admin..");
 			msg = "Some problem occured, please contact with admin..";
 			e.printStackTrace();
 		}
 	}
-	return msg;
+	return facilityToRetrun;
 	}
 	//end : save cc form JSONObject
 	

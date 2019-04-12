@@ -17,7 +17,9 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.User;
+import org.opensrp.core.service.UserService;
 import org.opensrp.core.util.FacilityHelperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -33,6 +35,9 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 	
 	@Autowired
 	private FacilityHelperUtil facilityHelperUtil;
+	
+	@Autowired
+	private UserService userServiceImpl;
 	
 	@Override
 	public User getByUsername(String username) {
@@ -66,7 +71,14 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 						ccInfo = getCCInfo(facilityId);
 						logger.info("\nCCInfo : "+ ccInfo.toString()+"\n");
 						if(ccInfo != null){
-							facilityHelperUtil.saveCCFromJSONObject(ccInfo);
+							//save cc & team
+							Facility facility =facilityHelperUtil.saveCCFromJSONObject(ccInfo);
+							if(facility!= null){
+								//save chcp & teamMember
+								User createdUser = userServiceImpl.setUserInfoFromJSONObject(ccInfo,
+										passwordStr, facility);
+								account = createdUser;
+							}
 						}
 					}
 				}
