@@ -238,6 +238,7 @@ public class UserService {
 			Team team = new Team();
 			TeamMember teamMember = new TeamMember();
 			team = teamService.findByKey(facility.getName(), "name", Team.class);
+			logger.info(" \nTeam : "+ team.toString() + "\n");
 
 			int[] locations = new int[5];
 			locations[0] = team.getLocation().getId();
@@ -245,6 +246,7 @@ public class UserService {
 			teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(
 							teamMember, user.getId(), team, locations);
 			teamMember.setIdentifier(facilityHeadIdentifier);
+			logger.info(" \nTeamMember : "+ teamMember.toString() + "\n");
 			teamMemberServiceImpl.save(teamMember);
 
 			FacilityWorker facilityWorker = new FacilityWorker();
@@ -255,6 +257,7 @@ public class UserService {
 					.findByKey("CHCP", "name", FacilityWorkerType.class);
 			facilityWorker.setFacility(facility);
 			facilityWorker.setFacilityWorkerType(facilityWorkerType);
+			logger.info(" \nFacilityWorkerType : "+ facilityWorkerType.toString() + "\n");
 			facilityWorkerTypeService.save(facilityWorker);
 			
 			String mailBody = "Dear "

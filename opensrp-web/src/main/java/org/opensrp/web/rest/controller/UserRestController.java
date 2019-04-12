@@ -89,7 +89,7 @@ public class UserRestController {
 					teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
 					    user.getId(), team, locations);
 					teamMember.setIdentifier(userDTO.getIdetifier());
-					
+					logger.info(" \nTeamMember : "+ teamMember.toString() + "\n");
 					teamMemberServiceImpl.save(teamMember);
 					
 					FacilityWorker facilityWorker = new FacilityWorker();
@@ -100,6 +100,7 @@ public class UserRestController {
 					    FacilityWorkerType.class);
 					facilityWorker.setFacility(facility);
 					facilityWorker.setFacilityWorkerType(facilityWorkerType);
+					logger.info(" \nFacilityWorkerType : "+ facilityWorkerType.toString() + "\n");
 					facilityWorkerTypeService.save(facilityWorker);
 					String mailBody = "Dear " + user.getFullName()
 					        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + user.getUsername()
@@ -145,7 +146,6 @@ public class UserRestController {
 				firstName = user.getFirstName();
 				lastName = user.getLastName();
 				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
-				//System.out.println("in controller :"+user.toString());
 				String[] locations = userDTO.getLocationList().split(",");
 				int[] locationList = new int[locations.length];
 				for (int i = 0; i < locations.length; i++) {
@@ -155,7 +155,6 @@ public class UserRestController {
 				teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
 				    user.getId(), team, locationList);
 				teamMember.setIdentifier(userDTO.getIdetifier());
-				
 				teamMemberServiceImpl.save(teamMember);
 				
 				FacilityWorker facilityWorker = new FacilityWorker();
