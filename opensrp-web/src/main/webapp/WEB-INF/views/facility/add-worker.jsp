@@ -548,6 +548,16 @@ function checkForTraining(){
 	}else if($("#newWorker").val() === "0"){
 		checkForTrainingOldWorker();
 	}
+	//for making organization readonly - april 17, 2019
+	//not working
+	var workerType =$("#facilityWorkerTypeId").val();
+	
+	if(workerType === '2' || workerType === '4' || workerType === '6'){
+		$('input[name=organization]').prop( "readonly", true );
+	}else{
+		$('input[name=organization]').prop( "readonly", false );
+	}
+	//end : making organization readonly
 }
 
 var isSuggestionActive =0;
