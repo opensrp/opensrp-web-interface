@@ -16,7 +16,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 
 
-	<%
+<%
 	User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 	List<String> roleList = AuthenticationManagerUtil.getLoggedInUserRoles();
 	boolean isAdmin = AuthenticationManagerUtil.isAdmin();
@@ -31,13 +31,13 @@
 		String workerIdentifier = worker.getIdentifier() != null? worker.getIdentifier() : "";
 		String workerOrganization = worker.getOrganization() != null? worker.getOrganization() : "";
 	%>
-									
-									<tr>
-										<td><%=workerType %></td>
-										<td><%=workerName %></td>
-										<td><%=workerIdentifier %></td>
-										<td><%=workerOrganization %></td>
-										
+
+<tr>
+	<td><%=workerType %></td>
+	<td><%=workerName %></td>
+	<td><%=workerIdentifier %></td>
+	<td><%=workerOrganization %></td>
+
 	<% 	
 	String trainingString = "";
 	Set<FacilityTraining> trainings = worker.getFacilityTrainings();
@@ -52,11 +52,36 @@
 			counter++;
 		}
 	%>
-										<td><%=trainingString %></td>
-										<td><button onclick="editWorker(<%=worker.getId() %>)" class="btn btn-primary btn-block"><spring:message code="lbl.edit"/></button></td>
-										<td><button onclick="deleteWorker(<%=worker.getFacility().getId()%>,<%=worker.getId() %>)" class="btn btn-danger btn-block"><spring:message code="lbl.delete"/></button></td>
-									</tr>
-									<%
+	<td><%=trainingString %></td>
+	<td><button onclick="editWorker(<%=worker.getId() %>)"
+			class="btn btn-primary btn-block">
+			<spring:message code="lbl.edit" />
+		</button></td>
+	<%if(workerType.equals("CHCP")){
+							if(AuthenticationManagerUtil.isAdmin()){
+								%>
+	<td><button
+			onclick="deleteWorker(<%=worker.getFacility().getId()%>,<%=worker.getId() %>)"
+			class="btn btn-danger btn-block">
+			<spring:message code="lbl.delete" />
+		</button></td>
+
+	<% 
+							}else{
+								%>
+	<td></td>
+	<%
+							}
+						} else{
+						%>
+	<td><button
+			onclick="deleteWorker(<%=worker.getFacility().getId()%>,<%=worker.getId() %>)"
+			class="btn btn-danger btn-block">
+			<spring:message code="lbl.delete" />
+		</button></td>
+	<% } %>
+</tr>
+<%
 									
 									}
 	}
