@@ -714,6 +714,9 @@ function editWorker(workerId) {
     	var prevWorkerTypeId = parseInt(previousWorkerType);
     	distinctWorkerCountArrayForEdit = JSON.parse(JSON.stringify(distinctWorkerCountArray));
     	distinctWorkerCountArrayForEdit[prevWorkerTypeId -1][1]--;
+    	//to scroll to the top of the page
+    	$("html, body").animate({ scrollTop: 0 }, "slow");
+    	//end: scroll to the top of the page
     }).error(function() {
     });
 }
