@@ -181,7 +181,7 @@ String selectedPersonName = "";
 						<input name="facilityId" id="facilityId" value="<%=facilityId%>" style="display: none;"/>
 						<input name="newWorker" id="newWorker" value="1" style="display: none;"/>
 						
-						<div class="form-group">
+						<div class="form-group" id="organizationDiv">
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/></label>
@@ -722,8 +722,10 @@ function editWorker(workerId) {
     	
     	if(workerType === '2' || workerType === '4' || workerType === '6'){
     		$('input[name=organization]').prop( "readonly", true );
+    		$("#organizationDiv").hide();
     	}else{
     		$('input[name=organization]').prop( "readonly", false );
+    		$("#organizationDiv").show();
     	}
     	//end : making organization readonly
     }).error(function() {
