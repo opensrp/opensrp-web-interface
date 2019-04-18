@@ -93,7 +93,7 @@
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group" id="organizationDiv">
 		<div class="row">
 			<div class="col-5">
 				<label for="exampleInputName">স্বাস্থ্য কর্মীর প্রতিষ্ঠান </label>
@@ -153,8 +153,11 @@
 	<div class="form-group">
 		<div class="row">
 		<div class="col-2">
-				<button onclick="cancelWorkerEdit(<%=facilityId %>)" class="btn btn-danger btn-block"><spring:message code="lbl.cancel"/></button>
-	   	</div>
+				<%-- <button onclick="cancelWorkerEdit(<%=facilityId %>)" class="btn btn-danger btn-block"><spring:message code="lbl.cancel"/></button>--%>
+	   	 	<a  href="" onclick="location.reload()" class="btn btn-danger btn-block">
+								 	 <strong><spring:message code="lbl.cancel"/></strong>
+								 </a>
+	   	 </div>
 			<div class="col-2" id="saveButtonDiv">
 				<input type="submit" value="<spring:message code="lbl.save"/>"
 					class="btn btn-success btn-block"/>

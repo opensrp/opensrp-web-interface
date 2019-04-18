@@ -181,7 +181,7 @@ String selectedPersonName = "";
 						<input name="facilityId" id="facilityId" value="<%=facilityId%>" style="display: none;"/>
 						<input name="newWorker" id="newWorker" value="1" style="display: none;"/>
 						
-						<div class="form-group" id="organizationDiv">
+						<div class="form-group" >
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/></label>
