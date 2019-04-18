@@ -36,7 +36,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
+			
+			
+			<!-- location info -->
+			<%-- <div class="row">
 				
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="division"
@@ -51,6 +54,7 @@
 						%>
 					</select>
 				</div>
+				
 				<div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="district"
 						name="district">
@@ -103,6 +107,21 @@
 						<option value="Child(2 month - 5 years)">Child(2 month - 5 years)</option>
 						<option value="Adult (above 50 years)">Adult (above 50 years)</option>
 					</select>
+				</div>
+			</div> --%>
+			<!-- end: location info -->
+			
+			
+		   <div class="row">
+				<div class="col-3">
+						<select class="custom-select custom-select-lg mb-3" id="memberType"
+							name="memberType">
+							<option value="0?"><spring:message code="lbl.selectMemberType"/></option>
+							<option value="Pregnant Woman">Pregnant Woman</option>
+							<option value="Child (0-2 month)">Child (0-2 month)</option>
+							<option value="Child(2 month - 5 years)">Child(2 month - 5 years)</option>
+							<option value="Adult (above 50 years)">Adult (above 50 years)</option>
+						</select>
 				</div>
 			</div>
 
