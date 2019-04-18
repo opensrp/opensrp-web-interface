@@ -190,13 +190,44 @@ if (session.getAttribute("facilityWorkerList") != null) {
     <td>মোবাইল নম্বর:</td>
     <td><%=(coreWorkers[1][1]!= null)? coreWorkers[1][1] : ""%></td>
   </tr>
+  <!-- for HA - april 18, 2019 --> 
   <tr>
+    <td>7.</td>
+    <td colspan="4">স্বাস্থ্য সহকারীর নাম ও মোবাইল নম্বর:</td>
+  </tr>
+    <tr>
+    <td>&nbsp;</td>
+    <td colspan="4"><table width="100%" border="0">
+ <%
+	int countHA = 0;
+ 	Collections.reverse(healthAssistantList);
+ 	for(FacilityWorker worker : healthAssistantList){
+ 		if(countHA >1) break;	
+ 		String workerName = worker.getName();
+ 		String workerIdentifier = worker.getIdentifier();
+ 		workerName = (workerName != null) ? workerName : "";
+ 		workerIdentifier = (workerIdentifier != null) ? workerIdentifier : "";
+ %>     
+      <tr>
+      	<td>নাম: </td>
+        <td><%=workerName %></td>
+        <td>মোবাইল নম্বর:</td>
+        <td><%=workerIdentifier %></td>
+      </tr>
+ <%
+ 	countHA++;
+ 	}
+ %>    
+    </table></td>
+  </tr>
+  <!-- end: for HA - april 18, 2019 --> 
+  <%-- <tr>
   	<td>5.</td>
     <td>স্বাস্থ্য সহকারীর নাম:</td>
     <td><%=(coreWorkers[2][0]!= null)? coreWorkers[2][0] : ""%></td>
     <td>মোবাইল নম্বর:</td>
     <td><%=(coreWorkers[2][1]!= null)? coreWorkers[2][1] : ""%></td>
-  </tr>
+  </tr> --%>
   <%-- <tr>
     <td>6.</td>
     <td>সহকারীর স্বাস্থ্য পরিদর্শকের  নাম:</td>
@@ -213,10 +244,10 @@ if (session.getAttribute("facilityWorkerList") != null) {
     <td>&nbsp;</td>
     <td colspan="4"><table width="100%" border="0">
  <%
-	int count = 0;
+	int countFWA = 0;
  	Collections.reverse(familyWelfareAssistantList);
  	for(FacilityWorker worker : familyWelfareAssistantList){
- 		if(count >1) break;	
+ 		if(countFWA >1) break;	
  		String workerName = worker.getName();
  		String workerIdentifier = worker.getIdentifier();
  		workerName = (workerName != null) ? workerName : "";
@@ -229,7 +260,7 @@ if (session.getAttribute("facilityWorkerList") != null) {
         <td><%=workerIdentifier %></td>
       </tr>
  <%
- 	count++;
+ 	countFWA++;
  	}
  %>    
     </table></td>

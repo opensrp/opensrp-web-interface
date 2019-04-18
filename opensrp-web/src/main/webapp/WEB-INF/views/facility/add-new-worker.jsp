@@ -727,8 +727,8 @@ function checkForTrainingNewWorker(){
 		$("#trainingDiv").hide();
 		prevTrainings = $("#trainings").val();
 		$("#trainings").val("");
-		if(workerType === '2' && distinctWorkerCountArray[1][1]>0){
-				//warnUser("HEALTH ASSISTANT", 1); 
+		if(workerType === '2' && distinctWorkerCountArray[1][1]>1){
+				warnUser("HEALTH ASSISTANT", 2); 
 		}else if(workerType === '3' && distinctWorkerCountArray[2][1]>0){
 				//warnUser("ASSISTANT HEALTH INSPECTOR", 1);
 		}else if(workerType === '4' && distinctWorkerCountArray[3][1]>1){
