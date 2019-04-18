@@ -136,13 +136,14 @@ int roleIdProvider= -1;
 								<%-- <spring:message code="lbl.passwordMEssage"/> --%>
 	                          		 
 	                        	</small>
+	                        	<input type="checkbox" onclick="toggleVisibilityOfPassword()">Show Password
 							 </div>
 						 </div>
 						
 						<div class="row col-12 tag-height">						
 							<div class="form-group required">														
 								<label class="label-width"  for="inputPassword6"><spring:message code="lbl.confirmedPassword"/></label>										 
-								<form:password path="retypePassword" class="form-control mx-sm-3"
+								<form:password path="retypePassword" class="form-control mx-sm-3" id="retypePassword"
 										required="required" />
 								<small id="passwordHelpInline" class="text-muted text-para">
 	                          		 <span class="text-red" id="passwordNotmatchedMessage"></span> <spring:message code="lbl.retypePasswordMessage"/>
@@ -271,6 +272,18 @@ int roleIdProvider= -1;
 		}
 		showTeamAndLocationDiv();
 	}
+	
+	function toggleVisibilityOfPassword() {
+		  var pswrd = document.getElementById("password");
+		  var retypePswrd = document.getElementById("retypePassword");
+		  if (pswrd.type === "password") {
+			  pswrd.type = "text";
+			  retypePswrd.type = "text";
+		  } else {
+			  pswrd.type = "password";
+			  retypePswrd.type = "password";
+		  }
+		}
 	
 	function showTeamAndLocationDiv(){
 		if(isTeamMember()){
