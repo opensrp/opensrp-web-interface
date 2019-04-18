@@ -586,7 +586,7 @@ function showNameWithoutSuggestionDiv(){
 }
 
 
-function checkForTrainingOldWorker(){
+/* function checkForTrainingOldWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
 	
 	if(workerType === '7' || workerType === '8' || workerType === '9' || workerType === '10' || workerType === '11'){
@@ -632,7 +632,7 @@ function checkForTrainingOldWorker(){
 				warnUser("COMMUNITY SUPPORT-GROUP-3 MEMBER", 17); 
 		}			
 	} 
-}
+} */
 
 function checkForTrainingNewWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
@@ -673,7 +673,7 @@ function checkForTrainingNewWorker(){
 		}else if(workerType === '8' && distinctWorkerCountArray[7][1]>16){
 				warnUser("COMMUNITY GROUP MEMBER", 17);
 		}else if(workerType === '9' && distinctWorkerCountArray[8][1]>16){
-				warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17); 
+				//warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17); 
 		}	
 	} 
 }

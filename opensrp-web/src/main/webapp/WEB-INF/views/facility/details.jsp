@@ -2,6 +2,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Set"%>
+<%@page import="java.util.Collections"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="org.opensrp.core.entity.FacilityWorker"%>
@@ -36,6 +37,9 @@ List<FacilityWorker> communitySupportGroupOneMemberList = new ArrayList<Facility
 List<FacilityWorker> communitySupportGroupTwoMemberList = new ArrayList<FacilityWorker>();
 List<FacilityWorker> communitySupportGroupThreeMemberList = new ArrayList<FacilityWorker>();
 
+List<FacilityWorker> healthAssistantList = new ArrayList<FacilityWorker>();
+List<FacilityWorker> familyWelfareAssistantList = new ArrayList<FacilityWorker>();
+
 String[][] coreWorkers = new String[6][2];
 Set<FacilityTraining> trainings = new HashSet<FacilityTraining>();
 
@@ -52,9 +56,13 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		String identifier = facilityWorker.getIdentifier();
 		String organization = facilityWorker.getOrganization();
 		int workerTypeId = facilityWorker.getFacilityWorkerType().getId();
-		if(workerTypeId<6){
+		if(workerTypeId== 1 || workerTypeId== 3 || workerTypeId== 5 ){
 			coreWorkers[workerTypeId][0] = (name != null)? name : "";
 			coreWorkers[workerTypeId][1] = (identifier != null)? identifier : "";
+		}else if(workerTypeId == 2){
+			healthAssistantList.add(facilityWorker);
+		}else if(workerTypeId == 4){
+			familyWelfareAssistantList.add(facilityWorker);
 		}else if(workerTypeId == 6){
 			multipurposeHealthVolunteerList.add(facilityWorker);
 		}else if(workerTypeId == 7){
@@ -196,13 +204,44 @@ if (session.getAttribute("facilityWorkerList") != null) {
     <td>মোবাইল নম্বর:</td>
     <td><%=(coreWorkers[3][1]!= null)? coreWorkers[3][1] : ""%></td>
   </tr> --%>
+  <!-- for FWA - april 18, 2019 --> 
   <tr>
+    <td>7.</td>
+    <td colspan="4">পরিবার পরিকল্পনা সহকারীর নাম ও মোবাইল নম্বর:</td>
+  </tr>
+    <tr>
+    <td>&nbsp;</td>
+    <td colspan="4"><table width="100%" border="0">
+ <%
+	int count = 0;
+ 	Collections.reverse(familyWelfareAssistantList);
+ 	for(FacilityWorker worker : familyWelfareAssistantList){
+ 		if(count >1) break;	
+ 		String workerName = worker.getName();
+ 		String workerIdentifier = worker.getIdentifier();
+ 		workerName = (workerName != null) ? workerName : "";
+ 		workerIdentifier = (workerIdentifier != null) ? workerIdentifier : "";
+ %>     
+      <tr>
+      	<td>নাম: </td>
+        <td><%=workerName %></td>
+        <td>মোবাইল নম্বর:</td>
+        <td><%=workerIdentifier %></td>
+      </tr>
+ <%
+ 	count++;
+ 	}
+ %>    
+    </table></td>
+  </tr>
+  <!-- end: for FWA - april 18, 2019 --> 
+  <%-- <tr>
     <td>7.</td>
     <td>পরিবার পরিকল্পনা সহকারীর নাম :</td>
     <td><%=(coreWorkers[4][0]!= null)? coreWorkers[4][0] : ""%></td>
     <td>মোবাইল নম্বর:</td>
     <td><%=(coreWorkers[4][1]!= null)? coreWorkers[4][1] : ""%></td>
-  </tr>
+  </tr> --%>
   <%-- <tr>
     <td>8.</td>
     <td>পরিবার পরিকল্পনা পরিদর্শকের নাম:</td>
