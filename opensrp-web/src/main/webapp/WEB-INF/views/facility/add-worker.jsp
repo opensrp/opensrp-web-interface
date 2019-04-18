@@ -548,16 +548,6 @@ function checkForTraining(){
 	}else if($("#newWorker").val() === "0"){
 		checkForTrainingOldWorker();
 	}
-	//for making organization readonly - april 17, 2019
-	//not working
-	var workerType =$("#facilityWorkerTypeId").val();
-	
-	if(workerType === '2' || workerType === '4' || workerType === '6'){
-		$('input[name=organization]').prop( "readonly", true );
-	}else{
-		$('input[name=organization]').prop( "readonly", false );
-	}
-	//end : making organization readonly
 }
 
 var isSuggestionActive =0;
@@ -727,6 +717,15 @@ function editWorker(workerId) {
     	//to scroll to the top of the page
     	$("html, body").animate({ scrollTop: 0 }, "slow");
     	//end: scroll to the top of the page
+    	//for making organization readonly - april 17, 2019
+    	var workerType =$("#facilityWorkerTypeId").val();
+    	
+    	if(workerType === '2' || workerType === '4' || workerType === '6'){
+    		$('input[name=organization]').prop( "readonly", true );
+    	}else{
+    		$('input[name=organization]').prop( "readonly", false );
+    	}
+    	//end : making organization readonly
     }).error(function() {
     });
 }
