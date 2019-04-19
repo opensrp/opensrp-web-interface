@@ -176,7 +176,9 @@ String selectedPersonName = "";
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.contact"/></label>
 									<input name="identifier" class="form-control"
-										required="required" aria-describedby="nameHelp" />
+										required="required" aria-describedby="nameHelp" 
+										pattern="^01[3-9]\d{8}$" title="11 digit mobile number, must start with 013-019 " />
+										
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
@@ -637,7 +639,7 @@ function showNameWithoutSuggestionDiv(){
 function checkForTrainingNewWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
 	
-	if(workerType === '7' || workerType === '8' || workerType === '9'){
+	if(workerType === '8' || workerType === '9' || workerType === '10' || workerType === '11'){
 		showNameWithSuggestionDiv();
 	}else{
 		showNameWithoutSuggestionDiv();
