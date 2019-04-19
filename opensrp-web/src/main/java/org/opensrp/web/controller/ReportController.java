@@ -95,7 +95,23 @@ public class ReportController {
 		if (formWiseAggregatedList != null && !formWiseAggregatedList.isEmpty()) {
 			System.out.println("size of report data: " + formWiseAggregatedList.size());
 		}
-
+		//for setting start date and end date in report
+		String startDate = "";
+		String endDate = "";
+		String memberType = "";
+		if (request.getParameterMap().containsKey("start")) {
+			startDate = (String) request.getParameter("start");
+		}
+		if (request.getParameterMap().containsKey("end")) {
+			endDate = (String) request.getParameter("end");
+		}
+		if (request.getParameterMap().containsKey("memberType")) {
+			memberType = (String) request.getParameter("memberType");
+		}
+		session.setAttribute("startDate", startDate);
+		session.setAttribute("endDate", endDate);
+		session.setAttribute("memberType", memberType);
+		//end: setting start date and end date in report
 		return "report/householdDataReport";
 	}
 

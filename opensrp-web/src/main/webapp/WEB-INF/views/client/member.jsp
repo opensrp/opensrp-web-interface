@@ -28,7 +28,7 @@
 			</div>
 
 
-			<jsp:include page="/WEB-INF/views/searchPanelOnlyName.jsp" />
+			<jsp:include page="/WEB-INF/views/searchPanel.jsp" />
 
 			<div class="card mb-3">
 				<div class="card-header">
