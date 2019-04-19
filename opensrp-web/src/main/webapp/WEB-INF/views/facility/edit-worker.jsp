@@ -37,7 +37,7 @@
 	<div class="form-group">							
 	<div class="row">									
 		<div class="col-5">
-		<label for="exampleInputName">স্বাস্থ্য কর্মীর প্রকারভেদ </label>
+		<label for="exampleInputName"><spring:message code="lbl.healthWorkerType"/> </label>
 			<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" onchange="checkForTraining()" required>
 		 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 					<%
@@ -73,7 +73,7 @@
 	<div class="form-group">
 		<div class="row">
 			<div class="col-5">
-			 <label for="exampleInputName">স্বাস্থ্য কর্মীর নাম  </label>
+			 <label for="exampleInputName"><spring:message code="lbl.healthWorkerName"/>  </label>
 				<input name="name" class="form-control"
 					required="required" aria-describedby="nameHelp"
 					placeholder="<spring:message code="lbl.name"/>" value="<%=name%>"/> 
@@ -84,9 +84,10 @@
 	<div class="form-group">
 		<div class="row">
 			<div class="col-5">
-				<label for="exampleInputName">স্বাস্থ্য কর্মীর মোবাইল নম্বর / ইমেইল </label>
+				<label for="exampleInputName"><spring:message code="lbl.healthWorkerContact"/></label>
 				<input name="identifier" class="form-control"
 					required="required" aria-describedby="nameHelp"
+					pattern="^01[3-9]\d{8}$" title="11 digit mobile number,must start with 013-019 "
 					placeholder="<spring:message code="lbl.healthWorkerContact"/>" value="<%=identifier%>"/>
 				<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 			</div>
@@ -96,7 +97,7 @@
 	<div class="form-group" id="organizationDiv">
 		<div class="row">
 			<div class="col-5">
-				<label for="exampleInputName">স্বাস্থ্য কর্মীর প্রতিষ্ঠান </label>
+				<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/> </label>
 				<input name="organization" class="form-control"
 					required="required" aria-describedby="nameHelp"
 					placeholder="<spring:message code="lbl.healthWorkerOrganization"/>" value="<%=organization%>"/>
@@ -110,7 +111,7 @@
 		<div class="form-check">
 			<div class="row">
 				<div class="col-10">
-				<label for="exampleInputName">সিএইচসিপির প্রাপ্ত প্রশিক্ষণ সমূহ:</label><br>
+				<label for="exampleInputName"><spring:message code="lbl.trainingsOfChcp"/></label><br>
 			    </div>
 				<%
 					String trainingListString = "";

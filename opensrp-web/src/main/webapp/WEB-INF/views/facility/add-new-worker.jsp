@@ -193,7 +193,7 @@ String selectedPersonName = "";
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerContact"/></label>
 									<input name="identifier" class="form-control" id="contact"
 										required="required" aria-describedby="nameHelp" 
-										pattern="^01[3-9]\d{8}$" title="mobile number must be 11 digit"
+										pattern="^01[3-9]\d{8}$" title="11 digit mobile number,must start with 013-019 "
 										placeholder="<spring:message code="lbl.healthWorkerContact"/>" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
