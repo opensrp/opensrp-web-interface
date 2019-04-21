@@ -385,7 +385,7 @@ public class FacilityHelperUtil {
 	
 	@Transactional
 	public List<String> getAllWorkersNameByKeysWithALlMatchesFromView(String name) {
-		String query = "select first_name from core.\"viewJsonDataConversionOfClient\""
+		String query = "select concat(first_name,' ', lastname, ' # ', phone_number) from core.\"viewJsonDataConversionOfClient\""
 		        + " where entity_type in ('ec_member', 'ec_woman')" + "and first_name ilike '%" + name + "%'";
 		List<String> workerNameList = repository.executeSelectQuery(query);
 		return workerNameList;

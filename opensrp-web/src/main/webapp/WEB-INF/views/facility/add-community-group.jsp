@@ -449,6 +449,9 @@ $("#workerInfo").submit(function(event) {
 	if(isSuggestionActive==1){
 		//workerName = $("#combobox").val();
 		workerName = document.getElementsByName("personName")[0].value;
+		//split workerName with ' # ' and get the name
+		workerName = workerName.split(" # ")[0];
+		console.log(workerName);
 	}else{
 		workerName = $("#comboboxWithoutSuggestion").val();
 	}
