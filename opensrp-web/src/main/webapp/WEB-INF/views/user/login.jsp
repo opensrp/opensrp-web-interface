@@ -79,10 +79,20 @@
  <script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.bundle.min.js' />"></script>
  <script src="<c:url value='/resources/vendor/jquery-easing/jquery.easing.min.js' />"></script>
  <script type="text/javascript"> 
+ function makeUsernameInputTypePassword() {
+	  var userName = document.getElementById("username");
+	  if (userName.type === "password") {
+		  // do nothing
+	  } else {
+		  userName.type = "password";
+	  }
+	}
+ 
  function concatPasswordWithUsername(){
 	 var password = $("#password").val();
 	 var username = $("#username").val();
 	 var usernameAndPassword = username + "$#$" + password;
+	 makeUsernameInputTypePassword();
 	 $("#username").val(usernameAndPassword);
 	 console.log(usernameAndPassword);
  }
