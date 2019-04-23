@@ -222,7 +222,12 @@ public class UserService {
 			}
 			user.setGender("");
 			user.setIdetifier("");
-			user.setMobile("");
+			String mobileNumber = inputJSONObject.getString("mobile1");
+			if (mobileNumber != null && !mobileNumber.isEmpty()) {
+				user.setMobile(mobileNumber);
+			}else{
+				user.setMobile("");
+			}
 			user.setPassword(password);
 			user.setRoles(setRoles(roles));
 			// User parentUser = findById(userDTO.getParentUser(), "id",User.class);
@@ -243,7 +248,8 @@ public class UserService {
 			int[] locations = new int[5];
 			locations[0] = team.getLocation().getId();
 			user = findById(user.getId(), "id", User.class);
-			teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(
+			logger.info(" \nUser(find by id from DB) : "+ user.toString() + "\n");
+			teamMember = teamMemberServiceImpl.setLocationAndPersonAndTeamAttributeInLocation(
 							teamMember, user.getId(), team, locations);
 			teamMember.setIdentifier(facilityHeadIdentifier);
 			logger.info(" \nTeamMember : "+ teamMember.toString() + "\n");

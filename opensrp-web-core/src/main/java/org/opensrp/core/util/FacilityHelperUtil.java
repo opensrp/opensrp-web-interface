@@ -155,7 +155,15 @@ public class FacilityHelperUtil {
 			
 			String hrmId = inputJSONObject.getString("code");
 			if(hrmId!= null && !hrmId.isEmpty()){
-				facility.setHrmId(hrmId);// code
+				Facility existingFacility = null;
+				existingFacility = facilityService.findByKey(hrmId, "hrmId",  Facility.class);
+				if(existingFacility!= null){
+					logger.info("\nExisting Facility <><><><> "+existingFacility.toString()+"\n");
+					facilityToRetrun = existingFacility;
+					return facilityToRetrun;
+				}else{
+					facility.setHrmId(hrmId);// code
+				}
 			}
 			
 			String division = inputJSONObject.getString("division_name");
