@@ -50,10 +50,17 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 		User account = null;
 		try {
 			logger.info("usernameAndPassword:" + username);
-			String[] credentials = username.split("\\$\\#\\$");
-			String usernameStr = credentials[0];
-			String passwordStr = credentials[1];
-			logger.info(credentials.length+ " -> username: " + usernameStr+ " -> password: "+ passwordStr);			
+			String separator = "$#$";
+			String usernameStr = "";
+			String passwordStr = "";
+			if(username.toLowerCase().contains(separator.toLowerCase())){
+				String[] credentials = username.split("\\$\\#\\$");
+				usernameStr = credentials[0];
+				passwordStr = credentials[1];
+				logger.info(credentials.length+ " -> username: " + usernameStr+ " -> password: "+ passwordStr);
+			}else{
+				usernameStr = username;
+			}
 			account = getByUsername(usernameStr);
 			if(account!= null){
 				logger.info("\nUsername:" + account.toString()+"\n");
