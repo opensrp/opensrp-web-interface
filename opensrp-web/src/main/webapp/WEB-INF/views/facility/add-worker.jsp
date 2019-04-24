@@ -732,6 +732,25 @@ function editWorker(workerId) {
     });
 }
 
+function editMHV(workerId) {
+	var workerListURL ="/opensrp-dashboard/user/"+workerId+"/editMHV.html";
+    $.ajax(workerListURL, {
+        type: 'GET',
+        dataType: 'html',
+    }).done(function(workerDetails) {
+    	$("#addWorkerDiv").show();
+    	$("#workerInfo").html(workerDetails);
+    	previousWorkerType =$("#facilityWorkerTypeId").val();
+    	var prevWorkerTypeId = parseInt(previousWorkerType);
+    	distinctWorkerCountArrayForEdit = JSON.parse(JSON.stringify(distinctWorkerCountArray));
+    	distinctWorkerCountArrayForEdit[prevWorkerTypeId -1][1]--;
+    	//to scroll to the top of the page
+    	$("html, body").animate({ scrollTop: 0 }, "slow");
+    	//end: scroll to the top of the page
+    }).error(function() {
+    });
+}
+
 function deleteWorker(facilityId,workerId) {
 	var detailsPageUrl = "/opensrp-dashboard/facility/"+facilityId+"/details.html";
 	var addWorkerPageUrl = "/opensrp-dashboard/facility/"+facilityId+"/addWorker.html";

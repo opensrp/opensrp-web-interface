@@ -147,6 +147,11 @@ public class UserService {
 	}
 	
 	@Transactional
+	public <T> T findOneByKeys(Map<String, Object> fielaValues, Class<?> className) {
+		return repository.findByKeys(fielaValues, className);
+	}
+	
+	@Transactional
 	public Set<Role> setRoles(String[] selectedRoles) {
 		Set<Role> roles = new HashSet<Role>();
 		if (selectedRoles != null) {

@@ -16,10 +16,12 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.core.entity.FacilityWorker;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.Permission;
 import org.opensrp.core.entity.TeamMember;
 import org.opensrp.core.entity.User;
+import org.opensrp.core.service.FacilityWorkerService;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.RoleService;
 import org.opensrp.core.service.TeamMemberService;
@@ -90,6 +92,9 @@ public class UserController {
 	
 	@Autowired
 	private FacilityService facilityService;
+	
+	@Autowired
+	FacilityWorkerService facilityWorkerService;
 	
 	@Autowired
 	private TeamMember teamMember;
@@ -245,6 +250,78 @@ public class UserController {
 		//return new ModelAndView("user/edit", "command", teamMember);
 		return new ModelAndView("user/edit", "command", account);
 	}
+	
+	
+	// for edit MHV
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
+	@RequestMapping(value = "/user/{id}/editMHV.html", method = RequestMethod.GET)
+	public ModelAndView editMHV(Model model, HttpSession session, @PathVariable("id") int id, Locale locale)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
+		logger.info("\n\nUserId : "+ id + "\n");
+		FacilityWorker facilityWorker = facilityWorkerService.findById(id, "id",FacilityWorker.class);
+		Map<String, Object> keyValueMap = new HashMap<String, Object>();
+		keyValueMap.put("chcp", facilityWorker.getFacility().getId()+"");
+		keyValueMap.put("provider", true);
+		String fullName = facilityWorker.getName();
+		String firstName = fullName.split("\\s+")[0];
+		String lastName = fullName.split("\\s+")[1];
+		keyValueMap.put("firstName", firstName);
+		keyValueMap.put("lastName", lastName);
+		User account = userServiceImpl.findOneByKeys(keyValueMap, User.class);
+		logger.info("\n\nUser : "+ account.toString()+ "\n");
+		model.addAttribute("account", account);
+		model.addAttribute("id", id);
+		/**
+		 * Parent user section start . this section prepare parent user information and render to
+		 * view for showing. parentUserName shows to the parent user text field named
+		 * "parentUserName". parentUserId goes to the hidden field "parentUser"
+		 */
+		User parentUser = account.getParentUser();
+		String parentUserName = "";
+		int parentUserId = 0;
+		if (parentUser != null) {
+			parentUserName = parentUser.getUsername() + " (" + parentUser.getFullName() + ")";
+			parentUserId = parentUser.getId();
+		}
+		session.setAttribute("parentUserName", parentUserName);
+		session.setAttribute("parentUserId", parentUserId);
+		/** end parent user section */
+		userServiceImpl.setRolesAttributes(userServiceImpl.getSelectedRoles(account), session);
+		
+		//for teamMember
+		Map<String, Object> fieldValues = new HashMap<String, Object>();
+		fieldValues.put("person", account);
+		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
+		if (teamMember != null) {
+			
+			//System.out.println(teamMember.toString());
+			//model.addAttribute("id", id);
+			teamMember.setPerson(account);
+			model.addAttribute("teamMember", teamMember);
+			int[] locations = teamMemberServiceImpl.getLocationIds(teamMember.getLocations());
+			//User person = teamMember.getPerson();
+			String personName = account.getUsername() + " (" + account.getFullName() + ")";
+			teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+			
+			//return new ModelAndView("team-member/edit", "command", teamMember);
+		} else {
+			//for adding location and team
+			TeamMember newTeamMember = new TeamMember();
+			newTeamMember.setPerson(account);
+			model.addAttribute("teamMember", newTeamMember);
+			String personName = "";
+			session.setAttribute("locationList", locationServiceImpl.list().toString());
+			int[] locations = new int[0];
+			teamMemberServiceImpl.setSessionAttribute(session, newTeamMember, personName, locations);
+			//end: adding location and team
+		}
+		//end: for teamMember
+		
+		//return new ModelAndView("user/edit", "command", teamMember);
+		return new ModelAndView("user/editMHV", "command", account);
+	}
+	//end : edit MHV
 	
 	/**
 	 * <p>
