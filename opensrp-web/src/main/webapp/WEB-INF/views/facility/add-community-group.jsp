@@ -39,7 +39,7 @@ String selectedPersonName = "";
 <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
-<title>Add Worker</title>
+<title>Add CG/CSG</title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 

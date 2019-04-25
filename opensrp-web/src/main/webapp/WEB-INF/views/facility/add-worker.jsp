@@ -39,7 +39,7 @@ String selectedPersonName = "";
 <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
-<title>Add Worker</title>
+<title>Update Profile</title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -88,7 +88,24 @@ String selectedPersonName = "";
 				</li>		
 		<%} %>
 		</ol>
-		</div>		
+		</div>	
+		
+		<!-- for edit MHV -->	
+		<div class="card mb-3" id="editMHVDiv" style="display : none">
+				<div class="card-header">
+					<i class="fa fa-table"></i> <spring:message code="lbl.updateProfile"/> (<b><%=facilityName %></b>)
+				</div>
+				<div class="card-body" >
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+		<!-- end: edit MHV -->
 		
 			<div class="card mb-3" id="addWorkerDiv" style="display : none">
 				<div class="card-header">
@@ -738,12 +755,8 @@ function editMHV(workerId) {
         type: 'GET',
         dataType: 'html',
     }).done(function(workerDetails) {
-    	$("#addWorkerDiv").show();
-    	$("#workerInfo").html(workerDetails);
-    	previousWorkerType =$("#facilityWorkerTypeId").val();
-    	var prevWorkerTypeId = parseInt(previousWorkerType);
-    	distinctWorkerCountArrayForEdit = JSON.parse(JSON.stringify(distinctWorkerCountArray));
-    	distinctWorkerCountArrayForEdit[prevWorkerTypeId -1][1]--;
+    	$("#editMHVDiv").show();
+    	$("#editMHVDiv").html(workerDetails);
     	//to scroll to the top of the page
     	$("html, body").animate({ scrollTop: 0 }, "slow");
     	//end: scroll to the top of the page
