@@ -351,6 +351,7 @@ public class UserController {
 		account.setId(id);
 		User parentUser = userServiceImpl.findById(parentUserId, "id", User.class);
 		account.setParentUser(parentUser);
+		logger.info("\n\nUSER : "+ account.toString()+"\n");
 		userServiceImpl.update(account);
 		
 		Map<String, Object> fieldValues = new HashMap<String, Object>();

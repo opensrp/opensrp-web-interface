@@ -53,7 +53,7 @@
 		}
 	%>
 	<td><%=trainingString %></td>
-	<%if(workerType.equals("MULTIPURPOSE HEALTH VOLUNTEER")){%>
+	<%if(workerType.equals("MULTIPURPOSE HEALTH VOLUNTEER RemoveThisStringToMakeItFunctional")){%>
 		<td><button onclick="editMHV(<%=worker.getId() %>)"
 				class="btn btn-primary btn-block">
 				<spring:message code="lbl.edit" />
