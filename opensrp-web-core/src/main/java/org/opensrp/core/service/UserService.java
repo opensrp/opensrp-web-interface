@@ -37,6 +37,9 @@ public class UserService {
 	private static final Logger logger = Logger.getLogger(UserService.class);
 	
 	@Autowired
+	private RoleService roleService;
+	
+	@Autowired
 	private TeamService teamService;
 	
 	@Autowired
@@ -203,7 +206,11 @@ public class UserService {
 				&& !facilityHeadDesignation.isEmpty()
 				&& facilityHeadDesignation.equals("Community Health Care Provider")) {
 			user = new User();
-			String[] roles = { "7" };
+			Role roleOfCHCP = roleService.findByKey("CHCP", "name", Role.class);
+			logger.info("\n Role Of CHCP : "+ roleOfCHCP.toString() + "\n");
+			String roleId = roleOfCHCP.getId()+"";
+			//String[] roles = { "7" };
+			String[] roles = { roleId };
 			String username = inputJSONObject.getString("email1");
 			if (username != null && !username.isEmpty()) {
 				user.setUsername(username);
