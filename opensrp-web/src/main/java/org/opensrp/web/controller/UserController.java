@@ -267,11 +267,13 @@ public class UserController {
 		String firstName = fullName.split("\\s+")[0];
 		String lastName = fullName.split("\\s+")[1];
 		keyValueMap.put("firstName", firstName);
+		logger.info("\n\nFirstName : "+ firstName+ ";\n");
 		keyValueMap.put("lastName", lastName);
+		logger.info("\n\nLastName : "+ lastName+ ";\n");
 		User account = userServiceImpl.findOneByKeys(keyValueMap, User.class);
 		logger.info("\n\nUser : "+ account.toString()+ "\n");
 		model.addAttribute("account", account);
-		model.addAttribute("id", id);
+		model.addAttribute("id", account.getId());
 		/**
 		 * Parent user section start . this section prepare parent user information and render to
 		 * view for showing. parentUserName shows to the parent user text field named
