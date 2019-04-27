@@ -91,7 +91,7 @@ int roleIdProvider= -1;
 							 </div>							 
 						 </div>
 						 <form:hidden path="parentUser" id="parentUser" value="<%=selectedParentId %>"/>
-						 <div class="row col-12 tag-height">						
+						 <div class="row col-12 tag-height" style="display:none">						
 							<div class="form-group">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.parentUser"/></label>										 
 								<select id="combobox" class="form-control">	</select>								
@@ -107,7 +107,7 @@ int roleIdProvider= -1;
 						
 						<form:hidden path="id" />
 						<form:hidden path="password" />
-						<div class="row col-12 tag-height">	
+						<div class="row col-12 tag-height" style="display:none">	
 							<div class="form-group required">
 							<label class="label-width"  for="inputPassword6"><spring:message code="lbl.role"/></label>								
 								<%
@@ -182,7 +182,7 @@ int roleIdProvider= -1;
 						
 						
 						
-						<div class="row col-12 tag-height">						
+						<div class="row col-12 tag-height" style="display:none">						
 							<div class="form-group">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.activeUser"/></label>										 
 								<form:checkbox class="checkBoxClass form-check-input"
