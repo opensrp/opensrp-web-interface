@@ -131,6 +131,7 @@ int roleIdProvider= -1;
 						<form:hidden path="uuid" />
 						<form:hidden path="personUUid" />
 						<form:hidden path="provider" />
+						<form:hidden path="chcp" />
 						
 						
 						<form:hidden path="id" />

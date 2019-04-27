@@ -95,7 +95,7 @@ String selectedPersonName = "";
 				<div class="card-header">
 					<i class="fa fa-table"></i> <spring:message code="lbl.updateProfile"/> (<b><%=facilityName %></b>)
 				</div>
-				<div class="card-body" >
+				<div class="card-body" id="editMHVformContainerDiv">
 				</div>
 			</div>
 		
@@ -756,7 +756,7 @@ function editMHV(workerId) {
         dataType: 'html',
     }).done(function(workerDetails) {
     	$("#editMHVDiv").show();
-    	$("#editMHVDiv").html(workerDetails);
+    	$("#editMHVformContainerDiv").html(workerDetails);
     	//to scroll to the top of the page
     	$("html, body").animate({ scrollTop: 0 }, "slow");
     	//end: scroll to the top of the page

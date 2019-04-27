@@ -13,7 +13,7 @@
 <%@page import="org.opensrp.core.entity.Role"%>
 
 
-<c:url var="saveUrl" value="/user/${id}/edit.html" />
+<c:url var="saveUrl" value="/user/${id}/${facilityWorkerId}/editMHV.html" />
 <%
 String selectedParentUser = (String)session.getAttribute("parentUserName");
 Integer selectedParentId = (Integer)session.getAttribute("parentUserId");
@@ -102,6 +102,7 @@ int roleIdProvider= -1;
 						<form:hidden path="uuid" />
 						<form:hidden path="personUUid" />
 						<form:hidden path="provider" />
+						<form:hidden path="chcp" />
 						
 						
 						<form:hidden path="id" />
