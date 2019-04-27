@@ -73,6 +73,15 @@ public class FacilityHelperUtil {
 		session.setAttribute("facilityWorkerList", facilityWorkerList);
 	}
 	
+	public void setBahmniVisitURLToSession(HttpSession session, String openmrsBaseURL) {
+		logger.info("\n\n OpenMRS_Base_URL : "+ openmrsBaseURL + "\n");
+		String bahmniVisitURL = "";
+		String replacedStr = openmrsBaseURL.replaceAll("openmrs/", "bahmni/home/index.html#/login");
+		bahmniVisitURL = replacedStr;
+		logger.info("\n\n Bahmni_Visit_URL : "+ bahmniVisitURL + "\n");
+		session.setAttribute("bahmniVisitURL", bahmniVisitURL);
+	}
+	
 	public void setFacilityWorkerTypeAndTrainingsToSession(HttpSession session) {
 		List<FacilityWorkerType> workerTypeList = facilityWorkerTypeService.findAll("FacilityWorkerType");
 		 Collections.reverse(workerTypeList); 

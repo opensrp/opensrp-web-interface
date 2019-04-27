@@ -17,6 +17,7 @@
 
 
 <%
+String bahmniVisitURL = (String)session.getAttribute("bahmniVisitURL");
 List<FacilityWorkerType> workerTypeList= (List<FacilityWorkerType>)session.getAttribute("workerTypeList");
 int facilityId= (Integer)session.getAttribute("facilityId");
 String facilityName= (String)session.getAttribute("facilityName");
@@ -84,7 +85,7 @@ String selectedPersonName = "";
 		
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
-				<a  href="https://103.247.238.36/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
+				<a  href="<%=bahmniVisitURL %>" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
 				</li>		
 		<%} %>
 		</ol>

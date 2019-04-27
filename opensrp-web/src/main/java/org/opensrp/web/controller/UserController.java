@@ -29,8 +29,10 @@ import org.opensrp.core.service.TeamMemberService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.service.FacilityService;
+import org.opensrp.core.util.FacilityHelperUtil;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -63,6 +65,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController {
 	
 	private static final Logger logger = Logger.getLogger(UserController.class);
+	
+	@Value("#{opensrp['openmrs.url']}")
+	private String OPENMRS_BASE_URL;
 	
 	@Autowired
 	private DatabaseServiceImpl databaseServiceImpl;
@@ -102,6 +107,9 @@ public class UserController {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private FacilityHelperUtil facilityHelperUtil;
 	
 	/**
 	 * <p>
@@ -170,6 +178,7 @@ public class UserController {
 		model.addAttribute("locale", locale);
 		session.setAttribute("facilityId", id);
 		model.addAttribute("facilityId", id);
+		facilityHelperUtil.setBahmniVisitURLToSession(session, OPENMRS_BASE_URL);
 		//for adding location and team
 		model.addAttribute("teamMember", new TeamMember());
 		String personName = "";

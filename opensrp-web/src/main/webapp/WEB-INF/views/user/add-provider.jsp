@@ -13,6 +13,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <%
+String bahmniVisitURL = (String)session.getAttribute("bahmniVisitURL");
 Integer selectedPersonId = (Integer)session.getAttribute("selectedPersonId");
 String locationList = (String)session.getAttribute("locationList"); 
 String selectedLocationList = (String)session.getAttribute("selectedLocationList"); 
@@ -83,7 +84,7 @@ List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
 		
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
-				<a  href="https://27.147.129.56/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
+				<a  href="<%=bahmniVisitURL %>" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
 				</li>		
 		<%} %>
 		</ol>

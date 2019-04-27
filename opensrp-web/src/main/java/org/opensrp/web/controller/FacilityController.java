@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 
 import org.opensrp.core.entity.Facility;
@@ -23,6 +24,7 @@ import org.opensrp.core.service.FacilityWorkerTypeService;
 import org.opensrp.core.util.FacilityHelperUtil;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,6 +67,11 @@ public class FacilityController {
 	@Autowired
 	private FacilityHelperUtil facilityHelperUtil;
 	
+	@Value("#{opensrp['openmrs.url']}")
+	private String OPENMRS_BASE_URL;
+	
+	private static final Logger logger = Logger.getLogger(FacilityController.class);
+	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY')")
 	@RequestMapping(value = "/facility/add.html", method = RequestMethod.GET)
 	public ModelAndView addFacility(HttpServletRequest request, ModelMap model, HttpSession session, Locale locale) {
@@ -99,6 +106,7 @@ public class FacilityController {
 		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
 		model.addAttribute("facility", facility);
 		model.addAttribute("locale", locale);
+		facilityHelperUtil.setBahmniVisitURLToSession(session, OPENMRS_BASE_URL);
 		return "facility/add-new-worker";
 	}
 	
@@ -109,6 +117,7 @@ public class FacilityController {
 		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
 		model.addAttribute("facility", facility);
 		model.addAttribute("locale", locale);
+	    facilityHelperUtil.setBahmniVisitURLToSession(session, OPENMRS_BASE_URL);
 		return "facility/add-community-group";
 	}
 	
@@ -119,6 +128,7 @@ public class FacilityController {
 		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
 		model.addAttribute("facility", facility);
 		model.addAttribute("locale", locale);
+		facilityHelperUtil.setBahmniVisitURLToSession(session, OPENMRS_BASE_URL);
 		return "facility/add-worker";
 	}
 	
@@ -160,6 +170,7 @@ public class FacilityController {
 		model.addAttribute("facility", facility);
 		List<FacilityWorker> facilityWorkerList = facilityService.getFacilityWorkerList(facilityId);
 		facilityHelperUtil.setFacilityWorkerListToSession(session, facilityWorkerList);
+		facilityHelperUtil.setBahmniVisitURLToSession(session, OPENMRS_BASE_URL);
 		model.addAttribute("locale", locale);
 		return "facility/details";
 	}
