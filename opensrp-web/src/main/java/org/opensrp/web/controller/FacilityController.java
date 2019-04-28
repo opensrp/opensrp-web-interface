@@ -67,8 +67,9 @@ public class FacilityController {
 	@Autowired
 	private FacilityHelperUtil facilityHelperUtil;
 	
-	@Value("#{opensrp['openmrs.url']}")
-	private String OPENMRS_BASE_URL;
+	@Value("#{opensrp['bahmni.url']}")
+	private String BAHMNI_VISIT_URL;
+	
 	
 	private static final Logger logger = Logger.getLogger(FacilityController.class);
 	
@@ -106,7 +107,7 @@ public class FacilityController {
 		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
 		model.addAttribute("facility", facility);
 		model.addAttribute("locale", locale);
-		facilityHelperUtil.setBahmniVisitURLToSession(session, OPENMRS_BASE_URL);
+		session.setAttribute("bahmniVisitURL", BAHMNI_VISIT_URL);
 		return "facility/add-new-worker";
 	}
 	
@@ -117,7 +118,7 @@ public class FacilityController {
 		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
 		model.addAttribute("facility", facility);
 		model.addAttribute("locale", locale);
-	    facilityHelperUtil.setBahmniVisitURLToSession(session, OPENMRS_BASE_URL);
+		session.setAttribute("bahmniVisitURL", BAHMNI_VISIT_URL);
 		return "facility/add-community-group";
 	}
 	
@@ -128,7 +129,7 @@ public class FacilityController {
 		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
 		model.addAttribute("facility", facility);
 		model.addAttribute("locale", locale);
-		facilityHelperUtil.setBahmniVisitURLToSession(session, OPENMRS_BASE_URL);
+		session.setAttribute("bahmniVisitURL", BAHMNI_VISIT_URL);
 		return "facility/add-worker";
 	}
 	
@@ -170,7 +171,7 @@ public class FacilityController {
 		model.addAttribute("facility", facility);
 		List<FacilityWorker> facilityWorkerList = facilityService.getFacilityWorkerList(facilityId);
 		facilityHelperUtil.setFacilityWorkerListToSession(session, facilityWorkerList);
-		facilityHelperUtil.setBahmniVisitURLToSession(session, OPENMRS_BASE_URL);
+		session.setAttribute("bahmniVisitURL", BAHMNI_VISIT_URL);
 		model.addAttribute("locale", locale);
 		return "facility/details";
 	}

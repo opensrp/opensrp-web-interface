@@ -82,11 +82,12 @@ List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
 			</li> 	
 		<%} %>	
 		
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+		<jsp:include page="/WEB-INF/views/facility/bahmni-visit-link.jsp" />
+		<%-- <% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
 				<a  href="https://103.247.238.36/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
 				</li>		
-		<%} %>
+		<%} %> --%>
 		</ol>
 		</div>
 			<div class="card mb-3">

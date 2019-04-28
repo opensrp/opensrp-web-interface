@@ -29,7 +29,7 @@ font-family: ShonarBangla;}
 </style>
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <%
-String bahmniVisitURL = (String)session.getAttribute("bahmniVisitURL");
+//String bahmniVisitURL = (String)session.getAttribute("bahmniVisitURL");
 List<Integer> trainingIdList = new ArrayList<Integer>();
 List<FacilityWorker> multipurposeHealthVolunteerList = new ArrayList<FacilityWorker>();
 List<FacilityWorker> otherHealthWorkerList = new ArrayList<FacilityWorker>();
@@ -101,7 +101,8 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
 		<li class="breadcrumb-item">
-			<a  href="<c:url value="/facility/${facility.id}/updateProfile.html?lang=${locale}"/>"> <strong><spring:message code="lbl.updateProfile"/></strong> </a>	 
+			<a  href="<c:url value="/facility/${facility.id}/updateProfile.html?lang=${locale}"/>"> 
+			<strong><spring:message code="lbl.updateProfile"/></strong> </a>	 
 			</li> 	
 		<%} %>	
 		
@@ -122,11 +123,17 @@ if (session.getAttribute("facilityWorkerList") != null) {
 			</li> 	
 		<%} %>	
 		
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+		
+		<jsp:include page="/WEB-INF/views/facility/bahmni-visit-link.jsp" />
+		<%-- <% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
-				<a  href="https://103.247.238.36/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
+				<a  href="https://103.247.238.36/bahmni/home/index.html#/login" target="_blank"> 
+					<strong><spring:message code="lbl.visit"/></strong> </a>
+					<a  href="<%=bahmniVisitURL %>" target="_blank"> 
+					<strong><spring:message code="lbl.visit"/></strong> </a>
 				</li>		
-		<%} %>
+		<%} %> --%>
+		
 		</ol>
 		</div>
 					

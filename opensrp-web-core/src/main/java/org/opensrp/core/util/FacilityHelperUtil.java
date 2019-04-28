@@ -33,6 +33,7 @@ import org.opensrp.core.service.FacilityWorkerService;
 import org.opensrp.core.service.FacilityWorkerTrainingService;
 import org.opensrp.core.service.FacilityWorkerTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -81,6 +82,7 @@ public class FacilityHelperUtil {
 		logger.info("\n\n Bahmni_Visit_URL : "+ bahmniVisitURL + "\n");
 		session.setAttribute("bahmniVisitURL", bahmniVisitURL);
 	}
+	
 	
 	public void setFacilityWorkerTypeAndTrainingsToSession(HttpSession session) {
 		List<FacilityWorkerType> workerTypeList = facilityWorkerTypeService.findAll("FacilityWorkerType");

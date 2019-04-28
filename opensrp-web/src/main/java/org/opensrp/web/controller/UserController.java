@@ -66,8 +66,8 @@ public class UserController {
 	
 	private static final Logger logger = Logger.getLogger(UserController.class);
 	
-	@Value("#{opensrp['openmrs.url']}")
-	private String OPENMRS_BASE_URL;
+	@Value("#{opensrp['bahmni.url']}")
+	private String BAHMNI_VISIT_URL;
 	
 	@Autowired
 	private DatabaseServiceImpl databaseServiceImpl;
@@ -178,7 +178,7 @@ public class UserController {
 		model.addAttribute("locale", locale);
 		session.setAttribute("facilityId", id);
 		model.addAttribute("facilityId", id);
-		facilityHelperUtil.setBahmniVisitURLToSession(session, OPENMRS_BASE_URL);
+		session.setAttribute("bahmniVisitURL", BAHMNI_VISIT_URL);
 		//for adding location and team
 		model.addAttribute("teamMember", new TeamMember());
 		String personName = "";
