@@ -1,5 +1,6 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
+<%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
@@ -78,8 +79,10 @@
 	</div>
 	<div class="card-body">
 		<form id="search-form">
+		<% if(AuthenticationManagerUtil.isAdmin()){ %>
+		<!-- location filter -->
 			<div class="row">
-				<div class="col-3">
+				<div class="col-2">
 					<select class="custom-select custom-select-lg mb-3" id="division"
 						name="division">
 						<option value="0?"><spring:message code="lbl.selectDivision"/></option>
@@ -98,7 +101,7 @@
 									%>
 					</select>
 				</div>
-				<div class="col-3">
+				<div class="col-2">
 					<select class="custom-select custom-select-lg mb-3" id="district"
 						name="district">
 						<option value="0?"><spring:message code="lbl.selectDistrict"/></option>
@@ -119,7 +122,7 @@
 									%>
 					</select>
 				</div>
-				<div class="col-3">
+				<div class="col-2">
 					<select class="custom-select custom-select-lg mb-3" id="upazila"
 						name="upazila">
 						<option value="0?"><spring:message code="lbl.selectUpazila"/></option>
@@ -140,7 +143,7 @@
 									%>
 					</select>
 				</div>
-				<div class="col-3">
+				<div class="col-2">
 					<select class="custom-select custom-select-lg mb-3" id="union"
 						name="union">
 						<option value="0?"><spring:message code="lbl.selectUnion"/></option>
@@ -161,7 +164,7 @@
 									%>
 					</select>
 				</div>
-				<div class="col-3">
+				<div class="col-2">
 					<select class="custom-select custom-select-lg mb-3" id="ward"
 						name="ward">
 						<option value="0?"><spring:message code="lbl.selectWard"/></option>
@@ -225,16 +228,17 @@
 					</select>
 				</div> --%>
 			</div>
-
+			<!-- end: location filter -->
+			<%} %>
 
 			<div class="row">
-				<div class="col-6">
+				<div class="col-2">
 					<div class="form-group">
 						<input name="name" type="search" class="form-control"
 							value="<%=name%>" placeholder="">
 					</div>
 				</div>
-				<div class="col-6">
+				<div class="col-2">
 					<button name="search" type="submit" id="bth-search"
 						class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
 				</div>

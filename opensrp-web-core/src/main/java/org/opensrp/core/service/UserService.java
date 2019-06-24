@@ -19,7 +19,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
+import org.opensrp.core.entity.Facility;
+import org.opensrp.core.entity.FacilityWorker;
+import org.opensrp.core.entity.FacilityWorkerType;
 import org.opensrp.core.entity.Role;
+import org.opensrp.core.entity.Team;
+import org.opensrp.core.entity.TeamMember;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.openmrs.service.OpenMRSServiceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +37,18 @@ public class UserService {
 	private static final Logger logger = Logger.getLogger(UserService.class);
 	
 	@Autowired
+	private RoleService roleService;
+	
+	@Autowired
+	private TeamService teamService;
+	
+	@Autowired
+	private TeamMemberService teamMemberServiceImpl;
+	
+	@Autowired
+	private FacilityWorkerTypeService facilityWorkerTypeService;
+	
+	@Autowired
 	private DatabaseRepository repository;
 	
 	@Autowired
@@ -42,6 +59,9 @@ public class UserService {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	@Transactional
 	public <T> long save(T t, boolean isUpdate) throws Exception {
@@ -57,7 +77,9 @@ public class UserService {
 		if (isProvider) {
 			existingOpenMRSUser = openMRSServiceFactory.getOpenMRSConnector("user").getByQuery(query);
 			if (existingOpenMRSUser.length() == 0) {
+				logger.info(" \nUserBeforeSendingToOpenMRS : "+ user.toString() + "\n");
 				user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
+				logger.info(" \nUserFromOpenMRS : "+ user.toString() + "\n");
 				if (!user.getUuid().isEmpty()) {
 					user.setPassword(passwordEncoder.encode(user.getPassword()));
 					user.setProvider(true);
@@ -128,6 +150,11 @@ public class UserService {
 	}
 	
 	@Transactional
+	public <T> T findOneByKeys(Map<String, Object> fielaValues, Class<?> className) {
+		return repository.findByKeys(fielaValues, className);
+	}
+	
+	@Transactional
 	public Set<Role> setRoles(String[] selectedRoles) {
 		Set<Role> roles = new HashSet<Role>();
 		if (selectedRoles != null) {
@@ -168,6 +195,106 @@ public class UserService {
 		return user;
 		
 	}
+	
+	// for setting user attributes from jsonObject -- April 10, 2019
+	public User setUserInfoFromJSONObject(JSONObject inputJSONObject,
+			String password, Facility facility) throws Exception {
+		String facilityHeadDesignation = inputJSONObject.getString("facility_head_designation_name");
+		logger.info("\nfacilityHeadDesignation : "+ facilityHeadDesignation + "\n");
+		User user = null;
+		if (facilityHeadDesignation != null
+				&& !facilityHeadDesignation.isEmpty()
+				&& facilityHeadDesignation.equals("Community Health Care Provider")) {
+			user = new User();
+			Role roleOfCHCP = roleService.findByKey("CHCP", "name", Role.class);
+			logger.info("\n Role Of CHCP : "+ roleOfCHCP.toString() + "\n");
+			String roleId = roleOfCHCP.getId()+"";
+			//String[] roles = { "7" };
+			String[] roles = { roleId };
+			String username = inputJSONObject.getString("email1");
+			if (username != null && !username.isEmpty()) {
+				user.setUsername(username);
+				//for checking
+				//user.setUsername("TestUserName");
+			}
+			if (username != null && !username.isEmpty()) {
+				user.setEmail(username);
+			}
+			user.setEnabled(true);
+			String facilityHeadIdentifier = inputJSONObject.getString("facility_head_provider_id");
+			String facilityHeadName = inputJSONObject.getString("facility_head_provider_name");
+			String[] nameArray = facilityHeadName.split("\\s+");
+			String firstName = nameArray[0];
+			String lastName = nameArray[nameArray.length - 1];
+			if (firstName != null && !firstName.isEmpty()) {
+				user.setFirstName(firstName);
+			}
+			if (lastName != null && !lastName.isEmpty()) {
+				user.setLastName(lastName);
+			}
+			user.setGender("");
+			user.setIdetifier("");
+			String mobileNumber = inputJSONObject.getString("mobile1");
+			if (mobileNumber != null && !mobileNumber.isEmpty()) {
+				user.setMobile(mobileNumber);
+			}else{
+				user.setMobile("");
+			}
+			user.setPassword(password);
+			user.setRoles(setRoles(roles));
+			// User parentUser = findById(userDTO.getParentUser(), "id",User.class);
+			// user.setParentUser("");
+
+			// from user rest controller -- April 11, 2019
+			user.setChcp(facility.getId() + "");
+			logger.info(" \nUser : "+ user.toString() + "\n");
+			int numberOfUserSaved = (int) save(user, false);
+			logger.info("\nNumUSER: "+numberOfUserSaved +" \nUser : "+ user.toString() + "\n");
+
+			// get facility by name from team table and then add it to team member
+			Team team = new Team();
+			TeamMember teamMember = new TeamMember();
+			team = teamService.findByKey(facility.getName(), "name", Team.class);
+			logger.info(" \nTeam : "+ team.toString() + "\n");
+
+			int[] locations = new int[5];
+			locations[0] = team.getLocation().getId();
+			user = findById(user.getId(), "id", User.class);
+			logger.info(" \nUser(find by id from DB) : "+ user.toString() + "\n");
+			teamMember = teamMemberServiceImpl.setLocationAndPersonAndTeamAttributeInLocation(
+							teamMember, user.getId(), team, locations);
+			teamMember.setIdentifier(facilityHeadIdentifier);
+			logger.info(" \nTeamMember : "+ teamMember.toString() + "\n");
+			teamMemberServiceImpl.save(teamMember);
+
+			FacilityWorker facilityWorker = new FacilityWorker();
+			facilityWorker.setName(user.getFullName());
+			facilityWorker.setIdentifier(user.getMobile());
+			facilityWorker.setOrganization("Community Clinic");
+			FacilityWorkerType facilityWorkerType = facilityWorkerTypeService
+					.findByKey("CHCP", "name", FacilityWorkerType.class);
+			facilityWorker.setFacility(facility);
+			facilityWorker.setFacilityWorkerType(facilityWorkerType);
+			logger.info(" \nFacilityWorkerType : "+ facilityWorkerType.toString() + "\n");
+			facilityWorkerTypeService.save(facilityWorker);
+			
+			String mailBody = "Dear "
+					+ user.getFullName()
+					+ ",\n\nYour login credentials for CBHC are given below -\nusername : "
+					+ user.getUsername() + "\npassword : " + password;
+			if (numberOfUserSaved > 0) {
+				logger.info("<><><><><> in user rest controller before sending mail to-"
+						+ user.getEmail());
+				emailService.sendSimpleMessage(user.getEmail(),
+						"Login credentials for CBHC", mailBody);
+
+			}
+			// end: from user rest controller
+		}
+		return user;
+	}
+
+	// end: setting user attributes from jsonObject
 	
 	public int[] getSelectedRoles(User account) {
 		int[] selectedRoles = new int[200];

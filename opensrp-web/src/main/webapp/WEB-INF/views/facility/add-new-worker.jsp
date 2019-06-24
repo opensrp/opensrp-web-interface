@@ -10,13 +10,14 @@
 <%@page import="org.opensrp.core.entity.Location"%>
 <%@page import="org.json.JSONObject" %>
 <%@page import="org.json.JSONArray" %>
-<%@page import="org.opensrp.facility.entity.FacilityTraining" %>
-<%@page import="org.opensrp.facility.entity.FacilityWorkerType" %>
+<%@page import="org.opensrp.core.entity.FacilityTraining" %>
+<%@page import="org.opensrp.core.entity.FacilityWorkerType" %>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <%@page import="java.util.Iterator"%>
 
 
 <%
+String bahmniVisitURL = (String)session.getAttribute("bahmniVisitURL");
 List<FacilityWorkerType> workerTypeList= (List<FacilityWorkerType>)session.getAttribute("workerTypeList");
 int facilityId= (Integer)session.getAttribute("facilityId");
 String facilityName= (String)session.getAttribute("facilityName");
@@ -82,11 +83,12 @@ String selectedPersonName = "";
 			</li> 	
 		<%} %>	
 		
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+		<jsp:include page="/WEB-INF/views/facility/bahmni-visit-link.jsp" />
+		<%-- <% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
-				<a  href="https://27.147.129.56/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
+				<a  href="https://103.247.238.36/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
 				</li>		
-		<%} %>
+		<%} %> --%>
 		</ol>
 		</div>		
 		
@@ -193,7 +195,7 @@ String selectedPersonName = "";
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerContact"/></label>
 									<input name="identifier" class="form-control" id="contact"
 										required="required" aria-describedby="nameHelp" 
-										pattern="^01[3-9]\d{8}$" title="mobile number must be 11 digit"
+										pattern="^01[3-9]\d{8}$" title="11 digit mobile number, must start with 013-019 "
 										placeholder="<spring:message code="lbl.healthWorkerContact"/>" />
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
@@ -727,26 +729,19 @@ function checkForTrainingNewWorker(){
 		$("#trainingDiv").hide();
 		prevTrainings = $("#trainings").val();
 		$("#trainings").val("");
-		if(workerType === '2' && distinctWorkerCountArray[1][1]>0){
-				//warnUser("HEALTH ASSISTANT", 1); 
+		if(workerType === '2' && distinctWorkerCountArray[1][1]>1){
+				warnUser("HEALTH ASSISTANT", 2); 
 		}else if(workerType === '3' && distinctWorkerCountArray[2][1]>0){
 				//warnUser("ASSISTANT HEALTH INSPECTOR", 1);
-		}else if(workerType === '4' && distinctWorkerCountArray[3][1]>0){
-				//warnUser("FAMILY PLANNING ASSISTANT", 1);
+		}else if(workerType === '4' && distinctWorkerCountArray[3][1]>1){
+				warnUser("FAMILY WELFARE ASSISTANT", 2);
 		}else if(workerType === '5' && distinctWorkerCountArray[4][1]>0){
 				//warnUser("FAMILY PLANNING INSPECTOR", 1);  
-		}else if(workerType === '6' ){
-				warnUser("MULTIPURPOSE HEALTH VOLUNTEER", -1); 
-				if(distinctWorkerCountArray[5][1]>4){
-					warnUser("MULTIPURPOSE HEALTH VOLUNTEER", 5); 
-				}
 		}else if(workerType === '7' && distinctWorkerCountArray[6][1]>0){
 				//warnUser("OTHER HEALTH WORKER", 1);
-		}else if(workerType === '8' && distinctWorkerCountArray[7][1]>16){
-				warnUser("COMMUNITY GROUP MEMBER", 17);
-		}else if(workerType === '9' && distinctWorkerCountArray[8][1]>16){
-				warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17); 
-		}	
+		}
+		
+		
 	} 
 }
 

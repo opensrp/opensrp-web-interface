@@ -10,13 +10,14 @@
 <%@page import="org.opensrp.core.entity.Location"%>
 <%@page import="org.json.JSONObject" %>
 <%@page import="org.json.JSONArray" %>
-<%@page import="org.opensrp.facility.entity.FacilityTraining" %>
-<%@page import="org.opensrp.facility.entity.FacilityWorkerType" %>
+<%@page import="org.opensrp.core.entity.FacilityTraining" %>
+<%@page import="org.opensrp.core.entity.FacilityWorkerType" %>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <%@page import="java.util.Iterator"%>
 
 
 <%
+String bahmniVisitURL = (String)session.getAttribute("bahmniVisitURL");
 List<FacilityWorkerType> workerTypeList= (List<FacilityWorkerType>)session.getAttribute("workerTypeList");
 int facilityId= (Integer)session.getAttribute("facilityId");
 String facilityName= (String)session.getAttribute("facilityName");
@@ -39,7 +40,7 @@ String selectedPersonName = "";
 <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
-<title>Add Worker</title>
+<title>Add CG/CSG</title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -82,11 +83,12 @@ String selectedPersonName = "";
 			</li> 	
 		<%} %>	
 		
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+		<jsp:include page="/WEB-INF/views/facility/bahmni-visit-link.jsp" />
+		<%-- <% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
-				<a  href="https://27.147.129.56/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
+				<a  href="https://103.247.238.36/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
 				</li>		
-		<%} %>
+		<%} %> --%>
 		</ol>
 		</div>		
 		
@@ -176,7 +178,9 @@ String selectedPersonName = "";
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.contact"/></label>
 									<input name="identifier" class="form-control"
-										required="required" aria-describedby="nameHelp" />
+										required="required" aria-describedby="nameHelp" 
+										pattern="^01[3-9]\d{8}$" title="11 digit mobile number, must start with 013-019 " />
+										
 									<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 								</div>
 							</div>
@@ -447,6 +451,9 @@ $("#workerInfo").submit(function(event) {
 	if(isSuggestionActive==1){
 		//workerName = $("#combobox").val();
 		workerName = document.getElementsByName("personName")[0].value;
+		//split workerName with ' # ' and get the name
+		workerName = workerName.split(" # ")[0];
+		console.log(workerName);
 	}else{
 		workerName = $("#comboboxWithoutSuggestion").val();
 	}
@@ -586,7 +593,7 @@ function showNameWithoutSuggestionDiv(){
 }
 
 
-function checkForTrainingOldWorker(){
+/* function checkForTrainingOldWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
 	
 	if(workerType === '7' || workerType === '8' || workerType === '9' || workerType === '10' || workerType === '11'){
@@ -632,12 +639,12 @@ function checkForTrainingOldWorker(){
 				warnUser("COMMUNITY SUPPORT-GROUP-3 MEMBER", 17); 
 		}			
 	} 
-}
+} */
 
 function checkForTrainingNewWorker(){
 	var workerType =$("#facilityWorkerTypeId").val();
 	
-	if(workerType === '7' || workerType === '8' || workerType === '9'){
+	if(workerType === '8' || workerType === '9' || workerType === '10' || workerType === '11'){
 		showNameWithSuggestionDiv();
 	}else{
 		showNameWithoutSuggestionDiv();
@@ -673,7 +680,7 @@ function checkForTrainingNewWorker(){
 		}else if(workerType === '8' && distinctWorkerCountArray[7][1]>16){
 				warnUser("COMMUNITY GROUP MEMBER", 17);
 		}else if(workerType === '9' && distinctWorkerCountArray[8][1]>16){
-				warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17); 
+				//warnUser("COMMUNITY SUPPORT-GROUP MEMBER", 17); 
 		}	
 	} 
 }

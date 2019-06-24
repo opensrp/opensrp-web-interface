@@ -11,7 +11,7 @@
 
 <%@page import="org.json.JSONObject" %>
 <%@page import="org.json.JSONArray" %>
-<%@page import="org.opensrp.facility.entity.FacilityWorker" %>
+<%@page import="org.opensrp.core.entity.FacilityWorker" %>
 <%@page import="java.util.List"%>
 
 

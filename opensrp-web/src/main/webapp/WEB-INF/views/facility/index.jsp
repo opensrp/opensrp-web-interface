@@ -1,6 +1,6 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="org.opensrp.facility.entity.Facility"%>
+<%@page import="org.opensrp.core.entity.Facility"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="ISO-8859-1"%>
 

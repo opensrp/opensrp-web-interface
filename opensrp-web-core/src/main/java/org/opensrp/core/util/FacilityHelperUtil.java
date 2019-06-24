@@ -1,4 +1,4 @@
-package org.opensrp.facility.util;
+package org.opensrp.core.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,22 +16,24 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.Team;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.TeamService;
-import org.opensrp.facility.dto.FacilityWorkerDTO;
-import org.opensrp.facility.entity.Chcp;
-import org.opensrp.facility.entity.Facility;
-import org.opensrp.facility.entity.FacilityTraining;
-import org.opensrp.facility.entity.FacilityWorker;
-import org.opensrp.facility.entity.FacilityWorkerType;
-import org.opensrp.facility.service.FacilityService;
-import org.opensrp.facility.service.FacilityWorkerService;
-import org.opensrp.facility.service.FacilityWorkerTrainingService;
-import org.opensrp.facility.service.FacilityWorkerTypeService;
+import org.opensrp.core.dto.FacilityWorkerDTO;
+import org.opensrp.core.entity.Chcp;
+import org.opensrp.core.entity.Facility;
+import org.opensrp.core.entity.FacilityTraining;
+import org.opensrp.core.entity.FacilityWorker;
+import org.opensrp.core.entity.FacilityWorkerType;
+import org.opensrp.core.service.FacilityService;
+import org.opensrp.core.service.FacilityWorkerService;
+import org.opensrp.core.service.FacilityWorkerTrainingService;
+import org.opensrp.core.service.FacilityWorkerTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -71,6 +73,16 @@ public class FacilityHelperUtil {
 	public void setFacilityWorkerListToSession(HttpSession session, List<FacilityWorker> facilityWorkerList) {
 		session.setAttribute("facilityWorkerList", facilityWorkerList);
 	}
+	
+	public void setBahmniVisitURLToSession(HttpSession session, String openmrsBaseURL) {
+		logger.info("\n\n OpenMRS_Base_URL : "+ openmrsBaseURL + "\n");
+		String bahmniVisitURL = "";
+		String replacedStr = openmrsBaseURL.replaceAll("openmrs/", "bahmni/home/index.html#/login");
+		bahmniVisitURL = replacedStr;
+		logger.info("\n\n Bahmni_Visit_URL : "+ bahmniVisitURL + "\n");
+		session.setAttribute("bahmniVisitURL", bahmniVisitURL);
+	}
+	
 	
 	public void setFacilityWorkerTypeAndTrainingsToSession(HttpSession session) {
 		List<FacilityWorkerType> workerTypeList = facilityWorkerTypeService.findAll("FacilityWorkerType");
@@ -137,6 +149,107 @@ public class FacilityHelperUtil {
 		
 		return facilityWorker;
 		
+	}
+	
+	//save cc form jsonObject - April 9, 2019
+	public Facility saveCCFromJSONObject (JSONObject inputJSONObject){
+	String msg = "";
+	Facility facilityToRetrun = null;
+	if(inputJSONObject != null){
+		try {
+			Facility facility = new Facility();
+			
+			String name = inputJSONObject.getString("name");
+			if(name!= null && !name.isEmpty()){
+				facility.setName(name); // name
+			}
+			
+			String hrmId = inputJSONObject.getString("code");
+			if(hrmId!= null && !hrmId.isEmpty()){
+				Facility existingFacility = null;
+				existingFacility = facilityService.findByKey(hrmId, "hrmId",  Facility.class);
+				if(existingFacility!= null){
+					logger.info("\nExisting Facility <><><><> "+existingFacility.toString()+"\n");
+					facilityToRetrun = existingFacility;
+					return facilityToRetrun;
+				}else{
+					facility.setHrmId(hrmId);// code
+				}
+			}
+			
+			String division = inputJSONObject.getString("division_name");
+			if(division!= null && !division.isEmpty()){
+				facility.setDivision(trimAndUpper(division));// division
+			}
+			
+			String divisionCode = inputJSONObject.getString("division_code");
+			if(divisionCode!= null && !divisionCode.isEmpty()){
+				facility.setDivisionCode(divisionCode); // division code
+			}
+			
+			String district = inputJSONObject.getString("district_name");
+			if(district!= null && !district.isEmpty()){
+				facility.setDistrict(trimAndUpper(district)); // district 
+			}
+			
+			String districtCode = inputJSONObject.getString("district_code");
+			if(districtCode!= null && !districtCode.isEmpty()){
+				facility.setDistrictCode(districtCode); // district code 
+			}
+			
+			String upazila = inputJSONObject.getString("upazila_name");
+			if(upazila!= null && !upazila.isEmpty()){
+				facility.setUpazila(trimAndUpper(upazila)); // upazilla
+			}
+			
+			String upazilaCode = inputJSONObject.getString("upazila_code");
+			if(upazilaCode!= null && !upazilaCode.isEmpty()){
+				facility.setUpazilaCode(upazilaCode); // upazilla code
+			}
+			
+			String union = inputJSONObject.getString("union_name");
+			if(union!= null && !union.isEmpty()){
+				facility.setUnion(trimAndUpper(union)); //union 
+			}
+			
+			String unionCode = inputJSONObject.getString("union_code");
+			if(unionCode!= null && !unionCode.isEmpty()){
+				facility.setUnionCode(unionCode); // union code
+			}
+			
+			String wardCode = inputJSONObject.getString("ward_code");
+			wardCode = removeLeadingZeroes(wardCode);
+			if(wardCode!= null && !wardCode.isEmpty()){
+				facility.setWardCode(wardCode);// ward code
+			}
+			
+			String ward = trimAndUpper(union) + ":WARD " + removeLeadingZeroes(wardCode);
+			if(ward!= null && !ward.isEmpty()){
+				facility.setWard(ward);// ward
+			}
+			
+			logger.info("\n<><><><> "+facility.toString()+"\n");
+			facilityService.save(facility);
+			addTeamFromCommunity(facility);
+			facilityToRetrun = facilityService.findById(facility.getId(), "id", Facility.class);
+		} catch (Exception e) {
+			logger.info("Some problem occured, please contact admin..");
+			msg = "Some problem occured, please contact with admin..";
+			e.printStackTrace();
+		}
+	}
+	return facilityToRetrun;
+	}
+	//end : save cc form JSONObject
+	
+	public String trimAndUpper(String inputString){
+		String outputString;
+		outputString = inputString.trim().toUpperCase();
+		return outputString;
+	}
+	
+	public String removeLeadingZeroes(String value) {
+	     return new Integer(value).toString();
 	}
 	
 	@SuppressWarnings("resource")
@@ -208,7 +321,6 @@ public class FacilityHelperUtil {
 			
 		}
 		catch (Exception e) {
-			
 			logger.info("Some problem occured, please contact admin..");
 			msg = "Some problem occured, please contact with admin..";
 		}
@@ -292,7 +404,7 @@ public class FacilityHelperUtil {
 	
 	@Transactional
 	public List<String> getAllWorkersNameByKeysWithALlMatchesFromView(String name) {
-		String query = "select first_name from core.\"viewJsonDataConversionOfClient\""
+		String query = "select concat(first_name,' ', lastname, ' # ', phone_number) from core.\"viewJsonDataConversionOfClient\""
 		        + " where entity_type in ('ec_member', 'ec_woman')" + "and first_name ilike '%" + name + "%'";
 		List<String> workerNameList = repository.executeSelectQuery(query);
 		return workerNameList;

@@ -16,18 +16,23 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.core.entity.FacilityWorker;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.Permission;
 import org.opensrp.core.entity.TeamMember;
 import org.opensrp.core.entity.User;
+import org.opensrp.core.service.EmailService;
+import org.opensrp.core.service.FacilityWorkerService;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.RoleService;
 import org.opensrp.core.service.TeamMemberService;
 import org.opensrp.core.service.UserService;
-import org.opensrp.facility.entity.Facility;
-import org.opensrp.facility.service.FacilityService;
+import org.opensrp.core.entity.Facility;
+import org.opensrp.core.service.FacilityService;
+import org.opensrp.core.util.FacilityHelperUtil;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -61,6 +66,9 @@ public class UserController {
 	
 	private static final Logger logger = Logger.getLogger(UserController.class);
 	
+	@Value("#{opensrp['bahmni.url']}")
+	private String BAHMNI_VISIT_URL;
+	
 	@Autowired
 	private DatabaseServiceImpl databaseServiceImpl;
 	
@@ -92,7 +100,16 @@ public class UserController {
 	private FacilityService facilityService;
 	
 	@Autowired
+	FacilityWorkerService facilityWorkerService;
+	
+	@Autowired
 	private TeamMember teamMember;
+	
+	@Autowired
+	private EmailService emailService;
+	
+	@Autowired
+	private FacilityHelperUtil facilityHelperUtil;
 	
 	/**
 	 * <p>
@@ -161,6 +178,7 @@ public class UserController {
 		model.addAttribute("locale", locale);
 		session.setAttribute("facilityId", id);
 		model.addAttribute("facilityId", id);
+		session.setAttribute("bahmniVisitURL", BAHMNI_VISIT_URL);
 		//for adding location and team
 		model.addAttribute("teamMember", new TeamMember());
 		String personName = "";
@@ -246,6 +264,81 @@ public class UserController {
 		return new ModelAndView("user/edit", "command", account);
 	}
 	
+	
+	// for edit MHV
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
+	@RequestMapping(value = "/user/{facilityWorkerId}/editMHV.html", method = RequestMethod.GET)
+	public ModelAndView editMHV(Model model, HttpSession session, @PathVariable("facilityWorkerId") int facilityWorkerId, Locale locale)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
+		logger.info("\n\nUserId : "+ facilityWorkerId + "\n");
+		FacilityWorker facilityWorker = facilityWorkerService.findById(facilityWorkerId, "id",FacilityWorker.class);
+		Map<String, Object> keyValueMap = new HashMap<String, Object>();
+		keyValueMap.put("chcp", facilityWorker.getFacility().getId()+"");
+		keyValueMap.put("provider", true);
+		String fullName = facilityWorker.getName();
+		String firstName = fullName.split("\\s+")[0];
+		String lastName = fullName.split("\\s+")[1];
+		keyValueMap.put("firstName", firstName);
+		logger.info("\n\nFirstName : "+ firstName+ ";\n");
+		keyValueMap.put("lastName", lastName);
+		logger.info("\n\nLastName : "+ lastName+ ";\n");
+		User account = userServiceImpl.findOneByKeys(keyValueMap, User.class);
+		logger.info("\n\nUser : "+ account.toString()+ "\n");
+		model.addAttribute("account", account);
+		model.addAttribute("id", account.getId());
+		model.addAttribute("facilityWorkerId", facilityWorkerId);
+		/**
+		 * Parent user section start . this section prepare parent user information and render to
+		 * view for showing. parentUserName shows to the parent user text field named
+		 * "parentUserName". parentUserId goes to the hidden field "parentUser"
+		 */
+		User parentUser = account.getParentUser();
+		String parentUserName = "";
+		int parentUserId = 0;
+		if (parentUser != null) {
+			parentUserName = parentUser.getUsername() + " (" + parentUser.getFullName() + ")";
+			parentUserId = parentUser.getId();
+		}
+		session.setAttribute("parentUserName", parentUserName);
+		session.setAttribute("parentUserId", parentUserId);
+		/** end parent user section */
+		userServiceImpl.setRolesAttributes(userServiceImpl.getSelectedRoles(account), session);
+		
+		//for teamMember
+		Map<String, Object> fieldValues = new HashMap<String, Object>();
+		fieldValues.put("person", account);
+		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
+		if (teamMember != null) {
+			
+			//System.out.println(teamMember.toString());
+			//model.addAttribute("id", id);
+			teamMember.setPerson(account);
+			model.addAttribute("teamMember", teamMember);
+			int[] locations = teamMemberServiceImpl.getLocationIds(teamMember.getLocations());
+			//User person = teamMember.getPerson();
+			String personName = account.getUsername() + " (" + account.getFullName() + ")";
+			teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+			
+			//return new ModelAndView("team-member/edit", "command", teamMember);
+		} else {
+			//for adding location and team
+			TeamMember newTeamMember = new TeamMember();
+			newTeamMember.setPerson(account);
+			model.addAttribute("teamMember", newTeamMember);
+			String personName = "";
+			session.setAttribute("locationList", locationServiceImpl.list().toString());
+			int[] locations = new int[0];
+			teamMemberServiceImpl.setSessionAttribute(session, newTeamMember, personName, locations);
+			//end: adding location and team
+		}
+		//end: for teamMember
+		
+		//return new ModelAndView("user/edit", "command", teamMember);
+		return new ModelAndView("user/editMHV", "command", account);
+	}
+	//end : edit MHV
+	
 	/**
 	 * <p>
 	 * This method is a post request of corresponding of get request method @editUser which actually
@@ -274,6 +367,7 @@ public class UserController {
 		account.setId(id);
 		User parentUser = userServiceImpl.findById(parentUserId, "id", User.class);
 		account.setParentUser(parentUser);
+		logger.info("\n\nUSER : "+ account.toString()+"\n");
 		userServiceImpl.update(account);
 		
 		Map<String, Object> fieldValues = new HashMap<String, Object>();
@@ -313,6 +407,88 @@ public class UserController {
 		return new ModelAndView("redirect:/user.html?lang=" + locale);
 		
 	}
+	
+	
+	//for edit mhv post - april 27, 2019
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
+	@RequestMapping(value = "/user/{id}/{facilityWorkerId}/editMHV.html", method = RequestMethod.POST)
+	public ModelAndView editUserMHV(@RequestParam(value = "parentUser", required = false) Integer parentUserId,
+	                             @RequestParam(value = "roles", required = false) String[] roles,
+	                             @RequestParam(value = "team", required = false) Integer teamId,
+	                             @RequestParam(value = "locationList[]", required = false) int[] locations,
+	                             @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
+	                             HttpSession session, @PathVariable("id") int id, 
+	                             @PathVariable("facilityWorkerId") int facilityWorkerId,
+	                             Locale locale) throws Exception {
+		
+		account.setRoles(userServiceImpl.setRoles(roles));
+		account.setId(id);
+		User parentUser = userServiceImpl.findById(parentUserId, "id", User.class);
+		account.setParentUser(parentUser);
+		logger.info("\n\nUSER : "+ account.toString()+"\n");
+		userServiceImpl.update(account);
+		
+		//set edited name in facilityWorker
+		logger.info("\n\nFacilityWorkerId : "+ facilityWorkerId+"\n");
+		FacilityWorker facilityWorker = facilityWorkerService.findById(facilityWorkerId, "id",FacilityWorker.class);
+		String fullName = account.getFirstName()+ " "+ account.getLastName();
+		facilityWorker.setName(fullName);
+		facilityWorkerService.save(facilityWorker);
+		//end: set edited name in facilityWorker
+		
+		//get facilityId to redirect to update_porfile view
+		Facility facility = facilityWorker.getFacility();
+		String facilityId = facility.getId()+"";
+		String redirectUrl = "redirect:/facility/"+facilityId+"/updateProfile.html";
+		//end: get facilityId to redirect to update_porfile view
+		
+		Map<String, Object> fieldValues = new HashMap<String, Object>();
+		fieldValues.put("person", account);
+		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
+		if (teamMember != null) {
+			if (teamId != null) {
+				teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
+				    account.getId(), teamId, locations);
+				teamMember.setIdentifier(account.getIdetifier());
+				
+				//teamMember.setId(id);
+				if (!teamMemberServiceImpl.isPersonAndIdentifierExists(model, teamMember, locations)) {
+					teamMemberServiceImpl.update(teamMember);
+					
+				} else {
+					teamMemberServiceImpl.setSessionAttribute(session, teamMember, teamMember.getPerson().getFullName(),
+					    locations);
+					return new ModelAndView("/team-member/edit");
+				}
+			} else {
+				teamMemberServiceImpl.delete(teamMember);
+			}
+		} else {
+			if (teamId != null && teamId > 0) {
+				TeamMember newTeamMember = new TeamMember();
+				newTeamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(newTeamMember,
+				    account.getId(), teamId, locations);
+				newTeamMember.setIdentifier(account.getIdetifier());
+				
+				if (!teamMemberServiceImpl.isPersonAndIdentifierExists(model, newTeamMember, locations)) {
+					teamMemberServiceImpl.save(newTeamMember);
+				}
+			}
+		}
+		
+		//send mail to emailAddress
+		String mailBody = "Dear " + facilityWorker.getName()
+		        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + account.getUsername();
+		        //+ "\npassword : " + userDTO.getPassword();
+		emailService.sendSimpleMessage(account.getEmail(), "Login credentials for CBHC", mailBody);
+		//end: send mail to emailAddress
+		
+		//return new ModelAndView("redirect:/user.html?lang=" + locale);
+		return new ModelAndView(redirectUrl + "?lang=" + locale);
+		
+	}
+	//end : edit mhv post
+	
 	
 	/**
 	 * <p>

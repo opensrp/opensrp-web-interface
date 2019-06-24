@@ -13,6 +13,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <%
+String bahmniVisitURL = (String)session.getAttribute("bahmniVisitURL");
 Integer selectedPersonId = (Integer)session.getAttribute("selectedPersonId");
 String locationList = (String)session.getAttribute("locationList"); 
 String selectedLocationList = (String)session.getAttribute("selectedLocationList"); 
@@ -81,11 +82,12 @@ List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
 			</li> 	
 		<%} %>	
 		
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+		<jsp:include page="/WEB-INF/views/facility/bahmni-visit-link.jsp" />
+		<%-- <% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
-				<a  href="https://27.147.129.56/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
+				<a  href="https://103.247.238.36/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
 				</li>		
-		<%} %>
+		<%} %> --%>
 		</ol>
 		</div>
 			<div class="card mb-3">
@@ -169,16 +171,17 @@ List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.password"/></label>										 
 								<input type="password" class="form-control mx-sm-3" id="password" name="password"  title="" required />
 								<small id="passwordHelpInline" class="text-muted text-para">
+							
 								<%-- <spring:message code="lbl.passwordMEssage"/> --%>
-	                          		 
 	                        	</small>
+	                        	<input type="checkbox" onclick="toggleVisibilityOfPassword()">Show Password
 							 </div>
 						 </div>
 						
 						<div class="row col-12 tag-height">						
 							<div class="form-group required">														
 								<label class="label-width"  for="inputPassword6"><spring:message code="lbl.confirmedPassword"/></label>										 
-								<form:password path="retypePassword" class="form-control mx-sm-3"
+								<form:password path="retypePassword" class="form-control mx-sm-3" id="retypePassword"
 										required="required" />
 								<small id="passwordHelpInline" class="text-muted text-para">
 	                          		 <span class="text-red" id="passwordNotmatchedMessage"></span> <spring:message code="lbl.retypePasswordMessage"/>
@@ -251,6 +254,18 @@ List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
 		}
 		showTeamAndLocationDiv();
 	}
+	
+	function toggleVisibilityOfPassword() {
+		  var pswrd = document.getElementById("password");
+		  var retypePswrd = document.getElementById("retypePassword");
+		  if (pswrd.type === "password") {
+			  pswrd.type = "text";
+			  retypePswrd.type = "text";
+		  } else {
+			  pswrd.type = "password";
+			  retypePswrd.type = "password";
+		  }
+		}
 	
 	function showTeamAndLocationDiv(){
 		if(isTeamMember()){

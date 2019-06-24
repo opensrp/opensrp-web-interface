@@ -280,4 +280,26 @@ public class TeamMemberService {
 		return teamMember;
 	}
 	
+	// if user comes from HRIS then there is no creator - april 23, 2019
+	public TeamMember setLocationAndPersonAndTeamAttributeInLocation(TeamMember teamMember, int personId, Team team,
+            int[] locations) {
+		User person = (User) repository.findById(personId, "id", User.class);
+		Set<Location> locationSet = new HashSet<Location>();
+		if (locations != null && locations.length != 0) {
+		for (int locationId : locations) {
+		Location location = (Location) repository.findById(locationId, "id", Location.class);
+		if (location != null) {
+		locationSet.add(location);
+		
+		}
+		}
+		teamMember.setLocations(locationSet);
+		}
+		
+		teamMember.setPerson(person);
+		teamMember.setTeam(team);
+		return teamMember;
+		}
+	// end: if user comes from HRIS then there is no creator - april 23, 2019
+	
 }

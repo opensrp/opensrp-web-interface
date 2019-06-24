@@ -15,11 +15,11 @@ import org.opensrp.core.service.TeamMemberService;
 import org.opensrp.core.service.TeamService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.core.service.EmailService;
-import org.opensrp.facility.entity.Facility;
-import org.opensrp.facility.entity.FacilityWorker;
-import org.opensrp.facility.entity.FacilityWorkerType;
-import org.opensrp.facility.service.FacilityService;
-import org.opensrp.facility.service.FacilityWorkerTypeService;
+import org.opensrp.core.entity.Facility;
+import org.opensrp.core.entity.FacilityWorker;
+import org.opensrp.core.entity.FacilityWorkerType;
+import org.opensrp.core.service.FacilityService;
+import org.opensrp.core.service.FacilityWorkerTypeService;
 import org.opensrp.web.controller.UserController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -89,7 +89,7 @@ public class UserRestController {
 					teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
 					    user.getId(), team, locations);
 					teamMember.setIdentifier(userDTO.getIdetifier());
-					
+					logger.info(" \nTeamMember : "+ teamMember.toString() + "\n");
 					teamMemberServiceImpl.save(teamMember);
 					
 					FacilityWorker facilityWorker = new FacilityWorker();
@@ -100,6 +100,7 @@ public class UserRestController {
 					    FacilityWorkerType.class);
 					facilityWorker.setFacility(facility);
 					facilityWorker.setFacilityWorkerType(facilityWorkerType);
+					logger.info(" \nFacilityWorkerType : "+ facilityWorkerType.toString() + "\n");
 					facilityWorkerTypeService.save(facilityWorker);
 					String mailBody = "Dear " + user.getFullName()
 					        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + user.getUsername()
@@ -145,7 +146,6 @@ public class UserRestController {
 				firstName = user.getFirstName();
 				lastName = user.getLastName();
 				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
-				//System.out.println("in controller :"+user.toString());
 				String[] locations = userDTO.getLocationList().split(",");
 				int[] locationList = new int[locations.length];
 				for (int i = 0; i < locations.length; i++) {
@@ -155,7 +155,6 @@ public class UserRestController {
 				teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
 				    user.getId(), team, locationList);
 				teamMember.setIdentifier(userDTO.getIdetifier());
-				
 				teamMemberServiceImpl.save(teamMember);
 				
 				FacilityWorker facilityWorker = new FacilityWorker();

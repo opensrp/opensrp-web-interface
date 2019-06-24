@@ -10,13 +10,14 @@
 <%@page import="org.opensrp.core.entity.Location"%>
 <%@page import="org.json.JSONObject" %>
 <%@page import="org.json.JSONArray" %>
-<%@page import="org.opensrp.facility.entity.FacilityTraining" %>
-<%@page import="org.opensrp.facility.entity.FacilityWorkerType" %>
+<%@page import="org.opensrp.core.entity.FacilityTraining" %>
+<%@page import="org.opensrp.core.entity.FacilityWorkerType" %>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <%@page import="java.util.Iterator"%>
 
 
 <%
+String bahmniVisitURL = (String)session.getAttribute("bahmniVisitURL");
 List<FacilityWorkerType> workerTypeList= (List<FacilityWorkerType>)session.getAttribute("workerTypeList");
 int facilityId= (Integer)session.getAttribute("facilityId");
 String facilityName= (String)session.getAttribute("facilityName");
@@ -39,7 +40,7 @@ String selectedPersonName = "";
 <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
-<title>Add Worker</title>
+<title>Update Profile</title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -82,13 +83,31 @@ String selectedPersonName = "";
 			</li> 	
 		<%} %>	
 		
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+		<jsp:include page="/WEB-INF/views/facility/bahmni-visit-link.jsp" />
+		<%-- <% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
-				<a  href="https://27.147.129.56/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
+				<a  href="https://103.247.238.36/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
 				</li>		
-		<%} %>
+		<%} %> --%>
 		</ol>
-		</div>		
+		</div>	
+		
+		<!-- for edit MHV -->	
+		<div class="card mb-3" id="editMHVDiv" style="display : none">
+				<div class="card-header">
+					<i class="fa fa-table"></i> <spring:message code="lbl.updateProfile"/> (<b><%=facilityName %></b>)
+				</div>
+				<div class="card-body" id="editMHVformContainerDiv">
+				</div>
+			</div>
+		
+		
+		
+		
+		
+		
+		
+		<!-- end: edit MHV -->
 		
 			<div class="card mb-3" id="addWorkerDiv" style="display : none">
 				<div class="card-header">
@@ -181,7 +200,7 @@ String selectedPersonName = "";
 						<input name="facilityId" id="facilityId" value="<%=facilityId%>" style="display: none;"/>
 						<input name="newWorker" id="newWorker" value="1" style="display: none;"/>
 						
-						<div class="form-group">
+						<div class="form-group" >
 							<div class="row">
 								<div class="col-5">
 									<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/></label>
@@ -714,6 +733,35 @@ function editWorker(workerId) {
     	var prevWorkerTypeId = parseInt(previousWorkerType);
     	distinctWorkerCountArrayForEdit = JSON.parse(JSON.stringify(distinctWorkerCountArray));
     	distinctWorkerCountArrayForEdit[prevWorkerTypeId -1][1]--;
+    	//to scroll to the top of the page
+    	$("html, body").animate({ scrollTop: 0 }, "slow");
+    	//end: scroll to the top of the page
+    	//for making organization readonly - april 17, 2019
+    	var workerType =$("#facilityWorkerTypeId").val();
+    	
+    	if(workerType === '2' || workerType === '4' || workerType === '6'){
+    		$('input[name=organization]').prop( "readonly", true );
+    		$("#organizationDiv").hide();
+    	}else{
+    		$('input[name=organization]').prop( "readonly", false );
+    		$("#organizationDiv").show();
+    	}
+    	//end : making organization readonly
+    }).error(function() {
+    });
+}
+
+function editMHV(workerId) {
+	var workerListURL ="/opensrp-dashboard/user/"+workerId+"/editMHV.html";
+    $.ajax(workerListURL, {
+        type: 'GET',
+        dataType: 'html',
+    }).done(function(workerDetails) {
+    	$("#editMHVDiv").show();
+    	$("#editMHVformContainerDiv").html(workerDetails);
+    	//to scroll to the top of the page
+    	$("html, body").animate({ scrollTop: 0 }, "slow");
+    	//end: scroll to the top of the page
     }).error(function() {
     });
 }

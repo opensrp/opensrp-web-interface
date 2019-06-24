@@ -1,4 +1,4 @@
-package org.opensrp.facility.dto;
+package org.opensrp.core.dto;
 
 
 public class FacilityWorkerDTO {

@@ -2,9 +2,9 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="org.opensrp.facility.entity.FacilityWorker"%>
-<%@page import="org.opensrp.facility.entity.FacilityTraining"%>
-<%@page import="org.opensrp.facility.entity.FacilityWorkerType" %>
+<%@page import="org.opensrp.core.entity.FacilityWorker"%>
+<%@page import="org.opensrp.core.entity.FacilityTraining"%>
+<%@page import="org.opensrp.core.entity.FacilityWorkerType" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -37,7 +37,7 @@
 	<div class="form-group">							
 	<div class="row">									
 		<div class="col-5">
-		<label for="exampleInputName">স্বাস্থ্য কর্মীর প্রকারভেদ </label>
+		<label for="exampleInputName"><spring:message code="lbl.healthWorkerType"/> </label>
 			<select class="custom-select custom-select-lg mb-3" id="facilityWorkerTypeId" name="facilityWorkerTypeId" onchange="checkForTraining()" required>
 		 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 					<%
@@ -73,7 +73,7 @@
 	<div class="form-group">
 		<div class="row">
 			<div class="col-5">
-			 <label for="exampleInputName">স্বাস্থ্য কর্মীর নাম  </label>
+			 <label for="exampleInputName"><spring:message code="lbl.healthWorkerName"/>  </label>
 				<input name="name" class="form-control"
 					required="required" aria-describedby="nameHelp"
 					placeholder="<spring:message code="lbl.name"/>" value="<%=name%>"/> 
@@ -84,19 +84,20 @@
 	<div class="form-group">
 		<div class="row">
 			<div class="col-5">
-				<label for="exampleInputName">স্বাস্থ্য কর্মীর মোবাইল নম্বর / ইমেইল </label>
+				<label for="exampleInputName"><spring:message code="lbl.healthWorkerContact"/></label>
 				<input name="identifier" class="form-control"
 					required="required" aria-describedby="nameHelp"
+					pattern="^01[3-9]\d{8}$" title="11 digit mobile number,must start with 013-019 "
 					placeholder="<spring:message code="lbl.healthWorkerContact"/>" value="<%=identifier%>"/>
 				<span class="text-red">${uniqueIdetifierErrorMessage}</span>
 			</div>
 		</div>
 	</div>
 	
-	<div class="form-group">
+	<div class="form-group" id="organizationDiv">
 		<div class="row">
 			<div class="col-5">
-				<label for="exampleInputName">স্বাস্থ্য কর্মীর প্রতিষ্ঠান </label>
+				<label for="exampleInputName"><spring:message code="lbl.healthWorkerOrganization"/> </label>
 				<input name="organization" class="form-control"
 					required="required" aria-describedby="nameHelp"
 					placeholder="<spring:message code="lbl.healthWorkerOrganization"/>" value="<%=organization%>"/>
@@ -110,7 +111,7 @@
 		<div class="form-check">
 			<div class="row">
 				<div class="col-10">
-				<label for="exampleInputName">সিএইচসিপির প্রাপ্ত প্রশিক্ষণ সমূহ:</label><br>
+				<label for="exampleInputName"><spring:message code="lbl.trainingsOfChcp"/></label><br>
 			    </div>
 				<%
 					String trainingListString = "";
@@ -153,8 +154,11 @@
 	<div class="form-group">
 		<div class="row">
 		<div class="col-2">
-				<button onclick="cancelWorkerEdit(<%=facilityId %>)" class="btn btn-danger btn-block"><spring:message code="lbl.cancel"/></button>
-	   	</div>
+				<%-- <button onclick="cancelWorkerEdit(<%=facilityId %>)" class="btn btn-danger btn-block"><spring:message code="lbl.cancel"/></button>--%>
+	   	 	<a  href="" onclick="location.reload()" class="btn btn-danger btn-block">
+								 	 <strong><spring:message code="lbl.cancel"/></strong>
+								 </a>
+	   	 </div>
 			<div class="col-2" id="saveButtonDiv">
 				<input type="submit" value="<spring:message code="lbl.save"/>"
 					class="btn btn-success btn-block"/>

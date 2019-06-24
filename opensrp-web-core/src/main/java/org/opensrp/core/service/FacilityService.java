@@ -1,4 +1,4 @@
-package org.opensrp.facility.service;
+package org.opensrp.core.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,9 +14,9 @@ import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.Team;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.TeamService;
-import org.opensrp.facility.entity.Facility;
-import org.opensrp.facility.entity.FacilityWorker;
-import org.opensrp.facility.util.FacilityHelperUtil;
+import org.opensrp.core.entity.Facility;
+import org.opensrp.core.entity.FacilityWorker;
+import org.opensrp.core.util.FacilityHelperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

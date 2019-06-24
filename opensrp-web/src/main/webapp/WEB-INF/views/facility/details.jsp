@@ -2,10 +2,11 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Set"%>
+<%@page import="java.util.Collections"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.Iterator"%>
-<%@page import="org.opensrp.facility.entity.FacilityWorker"%>
-<%@page import="org.opensrp.facility.entity.FacilityTraining"%>
+<%@page import="org.opensrp.core.entity.FacilityWorker"%>
+<%@page import="org.opensrp.core.entity.FacilityTraining"%>
 
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -28,6 +29,7 @@ font-family: ShonarBangla;}
 </style>
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <%
+//String bahmniVisitURL = (String)session.getAttribute("bahmniVisitURL");
 List<Integer> trainingIdList = new ArrayList<Integer>();
 List<FacilityWorker> multipurposeHealthVolunteerList = new ArrayList<FacilityWorker>();
 List<FacilityWorker> otherHealthWorkerList = new ArrayList<FacilityWorker>();
@@ -35,6 +37,9 @@ List<FacilityWorker> communityGroupMemberList = new ArrayList<FacilityWorker>();
 List<FacilityWorker> communitySupportGroupOneMemberList = new ArrayList<FacilityWorker>();
 List<FacilityWorker> communitySupportGroupTwoMemberList = new ArrayList<FacilityWorker>();
 List<FacilityWorker> communitySupportGroupThreeMemberList = new ArrayList<FacilityWorker>();
+
+List<FacilityWorker> healthAssistantList = new ArrayList<FacilityWorker>();
+List<FacilityWorker> familyWelfareAssistantList = new ArrayList<FacilityWorker>();
 
 String[][] coreWorkers = new String[6][2];
 Set<FacilityTraining> trainings = new HashSet<FacilityTraining>();
@@ -52,9 +57,13 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		String identifier = facilityWorker.getIdentifier();
 		String organization = facilityWorker.getOrganization();
 		int workerTypeId = facilityWorker.getFacilityWorkerType().getId();
-		if(workerTypeId<6){
+		if(workerTypeId== 1 || workerTypeId== 3 || workerTypeId== 5 ){
 			coreWorkers[workerTypeId][0] = (name != null)? name : "";
 			coreWorkers[workerTypeId][1] = (identifier != null)? identifier : "";
+		}else if(workerTypeId == 2){
+			healthAssistantList.add(facilityWorker);
+		}else if(workerTypeId == 4){
+			familyWelfareAssistantList.add(facilityWorker);
 		}else if(workerTypeId == 6){
 			multipurposeHealthVolunteerList.add(facilityWorker);
 		}else if(workerTypeId == 7){
@@ -92,7 +101,8 @@ if (session.getAttribute("facilityWorkerList") != null) {
 		
 		<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY_WORKER")){ %>
 		<li class="breadcrumb-item">
-			<a  href="<c:url value="/facility/${facility.id}/updateProfile.html?lang=${locale}"/>"> <strong><spring:message code="lbl.updateProfile"/></strong> </a>	 
+			<a  href="<c:url value="/facility/${facility.id}/updateProfile.html?lang=${locale}"/>"> 
+			<strong><spring:message code="lbl.updateProfile"/></strong> </a>	 
 			</li> 	
 		<%} %>	
 		
@@ -113,11 +123,17 @@ if (session.getAttribute("facilityWorkerList") != null) {
 			</li> 	
 		<%} %>	
 		
-		<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
+		
+		<jsp:include page="/WEB-INF/views/facility/bahmni-visit-link.jsp" />
+		<%-- <% if(AuthenticationManagerUtil.isPermitted("PERM_READ_FACILITY")){ %>
 				<li class="breadcrumb-item">
-				<a  href="https://27.147.129.56/bahmni/home/index.html#/login" target="_blank"> <strong><spring:message code="lbl.visit"/></strong> </a>
+				<a  href="https://103.247.238.36/bahmni/home/index.html#/login" target="_blank"> 
+					<strong><spring:message code="lbl.visit"/></strong> </a>
+					<a  href="<%=bahmniVisitURL %>" target="_blank"> 
+					<strong><spring:message code="lbl.visit"/></strong> </a>
 				</li>		
-		<%} %>
+		<%} %> --%>
+		
 		</ol>
 		</div>
 					
@@ -182,13 +198,44 @@ if (session.getAttribute("facilityWorkerList") != null) {
     <td>মোবাইল নম্বর:</td>
     <td><%=(coreWorkers[1][1]!= null)? coreWorkers[1][1] : ""%></td>
   </tr>
+  <!-- for HA - april 18, 2019 --> 
   <tr>
+    <td>7.</td>
+    <td colspan="4">স্বাস্থ্য সহকারীর নাম ও মোবাইল নম্বর:</td>
+  </tr>
+    <tr>
+    <td>&nbsp;</td>
+    <td colspan="4"><table width="100%" border="0">
+ <%
+	int countHA = 0;
+ 	Collections.reverse(healthAssistantList);
+ 	for(FacilityWorker worker : healthAssistantList){
+ 		if(countHA >1) break;	
+ 		String workerName = worker.getName();
+ 		String workerIdentifier = worker.getIdentifier();
+ 		workerName = (workerName != null) ? workerName : "";
+ 		workerIdentifier = (workerIdentifier != null) ? workerIdentifier : "";
+ %>     
+      <tr>
+      	<td>নাম: </td>
+        <td><%=workerName %></td>
+        <td>মোবাইল নম্বর:</td>
+        <td><%=workerIdentifier %></td>
+      </tr>
+ <%
+ 	countHA++;
+ 	}
+ %>    
+    </table></td>
+  </tr>
+  <!-- end: for HA - april 18, 2019 --> 
+  <%-- <tr>
   	<td>5.</td>
     <td>স্বাস্থ্য সহকারীর নাম:</td>
     <td><%=(coreWorkers[2][0]!= null)? coreWorkers[2][0] : ""%></td>
     <td>মোবাইল নম্বর:</td>
     <td><%=(coreWorkers[2][1]!= null)? coreWorkers[2][1] : ""%></td>
-  </tr>
+  </tr> --%>
   <%-- <tr>
     <td>6.</td>
     <td>সহকারীর স্বাস্থ্য পরিদর্শকের  নাম:</td>
@@ -196,13 +243,44 @@ if (session.getAttribute("facilityWorkerList") != null) {
     <td>মোবাইল নম্বর:</td>
     <td><%=(coreWorkers[3][1]!= null)? coreWorkers[3][1] : ""%></td>
   </tr> --%>
+  <!-- for FWA - april 18, 2019 --> 
   <tr>
+    <td>7.</td>
+    <td colspan="4">পরিবার পরিকল্পনা সহকারীর নাম ও মোবাইল নম্বর:</td>
+  </tr>
+    <tr>
+    <td>&nbsp;</td>
+    <td colspan="4"><table width="100%" border="0">
+ <%
+	int countFWA = 0;
+ 	Collections.reverse(familyWelfareAssistantList);
+ 	for(FacilityWorker worker : familyWelfareAssistantList){
+ 		if(countFWA >1) break;	
+ 		String workerName = worker.getName();
+ 		String workerIdentifier = worker.getIdentifier();
+ 		workerName = (workerName != null) ? workerName : "";
+ 		workerIdentifier = (workerIdentifier != null) ? workerIdentifier : "";
+ %>     
+      <tr>
+      	<td>নাম: </td>
+        <td><%=workerName %></td>
+        <td>মোবাইল নম্বর:</td>
+        <td><%=workerIdentifier %></td>
+      </tr>
+ <%
+ 	countFWA++;
+ 	}
+ %>    
+    </table></td>
+  </tr>
+  <!-- end: for FWA - april 18, 2019 --> 
+  <%-- <tr>
     <td>7.</td>
     <td>পরিবার পরিকল্পনা সহকারীর নাম :</td>
     <td><%=(coreWorkers[4][0]!= null)? coreWorkers[4][0] : ""%></td>
     <td>মোবাইল নম্বর:</td>
     <td><%=(coreWorkers[4][1]!= null)? coreWorkers[4][1] : ""%></td>
-  </tr>
+  </tr> --%>
   <%-- <tr>
     <td>8.</td>
     <td>পরিবার পরিকল্পনা পরিদর্শকের নাম:</td>
