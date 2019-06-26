@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.json.JSONObject;
@@ -123,14 +124,17 @@ public class HealthIdService {
 		}
 		return msg;
 	}
-	
+
+	@Transactional
 	public synchronized JSONObject getHealthIdAndUpdateRecord() throws Exception {
 		
 		JSONObject healthIds = new JSONObject();
 		Session session = sessionFactory.openSession();
+		Transaction tx = null;
 		try {
+			tx = session.beginTransaction();
 			Criteria criteria = session.createCriteria(HealthId.class);
-			criteria.setMaxResults(20);
+			criteria.setMaxResults(250);
 			criteria.add(Restrictions.eq("status", false));
 			criteria.add(Restrictions.eq("type", "Reserved"));
 			criteria.addOrder(Order.asc("id"));
@@ -138,10 +142,8 @@ public class HealthIdService {
 			List<String> list = new ArrayList<String>();
 			for (HealthId healthId : result) {
 				healthId.setStatus(true);
-				if (update(healthId) == 1) {
-					list.add(healthId.gethId());
-				}
-				;
+				session.saveOrUpdate(healthId);
+				list.add(healthId.gethId());
 			}
 			if (list.size() != 0) {
 				healthIds.put("identifiers", list);
@@ -151,6 +153,7 @@ public class HealthIdService {
 			logger.error("health id fetch error:" + e.fillInStackTrace());
 		}
 		finally {
+			tx.commit();
 			session.close();
 		}
 		return healthIds;

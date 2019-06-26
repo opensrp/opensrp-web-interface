@@ -36,6 +36,10 @@ public class SearchBuilder {
 	private String start;
 	
 	private String end;
+
+	private String ageFrom;
+
+	private String ageTo;
 	
 	public SearchBuilder() {
 		
@@ -58,6 +62,8 @@ public class SearchBuilder {
 		this.setPregStatus("");
 		this.setStart("");
 		this.setEnd("");
+		this.setAgeFrom("");
+		this.setAgeTo("");
 		return this;
 		
 	}
@@ -79,7 +85,21 @@ public class SearchBuilder {
 		this.end = end;
 		return this;
 	}
-	
+
+	public String getAgeFrom() { return ageFrom; }
+
+	public SearchBuilder setAgeFrom(String ageFrom) {
+		this.ageFrom = ageFrom;
+		return this;
+	}
+
+	public String getAgeTo() { return ageTo; }
+
+	public SearchBuilder setAgeTo(String ageTo) {
+		this.ageTo = ageTo;
+		return this;
+	}
+
 	public String getYear() {
 		return year;
 	}
@@ -225,6 +245,8 @@ public class SearchBuilder {
 		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
 		result = prime * result + ((ward == null) ? 0 : ward.hashCode());
 		result = prime * result + ((year == null) ? 0 : year.hashCode());
+		result = prime * result + ((ageFrom == null)? 0 : ageFrom.hashCode());
+		result = prime * result + ((ageTo == null)? 0 : ageTo.hashCode());
 		return result;
 	}
 	
@@ -313,6 +335,16 @@ public class SearchBuilder {
 			if (other.year != null)
 				return false;
 		} else if (!year.equals(other.year))
+			return false;
+		if (ageFrom == null) {
+			if (other.ageFrom != null)
+				return false;
+		} else if (!ageFrom.equals(other.ageFrom))
+			return false;
+		if (ageTo == null) {
+			if (other.ageTo != null)
+				return false;
+		} else if (!ageTo.equals(other.ageTo))
 			return false;
 		return true;
 	}

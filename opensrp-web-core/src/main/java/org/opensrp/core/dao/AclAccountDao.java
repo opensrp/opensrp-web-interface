@@ -74,7 +74,7 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 				if(accessToken != null && !accessToken.isEmpty()){
 					facilityId = getFacilityId(accessToken);
 					logger.info("\nFacilityId : "+ facilityId+"\n");
-					if(accessToken != null && !accessToken.isEmpty()){
+					if(facilityId != null && !facilityId.isEmpty()){
 						ccInfo = getCCInfo(facilityId);
 						logger.info("\nCCInfo : "+ ccInfo.toString()+"\n");
 						if(ccInfo != null){

@@ -66,6 +66,9 @@ SELECT DISTINCT c.id as id
    , c.json->'attributes'->>'nationalId' as national_id
    , c.json->'attributes'->>'Child_Birth_Certificate' as child_birth_certificate
    , c.json->'attributes'->>'phoneNumber' as phone_number
+   , CASE
+       WHEN (c.json->'attributes'->>'PregnancyStatus' = 'Antenatal Period')
+           THEN 'true'ELSE NULL END AS pregnancy_status
    , c.json->>'serverVersion' as server_version
    , c.json->'attributes'->>'spouseName' as spouse_name
    , c.json->'addresses'->0->'addressFields'->>'address3' as subunit

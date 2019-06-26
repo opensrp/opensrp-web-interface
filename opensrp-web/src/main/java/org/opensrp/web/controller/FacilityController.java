@@ -167,12 +167,18 @@ public class FacilityController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_FACILITY')")
 	@RequestMapping(value = "/facility/{id}/details.html", method = RequestMethod.GET)
 	public String facilityDetails(ModelMap model, HttpSession session, Locale locale, @PathVariable("id") int facilityId) {
+
+		logger.info("\nRequest incoming started!! "+System.currentTimeMillis());
+
 		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
 		model.addAttribute("facility", facility);
 		List<FacilityWorker> facilityWorkerList = facilityService.getFacilityWorkerList(facilityId);
 		facilityHelperUtil.setFacilityWorkerListToSession(session, facilityWorkerList);
 		session.setAttribute("bahmniVisitURL", BAHMNI_VISIT_URL);
 		model.addAttribute("locale", locale);
+
+		logger.info("\nRequest incoming end!! "+System.currentTimeMillis()+"\n");
+
 		return "facility/details";
 	}
 	

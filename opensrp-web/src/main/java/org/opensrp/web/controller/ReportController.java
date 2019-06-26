@@ -11,11 +11,21 @@ import javax.servlet.http.HttpSession;
 
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.core.entity.Facility;
+import org.opensrp.core.entity.FacilityWorker;
+import org.opensrp.core.entity.Location;
+import org.opensrp.core.entity.User;
+import org.opensrp.core.service.FacilityService;
+import org.opensrp.core.service.FacilityWorkerService;
+import org.opensrp.core.service.LocationService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
+import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.PaginationHelperUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +52,9 @@ public class ReportController {
 
 	@Autowired
 	private DatabaseServiceImpl databaseServiceImpl;
+
+	@Autowired
+	private FacilityService facilityService;
 
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_REPORT')")
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
@@ -87,6 +100,15 @@ public class ReportController {
 	@RequestMapping(value = "/householdDataReport.html", method = RequestMethod.GET)
 	public String showFormWiseReport(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
+		if (!AuthenticationManagerUtil.isAdmin()) {
+			User user = AuthenticationManagerUtil.getLoggedInUser();
+			Facility facility = facilityService.findById(Integer.parseInt(user.getChcp()), "id", Facility.class);
+			request.setAttribute("division", facility.getDivision());
+			request.setAttribute("district", facility.getDistrict());
+			request.setAttribute("upazila", facility.getUpazila());
+			request.setAttribute("union", facility.getUnion());
+			request.setAttribute("ward", facility.getWard());
+		}
 		searchBuilder = paginationHelperUtil.setParams(request, session);
 		searchUtil.setDivisionAttribute(session);
 		List<Object> formWiseAggregatedList = (List<Object>) databaseServiceImpl.getReportData(searchBuilder);

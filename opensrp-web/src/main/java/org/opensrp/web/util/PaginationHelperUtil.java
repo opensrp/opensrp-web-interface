@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.core.entity.Location;
 import org.opensrp.core.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -108,34 +109,59 @@ public class PaginationHelperUtil {
 		String userName = "";
 		String start_date = "";
 		String end_date = "";
+		String pregnancy_status = "";
+		String age_from = "";
+		String age_to = "";
 		
 		if (request.getParameterMap().containsKey("division")) {
 			division = (String) request.getParameter("division");
 			this.setChildLocationToSession(division, "districtListByParent", session);
+		} else if (request.getAttribute("division") != null) {
+			Location location = locationServiceImpl.findByKey((String)request.getAttribute("division"), "name", Location.class);
+			division = location.getId()+"?"+(String) request.getAttribute("division");
 		}
+
 		if (request.getParameterMap().containsKey("district")) {
 			district = (String) request.getParameter("district");
 			this.setChildLocationToSession(district, "upazilasListByParent", session);
+		} else if (request.getAttribute("district") != null) {
+			Location location = locationServiceImpl.findByKey((String)request.getAttribute("district"), "name", Location.class);
+			district = location.getId()+"?"+(String) request.getAttribute("district");
 		}
+
 		if (request.getParameterMap().containsKey("upazila")) {
 			upazila = (String) request.getParameter("upazila");
 			this.setChildLocationToSession(upazila, "unionsListByParent", session);
+		} else if (request.getAttribute("upazila") != null) {
+			Location location = locationServiceImpl.findByKey((String)request.getAttribute("upazila"), "name", Location.class);
+			upazila = location.getId()+"?"+(String) request.getAttribute("upazila");
 		}
+
 		if (request.getParameterMap().containsKey("union")) {
 			union = (String) request.getParameter("union");
 			this.setChildLocationToSession(union, "wardsListByParent", session);
+		} else if (request.getAttribute("union") != null) {
+			Location location = locationServiceImpl.findByKey((String)request.getAttribute("union"), "name", Location.class);
+			union = location.getId()+"?"+(String) request.getAttribute("union");
 		}
+
 		if (request.getParameterMap().containsKey("ward")) {
 			ward = (String) request.getParameter("ward");
 			this.setChildLocationToSession(ward, "subunitListByParent", session);
+		} else if (request.getAttribute("ward") != null) {
+			Location location = locationServiceImpl.findByKey((String)request.getAttribute("ward"), "name", Location.class);
+			ward = location.getId()+"?"+(String) request.getAttribute("ward");
 		}
+
 		if (request.getParameterMap().containsKey("subunit")) {
 			subunit = (String) request.getParameter("subunit");
 			this.setChildLocationToSession(subunit, "mauzaparaListByParent", session);
 		}
+
 		if (request.getParameterMap().containsKey("mauzapara")) {
 			mauzapara = (String) request.getParameter("mauzapara");
 		}
+
 		if (request.getParameterMap().containsKey("provider")) {
 			provider = (String) request.getParameter("provider");
 		}
@@ -143,28 +169,59 @@ public class PaginationHelperUtil {
 		if (request.getParameterMap().containsKey("year")) {
 			year = (String) request.getParameter("year");
 		}
+
 		if (request.getParameterMap().containsKey("name")) {
 			name = (String) request.getParameter("name");
 		}
+
 		if (request.getParameterMap().containsKey("userName")) {
 			userName = (String) request.getParameter("userName");
 		}
+
 		if (request.getParameterMap().containsKey("userName")) {
 			userName = (String) request.getParameter("userName");
 		}
+
 		if (request.getParameterMap().containsKey("start")) {
 			start_date = (String) request.getParameter("start");
 			System.out.println("start date: " + start_date);
 		}
+
 		if (request.getParameterMap().containsKey("end")) {
 			end_date = (String) request.getParameter("end");
-			
+		}
+
+		if (request.getParameterMap().containsKey("memberType")) {
+			String memberType = (String) request.getParameter("memberType");
+			if (memberType.equals("Pregnant Woman")) {
+				pregnancy_status = "true";
+				age_from = "";
+				age_to = "";
+			}
+			else {
+				pregnancy_status = "";
+				String ageRange = (String) request.getParameter("memberType");
+
+				if (ageRange.equals("Child (0-2 month)")) {
+					age_from = "0";
+					age_to = "61";
+				}
+				else if (ageRange.equals("Child(2 month - 5 years)")) {
+					age_from = "60";
+					age_to = "1866";
+				}
+				else if (ageRange.equals("Adult (above 50 years)")){
+					age_from = "18249";
+					age_to = "73000";
+				}
+			}
 		}
 		
 		searchBuilder.setDivision(locationName(division)).setDistrict(locationName(district))
 		        .setUpazila(locationName(upazila)).setUnion(locationName(union)).setWard(locationName(ward))
-		        .setSubunit(locationName(subunit)).setMauzapara(locationName(mauzapara)).setProvider(provider).setName(name)
-		        .setYear(year).setUserName(userName).setStart(start_date).setEnd(end_date);
+		        .setSubunit(locationName(subunit)).setMauzapara(locationName(mauzapara)).setProvider(provider)
+				.setName(name).setYear(year).setUserName(userName).setStart(start_date).setEnd(end_date)
+				.setAgeFrom(age_from).setAgeTo(age_to).setPregStatus(pregnancy_status);
 		
 		return searchBuilder;
 		

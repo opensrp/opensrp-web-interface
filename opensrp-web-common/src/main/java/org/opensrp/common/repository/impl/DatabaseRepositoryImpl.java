@@ -802,7 +802,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<T> aggregatedList = null;
 		try {
 			String hql = "select * from core." + procedureName + "(array[:division,:district,:upazila"
-					+ ",:union,:ward,:subunit,:mauzapara,:provider,:start_date,:end_date])";
+					+ ",:union,:ward,:subunit,:mauzapara,:provider,:start_date,:end_date,:pregnancy_status,:age_from,:age_to])";
 			Query query = session.createSQLQuery(hql);
 			setParameter(searchBuilder, query);
 			aggregatedList = query.list();
@@ -817,23 +817,17 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return aggregatedList;
 	}
 
-	private void setParameter(SearchBuilder searchFilterBuilder,
-			Query query) {
+	private void setParameter(SearchBuilder searchFilterBuilder, Query query) {
 		if (searchFilterBuilder.getDivision() != null && !searchFilterBuilder.getDivision().isEmpty()) {
 			query.setParameter("division", searchFilterBuilder.getDivision());
 		} else {
 			query.setParameter("division", "");
 		}
+
 		if (searchFilterBuilder.getDistrict() != null && !searchFilterBuilder.getDistrict().isEmpty()) {
 			query.setParameter("district", searchFilterBuilder.getDistrict());
 		} else {
 			query.setParameter("district", "");
-		}
-
-		if (searchFilterBuilder.getUpazila() != null && !searchFilterBuilder.getUpazila().isEmpty()) {
-			query.setParameter("upazila", searchFilterBuilder.getUpazila());
-		} else {
-			query.setParameter("upazila", "");
 		}
 
 		if (searchFilterBuilder.getUnion() != null && !searchFilterBuilder.getUnion().isEmpty()) {
@@ -842,10 +836,22 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			query.setParameter("union", "");
 		}
 
+		if (searchFilterBuilder.getUpazila() != null && !searchFilterBuilder.getUpazila().isEmpty()) {
+			query.setParameter("upazila", searchFilterBuilder.getUpazila());
+		} else {
+			query.setParameter("upazila", "");
+		}
+
 		if (searchFilterBuilder.getWard() != null && !searchFilterBuilder.getWard().isEmpty()) {
 			query.setParameter("ward", searchFilterBuilder.getWard());
 		} else {
 			query.setParameter("ward", "");
+		}
+
+		if (searchFilterBuilder.getMauzapara() != null && !searchFilterBuilder.getMauzapara().isEmpty()) {
+			query.setParameter("mauzapara", searchFilterBuilder.getMauzapara());
+		} else {
+			query.setParameter("mauzapara", "");
 		}
 
 		if (searchFilterBuilder.getSubunit() != null && !searchFilterBuilder.getSubunit().isEmpty()) {
@@ -854,10 +860,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			query.setParameter("subunit", "");
 		}
 
-		if (searchFilterBuilder.getMauzapara() != null && !searchFilterBuilder.getMauzapara().isEmpty()) {
-			query.setParameter("mauzapara", searchFilterBuilder.getMauzapara());
+		if (searchFilterBuilder.getPregStatus() != null && !searchFilterBuilder.getPregStatus().isEmpty()) {
+			query.setParameter("pregnancy_status", searchFilterBuilder.getPregStatus());
 		} else {
-			query.setParameter("mauzapara", "");
+			query.setParameter("pregnancy_status", "");
 		}
 
 		if (searchFilterBuilder.getProvider() != null && !searchFilterBuilder.getProvider().isEmpty()) {
@@ -873,6 +879,15 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		} else {
 			query.setParameter("start_date", "");
 			query.setParameter("end_date", "");
+		}
+
+		if (searchFilterBuilder.getAgeFrom() != null && !searchFilterBuilder.getAgeFrom().isEmpty()
+				&& searchFilterBuilder.getAgeTo() != null && !searchFilterBuilder.getAgeTo().isEmpty()) {
+			query.setParameter("age_from", searchFilterBuilder.getAgeFrom());
+			query.setParameter("age_to", searchFilterBuilder.getAgeTo());
+		} else {
+			query.setParameter("age_from", "");
+			query.setParameter("age_to", "");
 		}
 	}
 }

@@ -91,7 +91,12 @@ public class DatabaseServiceImpl implements DatabaseService {
 		
 		return databaseRepositoryImpl.update(t);
 	}
-	
+
+	public <T> long update(List<T> t) throws Exception {
+
+		return 0;
+	}
+
 	@Transactional
 	public <T> List<T> search(SearchBuilder searchBuilder, Integer offset, Integer maxResults, Class<?> entityClassName) {
 		return databaseRepositoryImpl.search(searchBuilder, offset, maxResults, entityClassName);
