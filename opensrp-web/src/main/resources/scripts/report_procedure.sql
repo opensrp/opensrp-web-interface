@@ -100,8 +100,8 @@ BEGIN
         age_from = E'\'' || age_from || E'\'';
         age_to = E'\'' || age_to || E'\'';
         filterString := filterString || E' and ((now()::date - birth_date::date) >'
-                            || age_from ||'and (now()::date - birth_date::date) <'
-                            || age_to ||')';
+                            || age_from ||E'and (now()::date - birth_date::date) <'
+                            || age_to ||E')';
     END IF;
     /*Total counts*/
     EXECUTE E'INSERT INTO helper_table (providerName)
