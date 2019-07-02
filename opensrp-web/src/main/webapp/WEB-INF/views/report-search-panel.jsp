@@ -11,8 +11,7 @@
 
 
 <%
-	List<Object[]> divisions = (List<Object[]>) session
-			.getAttribute("divisions");
+	List<Object[]> divisions = (List<Object[]>) session.getAttribute("divisions");
 	
 	String startDate = (String) session.getAttribute("startDate");
 	String endDate = (String) session.getAttribute("endDate");

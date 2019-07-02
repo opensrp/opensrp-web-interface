@@ -197,99 +197,89 @@ public class UserService {
 	}
 	
 	// for setting user attributes from jsonObject -- April 10, 2019
-	public User setUserInfoFromJSONObject(JSONObject inputJSONObject,
+	public User setUserInfoFromJSONObject(String username, JSONObject inputJSONObject,
 			String password, Facility facility) throws Exception {
-		String facilityHeadDesignation = inputJSONObject.getString("facility_head_designation_name");
+		String facilityHeadDesignation = "Community Health Care Provider";
 		logger.info("\nfacilityHeadDesignation : "+ facilityHeadDesignation + "\n");
 		User user = null;
-		if (facilityHeadDesignation != null
-				&& !facilityHeadDesignation.isEmpty()
-				&& facilityHeadDesignation.equals("Community Health Care Provider")) {
-			user = new User();
-			Role roleOfCHCP = roleService.findByKey("CHCP", "name", Role.class);
-			logger.info("\n Role Of CHCP : "+ roleOfCHCP.toString() + "\n");
-			String roleId = roleOfCHCP.getId()+"";
-			//String[] roles = { "7" };
-			String[] roles = { roleId };
-			String username = inputJSONObject.getString("email1");
-			if (username != null && !username.isEmpty()) {
-				user.setUsername(username);
-				//for checking
-				//user.setUsername("TestUserName");
-			}
-			if (username != null && !username.isEmpty()) {
-				user.setEmail(username);
-			}
-			user.setEnabled(true);
-			String facilityHeadIdentifier = inputJSONObject.getString("facility_head_provider_id");
-			String facilityHeadName = inputJSONObject.getString("facility_head_provider_name");
-			String[] nameArray = facilityHeadName.split("\\s+");
-			String firstName = nameArray[0];
-			String lastName = nameArray[nameArray.length - 1];
-			if (firstName != null && !firstName.isEmpty()) {
-				user.setFirstName(firstName);
-			}
-			if (lastName != null && !lastName.isEmpty()) {
-				user.setLastName(lastName);
-			}
-			user.setGender("");
-			user.setIdetifier("");
-			String mobileNumber = inputJSONObject.getString("mobile1");
-			if (mobileNumber != null && !mobileNumber.isEmpty()) {
-				user.setMobile(mobileNumber);
-			}else{
-				user.setMobile("");
-			}
-			user.setPassword(password);
-			user.setRoles(setRoles(roles));
-			// User parentUser = findById(userDTO.getParentUser(), "id",User.class);
-			// user.setParentUser("");
+		user = new User();
+		Role roleOfCHCP = roleService.findByKey("CHCP", "name", Role.class);
+		logger.info("\n Role Of CHCP : "+ roleOfCHCP.toString() + "\n");
+		String roleId = roleOfCHCP.getId()+"";
+		//String[] roles = { "7" };
+		String[] roles = { roleId };
+		user.setUsername(username);
+		if (username != null && !username.isEmpty()) {
+			user.setEmail(username);
+		}
+		user.setEnabled(true);
+		String facilityHeadIdentifier = inputJSONObject.getString("facility_head_provider_id");
+		String facilityHeadName = inputJSONObject.getString("facility_head_provider_name");
+		String[] nameArray = facilityHeadName.split("\\s+");
+		String firstName = nameArray[0];
+		String lastName = nameArray[nameArray.length - 1];
+		if (firstName != null && !firstName.isEmpty()) {
+			user.setFirstName(firstName);
+		}
+		if (lastName != null && !lastName.isEmpty()) {
+			user.setLastName(lastName);
+		}
+		user.setGender("");
+		user.setIdetifier("");
+		String mobileNumber = inputJSONObject.getString("mobile1");
+		if (mobileNumber != null && !mobileNumber.isEmpty()) {
+			user.setMobile(mobileNumber);
+		}else{
+			user.setMobile("");
+		}
+		user.setPassword(password);
+		user.setRoles(setRoles(roles));
+		// User parentUser = findById(userDTO.getParentUser(), "id",User.class);
+		// user.setParentUser("");
 
-			// from user rest controller -- April 11, 2019
-			user.setChcp(facility.getId() + "");
-			logger.info(" \nUser : "+ user.toString() + "\n");
-			int numberOfUserSaved = (int) save(user, false);
-			logger.info("\nNumUSER: "+numberOfUserSaved +" \nUser : "+ user.toString() + "\n");
+		// from user rest controller -- April 11, 2019
+		user.setChcp(facility.getId() + "");
+		logger.info(" \nUser : "+ user.toString() + "\n");
+		int numberOfUserSaved = (int) save(user, false);
+		logger.info("\nNumUSER: "+numberOfUserSaved +" \nUser : "+ user.toString() + "\n");
 
-			// get facility by name from team table and then add it to team member
-			Team team = new Team();
-			TeamMember teamMember = new TeamMember();
-			team = teamService.findByKey(facility.getName(), "name", Team.class);
-			logger.info(" \nTeam : "+ team.toString() + "\n");
+		// get facility by name from team table and then add it to team member
+		Team team = new Team();
+		TeamMember teamMember = new TeamMember();
+		team = teamService.findByKey(facility.getName(), "name", Team.class);
+		logger.info(" \nTeam : "+ team.toString() + "\n");
 
-			int[] locations = new int[5];
-			locations[0] = team.getLocation().getId();
-			user = findById(user.getId(), "id", User.class);
-			logger.info(" \nUser(find by id from DB) : "+ user.toString() + "\n");
-			teamMember = teamMemberServiceImpl.setLocationAndPersonAndTeamAttributeInLocation(
-							teamMember, user.getId(), team, locations);
-			teamMember.setIdentifier(facilityHeadIdentifier);
-			logger.info(" \nTeamMember : "+ teamMember.toString() + "\n");
-			teamMemberServiceImpl.save(teamMember);
+		int[] locations = new int[5];
+		locations[0] = team.getLocation().getId();
+		user = findById(user.getId(), "id", User.class);
+		logger.info(" \nUser(find by id from DB) : "+ user.toString() + "\n");
+		teamMember = teamMemberServiceImpl.setLocationAndPersonAndTeamAttributeInLocation(
+						teamMember, user.getId(), team, locations);
+		teamMember.setIdentifier(facilityHeadIdentifier);
+		logger.info(" \nTeamMember : "+ teamMember.toString() + "\n");
+		teamMemberServiceImpl.save(teamMember);
 
-			FacilityWorker facilityWorker = new FacilityWorker();
-			facilityWorker.setName(user.getFullName());
-			facilityWorker.setIdentifier(user.getMobile());
-			facilityWorker.setOrganization("Community Clinic");
-			FacilityWorkerType facilityWorkerType = facilityWorkerTypeService
-					.findByKey("CHCP", "name", FacilityWorkerType.class);
-			facilityWorker.setFacility(facility);
-			facilityWorker.setFacilityWorkerType(facilityWorkerType);
-			logger.info(" \nFacilityWorkerType : "+ facilityWorkerType.toString() + "\n");
-			facilityWorkerTypeService.save(facilityWorker);
-			
-			String mailBody = "Dear "
-					+ user.getFullName()
-					+ ",\n\nYour login credentials for CBHC are given below -\nusername : "
-					+ user.getUsername() + "\npassword : " + password;
-			if (numberOfUserSaved > 0) {
-				logger.info("<><><><><> in user rest controller before sending mail to-"
-						+ user.getEmail());
-				emailService.sendSimpleMessage(user.getEmail(),
-						"Login credentials for CBHC", mailBody);
+		FacilityWorker facilityWorker = new FacilityWorker();
+		facilityWorker.setName(user.getFullName());
+		facilityWorker.setIdentifier(user.getMobile());
+		facilityWorker.setOrganization("Community Clinic");
+		FacilityWorkerType facilityWorkerType = facilityWorkerTypeService
+				.findByKey("CHCP", "name", FacilityWorkerType.class);
+		facilityWorker.setFacility(facility);
+		facilityWorker.setFacilityWorkerType(facilityWorkerType);
+		logger.info(" \nFacilityWorkerType : "+ facilityWorkerType.toString() + "\n");
+		facilityWorkerTypeService.save(facilityWorker);
 
-			}
-			// end: from user rest controller
+		String mailBody = "Dear "
+				+ user.getFullName()
+				+ ",\n\nYour login credentials for CBHC are given below -\nusername : "
+				+ user.getUsername() + "\npassword : " + password;
+		if (numberOfUserSaved > 0) {
+			logger.info("<><><><><> in user rest controller before sending mail to-"
+					+ user.getEmail());
+			emailService.sendSimpleMessage(user.getEmail(),
+					"Login credentials for CBHC", mailBody);
+
 		}
 		return user;
 	}

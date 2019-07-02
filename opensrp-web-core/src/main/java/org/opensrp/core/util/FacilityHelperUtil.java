@@ -229,9 +229,15 @@ public class FacilityHelperUtil {
 			}
 			
 			logger.info("\n<><><><> "+facility.toString()+"\n");
-			facilityService.save(facility);
-			addTeamFromCommunity(facility);
-			facilityToRetrun = facilityService.findById(facility.getId(), "id", Facility.class);
+			if (facility.getWardCode() != null && !facility.getWardCode().isEmpty()) {
+				facilityService.save(facility);
+				addTeamFromCommunity(facility);
+				facilityToRetrun = facilityService.findById(facility.getId(), "id", Facility.class);
+			}
+			else {
+				logger.info("Ward code --> "+ wardCode);
+				throw new Exception("Ward code is empty!!!");
+			}
 		} catch (Exception e) {
 			logger.info("Some problem occured, please contact admin..");
 			msg = "Some problem occured, please contact with admin..";
@@ -249,7 +255,7 @@ public class FacilityHelperUtil {
 	}
 	
 	public String removeLeadingZeroes(String value) {
-	     return new Integer(value).toString();
+	     return value.replaceAll("[^1-9]+", "");
 	}
 	
 	@SuppressWarnings("resource")
