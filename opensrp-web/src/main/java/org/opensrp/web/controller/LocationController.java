@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.core.entity.Location;
+import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.LocationTagService;
 import org.opensrp.web.util.PaginationUtil;
@@ -41,6 +42,9 @@ public class LocationController {
 	
 	@Autowired
 	private LocationService locationServiceImpl;
+
+	@Autowired
+	private FacilityService facilityServiceImpl;
 	
 	@Autowired
 	private LocationTagService locationTagServiceImpl;
@@ -156,8 +160,10 @@ public class LocationController {
 	}
 	
 	@RequestMapping(value = "/location", method = RequestMethod.GET)
-	public String getChildLocationList(HttpServletRequest request, HttpSession session, Model model, @RequestParam int id) {
-		List<Object[]> parentData = locationServiceImpl.getChildData(id);
+	public String getChildLocationList(HttpServletRequest request, HttpSession session, Model model, @RequestParam int id, @RequestParam String title) {
+		List<Object[]> parentData = null;
+		if (title.length() == 0) parentData = locationServiceImpl.getChildData(id);
+		else parentData = facilityServiceImpl.getCCDataByWardName(title);
 		session.setAttribute("data", parentData);
 		return "/location";
 	}

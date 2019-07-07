@@ -66,15 +66,12 @@ SELECT DISTINCT c.id as id
    , c.json->'attributes'->>'nationalId' as national_id
    , c.json->'attributes'->>'Child_Birth_Certificate' as child_birth_certificate
    , c.json->'attributes'->>'phoneNumber' as phone_number
-   , CASE
-       WHEN (c.json->'attributes'->>'PregnancyStatus' = 'Antenatal Period')
-           THEN 'true'ELSE NULL END AS pregnancy_status
    , c.json->>'serverVersion' as server_version
    , c.json->'attributes'->>'spouseName' as spouse_name
    , c.json->'addresses'->0->'addressFields'->>'address3' as subunit
    , c.json->'addresses'->0->'addressFields'->>'address1' as client_union
    , c.json->'addresses'->0->'addressFields'->>'cityVillage' as upazila
-   , c.json->'addresses'->0->'addressFields'->>'address2' as ward
+   , UPPER(c.json->'addresses'->0->'addressFields'->>'address2') as ward
    , CASE
     WHEN (e.json->>'eventType' = 'New Woman Member Registration') THEN e.json->'obs'->3->'values'->>0
 	ELSE null
@@ -104,14 +101,17 @@ SELECT DISTINCT c.id as id
     WHEN (e.json->>'entityType' = 'child') THEN core.latest_child_growth_status(e.json->>'baseEntityId')
 	ELSE null
     END
-	as latest_growth_status
+	as latest_growth_status,
+    e.json ->> 'team'::text AS cc_name,
+    CASE
+        WHEN (c.json->'attributes'->>'PregnancyStatus' = 'Antenatal Period')
+         THEN 'true'ELSE NULL END AS pregnancy_status
    FROM core.client c
    JOIN core.event e ON c.json->'baseEntityId' = e.json->'baseEntityId'
    WHERE e.json->>'eventType' LIKE '%Registration%'
 WITH DATA;
 
 GRANT ALL PRIVILEGES ON TABLE core."viewJsonDataConversionOfClient" TO opensrp_admin;
-
 
 /*************************************************/
 

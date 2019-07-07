@@ -799,10 +799,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 	public <T> List<T> getReportData(SearchBuilder searchBuilder, String procedureName) {
 		Session session = sessionFactory.openSession();
+        System.out.println("<--Search Builder-->");
+        System.out.println(searchBuilder);
 		List<T> aggregatedList = null;
 		try {
 			String hql = "select * from core." + procedureName + "(array[:division,:district,:upazila"
-					+ ",:union,:ward,:subunit,:mauzapara,:provider,:start_date,:end_date,:pregnancy_status,:age_from,:age_to])";
+					+ ",:union,:ward,:cc_name,:subunit,:mauzapara,:provider,:start_date,:end_date,:pregnancy_status,:age_from,:age_to])";
 			Query query = session.createSQLQuery(hql);
 			setParameter(searchBuilder, query);
 			aggregatedList = query.list();
@@ -847,6 +849,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		} else {
 			query.setParameter("ward", "");
 		}
+
+        if (searchFilterBuilder.getCommunityClinic() != null && !searchFilterBuilder.getCommunityClinic().isEmpty()) {
+            query.setParameter("cc_name", searchFilterBuilder.getCommunityClinic());
+        } else {
+            query.setParameter("cc_name", "");
+        }
 
 		if (searchFilterBuilder.getMauzapara() != null && !searchFilterBuilder.getMauzapara().isEmpty()) {
 			query.setParameter("mauzapara", searchFilterBuilder.getMauzapara());

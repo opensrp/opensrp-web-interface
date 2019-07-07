@@ -186,5 +186,13 @@ public class FacilityService {
 		List<FacilityWorker> facilityWorkerList = facilityWorkerService.findAllByKeys(facilityMap, FacilityWorker.class);
 		return facilityWorkerList;
 	}
+
+	@Transactional
+	public List<Object[]> getCCDataByWardName(String wardName) {
+		String sqlQuery = "SELECT facility.name,facility.id from core.facility where ward=:wardName";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("wardName", wardName);
+		return repository.executeSelectQuery(sqlQuery, params);
+	}
 	
 }

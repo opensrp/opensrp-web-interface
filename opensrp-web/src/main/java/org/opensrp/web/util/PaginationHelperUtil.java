@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Location;
+import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,9 @@ public class PaginationHelperUtil {
 	
 	@Autowired
 	private LocationService locationServiceImpl;
+
+	@Autowired
+	private FacilityService facilityServiceImpl;
 	
 	@Autowired
 	private SearchBuilder searchBuilder;
@@ -84,7 +88,12 @@ public class PaginationHelperUtil {
 	public void setChildLocationToSession(String location, String sessionName, HttpSession session) {
 		if (location != null && !location.isEmpty() && !location.equalsIgnoreCase("0?")) {
 			String[] divisionName = location.split("\\?");
-			List<Object[]> childLocationListByParent = locationServiceImpl.getChildData(Integer.parseInt(divisionName[0]));
+			List<Object[]> childLocationListByParent = null;
+			System.out.println("<--Session Name-->");
+			System.out.println(sessionName);
+			if (!sessionName.equals("ccListByParent"))
+				childLocationListByParent = locationServiceImpl.getChildData(Integer.parseInt(divisionName[0]));
+			else childLocationListByParent = facilityServiceImpl.getCCDataByWardName(divisionName[1]);
 			session.setAttribute(sessionName, childLocationListByParent);
 		}
 	}
@@ -101,6 +110,7 @@ public class PaginationHelperUtil {
 		String upazila = "";
 		String union = "";
 		String ward = "";
+		String cc = "";
 		String subunit = "";
 		String mauzapara = "";
 		String provider = "";
@@ -148,9 +158,14 @@ public class PaginationHelperUtil {
 		if (request.getParameterMap().containsKey("ward")) {
 			ward = (String) request.getParameter("ward");
 			this.setChildLocationToSession(ward, "subunitListByParent", session);
+			this.setChildLocationToSession(ward, "ccListByParent", session);
 		} else if (request.getAttribute("ward") != null) {
 			Location location = locationServiceImpl.findByKey((String)request.getAttribute("ward"), "name", Location.class);
 			ward = location.getId()+"?"+(String) request.getAttribute("ward");
+		}
+
+		if (request.getParameterMap().containsKey("cc")) {
+			cc = (String) request.getParameter("cc");
 		}
 
 		if (request.getParameterMap().containsKey("subunit")) {
@@ -184,11 +199,14 @@ public class PaginationHelperUtil {
 
 		if (request.getParameterMap().containsKey("start")) {
 			start_date = (String) request.getParameter("start");
-			System.out.println("start date: " + start_date);
+			if (start_date.length() > 0) start_date += "T00:00:00.000+06:00";
+			System.out.println("start date:-> " + start_date);
 		}
 
 		if (request.getParameterMap().containsKey("end")) {
 			end_date = (String) request.getParameter("end");
+			if (end_date.length() > 0) end_date += "T23:59:59.999+06:00";
+			System.out.println("end date:-> "+ end_date);
 		}
 
 		if (request.getParameterMap().containsKey("memberType")) {
@@ -219,9 +237,9 @@ public class PaginationHelperUtil {
 		
 		searchBuilder.setDivision(locationName(division)).setDistrict(locationName(district))
 		        .setUpazila(locationName(upazila)).setUnion(locationName(union)).setWard(locationName(ward))
-		        .setSubunit(locationName(subunit)).setMauzapara(locationName(mauzapara)).setProvider(provider)
-				.setName(name).setYear(year).setUserName(userName).setStart(start_date).setEnd(end_date)
-				.setAgeFrom(age_from).setAgeTo(age_to).setPregStatus(pregnancy_status);
+				.setCommunityClinic(locationName(cc)).setSubunit(locationName(subunit)).setMauzapara(locationName(mauzapara))
+				.setProvider(provider).setName(name).setYear(year).setUserName(userName).setStart(start_date)
+				.setEnd(end_date).setAgeFrom(age_from).setAgeTo(age_to).setPregStatus(pregnancy_status);
 		
 		return searchBuilder;
 		

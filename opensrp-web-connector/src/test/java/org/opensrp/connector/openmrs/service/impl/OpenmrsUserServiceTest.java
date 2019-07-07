@@ -261,27 +261,27 @@ public class OpenmrsUserServiceTest {
 	@Ignore
 	@Test
 	public void createUpdateGetAndDeleteProvider() throws JSONException {
-		/*String personUuid = createUpdateAndGetPerson();
-		String userUuid = createUpdateGetAndDeleteUser();
-		String idetifier = userName;
-		JSONObject createdProvider = createProvider(personUuid, idetifier);
-		String providerIdentifier = (String) createdProvider.get("identifier");
-		Assert.assertEquals(userName, providerIdentifier);
-		
-		String providerUuid = (String) createdProvider.get("uuid");
-		String updatedIdentifier = "4454646";
-		JSONObject updatedProvider = updateProvider(personUuid, updatedIdentifier, providerUuid);
-		String getUpdatedProviderIdentifier = (String) updatedProvider.get("identifier");
-		Assert.assertEquals(updatedIdentifier, getUpdatedProviderIdentifier);
-		
-		JSONObject getProviderObject = openMRSAPIService.get("v=full", providerUuid, PROVIDER_URL);
-		String gePproviderUuid = (String) getProviderObject.get("uuid");
-		Assert.assertEquals(providerUuid, gePproviderUuid);
-		
-		openMRSAPIService.delete("", personUuid, PROVIDER_URL);*/
-		
-		openMRSAPIService.delete("", "add842ef-ffa5-4cb2-bb85-e7f575615ab0", PERSON_URL);
-		//openMRSAPIService.delete("", userUuid, USER_URL);
+//		String personUuid = createUpdateAndGetPerson();
+//		String userUuid = createUpdateGetAndDeleteUser();
+//		String identifier = userName;
+//		JSONObject createdProvider = createProvider(personUuid, identifier);
+//		String providerIdentifier = (String) createdProvider.get("identifier");
+//		Assert.assertEquals(userName, providerIdentifier);
+//
+//		String providerUuid = (String) createdProvider.get("uuid");
+//		String updatedIdentifier = "4454646";
+//		JSONObject updatedProvider = updateProvider(personUuid, updatedIdentifier, providerUuid);
+//		String getUpdatedProviderIdentifier = (String) updatedProvider.get("identifier");
+//		Assert.assertEquals(updatedIdentifier, getUpdatedProviderIdentifier);
+//
+//		JSONObject getProviderObject = openMRSAPIService.get("v=full", providerUuid, PROVIDER_URL);
+//		String gePproviderUuid = (String) getProviderObject.get("uuid");
+//		Assert.assertEquals(providerUuid, gePproviderUuid);
+//
+//		openMRSAPIService.delete("", personUuid, PROVIDER_URL);
+//
+//		openMRSAPIService.delete("", "add842ef-ffa5-4cb2-bb85-e7f575615ab0", PERSON_URL);
+//		openMRSAPIService.delete("", userUuid, USER_URL);
 	}
 	
 	@Ignore

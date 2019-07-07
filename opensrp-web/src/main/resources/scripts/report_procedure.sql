@@ -12,6 +12,7 @@ CREATE OR REPLACE FUNCTION core.test2_report(
     ROWS 1000
 AS $BODY$
 
+
 DECLARE
     filterString text := '';
     div text := '';
@@ -19,6 +20,7 @@ DECLARE
     upa text := '';
     uni text := '';
     war text := '';
+    cc text := '';
     sub text := '';
     mau text := '';
     pro text := '';
@@ -34,22 +36,23 @@ BEGIN
     upa := filterArray[3];
     uni := filterArray[4];
     war := filterArray[5];
-    sub := filterArray[6];
-    mau := filterArray[7];
-    pro := filterArray[8];
-    start_date := filterArray[9];
-    end_date := filterArray[10];
-    pregnancy_status := filterarray[11];
-    age_from := filterarray[12];
-    age_to := filterarray[13];
+    cc := filterarray[6];
+    sub := filterArray[7];
+    mau := filterArray[8];
+    pro := filterArray[9];
+    start_date := filterArray[10];
+    end_date := filterArray[11];
+    pregnancy_status := filterarray[12];
+    age_from := filterarray[13];
+    age_to := filterarray[14];
     /*Generating Temporary Table to populate aggregated values TEMPORARY*/
     DROP TABLE IF EXISTS helper_table;
     CREATE TEMPORARY TABLE IF NOT EXISTS helper_table (
-         providerName text,
-         householdCount integer,
-         population integer,
-         femalePercentage float,
-         malePercentage float
+                                                          providerName text,
+                                                          householdCount integer,
+                                                          population integer,
+                                                          femalePercentage float,
+                                                          malePercentage float
     );
 
     /*Creating conditional query string*/
@@ -71,6 +74,10 @@ BEGIN
 
     if (war != '') THEN
         filterString := filterString || E' and ward=\'' || war || E'\'';
+    END IF;
+
+    IF (cc != '') THEN
+        filterString := filterString || E' and cc_name=\'' || cc || E'\'';
     END IF;
 
     if (sub != '') THEN
@@ -220,10 +227,9 @@ BEGIN
                  from helper_table ttable
                  order by providerName, householdCount;
 END;
-
 $BODY$;
 
 ALTER FUNCTION core.test2_report(text[])
     OWNER TO postgres;
 
-select * from core.test2_report(array['','','','','','','','','','','','',''])
+select * from core.test2_report(array['','','','','','','','','','','','','', ''])

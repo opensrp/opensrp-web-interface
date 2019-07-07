@@ -40,6 +40,8 @@ public class SearchBuilder {
 	private String ageFrom;
 
 	private String ageTo;
+
+	private String communityClinic;
 	
 	public SearchBuilder() {
 		
@@ -51,6 +53,7 @@ public class SearchBuilder {
 		this.setUpazila("");
 		this.setUnion("");
 		this.setWard("");
+		this.setCommunityClinic("");
 		this.setSubunit("");
 		this.setMauzapara("");
 		this.setProvider("");
@@ -83,6 +86,13 @@ public class SearchBuilder {
 	
 	public SearchBuilder setEnd(String end) {
 		this.end = end;
+		return this;
+	}
+
+	public String getCommunityClinic() { return communityClinic; }
+
+	public SearchBuilder setCommunityClinic(String communityClinic) {
+		this.communityClinic = communityClinic;
 		return this;
 	}
 
@@ -247,6 +257,7 @@ public class SearchBuilder {
 		result = prime * result + ((year == null) ? 0 : year.hashCode());
 		result = prime * result + ((ageFrom == null)? 0 : ageFrom.hashCode());
 		result = prime * result + ((ageTo == null)? 0 : ageTo.hashCode());
+		result = prime * result + ((communityClinic == null)? 0 : communityClinic.hashCode());
 		return result;
 	}
 	
@@ -331,6 +342,11 @@ public class SearchBuilder {
 				return false;
 		} else if (!ward.equals(other.ward))
 			return false;
+		if (communityClinic == null) {
+			if (other.communityClinic != null)
+				return false;
+		} else if (!communityClinic.equals(other.communityClinic))
+			return false;
 		if (year == null) {
 			if (other.year != null)
 				return false;
@@ -348,13 +364,29 @@ public class SearchBuilder {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "SearchBuilder [division=" + division + ", district=" + district + ", upazila=" + upazila + ", union="
-		        + union + ", ward=" + ward + ", subunit=" + subunit + ", mauzapara=" + mauzapara + ", provider=" + provider
-		        + ", name=" + name + ", userName=" + userName + ", search=" + search + ", year=" + year + ", serverVersion="
-		        + serverVersion + ", pregStatus=" + pregStatus + ", start=" + start + ", end=" + end + "]";
+		return "SearchBuilder{" +
+				"division='" + division + '\'' +
+				", district='" + district + '\'' +
+				", upazila='" + upazila + '\'' +
+				", union='" + union + '\'' +
+				", ward='" + ward + '\'' +
+				", subunit='" + subunit + '\'' +
+				", mauzapara='" + mauzapara + '\'' +
+				", provider='" + provider + '\'' +
+				", name='" + name + '\'' +
+				", userName='" + userName + '\'' +
+				", search='" + search + '\'' +
+				", year='" + year + '\'' +
+				", serverVersion=" + serverVersion +
+				", pregStatus='" + pregStatus + '\'' +
+				", start='" + start + '\'' +
+				", end='" + end + '\'' +
+				", ageFrom='" + ageFrom + '\'' +
+				", ageTo='" + ageTo + '\'' +
+				", communityClinic='" + communityClinic + '\'' +
+				'}';
 	}
-	
 }
