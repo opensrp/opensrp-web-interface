@@ -799,8 +799,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 	public <T> List<T> getReportData(SearchBuilder searchBuilder, String procedureName) {
 		Session session = sessionFactory.openSession();
-        System.out.println("<--Search Builder-->");
-        System.out.println(searchBuilder);
 		List<T> aggregatedList = null;
 		try {
 			String hql = "select * from core." + procedureName + "(array[:division,:district,:upazila"
@@ -811,10 +809,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 			logger.info("Report Data fetched successfully from " + procedureName
 					+", aggregatedList size: " + aggregatedList.size());
-			session.close();
 		}
 		catch (Exception e) {
 			logger.error("Data fetch from " + procedureName + " error:" + e.getMessage());
+		}
+		finally {
+			session.close();
 		}
 		return aggregatedList;
 	}

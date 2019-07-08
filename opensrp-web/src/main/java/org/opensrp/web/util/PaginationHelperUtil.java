@@ -89,8 +89,6 @@ public class PaginationHelperUtil {
 		if (location != null && !location.isEmpty() && !location.equalsIgnoreCase("0?")) {
 			String[] divisionName = location.split("\\?");
 			List<Object[]> childLocationListByParent = null;
-			System.out.println("<--Session Name-->");
-			System.out.println(sessionName);
 			if (!sessionName.equals("ccListByParent"))
 				childLocationListByParent = locationServiceImpl.getChildData(Integer.parseInt(divisionName[0]));
 			else childLocationListByParent = facilityServiceImpl.getCCDataByWardName(divisionName[1]);
@@ -125,7 +123,7 @@ public class PaginationHelperUtil {
 		
 		if (request.getParameterMap().containsKey("division")) {
 			division = (String) request.getParameter("division");
-			this.setChildLocationToSession(division, "districtListByParent", session);
+			this.setChildLocationToSession((String) request.getParameter("division"), "districtListByParent", session);
 		} else if (request.getAttribute("division") != null) {
 			Location location = locationServiceImpl.findByKey((String)request.getAttribute("division"), "name", Location.class);
 			division = location.getId()+"?"+(String) request.getAttribute("division");
@@ -133,7 +131,7 @@ public class PaginationHelperUtil {
 
 		if (request.getParameterMap().containsKey("district")) {
 			district = (String) request.getParameter("district");
-			this.setChildLocationToSession(district, "upazilasListByParent", session);
+			this.setChildLocationToSession((String) request.getParameter("district"), "upazilasListByParent", session);
 		} else if (request.getAttribute("district") != null) {
 			Location location = locationServiceImpl.findByKey((String)request.getAttribute("district"), "name", Location.class);
 			district = location.getId()+"?"+(String) request.getAttribute("district");
@@ -141,7 +139,7 @@ public class PaginationHelperUtil {
 
 		if (request.getParameterMap().containsKey("upazila")) {
 			upazila = (String) request.getParameter("upazila");
-			this.setChildLocationToSession(upazila, "unionsListByParent", session);
+			this.setChildLocationToSession((String) request.getParameter("upazila"), "unionsListByParent", session);
 		} else if (request.getAttribute("upazila") != null) {
 			Location location = locationServiceImpl.findByKey((String)request.getAttribute("upazila"), "name", Location.class);
 			upazila = location.getId()+"?"+(String) request.getAttribute("upazila");
@@ -149,7 +147,7 @@ public class PaginationHelperUtil {
 
 		if (request.getParameterMap().containsKey("union")) {
 			union = (String) request.getParameter("union");
-			this.setChildLocationToSession(union, "wardsListByParent", session);
+			this.setChildLocationToSession((String) request.getParameter("union"), "wardsListByParent", session);
 		} else if (request.getAttribute("union") != null) {
 			Location location = locationServiceImpl.findByKey((String)request.getAttribute("union"), "name", Location.class);
 			union = location.getId()+"?"+(String) request.getAttribute("union");
@@ -157,8 +155,8 @@ public class PaginationHelperUtil {
 
 		if (request.getParameterMap().containsKey("ward")) {
 			ward = (String) request.getParameter("ward");
-			this.setChildLocationToSession(ward, "subunitListByParent", session);
-			this.setChildLocationToSession(ward, "ccListByParent", session);
+			this.setChildLocationToSession((String) request.getParameter("ward"), "subunitListByParent", session);
+			this.setChildLocationToSession((String) request.getParameter("ward"), "ccListByParent", session);
 		} else if (request.getAttribute("ward") != null) {
 			Location location = locationServiceImpl.findByKey((String)request.getAttribute("ward"), "name", Location.class);
 			ward = location.getId()+"?"+(String) request.getAttribute("ward");
@@ -166,6 +164,8 @@ public class PaginationHelperUtil {
 
 		if (request.getParameterMap().containsKey("cc")) {
 			cc = (String) request.getParameter("cc");
+		} else if (request.getAttribute("cc") != null) {
+			cc = "0?"+(String) request.getAttribute("cc");
 		}
 
 		if (request.getParameterMap().containsKey("subunit")) {
@@ -234,7 +234,15 @@ public class PaginationHelperUtil {
 				}
 			}
 		}
-		
+
+		if (cc != null && cc.length() > 0) {
+			division = "";
+			district = "";
+			upazila = "";
+			union = "";
+			ward = "";
+		}
+
 		searchBuilder.setDivision(locationName(division)).setDistrict(locationName(district))
 		        .setUpazila(locationName(upazila)).setUnion(locationName(union)).setWard(locationName(ward))
 				.setCommunityClinic(locationName(cc)).setSubunit(locationName(subunit)).setMauzapara(locationName(mauzapara))

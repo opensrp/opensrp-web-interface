@@ -108,6 +108,7 @@ public class ReportController {
 			request.setAttribute("upazila", facility.getUpazila());
 			request.setAttribute("union", facility.getUnion());
 			request.setAttribute("ward", facility.getWard());
+			request.setAttribute("cc", facility.getName());
 		}
 		searchBuilder = paginationHelperUtil.setParams(request, session);
 		searchUtil.setDivisionAttribute(session);
