@@ -10,10 +10,14 @@ import javax.validation.Valid;
 import org.json.JSONException;
 import org.opensrp.common.entity.ClientEntity;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.SimilarityMatchingCriteriaDefinition;
+import org.opensrp.core.entity.User;
 import org.opensrp.core.service.ClientService;
+import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.SimilarRecordService;
+import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -46,6 +50,9 @@ public class ClientController {
 	
 	@Autowired
 	private SimilarRecordService similarRecordService;
+
+	@Autowired
+	private FacilityService facilityService;
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_CHILD')")
 	@RequestMapping(value = "/child/{id}/details.html", method = RequestMethod.GET)
@@ -195,5 +202,26 @@ public class ClientController {
 		model.addAttribute("locale", locale);
 		return "client/similar-client";
 	}
-	
+
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_MEMBER')")
+	@RequestMapping(value = "/household-member-list.html", method = RequestMethod.GET)
+	public String getMemberList(HttpSession session) {
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		Facility facility = facilityService.findById(Integer.parseInt(user.getChcp()), "id", Facility.class);
+		System.out.println("community clinic name:-> ");
+		System.out.println(facility.getName());
+		List<Object[]> householdMemberList = databaseServiceImpl.getMemberListByCC(facility.getName());
+		session.setAttribute("memberList", householdMemberList);
+		return "client/member-list";
+	}
+
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_MEMBER')")
+	@RequestMapping(value = "/household-member.html", method = RequestMethod.GET)
+	public String reviewMember(HttpSession session,
+							   @RequestParam("healthId") String healthId) {
+
+		Object[] member = databaseServiceImpl.getMemberByHealthId(healthId);
+		session.setAttribute("member", member);
+		return "client/household-member";
+	}
 }

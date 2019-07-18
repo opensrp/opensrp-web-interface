@@ -3,6 +3,7 @@ package org.opensrp.common.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
@@ -51,7 +52,28 @@ public class DatabaseServiceImpl implements DatabaseService {
 	public <T> List<T> findAll(String tableClass) {
 		return (List<T>) databaseRepositoryImpl.findAll(tableClass);
 	}
-	
+
+	@Override
+	public <T> List<T> getHouseholdListByMHV(String username, HttpSession session) {
+		return databaseRepositoryImpl.getDataByMHV(username);
+	}
+
+	@Override
+	public <T> List<T> getMemberListByHousehold(String householdBaseId) {
+		return databaseRepositoryImpl.getMemberListByHousehold(householdBaseId);
+	}
+
+	@Override
+	public <T> T getMemberByHealthId(String healthId) {
+		return databaseRepositoryImpl.getMemberByHealthId(healthId);
+	}
+
+	@Override
+	public <T> List<T> getMemberListByCC(String ccName) {
+		return databaseRepositoryImpl.getMemberListByCC(ccName);
+	}
+
+
 	@Transactional
 	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {

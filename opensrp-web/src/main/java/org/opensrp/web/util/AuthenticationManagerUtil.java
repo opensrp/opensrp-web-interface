@@ -85,4 +85,14 @@ public class AuthenticationManagerUtil {
 				+"\nIsProvider : "+isProvider()
 				+"\n");
 	}
+
+	public static boolean isUHFPO() {
+		List<String> roleList = getLoggedInUserRoles();
+		if (roleList.contains("UHFPO")) {
+			logger.info("\nIsUHFPO:"+"True\n");
+			return  true;
+		}
+		logger.info("\nIsUHFPO :"+"False\n");
+		return false;
+	}
 }

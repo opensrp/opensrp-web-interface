@@ -8,6 +8,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.opensrp.common.util.SearchBuilder;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * <p>
  * This is the central API class abstracting the notion of a persistence service.<br>
@@ -110,5 +112,13 @@ public interface DatabaseRepository {
 	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType);
 	
 	public <T> List<T> getDataFromSQLFunction(Query query, Session session);
-	
+
+	public <T> List<T> getDataByMHV(String username);
+
+	public <T> List<T> getMemberListByHousehold(String householdBaseId);
+
+	public <T> T getMemberByHealthId(String healthId);
+
+	public <T> List<T> getMemberListByCC(String ccName);
+
 }

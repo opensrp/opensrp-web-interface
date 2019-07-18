@@ -76,8 +76,8 @@ SELECT DISTINCT c.id as id
     WHEN (e.json->>'eventType' = 'New Woman Member Registration') THEN e.json->'obs'->3->'values'->>0
 	ELSE null
     END latest_lmp
-   , c.json->'relationships'->>'household' as relationships_id 
-   , c.json->'identifiers'->>'OpenMRS_ID' as OpenMRS_ID
+   , c.json->'relationships'->'household'->>0 as relationships_id
+   , c.json->'identifiers'->>'Patient_Identifier' as health_id
    , e.json->>'providerId' as provider_id
    , e.json->>'entityType' as entity_type
    , e.json->>'eventType' as event_type

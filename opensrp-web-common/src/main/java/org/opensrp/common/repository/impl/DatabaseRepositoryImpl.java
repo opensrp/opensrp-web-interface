@@ -22,6 +22,8 @@ import org.opensrp.common.util.SearchBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * <p>
  * Concrete implementation of a DatabaseRepository.<br/>
@@ -797,6 +799,91 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return aggregatedList;
 	}
 
+	@Override
+	public <T> List<T> getDataByMHV(String username) {
+		Session session = sessionFactory.openSession();
+		List<T> viewData = null;
+
+		try {
+			String hql = "select vc1.household_code as household_id, concat(vc1.first_name, ' ', vc1.lastName) as full_name," +
+					" count(case when vc2.gender = 'M' or vc2.gender = 'F' then 1 end) as population_count," +
+					" count(case when vc2.gender = 'M' then 1 end) as male_count," +
+					" count(case when vc2.gender = 'F' then 1 end) as female_count, vc1.base_entity_id" +
+					" from core.\"viewJsonDataConversionOfClient\" vc1" +
+					" left join core.\"viewJsonDataConversionOfClient\" vc2 on vc1.base_entity_id = vc2.relationships_id" +
+					" where vc1.provider_id = '"+ username +"' and vc1.entity_type = 'ec_household' " +
+					"group by vc1.first_name, vc1.lastName, vc1.household_code, vc1.base_entity_id;";
+			Query query = session.createSQLQuery(hql);
+			viewData = query.list();
+			logger.info("data fetched successfully from " + "viewJsonDataConversionOfClient" + ", data size: " + viewData.size());
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		return viewData;
+	}
+
+	@Override
+	public <T> List<T> getMemberListByHousehold(String householdBaseId) {
+		Session session = sessionFactory.openSession();
+		List<T> aggregatedList = null;
+
+		try {
+			String hql = "select concat(first_name, ' ', lastName) as name, case when gender = 'M' then 'Male' else 'Female' end as gender," +
+					" concat(extract(year from age(now(), birth_date)), ' year(s) ', extract(month from age(now(), birth_date)), ' month(s)') as age, health_id" +
+					" from core.\"viewJsonDataConversionOfClient\" where relationships_id = '"+householdBaseId+"' and entity_type != 'ec_household';";
+			Query query = session.createSQLQuery(hql);
+			aggregatedList = query.list();
+			logger.info("data fetched successfully from viewJsonDataConversionOfClient, data size: "+ aggregatedList.size());
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		return aggregatedList;
+	}
+
+	@Override
+	public <T> T getMemberByHealthId(String healthId) {
+		Session session = sessionFactory.openSession();
+		T member = null;
+		try {
+			String hql = "select * from core.\"viewJsonDataConversionOfClient\" where health_id = '"+ healthId +"';";
+			Query query = session.createSQLQuery(hql);
+			List<T> members = query.list();
+			if (members.size() > 0) {
+				member = members.get(0);
+			}
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			session.close();
+		}
+		return member;
+	}
+
+	@Override
+	public <T> List<T> getMemberListByCC(String ccName) {
+		Session session = sessionFactory.openSession();
+		List<T> memberList = null;
+		try {
+			String hql = "select * from core.\"viewJsonDataConversionOfClient\" where cc_name = '"
+					+ ccName +"' and entity_type != 'ec_household';";
+			Query query = session.createSQLQuery(hql);
+			memberList = query.list();
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			session.close();
+		}
+		return memberList;
+	}
+
 	public <T> List<T> getReportData(SearchBuilder searchBuilder, String procedureName) {
 		Session session = sessionFactory.openSession();
 		List<T> aggregatedList = null;
@@ -898,4 +985,5 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			query.setParameter("age_to", "");
 		}
 	}
+
 }

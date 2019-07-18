@@ -9,6 +9,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Facility;
@@ -18,6 +19,7 @@ import org.opensrp.core.entity.User;
 import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.FacilityWorkerService;
 import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.PaginationHelperUtil;
@@ -28,8 +30,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author proshanto
@@ -40,6 +44,9 @@ public class ReportController {
 
 	@Autowired
 	private PaginationHelperUtil paginationHelperUtil;
+
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private ChildGrowthService childGrowthServiceImpl;
@@ -100,13 +107,13 @@ public class ReportController {
 	@RequestMapping(value = "/householdDataReport.html", method = RequestMethod.GET)
 	public String showFormWiseReport(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
-		if (!AuthenticationManagerUtil.isAdmin()) {
+		if (!AuthenticationManagerUtil.isAdmin() && !AuthenticationManagerUtil.isUHFPO()) {
 			User user = AuthenticationManagerUtil.getLoggedInUser();
 			Facility facility = facilityService.findById(Integer.parseInt(user.getChcp()), "id", Facility.class);
-			request.setAttribute("division", facility.getDivision());
-			request.setAttribute("district", facility.getDistrict());
-			request.setAttribute("upazila", facility.getUpazila());
-			request.setAttribute("union", facility.getUnion());
+//			request.setAttribute("division", facility.getDivision());
+//			request.setAttribute("district", facility.getDistrict());
+//			request.setAttribute("upazila", facility.getUpazila());
+//			request.setAttribute("union", facility.getUnion());
 			request.setAttribute("ward", facility.getWard());
 			request.setAttribute("cc", facility.getName());
 		}
@@ -138,4 +145,28 @@ public class ReportController {
 		return "report/householdDataReport";
 	}
 
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_AGGREGATED_REPORT')")
+	@RequestMapping(value = "/individual-mhv-works.html", method = RequestMethod.GET)
+	public String getIndividualMHVData(HttpServletRequest request,
+									   HttpSession session,
+									   @RequestParam("mhvUsername") String mhvUsername) {
+
+		User user = userService.findByKey(mhvUsername, "username", User.class);
+		request.setAttribute("user", user);
+		List<Object[]> householdList = databaseServiceImpl.getHouseholdListByMHV(mhvUsername, session);
+		session.setAttribute("householdList", householdList);
+		return "report/individual-mhv-works";
+	}
+
+	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_AGGREGATED_REPORT')")
+	@RequestMapping(value = "/household-member-list.html", method = RequestMethod.GET)
+	public String getHouseholdMemberList(HttpServletRequest request,
+									   HttpSession session,
+									   Model model,
+									   @RequestParam("householdBaseId") String householdBaseId) {
+
+		List<Object[]> householdMemberList = databaseServiceImpl.getMemberListByHousehold(householdBaseId);
+		session.setAttribute("memberList", householdMemberList);
+		return "report/household-member-list";
+	}
 }

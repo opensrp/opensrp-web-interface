@@ -230,6 +230,6 @@ END;
 $BODY$;
 
 ALTER FUNCTION core.test2_report(text[])
-    OWNER TO postgres;
+    OWNER TO opensrp_admin;
 
 select * from core.test2_report(array['','','','','','','','','','','','','', ''])

@@ -19,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
+import org.opensrp.core.dto.WorkerIdDTO;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.FacilityWorker;
 import org.opensrp.core.entity.FacilityWorkerType;
@@ -27,9 +28,11 @@ import org.opensrp.core.entity.Team;
 import org.opensrp.core.entity.TeamMember;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.openmrs.service.OpenMRSServiceFactory;
+import org.opensrp.core.openmrs.service.impl.OpenMRSUserAPIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor;
 
 @Service
 public class UserService {
@@ -62,6 +65,9 @@ public class UserService {
 	
 	@Autowired
 	private EmailService emailService;
+
+	@Autowired
+	private FacilityService facilityService;
 	
 	@Transactional
 	public <T> long save(T t, boolean isUpdate) throws Exception {
@@ -386,5 +392,25 @@ public class UserService {
 		
 		return dataArray;
 		
+	}
+
+	public boolean deleteMHV(WorkerIdDTO workerIdDTO) throws JSONException {
+		FacilityWorker facilityWorker = facilityWorkerTypeService.findById(workerIdDTO.getWorkerId(),"id",FacilityWorker.class);
+		Facility facility = new Facility();
+		if (facilityWorker != null)
+			facilityService.findById(facilityWorker.getFacility().getId(), "id", Facility.class);
+		User user = new User();
+		if (facility != null)
+			findByKey(String.valueOf(facility.getId()), "chcp", User.class);
+		TeamMember teamMember = new TeamMember();
+		if (user != null)
+			teamMemberServiceImpl.findByKey(String.valueOf(user.getId()), "person_id", TeamMember.class);
+
+		String teamMemberDeleteStatus = openMRSServiceFactory.getOpenMRSConnector("member").delete(teamMember.getUuid());
+
+		if (user != null)
+			openMRSServiceFactory.getOpenMRSConnector("user").delete(user.getUuid());
+
+		return true;
 	}
 }

@@ -10,7 +10,7 @@ Integer refreshCount = (Integer) session
 	 if(refreshCount!=0){ %>
 		<h1> Successfully View Refreshed, Thank You</h1>
 	<%  } else{ %>
-		<h1> Something wrong, please contact with adminitrator</h1>
+		<h1> Something wrong, please contact with administrator</h1>
 		
 	<% }
 	%>

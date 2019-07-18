@@ -44,7 +44,7 @@
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> MV Wise Report Status
+					<i class="fa fa-table"></i> MHV Wise Report Status
 				</div>
 				<div class="card-body">
 
@@ -171,7 +171,12 @@
 											String malePercentage = String.valueOf(formWiseObject[4]);
 									%>
 									<tr>
-										<td><%=providerName%></td>
+										<td>
+											<a href="<c:url value="/report/individual-mhv-works.html">
+											<c:param name="mhvUsername" value="<%=providerName%>"/></c:url>">
+												<%=providerName%>
+											</a>
+										</td>
 										<td><%=householdCount%></td>
 										<td><%=population%></td>
 										<td><%=femalePercentage%></td>

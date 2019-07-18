@@ -124,33 +124,21 @@ public class PaginationHelperUtil {
 		if (request.getParameterMap().containsKey("division")) {
 			division = (String) request.getParameter("division");
 			this.setChildLocationToSession((String) request.getParameter("division"), "districtListByParent", session);
-		} else if (request.getAttribute("division") != null) {
-			Location location = locationServiceImpl.findByKey((String)request.getAttribute("division"), "name", Location.class);
-			division = location.getId()+"?"+(String) request.getAttribute("division");
 		}
 
 		if (request.getParameterMap().containsKey("district")) {
 			district = (String) request.getParameter("district");
 			this.setChildLocationToSession((String) request.getParameter("district"), "upazilasListByParent", session);
-		} else if (request.getAttribute("district") != null) {
-			Location location = locationServiceImpl.findByKey((String)request.getAttribute("district"), "name", Location.class);
-			district = location.getId()+"?"+(String) request.getAttribute("district");
 		}
 
 		if (request.getParameterMap().containsKey("upazila")) {
 			upazila = (String) request.getParameter("upazila");
 			this.setChildLocationToSession((String) request.getParameter("upazila"), "unionsListByParent", session);
-		} else if (request.getAttribute("upazila") != null) {
-			Location location = locationServiceImpl.findByKey((String)request.getAttribute("upazila"), "name", Location.class);
-			upazila = location.getId()+"?"+(String) request.getAttribute("upazila");
 		}
 
 		if (request.getParameterMap().containsKey("union")) {
 			union = (String) request.getParameter("union");
 			this.setChildLocationToSession((String) request.getParameter("union"), "wardsListByParent", session);
-		} else if (request.getAttribute("union") != null) {
-			Location location = locationServiceImpl.findByKey((String)request.getAttribute("union"), "name", Location.class);
-			union = location.getId()+"?"+(String) request.getAttribute("union");
 		}
 
 		if (request.getParameterMap().containsKey("ward")) {

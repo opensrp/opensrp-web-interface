@@ -5,6 +5,7 @@ package org.opensrp.common.service.impl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.hibernate.SessionFactory;
@@ -68,7 +69,27 @@ public class MarkerServiceImpl implements DatabaseService {
 		
 		return null;
 	}
-	
+
+	@Override
+	public <T> List<T> getHouseholdListByMHV(String username, HttpSession session) {
+		return null;
+	}
+
+	@Override
+	public <T> List<T> getMemberListByHousehold(String householdBaseId) {
+		return null;
+	}
+
+	@Override
+	public <T> T getMemberByHealthId(String healthId) {
+		return null;
+	}
+
+	@Override
+	public <T> List<T> getMemberListByCC(String ccName) {
+		return null;
+	}
+
 	@Transactional
 	public Marker findByName(String name) {
 		// TODO Auto-generated method stub

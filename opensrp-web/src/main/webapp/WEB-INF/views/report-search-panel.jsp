@@ -52,7 +52,7 @@
 			</div>
 
 
-			<% if(AuthenticationManagerUtil.isAdmin()){ %>
+			<% if(AuthenticationManagerUtil.isAdmin() || AuthenticationManagerUtil.isUHFPO()){ %>
 			<!-- location info -->
 			<div class="row">
 

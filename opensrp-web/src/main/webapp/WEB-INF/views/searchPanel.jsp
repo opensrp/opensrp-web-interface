@@ -79,7 +79,7 @@
 	</div>
 	<div class="card-body">
 		<form id="search-form">
-		<% if(AuthenticationManagerUtil.isAdmin()){ %>
+		<% if(AuthenticationManagerUtil.isAdmin() || AuthenticationManagerUtil.isUHFPO()){ %>
 		<!-- location filter -->
 			<div class="row">
 				<div class="col-2">

@@ -12,10 +12,8 @@ import org.opensrp.core.dto.FacilityWorkerDTO;
 import org.opensrp.core.dto.WorkerIdDTO;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.FacilityWorker;
-import org.opensrp.core.service.FacilityService;
-import org.opensrp.core.service.FacilityWorkerService;
-import org.opensrp.core.service.FacilityWorkerTrainingService;
-import org.opensrp.core.service.FacilityWorkerTypeService;
+import org.opensrp.core.entity.TeamMember;
+import org.opensrp.core.service.*;
 import org.opensrp.core.util.FacilityHelperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +47,9 @@ public class FacilityRestController {
 	
 	@Autowired
 	private FacilityHelperUtil facilityHelperUtil;
+
+	@Autowired
+	private UserService userService;
 	
 	@RequestMapping(value = "/saveWorker", method = RequestMethod.POST)
 	public ResponseEntity<String> saveWorker(@RequestBody FacilityWorkerDTO facilityWorkerDTO) throws Exception {
@@ -90,6 +91,7 @@ public class FacilityRestController {
 	
 	@RequestMapping(value = "/deleteWorker", method = RequestMethod.POST)
 	public ResponseEntity<String> deleteWorker(@RequestBody WorkerIdDTO workerIdDTO) {
+//		userService.deleteMHV(workerIdDTO);
 		FacilityWorker facilityWorker = facilityWorkerService
 		        .findById(workerIdDTO.getWorkerId(), "id", FacilityWorker.class);
 		boolean isDeleted = facilityWorkerService.delete(facilityWorker);

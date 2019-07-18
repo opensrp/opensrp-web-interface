@@ -29,51 +29,51 @@
 	<jsp:include page="/WEB-INF/views/navbar.jsp" />
 	<div class="content-wrapper">
 		<div class="container-fluid">
-			<div class="form-group">				
-				   <jsp:include page="/WEB-INF/views/report/report-link.jsp" />		
-		
+			<div class="form-group">
+				   <jsp:include page="/WEB-INF/views/report/report-link.jsp" />
+
 			</div>
 		    <div class="card mb-3">
 		    	<center>
 				<form id="search-form">
 					<button name="search" type="submit" id="bth-search"
 							class="btn btn-primary" value="search"><spring:message code="lbl.viewRefresh"/></button>
-				</form>	
-				</center>		
+				</form>
+				</center>
 			</div>
-			
-			<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%"> 
+
+			<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
 							<img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
-							
+
 			</div>
 			<div id="message"> </div>
 
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
-		
+
 		<script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
-		
-		
+
+
 		<script src="<c:url value='/resources/js/datepicker.js'/>"></script>
-		
+
 		<script type="text/javascript">
-		
-		
-		$("#search-form").submit(function(event) { 
+
+
+		$("#search-form").submit(function(event) {
 			$("#loading").show();
-			 
+
 			 $("#message").html("");
 			event.preventDefault();
 			$.ajax({
 				type : "GET",
-				contentType : "application/json",				
-				url : "/opensrp-dashboard/analytics/analytics-ajax.html",				 
+				contentType : "application/json",
+				url : "/opensrp-dashboard/analytics/analytics-ajax.html",
 				dataType : 'html',
 				timeout : 100000,
 				beforeSend: function() {
-				    
-				   
+
+
 				},
-				success : function(data) {	
+				success : function(data) {
 					$("#loading").hide();
 				   $("#message").html(data);
 				},
@@ -81,12 +81,12 @@
 				    console.log("ERROR: ", e);
 				    display(e);
 				},
-				done : function(e) {				    
-				    console.log("DONE");				    
+				done : function(e) {
+				    console.log("DONE");
 				}
 			});
-		});		
-		 
+		});
+
 		</script>
 	</div>
 </body>
