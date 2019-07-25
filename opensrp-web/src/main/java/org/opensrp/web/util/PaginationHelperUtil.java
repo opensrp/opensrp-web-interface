@@ -223,7 +223,7 @@ public class PaginationHelperUtil {
 			}
 		}
 
-		if (cc != null && cc.length() > 0) {
+		if (cc != null && cc.length() > 0 && !cc.equals("0?")) {
 			division = "";
 			district = "";
 			upazila = "";

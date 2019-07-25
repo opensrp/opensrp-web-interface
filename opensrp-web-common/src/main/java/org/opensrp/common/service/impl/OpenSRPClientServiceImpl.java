@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpenSRPClientServiceImpl {
 final String CLIENT_URL = "rest/event/add";
+final String APPROVAL_URL = "rest/client/data-approval";
 
 	private static String PAYLOAD = "";
 
@@ -17,6 +18,10 @@ final String CLIENT_URL = "rest/event/add";
 
 	public void update(JSONObject jo) throws JSONException {
 		openSRPAPIServiceImpl.updateClient(PAYLOAD, jo, CLIENT_URL);
+	}
+
+	public JSONObject approval(JSONObject jo) throws JSONException {
+		return openSRPAPIServiceImpl.updateClient(PAYLOAD, jo, APPROVAL_URL);
 	}
 
 }

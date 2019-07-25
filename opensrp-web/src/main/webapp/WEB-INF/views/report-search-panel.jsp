@@ -25,6 +25,7 @@
 		<div class="row">
 		</div>
 		<form id="search-form" autocomplete="off">
+			<%if (!AuthenticationManagerUtil.isUHFPO()){%>
 			<div class="form-group">
 				<div class="row">
 					<div class="col-2">
@@ -50,6 +51,7 @@
 					</div>
 				</div>
 			</div>
+			<%}%>
 
 
 			<% if(AuthenticationManagerUtil.isAdmin() || AuthenticationManagerUtil.isUHFPO()){ %>
@@ -88,25 +90,31 @@
 					</select>
 				</div>
 				<div class="col-2">
+					<%if (!AuthenticationManagerUtil.isUHFPO()){%>
 					<select class="custom-select custom-select-lg mb-3" id="union"
 							name="union">
 						<option value="0?"><spring:message code="lbl.selectUnion"/></option>
 						<option value=""></option>
 					</select>
+					<%}%>
 				</div>
 				<div class="col-2">
+					<%if (!AuthenticationManagerUtil.isUHFPO()){%>
 					<select class="custom-select custom-select-lg mb-3" id="ward"
 							name="ward">
 						<option value="0?"><spring:message code="lbl.selectWard"/></option>
 						<option value=""></option>
 					</select>
+					<%}%>
 				</div>
 				<div class="col-2">
+					<%if (!AuthenticationManagerUtil.isUHFPO()){%>
 					<select class="custom-select custom-select-lg mb-3" id="cc"
 							name="cc">
 						<option value="0?"><spring:message code="lbl.selectCC"/></option>
 						<option value=""></option>
 					</select>
+					<%}%>
 				</div>
 				<!-- <div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="subunit"

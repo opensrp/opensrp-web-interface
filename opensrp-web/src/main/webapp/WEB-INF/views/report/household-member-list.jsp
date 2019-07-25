@@ -49,7 +49,7 @@
     <div class="container-fluid">
         <div class="card mb-3">
             <div class="card-header">
-                <i class="fa fa-table"></i> Household Member List
+                <i class="fa fa-table"></i> <spring:message code="lbl.householdMemberList"/>
             </div>
             <div class="card-body">
                 <div>

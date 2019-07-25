@@ -211,6 +211,7 @@ public class ClientController {
 		System.out.println("community clinic name:-> ");
 		System.out.println(facility.getName());
 		List<Object[]> householdMemberList = databaseServiceImpl.getMemberListByCC(facility.getName());
+		System.out.println("Size:-> "+ householdMemberList.size());
 		session.setAttribute("memberList", householdMemberList);
 		return "client/member-list";
 	}
@@ -218,9 +219,11 @@ public class ClientController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_MEMBER')")
 	@RequestMapping(value = "/household-member.html", method = RequestMethod.GET)
 	public String reviewMember(HttpSession session,
-							   @RequestParam("healthId") String healthId) {
+							   @RequestParam("baseEntityId") String baseEntityId) {
 
-		Object[] member = databaseServiceImpl.getMemberByHealthId(healthId);
+		Object[] member = databaseServiceImpl.getMemberByBaseEntityId(baseEntityId);
+		System.out.println(member[9]);
+		System.out.println(member[13]);
 		session.setAttribute("member", member);
 		return "client/household-member";
 	}

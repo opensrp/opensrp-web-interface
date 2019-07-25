@@ -9,9 +9,11 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.hibernate.SessionFactory;
+import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.entity.Marker;
 import org.opensrp.common.interfaces.DatabaseService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
+import org.opensrp.common.util.SearchBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,7 +88,27 @@ public class MarkerServiceImpl implements DatabaseService {
 	}
 
 	@Override
+	public <T> T getMemberByBaseEntityId(String baseEntityId) {
+		return null;
+	}
+
+	@Override
 	public <T> List<T> getMemberListByCC(String ccName) {
+		return null;
+	}
+
+	@Override
+	public <T> List<T> getUpazilaList() {
+		return null;
+	}
+
+	@Override
+	public <T> List<T> getCCListByUpazila(SearchBuilder searchBuilder) {
+		return null;
+	}
+
+	@Override
+	public List<ReportDTO> getMHVListFilterWise(SearchBuilder searchBuilder) {
 		return null;
 	}
 

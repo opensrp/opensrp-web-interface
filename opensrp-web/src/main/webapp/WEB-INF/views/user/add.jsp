@@ -361,7 +361,6 @@ int roleIdProvider= -1;
 				   $("#loading").hide();
 				   if(data == ""){					   
 					   window.location.replace("/opensrp-dashboard/user.html");
-					   
 				   }
 				   
 				},

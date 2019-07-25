@@ -43,7 +43,8 @@
 				<value>org.opensrp.core.entity.FacilityWorker</value>
 				<value>org.opensrp.core.entity.FacilityTraining</value>
 				<value>org.opensrp.core.entity.FacilityWorkerType</value>
-				<value>org.opensrp.core.entity.Chcp</value>	
+				<value>org.opensrp.core.entity.Chcp</value>
+				<value>org.opensrp.core.entity.Reviews</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

@@ -1,5 +1,7 @@
 package org.opensrp.connector.util;
 
+import org.json.JSONObject;
+
 public class HttpResponse {
     private final boolean isSuccess;
     private final String body;

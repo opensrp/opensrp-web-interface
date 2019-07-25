@@ -4,6 +4,9 @@
 <%@page import="java.util.Iterator"%>
 <%@page import="java.math.RoundingMode"%>
 <%@page import="java.text.DecimalFormat"%>
+<%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
+<%@ page import="java.math.BigInteger" %>
+<%@ page import="org.opensrp.common.dto.ReportDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="ISO-8859-1"%>
 
@@ -13,6 +16,13 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
+
+<%
+	int householdCount = (int) session.getAttribute("totalHousehold");
+	int populationCount = (int) session.getAttribute("totalPopulation");
+	String malePercentage = (String) session.getAttribute("totalMale");
+	String femalePercentage = (String) session.getAttribute("totalFemale");
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -44,34 +54,18 @@
 
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> MHV Wise Report Status
+					<i class="fa fa-table"></i>
+					<%if (AuthenticationManagerUtil.isUHFPO()){%>
+					<spring:message code="lbl.ccWiseReportStatus"/>
+					<%} else {%>
+					<spring:message code="lbl.mhvWiseReportStatus"/>
+					<%}%>
 				</div>
+				<%if (!AuthenticationManagerUtil.isUHFPO()){%>
 				<div class="card-body">
-
 					<!-- Icon Cards-->
 					<div class="row">
-					    <%
-							if(session.getAttribute("formWiseAggregatedList") != null){
-							List<Object> formWiseAggregatedList = (List<Object>) session.getAttribute("formWiseAggregatedList");
-							Iterator formWiseAggregatedListIterator = formWiseAggregatedList.iterator();
-							while (formWiseAggregatedListIterator.hasNext()) {
-								Object[] formWiseObject = (Object[]) formWiseAggregatedListIterator.next();
-								String providerName = String.valueOf(formWiseObject[0]);
-								String householdCount = "";
-								String population = "";
-								String femalePercentage = "";
-								String malePercentage = "";
-
-								if (providerName.equalsIgnoreCase("Total")) {
-									householdCount = String.valueOf(formWiseObject[1]);
-									population = String.valueOf(formWiseObject[2]);
-									femalePercentage = String.valueOf(formWiseObject[3]);
-									malePercentage = String.valueOf(formWiseObject[4]);
-								} else {
-									continue;
-								}
-						%>
-						<div class="col-xl-4 col-sm-6 mb-4">
+						<div class="col-xl-3 col-sm-6 mb-4">
 							<div class="card text-white o-hidden h-100 bg-primary">
 								<div class="card-body">
 									<div class="card-body-icon">
@@ -84,33 +78,33 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-xl-4 col-sm-6 mb-4">
+						<div class="col-xl-3 col-sm-6 mb-4">
 							<div class="card text-white o-hidden h-100 bg-primary">
 								<div class="card-body">
 									<div class="card-body-icon">
 										<!-- <i class="fa fa-fw fa-female"></i>  -->
 									</div>
 									<div class="mr-5">
-										<h3><%=population%></h3>
+										<h3><%=populationCount%></h3>
 										<h5>Total Population</h5>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="col-xl-4 col-sm-6 mb-4">
+						<div class="col-xl-3 col-sm-6 mb-4">
 							<div class="card text-white o-hidden h-100 bg-primary">
 								<div class="card-body">
 									<div class="card-body-icon">
 										<!-- <i class="fa fa-fw fa-female"></i>  -->
 									</div>
 									<div class="mr-5">
-									    <h3><%=femalePercentage%></h3>
+										<h3><%=femalePercentage%></h3>
 										<h5>Total Female Percentage</h5>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="col-xl-4 col-sm-6 mb-4">
+						<div class="col-xl-3 col-sm-6 mb-4">
 							<div class="card text-white o-hidden h-100 bg-primary">
 								<div class="card-body">
 									<div class="card-body-icon">
@@ -127,70 +121,86 @@
 							<div class="card text-white o-hidden h-100 bg-primary">
 								<div class="card-body">
 									<div class="card-body-icon">  -->
-										<!-- <i class="fa fa-fw fa-female"></i>  -->
-									<!-- </div>
-									<div class="mr-5">
-										<h5>Other Percentage</h5>
-									</div>
-								</div>
-							</div>
-						</div>  -->
-						<%
-							}
-						}
-						%>
+						<!-- <i class="fa fa-fw fa-female"></i>  -->
+						<!-- </div>
+                        <div class="mr-5">
+                            <h5>Other Percentage</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>  -->
 					</div>
 
 					<div class="row">
 						<div class="col-sm-12" id="content">
 							<table class="display" id="formWiseAggregatedListTable"
-								style="width: 100%;">
+								   style="width: 100%;">
 								<thead>
-									<tr>
-										<th><spring:message code="lbl.provider"/></th>
-										<th><spring:message code="lbl.householdCount"/></th>
-										<th><spring:message code="lbl.population"/></th>
-										<th><spring:message code="lbl.femalePercentage"/></th>
-										<th><spring:message code="lbl.malePercentage"/></th>
-									</tr>
+								<tr>
+									<th><spring:message code="lbl.provider"/></th>
+									<th><spring:message code="lbl.householdCount"/></th>
+									<th><spring:message code="lbl.population"/></th>
+									<th><spring:message code="lbl.femalePercentage"/></th>
+									<th><spring:message code="lbl.malePercentage"/></th>
+								</tr>
 								</thead>
 								<tbody>
-									<%
-										if(session.getAttribute("formWiseAggregatedList") != null){
-										List<Object> formWiseAggregatedList = (List<Object>) session.getAttribute("formWiseAggregatedList");
-										Iterator formWiseAggregatedListIterator = formWiseAggregatedList.iterator();
-										while (formWiseAggregatedListIterator.hasNext()) {
-											Object[] formWiseObject = (Object[]) formWiseAggregatedListIterator.next();
-											String providerName = String.valueOf(formWiseObject[0]);
-											if (providerName.equalsIgnoreCase("Total")) {
-												continue;
-											}
-											String householdCount = String.valueOf(formWiseObject[1]);
-											String population = String.valueOf(formWiseObject[2]);
-											String femalePercentage = String.valueOf(formWiseObject[3]);
-											String malePercentage = String.valueOf(formWiseObject[4]);
-									%>
-									<tr>
-										<td>
-											<a href="<c:url value="/report/individual-mhv-works.html">
-											<c:param name="mhvUsername" value="<%=providerName%>"/></c:url>">
-												<%=providerName%>
-											</a>
-										</td>
-										<td><%=householdCount%></td>
-										<td><%=population%></td>
-										<td><%=femalePercentage%></td>
-										<td><%=malePercentage%></td>
-									</tr>
-									<%
-										}
-									}
-									%>
+								<%
+									List<ReportDTO> reports = (List<ReportDTO>) session.getAttribute("formWiseAggregatedList");
+									for (ReportDTO report: reports) {
+								%>
+								<tr>
+									<td>
+										<a href="<c:url value="/report/individual-mhv-works.html">
+											<c:param name="mhvUsername" value="<%=report.getMhv()%>"/></c:url>">
+											<%=report.getMhv()%>
+										</a>
+									</td>
+									<td><%=report.getHousehold()%></td>
+									<td><%=report.getPopulation()%></td>
+									<td><%=report.getFemalePercentage()%></td>
+									<td><%=report.getMalePercentage()%></td>
+								</tr>
+								<%}%>
 								</tbody>
 							</table>
 						</div>
 					</div>
 				</div>
+				<%} else {%>
+				<div class="row" style="margin-top: 30px;">
+					<div class="col-sm-12" style="padding: 30px;">
+						<table class="display" id="ccListTable"
+							   style="width: 100%;">
+							<thead>
+							<tr>
+								<th><spring:message code="lbl.cc"/></th>
+								<th><spring:message code="lbl.householdCount"/></th>
+								<th><spring:message code="lbl.population"/></th>
+								<th><spring:message code="lbl.female"/></th>
+								<th><spring:message code="lbl.male"/></th>
+							</tr>
+							</thead>
+							<tbody>
+							<%
+								List<Object[]> ccList = (List<Object[]>) session.getAttribute("ccList");
+								for (int i = 0; i < ccList.size(); i++) {
+							%>
+							<tr>
+								<td><%=ccList.get(i)[0]%></td>
+								<td><%=ccList.get(i)[1]%></td>
+								<td><%=ccList.get(i)[2]%></td>
+								<td><%=ccList.get(i)[3]%></td>
+								<td><%=ccList.get(i)[4]%></td>
+							</tr>
+							<%}%>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<%}%>
+
+
 				<div class="card-footer small text-muted"></div>
 			</div>
 		</div>
@@ -209,6 +219,12 @@
 <script>
 	$(document).ready(function() {
 		$('#formWiseAggregatedListTable').DataTable({
+			"paginate" : true
+		});
+	});
+
+	$(document).ready(function() {
+		$('#ccListTable').DataTable({
 			"paginate" : true
 		});
 	});

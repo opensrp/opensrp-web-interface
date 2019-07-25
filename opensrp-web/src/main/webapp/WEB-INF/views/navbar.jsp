@@ -228,12 +228,9 @@
 
 					<% if(ANALYTICS){ %>
 					<div class="dropdown-divider"></div>
-					<%--					<a class="dropdown-item" href="<c:url value="/analytics/analytics.html?lang=${locale}"/>">--%>
-					<%--					<strong><spring:message code="lbl.analytics"/></strong></a>--%>
+										<a class="dropdown-item" href="<c:url value="/analytics/analytics.html?lang=${locale}"/>">
+										<strong><spring:message code="lbl.analytics"/></strong></a>
 
-					<%--it has to be removed. temporarily added this link--%>
-					<a class="dropdown-item" href="<c:url value="http://viz.mpower-social.com:8080/views/CBHC/PNCUtilizationStatus?%3Aembed=y&%3Adisplay_count=no"/>">
-						<strong><spring:message code="lbl.analytics"/></strong></a>
 					<% } %>
 
 					<% if(PERM_READ_AGGREGATED_REPORT){ %>

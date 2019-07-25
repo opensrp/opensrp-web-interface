@@ -49,14 +49,14 @@
             <div class="container-fluid">
                 <div class="card mb-3">
                     <div class="card-header">
-                        <i class="fa fa-table"></i> Household Wise Report Status
+                        <i class="fa fa-table"></i> <spring:message code="lbl.householdWiseReportStatus"/>
                     </div>
                     <div class="card-body">
                         <div>
                             <div>
-                                <p>MHV Name: <b style="font-size: 14px;"><%=user.getFullName()%></b></p>
-                                <p>MHV ID: <b style="font-size: 14px;"><%=user.getUsername()%></b></p>
-                                <p>MHV Phone No: <b style="font-size: 14px;"><%=user.getMobile()%></b></p>
+                                <p><spring:message code="lbl.mhvName"/>: <b style="font-size: 14px;"><%=user.getFullName()%></b></p>
+                                <p><spring:message code="lbl.mhvID"/>: <b style="font-size: 14px;"><%=user.getUsername()%></b></p>
+                                <p><spring:message code="lbl.mhvPhone"/>: <b style="font-size: 14px;"><%=user.getMobile()%></b></p>
                             </div>
                         </div>
                         <div class="row" style="margin-top: 30px;">

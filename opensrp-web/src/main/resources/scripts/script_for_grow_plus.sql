@@ -105,7 +105,8 @@ SELECT DISTINCT c.id as id
     e.json ->> 'team'::text AS cc_name,
     CASE
         WHEN (c.json->'attributes'->>'PregnancyStatus' = 'Antenatal Period')
-         THEN 'true'ELSE NULL END AS pregnancy_status
+         THEN 'true'ELSE NULL END AS pregnancy_status,
+    (c.json -> 'attributes'::text) ->> 'Religion'::text AS religion
    FROM core.client c
    JOIN core.event e ON c.json->'baseEntityId' = e.json->'baseEntityId'
    WHERE e.json->>'eventType' LIKE '%Registration%'

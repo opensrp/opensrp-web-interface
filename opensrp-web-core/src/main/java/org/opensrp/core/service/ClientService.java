@@ -219,6 +219,10 @@ public class ClientService extends EntityProperties {
 		
 		openSRPClientServiceImpl.update(jsonObject);
 	}
+
+	public JSONObject memberApproval(JSONObject jsonObject) throws JSONException {
+		return openSRPClientServiceImpl.approval(jsonObject);
+	}
 	
 	public String getHouseholdEntityNamePrefix() {
 		return PROJECT_ENTITY;

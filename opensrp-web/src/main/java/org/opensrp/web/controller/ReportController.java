@@ -3,22 +3,19 @@
  */
 package org.opensrp.web.controller;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Facility;
-import org.opensrp.core.entity.FacilityWorker;
-import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.FacilityService;
-import org.opensrp.core.service.FacilityWorkerService;
-import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
@@ -26,11 +23,8 @@ import org.opensrp.web.util.PaginationHelperUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -110,21 +104,39 @@ public class ReportController {
 		if (!AuthenticationManagerUtil.isAdmin() && !AuthenticationManagerUtil.isUHFPO()) {
 			User user = AuthenticationManagerUtil.getLoggedInUser();
 			Facility facility = facilityService.findById(Integer.parseInt(user.getChcp()), "id", Facility.class);
-//			request.setAttribute("division", facility.getDivision());
-//			request.setAttribute("district", facility.getDistrict());
-//			request.setAttribute("upazila", facility.getUpazila());
-//			request.setAttribute("union", facility.getUnion());
 			request.setAttribute("ward", facility.getWard());
 			request.setAttribute("cc", facility.getName());
 		}
 		searchBuilder = paginationHelperUtil.setParams(request, session);
 		searchUtil.setDivisionAttribute(session);
-		List<Object> formWiseAggregatedList = (List<Object>) databaseServiceImpl.getReportData(searchBuilder);
-		session.setAttribute("formWiseAggregatedList", formWiseAggregatedList);
-
-		if (formWiseAggregatedList != null && !formWiseAggregatedList.isEmpty()) {
-			System.out.println("size of report data: " + formWiseAggregatedList.size());
+		if (AuthenticationManagerUtil.isUHFPO()) {
+			List<Object[]> ccList = databaseServiceImpl.getCCListByUpazila(searchBuilder);
+			session.setAttribute("ccList", ccList);
 		}
+		List<ReportDTO> reports = databaseServiceImpl.getMHVListFilterWise(searchBuilder);
+		session.setAttribute("formWiseAggregatedList", reports);
+
+		int totalHousehold = 0, totalPopulation = 0, totalMale = 0, totalFemale = 0;
+		String malePercentage;
+		String femalePercentage;
+		for (int i = 0; i < reports.size(); i++) {
+			totalHousehold += reports.get(i).getHousehold();
+			totalPopulation += reports.get(i).getPopulation();
+			totalMale += reports.get(i).getMale();
+			totalFemale += reports.get(i).getFemale();
+		}
+
+		DecimalFormat df = new DecimalFormat("#.##");
+
+		if (totalPopulation == 0) {
+			malePercentage = "0";
+			femalePercentage = "0";
+		}
+		else {
+			femalePercentage = df.format((100.0/totalPopulation)*totalFemale);
+			malePercentage = df.format((100.0/totalPopulation)*totalMale);
+		}
+
 		//for setting start date and end date in report
 		String startDate = "";
 		String endDate = "";
@@ -141,6 +153,10 @@ public class ReportController {
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
 		session.setAttribute("memberType", memberType);
+		session.setAttribute("totalHousehold", totalHousehold);
+		session.setAttribute("totalPopulation", totalPopulation);
+		session.setAttribute("totalMale", malePercentage);
+		session.setAttribute("totalFemale", femalePercentage);
 		//end: setting start date and end date in report
 		return "report/householdDataReport";
 	}

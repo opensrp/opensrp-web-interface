@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 
+import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.FacilityWorker;
 import org.opensrp.core.service.FacilityService;
@@ -66,6 +67,9 @@ public class FacilityController {
 	
 	@Autowired
 	private FacilityHelperUtil facilityHelperUtil;
+
+	@Autowired
+	private DatabaseServiceImpl databaseServiceImpl;
 	
 	@Value("#{opensrp['bahmni.url']}")
 	private String BAHMNI_VISIT_URL;
@@ -245,5 +249,18 @@ public class FacilityController {
 		model.addAttribute("locale", locale);
 		return "facility/search-worker-name";
 	}
-	
+
+	@RequestMapping(value = "facility/uhfpo-dashboard.html", method = RequestMethod.GET)
+	public String getUHFPOData(Model model, HttpSession session, Locale locale) {
+
+		List<Object []> upazilaList = databaseServiceImpl.getUpazilaList();
+
+		session.setAttribute("upazilaList", upazilaList);
+
+		model.addAttribute("locale", locale);
+		return "facility/uhfpo-dashboard";
+	}
+
+
+
 }

@@ -1,6 +1,7 @@
 package org.opensrp.web.util;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -45,5 +46,26 @@ public class SearchUtil {
 		List<Object[]> divisions = locationServiceImpl.getLocationByTagId(DIVISION_TAG_ID);
 		logger.debug("set session attribute divisions: " + divisions.size());
 		session.setAttribute("divisions", divisions);
+	}
+
+	public static Integer randomBetween(Integer max, Integer min) {
+		Random rand = new Random();
+		return rand.nextInt((max - min) + 1) + min;
+	}
+
+	public static Integer[] rand30(int mx, int mn) {
+		Integer[] numbers =  {
+			randomBetween(mx, mn), randomBetween(mx, mn), randomBetween(mx, mn),
+			randomBetween(mx, mn), randomBetween(mx, mn), randomBetween(mx, mn),
+			randomBetween(mx, mn), randomBetween(mx, mn), randomBetween(mx, mn),
+			randomBetween(mx, mn), randomBetween(mx, mn), randomBetween(mx, mn),
+			randomBetween(mx, mn), randomBetween(mx, mn), randomBetween(mx, mn),
+			randomBetween(mx, mn), randomBetween(mx, mn), randomBetween(mx, mn),
+			randomBetween(mx, mn), randomBetween(mx, mn), randomBetween(mx, mn),
+			randomBetween(mx, mn), randomBetween(mx, mn), randomBetween(mx, mn),
+			randomBetween(mx, mn), randomBetween(mx, mn), randomBetween(mx, mn),
+			randomBetween(mx, mn), randomBetween(mx, mn), randomBetween(mx, mn)
+		};
+		return numbers;
 	}
 }

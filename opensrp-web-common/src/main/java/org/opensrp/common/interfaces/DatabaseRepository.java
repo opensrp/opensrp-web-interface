@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.util.SearchBuilder;
 
 import javax.servlet.http.HttpSession;
@@ -119,6 +120,14 @@ public interface DatabaseRepository {
 
 	public <T> T getMemberByHealthId(String healthId);
 
+	public <T> T getMemberByBaseEntityId(String baseEntityId);
+
 	public <T> List<T> getMemberListByCC(String ccName);
+
+	public <T> List<T> getUpazilaList();
+
+	public <T> List<T> getCCListByUpazila(SearchBuilder searchBuilder);
+
+	public List<ReportDTO> getMHVListFilterWise(String filterString);
 
 }

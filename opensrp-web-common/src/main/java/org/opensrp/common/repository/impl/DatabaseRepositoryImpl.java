@@ -16,6 +16,9 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
+import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.SearchBuilder;
@@ -868,12 +871,34 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
+	public <T> T getMemberByBaseEntityId(String baseEntityId) {
+		Session session = sessionFactory.openSession();
+		T member = null;
+		try {
+			String hql = "select * from core.\"viewJsonDataConversionOfClient\" where base_entity_id = '"+ baseEntityId +"';";
+			Query query = session.createSQLQuery(hql);
+			List<T> members = query.list();
+			if (members.size() > 0) {
+				member = members.get(0);
+			}
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			session.close();
+		}
+		return member;
+	}
+
+	@Override
 	public <T> List<T> getMemberListByCC(String ccName) {
 		Session session = sessionFactory.openSession();
 		List<T> memberList = null;
 		try {
-			String hql = "select * from core.\"viewJsonDataConversionOfClient\" where cc_name = '"
-					+ ccName +"' and entity_type != 'ec_household';";
+			String hql = "select concat(vc.first_name, ' ', vc.lastName) as name, case when vc.gender = 'M' then 'Male' else 'Female' end as gender," +
+					" concat(extract(year from age(now(), vc.birth_date)), ' year(s) ', extract(month from age(now(), vc.birth_date)), ' month(s)') as age," +
+					" vc.health_id, vc.base_entity_id, r.status from core.\"viewJsonDataConversionOfClient\" vc left join" +
+					" core.reviews r on vc.base_entity_id = r.base_entity_id where vc.cc_name = '"
+					+ ccName +"' and vc.entity_type != 'ec_household';";
 			Query query = session.createSQLQuery(hql);
 			memberList = query.list();
 		} catch (Exception e) {
@@ -882,6 +907,67 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			session.close();
 		}
 		return memberList;
+	}
+
+	@Override
+	public <T> List<T> getUpazilaList() {
+		Session session = sessionFactory.openSession();
+		List<T> upazilaList = null;
+		try {
+			String hql = "select distinct(upazila), count(case when entity_type = 'ec_household' then 1 end) as household_count," +
+					" count(case when entity_type != 'ec_household' then 1 end) as population_count from core.\"viewJsonDataConversionOfClient\" group by upazila;\n";
+			Query query = session.createSQLQuery(hql);
+			upazilaList = query.list();
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			session.close();
+		}
+		return upazilaList;
+	}
+
+	@Override
+	public <T> List<T> getCCListByUpazila(SearchBuilder searchBuilder) {
+		Session session = sessionFactory.openSession();
+		List<T> ccList = null;
+		try {
+			String hql = "select distinct(cc_name), count(case when entity_type = 'ec_household' then 1 end) as household_count," +
+					" count(case when entity_type != 'ec_household' then 1 end) as population_count, count(case when gender='F' then 1 end) as female," +
+					" count(case when gender = 'M' then 1 end) as male from core.\"viewJsonDataConversionOfClient\" where upazila = '"
+					+ searchBuilder.getUpazila() +"' and cc_name != '' group by cc_name order by cc_name;";
+			Query query = session.createSQLQuery(hql);
+			ccList = query.list();
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			session.close();
+		}
+		return ccList;
+	}
+
+	@Override
+	public List<ReportDTO> getMHVListFilterWise(String filterString) {
+		Session session = sessionFactory.openSession();
+		List<ReportDTO> mhvList = null;
+		try {
+			String hql = "select distinct(provider_id) as mhv, count(case when entity_type = 'ec_household' then 1 end) as household," +
+					" count(case when entity_type != 'ec_household' then 1 end) as population, count(case when gender='F' then 1 end) as female," +
+					" count(case when gender = 'M' then 1 end) as male from core.\"viewJsonDataConversionOfClient\" "+
+					filterString +" group by provider_id order by provider_id;";
+			Query query = session.createSQLQuery(hql)
+					.addScalar("mhv", StandardBasicTypes.STRING)
+					.addScalar("household", StandardBasicTypes.INTEGER)
+					.addScalar("population", StandardBasicTypes.INTEGER)
+					.addScalar("female", StandardBasicTypes.INTEGER)
+					.addScalar("male", StandardBasicTypes.INTEGER)
+					.setResultTransformer(Transformers.aliasToBean(ReportDTO.class));
+			mhvList = query.list();
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			session.close();
+		}
+		return mhvList;
 	}
 
 	public <T> List<T> getReportData(SearchBuilder searchBuilder, String procedureName) {

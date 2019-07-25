@@ -28,7 +28,11 @@ public class OpenMRSAPIServiceImpl extends OpenmrsCredentialsService implements 
 		return new JSONObject(HttpUtil.post(getURL() + "/" + URL, payload, jsonObject.toString(), OPENMRS_USER, OPENMRS_PWD)
 		        .body());
 	}
-	
+
+	public JSONObject update(String payload, JSONObject jsonObject, String URL) throws JSONException {
+		return null;
+	}
+
 	@Override
 	public JSONObject update(String payload, JSONObject roleObjectForUpdate, String uuid, String URL) throws JSONException {
 		return new JSONObject(HttpUtil.post(getURL() + "/" + URL + "/" + uuid, payload, roleObjectForUpdate.toString(),

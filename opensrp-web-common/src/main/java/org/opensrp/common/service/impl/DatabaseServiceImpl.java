@@ -10,9 +10,11 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.interfaces.DatabaseService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.common.util.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,8 +71,29 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 
 	@Override
+	public <T> T getMemberByBaseEntityId(String baseEntityId) {
+		return databaseRepositoryImpl.getMemberByBaseEntityId(baseEntityId);
+	}
+
+	@Override
 	public <T> List<T> getMemberListByCC(String ccName) {
 		return databaseRepositoryImpl.getMemberListByCC(ccName);
+	}
+
+	@Override
+	public <T> List<T> getUpazilaList() {
+		return databaseRepositoryImpl.getUpazilaList();
+	}
+
+	@Override
+	public <T> List<T> getCCListByUpazila(SearchBuilder searchBuilder) {
+		return databaseRepositoryImpl.getCCListByUpazila(searchBuilder);
+	}
+
+	@Override
+	public List<ReportDTO> getMHVListFilterWise(SearchBuilder searchBuilder) {
+		String filterString = SearchCriteria.getFilterString(searchBuilder);
+		return databaseRepositoryImpl.getMHVListFilterWise(filterString);
 	}
 
 

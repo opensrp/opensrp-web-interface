@@ -49,7 +49,7 @@
     <div class="container-fluid">
         <div class="card mb-3">
             <div class="card-header">
-                <i class="fa fa-table"></i> Household Member List
+                <i class="fa fa-table"></i> <spring:message code="lbl.householdMemberList"/>
             </div>
             <div class="card-body">
                 <div>
@@ -67,31 +67,38 @@
                                 <th><spring:message code="lbl.name"/></th>
                                 <th><spring:message code="lbl.gender"/></th>
                                 <th><spring:message code="lbl.age"/></th>
+                                <th><spring:message code="lbl.status"/></th>
                             </tr>
                             </thead>
                             <tbody>
                             <%
                                 List<Object[]> memberList = (List<Object[]>) session.getAttribute("memberList");
                                 for (int i = 0; i < memberList.size(); i++) {
-                                    String healthId = (String) memberList.get(i)[3];
+                                    String baseEntityId = (String) memberList.get(i)[4];
                             %>
                             <tr>
                                 <td>
-                                    <%if (healthId == null){%>
-                                    <%=memberList.get(i)[3]%>
-                                    <%} else {%>
                                     <a href="<c:url value="/client/household-member.html">
                                                 <c:param
-                                                    name="healthId"
-                                                    value="<%=healthId%>"/>
+                                                    name="baseEntityId"
+                                                    value="<%=baseEntityId%>"/>
                                                              </c:url>">
                                         <%=memberList.get(i)[3]%>
                                     </a>
-                                    <%}%>
                                 </td>
                                 <td><%=memberList.get(i)[0]%></td>
                                 <td><%=memberList.get(i)[1]%></td>
                                 <td><%=memberList.get(i)[2]%></td>
+                                <td>
+                                    <% if (memberList.get(i)[5] == null || memberList.get(i)[5].equals("")) {%>
+                                    <b>Not Yet Reviewed</b>
+                                    <%}
+                                    else if (memberList.get(i)[5].equals("0")) {%>
+                                    <b style="color: red;">Under Review</b>
+                                    <%} else if (memberList.get(i)[5].equals("1")) {%>
+                                    <b style="color: green;">Approved</b>
+                                    <%}%>
+                                </td>
                             </tr>
                             <%
                                 }

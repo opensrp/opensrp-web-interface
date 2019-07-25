@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpenSRPAPIServiceImpl extends OpensrpCredentialsService implements APIService {
 	
-	public void updateClient(String payload, JSONObject jsonObject, String URL) throws JSONException {
+	public JSONObject updateClient(String payload, JSONObject jsonObject, String URL) throws JSONException {
 		
-		HttpUtil.post(getURL() + "/" + URL, payload, jsonObject.toString(), OPENSRP_USER, OPENSRP_PWD).body();
+		return new JSONObject(HttpUtil.post(getURL() + "/" + URL, payload, jsonObject.toString(), OPENSRP_USER, OPENSRP_PWD).body());
 	}
 	
 	@Override
@@ -19,7 +19,7 @@ public class OpenSRPAPIServiceImpl extends OpensrpCredentialsService implements 
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
 	public JSONObject update(String payload, JSONObject jsonObject, String uuid, String URL) throws JSONException {
 		// TODO Auto-generated method stub

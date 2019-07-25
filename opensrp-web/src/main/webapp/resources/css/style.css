@@ -792,7 +792,7 @@ th {
 	cursor:pointer;
 	-moz-box-shadow:    inset 0 0 15px #530052;
     -webkit-box-shadow: inset 0 0 15px #530052;
-    box-shadow:         inset 0 0 15px #530052;
+    box-shadow:         inset 0 0 15px #FFFFFF;
 }
 .foot {
    background-color:#151415;
