@@ -10,6 +10,7 @@ public class FacilityWorkerDTO {
 	private String workerId;
 	private String facilityWorkerTypeId;
 	private String facilityTrainings;
+	private String username;
 	
 	public String getName() {
 		return name;
@@ -54,6 +55,15 @@ public class FacilityWorkerDTO {
 	public void setWorkerId(String workerId) {
 		this.workerId = workerId;
 	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	@Override
 	public String toString() {
 		return "FacilityWorkerDTO [name=" + name + ", identifier=" + identifier

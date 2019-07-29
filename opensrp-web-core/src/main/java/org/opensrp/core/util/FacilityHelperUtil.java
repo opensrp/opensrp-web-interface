@@ -122,6 +122,7 @@ public class FacilityHelperUtil {
 		facilityWorker.setName(facilityWorkerDTO.getName());
 		facilityWorker.setIdentifier(facilityWorkerDTO.getIdentifier());
 		facilityWorker.setOrganization(facilityWorkerDTO.getOrganization());
+		facilityWorker.setUsername(facilityWorkerDTO.getUsername());
 		
 		int facilityId = Integer.parseInt(facilityWorkerDTO.getFacilityId());
 		Facility facility = facilityService.findById(facilityId, "id", Facility.class);

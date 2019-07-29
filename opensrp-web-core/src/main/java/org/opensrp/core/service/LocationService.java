@@ -7,9 +7,7 @@ package org.opensrp.core.service;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -405,5 +403,18 @@ public class LocationService {
 			msg = "Some problem occured, please contact with admin..";
 		}
 		return msg;
+	}
+
+	public Set<Location> getLocationByIds(int[] locations) {
+		Set<Location> locationSet = new HashSet<Location>();
+		if (locations != null && locations.length != 0) {
+			for (int locationId : locations) {
+				Location location = repository.findById(locationId, "id", Location.class);
+				if (location != null) {
+					locationSet.add(location);
+				}
+			}
+		}
+		return locationSet;
 	}
 }

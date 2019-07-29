@@ -224,13 +224,20 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	@Override
 	public <T> T findByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
-			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
-		}
 		@SuppressWarnings("unchecked")
-		List<T> result = criteria.list();
-		session.close();
+		List<T> result = null;
+		try {
+			Criteria criteria = session.createCriteria(className);
+			for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+				criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+			}
+			result = criteria.list();
+			logger.info("\nresult---------------->"+ result.size());
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			session.close();
+		}
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 	

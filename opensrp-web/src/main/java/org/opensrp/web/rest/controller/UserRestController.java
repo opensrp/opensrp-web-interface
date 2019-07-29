@@ -20,6 +20,8 @@ import org.opensrp.core.entity.FacilityWorker;
 import org.opensrp.core.entity.FacilityWorkerType;
 import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.FacilityWorkerTypeService;
+import org.opensrp.core.service.mapper.FacilityWorkerMapper;
+import org.opensrp.core.service.mapper.UserMapper;
 import org.opensrp.web.controller.UserController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +61,12 @@ public class UserRestController {
 	
 	@Autowired
 	private EmailService emailService;
+
+	@Autowired
+	private FacilityWorkerMapper facilityWorkerMapper;
+
+	@Autowired
+	private UserMapper userMapper;
 	
 	private static final Logger logger = Logger.getLogger(UserRestController.class);
 	
@@ -73,12 +81,11 @@ public class UserRestController {
 			boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());
 			if (userDTO.isTeamMember()) {
 				team = teamService.findById(userDTO.getTeam(), "id", Team.class);
-				facility = (Facility) facilityService.findByKey(team.getLocation().getName(), "ward", Facility.class);
+				facility = facilityService.findByKey(team.getLocation().getName(), "ward", Facility.class);
 			}
-			
-			User user = new User();
+
 			if (!isExists) {
-				user = userServiceImpl.convert(userDTO);
+				User user = userMapper.map(userDTO);
 				user.setChcp(facility.getId() + "");
 				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
 				
@@ -91,15 +98,12 @@ public class UserRestController {
 					teamMember.setIdentifier(userDTO.getIdetifier());
 					logger.info(" \nTeamMember : "+ teamMember.toString() + "\n");
 					teamMemberServiceImpl.save(teamMember);
-					
-					FacilityWorker facilityWorker = new FacilityWorker();
-					facilityWorker.setName(user.getFullName());
-					facilityWorker.setIdentifier(user.getMobile());
-					facilityWorker.setOrganization("Community Clinic");
+
 					FacilityWorkerType facilityWorkerType = facilityWorkerTypeService.findByKey("CHCP", "name",
-					    FacilityWorkerType.class);
-					facilityWorker.setFacility(facility);
-					facilityWorker.setFacilityWorkerType(facilityWorkerType);
+							FacilityWorkerType.class);
+					
+					FacilityWorker facilityWorker = facilityWorkerMapper.map(user, facility, facilityWorkerType);
+
 					logger.info(" \nFacilityWorkerType : "+ facilityWorkerType.toString() + "\n");
 					facilityWorkerTypeService.save(facilityWorker);
 					String mailBody = "Dear " + user.getFullName()
@@ -108,7 +112,6 @@ public class UserRestController {
 					if (numberOfUserSaved > 0) {
 						logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
 						emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
-						
 					}
 				}
 			} else {
@@ -117,7 +120,7 @@ public class UserRestController {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			userNameUniqueError = "some Problem ocuured please contact with Admin";
+			userNameUniqueError = "some Problem occurred please contact with Admin";
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}
@@ -156,19 +159,18 @@ public class UserRestController {
 				    user.getId(), team, locationList);
 				teamMember.setIdentifier(userDTO.getIdetifier());
 				teamMemberServiceImpl.save(teamMember);
-				
-				FacilityWorker facilityWorker = new FacilityWorker();
-				facilityWorker.setName(user.getFullName());
-				facilityWorker.setIdentifier(user.getMobile());
-				facilityWorker.setOrganization("Community Clinic");
+
 				FacilityWorkerType facilityWorkerType = facilityWorkerTypeService.findByKey("MULTIPURPOSE HEALTH VOLUNTEER",
-				    "name", FacilityWorkerType.class);
-				facilityWorker.setFacility(facility);
-				facilityWorker.setFacilityWorkerType(facilityWorkerType);
+						"name", FacilityWorkerType.class);
+
+				FacilityWorker facilityWorker = facilityWorkerMapper.map(user, facility, facilityWorkerType);
+
 				facilityWorkerTypeService.save(facilityWorker);
+
 				String mailBody = "Dear " + user.getFullName()
 				        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + user.getUsername()
 				        + "\npassword : " + userDTO.getPassword();
+
 				if (numberOfUserSaved > 0) {
 					logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
 					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);

@@ -153,8 +153,8 @@ public class ReportController {
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
 		session.setAttribute("memberType", memberType);
-		session.setAttribute("totalHousehold", totalHousehold);
-		session.setAttribute("totalPopulation", totalPopulation);
+		session.setAttribute("totalHousehold", String.valueOf(totalHousehold));
+		session.setAttribute("totalPopulation", String.valueOf(totalPopulation));
 		session.setAttribute("totalMale", malePercentage);
 		session.setAttribute("totalFemale", femalePercentage);
 		//end: setting start date and end date in report

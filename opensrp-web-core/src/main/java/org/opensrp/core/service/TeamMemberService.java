@@ -25,6 +25,7 @@ import org.opensrp.core.entity.Team;
 import org.opensrp.core.entity.TeamMember;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.openmrs.service.OpenMRSServiceFactory;
+import org.opensrp.core.service.mapper.TeamMemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -53,6 +54,9 @@ public class TeamMemberService {
 	
 	@Autowired
 	private LocationService locationServiceImpl;
+
+	@Autowired
+	private TeamMemberMapper teamMemberMapper;
 	
 	public TeamMemberService() {
 		
@@ -259,46 +263,18 @@ public class TeamMemberService {
 	
 	public TeamMember setCreatorLocationAndPersonAndTeamAttributeInLocation(TeamMember teamMember, int personId, Team team,
 	                                                                        int[] locations) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User creator = (User) repository.findByKey(auth.getName(), "username", User.class);
-		User person = (User) repository.findById(personId, "id", User.class);
-		Set<Location> locationSet = new HashSet<Location>();
-		if (locations != null && locations.length != 0) {
-			for (int locationId : locations) {
-				Location location = (Location) repository.findById(locationId, "id", Location.class);
-				if (location != null) {
-					locationSet.add(location);
-					
-				}
-			}
-			teamMember.setLocations(locationSet);
-		}
-		
-		teamMember.setCreator(creator);
-		teamMember.setPerson(person);
-		teamMember.setTeam(team);
+		teamMember = teamMemberMapper.map(team, personId, locations);
+		teamMember.setCreator(userServiceImpl.getLoggedInUser());
+
 		return teamMember;
 	}
 	
 	// if user comes from HRIS then there is no creator - april 23, 2019
 	public TeamMember setLocationAndPersonAndTeamAttributeInLocation(TeamMember teamMember, int personId, Team team,
             int[] locations) {
-		User person = (User) repository.findById(personId, "id", User.class);
-		Set<Location> locationSet = new HashSet<Location>();
-		if (locations != null && locations.length != 0) {
-		for (int locationId : locations) {
-		Location location = (Location) repository.findById(locationId, "id", Location.class);
-		if (location != null) {
-		locationSet.add(location);
-		
-		}
-		}
-		teamMember.setLocations(locationSet);
-		}
-		
-		teamMember.setPerson(person);
-		teamMember.setTeam(team);
-		return teamMember;
+
+			teamMember = teamMemberMapper.map(team, personId, locations);
+			return teamMember;
 		}
 	// end: if user comes from HRIS then there is no creator - april 23, 2019
 	

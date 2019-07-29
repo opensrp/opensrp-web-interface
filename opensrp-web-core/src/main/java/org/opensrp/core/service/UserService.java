@@ -30,6 +30,8 @@ import org.opensrp.core.entity.User;
 import org.opensrp.core.openmrs.service.OpenMRSServiceFactory;
 import org.opensrp.core.openmrs.service.impl.OpenMRSUserAPIService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor;
@@ -301,6 +303,12 @@ public class UserService {
 			i++;
 		}
 		return selectedRoles;
+	}
+
+	public User getLoggedInUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = repository.findByKey(auth.getName(), "username", User.class);
+		return user;
 	}
 	
 	@Transactional

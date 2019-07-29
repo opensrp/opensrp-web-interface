@@ -45,6 +45,9 @@ public class FacilityWorker implements Serializable {
 	@NotNull
 	@Column(name = "identifier")
 	private String identifier;
+
+	@Column(name = "username")
+	private String username;
 	
 	@Column(name = "organization")
 	private String organization;
@@ -146,5 +149,12 @@ public class FacilityWorker implements Serializable {
 	public void setFacilityTrainings(Set<FacilityTraining> facilityTrainings) {
 		this.facilityTrainings = facilityTrainings;
 	}
-	
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 }

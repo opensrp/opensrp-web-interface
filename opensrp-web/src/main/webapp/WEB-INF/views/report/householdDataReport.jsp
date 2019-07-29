@@ -18,8 +18,8 @@
 	uri="http://www.springframework.org/security/tags"%>
 
 <%
-	int householdCount = (int) session.getAttribute("totalHousehold");
-	int populationCount = (int) session.getAttribute("totalPopulation");
+	String householdCount = (String) session.getAttribute("totalHousehold");
+	String populationCount = (String) session.getAttribute("totalPopulation");
 	String malePercentage = (String) session.getAttribute("totalMale");
 	String femalePercentage = (String) session.getAttribute("totalFemale");
 %>
@@ -199,8 +199,8 @@
 					</div>
 				</div>
 				<%}%>
-
-
+				<button id="exportcsv" class="btn btn-sm btn-primary">Export CSV</button>
+1
 				<div class="card-footer small text-muted"></div>
 			</div>
 		</div>

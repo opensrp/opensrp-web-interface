@@ -141,8 +141,6 @@ public class FacilityWorkerService {
 		FacilityWorker facilityWorker = findById(workerId, "id",
 				FacilityWorker.class);
 		session.setAttribute("workerToEdit", facilityWorker);
-		;
-
 	}
 
 	/**
