@@ -75,6 +75,7 @@
                                 List<Object[]> memberList = (List<Object[]>) session.getAttribute("memberList");
                                 for (int i = 0; i < memberList.size(); i++) {
                                     String baseEntityId = (String) memberList.get(i)[4];
+                                    if (memberList.get(i)[5] == null || memberList.get(i)[5].equals("0")) {
                             %>
                             <tr>
                                 <td>
@@ -95,14 +96,10 @@
                                     <%}
                                     else if (memberList.get(i)[5].equals("0")) {%>
                                     <b style="color: red;">Under Review</b>
-                                    <%} else if (memberList.get(i)[5].equals("1")) {%>
-                                    <b style="color: green;">Approved</b>
                                     <%}%>
                                 </td>
                             </tr>
-                            <%
-                                }
-                            %>
+                            <%} }%>
                             </tbody>
                         </table>
                     </div>

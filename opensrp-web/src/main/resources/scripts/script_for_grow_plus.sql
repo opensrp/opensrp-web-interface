@@ -48,69 +48,54 @@ select core.latest_child_growth_status ('734eb1f8-97d3-42c5-82a4-275c2b45f1a8');
 
 CREATE MATERIALIZED VIEW core."viewJsonDataConversionOfClient"
 AS
-SELECT DISTINCT c.id as id
-   , c.json->>'baseEntityId' as base_entity_id
-   , c.json->'addresses'->0->>'addressType' as address_type
-   , cast(c.json->>'birthdate' as Date) as birth_date
-   , c.json->'addresses'->0->'addressFields'->>'country' as country
-   , c.json->>'dateCreated' as date_created
-   , c.json->>'dateEdited' as date_edited
-   , c.json->'addresses'->0->'addressFields'->>'countyDistrict' as district
-   , c.json->'addresses'->0->'addressFields'->>'stateProvince' as division
-   , c.json->>'firstName' as first_name
-   , c.json->>'gender' as gender
-   , c.json->'addresses'->0->'addressFields'->>'address5' as gobhhid
-   , c.json->'attributes'->>'householdCode' as household_code
-   , c.json->>'lastName' as lastname 
-   , c.json->'addresses'->0->'addressFields'->>'address4' as mauzapara
-   , c.json->'attributes'->>'nationalId' as national_id
-   , c.json->'attributes'->>'Child_Birth_Certificate' as child_birth_certificate
-   , c.json->'attributes'->>'phoneNumber' as phone_number
-   , c.json->>'serverVersion' as server_version
-   , c.json->'attributes'->>'spouseName' as spouse_name
-   , c.json->'addresses'->0->'addressFields'->>'address3' as subunit
-   , c.json->'addresses'->0->'addressFields'->>'address1' as client_union
-   , c.json->'addresses'->0->'addressFields'->>'cityVillage' as upazila
-   , UPPER(c.json->'addresses'->0->'addressFields'->>'address2') as ward
-   , CASE
-    WHEN (e.json->>'eventType' = 'New Woman Member Registration') THEN e.json->'obs'->3->'values'->>0
-	ELSE null
-    END latest_lmp
-   , c.json->'relationships'->'household'->>0 as relationships_id
-   , c.json->'identifiers'->>'Patient_Identifier' as health_id
-   , e.json->>'providerId' as provider_id
-   , e.json->>'entityType' as entity_type
-   , e.json->>'eventType' as event_type
-   , core.getObsValue(e.id, 'start') as member_reg_date
-   , CASE
-    WHEN (e.json->>'entityType' = 'child') THEN e.json->'obs'->1->'values'->>0
-	ELSE null
-    END
-	as birth_weight
-   , CASE
-    WHEN (e.json->>'entityType' = 'child') THEN e.json->'obs'->3->'values'->>0
-	ELSE null
-    END
-	as mother_name
-    , CASE
-    WHEN (e.json->>'entityType' = 'child') THEN core.getObsValue(e.id, 'Father_Guardian_Name')
-	ELSE null
-    END
-	as father_name
-    , CASE
-    WHEN (e.json->>'entityType' = 'child') THEN core.latest_child_growth_status(e.json->>'baseEntityId')
-	ELSE null
-    END
-	as latest_growth_status,
-    e.json ->> 'team'::text AS cc_name,
-    CASE
-        WHEN (c.json->'attributes'->>'PregnancyStatus' = 'Antenatal Period')
-         THEN 'true'ELSE NULL END AS pregnancy_status,
-    (c.json -> 'attributes'::text) ->> 'Religion'::text AS religion
-   FROM core.client c
-   JOIN core.event e ON c.json->'baseEntityId' = e.json->'baseEntityId'
-   WHERE e.json->>'eventType' LIKE '%Registration%'
-WITH DATA;
+SELECT DISTINCT c.id as id,
+                c.json->>'baseEntityId' as base_entity_id,
+                c.json->'addresses'->0->>'addressType' as address_type,
+                cast(c.json->>'birthdate' as Date) as birth_date,
+                c.json->'addresses'->0->'addressFields'->>'country' as country,
+                c.json->>'dateCreated' as date_created,
+                c.json->>'dateEdited' as date_edited,
+                c.json->'addresses'->0->'addressFields'->>'countyDistrict' as district,
+                c.json->'addresses'->0->'addressFields'->>'stateProvince' as division,
+                c.json->>'firstName' as first_name,
+                c.json->>'gender' as gender,
+                c.json->'addresses'->0->'addressFields'->>'address5' as gobhhid,
+                c.json->'attributes'->>'householdCode' as household_code,
+                c.json->>'lastName' as lastname ,
+                c.json->'addresses'->0->'addressFields'->>'address4' as mauzapara,
+                c.json->'attributes'->>'nationalId' as national_id,
+                c.json->'attributes'->>'Child_Birth_Certificate' as child_birth_certificate,
+                c.json->'attributes'->>'phoneNumber' as phone_number,
+                c.json->>'serverVersion' as server_version,
+                c.json->'attributes'->>'spouseNameEnglish' AS spouse_name,
+                c.json->'addresses'->0->'addressFields'->>'address3' as subunit,
+                c.json->'addresses'->0->'addressFields'->>'address1' as client_union,
+                c.json->'addresses'->0->'addressFields'->>'cityVillage' as upazila,
+                UPPER(c.json->'addresses'->0->'addressFields'->>'address2') as ward,
+                CASE WHEN (e.json->>'eventType' = 'New Woman Member Registration')
+                    THEN e.json->'obs'->3->'values'->>0 ELSE null END latest_lmp,
+                c.json->'relationships'->'household'->>0 as relationships_id,
+                c.json->'identifiers'->>'Patient_Identifier' as health_id,
+                e.json->>'providerId' as provider_id,
+                e.json->>'entityType' as entity_type,
+                e.json->>'eventType' as event_type,
+                core.getObsValue(e.id, 'start') as member_reg_date,
+                CASE WHEN (e.json->>'entityType' = 'child')
+                    THEN e.json->'obs'->1->'values'->>0 ELSE null END as birth_weight,
+                c.json -> 'attributes'::text ->> 'motherNameEnglish'::text AS mother_name,
+                c.json->'attributes'->>'fatherNameEnglish' AS father_name,
+                CASE WHEN (e.json->>'entityType' = 'child')
+                    THEN core.latest_child_growth_status(e.json->>'baseEntityId') ELSE null END as latest_growth_status,
+                e.json ->> 'team'::text AS cc_name,
+                CASE WHEN (c.json->'attributes'->>'PregnancyStatus' = 'Antenatal Period')
+                    THEN 'true'ELSE NULL END AS pregnancy_status,
+                c.json -> 'attributes'::text ->> 'Religion'::text AS religion,
+                c.json->'attributes'->>'spouseNameBangla' AS spouse_name_bangla,
+                c.json -> 'attributes' ->>'fathernameBangla' AS father_name_bangla,
+                c.json -> 'attributes'::text ->> 'motherNameBangla'::text AS mother_name_bangla,
+                c.json -> 'attributes'::text ->> 'givenNameLocal'::text AS name_bangla
+FROM core.client c JOIN core.event e ON c.json->'baseEntityId' = e.json->'baseEntityId'
+WHERE e.json->>'eventType' LIKE '%Registration%' WITH DATA;
 
 GRANT ALL PRIVILEGES ON TABLE core."viewJsonDataConversionOfClient" TO opensrp_admin;
 

@@ -51,12 +51,6 @@ public class FacilityController {
 	private FacilityWorkerService facilityWorkerService;
 	
 	@Autowired
-	private FacilityWorkerTrainingService facilityWorkerTrainingService;
-	
-	@Autowired
-	private FacilityWorkerTypeService facilityWorkerTypeService;
-	
-	@Autowired
 	private PaginationUtil paginationUtil;
 	
 	@Autowired

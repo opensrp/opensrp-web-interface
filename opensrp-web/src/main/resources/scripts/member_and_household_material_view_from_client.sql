@@ -2,18 +2,18 @@ CREATE MATERIALIZED VIEW core."viewJsonDataConversionOfClientRequired"
 AS
 SELECT DISTINCT c.json->>'baseEntityId' as base_entity_id,
                 c.json->'relationships'->'household'->>0 as relation_ship_id,
-                (c.json -> 'identifiers'::text) ->> 'Patient_Identifier'::text AS health_id,
+                c.json -> 'identifiers'::text ->> 'Patient_Identifier'::text AS health_id,
                 e.json ->> 'providerId'::text AS mhv_name,
                 e.json ->> 'team'::text AS cc_name,
                 concat(c.json ->> 'firstName'::text, ' ' ,c.json ->> 'lastName'::text ) AS name,
-                (c.json -> 'attributes'::text) ->> 'givenNameLocal'::text AS name_bangla,
+                c.json -> 'attributes'::text ->> 'givenNameLocal'::text AS name_bangla,
                 c.json->'attributes'->>'spouseNameEnglish' AS husband_name,
                 c.json->'attributes'->>'spouseNameBangla' AS husband_name_bangla,
                 c.json->'attributes'->>'fatherNameEnglish' AS father_name,
                 c.json->'attributes'->>'fathernameBangla' AS father_name_bangla,
-                (c.json -> 'attributes'::text) ->> 'motherNameEnglish'::text AS mother_name,
-                (c.json -> 'attributes'::text) ->> 'motherNameBangla'::text AS mother_name_bangla,
-                (c.json ->> 'birthdate'::text)::date AS birth_date,
+                c.json -> 'attributes'::text ->> 'motherNameEnglish'::text AS mother_name,
+                c.json -> 'attributes'::text ->> 'motherNameBangla'::text AS mother_name_bangla,
+                c.json ->> 'birthdate'::text::date AS birth_date,
                 CASE WHEN c.json ->> 'gender'::text = 'M'::text THEN 'Male'::text ELSE 'Female'::text END AS gender,
                 (c.json -> 'attributes'::text) ->> 'nationalId'::text AS NID,
                 (c.json -> 'attributes'::text) ->> 'birthRegistrationID'::text AS BRID,
@@ -28,7 +28,7 @@ SELECT DISTINCT c.json->>'baseEntityId' as base_entity_id,
                 (((c.json -> 'addresses'::text) -> 0) -> 'addressFields'::text) ->> 'address2'::text AS present_address_ward,
                 (((c.json -> 'addresses'::text) -> 0) -> 'addressFields'::text) ->> 'address7'::text AS present_address_village
 FROM core.client c JOIN core.event e ON (c.json -> 'baseEntityId'::text) = (e.json -> 'baseEntityId'::text)
-WHERE (e.json ->> 'eventType'::text) ~~ '%Registration%'::text AND c.json->>'gender' != 'H' AND (c.json->>'dateCreated') BETWEEN '2019-07-17T00:00:00.000+06:00' AND '2019-07-21T23:59:59.999+06:00'
+WHERE (e.json ->> 'eventType'::text) ~~ '%Registration%'::text AND c.json->>'gender' != 'H' AND (c.json->>'dateCreated') BETWEEN '2019-07-22T00:00:00.000+06:00' AND '2019-07-28T23:59:59.999+06:00'
 WITH DATA;
 
 GRANT ALL PRIVILEGES ON TABLE core."viewJsonDataConversionOfClientRequired" TO opensrp_admin;

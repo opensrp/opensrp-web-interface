@@ -168,7 +168,9 @@ public class ReportController {
 									   @RequestParam("mhvUsername") String mhvUsername) {
 
 		User user = userService.findByKey(mhvUsername, "username", User.class);
+		Facility facility = facilityService.findById(Integer.valueOf(user.getChcp()), "id", Facility.class);
 		request.setAttribute("user", user);
+		request.setAttribute("facility", facility);
 		List<Object[]> householdList = databaseServiceImpl.getHouseholdListByMHV(mhvUsername, session);
 		session.setAttribute("householdList", householdList);
 		return "report/individual-mhv-works";

@@ -208,10 +208,7 @@ public class ClientController {
 	public String getMemberList(HttpSession session) {
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		Facility facility = facilityService.findById(Integer.parseInt(user.getChcp()), "id", Facility.class);
-		System.out.println("community clinic name:-> ");
-		System.out.println(facility.getName());
 		List<Object[]> householdMemberList = databaseServiceImpl.getMemberListByCC(facility.getName());
-		System.out.println("Size:-> "+ householdMemberList.size());
 		session.setAttribute("memberList", householdMemberList);
 		return "client/member-list";
 	}

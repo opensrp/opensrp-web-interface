@@ -5,6 +5,7 @@
 <%@page import="java.math.RoundingMode"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@ page import="org.opensrp.core.entity.User" %>
+<%@ page import="org.opensrp.core.entity.Facility" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
 
@@ -21,6 +22,7 @@
     String endDate = (String) session.getAttribute("endDate");
     String memberType = (String) session.getAttribute("memberType");
     User user = (User) request.getAttribute("user");
+    Facility facility = (Facility) request.getAttribute("facility");
 %>
 
 <!DOCTYPE html>
@@ -53,11 +55,32 @@
                     </div>
                     <div class="card-body">
                         <div>
-                            <div>
-                                <p><spring:message code="lbl.mhvName"/>: <b style="font-size: 14px;"><%=user.getFullName()%></b></p>
-                                <p><spring:message code="lbl.mhvID"/>: <b style="font-size: 14px;"><%=user.getUsername()%></b></p>
-                                <p><spring:message code="lbl.mhvPhone"/>: <b style="font-size: 14px;"><%=user.getMobile()%></b></p>
-                            </div>
+                            <table>
+                                <tr>
+                                    <td><spring:message code="lbl.mhvName"/></td>
+                                    <td><b style="font-size: 14px;"><%=user.getFullName()%></b></td>
+                                </tr>
+                                <tr>
+                                    <td><spring:message code="lbl.mhvID"/></td>
+                                    <td><b style="font-size: 14px;"><%=user.getUsername()%></b></td>
+                                </tr>
+                                <tr>
+                                    <td><spring:message code="lbl.mhvPhone"/></td>
+                                    <td><b style="font-size: 14px;"><%=user.getMobile()%></b></td>
+                                </tr>
+                                <tr>
+                                    <td><spring:message code="lbl.cc"/></td>
+                                    <td><b style="font-size: 14px;"><%=facility.getName()%></b></td>
+                                </tr>
+                                <tr>
+                                    <td><spring:message code="lbl.upazila"/></td>
+                                    <td><b style="font-size: 14px;"><%=facility.getUpazila()%></b></td>
+                                </tr>
+                                <tr>
+                                    <td><spring:message code="lbl.district"/></td>
+                                    <td><b style="font-size: 14px;"><%=facility.getDistrict()%></b></td>
+                                </tr>
+                            </table>
                         </div>
                         <div class="row" style="margin-top: 30px;">
                             <div class="col-sm-12" id="content">

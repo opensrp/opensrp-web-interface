@@ -100,64 +100,74 @@
                             <div class="col-sm-12" id="content">
                                 <table>
                                     <tr>
-                                        <td>Name:</td>
+                                        <td>Name</td>
                                         <td><%=member[9]%> <%=member[13]%></td>
                                     </tr>
                                     <tr>
-                                        <td>Father Name:</td>
+                                        <td>Name (Bangla)</td>
+                                        <td><%=member[41]%></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Father Name</td>
                                         <td><%=member[33]%></td>
                                     </tr>
                                     <tr>
-                                        <td>Mother Name:</td>
+                                        <td>Father Name (Bangla)</td>
+                                        <td><%=member[39]%></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mother Name</td>
                                         <td><%=member[32]%></td>
                                     </tr>
                                     <tr>
-                                        <td>Husband Name:</td>
+                                        <td>Mother Name (Bangla)</td>
+                                        <td><%=member[40]%></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Husband Name</td>
                                         <td><%=member[19]%></td>
                                     </tr>
                                     <tr>
-                                        <td>Date of Birth:</td>
+                                        <td>Husband Name (Bangla)</td>
+                                        <td><%=member[38]%></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Date of Birth</td>
                                         <td><%=member[3]%></td>
                                     </tr>
 
                                     <tr>
-                                        <td>Gender:</td>
+                                        <td>Gender</td>
                                         <td>
-                                            <%
-                                                if (member[10].equals("M")){
-                                                    %>
+                                            <%if (member[10].equals("M")){%>
                                             Male
-                                            <%
-                                                } else {
-                                                    %>
+                                            <%} else {%>
                                             Female
-                                            <%
-                                                }
-                                            %>
+                                            <%}%>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Religion:</td>
+                                        <td>Religion</td>
                                         <td><%=member[37]%></td>
                                     </tr>
                                     <tr>
-                                        <td>Division:</td>
+                                        <td>Division</td>
                                         <td><%=member[8]%></td>
                                     </tr>
                                     <tr>
-                                        <td>District:</td>
+                                        <td>District</td>
                                         <td><%=member[7]%></td>
                                     </tr>
                                     <tr>
-                                        <td>Upazila:</td>
+                                        <td>Upazila</td>
                                         <td><%=member[22]%></td>
                                     </tr>
                                     <tr>
-                                        <td>Union:</td>
+                                        <td>Union</td>
                                         <td><%=member[21]%></td>
                                     </tr>
                                     <tr>
-                                        <td>Ward:</td>
+                                        <td>Ward</td>
                                         <td><%=member[23]%></td>
                                     </tr>
 
