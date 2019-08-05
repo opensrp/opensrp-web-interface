@@ -48,7 +48,7 @@
         </c:if>
           <div class="form-group">
             <label>User Name</label>
-            <input class="form-control" id="username" name="username" placeholder="UserName">
+            <input class="form-control" id="username" name="username" placeholder="Username">
           </div>
           <div class="form-group">
             <label>Password</label>
