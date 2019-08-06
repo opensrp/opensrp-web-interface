@@ -78,7 +78,7 @@ public class MarkerServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public <T> List<T> getMemberListByHousehold(String householdBaseId) {
+	public <T> List<T> getMemberListByHousehold(String householdBaseId, String mhvId) {
 		return null;
 	}
 

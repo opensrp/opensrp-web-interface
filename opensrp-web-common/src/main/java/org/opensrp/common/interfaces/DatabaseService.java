@@ -22,7 +22,7 @@ public interface DatabaseService {
 
 	public <T> List<T> getHouseholdListByMHV(String username, HttpSession session);
 
-	public <T> List<T> getMemberListByHousehold(String householdBaseId);
+	public <T> List<T> getMemberListByHousehold(String householdBaseId, String mhvId);
 
 	public <T> T getMemberByHealthId(String healthId);
 

@@ -67,7 +67,6 @@
                                 <th><spring:message code="lbl.name"/></th>
                                 <th><spring:message code="lbl.gender"/></th>
                                 <th><spring:message code="lbl.age"/></th>
-                                <th><spring:message code="lbl.mhvID"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -81,7 +80,6 @@
                                 <td><%=memberList.get(i)[0]%></td>
                                 <td><%=memberList.get(i)[1]%></td>
                                 <td><%=memberList.get(i)[2]%></td>
-                                <td><%=memberList.get(i)[4]%></td>
                             </tr>
                             <%
                                 }

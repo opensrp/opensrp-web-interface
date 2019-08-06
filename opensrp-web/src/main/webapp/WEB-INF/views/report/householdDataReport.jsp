@@ -209,7 +209,6 @@
 				</div>
 				<%}%>
 <%--				<button id="exportcsv" class="btn btn-sm btn-primary">Export CSV</button>--%>
-1
 				<div class="card-footer small text-muted"></div>
 			</div>
 		</div>

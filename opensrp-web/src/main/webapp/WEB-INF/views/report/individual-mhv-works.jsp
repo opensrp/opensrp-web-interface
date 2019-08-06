@@ -107,6 +107,9 @@
 											                    <c:param
                                                                     name="householdBaseId"
                                                                     value="<%=householdBaseId%>"/>
+                                                                <c:param
+                                                                    name="mhvId"
+                                                                    value="<%=user.getUsername()%>"/>
                                                              </c:url>">
                                                         <%=householdList.get(i)[0]%>
                                                     </a>

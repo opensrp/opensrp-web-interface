@@ -179,11 +179,12 @@ public class ReportController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_AGGREGATED_REPORT')")
 	@RequestMapping(value = "/household-member-list.html", method = RequestMethod.GET)
 	public String getHouseholdMemberList(HttpServletRequest request,
-									   HttpSession session,
-									   Model model,
-									   @RequestParam("householdBaseId") String householdBaseId) {
+										 HttpSession session,
+										 Model model,
+										 @RequestParam("householdBaseId") String householdBaseId,
+										 @RequestParam("mhvId") String mhvId) {
 
-		List<Object[]> householdMemberList = databaseServiceImpl.getMemberListByHousehold(householdBaseId);
+		List<Object[]> householdMemberList = databaseServiceImpl.getMemberListByHousehold(householdBaseId, mhvId);
 		session.setAttribute("memberList", householdMemberList);
 		return "report/household-member-list";
 	}

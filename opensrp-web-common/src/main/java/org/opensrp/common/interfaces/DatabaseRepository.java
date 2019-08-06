@@ -116,7 +116,7 @@ public interface DatabaseRepository {
 
 	public <T> List<T> getDataByMHV(String username);
 
-	public <T> List<T> getMemberListByHousehold(String householdBaseId);
+	public <T> List<T> getMemberListByHousehold(String householdBaseId, String mhvId);
 
 	public <T> T getMemberByHealthId(String healthId);
 

@@ -837,14 +837,14 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public <T> List<T> getMemberListByHousehold(String householdBaseId) {
+	public <T> List<T> getMemberListByHousehold(String householdBaseId, String mhvId) {
 		Session session = sessionFactory.openSession();
 		List<T> aggregatedList = null;
 
 		try {
 			String hql = "select concat(first_name, ' ', lastName) as name, case when gender = 'M' then 'Male' else 'Female' end as gender," +
-					" concat(extract(year from age(now(), birth_date)), ' year(s) ', extract(month from age(now(), birth_date)), ' month(s)') as age, health_id, provider_id" +
-					" from core.\"viewJsonDataConversionOfClient\" where relationships_id = '"+householdBaseId+"' and entity_type != 'ec_household';";
+					" concat(extract(year from age(now(), birth_date)), ' year(s) ', extract(month from age(now(), birth_date)), ' month(s)') as age, health_id" +
+					" from core.\"viewJsonDataConversionOfClient\" where relationships_id = '"+householdBaseId+"' and entity_type != 'ec_household' and provider_id = '"+mhvId+"';";
 			Query query = session.createSQLQuery(hql);
 			aggregatedList = query.list();
 			logger.info("data fetched successfully from viewJsonDataConversionOfClient, data size: "+ aggregatedList.size());
@@ -939,7 +939,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<T> ccList = null;
 		try {
 			String hql = "select distinct(cc_name), provider_id, count(case when entity_type = 'ec_household' then 1 end) as household_count," +
-					" count(case when entity_type != 'ec_household' then 1 end) as population_count, count(case when gender='F' then 1 end) as female," +
+					" count(case when gender = 'M' or gender = 'F' then 1 end) as population_count, count(case when gender='F' then 1 end) as female," +
 					" count(case when gender = 'M' then 1 end) as male from core.\"viewJsonDataConversionOfClient\" where upazila = '"
 					+ searchBuilder.getUpazila() +"' and cc_name != '' group by cc_name, provider_id order by cc_name, provider_id;";
 			Query query = session.createSQLQuery(hql);

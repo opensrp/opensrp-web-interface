@@ -61,8 +61,8 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public <T> List<T> getMemberListByHousehold(String householdBaseId) {
-		return databaseRepositoryImpl.getMemberListByHousehold(householdBaseId);
+	public <T> List<T> getMemberListByHousehold(String householdBaseId, String mhvId) {
+		return databaseRepositoryImpl.getMemberListByHousehold(householdBaseId, mhvId);
 	}
 
 	@Override
