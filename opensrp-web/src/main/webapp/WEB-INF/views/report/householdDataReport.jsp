@@ -175,6 +175,7 @@
 							<thead>
 							<tr>
 								<th><spring:message code="lbl.cc"/></th>
+								<th><spring:message code="lbl.mhvID"/></th>
 								<th><spring:message code="lbl.householdCount"/></th>
 								<th><spring:message code="lbl.population"/></th>
 								<th><spring:message code="lbl.female"/></th>
@@ -185,13 +186,21 @@
 							<%
 								List<Object[]> ccList = (List<Object[]>) session.getAttribute("ccList");
 								for (int i = 0; i < ccList.size(); i++) {
+									String mhvUsername = (String) ccList.get(i)[1];
 							%>
 							<tr>
 								<td><%=ccList.get(i)[0]%></td>
-								<td><%=ccList.get(i)[1]%></td>
+								<td>
+									<a href="<c:url value="/report/individual-mhv-works.html">
+												<c:param name="mhvUsername" value="<%=mhvUsername%>"/>
+											 </c:url>">
+										<%=mhvUsername%>
+									</a>
+								</td>
 								<td><%=ccList.get(i)[2]%></td>
 								<td><%=ccList.get(i)[3]%></td>
 								<td><%=ccList.get(i)[4]%></td>
+								<td><%=ccList.get(i)[5]%></td>
 							</tr>
 							<%}%>
 							</tbody>

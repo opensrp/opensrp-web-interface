@@ -816,9 +816,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 		try {
 			String hql = "select vc1.household_code as household_id, concat(vc1.first_name, ' ', vc1.lastName) as full_name," +
-					" count(case when vc2.gender = 'M' or vc2.gender = 'F' then 1 end) as population_count," +
-					" count(case when vc2.gender = 'M' then 1 end) as male_count," +
-					" count(case when vc2.gender = 'F' then 1 end) as female_count, vc1.base_entity_id" +
+					" count(case when (vc2.gender = 'M' or vc2.gender = 'F') and vc1.provider_id = vc2.provider_id then 1 end) as population_count," +
+					" count(case when vc2.gender = 'M' and vc1.provider_id = vc2.provider_id then 1 end) as male_count," +
+					" count(case when vc2.gender = 'F' and vc1.provider_id = vc2.provider_id then 1 end) as female_count, vc1.base_entity_id" +
 					" from core.\"viewJsonDataConversionOfClient\" vc1" +
 					" left join core.\"viewJsonDataConversionOfClient\" vc2 on vc1.base_entity_id = vc2.relationships_id" +
 					" where vc1.provider_id = '"+ username +"' and vc1.entity_type = 'ec_household' " +
@@ -843,7 +843,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 		try {
 			String hql = "select concat(first_name, ' ', lastName) as name, case when gender = 'M' then 'Male' else 'Female' end as gender," +
-					" concat(extract(year from age(now(), birth_date)), ' year(s) ', extract(month from age(now(), birth_date)), ' month(s)') as age, health_id" +
+					" concat(extract(year from age(now(), birth_date)), ' year(s) ', extract(month from age(now(), birth_date)), ' month(s)') as age, health_id, provider_id" +
 					" from core.\"viewJsonDataConversionOfClient\" where relationships_id = '"+householdBaseId+"' and entity_type != 'ec_household';";
 			Query query = session.createSQLQuery(hql);
 			aggregatedList = query.list();
@@ -938,10 +938,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		List<T> ccList = null;
 		try {
-			String hql = "select distinct(cc_name), count(case when entity_type = 'ec_household' then 1 end) as household_count," +
+			String hql = "select distinct(cc_name), provider_id, count(case when entity_type = 'ec_household' then 1 end) as household_count," +
 					" count(case when entity_type != 'ec_household' then 1 end) as population_count, count(case when gender='F' then 1 end) as female," +
 					" count(case when gender = 'M' then 1 end) as male from core.\"viewJsonDataConversionOfClient\" where upazila = '"
-					+ searchBuilder.getUpazila() +"' and cc_name != '' group by cc_name order by cc_name;";
+					+ searchBuilder.getUpazila() +"' and cc_name != '' group by cc_name, provider_id order by cc_name, provider_id;";
 			Query query = session.createSQLQuery(hql);
 			ccList = query.list();
 		} catch (Exception e) {
