@@ -45,6 +45,7 @@
 	boolean PERM_UPLOAD_FORM = AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_FORM");
 	boolean PERM_READ_AGGREGATED_REPORT = AuthenticationManagerUtil.isPermitted("PERM_READ_AGGREGATED_REPORT");
 	boolean MEMBER_APPROVAL = AuthenticationManagerUtil.isPermitted("MEMBER_APPROVAL");
+	boolean PERM_READ_BRANCH_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_BRANCH_LIST");
 %>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
 	 id="mainNav">
@@ -256,6 +257,12 @@
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="<c:url value="/role.html?lang=${locale}"/>"> <strong>
 						<spring:message code="lbl.manageRole"/></strong>
+					</a>
+					<% } %>
+					<% if(PERM_READ_BRANCH_LIST){ %>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/branch-list.html?lang=${locale}"/>"> <strong>
+						<spring:message code="lbl.manageBranch"/></strong>
 					</a>
 					<% } %>
 				</div></li>

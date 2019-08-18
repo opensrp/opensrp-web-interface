@@ -1,9 +1,7 @@
 package org.opensrp.web.rest.controller;
 
 import com.google.gson.Gson;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.core.dto.FacilityWorkerDTO;
 import org.opensrp.core.entity.Reviews;
 import org.opensrp.core.service.ClientService;
 import org.opensrp.core.service.ReviewsService;

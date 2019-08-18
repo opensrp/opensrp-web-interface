@@ -94,6 +94,10 @@ public class User implements UserDetails {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", schema = "core", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	private Set<Role> roles = new HashSet<Role>();
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_branch", schema = "core", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "branch_id")})
+	private Set<Branch> branches = new HashSet<>();
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "creator", referencedColumnName = "id")
@@ -284,7 +288,15 @@ public class User implements UserDetails {
 	public void setChcp(String chcp) {
 		this.chcp = chcp;
 	}
-	
+
+	public Set<Branch> getBranches() {
+		return branches;
+	}
+
+	public void setBranches(Set<Branch> branches) {
+		this.branches = branches;
+	}
+
 	@Transient
 	public Set<Permission> getPermissions() {
 		Set<Permission> perms = new HashSet<Permission>();
@@ -322,6 +334,7 @@ public class User implements UserDetails {
 		result = prime * result + (provider ? 1231 : 1237);
 		result = prime * result + ((retypePassword == null) ? 0 : retypePassword.hashCode());
 		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
+		result = prime * result + ((branches == null) ? 0 : branches.hashCode());
 		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
@@ -411,6 +424,11 @@ public class User implements UserDetails {
 				return false;
 		} else if (!roles.equals(other.roles))
 			return false;
+		if (branches == null) {
+			if (other.branches != null)
+				return false;
+		} else if (!branches.equals(other.branches))
+			return false;
 		if (updated == null) {
 			if (other.updated != null)
 				return false;
@@ -432,7 +450,7 @@ public class User implements UserDetails {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", uuid=" + uuid + ", firstName=" + firstName + ", lastName="
-		        + lastName + ", email=" + email + ", password=" + password + ", retypePassword=" + retypePassword
+		        + lastName + ", email=" + email + ", password=" + password + ", retypePassword=" + retypePassword + ", branches=" + branches
 		        + ", enabled=" + enabled + ", created=" + created + ", updated=" + updated + ", roles=" + roles
 		        + ", creator=" + creator + ", gender=" + gender + ", mobile=" + mobile + ", idetifier=" + idetifier
 		        + ", provider=" + provider + ", personUUid=" + personUUid + ", parentUser=" + parentUser + ", chcp=" + chcp

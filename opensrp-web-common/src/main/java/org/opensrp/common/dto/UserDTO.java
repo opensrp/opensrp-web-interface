@@ -19,6 +19,8 @@ public class UserDTO {
 	private String password;
 	
 	private String roles;
+
+	private String branches;
 	
 	private int parentUser;
 	
@@ -123,7 +125,15 @@ public class UserDTO {
 	public void setParentUser(int parentUser) {
 		this.parentUser = parentUser;
 	}
-	
+
+	public String getBranches() {
+		return branches;
+	}
+
+	public void setBranches(String branches) {
+		this.branches = branches;
+	}
+
 	@Override
 	public String toString() {
 		return "UserDTO [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", mobile=" + mobile

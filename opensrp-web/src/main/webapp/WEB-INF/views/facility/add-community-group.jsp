@@ -71,7 +71,7 @@ String selectedPersonName = "";
 		</li> 	
 		<%} %>	
 		
-		<% if(AuthenticationManagerUtil.isPermitted("CRAETE_MULTIPURPOSE_VOLUNTEER")){ %>
+		<% if(AuthenticationManagerUtil.isPermitted("CREATE_MULTIPURPOSE_VOLUNTEER")){ %>
 			<li class="breadcrumb-item">
 			<a  href="<c:url value="/facility/mhv/${facility.id}/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.createMHV"/></strong> </a>	
 			</li> 	
