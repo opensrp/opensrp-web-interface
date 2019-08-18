@@ -20,13 +20,7 @@ import org.json.JSONObject;
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.core.dto.WorkerIdDTO;
-import org.opensrp.core.entity.Facility;
-import org.opensrp.core.entity.FacilityWorker;
-import org.opensrp.core.entity.FacilityWorkerType;
-import org.opensrp.core.entity.Role;
-import org.opensrp.core.entity.Team;
-import org.opensrp.core.entity.TeamMember;
-import org.opensrp.core.entity.User;
+import org.opensrp.core.entity.*;
 import org.opensrp.core.openmrs.service.OpenMRSServiceFactory;
 import org.opensrp.core.openmrs.service.impl.OpenMRSUserAPIService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,6 +166,18 @@ public class UserService {
 			}
 		}
 		return roles;
+	}
+
+	@Transactional
+	public Set<Branch> setBranches(String[] selectedBranches) {
+		Set<Branch> branches = new HashSet<>();
+		if (selectedBranches != null) {
+			for (String branchId : selectedBranches) {
+				Branch branch = repository.findById(Integer.parseInt(branchId), "id", Branch.class);
+				branches.add(branch);
+			}
+		}
+		return branches;
 	}
 	
 	public boolean isPasswordMatched(User account) {

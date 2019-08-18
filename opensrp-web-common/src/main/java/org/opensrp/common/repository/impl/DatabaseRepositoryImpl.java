@@ -232,7 +232,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 				criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
 			}
 			result = criteria.list();
-			logger.info("\nresult---------------->"+ result.size());
 		} catch (Exception e) {
 			logger.error(e);
 		} finally {

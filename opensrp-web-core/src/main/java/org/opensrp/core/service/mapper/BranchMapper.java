@@ -13,6 +13,7 @@ public class BranchMapper {
      */
     public Branch map(BranchDTO branchDTO) {
         Branch branch = new Branch();
+        if (branchDTO.getId() != 0) branch.setId(branchDTO.getId());
         branch.setCode(branchDTO.getCode());
         branch.setName(branchDTO.getName());
         return branch;
@@ -25,6 +26,7 @@ public class BranchMapper {
      */
     public BranchDTO map(Branch branch) {
         BranchDTO branchDTO = new BranchDTO();
+        branchDTO.setId(branch.getId());
         branchDTO.setCode(branch.getCode());
         branchDTO.setName(branch.getName());
         return branchDTO;

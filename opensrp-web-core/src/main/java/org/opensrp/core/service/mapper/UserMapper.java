@@ -15,6 +15,7 @@ public class UserMapper {
     public User map(UserDTO userDTO) {
         User user = new User();
         String[] roles = userDTO.getRoles().split(",");
+        String[] branches = userDTO.getBranches().split(",");
 
         user.setFirstName(userDTO.getFirstName());
         user.setGender("");
@@ -31,6 +32,7 @@ public class UserMapper {
         user.setRoles(userService.setRoles(roles));
         User parentUser = userService.findById(userDTO.getParentUser(), "id", User.class);
         user.setParentUser(parentUser);
+        user.setBranches(userService.setBranches(branches));
 
         return user;
     }

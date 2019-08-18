@@ -45,6 +45,7 @@
 				<value>org.opensrp.core.entity.FacilityWorkerType</value>
 				<value>org.opensrp.core.entity.Chcp</value>
 				<value>org.opensrp.core.entity.Reviews</value>
+				<value>org.opensrp.core.entity.Branch</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

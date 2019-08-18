@@ -22,7 +22,7 @@ public class BranchRestController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseEntity<String> saveBranch(@RequestBody BranchDTO branchDTO) {
 
-        System.out.println("BRANCH SAVE");
+        System.out.println(branchDTO);
 
         String msg = "";
         try {
@@ -37,7 +37,7 @@ public class BranchRestController {
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<String> updateBranch(@RequestBody BranchDTO branchDTO) {
 
-        System.out.println("BRANCH SAVE");
+        System.out.println("BRANCH UPDATE");
 
         String msg = "";
         try {

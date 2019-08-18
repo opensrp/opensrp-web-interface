@@ -16,19 +16,8 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
-import org.opensrp.core.entity.FacilityWorker;
-import org.opensrp.core.entity.Location;
-import org.opensrp.core.entity.Permission;
-import org.opensrp.core.entity.TeamMember;
-import org.opensrp.core.entity.User;
-import org.opensrp.core.service.EmailService;
-import org.opensrp.core.service.FacilityWorkerService;
-import org.opensrp.core.service.LocationService;
-import org.opensrp.core.service.RoleService;
-import org.opensrp.core.service.TeamMemberService;
-import org.opensrp.core.service.UserService;
-import org.opensrp.core.entity.Facility;
-import org.opensrp.core.service.FacilityService;
+import org.opensrp.core.entity.*;
+import org.opensrp.core.service.*;
 import org.opensrp.core.util.FacilityHelperUtil;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,6 +99,9 @@ public class UserController {
 	
 	@Autowired
 	private FacilityHelperUtil facilityHelperUtil;
+
+	@Autowired
+	private BranchService branchService;
 	
 	/**
 	 * <p>
@@ -152,10 +144,12 @@ public class UserController {
 		int[] selectedRoles = null;
 		model.addAttribute("account", new User());
 		userServiceImpl.setRolesAttributes(selectedRoles, session);
+		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("locale", locale);
 		
 		//for adding location and team
 		model.addAttribute("teamMember", new TeamMember());
+		model.addAttribute("branches", branches);
 		String personName = "";
 		session.setAttribute("locationList", locationServiceImpl.list().toString());
 		int[] locations = new int[0];
@@ -164,7 +158,7 @@ public class UserController {
 		return new ModelAndView("user/add", "command", account);
 	}
 	
-	@PostAuthorize("hasPermission(returnObject, 'CRAETE_MULTIPURPOSE_VOLUNTEER')")
+	@PostAuthorize("hasPermission(returnObject, 'CREATE_MULTIPURPOSE_VOLUNTEER')")
 	@RequestMapping(value = "/facility/mhv/{id}/add.html", method = RequestMethod.GET)
 	public ModelAndView saveUserAsCC(Model model, HttpSession session, @PathVariable("id") int id, Locale locale)
 	    throws JSONException {
