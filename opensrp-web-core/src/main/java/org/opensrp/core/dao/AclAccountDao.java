@@ -79,7 +79,7 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 						logger.info("\nCCInfo : "+ ccInfo.toString()+"\n");
 						if(ccInfo != null){
 							//save cc & team
-							Facility facility =facilityHelperUtil.saveCCFromJSONObject(ccInfo);
+							Facility facility = facilityHelperUtil.saveCCFromJSONObject(ccInfo);
 							if(facility!= null){
 								//save chcp & teamMember
 								User createdUser = userServiceImpl.setUserInfoFromJSONObject(usernameStr, ccInfo,
