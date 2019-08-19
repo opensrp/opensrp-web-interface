@@ -188,13 +188,11 @@ public class PaginationHelperUtil {
 		if (request.getParameterMap().containsKey("start")) {
 			start_date = (String) request.getParameter("start");
 			if (start_date.length() > 0) start_date += "T00:00:00.000+06:00";
-			System.out.println("start date:-> " + start_date);
 		}
 
 		if (request.getParameterMap().containsKey("end")) {
 			end_date = (String) request.getParameter("end");
 			if (end_date.length() > 0) end_date += "T23:59:59.999+06:00";
-			System.out.println("end date:-> "+ end_date);
 		}
 
 		if (request.getParameterMap().containsKey("memberType")) {

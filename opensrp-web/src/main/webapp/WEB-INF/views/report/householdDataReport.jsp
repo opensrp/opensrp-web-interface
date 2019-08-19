@@ -36,6 +36,7 @@
 
 	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
 	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
+	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
 </head>
 
 
@@ -213,6 +214,7 @@
 <script src="<c:url value='/resources/js/datepicker.js' />"></script>
 <script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>
 <script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
+<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
 <script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
 <script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
 <script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
@@ -222,25 +224,27 @@
 <script>
 	$(document).ready(function() {
 		$('#formWiseAggregatedListTable').DataTable({
-			bFilter: false,
-			bInfo: false,
+			bFilter: true,
+			bInfo: true,
 			dom: 'Bfrtip',
 			destroy: true,
 			buttons: [
-				'csv', 'excel', 'pdf'
-			]
+				'pageLength', 'csv', 'excel', 'pdf'
+			],
+			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
 		});
 	});
 
 	$(document).ready(function() {
 		$('#ccListTable').DataTable({
-			bFilter: false,
-			bInfo: false,
+			bFilter: true,
+			bInfo: true,
 			dom: 'Bfrtip',
 			destroy: true,
 			buttons: [
-				'csv', 'excel', 'pdf'
-			]
+				'pageLength', 'csv', 'excel', 'pdf'
+			],
+			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
 		});
 	});
 </script>

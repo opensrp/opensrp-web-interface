@@ -93,7 +93,7 @@ SELECT DISTINCT c.id as id,
                 c.json->'attributes'->>'spouseNameBangla' AS spouse_name_bangla,
                 c.json -> 'attributes' ->>'fathernameBangla' AS father_name_bangla,
                 c.json -> 'attributes'::text ->> 'motherNameBangla'::text AS mother_name_bangla,
-                c.json -> 'attributes'::text ->> 'givenNameLocal'::text AS name_bangla
+                c.json -> 'attributes'::text ->> 'givenNameLocal'::text AS name_bangla,
 FROM core.client c JOIN core.event e ON c.json->'baseEntityId' = e.json->'baseEntityId'
 WHERE e.json->>'eventType' LIKE '%Registration%' WITH DATA;
 

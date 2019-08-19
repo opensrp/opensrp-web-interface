@@ -232,7 +232,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 				criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
 			}
 			result = criteria.list();
-			logger.info("\nresult---------------->"+ result.size());
 		} catch (Exception e) {
 			logger.error(e);
 		} finally {
@@ -815,14 +814,14 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<T> viewData = null;
 
 		try {
-			String hql = "select vc1.household_code as household_id, concat(vc1.first_name, ' ', vc1.lastName) as full_name," +
+			String hql = "select vc1.health_id as household_id, concat(vc1.first_name, ' ', vc1.lastName) as full_name," +
 					" count(case when (vc2.gender = 'M' or vc2.gender = 'F') and vc1.provider_id = vc2.provider_id then 1 end) as population_count," +
 					" count(case when vc2.gender = 'M' and vc1.provider_id = vc2.provider_id then 1 end) as male_count," +
 					" count(case when vc2.gender = 'F' and vc1.provider_id = vc2.provider_id then 1 end) as female_count, vc1.base_entity_id" +
 					" from core.\"viewJsonDataConversionOfClient\" vc1" +
 					" left join core.\"viewJsonDataConversionOfClient\" vc2 on vc1.base_entity_id = vc2.relationships_id" +
 					" where vc1.provider_id = '"+ username +"' and vc1.entity_type = 'ec_household' " +
-					"group by vc1.first_name, vc1.lastName, vc1.household_code, vc1.base_entity_id;";
+					"group by vc1.first_name, vc1.lastName, vc1.health_id, vc1.base_entity_id;";
 			Query query = session.createSQLQuery(hql);
 			viewData = query.list();
 			logger.info("data fetched successfully from " + "viewJsonDataConversionOfClient" + ", data size: " + viewData.size());

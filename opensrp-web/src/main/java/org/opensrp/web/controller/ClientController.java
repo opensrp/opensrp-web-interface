@@ -219,8 +219,6 @@ public class ClientController {
 							   @RequestParam("baseEntityId") String baseEntityId) {
 
 		Object[] member = databaseServiceImpl.getMemberByBaseEntityId(baseEntityId);
-		System.out.println(member[9]);
-		System.out.println(member[13]);
 		session.setAttribute("member", member);
 		return "client/household-member";
 	}

@@ -1,9 +1,4 @@
 <%@page import="java.util.List"%>
-<%@page import="java.util.Map"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.Iterator"%>
-<%@page import="java.math.RoundingMode"%>
-<%@page import="java.text.DecimalFormat"%>
 <%@ page import="org.opensrp.core.entity.User" %>
 <%@ page import="org.opensrp.core.entity.Facility" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -43,6 +38,8 @@
 
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
+
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -142,16 +139,18 @@
 <script src="<c:url value='/resources/js/jszip.js' />"></script>
 <script src="<c:url value='/resources/js/pdfmake.js' />"></script>
 <script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>
+<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
 <script>
     $(document).ready(function() {
         $('#householdListTable').DataTable({
-            bFilter: false,
-            bInfo: false,
+            bFilter: true,
+            bInfo: true,
             dom: 'Bfrtip',
             destroy: true,
             buttons: [
-                'csv', 'excel', 'pdf'
-            ]
+                'pageLength', 'csv', 'excel', 'pdf'
+            ],
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
     });
 </script>

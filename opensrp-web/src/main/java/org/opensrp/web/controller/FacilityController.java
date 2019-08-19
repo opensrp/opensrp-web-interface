@@ -157,7 +157,6 @@ public class FacilityController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY_WORKER')")
 	@RequestMapping(value = "/facility/{workerId}/editWorker.html", method = RequestMethod.GET)
 	public String editWorker(ModelMap model, HttpSession session, Locale locale, @PathVariable("workerId") int workerId) {
-        System.out.println("Worker ID:-> "+ workerId);
 	    facilityWorkerService.setWorkerToEditToSession(session, workerId);
 		model.addAttribute("locale", locale);
 		return "facility/edit-worker";
