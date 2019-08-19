@@ -578,5 +578,16 @@ public class UserController {
 		session.setAttribute("searchedUsers", users);
 		return "user/search";
 	}
+
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_USER')")
+	@RequestMapping(value = "/user/{id}/catchment-area.html", method = RequestMethod.GET)
+	public String catchmentArea(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) throws JSONException {
+		model.addAttribute("locale", locale);
+		String parentIndication = "#";
+		String parentKey = "parent";
+		JSONArray data = locationServiceImpl.getLocationDataAsJson(parentIndication, parentKey);
+		session.setAttribute("locationTreeData", data);
+		return "user/catchment-area";
+	}
 	
 }
