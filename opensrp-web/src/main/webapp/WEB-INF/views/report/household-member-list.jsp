@@ -38,9 +38,8 @@
     <title>Form Wise Report Status</title>
 
     <jsp:include page="/WEB-INF/views/css.jsp" />
-    <link type="text/css"
-          href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/>"
-          rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -74,7 +73,7 @@
                                 List<Object[]> memberList = (List<Object[]>) session.getAttribute("memberList");
                                 for (int i = 0; i < memberList.size(); i++) {
                                     String healthId = (String) memberList.get(i)[3];
-                                    %>
+                            %>
                             <tr>
                                 <td><%=memberList.get(i)[3]%></td>
                                 <td><%=memberList.get(i)[0]%></td>
@@ -93,28 +92,29 @@
     </div>
     <jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
-</body>
-<script src="<c:url value='/resources/js/jquery-1.12.4.js' />"></script>
-<script src="<c:url value='/resources/js/jquery.dataTables.min.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
+<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script src="<c:url value='/resources/js/datepicker.js' />"></script>
 <script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>
-<script src="<c:url value='/resources/js/jquery.tabletoCSV.js' />"></script>
-<script src="<c:url value='/resources/js/jquery.tabletoPDF.js' />"></script>
+<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
+<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
+<script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
+<script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
+<script src="<c:url value='/resources/js/jszip.js' />"></script>
+<script src="<c:url value='/resources/js/pdfmake.js' />"></script>
+<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>
 <script>
     $(document).ready(function() {
         $('#householdMemberListTable').DataTable({
-            "paginate" : true
+            bFilter: false,
+            bInfo: false,
+            dom: 'Bfrtip',
+            destroy: true,
+            buttons: [
+                'csv', 'excel', 'pdf'
+            ]
         });
     });
-
-    $("#exportcsv").click(function() {
-        $("table").tableToCSV();
-    });
-
-    $("#exportpdf").click(function() {
-        $("table").tableToPDF();
-    });
 </script>
+</body>
 </html>
