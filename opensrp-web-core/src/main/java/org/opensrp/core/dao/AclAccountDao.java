@@ -62,35 +62,6 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 				usernameStr = username;
 			}
 			account = getByUsername(usernameStr);
-			if(account!= null){
-				logger.info("\nUsername:" + account.toString()+"\n");
-			}else{
-				//api call
-				String accessToken= null;
-				String facilityId= null;
-				JSONObject ccInfo= null;
-			    accessToken = getAccessToken(usernameStr, passwordStr);
-				logger.info("\nAccessToken : "+ accessToken+"\n");
-				if(accessToken != null && !accessToken.isEmpty()){
-					facilityId = getFacilityId(accessToken);
-					logger.info("\nFacilityId : "+ facilityId+"\n");
-					if(facilityId != null && !facilityId.isEmpty()){
-						ccInfo = getCCInfo(facilityId);
-						logger.info("\nCCInfo : "+ ccInfo.toString()+"\n");
-						if(ccInfo != null){
-							//save cc & team
-							Facility facility = facilityHelperUtil.saveCCFromJSONObject(ccInfo);
-							if(facility!= null){
-								//save chcp & teamMember
-								User createdUser = userServiceImpl.setUserInfoFromJSONObject(usernameStr, ccInfo,
-										passwordStr, facility);
-								account = createdUser;
-							}
-						}
-					}
-				}
-				//end: api call
-			}
 		}
 		catch (Exception e) {
 			logger.error("account null: " + e);
