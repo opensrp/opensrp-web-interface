@@ -32,7 +32,7 @@ public interface DatabaseService {
 
 	public <T> List<T> getUpazilaList();
 
-	public <T> List<T> getCCListByUpazila(SearchBuilder searchBuilder);
+	public List<ReportDTO> getCCListByUpazila(SearchBuilder searchBuilder);
 
 	public List<ReportDTO> getMHVListFilterWise(SearchBuilder searchBuilder);
 }

@@ -103,7 +103,7 @@ public class MarkerServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public <T> List<T> getCCListByUpazila(SearchBuilder searchBuilder) {
+	public List<ReportDTO> getCCListByUpazila(SearchBuilder searchBuilder) {
 		return null;
 	}
 

@@ -56,7 +56,6 @@
 				<spring:message code="lbl.mhvWiseReportStatus"/>
 				<%}%>
 			</div>
-			<%if (!AuthenticationManagerUtil.isUHFPO()){%>
 			<div class="card-body">
 				<!-- Icon Cards-->
 				<div class="row">
@@ -112,20 +111,9 @@
 							</div>
 						</div>
 					</div>
-					<!-- <div class="col-xl-4 col-sm-6 mb-4">
-                        <div class="card text-white o-hidden h-100 bg-primary">
-                            <div class="card-body">
-                                <div class="card-body-icon">  -->
-					<!-- <i class="fa fa-fw fa-female"></i>  -->
-					<!-- </div>
-                    <div class="mr-5">
-                        <h5>Other Percentage</h5>
-                    </div>
-                </div>
-            </div>
-        </div>  -->
 				</div>
 
+				<%if (!AuthenticationManagerUtil.isUHFPO()){%>
 				<div class="row">
 					<div class="col-sm-12" id="content">
 						<table class="display" id="formWiseAggregatedListTable"
@@ -133,6 +121,7 @@
 							<thead>
 							<tr>
 								<th><spring:message code="lbl.provider"/></th>
+								<th><spring:message code="lbl.mhvPhone"/></th>
 								<th><spring:message code="lbl.householdCount"/></th>
 								<th><spring:message code="lbl.population"/></th>
 								<th><spring:message code="lbl.femalePercentage"/></th>
@@ -151,6 +140,7 @@
 										<%=report.getMhv()%>
 									</a>
 								</td>
+								<td><%=report.getPhone()%></td>
 								<td><%=report.getHousehold()%></td>
 								<td><%=report.getPopulation()%></td>
 								<td><%=report.getFemalePercentage()%></td>
@@ -161,48 +151,50 @@
 						</table>
 					</div>
 				</div>
-			</div>
-			<%} else {%>
-			<div class="row" style="margin-top: 30px;">
-				<div class="col-sm-12" style="padding: 30px;">
-					<table class="display" id="ccListTable"
-						   style="width: 100%;">
-						<thead>
-						<tr>
-							<th><spring:message code="lbl.cc"/></th>
-							<th><spring:message code="lbl.mhvID"/></th>
-							<th><spring:message code="lbl.householdCount"/></th>
-							<th><spring:message code="lbl.population"/></th>
-							<th><spring:message code="lbl.female"/></th>
-							<th><spring:message code="lbl.male"/></th>
-						</tr>
-						</thead>
-						<tbody>
-						<%
-							List<Object[]> ccList = (List<Object[]>) session.getAttribute("ccList");
-							for (int i = 0; i < ccList.size(); i++) {
-								String mhvUsername = (String) ccList.get(i)[1];
-						%>
-						<tr>
-							<td><%=ccList.get(i)[0]%></td>
-							<td>
-								<a href="<c:url value="/report/individual-mhv-works.html">
+				<%} else {%>
+				<div class="row" style="margin-top: 30px;">
+					<div class="col-sm-12" style="padding: 30px;">
+						<table class="display" id="ccListTable"
+							   style="width: 100%;">
+							<thead>
+							<tr>
+								<th><spring:message code="lbl.cc"/></th>
+								<th><spring:message code="lbl.mhvID"/></th>
+								<th><spring:message code="lbl.mhvPhone"/></th>
+								<th><spring:message code="lbl.householdCount"/></th>
+								<th><spring:message code="lbl.population"/></th>
+								<th><spring:message code="lbl.female"/></th>
+								<th><spring:message code="lbl.male"/></th>
+							</tr>
+							</thead>
+							<tbody>
+							<%
+								List<ReportDTO> ccList = (List<ReportDTO>) session.getAttribute("ccList");
+								for (ReportDTO cc: ccList) {
+									String mhvUsername = (String) cc.getMhv();
+							%>
+							<tr>
+								<td><%=cc.getCc()%></td>
+								<td>
+									<a href="<c:url value="/report/individual-mhv-works.html">
 												<c:param name="mhvUsername" value="<%=mhvUsername%>"/>
 											 </c:url>">
-									<%=mhvUsername%>
-								</a>
-							</td>
-							<td><%=ccList.get(i)[2]%></td>
-							<td><%=ccList.get(i)[3]%></td>
-							<td><%=ccList.get(i)[4]%></td>
-							<td><%=ccList.get(i)[5]%></td>
-						</tr>
-						<%}%>
-						</tbody>
-					</table>
+										<%=mhvUsername%>
+									</a>
+								</td>
+								<td><%=cc.getPhone()%></td>
+								<td><%=cc.getHousehold()%></td>
+								<td><%=cc.getPopulation()%></td>
+								<td><%=cc.getFemale()%></td>
+								<td><%=cc.getMale()%></td>
+							</tr>
+							<%}%>
+							</tbody>
+						</table>
+					</div>
 				</div>
+				<%}%>
 			</div>
-			<%}%>
 			<div class="card-footer small text-muted"></div>
 		</div>
 	</div>

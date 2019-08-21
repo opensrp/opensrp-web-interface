@@ -109,12 +109,14 @@ public class ReportController {
 		}
 		searchBuilder = paginationHelperUtil.setParams(request, session);
 		searchUtil.setDivisionAttribute(session);
-		if (AuthenticationManagerUtil.isUHFPO()) {
-			List<Object[]> ccList = databaseServiceImpl.getCCListByUpazila(searchBuilder);
-			session.setAttribute("ccList", ccList);
-		}
+
 		List<ReportDTO> reports = databaseServiceImpl.getMHVListFilterWise(searchBuilder);
 		session.setAttribute("formWiseAggregatedList", reports);
+
+		if (AuthenticationManagerUtil.isUHFPO()) {
+			reports = databaseServiceImpl.getCCListByUpazila(searchBuilder);
+			session.setAttribute("ccList", reports);
+		}
 
 		int totalHousehold = 0, totalPopulation = 0, totalMale = 0, totalFemale = 0;
 		String malePercentage;

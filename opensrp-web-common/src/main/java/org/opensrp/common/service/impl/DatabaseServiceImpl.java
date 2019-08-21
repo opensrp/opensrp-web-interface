@@ -86,7 +86,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public <T> List<T> getCCListByUpazila(SearchBuilder searchBuilder) {
+	public List<ReportDTO> getCCListByUpazila(SearchBuilder searchBuilder) {
 		return databaseRepositoryImpl.getCCListByUpazila(searchBuilder);
 	}
 

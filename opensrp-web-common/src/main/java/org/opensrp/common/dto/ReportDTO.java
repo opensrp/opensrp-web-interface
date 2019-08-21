@@ -8,17 +8,27 @@ import java.text.DecimalFormat;
 
 public class ReportDTO {
 
-    @Column(name = "mhv_name")
-    String mhv;
+    private String cc;
 
-    @Column(name = "household_count")
-    int household;
+    private String mhv;
 
-    int population;
+    private String phone;
 
-    int female;
+    private int household;
 
-    int male;
+    private int population;
+
+    private int female;
+
+    private int male;
+
+    public String getCc() {
+        return cc;
+    }
+
+    public void setCc(String cc) {
+        this.cc = cc;
+    }
 
     public String getMhv() {
         return mhv;
@@ -26,6 +36,14 @@ public class ReportDTO {
 
     public void setMhv(String mhv) {
         this.mhv = mhv;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public int getHousehold() {

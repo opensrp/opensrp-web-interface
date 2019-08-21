@@ -126,7 +126,7 @@ public interface DatabaseRepository {
 
 	public <T> List<T> getUpazilaList();
 
-	public <T> List<T> getCCListByUpazila(SearchBuilder searchBuilder);
+	public  List<ReportDTO> getCCListByUpazila(SearchBuilder searchBuilder);
 
 	public List<ReportDTO> getMHVListFilterWise(String filterString);
 

@@ -933,15 +933,23 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public <T> List<T> getCCListByUpazila(SearchBuilder searchBuilder) {
+	public List<ReportDTO> getCCListByUpazila(SearchBuilder searchBuilder) {
 		Session session = sessionFactory.openSession();
-		List<T> ccList = null;
+		List<ReportDTO> ccList = null;
 		try {
-			String hql = "select distinct(cc_name), provider_id, count(case when entity_type = 'ec_household' then 1 end) as household_count," +
-					" count(case when gender = 'M' or gender = 'F' then 1 end) as population_count, count(case when gender='F' then 1 end) as female," +
+			String hql = "select *, (select mobile from core.users where username = mhv) as phone from (select distinct(cc_name) as cc, provider_id as mhv, (select mobile from core.users where username = provider_id) as phone, count(case when entity_type = 'ec_household' then 1 end) as household," +
+					" count(case when gender = 'M' or gender = 'F' then 1 end) as population, count(case when gender='F' then 1 end) as female," +
 					" count(case when gender = 'M' then 1 end) as male from core.\"viewJsonDataConversionOfClient\" where upazila = '"
-					+ searchBuilder.getUpazila() +"' and cc_name != '' group by cc_name, provider_id order by cc_name, provider_id;";
-			Query query = session.createSQLQuery(hql);
+					+ searchBuilder.getUpazila() +"' and cc_name != '' group by cc_name, provider_id order by cc_name, provider_id) temp;";
+			Query query = session.createSQLQuery(hql)
+					.addScalar("cc", StandardBasicTypes.STRING)
+					.addScalar("mhv", StandardBasicTypes.STRING)
+					.addScalar("household", StandardBasicTypes.INTEGER)
+					.addScalar("population", StandardBasicTypes.INTEGER)
+					.addScalar("female", StandardBasicTypes.INTEGER)
+					.addScalar("male", StandardBasicTypes.INTEGER)
+					.addScalar("phone", StandardBasicTypes.STRING)
+					.setResultTransformer(Transformers.aliasToBean(ReportDTO.class));
 			ccList = query.list();
 		} catch (Exception e) {
 			logger.error(e);
@@ -956,16 +964,17 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		List<ReportDTO> mhvList = null;
 		try {
-			String hql = "select distinct(provider_id) as mhv, count(case when entity_type = 'ec_household' then 1 end) as household," +
+			String hql = "select *, (select mobile from core.users where username = mhv) as phone from(select distinct(provider_id) as mhv, count(case when entity_type = 'ec_household' then 1 end) as household," +
 					" count(case when entity_type != 'ec_household' then 1 end) as population, count(case when gender='F' then 1 end) as female," +
 					" count(case when gender = 'M' then 1 end) as male from core.\"viewJsonDataConversionOfClient\" "+
-					filterString +" group by provider_id order by provider_id;";
+					filterString +" group by provider_id order by provider_id) temp;";
 			Query query = session.createSQLQuery(hql)
 					.addScalar("mhv", StandardBasicTypes.STRING)
 					.addScalar("household", StandardBasicTypes.INTEGER)
 					.addScalar("population", StandardBasicTypes.INTEGER)
 					.addScalar("female", StandardBasicTypes.INTEGER)
 					.addScalar("male", StandardBasicTypes.INTEGER)
+					.addScalar("phone", StandardBasicTypes.STRING)
 					.setResultTransformer(Transformers.aliasToBean(ReportDTO.class));
 			mhvList = query.list();
 		} catch (Exception e) {
