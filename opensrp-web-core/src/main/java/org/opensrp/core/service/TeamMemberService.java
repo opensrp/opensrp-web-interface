@@ -186,9 +186,9 @@ public class TeamMemberService {
 		Map<Integer, String> teams = teamServiceImpl.getTeamListAsMap();
 		
 		if (teamMember.getTeam() != null) {
-			session.setAttribute("selectetTeamId", teamMember.getTeam().getId());
+			session.setAttribute("selectedTeamId", teamMember.getTeam().getId());
 		} else {
-			session.setAttribute("selectetTeamId", 0);
+			session.setAttribute("selectedTeamId", 0);
 		}
 		session.setAttribute("teams", teams);
 		User person = teamMember.getPerson();

@@ -27,7 +27,7 @@
 <body class="bg-login">
 
    <div class="col-12" style="text-align:center">
-	   <img   alt="" src="<c:url value="/resources/img/logo.png"/>">
+<%--	   <img   alt="" src="<c:url value="/resources/img/logo.png"/>">--%>
 	</div>
 
 
@@ -62,7 +62,7 @@
           </div> -->
           
           <input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
-          <input type="submit" class="btn btn-primary btn-block" onclick="concatPasswordWithUsername()"  value="Log in">
+          <input type="submit" class="btn btn-primary btn-block" value="Log in">
           
         </form>
         

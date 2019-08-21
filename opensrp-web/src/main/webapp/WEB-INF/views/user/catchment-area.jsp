@@ -17,6 +17,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link type="text/css" href="<c:url value="/resources/css/jtree.min.css"/>" rel="stylesheet">
+    <link type="text/css" href="<c:url value="/resources/css/multi-select.css"/>" rel="stylesheet">
     <title><spring:message code="lbl.viewLocationsHierarchy"/> </title>
     <%@page import="org.json.JSONObject" %>
     <%@page import="org.json.JSONArray" %>
@@ -40,8 +41,24 @@
                 <spring:message code="lbl.viewLocationsHierarchy"/>
             </div>
             <div class="card-body">
-                <div id="locationTreee">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div id="locationTree">
 
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <select id='locations' multiple='multiple'>
+                        </select>
+                    </div>
+                    <div class="col-sm-1">
+                        <button
+                                class="btn btn-primary btn-sm"
+                                style="position: absolute; top: 50%;
+                                transform: translateY(-50%);">
+                            Save
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="card-footer small text-muted"></div>
@@ -52,13 +69,11 @@
     <jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
 <script src="<c:url value='/resources/js/jstree.min.js'/>"></script>
-
-</body>
-
+<script src="<c:url value='/resources/js/jquery.multi-select.js'/>"></script>
 <script type="text/javascript">
     $(document).ready(function () {
 
-        $('#locationTreee').jstree({
+        $('#locationTree').jstree({
             'core' : {
                 'data' : <%=locationTreeData %>
             },
@@ -66,11 +81,36 @@
                 'keep_selected_style' : false
             },
             'plugins': [
-                'checkbox'
+                'sort', 'wholerow'
             ]
         });
 
+        $('#locations').multiSelect();
+
+        $('#locationTree').on('changed.jstree', function (e, data) {
+            $('#locations option').remove();
+            $('#locations').multiSelect('refresh');
+            var i, j, r = [], z = [];
+            var id = data.selected[0];
+            r = data.instance.get_node(id).children;
+
+            for (i = 0; i < r.length; i++) {
+                z.push({
+                    name: data.instance.get_node(r[i]).text,
+                    id: data.instance.get_node(r[i]).id,
+                });
+            }
+            for (i = 0; i < z.length; i++) {
+                console.log(data.instance.get_node(z[i].id).icon);
+                $('#locations').multiSelect('addOption', {
+                    value: z[i].id,
+                    text: z[i].name,
+                    index: i
+                });
+            }
+        }).jstree();
     });
 </script>
+</body>
 </html>
 

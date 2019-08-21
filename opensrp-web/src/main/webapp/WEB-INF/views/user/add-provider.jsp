@@ -22,7 +22,7 @@ Map<Integer, String> teams =  (Map<Integer, String>)session.getAttribute("teams"
 String selectedPersonName = (String)session.getAttribute("personName");
 Integer facilityId= (Integer)session.getAttribute("facilityId");
 //Integer communityId = (Integer)session.getAttribute("communityId");
-Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
+Integer selectedTeamId = (Integer)session.getAttribute("selectedTeamId");
 
 int roleIdCHCP= -1;
 int roleIdProvider= -1;

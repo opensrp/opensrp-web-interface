@@ -44,7 +44,7 @@ Map<Integer, String> teams =  (Map<Integer, String>)session.getAttribute("teams"
 
 String selectedPersonName = (String)session.getAttribute("personName");
 
-Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
+Integer selectedTeamId = (Integer)session.getAttribute("selectedTeamId");
 int roleIdCHCP= -1;
 int roleIdProvider= -1;
 
@@ -193,7 +193,7 @@ int roleIdProvider= -1;
 												<%
 												for (Map.Entry<Integer, String> entry : teams.entrySet())
 												{
-													if(selectetTeamId==entry.getKey()){ %>
+													if(selectedTeamId==entry.getKey()){ %>
 														<option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
 													<% }else{
 														%>

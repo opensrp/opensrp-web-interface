@@ -20,7 +20,7 @@
 
 	String selectedPersonName = (String)session.getAttribute("personName");
 
-	Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
+	Integer selectedTeamId = (Integer)session.getAttribute("selectedTeamId");
 
 	int roleIdCHCP= -1;
 	int roleIdProvider= -1;
@@ -163,7 +163,7 @@
 									roleIdCHCP = role.getId();
 								}
 						%>
-						<form:checkbox
+						<form:radiobutton
 								path="roles" class="chk" value="<%=role.getId()%>" onclick='roleSelect(this)'/>
 						<label class="form-control mx-sm-3" for="defaultCheck1"> <%=role.getName()%></label>
 						<%
@@ -188,28 +188,6 @@
 					</div>
 
 				</div>
-
-
-
-				<%--  <!-- for location -->
-                 <div class="row col-12 tag-height" id="locationDiv" style="display:none">
-                    <div class="form-group">
-                        <label class="label-width" for="inputPassword6"><spring:message code="lbl.location"/></label>
-                        <div id="cm" class="ui-widget ">
-                            <div id="locationsTag" ></div>
-                            <span class="text-red">${locationSelectErrorMessage}</span>
-                        </div>
-                     </div>
-                 </div>	 --%>
-
-				<%--  <div id="cm" class="ui-widget">
-                                <label><spring:message code="lbl.location"/> </label>
-                                <div id="locationsTag"></div>
-                                <span class="text-red">${locationSelectErrorMessage}</span>
-                </div> --%>
-
-				<!-- end: for location -->
-				<!-- for team -->
 				<div class="row col-12 tag-height" id="teamDiv" style="display:none">
 					<div class="form-group">
 						<label class="label-width" for="inputPassword6"><spring:message code="lbl.cc"/></label>
@@ -218,7 +196,7 @@
 							<%
 								for (Map.Entry<Integer, String> entry : teams.entrySet())
 								{
-									if(selectetTeamId==entry.getKey()){ %>
+									if(selectedTeamId==entry.getKey()){ %>
 							<option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
 							<% }else{
 							%>
@@ -352,8 +330,6 @@
 		var url = "/opensrp-dashboard/rest/api/v1/user/save";
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		//alert(locationMagicSuggest.getValue());
-		//alert($('#team').val());
 		var formData;
 		if(isTeamMember()){
 			formData = {
@@ -467,152 +443,7 @@
 
 </script>
 
-<script type="text/javascript">
-
-<%--	locationMagicSuggest = $('#locationsTag').magicSuggest({--%>
-<%--		required: true,--%>
-<%--		//placeholder: 'Type Locations',--%>
-<%--		data: <%=locationList%>,--%>
-<%--		valueField: 'id',--%>
-<%--		displayField: 'value',--%>
-<%--		name: 'locationList',--%>
-<%--		inputCfg: {"class":"magicInput"},--%>
-<%--		value: <%=selectedLocationList%>,--%>
-<%--		useCommaKey: true,--%>
-<%--		allowFreeEntries: false,--%>
-<%--		maxSelection: 2,--%>
-<%--		maxEntryLength: 70,--%>
-<%--		maxEntryRenderer: function(v) {--%>
-<%--			return '<div style="color:red">Typed Word TOO LONG </div>';--%>
-<%--		}--%>
-
-<%--	});--%>
-</script>
-
 <script>
-	// $( function() {
-	// 	$.widget( "custom.combobox", {
-	// 		_create: function() {
-	// 			this.wrapper = $( "<div>" )
-	// 					.addClass( "custom-combobox" )
-	// 					.insertAfter( this.element );
-	//
-	// 			this.element.hide();
-	// 			this._createAutocomplete();
-	//
-	// 		},
-	//
-	// 		_createAutocomplete: function() {
-	// 			var selected = this.element.children( ":selected" ),
-	// 					value = selected.val() ? selected.text() : "";
-	// 			value = "";
-	// 			this.input = $( "<input>" )
-	// 					.appendTo( this.wrapper )
-	// 					.val( value )
-	// 					.attr( "title", "" )
-	// 					.attr( "name", "parentUserName" )
-	// 					.addClass( "form-control mx-sm-3 ui-widget ui-widget-content  ui-corner-left" )
-	// 					.autocomplete({
-	// 						delay: 0,
-	// 						minLength: 1,
-	// 						source: $.proxy( this, "_source" )
-	// 					})
-	// 					.tooltip({
-	// 						classes: {
-	// 							"ui-tooltip": "ui-state-highlight"
-	// 						}
-	// 					});
-	//
-	// 			this._on( this.input, {
-	// 				autocompleteselect: function( event, ui ) {
-	// 					ui.item.option.selected = true;
-	// 					$("#parentUser").val(ui.item.option.value);
-	// 					this._trigger( "select", event, {
-	// 						item: ui.item.option
-	// 					});
-	// 				},
-	//
-	// 				autocompletechange: "_removeIfInvalid"
-	// 			});
-	// 		},
-	//
-	//
-	//
-	// 		_source: function( request, response ) {
-	//
-	// 			$.ajax({
-	// 				type: "GET",
-	// 				dataType: 'html',
-	// 				url: "/opensrp-dashboard/user/user.html?name="+request.term,
-	// 				success: function(res)
-	// 				{
-	//
-	// 					$("#combobox").html(res);
-	// 				}
-	// 			});
-	// 			var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
-	// 			response( this.element.children( "option" ).map(function() {
-	// 				var text = $( this ).text();
-	// 				if ( this.value && ( !request.term || matcher.test(text) ) )
-	// 					return {
-	// 						label: text,
-	// 						value: text,
-	// 						option: this
-	// 					};
-	// 			}) );
-	// 		},
-	//
-	// 		_removeIfInvalid: function( event, ui ) {
-	//
-	// 			// Selected an item, nothing to do
-	// 			if ( ui.item ) {
-	// 				return;
-	// 			}
-	//
-	// 			// Search for a match (case-insensitive)
-	// 			var value = this.input.val(),
-	// 					valueLowerCase = value.toLowerCase(),
-	// 					valid = false;
-	// 			this.element.children( "option" ).each(function() {
-	// 				if ( $( this ).text().toLowerCase() === valueLowerCase ) {
-	// 					this.selected = valid = true;
-	// 					return false;
-	// 				}
-	// 			});
-	//
-	// 			// Found a match, nothing to do
-	// 			if ( valid ) {
-	// 				return;
-	// 			}
-	//
-	// 			// Remove invalid value
-	// 			this.input
-	// 					.val( "" )
-	// 					.attr( "title", value + " didn't match any item" )
-	// 					.tooltip( "open" );
-	// 			$("#parentUser").val(0);
-	// 			this.element.val( "" );
-	// 			this._delay(function() {
-	// 				this.input.tooltip( "close" ).attr( "title", "" );
-	// 			}, 2500 );
-	// 			this.input.autocomplete( "instance" ).term = "";
-	// 		},
-	//
-	// 		_destroy: function() {
-	// 			this.wrapper.remove();
-	// 			this.element.show();
-	// 		}
-	// 	});
-	//
-	// 	$( "#combobox" ).combobox();
-	//
-	// 	$( "#toggle" ).on( "click", function() {
-	// 		$( "#combobox" ).toggle();
-	// 	});
-	//
-	//
-	// } );
-
 	$(document).ready(function() {
 		$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
 	});

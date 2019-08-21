@@ -228,7 +228,6 @@ public class LocationService {
 				treeTraverse(children);
 			} else {
 				i = 0;
-				System.err.println("-----------------------");
 			}
 		}
 		
@@ -240,14 +239,15 @@ public class LocationService {
 		List<Location> locations = findAll("Location");
 		for (Location location : locations) {
 			JSONObject dataObject = new JSONObject();
+            Location parentLocation = location.getParentLocation();
+            if (parentLocation != null) {
+                dataObject.put(parentKey, parentLocation.getId());
+            } else {
+                dataObject.put(parentKey, parentIndication);
+            }
 			dataObject.put("id", location.getId());
-			Location parentLocation = location.getParentLocation();
-			if (parentLocation != null) {
-				dataObject.put(parentKey, parentLocation.getId());
-			} else {
-				dataObject.put(parentKey, parentIndication);
-			}
 			dataObject.put("text", location.getName());
+			dataObject.put("icon", location.getLocationTag().getName());
 			dataArray.put(dataObject);
 		}
 		
