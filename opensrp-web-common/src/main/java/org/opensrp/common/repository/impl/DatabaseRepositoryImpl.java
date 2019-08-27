@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 /**
  * <p>
@@ -89,6 +90,34 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		finally {
 			session.close();
 			
+		}
+		return returnValue;
+	}
+
+	@Override
+	public <T> long saveAll(List<T> t) throws Exception {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		long returnValue = -1;
+		try {
+			tx = session.beginTransaction();
+			for (int i = 0; i < t.size(); i++) {
+				session.saveOrUpdate(t.get(i));
+			}
+			logger.info("saved successfully: " + t.getClass().getName());
+			returnValue = 1;
+			if (!tx.wasCommitted())
+				tx.commit();
+		}
+		catch (HibernateException e) {
+			returnValue = -1;
+			tx.rollback();
+			logger.error(e);
+			throw new Exception(e.getMessage());
+		}
+		finally {
+			session.close();
+
 		}
 		return returnValue;
 	}
@@ -179,6 +208,22 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<T> result = criteria.list();
 		session.close();
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+	}
+
+	public <T> T findByForeignKey(int id, String fieldName, String className) {
+		Session session = sessionFactory.openSession();
+		String hql = "from "+className+" where " + fieldName + " = :id";
+		List<T> result = session.createQuery(hql).setInteger("id", id).list();
+		session.close();
+		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+	}
+
+	public <T> List<T> findAllByForeignKey(int id, String fieldName, String className) {
+		Session session = sessionFactory.openSession();
+		String hql = "from "+className+" where " + fieldName + " = :id";
+		List<T> result = session.createQuery(hql).setInteger("id", id).list();
+		session.close();
+		return (result.size() > 0 ? result : null);
 	}
 	
 	/**

@@ -102,6 +102,9 @@ public class UserController {
 
 	@Autowired
 	private BranchService branchService;
+
+	@Autowired
+	private UsersCatchmentAreaService usersCatchmentAreaService;
 	
 	/**
 	 * <p>
@@ -585,8 +588,14 @@ public class UserController {
 		model.addAttribute("locale", locale);
 		String parentIndication = "#";
 		String parentKey = "parent";
+		List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByForeignKey(id, "user_id", "UsersCatchmentArea");
 		JSONArray data = locationServiceImpl.getLocationDataAsJson(parentIndication, parentKey);
+		TeamMember member = teamMemberServiceImpl.findByForeignKey(id, "person_id", "TeamMember");
+		boolean isTeamMember = member!=null?true:false;
+		session.setAttribute("usersCatchmentAreas", usersCatchmentAreas);
 		session.setAttribute("locationTreeData", data);
+		session.setAttribute("isTeamMember", isTeamMember);
+		session.setAttribute("userId", id);
 		return "user/catchment-area";
 	}
 	

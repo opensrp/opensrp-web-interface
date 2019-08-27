@@ -15,6 +15,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @Entity
 @Table(name = "permission", schema = "core")
@@ -74,5 +76,4 @@ public class Permission implements GrantedAuthority {
 			return false;
 		return true;
 	}
-	
 }

@@ -16,15 +16,25 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
     <link type="text/css" href="<c:url value="/resources/css/jtree.min.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/multi-select.css"/>" rel="stylesheet">
     <title><spring:message code="lbl.viewLocationsHierarchy"/> </title>
     <%@page import="org.json.JSONObject" %>
     <%@page import="org.json.JSONArray" %>
+    <%@ page import="org.opensrp.core.entity.UsersCatchmentArea" %>
+    <%@ page import="java.util.List" %>
+    <%@ page import="org.opensrp.core.entity.User" %>
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 <%
     JSONArray locationTreeData = (JSONArray)session.getAttribute("locationTreeData");
+    int userId = (int)session.getAttribute("userId");
+    boolean isTeamMember = (boolean) session.getAttribute("isTeamMember");
+    List<UsersCatchmentArea> usersCatchmentAreas = (List<UsersCatchmentArea>) session.getAttribute("usersCatchmentAreas");
+
 %>
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 <jsp:include page="/WEB-INF/views/navbar.jsp" />
@@ -44,7 +54,6 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <div id="locationTree">
-
                         </div>
                     </div>
                     <div class="col-sm-7">
@@ -52,7 +61,9 @@
                         </select>
                     </div>
                     <div class="col-sm-1">
-                        <button
+                        <input id="catchment-areas" value="<%=usersCatchmentAreas%>" type="hidden">
+                        <input id="userId" value="<%=userId%>" type="hidden">
+                        <button id="saveCatchmentArea"
                                 class="btn btn-primary btn-sm"
                                 style="position: absolute; top: 50%;
                                 transform: translateY(-50%);">
@@ -90,8 +101,14 @@
         $('#locationTree').on('changed.jstree', function (e, data) {
             $('#locations option').remove();
             $('#locations').multiSelect('refresh');
+            var selectedAreas = [];
+            <% for (int i = 0; i < usersCatchmentAreas.size(); i++) {%>
+            selectedAreas[<%=i%>] = <%=usersCatchmentAreas.get(i).getLocationId()%>
+            <%}%>
+            console.log(selectedAreas);
             var i, j, r = [], z = [];
             var id = data.selected[0];
+            var ids = [];
             r = data.instance.get_node(id).children;
 
             for (i = 0; i < r.length; i++) {
@@ -100,15 +117,61 @@
                     id: data.instance.get_node(r[i]).id,
                 });
             }
+
             for (i = 0; i < z.length; i++) {
-                console.log(data.instance.get_node(z[i].id).icon);
-                $('#locations').multiSelect('addOption', {
+                if (selectedAreas.indexOf(parseInt(z[i].id)) >= 0) {
+                    ids.push(z[i].id);
+                }
+                $('#locations').multiSelect('addOption',{
                     value: z[i].id,
                     text: z[i].name,
                     index: i
                 });
             }
+
+            $('#locations').val(ids);
+            $('#locations').multiSelect('refresh');
+            console.log($('#locations').val());
         }).jstree();
+
+        $('#saveCatchmentArea').unbind().click(function () {
+            var url = "";
+            <% if (isTeamMember) {%>
+            url = "/opensrp-dashboard/rest/api/v1/user/catchment-area/update";
+            <%} else {%>
+            url = "/opensrp-dashboard/rest/api/v1/user/catchment-area/save";
+            <% } %>
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var formData = {
+                locations: $('#locations').val(),
+                userId: $('#userId').val()
+            };
+            $.ajax({
+                contentType : "application/json",
+                type: "POST",
+                url: url,
+                data: JSON.stringify(formData),
+                dataType : 'json',
+
+                timeout : 100000,
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                success : function(data) {
+                    if(data == ""){
+                        window.location.replace("/opensrp-dashboard/user.html");
+                    }
+
+                },
+                error : function(e) {
+                    console.log(data);
+                },
+                done : function(e) {
+                    console.log("DONE");
+                }
+            });
+        });
     });
 </script>
 </body>

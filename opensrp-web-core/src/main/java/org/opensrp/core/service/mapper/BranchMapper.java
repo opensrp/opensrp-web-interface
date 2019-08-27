@@ -4,10 +4,14 @@ import org.opensrp.core.dto.BranchDTO;
 import org.opensrp.core.entity.Branch;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class BranchMapper {
     /**
      * DTO to Entity
+     *
      * @param branchDTO
      * @return
      */
@@ -20,7 +24,22 @@ public class BranchMapper {
     }
 
     /**
+     * DTO's to Entities
+     *
+     * @param dtos
+     * @return
+     */
+    public List<Branch> map(List<BranchDTO> dtos) {
+        List<Branch> entities = new ArrayList<>();
+
+        dtos.forEach(dto->entities.add(this.map(dto)));
+
+        return entities;
+    }
+
+    /**
      * Entity to DTO
+     *
      * @param branch
      * @return
      */

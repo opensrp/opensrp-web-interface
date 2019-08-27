@@ -25,7 +25,7 @@ public class TeamMemberMapper {
         TeamMember teamMember = new TeamMember();
 
         teamMember.setPerson(databaseRepository.findById(personId, "id", User.class));
-        teamMember.setLocations(locationService.getLocationByIds(locations));
+        if (locations != null)teamMember.setLocations(locationService.getLocationByIds(locations));
         teamMember.setTeam(team);
 
         return teamMember;

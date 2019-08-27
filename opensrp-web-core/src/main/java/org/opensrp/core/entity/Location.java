@@ -7,17 +7,7 @@ package org.opensrp.core.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -79,7 +69,6 @@ public class Location implements Serializable {
 	
 	public int getId() {
 		return id;
-		
 	}
 	
 	public String getUuid() {
@@ -173,12 +162,12 @@ public class Location implements Serializable {
 	public void setVisitLocation(boolean visitLocation) {
 		this.visitLocation = visitLocation;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Location [id=" + id + ", name=" + name + ", description=" + description + ", uuid=" + uuid + ", code="
 		        + code + ", created=" + created + ", updated=" + updated + ", creator=" + creator + ", parentLocation="
 		        + parentLocation + ", locationTag=" + locationTag + ", loginLocation=" + loginLocation + "]";
 	}
-	
+
 }

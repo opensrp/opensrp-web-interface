@@ -34,34 +34,34 @@ import org.springframework.ui.ModelMap;
 
 @Service
 public class TeamMemberService {
-	
+
 	private static final Logger logger = Logger.getLogger(TeamMemberService.class);
-	
+
 	@Autowired
 	private DatabaseRepository repository;
-	
+
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 	@Autowired
 	private OpenMRSServiceFactory openMRSServiceFactory;
-	
+
 	@Autowired
 	private UserService userServiceImpl;
-	
+
 	@Autowired
 	private TeamService teamServiceImpl;
-	
+
 	@Autowired
 	private LocationService locationServiceImpl;
 
 	@Autowired
 	private TeamMemberMapper teamMemberMapper;
-	
+
 	public TeamMemberService() {
-		
+
 	}
-	
+
 	@Transactional
 	public <T> long save(T t) throws Exception {
 		TeamMember teamMember = (TeamMember) t;
@@ -73,15 +73,15 @@ public class TeamMemberService {
 			logger.error("No uuid found for team member:" + teamMember.getIdentifier());
 			// TODO
 		}
-		
+
 		return createdTeamMember;
 	}
-	
+
 	@Transactional
 	public <T> int update(T t) throws JSONException {
 		TeamMember teamMember = (TeamMember) t;
 		int updatedTag = 0;
-		
+
 		String uuid = openMRSServiceFactory.getOpenMRSConnector("member").update(teamMember, teamMember.getUuid(), null);
 		if (!uuid.isEmpty()) {
 			updatedTag = repository.update(teamMember);
@@ -91,7 +91,7 @@ public class TeamMemberService {
 		}
 		return updatedTag;
 	}
-	
+
 	@Transactional
 	public <T> boolean delete(T t) throws JSONException {
 		TeamMember teamMember = (TeamMember) t;
@@ -107,12 +107,17 @@ public class TeamMemberService {
 		return deletedTag;
 		//return repository.delete(t);
 	}
-	
+
 	@Transactional
 	public <T> T findById(int id, String fieldName, Class<?> className) {
 		return repository.findById(id, fieldName, className);
 	}
-	
+
+	@Transactional
+	public <T> T findByForeignKey(int id, String fieldName, String className) {
+		return repository.findByForeignKey(id, fieldName, className);
+	}
+
 	@Transactional
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
 		return repository.findByKey(value, fieldName, className);
@@ -123,29 +128,28 @@ public class TeamMemberService {
 	public <T> T findByKeys(Map<String, Object> fieldValues, Class<?> className) {
 		return repository.findByKeys(fieldValues, className);
 	}
-	
+
 	@Transactional
 	public <T> List<T> findAll(String tableClass) {
 		return repository.findAll(tableClass);
 	}
-	
+
 	public Map<Integer, String> getLocationTagListAsMap() {
 		List<LocationTag> locationTags = findAll("LocationTag");
 		Map<Integer, String> locationsTagMap = new HashMap<Integer, String>();
 		for (LocationTag locationTag : locationTags) {
 			locationsTagMap.put(locationTag.getId(), locationTag.getName());
-			
+
 		}
-		
 		return locationsTagMap;
 	}
-	
+
 	public void setModelAttribute(ModelMap model, Team team) {
 		model.addAttribute("name", team.getName());
 		model.addAttribute("uniqueErrorMessage", "Specified Name already exists, please specify another");
-		
+
 	}
-	
+
 	@SuppressWarnings("null")
 	public boolean isPersonAndIdentifierExists(ModelMap model, TeamMember teamMember, int[] locations) {
 		boolean isExists = false;
@@ -154,11 +158,11 @@ public class TeamMemberService {
 		boolean isLocationsExists = false;
 		if (teamMember != null) {
 			isPersonExists = repository.entityExistsNotEualThisId(teamMember.getId(), teamMember.getPerson(), "person",
-			    TeamMember.class);
+					TeamMember.class);
 		}
 		if (teamMember != null) {
 			isIdentifierExists = repository.entityExistsNotEualThisId(teamMember.getId(), teamMember.getIdentifier(),
-			    "identifier", TeamMember.class);
+					"identifier", TeamMember.class);
 		}
 		if (isPersonExists) {
 			model.addAttribute("uniqueNameErrorMessage", "Specified Person already exists, please specify another");
@@ -166,25 +170,25 @@ public class TeamMemberService {
 		if (isIdentifierExists) {
 			model.addAttribute("uniqueIdetifierErrorMessage", "Specified Identifier already exists, please specify another");
 		}
-		
+
 		if (locations == null) {
 			model.addAttribute("locationSelectErrorMessage", "Please Select Location");
 			isLocationsExists = true;
 		}
-		
+
 		if (isPersonExists || isIdentifierExists || isLocationsExists) {
 			System.err.println("okkk");
 			isExists = true;
 		}
-		
+
 		return isExists;
 	}
-	
+
 	public void setSessionAttribute(HttpSession session, TeamMember teamMember, String personName, int[] locations)
-	    throws JSONException {
-		
+			throws JSONException {
+
 		Map<Integer, String> teams = teamServiceImpl.getTeamListAsMap();
-		
+
 		if (teamMember.getTeam() != null) {
 			session.setAttribute("selectedTeamId", teamMember.getTeam().getId());
 		} else {
@@ -197,15 +201,15 @@ public class TeamMemberService {
 		} else {
 			session.setAttribute("selectedPersonId", 0);
 		}
-		
+
 		session.setAttribute("selectedLocationList", setExistingLocation(locations));
 		session.setAttribute("personName", personName);
 	}
-	
+
 	public String setExistingLocation(int[] locations) throws JSONException {
 		JSONArray locationJsonArray = new JSONArray();
 		if (locations != null && locations.length != 0) {
-			
+
 			for (int locationId : locations) {
 				Location location = (Location) repository.findById(locationId, "id", Location.class);
 				String locationName = locationServiceImpl.makeLocationName(location);
@@ -217,7 +221,7 @@ public class TeamMemberService {
 		}
 		return locationJsonArray.toString();
 	}
-	
+
 	public int[] getLocationIds(Set<Location> locations) {
 		System.err.println("TT:" + locations.size());
 		int[] locationIds = new int[locations.size()];
@@ -230,15 +234,15 @@ public class TeamMemberService {
 		}
 		return locationIds;
 	}
-	
+
 	public void setModelAttribute(ModelMap model, Location location) {
 		model.addAttribute("name", location.getName());
 		model.addAttribute("uniqueErrorMessage", "Specified Location name already exists, please specify another");
-		
+
 	}
-	
+
 	public TeamMember setCreatorLocationAndPersonAndTeamAttributeInLocation(TeamMember teamMember, int personId, int teamId,
-	                                                                        int[] locations) {
+																			int[] locations) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User creator = (User) repository.findByKey(auth.getName(), "username", User.class);
 		User person = (User) repository.findById(personId, "id", User.class);
@@ -249,33 +253,36 @@ public class TeamMemberService {
 				Location location = (Location) repository.findById(locationId, "id", Location.class);
 				if (location != null) {
 					locationSet.add(location);
-					
+
 				}
 			}
 			teamMember.setLocations(locationSet);
 		}
-		
+
 		teamMember.setCreator(creator);
 		teamMember.setPerson(person);
 		teamMember.setTeam(team);
 		return teamMember;
 	}
-	
+
 	public TeamMember setCreatorLocationAndPersonAndTeamAttributeInLocation(TeamMember teamMember, int personId, Team team,
-	                                                                        int[] locations) {
+																			int[] locations) {
 		teamMember = teamMemberMapper.map(team, personId, locations);
 		teamMember.setCreator(userServiceImpl.getLoggedInUser());
 
 		return teamMember;
 	}
-	
+
 	// if user comes from HRIS then there is no creator - april 23, 2019
 	public TeamMember setLocationAndPersonAndTeamAttributeInLocation(TeamMember teamMember, int personId, Team team,
-            int[] locations) {
+																	 int[] locations) {
+		teamMember = teamMemberMapper.map(team, personId, locations);
+		return teamMember;
+	}
 
-			teamMember = teamMemberMapper.map(team, personId, locations);
-			return teamMember;
-		}
+	public TeamMember findByUserId(int userId) {
+		return null;
+	}
 	// end: if user comes from HRIS then there is no creator - april 23, 2019
-	
+
 }

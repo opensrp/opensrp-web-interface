@@ -19,10 +19,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
+import org.opensrp.core.dto.UserLocationDTO;
 import org.opensrp.core.dto.WorkerIdDTO;
 import org.opensrp.core.entity.*;
 import org.opensrp.core.openmrs.service.OpenMRSServiceFactory;
 import org.opensrp.core.openmrs.service.impl.OpenMRSUserAPIService;
+import org.opensrp.core.service.mapper.UsersCatchmentAreaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,51 +34,60 @@ import org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor;
 
 @Service
 public class UserService {
-	
+
 	private static final Logger logger = Logger.getLogger(UserService.class);
-	
+
 	@Autowired
 	private RoleService roleService;
-	
+
 	@Autowired
 	private TeamService teamService;
-	
+
 	@Autowired
 	private TeamMemberService teamMemberServiceImpl;
-	
+
 	@Autowired
 	private FacilityWorkerTypeService facilityWorkerTypeService;
-	
+
 	@Autowired
 	private DatabaseRepository repository;
-	
+
 	@Autowired
 	private OpenMRSServiceFactory openMRSServiceFactory;
-	
+
 	@Autowired
 	private RoleService roleServiceImpl;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private EmailService emailService;
 
 	@Autowired
 	private FacilityService facilityService;
-	
+
+	@Autowired
+	private UsersCatchmentAreaService usersCatchmentAreaService;
+
+	@Autowired
+	private UsersCatchmentAreaMapper usersCatchmentAreaMapper;
+
+	@Autowired
+	private LocationService locationServiceImpl;
+
 	@Transactional
 	public <T> long save(T t, boolean isUpdate) throws Exception {
 		User user = (User) t;
 		long createdUser = 0;
 		Set<Role> roles = user.getRoles();
-		boolean isProvider = roleServiceImpl.isOpenMRSRole(roles);
+		boolean isAdmin = roleServiceImpl.isOpenMRSRole(roles);
 		JSONArray existingOpenMRSUser = new JSONArray();
 		String query = "";
 		String existingUserUUid = "";
 		String existingUserPersonUUid = "";
 		query = "v=full&username=" + user.getUsername();
-		if (isProvider) {
+		if (!isAdmin) {
 			existingOpenMRSUser = openMRSServiceFactory.getOpenMRSConnector("user").getByQuery(query);
 			if (existingOpenMRSUser.length() == 0) {
 				logger.info(" \nUserBeforeSendingToOpenMRS : "+ user.toString() + "\n");
@@ -107,16 +118,16 @@ public class UserService {
 				}
 				createdUser = repository.save(user);
 			}
-			
+
 		} else {
 			user.setProvider(false);
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			createdUser = repository.save(user);
 		}
-		
+
 		return createdUser;
 	}
-	
+
 	@Transactional
 	public <T> int update(T t) throws Exception {
 		User user = (User) t;
@@ -129,33 +140,33 @@ public class UserService {
 		}
 		return repository.update(user);
 	}
-	
+
 	@Transactional
 	public <T> boolean delete(T t) {
 		return repository.delete(t);
 	}
-	
+
 	@Transactional
 	public <T> T findById(int id, String fieldName, Class<?> className) {
 		return repository.findById(id, fieldName, className);
-		
+
 	}
-	
+
 	@Transactional
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
 		return repository.findByKey(value, fieldName, className);
 	}
-	
+
 	@Transactional
 	public <T> List<T> findAll(String tableClass) {
 		return repository.findAll(tableClass);
 	}
-	
+
 	@Transactional
 	public <T> T findOneByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		return repository.findByKeys(fielaValues, className);
 	}
-	
+
 	@Transactional
 	public Set<Role> setRoles(String[] selectedRoles) {
 		Set<Role> roles = new HashSet<Role>();
@@ -179,17 +190,17 @@ public class UserService {
 		}
 		return branches;
 	}
-	
+
 	public boolean isPasswordMatched(User account) {
 		return passwordEncoder.matches(account.getRetypePassword(), passwordEncoder.encode(account.getPassword()));
 	}
-	
+
 	public boolean isUserExist(String userName) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("username", userName);
 		return repository.isExists(params, User.class);
 	}
-	
+
 	public User convert(UserDTO userDTO) {
 		User user = new User();
 		String[] roles = userDTO.getRoles().split(",");
@@ -205,14 +216,14 @@ public class UserService {
 		user.setRoles(setRoles(roles));
 		User parentUser = findById(userDTO.getParentUser(), "id", User.class);
 		user.setParentUser(parentUser);
-		
+
 		return user;
-		
+
 	}
-	
+
 	// for setting user attributes from jsonObject -- April 10, 2019
 	public User setUserInfoFromJSONObject(String username, JSONObject inputJSONObject,
-			String password, Facility facility) throws Exception {
+										  String password, Facility facility) throws Exception {
 		String facilityHeadDesignation = "Community Health Care Provider";
 		logger.info("\nfacilityHeadDesignation : "+ facilityHeadDesignation + "\n");
 		User user = null;
@@ -268,7 +279,7 @@ public class UserService {
 		user = findById(user.getId(), "id", User.class);
 		logger.info(" \nUser(find by id from DB) : "+ user.toString() + "\n");
 		teamMember = teamMemberServiceImpl.setLocationAndPersonAndTeamAttributeInLocation(
-						teamMember, user.getId(), team, locations);
+				teamMember, user.getId(), team, locations);
 		teamMember.setIdentifier(facilityHeadIdentifier);
 		logger.info(" \nTeamMember : "+ teamMember.toString() + "\n");
 		teamMemberServiceImpl.save(teamMember);
@@ -299,7 +310,7 @@ public class UserService {
 	}
 
 	// end: setting user attributes from jsonObject
-	
+
 	public int[] getSelectedRoles(User account) {
 		int[] selectedRoles = new int[200];
 		Set<Role> getRoles = account.getRoles();
@@ -316,13 +327,13 @@ public class UserService {
 		User user = repository.findByKey(auth.getName(), "username", User.class);
 		return user;
 	}
-	
+
 	@Transactional
 	public <T> int updatePassword(T t) throws Exception {
 		int updatedUser = 0;
 		User user = (User) t;
 		Set<Role> roles = user.getRoles();
-		
+
 		boolean isProvider = roleServiceImpl.isOpenMRSRole(roles);
 		if (isProvider) {
 			String uuid = openMRSServiceFactory.getOpenMRSConnector("user").update(user, user.getUuid(), null);
@@ -336,24 +347,24 @@ public class UserService {
 		}
 		return updatedUser;
 	}
-	
+
 	public Map<Integer, String> getUserListAsMap() {
 		List<User> users = findAll("User");
 		Map<Integer, String> usersMap = new HashMap<Integer, String>();
 		for (User user : users) {
 			usersMap.put(user.getId(), user.getUsername());
-			
+
 		}
 		return usersMap;
 	}
-	
+
 	@Transactional
 	public List<User> findAllByKeysWithALlMatches(String name, boolean isProvider) {
 		Map<String, String> fielaValues = new HashMap<String, String>();
 		fielaValues.put("username", name);
 		return repository.findAllByKeysWithALlMatches(isProvider, fielaValues, User.class);
 	}
-	
+
 	@Transactional
 	public Map<Integer, String> getProviderListAsMap() {
 		Map<String, String> fielaValues = new HashMap<String, String>();
@@ -363,17 +374,17 @@ public class UserService {
 		if (users != null) {
 			for (User user : users) {
 				usersMap.put(user.getId(), user.getUsername());
-				
+
 			}
 		}
 		return usersMap;
 	}
-	
+
 	/**
 	 * <p>
 	 * This method set roles attribute to session, all roles and selected roles.
 	 * </p>
-	 * 
+	 *
 	 * @param roles list of selected roles.
 	 * @param session is an argument to the HttpSession's session .
 	 */
@@ -386,10 +397,10 @@ public class UserService {
 		session.setAttribute("roles", repository.findAllByKeys(findCriteriaMap, Role.class));
 		session.setAttribute("selectedRoles", roles);
 	}
-	
+
 	public JSONArray getUserDataAsJson(String parentIndication, String parentKey) throws JSONException {
 		JSONArray dataArray = new JSONArray();
-		
+
 		List<User> users = findAll("User");
 		for (User user : users) {
 			JSONObject dataObject = new JSONObject();
@@ -403,9 +414,9 @@ public class UserService {
 			dataObject.put("text", user.getFullName());
 			dataArray.put(dataObject);
 		}
-		
+
 		return dataArray;
-		
+
 	}
 
 	public boolean deleteMHV(WorkerIdDTO workerIdDTO) throws JSONException {
@@ -426,5 +437,78 @@ public class UserService {
 			openMRSServiceFactory.getOpenMRSConnector("user").delete(user.getUuid());
 
 		return true;
+	}
+
+	@Transactional
+	public String updateTeamMemberAndCatchmentAreas(UserLocationDTO userLocationDTO) throws Exception {
+		int parentId = 0;
+		String errorMessage = "";
+		TeamMember teamMember = teamMemberServiceImpl.findByForeignKey(userLocationDTO.getUserId(), "person_id", "TeamMember");
+
+		try {
+			if (userLocationDTO.getLocations().length > 0) {
+				int locationId = userLocationDTO.getLocations()[0];
+				Location location = locationServiceImpl.findById(locationId, "id", Location.class);
+				if (location != null) {
+					parentId = location.getParentLocation().getId();
+
+					Set<Location> locationSet = new HashSet<>();
+
+					for (Location teamMemberLocation : teamMember.getLocations()) {
+						if (teamMemberLocation.getParentLocation().getId() != parentId) {
+							locationSet.add(teamMemberLocation);
+						}
+					}
+
+					for (int newLocationId: userLocationDTO.getLocations()) {
+						Location newLocation = locationServiceImpl.findById(newLocationId, "id", Location.class);
+						locationSet.add(newLocation);
+					}
+					teamMember.setLocations(locationSet);
+
+					List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByParentAndUser(
+							parentId,
+							userLocationDTO.getUserId());
+
+					for (UsersCatchmentArea usersCatchmentArea : usersCatchmentAreas) {
+						usersCatchmentAreaService.delete(usersCatchmentArea);
+					}
+				}
+			}
+			teamMemberServiceImpl.save(teamMember);
+			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(
+					userLocationDTO.getLocations(),
+					userLocationDTO.getUserId());
+			usersCatchmentAreaService.saveAll(usersCatchmentAreas);
+		} catch (Exception e) {
+			e.printStackTrace();
+			errorMessage = "something went wrong";
+		}
+		return errorMessage;
+	}
+
+	@Transactional
+	public String saveTeamMemberAndCatchmentAreas(UserLocationDTO userLocationDTO) throws Exception {
+
+		String teamName = "HNPP-BRAC";
+		String errorMessage = "";
+		Team team = teamService.findByKey(teamName, "name", Team.class);
+		TeamMember teamMember = new TeamMember();
+		try {
+			teamMember = teamMemberServiceImpl.setLocationAndPersonAndTeamAttributeInLocation(
+					teamMember,
+					userLocationDTO.getUserId(),
+					team,
+					userLocationDTO.getLocations());
+			teamMemberServiceImpl.save(teamMember);
+			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(
+					userLocationDTO.getLocations(),
+					userLocationDTO.getUserId());
+			usersCatchmentAreaService.saveAll(usersCatchmentAreas);
+		} catch (Exception e) {
+			errorMessage = "something went wrong";
+			e.printStackTrace();
+		}
+		return errorMessage;
 	}
 }

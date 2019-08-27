@@ -46,6 +46,7 @@
 				<value>org.opensrp.core.entity.Chcp</value>
 				<value>org.opensrp.core.entity.Reviews</value>
 				<value>org.opensrp.core.entity.Branch</value>
+				<value>org.opensrp.core.entity.UsersCatchmentArea</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

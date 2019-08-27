@@ -26,7 +26,7 @@ Map<Integer, String> supervisors =  (Map<Integer, String>)session.getAttribute("
 
 String selectedLocationName = (String)session.getAttribute("locationName");
 
-Integer selectedSupervisor = (Integer)session.getAttribute("selectedSuperviosr");
+Integer selectedSupervisor = (Integer)session.getAttribute("selectedSupervisor");
 
 
 	%>

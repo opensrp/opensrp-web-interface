@@ -69,13 +69,19 @@ import javax.servlet.http.HttpSession;
 public interface DatabaseRepository {
 	
 	public <T> long save(T t) throws Exception;
-	
+
+	public <T> long saveAll(List<T> t) throws Exception;
+
 	public <T> int update(T t);
 	
 	public <T> boolean delete(T t);
 	
 	public <T> T findById(int id, String fieldName, Class<?> className);
-	
+
+	public <T> T findByForeignKey(int id, String fieldName, String className);
+
+	public <T> List<T> findAllByForeignKey(int id, String fieldName, String className);
+
 	public <T> T findByKey(String value, String fieldName, Class<?> className);
 	
 	public <T> List<T> findAll(String tableClass);

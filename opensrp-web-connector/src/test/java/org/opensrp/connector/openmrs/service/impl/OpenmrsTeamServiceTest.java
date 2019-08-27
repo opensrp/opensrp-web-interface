@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-@Ignore
+//@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath:test-applicationContext.xml" })
 public class OpenmrsTeamServiceTest {
@@ -32,7 +32,7 @@ public class OpenmrsTeamServiceTest {
 		
 	}
 	
-	@Ignore
+
 	@Test
 	public void createUpdateGetAndDeleteRole() throws JSONException {
 		String name = "Test";
@@ -50,8 +50,7 @@ public class OpenmrsTeamServiceTest {
 		 * { "person": "29d5d7a6-0b68-40b2-86c2-786aa56e21a4",
 		 * "locations":["4c8cb044-7b15-40b7-8ca2-6eceaa6c4e9a"], "identifier": "43267", "team":
 		 * "Test", "isDataProvider": "true" }
-		 */
-		/**
+*/		/**
 		 * { "teamName": "Rty", "location": "4c8cb044-7b15-40b7-8ca2-6eceaa6c4e9a" } { "name":
 		 * "ROlee", "identifier": "233" }
 		 */

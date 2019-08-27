@@ -149,9 +149,9 @@ public class TeamService {
 		}
 		session.setAttribute("supervisors", supervisors);
 		if (team.getSuperVisor() != null) {
-			session.setAttribute("selectedSuperviosr", team.getSuperVisor().getId());
+			session.setAttribute("selectedSupervisor", team.getSuperVisor().getId());
 		} else {
-			session.setAttribute("selectedSuperviosr", 0);
+			session.setAttribute("selectedSupervisor", 0);
 		}
 		
 		session.setAttribute("locationName", locationName);

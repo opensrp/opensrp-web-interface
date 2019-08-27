@@ -4,25 +4,12 @@ import static org.springframework.http.HttpStatus.OK;
 
 import org.apache.log4j.Logger;
 import org.opensrp.common.dto.UserDTO;
-import org.opensrp.core.entity.Location;
-import org.opensrp.core.entity.Role;
-import org.opensrp.core.entity.Team;
-import org.opensrp.core.entity.TeamMember;
-import org.opensrp.core.entity.User;
-import org.opensrp.core.service.LocationService;
-import org.opensrp.core.service.RoleService;
-import org.opensrp.core.service.TeamMemberService;
-import org.opensrp.core.service.TeamService;
-import org.opensrp.core.service.UserService;
-import org.opensrp.core.service.EmailService;
-import org.opensrp.core.entity.Facility;
-import org.opensrp.core.entity.FacilityWorker;
-import org.opensrp.core.entity.FacilityWorkerType;
-import org.opensrp.core.service.FacilityService;
-import org.opensrp.core.service.FacilityWorkerTypeService;
+import org.opensrp.core.dto.UserLocationDTO;
+import org.opensrp.core.entity.*;
+import org.opensrp.core.service.*;
 import org.opensrp.core.service.mapper.FacilityWorkerMapper;
 import org.opensrp.core.service.mapper.UserMapper;
-import org.opensrp.web.controller.UserController;
+import org.opensrp.core.service.mapper.UsersCatchmentAreaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
@@ -33,6 +20,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @RequestMapping("rest/api/v1/user")
 @RestController
@@ -46,13 +38,13 @@ public class UserRestController {
 	
 	@Autowired
 	private TeamService teamService;
-	
+
 	@Autowired
 	private FacilityService facilityService;
 	
 	@Autowired
 	private RoleService roleService;
-	
+
 	@Autowired
 	private FacilityWorkerTypeService facilityWorkerTypeService;
 	
@@ -76,51 +68,31 @@ public class UserRestController {
 		TeamMember teamMember = new TeamMember();
 		String userNameUniqueError = "";
 		Team team = new Team();
-		Facility facility = new Facility();
 		try {
 			boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());
 			if (userDTO.isTeamMember()) {
-				team = teamService.findById(userDTO.getTeam(), "id", Team.class);
-				facility = facilityService.findByKey(team.getLocation().getName(), "ward", Facility.class);
+				String teamName = "HNPP-BRAC";
+				team = teamService.findByKey(teamName, "name", Team.class);
 			}
 
 			if (!isExists) {
 				User user = userMapper.map(userDTO);
-				user.setChcp(facility.getId() + "");
 				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
-				
-				if (userDTO.isTeamMember()) {
-					int[] locations = new int[5];
-					locations[0] = team.getLocation().getId();
-					user = userServiceImpl.findById(user.getId(), "id", User.class);
-					teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
-					    user.getId(), team, locations);
-					teamMember.setIdentifier(userDTO.getIdetifier());
-					logger.info(" \nTeamMember : "+ teamMember.toString() + "\n");
-					teamMemberServiceImpl.save(teamMember);
+//				String mailBody = "Dear " + user.getFullName()
+//						+ ",\n\nYour login credentials for HNPP are given below -\nusername : " + user.getUsername()
+//						+ "\npassword : " + userDTO.getPassword();
+//				if (numberOfUserSaved > 0) {
+//					logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
+//					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
+//				}
 
-					FacilityWorkerType facilityWorkerType = facilityWorkerTypeService.findByKey("CHCP", "name",
-							FacilityWorkerType.class);
-					
-					FacilityWorker facilityWorker = facilityWorkerMapper.map(user, facility, facilityWorkerType);
-
-					logger.info(" \nFacilityWorkerType : "+ facilityWorkerType.toString() + "\n");
-					facilityWorkerTypeService.save(facilityWorker);
-					String mailBody = "Dear " + user.getFullName()
-					        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + user.getUsername()
-					        + "\npassword : " + userDTO.getPassword();
-					if (numberOfUserSaved > 0) {
-						logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
-						emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
-					}
-				}
 			} else {
 				userNameUniqueError = "User name already taken.";
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			userNameUniqueError = "some Problem occurred please contact with Admin";
+			userNameUniqueError = "Some problem occurred please contact with Admin";
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}
@@ -208,5 +180,19 @@ public class UserRestController {
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}
-	
+
+	@RequestMapping(value = "/catchment-area/save", method = RequestMethod.POST)
+	public ResponseEntity<String> saveUsersCatchmentArea(@RequestBody UserLocationDTO userLocationDTO) throws Exception {
+		String errorMessage = "";
+		userServiceImpl.saveTeamMemberAndCatchmentAreas(userLocationDTO);
+		return new ResponseEntity<>(new Gson().toJson(errorMessage), OK);
+	}
+
+	@RequestMapping(value = "/catchment-area/update", method = RequestMethod.POST)
+	public ResponseEntity<String> updateUsersCatchmentArea(@RequestBody UserLocationDTO userLocationDTO) throws Exception {
+		String errorMessage = "";
+		userServiceImpl.updateTeamMemberAndCatchmentAreas(userLocationDTO);
+		return new ResponseEntity<>(new Gson().toJson(errorMessage), OK);
+	}
+
 }
