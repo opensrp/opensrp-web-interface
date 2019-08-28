@@ -63,6 +63,7 @@
                                 <th><spring:message code="lbl.name"/></th>
                                 <th><spring:message code="lbl.gender"/></th>
                                 <th><spring:message code="lbl.age"/></th>
+                                <th><spring:message code="lbl.mhvID"/></th>
                                 <th><spring:message code="lbl.status"/></th>
                             </tr>
                             </thead>
@@ -86,6 +87,7 @@
                                 <td><%=memberList.get(i)[0]%></td>
                                 <td><%=memberList.get(i)[1]%></td>
                                 <td><%=memberList.get(i)[2]%></td>
+                                <td><%=memberList.get(i)[6]%></td>
                                 <td>
                                     <% if (memberList.get(i)[5] == null || memberList.get(i)[5].equals("")) {%>
                                     <b>Not Yet Reviewed</b>

@@ -902,7 +902,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		try {
 			String hql = "select concat(vc.first_name, ' ', vc.lastName) as name, case when vc.gender = 'M' then 'Male' else 'Female' end as gender," +
 					" concat(extract(year from age(now(), vc.birth_date)), ' year(s) ', extract(month from age(now(), vc.birth_date)), ' month(s)') as age," +
-					" vc.health_id, vc.base_entity_id, r.status from core.\"viewJsonDataConversionOfClient\" vc left join" +
+					" vc.health_id, vc.base_entity_id, r.status, vc.provider_id from core.\"viewJsonDataConversionOfClient\" vc left join" +
 					" core.reviews r on vc.base_entity_id = r.base_entity_id where vc.cc_name = '"
 					+ ccName +"' and vc.entity_type != 'ec_household';";
 			Query query = session.createSQLQuery(hql);
