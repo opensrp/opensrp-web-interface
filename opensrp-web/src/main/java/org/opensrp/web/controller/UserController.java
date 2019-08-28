@@ -538,7 +538,6 @@ public class UserController {
 			account.setRoles(gettingAccount.getRoles());
 			userServiceImpl.updatePassword(account);
 		} else {
-			
 			return new ModelAndView("user/password", "command", gettingAccount);
 		}
 		return new ModelAndView("redirect:/user.html?lang=" + locale);
