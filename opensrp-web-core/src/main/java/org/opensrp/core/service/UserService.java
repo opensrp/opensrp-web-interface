@@ -511,4 +511,9 @@ public class UserService {
 		}
 		return errorMessage;
 	}
+
+	@Transactional
+	public List<Object[]> getUsersCatchmentAreaTableAsJson(int userId) {
+		return usersCatchmentAreaService.getUsersCatchmentAreaTableAsJson(userId);
+	}
 }

@@ -1021,6 +1021,22 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return mhvList;
 	}
 
+	@Override
+	public <T> List<T> getCatchmentArea(int userId) {
+		Session session = sessionFactory.openSession();
+		List<T> catchmentAreas = null;
+		try {
+			String hql = "select * from core.get_user_catchment(:userId)";
+			catchmentAreas = session.createSQLQuery(hql).setInteger("userId", userId).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return catchmentAreas;
+	}
+
 	public <T> List<T> getReportData(SearchBuilder searchBuilder, String procedureName) {
 		Session session = sessionFactory.openSession();
 		List<T> aggregatedList = null;

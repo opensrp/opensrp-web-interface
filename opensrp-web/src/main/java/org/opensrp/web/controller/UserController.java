@@ -592,7 +592,10 @@ public class UserController {
 		JSONArray data = locationServiceImpl.getLocationDataAsJson(parentIndication, parentKey);
 		TeamMember member = teamMemberServiceImpl.findByForeignKey(id, "person_id", "TeamMember");
 		boolean isTeamMember = member!=null?true:false;
+		List<Object[]> catchmentAreas = userServiceImpl.getUsersCatchmentAreaTableAsJson(id);
+		System.out.println("RENDERING JSON:->");
 		session.setAttribute("usersCatchmentAreas", usersCatchmentAreas);
+		session.setAttribute("catchmentAreaTable", catchmentAreas);
 		session.setAttribute("locationTreeData", data);
 		session.setAttribute("isTeamMember", isTeamMember);
 		session.setAttribute("userId", id);

@@ -91,4 +91,9 @@ public class UsersCatchmentAreaService {
         return usersCatchmentAreas;
     }
 
+    @Transactional
+    public List<Object[]> getUsersCatchmentAreaTableAsJson(int userId) {
+        return repository.getCatchmentArea(userId);
+    }
+
 }

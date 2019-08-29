@@ -136,4 +136,6 @@ public interface DatabaseRepository {
 
 	public List<ReportDTO> getMHVListFilterWise(String filterString);
 
+	public <T> List<T> getCatchmentArea(int userId);
+
 }
