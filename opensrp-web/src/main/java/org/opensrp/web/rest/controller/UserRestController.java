@@ -126,12 +126,15 @@ public class UserRestController {
 	}
 	
 	@RequestMapping(value = "/{id}/mhv", method = RequestMethod.POST)
-	public ResponseEntity<String> saveUserMHV(@PathVariable("id") int facilityId, @RequestBody UserDTO userDTO,
+	public ResponseEntity<String> saveUserMHV(@PathVariable("id") int facilityId,
+                                              @RequestBody UserDTO userDTO,
 	                                          ModelMap model) throws Exception {
 		TeamMember teamMember = new TeamMember();
 		String userNameUniqueError = "";
 		Team team = new Team();
 		Facility facility = new Facility();
+		User loggedInUser = userServiceImpl.getLoggedInUser();
+		TeamMember loggedInMember = teamMemberServiceImpl.findByForeignKey(loggedInUser.getId(),"person_id", "TeamMember");
 		User user = new User();
 		String firstName = "";
 		String lastName = "";
@@ -140,8 +143,7 @@ public class UserRestController {
 			Role role = roleService.findByKey("Provider", "name", Role.class);
 			userDTO.setRoles("" + role.getId());
 			facility = (Facility) facilityService.findById(facilityId, "id", Facility.class);
-			Location location = locationService.findByKey(facility.getWard(), "name", Location.class);
-			team = teamService.findByKey(location.getUuid(), "locationUuid", Team.class);
+			team = loggedInMember.getTeam();
 			
 			if (!isExists) {
 				user = userServiceImpl.convert(userDTO);

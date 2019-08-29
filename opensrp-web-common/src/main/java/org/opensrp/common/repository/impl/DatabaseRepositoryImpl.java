@@ -180,7 +180,23 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		session.close();
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
-	
+
+	@Override
+	public <T> T findByForeignKey(int id, String fieldName, String className) {
+		Session session = sessionFactory.openSession();
+		List<T> result = null;
+		try {
+			String hql = "from "+className +" where " + fieldName + " = :id";
+			result = session.createQuery(hql).setInteger("id", id).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+	}
+
+
 	/**
 	 * <p>
 	 * {@link #findByKey(String, String, Class)} fetch entity by {@link #sessionFactory}. This is a

@@ -112,6 +112,11 @@ public class TeamMemberService {
 	public <T> T findById(int id, String fieldName, Class<?> className) {
 		return repository.findById(id, fieldName, className);
 	}
+
+	@Transactional
+	public <T> T findByForeignKey(int id, String fieldName, String className) {
+		return repository.findByForeignKey(id, fieldName, className);
+	}
 	
 	@Transactional
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
