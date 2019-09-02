@@ -223,15 +223,24 @@ public class UserController {
 			parentUserName = parentUser.getUsername() + " (" + parentUser.getFullName() + ")";
 			parentUserId = parentUser.getId();
 		}
+		List<Branch> branches = branchService.findAll("Branch");
+
+		model.addAttribute("branches", branches);
 		session.setAttribute("parentUserName", parentUserName);
 		session.setAttribute("parentUserId", parentUserId);
 		/** end parent user section */
 		userServiceImpl.setRolesAttributes(userServiceImpl.getSelectedRoles(account), session);
-		
+
+		session.setAttribute("selectedBranches", account.getBranches());
+
 		//for teamMember
 		Map<String, Object> fieldValues = new HashMap<String, Object>();
 		fieldValues.put("person", account);
 		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
+
+		System.out.println("TEAM NAME:->");
+		System.out.println(teamMember.getTeam().getName());
+
 		if (teamMember != null) {
 			
 			//System.out.println(teamMember.toString());
@@ -356,11 +365,13 @@ public class UserController {
 	public ModelAndView editUser(@RequestParam(value = "parentUser", required = false) Integer parentUserId,
 	                             @RequestParam(value = "roles", required = false) String[] roles,
 	                             @RequestParam(value = "team", required = false) Integer teamId,
+	                             @RequestParam(value = "branches", required = false) String[] branches,
 	                             @RequestParam(value = "locationList[]", required = false) int[] locations,
 	                             @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
 	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
-		
+
 		account.setRoles(userServiceImpl.setRoles(roles));
+		account.setBranches(userServiceImpl.setBranches(branches));
 		account.setId(id);
 		User parentUser = userServiceImpl.findById(parentUserId, "id", User.class);
 		account.setParentUser(parentUser);
@@ -594,11 +605,14 @@ public class UserController {
 		boolean isTeamMember = member!=null?true:false;
 		List<Object[]> catchmentAreas = userServiceImpl.getUsersCatchmentAreaTableAsJson(id);
 		System.out.println("RENDERING JSON:->");
+		System.out.println(data);
+		System.out.println(catchmentAreas.size());
 		session.setAttribute("usersCatchmentAreas", usersCatchmentAreas);
 		session.setAttribute("catchmentAreaTable", catchmentAreas);
 		session.setAttribute("locationTreeData", data);
 		session.setAttribute("isTeamMember", isTeamMember);
 		session.setAttribute("userId", id);
+		System.out.println("EVERYTHING IS OKAY");
 		return "user/catchment-area";
 	}
 	

@@ -186,8 +186,8 @@
 							</c:forEach>
 						</select>
 					</div>
-
 				</div>
+
 				<div class="row col-12 tag-height" id="teamDiv" style="display:none">
 					<div class="form-group">
 						<label class="label-width" for="inputPassword6"><spring:message code="lbl.cc"/></label>

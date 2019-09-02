@@ -62,7 +62,6 @@
                         </select>
                     </div>
                     <div class="col-sm-1">
-                        <input id="catchment-areas" value="<%=usersCatchmentAreas%>" type="hidden">
                         <input id="userId" value="<%=userId%>" type="hidden">
                         <button id="saveCatchmentArea"
                                 class="btn btn-primary btn-sm"
@@ -72,56 +71,58 @@
                         </button>
                     </div>
                 </div>
+                <%if (catchmentAreas != null && catchmentAreas.size() > 0) {%>
                 <div class="row" style="margin-top: 60px;">
                     <table>
                         <thead>
-                            <tr>
-                                <th><spring:message code="lbl.division"/></th>
-                                <th><spring:message code="lbl.district"/></th>
-                                <th><spring:message code="lbl.upazila"/></th>
-                                <th><spring:message code="lbl.union"/></th>
-                                <th><spring:message code="lbl.action"/></th>
-                            </tr>
+                        <tr>
+                            <th><spring:message code="lbl.division"/></th>
+                            <th><spring:message code="lbl.district"/></th>
+                            <th><spring:message code="lbl.upazila"/></th>
+                            <th><spring:message code="lbl.union"/></th>
+                            <th><spring:message code="lbl.action"/></th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <% for(int i = 0; i < catchmentAreas.size(); i++) { %>
-                            <tr>
-                                <td>
-                                    <%if (catchmentAreas.get(i)[0] == null) {%>
-                                    All
-                                    <% } else { %>
-                                    <%=catchmentAreas.get(i)[0]%>
-                                    <% } %>
-                                </td>
-                                <td>
-                                    <%if (catchmentAreas.get(i)[1] == null) {%>
-                                    All
-                                    <% } else { %>
-                                    <%=catchmentAreas.get(i)[1]%>
-                                    <% } %>
-                                </td>
-                                <td>
-                                    <%if (catchmentAreas.get(i)[2] == null) {%>
-                                    All
-                                    <% } else { %>
-                                    <%=catchmentAreas.get(i)[2]%>
-                                    <% } %>
-                                </td>
-                                <td>
-                                    <%if (catchmentAreas.get(i)[3] == null) {%>
-                                    All
-                                    <% } else { %>
-                                    <%=catchmentAreas.get(i)[3]%>
-                                    <% } %>
-                                </td>
-                                <td>
-                                    <a href="#top" id="edit" onclick="editLocation(<%=catchmentAreas.get(i)[4]%>)">Edit</a>
-                                </td>
-                            </tr>
-                            <% } %>
+                        <% for(int i = 0; i < catchmentAreas.size(); i++) { %>
+                        <tr>
+                            <td>
+                                <%if (catchmentAreas.get(i)[0] == null) {%>
+                                All
+                                <% } else { %>
+                                <%=catchmentAreas.get(i)[0]%>
+                                <% } %>
+                            </td>
+                            <td>
+                                <%if (catchmentAreas.get(i)[1] == null) {%>
+                                All
+                                <% } else { %>
+                                <%=catchmentAreas.get(i)[1]%>
+                                <% } %>
+                            </td>
+                            <td>
+                                <%if (catchmentAreas.get(i)[2] == null) {%>
+                                All
+                                <% } else { %>
+                                <%=catchmentAreas.get(i)[2]%>
+                                <% } %>
+                            </td>
+                            <td>
+                                <%if (catchmentAreas.get(i)[3] == null) {%>
+                                All
+                                <% } else { %>
+                                <%=catchmentAreas.get(i)[3]%>
+                                <% } %>
+                            </td>
+                            <td>
+                                <a href="#top" id="edit" onclick="editLocation(<%=catchmentAreas.get(i)[4]%>)">Edit</a>
+                            </td>
+                        </tr>
+                        <% } %>
                         </tbody>
                     </table>
                 </div>
+                <% } %>
             </div>
             <div class="card-footer small text-muted"></div>
         </div>
@@ -153,9 +154,11 @@
             $('#locations option').remove();
             $('#locations').multiSelect('refresh');
             var selectedAreas = [];
-            <% for (int i = 0; i < usersCatchmentAreas.size(); i++) {%>
-            selectedAreas[<%=i%>] = <%=usersCatchmentAreas.get(i).getLocationId()%>
-            <%}%>
+            <% if (usersCatchmentAreas != null) {
+                for (int i = 0; i < usersCatchmentAreas.size(); i++) {%>
+                    selectedAreas[<%=i%>] = <%=usersCatchmentAreas.get(i).getLocationId()%>
+                <%}
+            }%>
             var i, j, r = [], z = [];
             var id = data.selected[0];
             var ids = [];
@@ -224,14 +227,15 @@
         });
     });
     function editLocation(parentId) {
-        console.log(parentId);
-        console.log("clicked!");
         $('#locations option').remove();
         $('#locations').multiSelect('refresh');
         var i, selectedAreas = [], z = [], locations = [], ids = [];
-        <% for (int i = 0; i < usersCatchmentAreas.size(); i++) {%>
-        selectedAreas[<%=i%>] = <%=usersCatchmentAreas.get(i).getLocationId()%>
-        <%}%>
+
+        <%if (usersCatchmentAreas != null) {
+            for (int i = 0; i < usersCatchmentAreas.size(); i++) {%>
+                selectedAreas[<%=i%>] = <%=usersCatchmentAreas.get(i).getLocationId()%>
+            <%}
+        }%>
 
         locations = $('#locationTree').jstree(true).get_node(parentId).children;
         console.log(locations);

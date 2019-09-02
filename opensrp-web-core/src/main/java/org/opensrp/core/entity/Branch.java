@@ -82,4 +82,15 @@ public class Branch {
     public void setUpdated(Date updated) {
         this.updated = updated;
     }
+
+    @Override
+    public String toString() {
+        return "Branch{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", created=" + created +
+                ", updated=" + updated +
+                '}';
+    }
 }
