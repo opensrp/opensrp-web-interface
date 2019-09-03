@@ -604,9 +604,7 @@ public class UserController {
 		TeamMember member = teamMemberServiceImpl.findByForeignKey(id, "person_id", "TeamMember");
 		boolean isTeamMember = member!=null?true:false;
 		List<Object[]> catchmentAreas = userServiceImpl.getUsersCatchmentAreaTableAsJson(id);
-		System.out.println("RENDERING JSON:->");
-		System.out.println(data);
-		System.out.println(catchmentAreas.size());
+
 		session.setAttribute("usersCatchmentAreas", usersCatchmentAreas);
 		session.setAttribute("catchmentAreaTable", catchmentAreas);
 		session.setAttribute("locationTreeData", data);

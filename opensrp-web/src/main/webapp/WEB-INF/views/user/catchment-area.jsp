@@ -31,8 +31,8 @@
 </head>
 <%
     JSONArray locationTreeData = (JSONArray)session.getAttribute("locationTreeData");
-    int userId = (int)session.getAttribute("userId");
-    boolean isTeamMember = (boolean) session.getAttribute("isTeamMember");
+    Integer userId = (Integer) session.getAttribute("userId");
+    Boolean isTeamMember = (Boolean) session.getAttribute("isTeamMember");
     List<Object[]> catchmentAreas = (List<Object[]>) session.getAttribute("catchmentAreaTable");
     List<UsersCatchmentArea> usersCatchmentAreas = (List<UsersCatchmentArea>) session.getAttribute("usersCatchmentAreas");
 

@@ -6,12 +6,13 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 @Service
 @Entity
 @Table(name = "branch", schema = "core")
-public class Branch {
+public class Branch implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
