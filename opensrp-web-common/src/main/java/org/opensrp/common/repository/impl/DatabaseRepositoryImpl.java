@@ -18,6 +18,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
+import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import javax.xml.transform.Transformer;
 
 /**
  * <p>
@@ -1022,6 +1024,34 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
+	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId) {
+		List<LocationTreeDTO> treeDTOS = new ArrayList<LocationTreeDTO>();
+		Session session = sessionFactory.openSession();
+		try {
+			String hql = "select * from core.get_location_tree(:memberId, :childRoleId)";
+			Query query = session.createSQLQuery(hql)
+					.addScalar("id", StandardBasicTypes.INTEGER)
+					.addScalar("code", StandardBasicTypes.STRING)
+					.addScalar("name", StandardBasicTypes.STRING)
+					.addScalar("leaf_loc_id", StandardBasicTypes.INTEGER)
+					.addScalar("member_id", StandardBasicTypes.INTEGER)
+					.addScalar("username", StandardBasicTypes.STRING)
+					.addScalar("first_name", StandardBasicTypes.STRING)
+					.addScalar("last_name", StandardBasicTypes.STRING)
+					.addScalar("loc_tag_name", StandardBasicTypes.STRING)
+					.setResultTransformer(Transformers.aliasToBean(LocationTreeDTO.class))
+					.setInteger("memberId", memberId)
+					.setInteger("childRoleId", childRoleId);
+			treeDTOS = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return treeDTOS;
+	}
+
+	@Override
 	public <T> List<T> getCatchmentArea(int userId) {
 		Session session = sessionFactory.openSession();
 		List<T> catchmentAreas = null;
@@ -1035,6 +1065,22 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 
 		return catchmentAreas;
+	}
+
+	@Override
+	public <T> T countByField(int id, String fieldName, String className) {
+		Session session = sessionFactory.openSession();
+		List<T> result = null;
+		try {
+			String hql = "select count(*) from core."+className+ " where " + fieldName + " = :id";
+			Query query = session.createSQLQuery(hql).setInteger("id", id);
+			result = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return result.get(0);
 	}
 
 	public <T> List<T> getReportData(SearchBuilder searchBuilder, String procedureName) {
@@ -1138,5 +1184,4 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			query.setParameter("age_to", "");
 		}
 	}
-
 }

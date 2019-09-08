@@ -10,10 +10,14 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.HTTP;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.core.entity.HealthId;
 import org.opensrp.core.service.HealthIdService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -85,6 +89,20 @@ public class HealthIdController {
 			return new ModelAndView("/health-id/upload_csv");
 		}
 		return new ModelAndView("redirect:/cbhc-dashboard?lang=" + locale);
+	}
+
+	@RequestMapping(value = "/household/generated-code", method = RequestMethod.GET)
+	public ResponseEntity<String> getHouseholdIds(@RequestParam("villageId") int villageId,
+												  @RequestParam("username") String username) throws Exception {
+		int[] villageIds = new int[100];
+		if (villageId != 0) {
+			villageIds[0] = villageId;
+		} else {
+
+		}
+
+		JSONArray array = healthIdService.generateHouseholdId(villageIds);
+		return new ResponseEntity<>(array.toString(), HttpStatus.OK);
 	}
 	
 }

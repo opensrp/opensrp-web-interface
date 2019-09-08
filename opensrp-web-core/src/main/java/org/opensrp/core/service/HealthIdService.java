@@ -3,10 +3,8 @@ package org.opensrp.core.service;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigInteger;
+import java.util.*;
 
 import javax.transaction.Transactional;
 
@@ -17,6 +15,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.core.entity.HealthId;
@@ -27,6 +26,7 @@ import org.springframework.stereotype.Service;
 public class HealthIdService {
 	
 	private static final Logger logger = Logger.getLogger(HealthIdService.class);
+	private static int HEALTH_ID_LIMIT = 200;
 	
 	@Autowired
 	private DatabaseRepository repository;
@@ -44,6 +44,11 @@ public class HealthIdService {
 	@Transactional
 	public <T> long save(T t) throws Exception {
 		return repository.save(t);
+	}
+
+	@Transactional
+	public <T> long saveAll(List<T> t) throws Exception {
+		return repository.saveAll(t);
 	}
 	
 	@Transactional
@@ -90,6 +95,7 @@ public class HealthIdService {
 		try {
 			br = new BufferedReader(new FileReader(csvFile));
 			int count = 0;
+			List<HealthId> healthIds = new ArrayList<>();
 			while ((line = br.readLine()) != null) {
 				String[] healthIdFromCsv = line.split(cvsSplitBy);
 				if (position == 0) {
@@ -107,13 +113,14 @@ public class HealthIdService {
 							healthId.sethId(healthIdFromCsv[0].trim()); // health_id
 							healthId.setType("Reserved");
 							logger.info(healthId.toString());
-							save(healthId);
+							healthIds.add(healthId);
 							count++;
 						}
 					}
 				}
 				position++;
 			}
+			saveAll(healthIds);
 			msg = "Number of health-id uploaded successfully :  " + count;
 			
 		}
@@ -186,5 +193,42 @@ public class HealthIdService {
 		return healthIds;
 		
 	}
-	
+
+	public JSONArray generateHouseholdId(int[] villageIds) throws Exception {
+		JSONArray villageCodes = new JSONArray();
+		for (int i = 0; i < villageIds.length; i++) {
+			if (villageIds[i] == 0)break;
+			BigInteger b = repository.countByField(villageIds[i], "location_id", "health_id");
+			int number = b.intValue();
+			List<HealthId> healthIds = new ArrayList<>();
+			for (int j = 0; j < HEALTH_ID_LIMIT; j++){
+				int villageId = villageIds[i];
+				number ++;
+				String forthDigit = String.valueOf(number%10);
+				String thirdDigit = String.valueOf((number/10)%10);
+				String secondDigit = String.valueOf((number/100)%10);
+				String firstDigit = String.valueOf((number/1000)%10);
+				String finalNumber = firstDigit+secondDigit+thirdDigit+forthDigit;
+
+				HealthId healthId = new HealthId();
+				healthId.setCreated(new Date());
+				healthId.sethId(finalNumber);
+				healthId.setLocationId(villageId);
+				healthId.setStatus(true);
+				healthIds.add(healthId);
+			}
+			long isSaved = repository.saveAll(healthIds);
+			if (isSaved == 1) {
+				JSONObject villageCode = new JSONObject();
+				villageCode.put("village_id", villageIds[i]);
+				JSONArray ids = new JSONArray();
+				for (HealthId healthId : healthIds) {
+					ids.put(healthId.gethId());
+				}
+				villageCode.put("generated_code", ids);
+				villageCodes.put(villageCode);
+			}
+		}
+		return villageCodes;
+	}
 }

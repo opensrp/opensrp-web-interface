@@ -17,6 +17,7 @@ import org.hibernate.SessionFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.util.TreeNode;
 import org.opensrp.core.entity.Location;
@@ -416,5 +417,96 @@ public class LocationService {
 			}
 		}
 		return locationSet;
+	}
+
+	public JSONArray convertLocationTreeToJSON(List<LocationTreeDTO> treeDTOS) throws JSONException {
+		JSONArray locationTree = new JSONArray();
+
+		Map<String, Boolean> mp = new HashMap<>();
+		JSONObject object = new JSONObject();
+		JSONArray locations = new JSONArray();
+		JSONObject fullLocation = new JSONObject();
+
+		int counter = 0;
+		String username = "";
+
+		for (LocationTreeDTO treeDTO: treeDTOS) {
+			counter++;
+			if (mp.get(treeDTO.getUsername()) == null || !mp.get(treeDTO.getUsername())) {
+				if (counter > 1) {
+					object.put("username", username);
+					object.put("locations", locations);
+					locationTree.put(object);
+					locations = new JSONArray();
+					object = new JSONObject();
+				}
+				mp.put(treeDTO.getUsername(), true);
+			}
+
+			username = treeDTO.getUsername();
+
+			if (treeDTO.getLoc_tag_name().equalsIgnoreCase("country")) {
+				if (counter > 1) {
+					fullLocation = setEmptyValues(fullLocation);
+					locations.put(fullLocation);
+					fullLocation = new JSONObject();
+				}
+			}
+
+			JSONObject location = new JSONObject();
+			location.put("code", treeDTO.getCode());
+			location.put("id", treeDTO.getId());
+			location.put("name", treeDTO.getName());
+			fullLocation.put(treeDTO.getLoc_tag_name().toLowerCase().replaceAll(" ", "_"), location);
+
+			if (counter == treeDTOS.size()) {
+				locations.put(fullLocation);
+				object.put("username", username);
+				object.put("locations", locations);
+				locationTree.put(object);
+				object = new JSONObject();
+				locations = new JSONArray();
+			}
+		}
+		return locationTree;
+	}
+
+	private JSONObject getLocationProperty() throws JSONException {
+		JSONObject property = new JSONObject();
+		property.put("name", "");
+		property.put("id", 0);
+		property.put("code", "00");
+		return property;
+	}
+
+	private JSONObject setEmptyValues(JSONObject fullLocation) throws JSONException {
+		if (!fullLocation.has("country")) {
+			fullLocation.put("country", getLocationProperty());
+		}
+		if (!fullLocation.has("division")) {
+			fullLocation.put("division", getLocationProperty());
+		}
+		if (!fullLocation.has("district")) {
+			fullLocation.put("district", getLocationProperty());
+		}
+		if (!fullLocation.has("city_corporation")) {
+			fullLocation.put("city_corporation", getLocationProperty());
+		}
+		if (!fullLocation.has("upazilla")) {
+			fullLocation.put("upazilla", getLocationProperty());
+		}
+		if (!fullLocation.has("union")) {
+			fullLocation.put("union", getLocationProperty());
+		}
+		if (!fullLocation.has("ward")) {
+			fullLocation.put("ward", getLocationProperty());
+		}
+		if (!fullLocation.has("block")) {
+			fullLocation.put("block", getLocationProperty());
+		}
+		if (!fullLocation.has("village")) {
+			fullLocation.put("village", getLocationProperty());
+		}
+		return fullLocation;
 	}
 }

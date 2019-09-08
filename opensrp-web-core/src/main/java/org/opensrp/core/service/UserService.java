@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.core.dto.UserLocationDTO;
@@ -515,5 +516,10 @@ public class UserService {
 	@Transactional
 	public List<Object[]> getUsersCatchmentAreaTableAsJson(int userId) {
 		return usersCatchmentAreaService.getUsersCatchmentAreaTableAsJson(userId);
+	}
+
+	@Transactional
+	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId) {
+		return repository.getProviderLocationTreeByChildRole(memberId, childRoleId);
 	}
 }

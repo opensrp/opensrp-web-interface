@@ -34,7 +34,10 @@ public class HealthId {
 	
 	@Column(name = "status")
 	private Boolean status = false;
-	
+
+	@Column(name = "location_id")
+	private int locationId;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
 	@CreationTimestamp
@@ -105,6 +108,13 @@ public class HealthId {
     	this.updated = updated;
     }
 
+	public int getLocationId() {
+		return locationId;
+	}
+
+	public void setLocationId(int locationId) {
+		this.locationId = locationId;
+	}
 
 	@Override
     public int hashCode() {

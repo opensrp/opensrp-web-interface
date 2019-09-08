@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.google.gson.Gson;
 import javassist.tools.framedump;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.entity.*;
 import org.opensrp.core.service.*;
@@ -22,6 +24,7 @@ import org.opensrp.core.util.FacilityHelperUtil;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import static org.springframework.http.HttpStatus.OK;
 
 /**
  * <p>
@@ -54,6 +58,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController {
 	
 	private static final Logger logger = Logger.getLogger(UserController.class);
+	private static final int childRoleId = 13;
 	
 	@Value("#{opensrp['bahmni.url']}")
 	private String BAHMNI_VISIT_URL;
@@ -613,5 +618,22 @@ public class UserController {
 		System.out.println("EVERYTHING IS OKAY");
 		return "user/catchment-area";
 	}
-	
+
+	@RequestMapping(value = "/provider/location-tree", method = RequestMethod.GET)
+	public ResponseEntity<String> getLocationTree(@RequestParam("username") String username) throws JSONException {
+
+		User user = userServiceImpl.findByKey(username, "username", User.class);
+		TeamMember teamMember = teamMemberServiceImpl.findByForeignKey(user.getId(), "person_id", "TeamMember");
+		List<LocationTreeDTO> treeDTOS = userServiceImpl.getProviderLocationTreeByChildRole(teamMember.getId(), childRoleId);
+
+		JSONArray array = new JSONArray();
+		try {
+			array = locationServiceImpl.convertLocationTreeToJSON(treeDTOS);
+			System.out.println(array);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseEntity<>(array.toString(), OK);
+	}
 }
