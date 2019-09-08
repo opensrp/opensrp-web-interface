@@ -92,7 +92,34 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return returnValue;
 	}
-	
+
+	@Override
+	public <T> long saveAll(List<T> t) throws Exception {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		long returnValue = -1;
+		try {
+			tx = session.beginTransaction();
+			for (int i = 0; i < t.size(); i++) {
+				session.saveOrUpdate(t.get(i));
+			}
+			logger.info("saved successfully: " + t.getClass().getName());
+			returnValue = 1;
+			if (!tx.wasCommitted())
+				tx.commit();
+		}
+		catch (HibernateException e) {
+			returnValue = -1;
+			tx.rollback();
+			logger.error(e);
+			throw new Exception(e.getMessage());
+		}
+		finally {
+			session.close();
+		}
+		return returnValue;
+	}
+
 	/**
 	 * Update data object to persistent through Hibernate {@link #sessionFactory}
 	 * 

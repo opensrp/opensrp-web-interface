@@ -69,7 +69,9 @@ import javax.servlet.http.HttpSession;
 public interface DatabaseRepository {
 	
 	public <T> long save(T t) throws Exception;
-	
+
+	public <T> long saveAll(List<T> t) throws Exception;
+
 	public <T> int update(T t);
 	
 	public <T> boolean delete(T t);
