@@ -95,7 +95,6 @@ public class HealthIdService {
 		try {
 			br = new BufferedReader(new FileReader(csvFile));
 			int count = 0;
-			List<HealthId> healthIds = new ArrayList<>();
 			while ((line = br.readLine()) != null) {
 				String[] healthIdFromCsv = line.split(cvsSplitBy);
 				if (position == 0) {
@@ -113,14 +112,13 @@ public class HealthIdService {
 							healthId.sethId(healthIdFromCsv[0].trim()); // health_id
 							healthId.setType("Reserved");
 							logger.info(healthId.toString());
-							healthIds.add(healthId);
+							save(healthId);
 							count++;
 						}
 					}
 				}
 				position++;
 			}
-			saveAll(healthIds);
 			msg = "Number of health-id uploaded successfully :  " + count;
 			
 		}

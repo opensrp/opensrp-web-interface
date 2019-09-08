@@ -135,6 +135,11 @@ public class LocationService {
 		
 		return location;
 	}
+
+	@Transactional
+	public <T> List<T> getVillageIdByProvider(int memberId, int childRoleId, int locationTagId) {
+		return repository.getVillageIdByProvider(memberId, childRoleId, locationTagId);
+	}
 	
 	public Map<Integer, String> getLocationTreeAsMap() {
 		List<Location> locations = findAll("Location");

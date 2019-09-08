@@ -1068,6 +1068,25 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
+	public <T> List<T> getVillageIdByProvider(int memberId, int childRoleId, int locationTagId) {
+		Session session = sessionFactory.openSession();
+		List<T> results = null;
+		try {
+			String hql = "select * from core.get_location_tree_id(:memberId, :childRoleId, :locationTagId);";
+			Query query = session.createSQLQuery(hql)
+					.setInteger("memberId", memberId)
+					.setInteger("childRoleId", childRoleId)
+					.setInteger("locationTagId", locationTagId);
+			results = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return results;
+	}
+
+	@Override
 	public <T> T countByField(int id, String fieldName, String className) {
 		Session session = sessionFactory.openSession();
 		List<T> result = null;

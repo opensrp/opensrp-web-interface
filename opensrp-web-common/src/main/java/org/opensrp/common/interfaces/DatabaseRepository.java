@@ -139,6 +139,8 @@ public interface DatabaseRepository {
 
 	public <T> List<T> getCatchmentArea(int userId);
 
+	public <T> List<T> getVillageIdByProvider(int memberId, int childRoleId, int locationTagId);
+
 	public <T> T countByField(int id, String fieldName, String className);
 
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId);

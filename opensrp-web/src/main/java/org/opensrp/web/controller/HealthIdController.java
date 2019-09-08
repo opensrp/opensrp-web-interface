@@ -5,16 +5,21 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.json.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.core.entity.HealthId;
+import org.opensrp.core.entity.TeamMember;
+import org.opensrp.core.entity.User;
 import org.opensrp.core.service.HealthIdService;
+import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.TeamMemberService;
+import org.opensrp.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,10 +39,20 @@ public class HealthIdController {
 	private HealthIdService healthIdService;
 
 	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private LocationService locationService;
+
+	@Autowired
+	private TeamMemberService teamMemberService;
+
+	@Autowired
 	private HealthId healthId;
 	
-	
-	
+	private static int CHILD_ROLE_ID = 13;
+	private static int LOCATION_TAG_ID = 15;
+
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_HEALTH_ID')")
 	@RequestMapping(value = "/healthId/upload_csv.html", method = RequestMethod.GET)
 	public String csvUpload(HttpSession session, ModelMap model, Locale locale) throws JSONException {
@@ -94,11 +109,17 @@ public class HealthIdController {
 	@RequestMapping(value = "/household/generated-code", method = RequestMethod.GET)
 	public ResponseEntity<String> getHouseholdIds(@RequestParam("villageId") int villageId,
 												  @RequestParam("username") String username) throws Exception {
-		int[] villageIds = new int[100];
+		int[] villageIds = new int[1000];
 		if (villageId != 0) {
 			villageIds[0] = villageId;
 		} else {
-
+			User user = userService.findByKey(username, "username", User.class);
+			TeamMember member = teamMemberService.findByForeignKey(user.getId(), "person_id", "TeamMember");
+			List<Integer> locationIds = locationService.getVillageIdByProvider(member.getId(), CHILD_ROLE_ID, LOCATION_TAG_ID);
+			int i = 0;
+			for (Integer locationId : locationIds) {
+				villageIds[i++] = locationId;
+			}
 		}
 
 		JSONArray array = healthIdService.generateHouseholdId(villageIds);
