@@ -11,21 +11,10 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <%
-	Integer selectedPersonId = (Integer)session.getAttribute("selectedPersonId");
-	String locationList = (String)session.getAttribute("locationList");
-	String selectedLocationList = (String)session.getAttribute("selectedLocationList");
-
 	Map<Integer, String> teams =  (Map<Integer, String>)session.getAttribute("teams");
-
-	String selectedPersonName = (String)session.getAttribute("personName");
-
 	Integer selectedTeamId = (Integer)session.getAttribute("selectedTeamId");
-
-	int roleIdCHCP= -1;
-	int roleIdProvider= -1;
-
-
 %>
 
 <head>
@@ -64,11 +53,11 @@
 					<img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
 
 			</div>
-			<form:form 	modelAttribute="account" id="UserInfo" class="form-inline">
+			<form:form 	modelAttribute="account" id="UserInfo" class="form-inline" autocomplete="false">
 
 				<div class="row col-12 tag-height">
 					<div class="form-group required">
-						<label class="label-width" for="inputPassword6"> <spring:message code="lbl.firstName"/> </label>
+						<label class="label-width" for="firstName"> <spring:message code="lbl.firstName"/> </label>
 						<form:input path="firstName" class="form-control mx-sm-3"
 									required="required" />
 					</div>
@@ -76,40 +65,29 @@
 
 				<div class="row col-12 tag-height">
 					<div class="form-group required">
-						<label class="label-width" for="inputPassword6"> <spring:message code="lbl.lastName"/> </label>
+						<label class="label-width" for="lastName"> <spring:message code="lbl.lastName"/> </label>
 						<form:input path="lastName" class="form-control mx-sm-3"
 									required="required"/>
 					</div>
 				</div>
 
 				<div class="row col-12 tag-height">
-					<div class="form-group required">
-						<label class="label-width"  for="inputPassword6"> <spring:message code="lbl.email"/> </label>
-						<input type="email" class="form-control mx-sm-3" name="email" required="required">
-
+					<div class="form-group">
+						<label class="label-width" for="email"> <spring:message code="lbl.email"/> </label>
+						<input type="email" class="form-control mx-sm-3" name="email">
 					</div>
 				</div>
 
 				<div class="row col-12 tag-height">
 					<div class="form-group">
-						<label class="label-width" for="inputPassword6"><spring:message code="lbl.mobile"/></label>
+						<label class="label-width" for="mobile"><spring:message code="lbl.mobile"/></label>
 						<form:input path="mobile" class="form-control mx-sm-3" />
 					</div>
 				</div>
-				<div class="row col-12 tag-height">
-					<div class="form-group">
-						<label class="label-width" for="inputPassword6"><spring:message code="lbl.identifier"/></label>
-						<form:input path="idetifier" class="form-control mx-sm-3" />
-						<small id="passwordHelpInline" class="text-muted text-para">
-							<spring:message code="lbl.identifierMsg"/>
-						</small>
-
-					</div>
-				</div>
 
 				<div class="row col-12 tag-height">
 					<div class="form-group required">
-						<label class="label-width" for="inputPassword6"><spring:message code="lbl.userName"/></label>
+						<label class="label-width" for="username"><spring:message code="lbl.userName"/></label>
 						<form:input path="username" class="form-control mx-sm-3"
 									required="required" />
 						<small id="passwordHelpInline" class="text-muted text-para">
@@ -129,7 +107,7 @@
 
 				<div class="row col-12 tag-height">
 					<div class="form-group required">
-						<label class="label-width" for="inputPassword6"><spring:message code="lbl.password"/></label>
+						<label class="label-width" for="password"><spring:message code="lbl.password"/></label>
 						<input type="password" class="form-control mx-sm-3" id="password" name="password"  required />
 						<small id="passwordHelpInline" class="text-muted text-para">
 								<%-- <spring:message code="lbl.passwordMEssage"/> --%>
@@ -141,7 +119,7 @@
 
 				<div class="row col-12 tag-height">
 					<div class="form-group required">
-						<label class="label-width"  for="inputPassword6"><spring:message code="lbl.confirmedPassword"/></label>
+						<label class="label-width"  for="retypePassword"><spring:message code="lbl.confirmedPassword"/></label>
 						<form:password path="retypePassword" class="form-control mx-sm-3" id="retypePassword"
 									   required="required" />
 						<small id="passwordHelpInline" class="text-muted text-para">
@@ -153,23 +131,16 @@
 
 				<div class="row col-12 tag-height">
 					<div class="form-group required">
-						<label class="label-width"  for="inputPassword6"><spring:message code="lbl.role"/></label>
-						<%
-							List<Role> roles = (List<Role>) session.getAttribute("roles");
-							for (Role role : roles) {
-								if(role.getName().equals("Provider")){
-									roleIdProvider = role.getId();
-								}else if(role.getName().equals("CHCP")){
-									roleIdCHCP = role.getId();
-								}
-						%>
-						<form:radiobutton
-								path="roles" class="chk" value="<%=role.getId()%>" onclick='roleSelect(this)'/>
-						<label class="form-control mx-sm-3" for="defaultCheck1"> <%=role.getName()%></label>
-						<%
-							}
-						%>
-
+						<label class="label-width"  for="role">
+							<spring:message code="lbl.role"/>
+						</label>
+						<select id="role"
+								class="form-control mx-sm-3 js-example-basic-multiple"
+								name="role" required>
+							<c:forEach items="${roles}" var="role">
+								<option value="${role.id}">${role.name}</option>
+							</c:forEach>
+						</select>
 					</div>
 				</div>
 
@@ -180,7 +151,7 @@
 						</label>
 						<select id="branches"
 								class="form-control mx-sm-3 js-example-basic-multiple"
-								name="branches[]" multiple="multiple">
+								name="branches[]" multiple="multiple" required>
 							<c:forEach items="${branches}" var="branch">
 								<option value="${branch.id}">${branch.name} (${branch.code})</option>
 							</c:forEach>
@@ -190,7 +161,7 @@
 
 				<div class="row col-12 tag-height" id="teamDiv" style="display:none">
 					<div class="form-group">
-						<label class="label-width" for="inputPassword6"><spring:message code="lbl.cc"/></label>
+						<label class="label-width" for="team"><spring:message code="lbl.cc"/></label>
 						<select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
 							<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 							<%
@@ -221,7 +192,11 @@
 				</div>
 				<div class="row col-12 tag-height">
 					<div class="form-group">
-						<input type="submit" onclick="return Validate()"  value="<spring:message code="lbl.save"/>" 	class="btn btn-primary btn-block btn-center" />
+						<input
+								type="submit"
+								onclick="return Validate()"
+								value="<spring:message code="lbl.save"/>"
+								class="btn btn-primary btn-block btn-center" />
 					</div>
 				</div>
 			</form:form>
@@ -255,64 +230,17 @@
 
 
 <script type="text/javascript">
-	var locationMagicSuggest;
-	var isCHCP= 0;
-	var isProvider= 0;
-	function roleSelect(cBox){
-		//alert(cBox.checked+" - "+cBox.value);
-		var roleIdOfCHCP = <%=roleIdCHCP%>;
-		var roleIdOfProvider = <%=roleIdProvider%>;
-		var roleIdOfClickedCheckbox = cBox.value;
-
-		if(roleIdOfClickedCheckbox == roleIdOfCHCP){
-			if(cBox.checked){
-				isCHCP= 1;
-			}else{
-				isCHCP= 0;
-			}
-		}
-
-		if(roleIdOfClickedCheckbox == roleIdOfProvider){
-			if(cBox.checked){
-				isProvider= 1;
-			}else{
-				isProvider= 0;
-			}
-		}
-		showTeamAndLocationDiv();
-	}
 
 	function toggleVisibilityOfPassword() {
-		var pswrd = document.getElementById("password");
-		var retypePswrd = document.getElementById("retypePassword");
-		if (pswrd.type === "password") {
-			pswrd.type = "text";
-			retypePswrd.type = "text";
+		var password = document.getElementById("password");
+		var retypePassword = document.getElementById("retypePassword");
+		if (password.type === "password") {
+			password.type = "text";
+			retypePassword.type = "text";
 		} else {
-			pswrd.type = "password";
-			retypePswrd.type = "password";
+			password.type = "password";
+			retypePassword.type = "password";
 		}
-	}
-
-	function showTeamAndLocationDiv(){
-		if(isTeamMember()){
-			$("#locationDiv").show();
-			$("#team").prop('required',true);
-			$("#team").prop('disabled', false);
-			$("#teamDiv").show();
-		}else{
-			$("#locationDiv").hide();
-			$("#team").prop('required',false);
-			$("#team").prop('disabled', true);
-			$("#teamDiv").hide();
-		}
-	}
-
-	function isTeamMember(){
-		if(isCHCP== 1 || isProvider== 1){
-			return true;
-		}
-		return false;
 	}
 
 	function getBranches() {
@@ -331,36 +259,20 @@
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		var formData;
-		if(isTeamMember()){
-			formData = {
-				'firstName': $('input[name=firstName]').val(),
-				'lastName': $('input[name=lastName]').val(),
-				'email': $('input[name=email]').val(),
-				'mobile': $('input[name=mobile]').val(),
-				'idetifier': $('input[name=idetifier]').val(),
-				'username': $('input[name=username]').val(),
-				'password': $('input[name=password]').val(),
-				'parentUser': $('input[name=parentUser]').val(),
-				'roles': getCheckboxValueUsingClass(),
-				'team': $('#team').val(),
-				'teamMember': isTeamMember(),
-				'branches': getBranches()
-			};
-		}else{
-			formData = {
-				'firstName': $('input[name=firstName]').val(),
-				'lastName': $('input[name=lastName]').val(),
-				'email': $('input[name=email]').val(),
-				'mobile': $('input[name=mobile]').val(),
-				'idetifier': $('input[name=idetifier]').val(),
-				'username': $('input[name=username]').val(),
-				'password': $('input[name=password]').val(),
-				'parentUser': $('input[name=parentUser]').val(),
-				'roles': getCheckboxValueUsingClass(),
-				'teamMember': isTeamMember(),
-				'branches': getBranches()
-			};
-		}
+
+		formData = {
+			'firstName': $('input[name=firstName]').val(),
+			'lastName': $('input[name=lastName]').val(),
+			'email': $('input[name=email]').val(),
+			'mobile': $('input[name=mobile]').val(),
+			'username': $('input[name=username]').val(),
+			'password': $('input[name=password]').val(),
+			'parentUser': $('input[name=parentUser]').val(),
+			'roles': $('#role').val(),
+			'team': $('#team').val(),
+			'teamMember': false,
+			'branches': getBranches()
+		};
 
 		event.preventDefault();
 
@@ -394,50 +306,16 @@
 		});
 	});
 
-
-	function getCheckboxValueUsingClass(){
-		/* declare an checkbox array */
-		var chkArray = [];
-
-		/* look for all checkboes that have a class 'chk' attached to it and check if it was checked */
-		$(".chk:checked").each(function() {
-			chkArray.push($(this).val());
-		});
-
-		/* we join the array separated by the comma */
-		var selected;
-		selected = chkArray.join(',') ;
-
-		return selected;
-	}
-
 	function Validate() {
-
 		var password = document.getElementById("password").value;
 		var confirmPassword = document.getElementById("retypePassword").value;
 		if (password != confirmPassword) {
-			$("#passwordNotmatchedMessage").html("Your password is not similar with confirm password. Please enter same password in both");
+			$("#passwordNotMatchedMessage").html("Your password is not similar with confirm password. Please enter same password in both");
 
 			return false;
 		}
 
-		$("#passwordNotmatchedMessage").html("");
-		var chkArray = [];
-
-		/* look for all checkboes that have a class 'chk' attached to it and check if it was checked */
-		$(".chk:checked").each(function() {
-			chkArray.push($(this).val());
-		});
-
-		/* we join the array separated by the comma */
-		var selected;
-		selected = chkArray.join(',') ;
-		if(selected.length > 0){
-		}else{
-			$("#roleSelectmessage").html("Please select at least one role");
-			return false;
-		}
-		$("#roleSelectmessage").html("");
+		$("#passwordNotMatchedMessage").html("");
 		return true;
 	}
 

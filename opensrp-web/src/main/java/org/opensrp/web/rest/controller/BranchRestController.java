@@ -21,9 +21,6 @@ public class BranchRestController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseEntity<String> saveBranch(@RequestBody BranchDTO branchDTO) {
-
-        System.out.println(branchDTO);
-
         String msg = "";
         try {
              branchService.save(branchMapper.map(branchDTO));

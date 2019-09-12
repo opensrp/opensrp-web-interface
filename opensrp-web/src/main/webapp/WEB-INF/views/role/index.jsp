@@ -37,7 +37,12 @@
 			<div class="form-group">
 				<h5><spring:message code="lbl.roleManagement"/></h5>
 				<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_ROLE")){ %>
-				<a  href="<c:url value="/role/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addNew"/></strong></a> <%} %>
+				<a  href="<c:url value="/role/add.html?lang=${locale}"/>">
+					<strong>
+						<spring:message code="lbl.addNew"/>
+						<spring:message code="lbl.role"/>
+					</strong>
+				</a> <%} %>
 			</div>
 			<!-- Example DataTables Card-->
 			<div class="card mb-3">

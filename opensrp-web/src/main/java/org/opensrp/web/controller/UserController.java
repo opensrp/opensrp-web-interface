@@ -148,12 +148,13 @@ public class UserController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_USER')")
 	@RequestMapping(value = "/user/add.html", method = RequestMethod.GET)
-	public ModelAndView saveUser(Model model, HttpSession session, Locale locale) throws JSONException {
+	public ModelAndView addUser(Model model, HttpSession session, Locale locale) throws JSONException {
 		int[] selectedRoles = null;
 		model.addAttribute("account", new User());
-		userServiceImpl.setRolesAttributes(selectedRoles, session);
+		List<Role> roles = userServiceImpl.setRolesAttributes(selectedRoles, session);
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("locale", locale);
+		model.addAttribute("roles", roles);
 		
 		//for adding location and team
 		model.addAttribute("teamMember", new TeamMember());
@@ -242,9 +243,6 @@ public class UserController {
 		Map<String, Object> fieldValues = new HashMap<String, Object>();
 		fieldValues.put("person", account);
 		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
-
-		System.out.println("TEAM NAME:->");
-		System.out.println(teamMember.getTeam().getName());
 
 		if (teamMember != null) {
 			

@@ -390,13 +390,15 @@ public class UserService {
 	 * @param session is an argument to the HttpSession's session .
 	 */
 	@Transactional
-	public void setRolesAttributes(int[] roles, HttpSession session) {
+	public List<Role> setRolesAttributes(int[] roles, HttpSession session) {
 		//session.setAttribute("roles", repository.findAll("Role"));
 		//fetch active roles to show on user edit view
 		Map<String, Object> findCriteriaMap = new HashMap<String, Object>();
 		findCriteriaMap.put("active", true);
-		session.setAttribute("roles", repository.findAllByKeys(findCriteriaMap, Role.class));
+		List<Role> activeRoles = repository.findAllByKeys(findCriteriaMap, Role.class);
+		session.setAttribute("roles", activeRoles);
 		session.setAttribute("selectedRoles", roles);
+		return activeRoles;
 	}
 
 	public JSONArray getUserDataAsJson(String parentIndication, String parentKey) throws JSONException {
@@ -476,7 +478,7 @@ public class UserService {
 					}
 				}
 			}
-			teamMemberServiceImpl.save(teamMember);
+			teamMemberServiceImpl.update(teamMember);
 			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(
 					userLocationDTO.getLocations(),
 					userLocationDTO.getUserId());
@@ -501,7 +503,14 @@ public class UserService {
 					userLocationDTO.getUserId(),
 					team,
 					userLocationDTO.getLocations());
-			teamMemberServiceImpl.save(teamMember);
+
+			TeamMember isExist = teamMemberServiceImpl.findByForeignKey(userLocationDTO.getUserId(), "person_id", "TeamMember");
+
+			if (isExist == null)teamMemberServiceImpl.save(teamMember);
+			else {
+				isExist.setLocations(teamMember.getLocations());
+				teamMemberServiceImpl.update(isExist);
+			}
 			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(
 					userLocationDTO.getLocations(),
 					userLocationDTO.getUserId());

@@ -24,7 +24,7 @@ public class RoleControllerTest {
 	}
 	
 	@Test
-	public void tets() {
+	public void test() {
 		
 		System.err.println("roleController:" + roleController);
 	}

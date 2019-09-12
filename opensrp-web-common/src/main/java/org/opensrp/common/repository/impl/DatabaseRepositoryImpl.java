@@ -628,7 +628,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<T> data = new ArrayList<T>();
 		try {
 			data = (List<T>) criteria.list();
-			
 		}
 		catch (Exception e) {
 			logger.error(e);

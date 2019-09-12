@@ -51,7 +51,7 @@ public class HealthIdController {
 	private HealthId healthId;
 	
 	private static int CHILD_ROLE_ID = 13;
-	private static int LOCATION_TAG_ID = 15;
+	private static int LOCATION_TAG_ID = 16;
 
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_HEALTH_ID')")
 	@RequestMapping(value = "/healthId/upload_csv.html", method = RequestMethod.GET)
@@ -107,12 +107,15 @@ public class HealthIdController {
 	}
 
 	@RequestMapping(value = "/household/generated-code", method = RequestMethod.GET)
-	public ResponseEntity<String> getHouseholdIds(@RequestParam("villageId") int villageId,
+	public ResponseEntity<String> getHouseholdIds(@RequestParam("villageId") String villageId,
 												  @RequestParam("username") String username) throws Exception {
 		int[] villageIds = new int[1000];
-		if (villageId != 0) {
-			villageIds[0] = villageId;
-		} else {
+		String[] ids = villageId.split(",");
+		for (int i = 0; i < ids.length; i++) {
+		    villageIds[i] = Integer.parseInt(ids[i]);
+        }
+
+		if (villageIds[0] == 0)  {
 			User user = userService.findByKey(username, "username", User.class);
 			TeamMember member = teamMemberService.findByForeignKey(user.getId(), "person_id", "TeamMember");
 			List<Integer> locationIds = locationService.getVillageIdByProvider(member.getId(), CHILD_ROLE_ID, LOCATION_TAG_ID);

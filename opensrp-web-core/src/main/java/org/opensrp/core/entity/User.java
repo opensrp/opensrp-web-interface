@@ -64,8 +64,7 @@ public class User implements UserDetails {
 	
 	@Column(name = "last_name")
 	private String lastName;
-	
-	@NotEmpty(message = "email can't be empty")
+
 	@Column(name = "email")
 	private String email;
 	

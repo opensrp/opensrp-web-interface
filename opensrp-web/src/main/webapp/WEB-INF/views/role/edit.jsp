@@ -41,7 +41,7 @@
 							<div class="row">
 								<div class="col-3">
 									<label for="exampleInputName"><spring:message code="lbl.name"/></label>
-									<form:input path="name" readonly="true" class="form-control"
+									<form:input path="name" readonly="false" class="form-control"
 										required="required"/>
 								</div>
 							</div>

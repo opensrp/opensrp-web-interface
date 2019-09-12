@@ -97,15 +97,15 @@
 						</div>
 					</div>
 
-					<div class="row col-12 tag-height">
-						<div class="form-group">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.identifier"/></label>
-							<form:input path="idetifier" class="form-control mx-sm-3" />
-							<small id="passwordHelpInline" class="text-muted text-para">
-								<spring:message code="lbl.identifierMsg"/>
-							</small>
-						</div>
-					</div>
+<%--					<div class="row col-12 tag-height">--%>
+<%--						<div class="form-group">--%>
+<%--							<label class="label-width" for="inputPassword6"><spring:message code="lbl.identifier"/></label>--%>
+<%--							<form:input path="idetifier" class="form-control mx-sm-3" />--%>
+<%--							<small id="passwordHelpInline" class="text-muted text-para">--%>
+<%--								<spring:message code="lbl.identifierMsg"/>--%>
+<%--							</small>--%>
+<%--						</div>--%>
+<%--					</div>--%>
 
 
 
@@ -119,13 +119,13 @@
 							</small>
 						</div>
 					</div>
-					<form:hidden path="parentUser" id="parentUser" value="<%=selectedParentId %>"/>
-					<div class="row col-12 tag-height">
-						<div class="form-group">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.parentUser"/></label>
-							<select id="combobox" class="form-control">	</select>
-						</div>
-					</div>
+<%--					<form:hidden path="parentUser" id="parentUser" value="<%=selectedParentId %>"/>--%>
+<%--					<div class="row col-12 tag-height">--%>
+<%--						<div class="form-group">--%>
+<%--							<label class="label-width" for="inputPassword6"><spring:message code="lbl.parentUser"/></label>--%>
+<%--							<select id="combobox" class="form-control">	</select>--%>
+<%--						</div>--%>
+<%--					</div>--%>
 
 
 					<form:hidden path="uuid" />
@@ -190,6 +190,7 @@
 								<spring:message code="lbl.branches"/>
 							</label>
 							<select
+									required
 									name="branches"
 									id="branches"
 									class="form-control mx-sm-3 js-example-basic-multiple"

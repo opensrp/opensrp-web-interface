@@ -21,7 +21,7 @@
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
     <link type="text/css" href="<c:url value="/resources/css/jtree.min.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/multi-select.css"/>" rel="stylesheet">
-    <title><spring:message code="lbl.viewLocationsHierarchy"/> </title>
+    <title><spring:message code="lbl.catchmentArea"/> </title>
     <%@page import="org.json.JSONObject" %>
     <%@page import="org.json.JSONArray" %>
     <%@ page import="org.opensrp.core.entity.UsersCatchmentArea" %>
@@ -80,7 +80,8 @@
                             <th><spring:message code="lbl.district"/></th>
                             <th><spring:message code="lbl.upazila"/></th>
                             <th><spring:message code="lbl.union"/></th>
-                            <th><spring:message code="lbl.action"/></th>
+                            <th><spring:message code="lbl.union"/></th>
+                            <th><spring:message code="lbl.ward"/></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -115,7 +116,14 @@
                                 <% } %>
                             </td>
                             <td>
-                                <a href="#top" id="edit" onclick="editLocation(<%=catchmentAreas.get(i)[4]%>)">Edit</a>
+                                <%if (catchmentAreas.get(i)[4] == null) {%>
+                                All
+                                <% } else { %>
+                                <%=catchmentAreas.get(i)[4]%>
+                                <% } %>
+                            </td>
+                            <td>
+                                <a href="#top" id="edit" onclick="editLocation(<%=catchmentAreas.get(i)[5]%>)">Edit</a>
                             </td>
                         </tr>
                         <% } %>

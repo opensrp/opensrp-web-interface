@@ -29,10 +29,10 @@
 		</div>
 		<div class="card mb-3">
 			<div class="card-header">
-				<i class="fa fa-table"></i> <spring:message code="lbl.addRoleTitle"/>
+				<i class="fa fa-table"></i> <spring:message code="lbl.addBranchTitle"/>
 			</div>
 			<div class="card-body">
-				<form:form modelAttribute="branch" id="BranchInfo" class="form-inline">
+				<form:form modelAttribute="branch" id="BranchInfo" class="form-inline" autocomplete="false">
 					<div class="row col-12 tag-height">
 						<div class="form-group required">
 							<label class="label-width" for="name"> <spring:message code="lbl.branchName"/> </label>
@@ -87,10 +87,12 @@
 				xhr.setRequestHeader(header, token);
 			},
 			success : function(data) {
+				console.log(data);
+				console.log("success!!!")
 				window.location.replace("/opensrp-dashboard/branch-list.html");
 			},
 			error : function(e) {
-
+				console.log(e);
 			},
 			done : function(e) {
 				$("#loading").hide();

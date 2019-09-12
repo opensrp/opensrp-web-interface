@@ -46,7 +46,11 @@
 		<div class="form-group">
 			<h5><spring:message code="lbl.userList"/></h5>
 			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-			<a  href="<c:url value="/user/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addNew"/></strong> </a> <%} %>
+			<a  href="<c:url value="/user/add.html?lang=${locale}"/>">
+				<strong>
+					<spring:message code="lbl.addNew"/>
+					<spring:message code="lbl.user"/>
+				</strong> </a> <%} %>
 		</div>
 		<div class="card mb-3">
 
@@ -115,8 +119,8 @@
 							<td>
 								<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
 								<a href="<c:url value="/user/${id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
-								<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-								<a href="<c:url value="/user/${id}/password.html?lang=${locale}"/>"><spring:message code="lbl.resetPassword"/></a> | <%} %>
+<%--								<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>--%>
+<%--								<a href="<c:url value="/user/${id}/password.html?lang=${locale}"/>"><spring:message code="lbl.resetPassword"/></a> | <%} %>--%>
 								<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
 								<a href="<c:url value="/user/${id}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>
 							</td>

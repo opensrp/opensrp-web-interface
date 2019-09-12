@@ -22,12 +22,12 @@ public class Branch implements Serializable {
     @SequenceGenerator(name = "facility_id_seq", sequenceName = "facility_id_seq", allocationSize = 1)
     private int id;
 
-    @NotNull
+    @NotNull(message = "name can't be empty")
     @Column(name = "name")
     private String name;
 
-    @NotNull
-    @Column(name = "code")
+    @NotNull(message = "code can't be empty")
+    @Column(name = "code", unique = true, nullable = false)
     private String code;
 
     @Temporal(TemporalType.TIMESTAMP)
