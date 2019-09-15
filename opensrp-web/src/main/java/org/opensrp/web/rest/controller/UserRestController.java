@@ -2,7 +2,10 @@ package org.opensrp.web.rest.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import jdk.nashorn.api.scripting.JSObject;
 import org.apache.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.Role;
@@ -24,15 +27,20 @@ import org.opensrp.core.service.mapper.FacilityWorkerMapper;
 import org.opensrp.core.service.mapper.UserMapper;
 import org.opensrp.web.controller.UserController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.google.gson.Gson;
+import sun.misc.BASE64Decoder;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @RequestMapping("rest/api/v1/user")
 @RestController
@@ -66,9 +74,32 @@ public class UserRestController {
 	private FacilityWorkerMapper facilityWorkerMapper;
 
 	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	@Autowired
 	private UserMapper userMapper;
 	
 	private static final Logger logger = Logger.getLogger(UserRestController.class);
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public ResponseEntity<String> loginUser(HttpServletRequest httpRequest) throws IOException, JSONException {
+		JSONObject object = new JSONObject();
+		object.put("is_authenticated", false);
+		final String authorization = httpRequest.getHeader("Authorization");
+		if (authorization != null && authorization.toLowerCase().startsWith("basic")) {
+			// Authorization: Basic base64credentials
+			String base64Credentials = authorization.substring("Basic".length()).trim();
+			byte[] credDecoded = new BASE64Decoder().decodeBuffer(base64Credentials);
+			String credentials = new String(credDecoded, StandardCharsets.UTF_8);
+			// credentials = username:password
+			final String[] values = credentials.split(":", 2);
+			User user = userServiceImpl.findByKey(values[0], "username", User.class);
+			boolean match = bCryptPasswordEncoder.matches(values[1], user.getPassword());
+			object.put("is_authenticated", match);
+			return new ResponseEntity<>(object.toString(), OK);
+		}
+		return new ResponseEntity<>(object.toString(), OK);
+	}
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO, ModelMap model) throws Exception {

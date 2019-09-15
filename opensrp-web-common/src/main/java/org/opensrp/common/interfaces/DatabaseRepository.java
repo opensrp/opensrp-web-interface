@@ -133,5 +133,4 @@ public interface DatabaseRepository {
 	public  List<ReportDTO> getCCListByUpazila(SearchBuilder searchBuilder);
 
 	public List<ReportDTO> getMHVListFilterWise(String filterString);
-
 }
