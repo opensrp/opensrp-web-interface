@@ -2,12 +2,10 @@ package org.opensrp.web.rest.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
-import jdk.nashorn.api.scripting.JSObject;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.UserDTO;
-import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.Team;
 import org.opensrp.core.entity.TeamMember;
@@ -25,48 +23,36 @@ import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.FacilityWorkerTypeService;
 import org.opensrp.core.service.mapper.FacilityWorkerMapper;
 import org.opensrp.core.service.mapper.UserMapper;
-import org.opensrp.web.controller.UserController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import com.google.gson.Gson;
-import sun.misc.BASE64Decoder;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 @RequestMapping("rest/api/v1/user")
 @RestController
 public class UserRestController {
-	
+
 	@Autowired
 	private UserService userServiceImpl;
-	
+
 	@Autowired
 	private TeamMemberService teamMemberServiceImpl;
-	
+
 	@Autowired
 	private TeamService teamService;
-	
+
 	@Autowired
 	private FacilityService facilityService;
-	
+
 	@Autowired
 	private RoleService roleService;
-	
+
 	@Autowired
 	private FacilityWorkerTypeService facilityWorkerTypeService;
-	
-	@Autowired
-	private LocationService locationService;
-	
+
 	@Autowired
 	private EmailService emailService;
 
@@ -78,26 +64,23 @@ public class UserRestController {
 
 	@Autowired
 	private UserMapper userMapper;
-	
+
 	private static final Logger logger = Logger.getLogger(UserRestController.class);
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ResponseEntity<String> loginUser(HttpServletRequest httpRequest) throws IOException, JSONException {
-		JSONObject object = new JSONObject();
-		object.put("is_authenticated", false);
-		final String authorization = httpRequest.getHeader("Authorization");
-		if (authorization != null && authorization.toLowerCase().startsWith("basic")) {
-			// Authorization: Basic base64credentials
-			String base64Credentials = authorization.substring("Basic".length()).trim();
-			byte[] credDecoded = new BASE64Decoder().decodeBuffer(base64Credentials);
-			String credentials = new String(credDecoded, StandardCharsets.UTF_8);
-			// credentials = username:password
-			final String[] values = credentials.split(":", 2);
-			User user = userServiceImpl.findByKey(values[0], "username", User.class);
-			boolean match = bCryptPasswordEncoder.matches(values[1], user.getPassword());
-			object.put("is_authenticated", match);
-			return new ResponseEntity<>(object.toString(), OK);
+	public ResponseEntity<String> loginUser(@RequestParam("username") String username,
+											@RequestParam("password") String password) throws JSONException {
+
+		Boolean match;
+		User user = userServiceImpl.findByKey(username, "username", User.class);
+		if (user == null) {
+			match = false;
+		} else {
+			match = bCryptPasswordEncoder.matches(password, user.getPassword());
 		}
+		JSONObject object = new JSONObject();
+		object.put("is_authenticated", match);
+
 		return new ResponseEntity<>(object.toString(), OK);
 	}
 	
@@ -227,7 +210,7 @@ public class UserRestController {
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}
-	
+
 	@RequestMapping(value = "/password/edit", method = RequestMethod.POST)
 	public ResponseEntity<String> editPassword(@RequestBody UserDTO userDTO) throws Exception {
 		boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());
@@ -241,5 +224,5 @@ public class UserRestController {
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}
-	
+
 }
