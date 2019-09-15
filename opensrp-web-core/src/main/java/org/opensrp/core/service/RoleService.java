@@ -81,10 +81,10 @@ public class RoleService {
 		for (Role role : roles) {
 			isProvider = RoleUtil.containsRole(role.getName());
 			if (isProvider) {
-				return isProvider;
+				return false;
 			}
 		}
-		return isProvider;
+		return true;
 	}
 
 	public boolean isAdmin(Set<Role> roles) {

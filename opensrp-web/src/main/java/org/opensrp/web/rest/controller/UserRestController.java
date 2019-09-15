@@ -70,11 +70,6 @@ public class UserRestController {
 		Team team = new Team();
 		try {
 			boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());
-			if (userDTO.isTeamMember()) {
-				String teamName = "HNPP-BRAC";
-				team = teamService.findByKey(teamName, "name", Team.class);
-			}
-
 			if (!isExists) {
 				User user = userMapper.map(userDTO);
 				int numberOfUserSaved = (int) userServiceImpl.save(user, false);

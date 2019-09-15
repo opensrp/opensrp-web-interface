@@ -82,7 +82,12 @@ public class UserService {
 		User user = (User) t;
 		long createdUser = 0;
 		Set<Role> roles = user.getRoles();
+		System.out.println("CHECK ROLES: ");
+		System.out.println(user.getRoles());
 		boolean isAdmin = roleServiceImpl.isOpenMRSRole(roles);
+
+		System.out.println("IS ADMIN CHECK: "+isAdmin);
+
 		JSONArray existingOpenMRSUser = new JSONArray();
 		String query = "";
 		String existingUserUUid = "";
@@ -92,6 +97,8 @@ public class UserService {
 			existingOpenMRSUser = openMRSServiceFactory.getOpenMRSConnector("user").getByQuery(query);
 			if (existingOpenMRSUser.length() == 0) {
 				logger.info(" \nUserBeforeSendingToOpenMRS : "+ user.toString() + "\n");
+				System.out.println("BEFORE OPENMRS:->");
+				System.out.println(user);
 				user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
 				logger.info(" \nUserFromOpenMRS : "+ user.toString() + "\n");
 				if (!user.getUuid().isEmpty()) {

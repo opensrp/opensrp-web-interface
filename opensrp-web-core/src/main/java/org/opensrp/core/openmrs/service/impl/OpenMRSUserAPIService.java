@@ -92,6 +92,9 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 			 * openmrs role such as Provider / CHCP
 			 */
 			Set<Role> roles = user.getRoles();
+
+			System.out.println("BEFORE OPENMRS ROLES:-> "+ roles);
+
 			for (Role role : roles) {
 				JSONObject roleObject = new JSONObject();
 				if (RoleUtil.containsRole(role.getName())) {
