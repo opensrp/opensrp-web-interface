@@ -45,11 +45,16 @@ public class HealthIdController {
 	@RequestMapping(value = "/healthId/upload_csv.html", method = RequestMethod.POST)
 	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
 	    throws Exception {
+
+		System.out.println("fileType: ");
+		System.out.println(file.getContentType());
+
 		if (file.isEmpty()) {
 			model.put("msg", "failed to upload file because its empty");
 			model.addAttribute("msg", "failed to upload file because its empty");
 			return new ModelAndView("/health-id/upload_csv");
-		} else if (!"text/csv".equalsIgnoreCase(file.getContentType())) {
+		} else if (!"text/csv".equalsIgnoreCase(file.getContentType())
+				&& !"application/vnd.ms-excel".equalsIgnoreCase(file.getContentType())) {
 			model.addAttribute("msg", "file type should be '.csv'");
 			return new ModelAndView("/health-id/upload_csv");
 		}
