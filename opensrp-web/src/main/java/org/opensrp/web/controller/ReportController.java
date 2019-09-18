@@ -101,18 +101,7 @@ public class ReportController {
 	@RequestMapping(value = "/householdDataReport.html", method = RequestMethod.GET)
 	public String showFormWiseReport(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
-		if (!AuthenticationManagerUtil.isAdmin() && !AuthenticationManagerUtil.isUHFPO()) {
-			User user = AuthenticationManagerUtil.getLoggedInUser();
-			Facility facility = facilityService.findById(Integer.parseInt(user.getChcp()), "id", Facility.class);
-			request.setAttribute("ward", facility.getWard());
-			request.setAttribute("cc", facility.getName());
-		}
-		searchBuilder = paginationHelperUtil.setParams(request, session);
-		searchUtil.setDivisionAttribute(session);
-		if (AuthenticationManagerUtil.isUHFPO()) {
-			List<Object[]> ccList = databaseServiceImpl.getCCListByUpazila(searchBuilder);
-			session.setAttribute("ccList", ccList);
-		}
+
 		List<ReportDTO> reports = databaseServiceImpl.getMHVListFilterWise(searchBuilder);
 		session.setAttribute("formWiseAggregatedList", reports);
 

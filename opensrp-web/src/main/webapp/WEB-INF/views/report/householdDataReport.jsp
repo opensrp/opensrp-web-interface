@@ -1,6 +1,7 @@
 <%@page import="java.util.List"%>
 <%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
 <%@ page import="org.opensrp.common.dto.ReportDTO" %>
+<%@ page import="org.opensrp.web.util.SearchUtil" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 		 pageEncoding="ISO-8859-1"%>
 
@@ -56,7 +57,6 @@
 				<spring:message code="lbl.mhvWiseReportStatus"/>
 				<%}%>
 			</div>
-			<%if (!AuthenticationManagerUtil.isUHFPO()){%>
 			<div class="card-body">
 				<!-- Icon Cards-->
 				<div class="row">
@@ -135,14 +135,16 @@
 								<th><spring:message code="lbl.provider"/></th>
 								<th><spring:message code="lbl.householdCount"/></th>
 								<th><spring:message code="lbl.population"/></th>
-								<th><spring:message code="lbl.femalePercentage"/></th>
-								<th><spring:message code="lbl.malePercentage"/></th>
+								<th><spring:message code="lbl.female"/></th>
+								<th><spring:message code="lbl.male"/></th>
 							</tr>
 							</thead>
 							<tbody>
 							<%
 								List<ReportDTO> reports = (List<ReportDTO>) session.getAttribute("formWiseAggregatedList");
 								for (ReportDTO report: reports) {
+									int population = SearchUtil.randomBetween(600, 20);
+									int male = SearchUtil.randomBetween(population, 20);
 							%>
 							<tr>
 								<td>
@@ -151,10 +153,10 @@
 										<%=report.getMhv()%>
 									</a>
 								</td>
-								<td><%=report.getHousehold()%></td>
-								<td><%=report.getPopulation()%></td>
-								<td><%=report.getFemalePercentage()%></td>
-								<td><%=report.getMalePercentage()%></td>
+								<td><%=SearchUtil.randomBetween(100, 20)%></td>
+								<td><%=population%></td>
+								<td><%=population-male%></td>
+								<td><%=male%></td>
 							</tr>
 							<%}%>
 							</tbody>
@@ -162,47 +164,6 @@
 					</div>
 				</div>
 			</div>
-			<%} else {%>
-			<div class="row" style="margin-top: 30px;">
-				<div class="col-sm-12" style="padding: 30px;">
-					<table class="display" id="ccListTable"
-						   style="width: 100%;">
-						<thead>
-						<tr>
-							<th><spring:message code="lbl.cc"/></th>
-							<th><spring:message code="lbl.mhvID"/></th>
-							<th><spring:message code="lbl.householdCount"/></th>
-							<th><spring:message code="lbl.population"/></th>
-							<th><spring:message code="lbl.female"/></th>
-							<th><spring:message code="lbl.male"/></th>
-						</tr>
-						</thead>
-						<tbody>
-						<%
-							List<Object[]> ccList = (List<Object[]>) session.getAttribute("ccList");
-							for (int i = 0; i < ccList.size(); i++) {
-								String mhvUsername = (String) ccList.get(i)[1];
-						%>
-						<tr>
-							<td><%=ccList.get(i)[0]%></td>
-							<td>
-								<a href="<c:url value="/report/individual-mhv-works.html">
-												<c:param name="mhvUsername" value="<%=mhvUsername%>"/>
-											 </c:url>">
-									<%=mhvUsername%>
-								</a>
-							</td>
-							<td><%=ccList.get(i)[2]%></td>
-							<td><%=ccList.get(i)[3]%></td>
-							<td><%=ccList.get(i)[4]%></td>
-							<td><%=ccList.get(i)[5]%></td>
-						</tr>
-						<%}%>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<%}%>
 			<div class="card-footer small text-muted"></div>
 		</div>
 	</div>
