@@ -1,3 +1,4 @@
+--for provider id
 --update event_metadata
 UPDATE core.event_metadata
 SET    provider_id = ut.provider_id
@@ -35,4 +36,44 @@ FROM   (SELECT em.base_entity_id       be_id,
                AND em.provider_id != ''
                AND em.base_entity_id = e.json ->> 'baseEntityId') ut
 WHERE  ut.be_id = json ->> 'baseEntityId'
-       AND json ->> 'providerId' = '';
+       AND json ->> 'team' = '';
+
+--for team
+--update event_metadata
+UPDATE core.event_metadata
+SET    team = ut.team
+FROM   (SELECT cem.base_entity_id be_id,
+               cem.team    tid,
+               adt.team
+        FROM   core.event_metadata cem
+               JOIN (SELECT em.*,
+                            cm.relational_id
+                     FROM   core.event_metadata em
+                            JOIN core.client_metadata cm
+                              ON cm.base_entity_id = em.base_entity_id
+                     WHERE  em.entity_type != 'ec_household'
+                            AND em.team != '') adt
+                 ON adt.relational_id = cem.base_entity_id
+        WHERE  cem.entity_type = 'ec_household'
+               AND cem.team = ''
+               AND adt.relational_id = cem.base_entity_id) ut
+WHERE  ut.be_id = base_entity_id;
+
+
+--update event
+
+UPDATE core.event
+SET    json = Replace(json :: text, '"team": ""',
+                            Concat('"team": ', '"', ut.tid, '"')) :: jsonb
+FROM   (SELECT em.base_entity_id       be_id,
+               em.team          tid,
+               e.json ->> 'team' AS t_id
+        FROM   core.event_metadata em
+               JOIN core.event e
+                 ON e.json ->> 'baseEntityId' :: text = em.base_entity_id
+        WHERE  em.entity_type = 'ec_household'
+               AND e.json ->> 'team' = ''
+               AND em.team != ''
+               AND em.base_entity_id = e.json ->> 'baseEntityId') ut
+WHERE  ut.be_id = json ->> 'baseEntityId'
+       AND json ->> 'team' = '';

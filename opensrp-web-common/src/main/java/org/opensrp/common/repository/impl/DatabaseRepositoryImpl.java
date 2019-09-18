@@ -128,7 +128,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * @return 1 for success and -1 for failure.
 	 */
 	@Override
-	public <T> int update(T t) {
+	public <T> int update(T t) throws Exception {
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
 		int returnValue = -1;
@@ -144,6 +144,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			returnValue = -1;
 			tx.rollback();
 			logger.error(e);
+			throw new Exception(e.getMessage());
 		}
 		finally {
 			session.close();
@@ -1005,6 +1006,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	@Override
 	public List<ReportDTO> getMHVListFilterWise(String filterString) {
 		Session session = sessionFactory.openSession();
+		System.out.println("MHV Filter String:->");
+		System.out.println(filterString);
 		List<ReportDTO> mhvList = null;
 		try {
 			String hql = "select *, (select mobile from core.users where username = mhv) as phone from(select distinct(provider_id) as mhv, count(case when entity_type = 'ec_household' then 1 end) as household," +

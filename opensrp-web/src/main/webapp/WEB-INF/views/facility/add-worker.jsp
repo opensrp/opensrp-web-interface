@@ -294,8 +294,8 @@ String selectedPersonName = "";
 													style="width: 140px;"><spring:message code="lbl.organization"/></th>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 79px;"><spring:message code="lbl.training"/></th>
-													<th tabindex="0" rowspan="1" colspan="1"
-													style="width: 79px;"><spring:message code="lbl.action"/></th>
+<%--													<th tabindex="0" rowspan="1" colspan="1"--%>
+<%--													style="width: 79px;"><spring:message code="lbl.action"/></th>--%>
 													<th tabindex="0" rowspan="1" colspan="1"
 													style="width: 79px;"><spring:message code="lbl.action"/></th>
 											</tr>

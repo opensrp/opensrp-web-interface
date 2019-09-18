@@ -79,7 +79,7 @@ public class LocationTagController {
 	@RequestMapping(value = "/location/tag/{id}/edit.html", method = RequestMethod.POST)
 	public ModelAndView editRole(@ModelAttribute("locationTag") @Valid LocationTag locationTag, BindingResult binding,
 	                             ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale)
-	    throws JSONException {
+			throws Exception {
 		locationTag.setId(id);
 		locationTag.setName(locationTag.getName().trim());
 		

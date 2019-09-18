@@ -78,7 +78,7 @@ public class TeamMemberService {
 	}
 	
 	@Transactional
-	public <T> int update(T t) throws JSONException {
+	public <T> int update(T t) throws Exception {
 		TeamMember teamMember = (TeamMember) t;
 		int updatedTag = 0;
 		

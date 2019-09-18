@@ -145,7 +145,7 @@ public class RoleController {
 	@RequestMapping(value = "/role/{id}/edit.html", method = RequestMethod.POST)
 	public ModelAndView editRole(@RequestParam(value = "permissions", required = false) int[] permissions,
 	                             @ModelAttribute("role") @Valid Role role, BindingResult binding, ModelMap model,
-	                             HttpSession session, @PathVariable("id") int id, Locale locale) {
+	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
 		
 		if (permissions != null) {
 			role.setPermissions(roleServiceImpl.setPermissions(permissions));

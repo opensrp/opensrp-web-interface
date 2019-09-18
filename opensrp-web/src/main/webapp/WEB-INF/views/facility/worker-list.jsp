@@ -53,17 +53,17 @@
 		}
 	%>
 	<td><%=trainingString %></td>
-	<%if(workerType.equals("MULTIPURPOSE HEALTH VOLUNTEER")){%>
-		<td><button onclick="editMHV(<%=worker.getId() %>)"
-				class="btn btn-primary btn-block">
-				<spring:message code="lbl.edit" />
-			</button></td>
-	<%}else{ %>
-		<td><button onclick="editWorker(<%=worker.getId() %>)"
-				class="btn btn-primary btn-block">
-				<spring:message code="lbl.edit" />
-			</button></td>
-	<%} %>
+<%--	<%if(workerType.equals("MULTIPURPOSE HEALTH VOLUNTEER")){%>--%>
+<%--		<td><button onclick="editMHV(<%=worker.getId() %>)"--%>
+<%--				class="btn btn-primary btn-block">--%>
+<%--				<spring:message code="lbl.edit" />--%>
+<%--			</button></td>--%>
+<%--	<%}else{ %>--%>
+<%--		<td><button onclick="editWorker(<%=worker.getId() %>)"--%>
+<%--				class="btn btn-primary btn-block">--%>
+<%--				<spring:message code="lbl.edit" />--%>
+<%--			</button></td>--%>
+<%--	<%} %>--%>
 	
 	<%if(workerType.equals("CHCP")){
 							if(AuthenticationManagerUtil.isAdmin()){

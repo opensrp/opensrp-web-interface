@@ -72,7 +72,7 @@ public interface DatabaseRepository {
 
 	public <T> long saveAll(List<T> t) throws Exception;
 
-	public <T> int update(T t);
+	public <T> int update(T t) throws Exception;
 	
 	public <T> boolean delete(T t);
 	

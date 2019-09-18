@@ -60,7 +60,7 @@ public class LocationTagService {
 	}
 	
 	@Transactional
-	public <T> int update(T t) throws JSONException {
+	public <T> int update(T t) throws Exception {
 		LocationTag locationTag = (LocationTag) t;
 		int updatedTag = 0;
 		String uuid = openMRSServiceFactory.getOpenMRSConnector("tag").update(locationTag, locationTag.getUuid(), null);

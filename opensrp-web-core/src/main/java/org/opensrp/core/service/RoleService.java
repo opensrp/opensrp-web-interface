@@ -34,7 +34,7 @@ public class RoleService {
 	}
 	
 	@Transactional
-	public <T> int update(T t) {
+	public <T> int update(T t) throws Exception {
 		return repository.update(t);
 	}
 	

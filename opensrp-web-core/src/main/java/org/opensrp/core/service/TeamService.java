@@ -63,7 +63,7 @@ public class TeamService {
 	}
 	
 	@Transactional
-	public <T> int update(T t) throws JSONException {
+	public <T> int update(T t) throws Exception {
 		Team team = (Team) t;
 		int updatedTag = 0;
 		String uuid = openMRSServiceFactory.getOpenMRSConnector("team").update(team, team.getUuid(), null);

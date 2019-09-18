@@ -88,7 +88,7 @@ public class LocationService {
 	}
 	
 	@Transactional
-	public <T> int update(T t) throws JSONException {
+	public <T> int update(T t) throws Exception {
 		Location location = (Location) t;
 		int updatedLocation = 0;
 		String uuid = openMRSServiceFactory.getOpenMRSConnector("location").update(location, location.getUuid(), null);

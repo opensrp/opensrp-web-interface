@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.entity.FacilityWorker;
 import org.opensrp.core.entity.Location;
@@ -110,7 +111,9 @@ public class UserController {
 	
 	@Autowired
 	private FacilityHelperUtil facilityHelperUtil;
-	
+
+	@Autowired
+	private DatabaseRepository repository;
 	/**
 	 * <p>
 	 * showing user list, support pagination with search by user name
@@ -421,8 +424,8 @@ public class UserController {
 	                             @PathVariable("facilityWorkerId") int facilityWorkerId,
 	                             Locale locale) throws Exception {
 		
-		account.setRoles(userServiceImpl.setRoles(roles));
 		account.setId(id);
+		account.setRoles(userServiceImpl.setRoles(roles));
 		User parentUser = userServiceImpl.findById(parentUserId, "id", User.class);
 		account.setParentUser(parentUser);
 		logger.info("\n\nUSER : "+ account.toString()+"\n");
@@ -433,14 +436,14 @@ public class UserController {
 		FacilityWorker facilityWorker = facilityWorkerService.findById(facilityWorkerId, "id",FacilityWorker.class);
 		String fullName = account.getFirstName()+ " "+ account.getLastName();
 		facilityWorker.setName(fullName);
-		facilityWorkerService.save(facilityWorker);
+		facilityWorkerService.update(facilityWorker);
 		//end: set edited name in facilityWorker
 		
-		//get facilityId to redirect to update_porfile view
+		//get facilityId to redirect to update_profile view
 		Facility facility = facilityWorker.getFacility();
 		String facilityId = facility.getId()+"";
 		String redirectUrl = "redirect:/facility/"+facilityId+"/updateProfile.html";
-		//end: get facilityId to redirect to update_porfile view
+		//end: get facilityId to redirect to update_profile view
 		
 		Map<String, Object> fieldValues = new HashMap<String, Object>();
 		fieldValues.put("person", account);
@@ -454,7 +457,6 @@ public class UserController {
 				//teamMember.setId(id);
 				if (!teamMemberServiceImpl.isPersonAndIdentifierExists(model, teamMember, locations)) {
 					teamMemberServiceImpl.update(teamMember);
-					
 				} else {
 					teamMemberServiceImpl.setSessionAttribute(session, teamMember, teamMember.getPerson().getFullName(),
 					    locations);
@@ -479,7 +481,7 @@ public class UserController {
 		//send mail to emailAddress
 		String mailBody = "Dear " + facilityWorker.getName()
 		        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + account.getUsername();
-		        //+ "\npassword : " + userDTO.getPassword();
+		        //+ "\nPassword : " + userDTO.getPassword();
 		emailService.sendSimpleMessage(account.getEmail(), "Login credentials for CBHC", mailBody);
 		//end: send mail to emailAddress
 		
