@@ -371,22 +371,33 @@ public class LocationService {
 					tags = locations;
 				} else {
 					for (int i = 0; i < locations.length; i = i + 2) {
+						tag = tags[i + 1];
 						code = locations[i];
 						name = locations[i + 1];
 						if (i != 0) {
 							parent = locations[i - 1];
 						}
-						tag = tags[i + 1];
 						LocationTag locationTag = findByKey(tag, "name", LocationTag.class);
 						Location parentLocation = findByKey(parent.toUpperCase().trim(), "name", Location.class);
+						if (!tag.equalsIgnoreCase("country")
+								&& !tag.equalsIgnoreCase("division")) {
+							name += ":" + parentLocation.getId();
+							locations[i+1] = name;
+						}
 						Location isExists = findByKey(name.toUpperCase().trim(), "name", Location.class);
 						Location location = new Location();
 						location.setCode(code);
+
 						location.setName(name.toUpperCase().trim());
+
 						location.setLocationTag(locationTag);
 						location.setParentLocation(parentLocation);
 						location.setDescription(name);
 						location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
+
+						System.out.println("LOCATION CREATED OPENMRS:::");
+						System.out.println(location);
+
 						if (!location.getUuid().isEmpty()) {
 							if (isExists == null) {
 								repository.save(location);
@@ -405,8 +416,8 @@ public class LocationService {
 			
 		}
 		catch (Exception e) {
-			logger.info("Some problem occured, please contact with admin..");
-			msg = "Some problem occured, please contact with admin..";
+			logger.info("Some problem occurred, please contact with admin..");
+			msg = "Some problem occurred, please contact with admin..";
 		}
 		return msg;
 	}

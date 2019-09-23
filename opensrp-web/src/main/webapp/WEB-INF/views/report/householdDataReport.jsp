@@ -38,6 +38,11 @@
 	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
 	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
 	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
+	<style>
+		th, td {
+			text-align: center;
+		}
+	</style>
 </head>
 
 
@@ -132,11 +137,35 @@
 							   style="width: 100%;">
 							<thead>
 							<tr>
-								<th><spring:message code="lbl.provider"/></th>
-								<th><spring:message code="lbl.householdCount"/></th>
-								<th><spring:message code="lbl.population"/></th>
-								<th><spring:message code="lbl.female"/></th>
+								<th rowspan="2"><spring:message code="lbl.provider"/></th>
+								<th rowspan="2"><spring:message code="lbl.householdCount"/></th>
+								<th colspan="3"><spring:message code="lbl.householdVisited"/></th>
+								<th rowspan="2"><spring:message code="lbl.population"/></th>
+								<th colspan="6"><spring:message code="lbl.childInformation"/></th>
+								<th rowspan="2"><spring:message code="lbl.childrenUnderFive"/></th>
+								<th rowspan="2"><spring:message code="lbl.childrenFiveToTenYears"/></th>
+								<th colspan="3"><spring:message code="lbl.adolescentTenToNineteen"/></th>
+								<th colspan="3"><spring:message code="lbl.agedNineteenToThirtyFive"/></th>
+								<th rowspan="2"><spring:message code="lbl.numberOfPopulationThirtyFiveDivideThirtyFivePlusYearsOld"/></th>
+								<th rowspan="2"><spring:message code="lbl.numberOfHHWithSanitaryLatrine"/></th>
+
+							</tr>
+							<tr>
+								<th><spring:message code="lbl.vo"/></th>
+								<th><spring:message code="lbl.nvo"/></th>
+								<th><spring:message code="lbl.total"/></th>
+								<th><spring:message code="lbl.zeroToSix"/></th>
+								<th><spring:message code="lbl.sevenToTwelve"/></th>
+								<th><spring:message code="lbl.thirteenToEighteen"/></th>
+								<th><spring:message code="lbl.nineteenToTwentyFour"/></th>
+								<th><spring:message code="lbl.twentyFiveToThirtySix"/></th>
+								<th><spring:message code="lbl.thirtySevenToSixty"/></th>
 								<th><spring:message code="lbl.male"/></th>
+								<th><spring:message code="lbl.female"/></th>
+								<th><spring:message code="lbl.total"/></th>
+								<th><spring:message code="lbl.male"/></th>
+								<th><spring:message code="lbl.female"/></th>
+								<th><spring:message code="lbl.total"/></th>
 							</tr>
 							</thead>
 							<tbody>
@@ -152,11 +181,28 @@
 											<c:param name="mhvUsername" value="<%=report.getMhv()%>"/></c:url>">
 										<%=report.getMhv()%>
 									</a>
-								</td>
-								<td><%=SearchUtil.randomBetween(100, 20)%></td>
-								<td><%=population%></td>
-								<td><%=population-male%></td>
-								<td><%=male%></td>
+								</td><!--provider-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--household registered-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--vo-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--nvo-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--total-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--population-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--zero to six-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--seven to twelve-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--thirteen to eighteen-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--nineteen to twenty four-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--twenty five to thirty six-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--thirty seven to sixty-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--children under five years-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--children 5-10 years-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--adolescent male-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--adolescent female-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--adolescent total-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--aged 19-35 years male-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--aged 19-35 years female-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--aged 19-35 years total-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--number of population 35/35 years old-->
+								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--number of sanitary with hh-->
 							</tr>
 							<%}%>
 							</tbody>
@@ -192,8 +238,10 @@
 			buttons: [
 				'pageLength', 'csv', 'excel', 'pdf'
 			],
-			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+			scrollX: true
 		});
+		$('.dataTables_length').addClass('bs-select');
 	});
 
 	$(document).ready(function() {
