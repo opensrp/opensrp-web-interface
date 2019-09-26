@@ -50,7 +50,7 @@ public class HealthIdController {
 	@Autowired
 	private HealthId healthId;
 	
-	private static int CHILD_ROLE_ID = 13;
+	private static int CHILD_ROLE_ID = 10;
 	private static int LOCATION_TAG_ID = 16;
 
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_HEALTH_ID')")

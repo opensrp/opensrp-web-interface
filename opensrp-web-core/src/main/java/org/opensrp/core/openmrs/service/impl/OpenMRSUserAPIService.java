@@ -94,14 +94,17 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 			Set<Role> roles = user.getRoles();
 
 			System.out.println("BEFORE OPENMRS ROLES:-> "+ roles);
-
-			for (Role role : roles) {
-				JSONObject roleObject = new JSONObject();
-				if (RoleUtil.containsRole(role.getName())) {
-					roleObject.put("role", role.getName());
-					roleArray.put(roleObject);
-				}
-			}
+//
+//			for (Role role : roles) {
+//				JSONObject roleObject = new JSONObject();
+//				if (RoleUtil.containsRole(role.getName())) {
+//					roleObject.put("role", role.getName());
+//					roleArray.put(roleObject);
+//				}
+//			}
+			JSONObject roleObject = new JSONObject();
+			roleObject.put("role", "Provider");
+			roleArray.put(roleObject);
 			userJsonObject.put(rolesKey, roleArray);
 			userJsonObject.put(passwordKey, user.getPassword());
 		} else {
@@ -158,7 +161,7 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 			user.setPersonUUid(createdPerson.getString("uuid"));
 			JSONObject createdUser = apiServiceFactory.getApiService("openmrs").add(PAYLOAD,
 			    generateUserJsonObject(user, isUpdate, null), USER_URL);
-			roleUpdate();
+//			roleUpdate();
 			if (createdUser.has("uuid")) {
 				userUuid = (String) createdUser.get("uuid");
 				user.setUuid(userUuid);

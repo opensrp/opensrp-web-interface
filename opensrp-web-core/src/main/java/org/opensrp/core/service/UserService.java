@@ -500,10 +500,13 @@ public class UserService {
 	@Transactional
 	public String saveTeamMemberAndCatchmentAreas(UserLocationDTO userLocationDTO) throws Exception {
 
+		System.out.println("BEFORE");
 		String teamName = "HNPP-BRAC";
 		String errorMessage = "";
 		Team team = teamService.findByKey(teamName, "name", Team.class);
 		TeamMember teamMember = new TeamMember();
+		System.out.println("TEAM");
+		System.out.println(team);
 		try {
 			teamMember = teamMemberServiceImpl.setLocationAndPersonAndTeamAttributeInLocation(
 					teamMember,
@@ -513,14 +516,22 @@ public class UserService {
 
 			TeamMember isExist = teamMemberServiceImpl.findByForeignKey(userLocationDTO.getUserId(), "person_id", "TeamMember");
 
-			if (isExist == null)teamMemberServiceImpl.save(teamMember);
+			if (isExist == null){
+				System.out.println("TEAM MEMBER SAVE 1");
+				teamMemberServiceImpl.save(teamMember);
+				System.out.println("TEAM MEMBER SAVE 2");
+			}
 			else {
+				System.out.println("TEAM MEMBER UPDATE 1");
 				isExist.setLocations(teamMember.getLocations());
 				teamMemberServiceImpl.update(isExist);
+				System.out.println("TEAM MEMBER UPDATE 2");
 			}
 			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(
 					userLocationDTO.getLocations(),
 					userLocationDTO.getUserId());
+			System.out.println("USER CATCHMENT AREAS");
+			System.out.println(usersCatchmentAreas);
 			usersCatchmentAreaService.saveAll(usersCatchmentAreas);
 		} catch (Exception e) {
 			errorMessage = "something went wrong";

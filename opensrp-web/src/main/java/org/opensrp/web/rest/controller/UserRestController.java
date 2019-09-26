@@ -179,6 +179,7 @@ public class UserRestController {
 	@RequestMapping(value = "/catchment-area/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUsersCatchmentArea(@RequestBody UserLocationDTO userLocationDTO) throws Exception {
 		String errorMessage = "";
+		System.out.println("ERROR 500");
 		userServiceImpl.saveTeamMemberAndCatchmentAreas(userLocationDTO);
 		return new ResponseEntity<>(new Gson().toJson(errorMessage), OK);
 	}
