@@ -217,6 +217,12 @@ public class UserController {
 		User account = userServiceImpl.findById(id, "id", User.class);
 		model.addAttribute("account", account);
 		model.addAttribute("id", id);
+		int facilityId = Integer.parseInt(account.getChcp());
+		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
+		Location location = locationServiceImpl.findByKey(facility.getUnion(), "name", Location.class);
+		List<Object[]> wards = locationServiceImpl.getChildData(location.getId());
+		session.setAttribute("wards", wards);
+		
 		/**
 		 * Parent user section start . this section prepare parent user information and render to
 		 * view for showing. parentUserName shows to the parent user text field named

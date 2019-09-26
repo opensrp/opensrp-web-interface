@@ -48,6 +48,9 @@ Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 int roleIdCHCP= -1;
 int roleIdProvider= -1;
 
+List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
+
+
 %>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -119,13 +122,13 @@ int roleIdProvider= -1;
 	                        	</small>
 							 </div>							 
 						 </div>
-						 <form:hidden path="parentUser" id="parentUser" value="<%=selectedParentId %>"/>
+						<%--  <form:hidden path="parentUser" id="parentUser" value="<%=selectedParentId %>"/>
 						 <div class="row col-12 tag-height">						
 							<div class="form-group">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.parentUser"/></label>										 
 								<select id="combobox" class="form-control">	</select>								
 							 </div>							 
-						 </div>
+						 </div> --%>
 						
 						
 						<form:hidden path="uuid" />
@@ -136,7 +139,7 @@ int roleIdProvider= -1;
 						
 						<form:hidden path="id" />
 						<form:hidden path="password" />
-						<div class="row col-12 tag-height">	
+						<%-- <div class="row col-12 tag-height">	
 							<div class="form-group required">
 							<label class="label-width"  for="inputPassword6"><spring:message code="lbl.role"/></label>								
 								<%
@@ -162,12 +165,28 @@ int roleIdProvider= -1;
 									}
 									%>
 							</div>
-						</div>
+						</div> --%>
 						
-						
+						<div class="row col-12 tag-height">						
+							<div class="form-group required">
+								<label class="label-width"  for="location"><spring:message code="lbl.location"/></label>
+									<%																					
+									    for (Object[] objects : wards) {
+									    	String[] ward = objects[0].toString().split(":");
+									    	int length = ward.length-1;
+									%>									
+										<form:checkbox 
+											path="roles" class="chk" value="<%=objects[1]%>"/>
+										<label class="form-control mx-sm-3" for="defaultCheck1"> <%=ward[length]%></label>									
+									<%
+										}
+									%>
+								
+							</div>
+						</div>	
 						
 						<!-- for location -->
-						 <div class="row col-12 tag-height" id="locationDiv" style="display:none">						
+						 <%-- <div class="row col-12 tag-height" id="locationDiv" style="display:none">						
 							<div class="form-group">														
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.location"/></label>										 
 								<div id="cm" class="ui-widget ">
@@ -175,7 +194,7 @@ int roleIdProvider= -1;
 									<span class="text-red">${locationSelectErrorMessage}</span>		
 								</div>						
 							 </div>
-						 </div>	
+						 </div>	 --%>
 						 
 						<%--  <div id="cm" class="ui-widget">
 										<label><spring:message code="lbl.location"/> </label>
@@ -185,7 +204,7 @@ int roleIdProvider= -1;
 						 
 						 <!-- end: for location -->
 						 <!-- for team -->
-						 <div class="row col-12 tag-height" id="teamDiv" style="display:none">							
+						 <%-- <div class="row col-12 tag-height" id="teamDiv" style="display:none">							
 								<div class="form-group">
 									<label class="label-width" for="inputPassword6"><spring:message code="lbl.team"/></label>
 										<select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
@@ -206,7 +225,7 @@ int roleIdProvider= -1;
 											</select>								
 								</div>
 							
-						</div>
+						</div> --%>
 						 <!--end: for team -->
 						
 						
