@@ -117,6 +117,9 @@ public class User implements UserDetails {
 	
 	@Column(name = "chcp")
 	private String chcp;
+
+	@ManyToOne()
+	private UpazilaStat stat;
 	
 	public User() {
 	}
@@ -293,7 +296,15 @@ public class User implements UserDetails {
 		}
 		return perms;
 	}
-	
+
+	public UpazilaStat getStat() {
+		return stat;
+	}
+
+	public void setStat(UpazilaStat stat) {
+		this.stat = stat;
+	}
+
 	@Transient
 	public Collection<GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
