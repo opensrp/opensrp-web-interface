@@ -75,7 +75,7 @@
                             <td><%=list[6]%></td>
                             <td><%=list[3]%></td>
                             <td><%=list[4]%></td>
-                            <td>67.7%</td>
+                            <td><%=list[9]%>%</td>
                         </tr>
                         <%
                             }

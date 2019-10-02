@@ -1036,18 +1036,22 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		List<Object[]> objects = null;
 		try {
-			String sql = "SELECT vc.district, \n" + "       vc.upazila, \n" + "       l.id, \n" + "       Sum(CASE \n"
-					+ "             WHEN vc.entity_type = 'ec_household' THEN 1 \n" + "             ELSE 0 \n"
-					+ "           END) AS household_count, \n" + "       Sum(CASE \n"
-					+ "             WHEN vc.entity_type != 'ec_household' THEN 1 \n" + "             ELSE 0 \n"
-					+ "           END) AS population_count, \n" + "       us.targeted_household, \n"
-					+ "       us.targeted_population, \n" + "       us.total_cc, \n" + "       us.total_mhv \n"
-					+ "FROM   core.\"viewJsonDataConversionOfClient\" vc \n" + "       JOIN core.location l \n"
-					+ "         ON l.NAME = vc.upazila \n" + "       JOIN core.upazila_stat us \n"
-					+ "         ON us.upazila_id = l.id \n" + "GROUP  BY vc.district, \n" + "          vc.upazila, \n"
-					+ "          l.id, \n" + "          us.targeted_household, \n" + "          us.targeted_population, \n"
-					+ "          us.total_cc, \n" + "          us.total_mhv \n" + "ORDER  BY vc.district, \n"
-					+ "          vc.upazila; ";
+			String sql = "SELECT *, \n" + "       Round(temp.population_count * 100.0 / temp.targeted_population, 2) AS \n"
+					+ "       achievement \n" + "FROM   (SELECT vc.district, \n" + "               vc.upazila, \n"
+					+ "               l.id, \n" + "               Sum(CASE \n"
+					+ "                     WHEN vc.entity_type = 'ec_household' THEN 1 \n"
+					+ "                     ELSE 0 \n" + "                   END) AS household_count, \n"
+					+ "               Sum(CASE \n" + "                     WHEN vc.entity_type != 'ec_household' THEN 1 \n"
+					+ "                     ELSE 0 \n" + "                   END) AS population_count, \n"
+					+ "               us.targeted_household, \n" + "               us.targeted_population, \n"
+					+ "               us.total_cc, \n" + "               us.total_mhv \n"
+					+ "        FROM   core.\"viewJsonDataConversionOfClient\" vc \n"
+					+ "               JOIN core.location l \n" + "                 ON l.NAME = vc.upazila \n"
+					+ "               JOIN core.upazila_stat us \n" + "                 ON us.upazila_id = l.id \n"
+					+ "        GROUP  BY vc.district, \n" + "                  vc.upazila, \n" + "                  l.id, \n"
+					+ "                  us.targeted_household, \n" + "                  us.targeted_population, \n"
+					+ "                  us.total_cc, \n" + "                  us.total_mhv \n"
+					+ "        ORDER  BY vc.district, \n" + "                  vc.upazila) temp;";
 			objects = session.createSQLQuery(sql).list();
 
 		} catch (Exception e) {
