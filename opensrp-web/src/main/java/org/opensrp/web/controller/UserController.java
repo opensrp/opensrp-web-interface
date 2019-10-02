@@ -244,6 +244,8 @@ public class UserController {
 		Map<String, Object> fieldValues = new HashMap<String, Object>();
 		fieldValues.put("person", account);
 		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
+		
+		
 		if (teamMember != null) {
 			
 			//System.out.println(teamMember.toString());
@@ -252,6 +254,7 @@ public class UserController {
 			model.addAttribute("teamMember", teamMember);
 			int[] locations = teamMemberServiceImpl.getLocationIds(teamMember.getLocations());
 			//User person = teamMember.getPerson();
+			session.setAttribute("locations", locations);
 			String personName = account.getUsername() + " (" + account.getFullName() + ")";
 			teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
 			
@@ -365,52 +368,41 @@ public class UserController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
 	@RequestMapping(value = "/user/{id}/edit.html", method = RequestMethod.POST)
-	public ModelAndView editUser(@RequestParam(value = "parentUser", required = false) Integer parentUserId,
-	                             @RequestParam(value = "roles", required = false) String[] roles,
+	public ModelAndView editUser(
+	                             @RequestParam(value = "roles", required = false) int[] locations,
 	                             @RequestParam(value = "team", required = false) Integer teamId,
-	                             @RequestParam(value = "locationList[]", required = false) int[] locations,
 	                             @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
 	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
 		
-		account.setRoles(userServiceImpl.setRoles(roles));
-		account.setId(id);
-		User parentUser = userServiceImpl.findById(parentUserId, "id", User.class);
-		account.setParentUser(parentUser);
+		User usr = userServiceImpl.findById(id, "id", User.class);
+		
+		
 		logger.info("\n\nUSER : "+ account.toString()+"\n");
-		userServiceImpl.update(account);
+		usr.setFirstName(account.getFirstName());
+		usr.setLastName(account.getLastName());
+		usr.setMobile(account.getMobile());
+		usr.setIdetifier(account.getIdetifier());
+		usr.setEmail(account.getEmail());
+		userServiceImpl.update(usr);
 		
 		Map<String, Object> fieldValues = new HashMap<String, Object>();
 		fieldValues.put("person", account);
 		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
+		System.out.println("teamMember:"+teamMember);
+		System.err.println("teamId:::"+teamId);
 		if (teamMember != null) {
 			if (teamId != null) {
 				teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
-				    account.getId(), teamId, locations);
+				    account.getId(),teamId, locations);
 				teamMember.setIdentifier(account.getIdetifier());
-				
-				//teamMember.setId(id);
-				if (!teamMemberServiceImpl.isPersonAndIdentifierExists(model, teamMember, locations)) {
 					teamMemberServiceImpl.update(teamMember);
-					
-				} else {
-					teamMemberServiceImpl.setSessionAttribute(session, teamMember, teamMember.getPerson().getFullName(),
-					    locations);
-					return new ModelAndView("/team-member/edit");
-				}
-			} else {
-				teamMemberServiceImpl.delete(teamMember);
-			}
-		} else {
-			if (teamId != null && teamId > 0) {
-				TeamMember newTeamMember = new TeamMember();
-				newTeamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(newTeamMember,
-				    account.getId(), teamId, locations);
-				newTeamMember.setIdentifier(account.getIdetifier());
-				
-				if (!teamMemberServiceImpl.isPersonAndIdentifierExists(model, newTeamMember, locations)) {
-					teamMemberServiceImpl.save(newTeamMember);
-				}
-			}
+			} 
+		}else{
+			TeamMember tm = new TeamMember();
+			tm = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(tm,
+				    account.getId(),teamId, locations);
+			tm.setIdentifier(account.getIdetifier());			
+			teamMemberServiceImpl.save(tm)	;
 		}
 		
 		return new ModelAndView("redirect:/user.html?lang=" + locale);

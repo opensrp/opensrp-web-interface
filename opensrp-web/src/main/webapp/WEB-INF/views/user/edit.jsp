@@ -170,14 +170,16 @@ List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
 						<div class="row col-12 tag-height">						
 							<div class="form-group required">
 								<label class="label-width"  for="location"><spring:message code="lbl.location"/></label>
-									<%																					
+									<%		
+									int[] locations = (int[]) session.getAttribute("locations");
 									    for (Object[] objects : wards) {
 									    	String[] ward = objects[0].toString().split(":");
 									    	int length = ward.length-1;
 									%>									
+										
 										<form:checkbox 
-											path="roles" class="chk" value="<%=objects[1]%>"/>
-										<label class="form-control mx-sm-3" for="defaultCheck1"> <%=ward[length]%></label>									
+											path="roles" class="chk"  checked="<%=CheckboxHelperUtil.checkCheckedBox(locations,(Integer)objects[1])%>"  value="<%=objects[1]%>"/>
+										<label class="form-control mx-sm-3"  for="defaultCheck1"> <%=ward[length]%></label>									
 									<%
 										}
 									%>
@@ -204,10 +206,10 @@ List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
 						 
 						 <!-- end: for location -->
 						 <!-- for team -->
-						 <%-- <div class="row col-12 tag-height" id="teamDiv" style="display:none">							
+						 <div class="row col-12 tag-height" >							
 								<div class="form-group">
 									<label class="label-width" for="inputPassword6"><spring:message code="lbl.team"/></label>
-										<select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
+										<select class="form-control mx-sm-3" id="team" name="team" required="required">
 									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 												<%
 												for (Map.Entry<Integer, String> entry : teams.entrySet())
@@ -225,7 +227,7 @@ List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
 											</select>								
 								</div>
 							
-						</div> --%>
+						</div>
 						 <!--end: for team -->
 						
 						
@@ -402,12 +404,12 @@ function isTeamMember(){
           }
         });
  
-        // Found a match, nothing to do
+       
         if ( valid ) {
           return;
         }
  
-        // Remove invalid value
+        
          this.input
           .val( "" )
           .attr( "title", value + " didn't match any item" )
@@ -437,7 +439,7 @@ function isTeamMember(){
   </script>
    <script type="text/javascript">
   
- locationMagicSuggest = $('#locationsTag').magicSuggest({ 
+ <%-- locationMagicSuggest = $('#locationsTag').magicSuggest({ 
 		 	required: true,
 			//placeholder: 'Type Locations',
      		data: <%=locationList%>,
@@ -454,6 +456,6 @@ function isTeamMember(){
 	 			return '<div style="color:red">Typed Word TOO LONG </div>';
 	 		}
 	       
-	  });
+	  }); --%>
   </script>
 </html>
