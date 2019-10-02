@@ -626,7 +626,7 @@ public class UserController {
 
 		JSONArray array = new JSONArray();
 		try {
-			array = locationServiceImpl.convertLocationTreeToJSON(treeDTOS);
+			array = locationServiceImpl.convertLocationTreeToJSON(treeDTOS, user.isEnableSimPrint());
 			System.out.println(array);
 		} catch (Exception e) {
 			e.printStackTrace();

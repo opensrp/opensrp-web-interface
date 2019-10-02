@@ -435,7 +435,7 @@ public class LocationService {
 		return locationSet;
 	}
 
-	public JSONArray convertLocationTreeToJSON(List<LocationTreeDTO> treeDTOS) throws JSONException {
+	public JSONArray convertLocationTreeToJSON(List<LocationTreeDTO> treeDTOS, boolean enableSimPrint) throws JSONException {
 		JSONArray locationTree = new JSONArray();
 
 		Map<String, Boolean> mp = new HashMap<>();
@@ -452,6 +452,7 @@ public class LocationService {
 				if (counter > 1) {
 					object.put("username", username);
 					object.put("locations", locations);
+					object.put("simprint_eable", enableSimPrint);
 					locationTree.put(object);
 					locations = new JSONArray();
 					object = new JSONObject();

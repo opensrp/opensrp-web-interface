@@ -120,7 +120,10 @@ public class User implements UserDetails {
 	
 	@Column(name = "chcp")
 	private String chcp;
-	
+
+	@Column(name = "enable_sim_print")
+	private boolean enableSimPrint;
+
 	public User() {
 	}
 	
@@ -294,6 +297,14 @@ public class User implements UserDetails {
 
 	public void setBranches(Set<Branch> branches) {
 		this.branches = branches;
+	}
+
+	public boolean isEnableSimPrint() {
+		return enableSimPrint;
+	}
+
+	public void setEnableSimPrint(boolean enableSimPrint) {
+		this.enableSimPrint = enableSimPrint;
 	}
 
 	@Transient

@@ -29,6 +29,8 @@ public class UserDTO {
 	private int team;
 	
 	private boolean teamMember;
+
+	private boolean enableSimPrint;
 	
 	public boolean isTeamMember() {
 		return teamMember;
@@ -132,6 +134,14 @@ public class UserDTO {
 
 	public void setBranches(String branches) {
 		this.branches = branches;
+	}
+
+	public boolean isEnableSimPrint() {
+		return enableSimPrint;
+	}
+
+	public void setEnableSimPrint(boolean enableSimPrint) {
+		this.enableSimPrint = enableSimPrint;
 	}
 
 	@Override
