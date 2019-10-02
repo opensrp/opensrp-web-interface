@@ -97,6 +97,19 @@ public class FacilityController {
 		model.addAttribute("locale", locale);
 		return "/facility/index";
 	}
+
+	@RequestMapping(value = "/admin-dashboard", method = RequestMethod.GET)
+	public String showData(HttpServletRequest request, HttpSession session, ModelMap model, Locale locale) {
+		paginationUtil.createPagination(request, session, Facility.class);
+		model.addAttribute("locale", locale);
+
+		List<Object[]> objects1 = facilityService.getTable1Data();
+
+		session.setAttribute("table1Data", objects1);
+
+
+		return "/dashboard/admin";
+	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_FACILITY_WORKER')")
 	@RequestMapping(value = "/facility/{id}/addWorker.html", method = RequestMethod.GET)

@@ -211,7 +211,14 @@ public class UserService {
 		logger.info("\nfacilityHeadDesignation : "+ facilityHeadDesignation + "\n");
 		User user = null;
 		user = new User();
-		Role roleOfCHCP = roleService.findByKey("CHCP", "name", Role.class);
+		boolean isUHFPO = username.contains("uhfpo");
+
+		System.out.println("USERNAME:->");
+		System.out.println(isUHFPO);
+		System.out.println(username);
+		System.out.println(inputJSONObject);
+
+		Role roleOfCHCP = roleService.findByKey(isUHFPO?"UHFPO":"CHCP", "name", Role.class);
 		logger.info("\n Role Of CHCP : "+ roleOfCHCP.toString() + "\n");
 		String roleId = roleOfCHCP.getId()+"";
 		//String[] roles = { "7" };
@@ -247,8 +254,16 @@ public class UserService {
 
 		// from user rest controller -- April 11, 2019
 		user.setChcp(facility.getId() + "");
+
+		if (isUHFPO) {
+			System.out.println("Everything is null");
+			user.setFirstName("Upazila");
+			user.setLastName("UHFPO");
+		}
+
 		logger.info(" \nUser : "+ user.toString() + "\n");
 		int numberOfUserSaved = (int) save(user, false);
+
 		logger.info("\nNumUSER: "+numberOfUserSaved +" \nUser : "+ user.toString() + "\n");
 
 		// get facility by name from team table and then add it to team member

@@ -194,5 +194,9 @@ public class FacilityService {
 		params.put("wardName", wardName);
 		return repository.executeSelectQuery(sqlQuery, params);
 	}
+
+	public List<Object[]> getTable1Data() {
+		return repository.getTable1Data();
+	}
 	
 }

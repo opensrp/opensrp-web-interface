@@ -42,14 +42,8 @@ public class UpazilaStat implements Serializable {
 	@Column(name = "targeted_population")
 	private Integer targetedPopulation;
 
-	@Column(name = "collected_population")
-	private Integer collectedPopulation;
-
 	@Column(name = "targeted_household")
 	private Integer targetedHousehold;
-
-	@Column(name = "collected_household")
-	private Integer collectedHousehold;
 
 	@Column(name = "total_prima_cc")
 	private Integer totalPrimaCC;
@@ -113,28 +107,12 @@ public class UpazilaStat implements Serializable {
 		this.targetedPopulation = targetedPopulation;
 	}
 
-	public Integer getCollectedPopulation() {
-		return collectedPopulation;
-	}
-
-	public void setCollectedPopulation(Integer collectedPopulation) {
-		this.collectedPopulation = collectedPopulation;
-	}
-
 	public Integer getTargetedHousehold() {
 		return targetedHousehold;
 	}
 
 	public void setTargetedHousehold(Integer targetedHousehold) {
 		this.targetedHousehold = targetedHousehold;
-	}
-
-	public Integer getCollectedHousehold() {
-		return collectedHousehold;
-	}
-
-	public void setCollectedHousehold(Integer collectedHousehold) {
-		this.collectedHousehold = collectedHousehold;
 	}
 
 	public Integer getTotalPrimaCC() {
