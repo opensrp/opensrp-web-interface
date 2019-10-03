@@ -122,7 +122,7 @@ public class User implements UserDetails {
 	private String chcp;
 
 	@Column(name = "enable_sim_print")
-	private boolean enableSimPrint;
+	private Boolean enableSimPrint;
 
 	public User() {
 	}
@@ -299,11 +299,11 @@ public class User implements UserDetails {
 		this.branches = branches;
 	}
 
-	public boolean isEnableSimPrint() {
+	public Boolean getEnableSimPrint() {
 		return enableSimPrint;
 	}
 
-	public void setEnableSimPrint(boolean enableSimPrint) {
+	public void setEnableSimPrint(Boolean enableSimPrint) {
 		this.enableSimPrint = enableSimPrint;
 	}
 

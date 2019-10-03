@@ -30,7 +30,7 @@ public class UserDTO {
 	
 	private boolean teamMember;
 
-	private boolean enableSimPrint;
+	private Boolean enableSimPrint;
 	
 	public boolean isTeamMember() {
 		return teamMember;
@@ -136,11 +136,11 @@ public class UserDTO {
 		this.branches = branches;
 	}
 
-	public boolean isEnableSimPrint() {
+	public Boolean getEnableSimPrint() {
 		return enableSimPrint;
 	}
 
-	public void setEnableSimPrint(boolean enableSimPrint) {
+	public void setEnableSimPrint(Boolean enableSimPrint) {
 		this.enableSimPrint = enableSimPrint;
 	}
 

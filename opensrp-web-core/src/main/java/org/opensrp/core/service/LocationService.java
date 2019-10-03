@@ -355,7 +355,7 @@ public class LocationService {
 		String msg = "";
 		BufferedReader br = null;
 		String line = "";
-		String cvsSplitBy = ",";
+		String cvsSplitBy = ";";
 		
 		int position = 0;
 		String[] tags = null;
@@ -452,7 +452,7 @@ public class LocationService {
 				if (counter > 1) {
 					object.put("username", username);
 					object.put("locations", locations);
-					object.put("simprint_eable", enableSimPrint);
+					object.put("simprints_enable", enableSimPrint);
 					locationTree.put(object);
 					locations = new JSONArray();
 					object = new JSONObject();
@@ -480,6 +480,7 @@ public class LocationService {
 				locations.put(fullLocation);
 				object.put("username", username);
 				object.put("locations", locations);
+				object.put("simprints_enable", enableSimPrint);
 				locationTree.put(object);
 				object = new JSONObject();
 				locations = new JSONArray();

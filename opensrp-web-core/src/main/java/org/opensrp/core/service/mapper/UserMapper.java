@@ -28,7 +28,7 @@ public class UserMapper {
         user.setLastName(userDTO.getLastName());
         user.setMobile(userDTO.getMobile());
         user.setPassword(userDTO.getPassword());
-        user.setEnableSimPrint(userDTO.isEnableSimPrint());
+        user.setEnableSimPrint(userDTO.getEnableSimPrint());
 
         user.setRoles(userService.setRoles(roles));
         User parentUser = userService.findById(userDTO.getParentUser(), "id", User.class);
