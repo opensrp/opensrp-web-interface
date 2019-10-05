@@ -135,4 +135,8 @@ public interface DatabaseRepository {
 	public List<ReportDTO> getMHVListFilterWise(String filterString);
 
 	public List<Object[]> getTable1Data();
+
+	public List<Object[]> lastSevenDaysData(String startDate, String endDate);
+
+	public List<Object[]> countPopulation();
 }

@@ -13,6 +13,8 @@
 
 <%
     List<Object[]> table1Data = (List<Object[]>) session.getAttribute("table1Data");
+    List<Object[]> sevenDaysData = (List<Object[]>) session.getAttribute("sevenDaysData");
+    List<Object[]> countPopulation = (List<Object[]>) session.getAttribute("countPopulation");
 %>
 
 
@@ -27,7 +29,7 @@
     <meta http-equiv="refresh"
           content="<%=session.getMaxInactiveInterval()%>;url=/login" />
 
-    <title>Form Wise Report Status</title>
+    <title>Admin Dashboard</title>
 
     <jsp:include page="/WEB-INF/views/css.jsp" />
 
@@ -44,7 +46,7 @@
         <div class="card mb-3">
             <div class="card-header">
                 <i class="fa fa-table"></i>
-                <spring:message code="lbl.mhvWiseReportStatus"/>
+                <spring:message code="lbl.adminDashboard"/>
             </div>
 
             <div class="card-body">
@@ -83,36 +85,96 @@
                     </tbody>
                 </table>
 
-<%--                <table id="mhvWiseStatistics" class="display">--%>
-<%--                    <thead>--%>
-<%--                    <tr>--%>
-<%--                        <th><spring:message code="lbl.district"/> </th>--%>
-<%--                        <th><spring:message code="lbl.upazila"/> </th>--%>
-<%--                        <th><spring:message code="lbl.totalCCFromHRIS"/> </th>--%>
-<%--                        <th><spring:message code="lbl.totalMHVFromCBHC"/> </th>--%>
-<%--                        <th><spring:message code="lbl.targetHousehold"/> </th>--%>
-<%--                        <th><spring:message code="lbl.targetPopulation"/> </th>--%>
-<%--                        <th><spring:message code="lbl.collectedHousehold"/> </th>--%>
-<%--                        <th><spring:message code="lbl.collectedPopulation"/> </th>--%>
-<%--                        <th><spring:message code="lbl.achievement"/> </th>--%>
-<%--                    </tr>--%>
-<%--                    </thead>--%>
-<%--                    <tbody>--%>
-<%--                    <tr>--%>
-<%--                        <td>NARSINGDI</td>--%>
-<%--                        <td>SHIBPUR</td>--%>
-<%--                        <td>17</td>--%>
-<%--                        <td>353</td>--%>
-<%--                        <td>1756</td>--%>
-<%--                        <td>8780</td>--%>
-<%--                        <td>1398</td>--%>
-<%--                        <td>5908</td>--%>
-<%--                        <td>67.7%</td>--%>
-<%--                    </tr>--%>
-<%--                    </tbody>--%>
-<%--                </table>--%>
-            </div>
+                <table id="mhvWiseStatistics" class="display">
+                    <thead>
+                    <tr>
+                        <th><spring:message code="lbl.district"/> </th>
+                        <th><spring:message code="lbl.upazila"/> </th>
+                        <th><spring:message code="lbl.totalCCFromHRIS"/> </th>
+                        <th><spring:message code="lbl.totalCCFromPrima"/> </th>
+                        <th><spring:message code="lbl.coverageCCPrima"/> </th>
+                        <th><spring:message code="lbl.totalMHVFromCBHC"/> </th>
+                        <th><spring:message code="lbl.totalMHVFromPrima"/> </th>
+                        <th><spring:message code="lbl.coverageMHVPrima"/> </th>
 
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        for (Object[] list: table1Data) {
+                    %>
+                    <tr>
+                        <td><%=list[0]%></td>
+                        <td><%=list[1]%></td>
+                        <td><%=list[7]%></td>
+                        <td><%=list[11]%></td>
+                        <td><%=list[13]%>%</td>
+                        <td><%=list[8]%></td>
+                        <td><%=list[10]%></td>
+                        <td><%=list[12]%>%</td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <table class="display">
+                            <thead>
+                            <tr>
+                                <th><spring:message code="lbl.date"/> </th>
+                                <th><spring:message code="lbl.male"/> </th>
+                                <th><spring:message code="lbl.female"/> </th>
+                                <th><spring:message code="lbl.total"/> </th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <%
+                                for (Object[] list: sevenDaysData) {
+                            %>
+                            <tr>
+                                <td><%=list[0]%></td>
+                                <td><%=list[1]%></td>
+                                <td><%=list[2]%></td>
+                                <td><%=list[3]%></td>
+                            </tr>
+                            <%
+                                }
+                            %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-sm-4">
+                        <table class="display">
+                            <thead>
+                            <tr>
+                                <th><spring:message code="lbl.total"/> <spring:message code="lbl.targetPopulation"/> </th>
+                                <th><spring:message code="lbl.total"/> <spring:message code="lbl.collectedHousehold"/> </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <%
+                                for (Object[] list: countPopulation) {
+                            %>
+                            <tr>
+                                <td><%=list[0]%></td>
+                                <td><%=list[1]%></td>
+                            </tr>
+                            <%
+                                }
+                            %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-8">
+                        <div id="count_population"></div>
+                    </div>
+                </div>
+            </div>
             <div class="card-footer small text-muted"></div>
         </div>
     </div>
@@ -130,6 +192,10 @@
 <script src="<c:url value='/resources/js/jszip.js' />"></script>
 <script src="<c:url value='/resources/js/pdfmake.js' />"></script>
 <script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>
+<script src="<c:url value='/resources/chart/highcharts.js'/>"></script>
+<script src="<c:url value='/resources/chart/data.js'/>"></script>
+<script src="<c:url value='/resources/chart/drilldown.js'/>"></script>
+<script src="<c:url value='/resources/chart/series-label.js'/>"></script>
 <script>
     $(document).ready(function() {
         $('#aggregatedStatistics').DataTable({
@@ -155,6 +221,48 @@
             ],
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
+    });
+</script>
+<script>
+    var a = <%=countPopulation.get(0)[2]%>;
+    var b = <%=countPopulation.get(0)[3]%>;
+
+    Highcharts.chart('count_population', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: ''
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                }
+            }
+        },
+        series: [{
+            name: 'Brands',
+            colorByPoint: true,
+            data: [{
+                name: 'Total Collected Population',
+                y: 85.86,
+                sliced: false,
+                selected: true
+            },  {
+                name: 'Total Targeted Population',
+                y: 14.14
+            }]
+        }]
     });
 </script>
 </body>

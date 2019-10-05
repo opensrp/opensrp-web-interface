@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -12,10 +15,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.common.util.DateUtil;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.FacilityWorker;
 import org.opensrp.core.service.FacilityService;
@@ -103,8 +108,17 @@ public class FacilityController {
 		paginationUtil.createPagination(request, session, Facility.class);
 		model.addAttribute("locale", locale);
 
-		List<Object[]> objects1 = facilityService.getTable1Data();
+		String startDate = new Timestamp(DateUtil.atEndOfDay(DateUtils.addDays(new Date(), -1)).getTime()).toString();
+		String endDate = new Timestamp(DateUtil.atStartOfDay(DateUtils.addDays(new Date(), -8)).getTime()).toString();
 
+		List<Object[]> objects1 = facilityService.getTable1Data();
+		List<Object[]> objects2 = facilityService.lastSevenDaysData(startDate, endDate);
+		List<Object[]> objects3 = facilityService.countPopulation();
+
+		System.out.println(objects2.size());
+
+		session.setAttribute("countPopulation", objects3);
+		session.setAttribute("sevenDaysData", objects2);
 		session.setAttribute("table1Data", objects1);
 
 

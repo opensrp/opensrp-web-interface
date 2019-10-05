@@ -1036,22 +1036,49 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		List<Object[]> objects = null;
 		try {
-			String sql = "SELECT *, \n" + "       Round(temp.population_count * 100.0 / temp.targeted_population, 2) AS \n"
-					+ "       achievement \n" + "FROM   (SELECT vc.district, \n" + "               vc.upazila, \n"
-					+ "               l.id, \n" + "               Sum(CASE \n"
-					+ "                     WHEN vc.entity_type = 'ec_household' THEN 1 \n"
-					+ "                     ELSE 0 \n" + "                   END) AS household_count, \n"
-					+ "               Sum(CASE \n" + "                     WHEN vc.entity_type != 'ec_household' THEN 1 \n"
-					+ "                     ELSE 0 \n" + "                   END) AS population_count, \n"
-					+ "               us.targeted_household, \n" + "               us.targeted_population, \n"
-					+ "               us.total_cc, \n" + "               us.total_mhv \n"
-					+ "        FROM   core.\"viewJsonDataConversionOfClient\" vc \n"
-					+ "               JOIN core.location l \n" + "                 ON l.NAME = vc.upazila \n"
-					+ "               JOIN core.upazila_stat us \n" + "                 ON us.upazila_id = l.id \n"
-					+ "        GROUP  BY vc.district, \n" + "                  vc.upazila, \n" + "                  l.id, \n"
-					+ "                  us.targeted_household, \n" + "                  us.targeted_population, \n"
-					+ "                  us.total_cc, \n" + "                  us.total_mhv \n"
-					+ "        ORDER  BY vc.district, \n" + "                  vc.upazila) temp;";
+			String sql = "SELECT us.*, \n" + "       temp_n.prima_mhv, temp_n.prima_cc, \n"
+					+ "       Round(temp_n.prima_mhv * 100.00 / us.total_mhv, 2) AS coverage_mhv, \n"
+					+ "       Round(temp_n.prima_cc * 100.00 / us.total_cc, 2)   AS coverage_cc \n"
+					+ "FROM   (SELECT l.id, \n" + "               (SELECT NAME \n"
+					+ "                FROM   core.location \n"
+					+ "                WHERE  id = l.parent_location_id) AS district, \n" + "               temp1.*, \n"
+					+ "               temp2.count                        AS prima_cc \n"
+					+ "        FROM   (SELECT f.upazila, \n" + "                       Count(*) AS prima_mhv \n"
+					+ "                FROM   core.facility_worker fw \n" + "                       JOIN core.facility f \n"
+					+ "                         ON f.id = fw.facility_id \n"
+					+ "                WHERE  fw.facility_worker_type_id = 6 \n" + "                GROUP  BY f.upazila \n"
+					+ "                ORDER  BY f.upazila) temp1 \n" + "               JOIN (SELECT upazila, \n"
+					+ "                            Count(*) \n" + "                     FROM   core.facility \n"
+					+ "                     GROUP  BY upazila \n" + "                     ORDER  BY upazila) temp2 \n"
+					+ "                 ON temp1.upazila = temp2.upazila \n" + "               LEFT JOIN core.location l \n"
+					+ "                      ON l.NAME = temp1.upazila \n" + "        ORDER  BY temp2.upazila, \n"
+					+ "                  district) temp_n \n" + "       JOIN (SELECT *, \n"
+					+ "                    Round(temp.population_count * 100.0 / \n"
+					+ "                          temp.targeted_population, 2) \n"
+					+ "                                                AS \n" + "                    achievement \n"
+					+ "             FROM   (SELECT vc.district, \n" + "                            vc.upazila, \n"
+					+ "                            l.id, \n" + "                            Sum(CASE \n"
+					+ "                                  WHEN vc.entity_type = 'ec_household' THEN 1 \n"
+					+ "                                  ELSE 0 \n"
+					+ "                                END) AS household_count, \n"
+					+ "                            Sum(CASE \n"
+					+ "                                  WHEN vc.entity_type != 'ec_household' THEN 1 \n"
+					+ "                                  ELSE 0 \n"
+					+ "                                END) AS population_count, \n"
+					+ "                            us.targeted_household, \n"
+					+ "                            us.targeted_population, \n"
+					+ "                            us.total_cc, \n" + "                            us.total_mhv \n"
+					+ "                     FROM   core.\"viewJsonDataConversionOfClient\" vc \n"
+					+ "                            JOIN core.location l \n"
+					+ "                              ON l.NAME = vc.upazila \n"
+					+ "                            JOIN core.upazila_stat us \n"
+					+ "                              ON us.upazila_id = l.id \n" + "\t\t\t\t\t WHERE vc.provider_id != ''\n"
+					+ "                     GROUP  BY vc.district, \n" + "                               vc.upazila, \n"
+					+ "                               l.id, \n" + "                               us.targeted_household, \n"
+					+ "                               us.targeted_population, \n"
+					+ "                               us.total_cc, \n" + "                               us.total_mhv \n"
+					+ "                     ORDER  BY vc.district, \n"
+					+ "                               vc.upazila) temp) us \n" + "         ON us.id = temp_n.id;";
 			objects = session.createSQLQuery(sql).list();
 
 		} catch (Exception e) {
@@ -1061,6 +1088,53 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 
 		return objects;
+	}
+
+	@Override
+	public List<Object[]> lastSevenDaysData(String startDate, String endDate) {
+		Session session = sessionFactory.openSession();
+		List<Object[]> lastSevenDaysData = null;
+		try {
+			String sql = "SELECT *, \n" + "       ( male_count + female_count ) AS total \n"
+					+ "FROM   (SELECT Cast(c.date_created AS DATE), \n" + "               Sum(CASE \n"
+					+ "                     WHEN c.gender = 'M' THEN 1 \n" + "                     ELSE 0 \n"
+					+ "                   END) AS male_count, \n" + "               Sum(CASE \n"
+					+ "                     WHEN c.gender = 'F' THEN 1 \n" + "                     ELSE 0 \n"
+					+ "                   END) AS female_count \n"
+					+ "        FROM   core.\"viewJsonDataConversionOfClient\" c \n"
+					+ "        WHERE  c.date_created BETWEEN :endDate AND \n"
+					+ "                                      :startDate \n"
+					+ "               AND c.provider_id != '' \n" + "        GROUP  BY Cast(c.date_created AS DATE) \n"
+					+ "        ORDER  BY Cast(c.date_created AS DATE)) temp; ";
+			lastSevenDaysData = session.createSQLQuery(sql)
+					.setString("startDate", startDate)
+					.setString("endDate", endDate)
+					.list();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return lastSevenDaysData;
+ 	}
+
+	@Override
+	public List<Object[]> countPopulation() {
+		Session session = sessionFactory.openSession();
+		List<Object[]> countPopulation = null;
+		try {
+			String hql = "SELECT *, round(b.total_collected_population*100.00/a.total_targeted_population, 2) as achievement FROM (SELECT Sum(targeted_population) AS total_targeted_population \n"
+					+ "        FROM   core.upazila_stat) a, \n" + "       (SELECT Count(*) AS total_collected_population \n"
+					+ "        FROM   core.\"viewJsonDataConversionOfClient\" \n" + "        WHERE  provider_id != '' \n"
+					+ "               AND entity_type != 'ec_household') b";
+			countPopulation = session.createSQLQuery(hql).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return countPopulation;
 	}
 
 	public <T> List<T> getReportData(SearchBuilder searchBuilder, String procedureName) {

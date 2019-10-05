@@ -198,5 +198,12 @@ public class FacilityService {
 	public List<Object[]> getTable1Data() {
 		return repository.getTable1Data();
 	}
-	
+
+	public List<Object[]> lastSevenDaysData(String startDate, String endDate) {
+		return repository.lastSevenDaysData(startDate, endDate);
+	}
+
+	public List<Object[]> countPopulation() {
+		return repository.countPopulation();
+	}
 }
