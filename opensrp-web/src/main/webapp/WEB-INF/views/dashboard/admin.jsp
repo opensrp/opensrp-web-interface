@@ -1,6 +1,7 @@
 <%@page import="java.util.List"%>
 <%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
 <%@ page import="org.opensrp.common.dto.ReportDTO" %>
+<%@ page import="org.json.JSONArray" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
 
@@ -15,6 +16,9 @@
     List<Object[]> table1Data = (List<Object[]>) session.getAttribute("table1Data");
     List<Object[]> sevenDaysData = (List<Object[]>) session.getAttribute("sevenDaysData");
     List<Object[]> countPopulation = (List<Object[]>) session.getAttribute("countPopulation");
+    JSONArray countPopulationArray = (JSONArray) session.getAttribute("countPopulationArray");
+    JSONArray genderChart = (JSONArray) session.getAttribute("genderChart");
+    JSONArray categories = (JSONArray) session.getAttribute("categories");
 %>
 
 
@@ -119,7 +123,8 @@
                     </tbody>
                 </table>
                 <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-sm-4">
+                        <h4>Last Week Population(Based on Gender)</h4>
                         <table class="display">
                             <thead>
                             <tr>
@@ -146,9 +151,13 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="col-sm-8">
+                        <div id="gender_chart"></div>
+                    </div>
                 </div>
-                <div class="row" style="margin-top: 20px;">
+                <div class="row" style="margin-top: 40px;">
                     <div class="col-sm-4">
+                        <h4>Population Coverage</h4>
                         <table class="display">
                             <thead>
                             <tr>
@@ -224,9 +233,6 @@
     });
 </script>
 <script>
-    var a = <%=countPopulation.get(0)[2]%>;
-    var b = <%=countPopulation.get(0)[3]%>;
-
     Highcharts.chart('count_population', {
         chart: {
             plotBackgroundColor: null,
@@ -235,7 +241,7 @@
             type: 'pie'
         },
         title: {
-            text: ''
+            text: 'Population Coverage'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -253,16 +259,43 @@
         series: [{
             name: 'Brands',
             colorByPoint: true,
-            data: [{
-                name: 'Total Collected Population',
-                y: 85.86,
-                sliced: false,
-                selected: true
-            },  {
-                name: 'Total Targeted Population',
-                y: 14.14
-            }]
+            data: <%=countPopulationArray%>
         }]
+    });
+</script>
+<script>
+    Highcharts.chart('gender_chart', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Last Week Population(Based on Gender)'
+        },
+        xAxis: {
+            categories: <%=categories%>,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Population'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: <%=genderChart%>
     });
 </script>
 </body>

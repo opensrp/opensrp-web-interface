@@ -1124,10 +1124,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		List<Object[]> countPopulation = null;
 		try {
-			String hql = "SELECT *, round(b.total_collected_population*100.00/a.total_targeted_population, 2) as achievement FROM (SELECT Sum(targeted_population) AS total_targeted_population \n"
+			String hql = "SELECT *, (100-temp.achievement) as due from (\n"
+					+ "\tSELECT *, round(b.total_collected_population*100.00/a.total_targeted_population, 2) as achievement FROM (SELECT Sum(targeted_population) AS total_targeted_population \n"
 					+ "        FROM   core.upazila_stat) a, \n" + "       (SELECT Count(*) AS total_collected_population \n"
 					+ "        FROM   core.\"viewJsonDataConversionOfClient\" \n" + "        WHERE  provider_id != '' \n"
-					+ "               AND entity_type != 'ec_household') b";
+					+ "               AND entity_type != 'ec_household') b\n" + ") temp;";
 			countPopulation = session.createSQLQuery(hql).list();
 		} catch (Exception e) {
 			e.printStackTrace();

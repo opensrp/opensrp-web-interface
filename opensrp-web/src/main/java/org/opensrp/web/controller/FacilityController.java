@@ -17,8 +17,10 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
 
+import org.json.JSONObject;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
 import org.opensrp.core.entity.Facility;
@@ -28,6 +30,7 @@ import org.opensrp.core.service.FacilityWorkerService;
 import org.opensrp.core.service.FacilityWorkerTrainingService;
 import org.opensrp.core.service.FacilityWorkerTypeService;
 import org.opensrp.core.util.FacilityHelperUtil;
+import org.opensrp.web.util.HighChart;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -104,7 +107,8 @@ public class FacilityController {
 	}
 
 	@RequestMapping(value = "/admin-dashboard", method = RequestMethod.GET)
-	public String showData(HttpServletRequest request, HttpSession session, ModelMap model, Locale locale) {
+	public String showData(HttpServletRequest request, HttpSession session, ModelMap model, Locale locale)
+			throws JSONException {
 		paginationUtil.createPagination(request, session, Facility.class);
 		model.addAttribute("locale", locale);
 
@@ -117,7 +121,14 @@ public class FacilityController {
 
 		System.out.println(objects2.size());
 
+		JSONArray countPopulationArray = HighChart.countPopulation(objects3);
+		JSONArray categories = HighChart.categories(objects2);
+		JSONArray genderChart = HighChart.maleFemaleChart(objects2);
+
+		session.setAttribute("categories", categories);
+		session.setAttribute("genderChart", genderChart);
 		session.setAttribute("countPopulation", objects3);
+		session.setAttribute("countPopulationArray", countPopulationArray);
 		session.setAttribute("sevenDaysData", objects2);
 		session.setAttribute("table1Data", objects1);
 
