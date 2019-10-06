@@ -47,10 +47,94 @@
 <jsp:include page="/WEB-INF/views/navbar.jsp" />
 <div class="content-wrapper">
     <div class="container-fluid">
+
         <div class="card mb-3">
             <div class="card-header">
                 <i class="fa fa-table"></i>
-                <spring:message code="lbl.adminDashboard"/>
+                <spring:message code="lbl.lastWeekDashboard"/>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <table class="display">
+                            <thead>
+                            <tr>
+                                <th><spring:message code="lbl.date"/> </th>
+                                <th><spring:message code="lbl.male"/> </th>
+                                <th><spring:message code="lbl.female"/> </th>
+                                <th><spring:message code="lbl.total"/> </th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <%
+                                for (Object[] list: sevenDaysData) {
+                            %>
+                            <tr>
+                                <td><%=list[0]%></td>
+                                <td><%=list[1]%></td>
+                                <td><%=list[2]%></td>
+                                <td><%=list[3]%></td>
+                            </tr>
+                            <%
+                                }
+                            %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-8">
+                        <div id="gender_chart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer small text-muted"></div>
+        </div>
+        <br>
+        <br>
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fa fa-table"></i>
+                <spring:message code="lbl.populationCoverage"/>
+            </div>
+
+            <div class="card-body">
+                <div class="row" style="margin-top: 40px;">
+                    <div class="col-sm-4">
+                        <table class="display">
+                            <thead>
+                            <tr>
+                                <th><spring:message code="lbl.total"/> <spring:message code="lbl.targetPopulation"/> </th>
+                                <th><spring:message code="lbl.total"/> <spring:message code="lbl.collectedHousehold"/> </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <%
+                                for (Object[] list: countPopulation) {
+                            %>
+                            <tr>
+                                <td><%=list[0]%></td>
+                                <td><%=list[1]%></td>
+                            </tr>
+                            <%
+                                }
+                            %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-8">
+                        <div id="count_population"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer small text-muted"></div>
+        </div>
+        <br>
+        <br>
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fa fa-table"></i>
+                <spring:message code="lbl.achievementDashboard"/>
             </div>
 
             <div class="card-body">
@@ -88,6 +172,18 @@
                         %>
                     </tbody>
                 </table>
+            </div>
+            <div class="card-footer small text-muted"></div>
+        </div>
+        <br>
+        <br>
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fa fa-table"></i>
+                <spring:message code="lbl.coverageDashboard"/>
+            </div>
+
+            <div class="card-body">
 
                 <table id="mhvWiseStatistics" class="display">
                     <thead>
@@ -122,67 +218,6 @@
                     %>
                     </tbody>
                 </table>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <h4>Last Week Population(Based on Gender)</h4>
-                        <table class="display">
-                            <thead>
-                            <tr>
-                                <th><spring:message code="lbl.date"/> </th>
-                                <th><spring:message code="lbl.male"/> </th>
-                                <th><spring:message code="lbl.female"/> </th>
-                                <th><spring:message code="lbl.total"/> </th>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <%
-                                for (Object[] list: sevenDaysData) {
-                            %>
-                            <tr>
-                                <td><%=list[0]%></td>
-                                <td><%=list[1]%></td>
-                                <td><%=list[2]%></td>
-                                <td><%=list[3]%></td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-sm-8">
-                        <div id="gender_chart"></div>
-                    </div>
-                </div>
-                <div class="row" style="margin-top: 40px;">
-                    <div class="col-sm-4">
-                        <h4>Population Coverage</h4>
-                        <table class="display">
-                            <thead>
-                            <tr>
-                                <th><spring:message code="lbl.total"/> <spring:message code="lbl.targetPopulation"/> </th>
-                                <th><spring:message code="lbl.total"/> <spring:message code="lbl.collectedHousehold"/> </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <%
-                                for (Object[] list: countPopulation) {
-                            %>
-                            <tr>
-                                <td><%=list[0]%></td>
-                                <td><%=list[1]%></td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-sm-8">
-                        <div id="count_population"></div>
-                    </div>
-                </div>
             </div>
             <div class="card-footer small text-muted"></div>
         </div>

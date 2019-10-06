@@ -38,6 +38,8 @@ public class HealthIdController {
 	@RequestMapping(value = "/healthId/upload_csv.html", method = RequestMethod.GET)
 	public String csvUpload(HttpSession session, ModelMap model, Locale locale) throws JSONException {
 		model.addAttribute("locale", locale);
+		Object availableHealthId = healthIdService.availableHealthId();
+		session.setAttribute("availableHealthId", availableHealthId);
 		return "/health-id/upload_csv";
 	}
 	

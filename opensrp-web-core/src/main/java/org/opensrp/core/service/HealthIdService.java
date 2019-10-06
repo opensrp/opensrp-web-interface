@@ -186,5 +186,9 @@ public class HealthIdService {
 		return healthIds;
 		
 	}
+
+	public Object availableHealthId() {
+		return repository.availableHealthId();
+	}
 	
 }

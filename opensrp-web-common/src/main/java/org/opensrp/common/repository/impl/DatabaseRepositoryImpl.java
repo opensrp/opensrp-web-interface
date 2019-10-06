@@ -1138,6 +1138,21 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return countPopulation;
 	}
 
+	@Override
+	public Object availableHealthId() {
+		Session session = sessionFactory.openSession();
+		Object availableHealthId = null;
+		try {
+			String hql = "select count(*) from core.health_id where status = 'f';";
+			availableHealthId = session.createSQLQuery(hql).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return availableHealthId;
+	}
+
 	public <T> List<T> getReportData(SearchBuilder searchBuilder, String procedureName) {
 		Session session = sessionFactory.openSession();
 		List<T> aggregatedList = null;

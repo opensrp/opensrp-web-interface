@@ -11,6 +11,10 @@
 <%@page import="org.json.JSONObject" %>
 <%@page import="org.json.JSONArray" %>
 
+<%
+	Object availableHealthId = (Object) session.getAttribute("availableHealthId");
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,7 +43,12 @@
 				<div class="card-header">
 					<i class="fa fa-table"></i> <spring:message code="lbl.healthIdUpload"/>
 				</div>
-				<div class="card-body">				
+				<div class="card-body">
+					<div class="display">
+						<h4>Available Health Id</h4>
+						<p><%=availableHealthId%></p>
+					</div>
+					<br>
 					<form:form method="POST" action="${saveUrl}?${_csrf.parameterName}=${_csrf.token}" enctype="multipart/form-data">
 						<div class="form-group">
 							<div class="row">
