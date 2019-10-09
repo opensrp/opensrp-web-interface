@@ -37,14 +37,14 @@
 		</ol>
 			<div class="card mb-3">
 				<div class="card-header">
-					<i class="fa fa-table"></i> <spring:message code="lbl.healthIdUpload"/>
+					<i class="fa fa-table"></i> <spring:message code="lbl.userUpload"/>
 				</div>
 				<div class="card-body">				
 					<form:form method="POST" action="${saveUrl}?${_csrf.parameterName}=${_csrf.token}" enctype="multipart/form-data">
 						<div class="form-group">
 							<div class="row">
 								<div class="col-5">
-									<label for="exampleInputName"><spring:message code="lbl.file"/>  </label>
+									<label for="userUpload"><spring:message code="lbl.file"/>  </label>
 									<input id="file" type="file" name="file" />										
 								</div>
 								

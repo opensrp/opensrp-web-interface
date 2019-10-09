@@ -79,9 +79,10 @@
                             <th><spring:message code="lbl.division"/></th>
                             <th><spring:message code="lbl.district"/></th>
                             <th><spring:message code="lbl.upazila"/></th>
+                            <th><spring:message code="lbl.pourasabha"/></th>
                             <th><spring:message code="lbl.union"/></th>
-                            <th><spring:message code="lbl.union"/></th>
-                            <th><spring:message code="lbl.ward"/></th>
+                            <th><spring:message code="lbl.village"/></th>
+                            <th><spring:message code="lbl.action"/></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -123,7 +124,14 @@
                                 <% } %>
                             </td>
                             <td>
-                                <a href="#top" id="edit" onclick="editLocation(<%=catchmentAreas.get(i)[5]%>)">Edit</a>
+                                <%if (catchmentAreas.get(i)[5] == null) {%>
+                                All
+                                <% } else { %>
+                                <%=catchmentAreas.get(i)[5]%>
+                                <% } %>
+                            </td>
+                            <td>
+                                <a href="#top" id="edit" onclick="editLocation(<%=catchmentAreas.get(i)[6]%>)">Edit</a>
                             </td>
                         </tr>
                         <% } %>
