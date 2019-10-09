@@ -77,9 +77,9 @@
                                 <select class="custom-select custom-select-lg mb-3" id="formName" name="formName">
                                     <option value="-1">Select Form Name</option>
                                     <option value="Member Registration">Member Registration</option>
-                                    <option value="Family Member Registration">Family Member Registration</option>
+                                    <option value="Household Registration">Household Registration</option>
                                     <option value="Child Registration">Child Registration</option>
-                                    <option value="Woman Member Registration">Woman Member Registration</option>
+<%--                                    <option value="Woman Member Registration">Woman Member Registration</option>--%>
                                 </select>
                             </div>
                             <div class="col-2">
