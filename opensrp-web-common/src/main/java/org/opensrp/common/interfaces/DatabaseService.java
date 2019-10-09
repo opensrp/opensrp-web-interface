@@ -4,6 +4,7 @@ import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.util.SearchBuilder;
 
 import javax.servlet.http.HttpSession;
+
 import java.util.List;
 
 public interface DatabaseService {
@@ -35,10 +36,13 @@ public interface DatabaseService {
 	public <T> List<T> getCCListByUpazila(SearchBuilder searchBuilder);
 
 	public List<ReportDTO> getMHVListFilterWise(SearchBuilder searchBuilder);
+	
+	public List<Object[]> getHouseHoldReports(String address_value);
 
 	public  List<Object[]> getAllSks();
 
 	public List<Object[]> getClientInformation();
 
 	public List<Object[]> getClientInfoFilter(String startTime,String endTime, String formName,String sk);
+
 }
