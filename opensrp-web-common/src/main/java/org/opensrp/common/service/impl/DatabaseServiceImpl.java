@@ -96,6 +96,21 @@ public class DatabaseServiceImpl implements DatabaseService {
 		return databaseRepositoryImpl.getMHVListFilterWise(filterString);
 	}
 
+	@Override
+	public List<Object[]> getAllSks() {
+		return databaseRepositoryImpl.getAllSK();
+	}
+
+	@Override
+	public List<Object[]> getClientInformation() {
+		return databaseRepositoryImpl.getClientInformation();
+	}
+
+	@Override
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk) {
+		return databaseRepositoryImpl.getClientInfoFilter(startTime,endTime,formName,sk);
+	}
+
 
 	@Transactional
 	@Override
