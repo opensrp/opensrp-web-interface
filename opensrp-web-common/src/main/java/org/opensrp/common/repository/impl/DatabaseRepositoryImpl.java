@@ -1021,6 +1021,61 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return mhvList;
 	}
+	
+	@Override
+	public List<Object[]> getHouseHoldReports(String filterString) {
+		Session session = sessionFactory.openSession();
+		List<Object[]> mhvList = null;
+		try {
+			String hql = "SELECT distinct "+filterString+", \n" + "       Sum(CASE \n"
+					+ "             WHEN entity_type = 'ec_family' THEN 1 ELSE 0 END) AS house_hold_count, \n"
+					+ "       Sum(CASE \n" + "\t\t   \t WHEN house_hold_type = 'NVO' THEN 1 ELSE 0 END) AS NVO, \n"
+					+ "       Sum(CASE \n" + "             WHEN house_hold_type = 'VO' THEN 1 ELSE 0 END) AS VO, \n"
+					+ "       (Sum(CASE WHEN house_hold_type = 'NVO' THEN 1 ELSE 0 END) + Sum(CASE \n"
+					+ "         \t WHEN house_hold_type = 'VO' THEN 1 ELSE 0 END) ) AS Total, \n" + "       Sum(CASE \n"
+					+ "             WHEN entity_type = 'ec_family_member' THEN 1 ELSE 0 END) AS population,\n"
+					+ "\t   Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 6 THEN 1 ELSE 0 END) AS zeroToSixMOnths,\n"
+					+ "\t   Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 6 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 13 THEN 1 ELSE 0 END) AS sevenToTwelveMonths,\n"
+					+ "\t   Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 12 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 19 THEN 1 ELSE 0 END) AS thirteenToEighteen,\n"
+					+ "\t   Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 18 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 25 THEN 1 ELSE 0 END) AS nineteenTotwentyFour,\n"
+					+ "\t   Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 24 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 37 THEN 1 ELSE 0 END) AS twentyFiveTothirtySix,\n"
+					+ "\t   Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 36 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 61 THEN 1 ELSE 0 END) AS thirtySevenToSixty,\n"
+					+ "\t   Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 60  THEN 1 ELSE 0 END) AS childrenUnderFIve,\n"
+					+ "\t   Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 60  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 120 THEN 1 ELSE 0 END) AS childrenFIveToten,\n"
+					+ "\t   Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 120  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 228 and gender = 'পুরুষ' THEN 1 ELSE 0 END) AS tenToNineteenYearMale,\n"
+					+ "\t   Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 120  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 228 and gender = 'নারী' THEN 1 ELSE 0 END) AS tenToNineteenYearFemale,\n"
+					+ "\t   (Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 120  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 228 and gender = 'পুরুষ' THEN 1 ELSE 0 END) + Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 120  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 228 and gender = 'নারী' THEN 1 ELSE 0 END) ) AS TotalMFTenToNineteen,\n"
+					+ "\t\tSum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 228  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 420 and gender = 'পুরুষ' THEN 1 ELSE 0 END) AS nineTeenToThirtyFiveMale,\n"
+					+ "\t   Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 228  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 420 and gender = 'নারী' THEN 1 ELSE 0 END) AS nineTeenToThirtyFiveFemale,\n"
+					+ "\t   (Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 228  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 420 and gender = 'পুরুষ' THEN 1 ELSE 0 END) + Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 228  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 420 and gender = 'নারী' THEN 1 ELSE 0 END) ) AS TotalMFAgedNineteenTOThirtyFive,\n"
+					+ "\t\tSum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 420 THEN 1 ELSE 0 END) AS populationThirtyFiveAndAbove\n"
+					+ "\t\t\t\n" + "\t\t\t \n" + "FROM   core.\"clientInfoFromJSON\"\n" + "\n" + "GROUP  BY "+filterString+";";
+			Query query = session.createSQLQuery(hql);
+			mhvList = query.list();
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			session.close();
+		}
+		return mhvList;
+	}
 
 	@Override
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId) {

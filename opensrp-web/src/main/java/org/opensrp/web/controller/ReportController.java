@@ -99,13 +99,14 @@ public class ReportController {
 
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_AGGREGATED_REPORT')")
 	@RequestMapping(value = "/householdDataReport.html", method = RequestMethod.GET)
-	public String showFormWiseReport(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+	public String showFormWiseReport(HttpServletRequest request, HttpSession session, Model model, Locale locale,@RequestParam("address_field") String address_value) {
 		model.addAttribute("locale", locale);
 
-		List<ReportDTO> reports = databaseServiceImpl.getMHVListFilterWise(searchBuilder);
+		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(address_value);
 		session.setAttribute("formWiseAggregatedList", reports);
+		System.out.print(reports.size());
 
-		int totalHousehold = 0, totalPopulation = 0, totalMale = 0, totalFemale = 0;
+/*		int totalHousehold = 0, totalPopulation = 0, totalMale = 0, totalFemale = 0;
 		String malePercentage;
 		String femalePercentage;
 		for (int i = 0; i < reports.size(); i++) {
@@ -145,7 +146,7 @@ public class ReportController {
 		session.setAttribute("totalHousehold", String.valueOf(totalHousehold));
 		session.setAttribute("totalPopulation", String.valueOf(totalPopulation));
 		session.setAttribute("totalMale", malePercentage);
-		session.setAttribute("totalFemale", femalePercentage);
+		session.setAttribute("totalFemale", femalePercentage);*/
 		//end: setting start date and end date in report
 		return "report/householdDataReport";
 	}

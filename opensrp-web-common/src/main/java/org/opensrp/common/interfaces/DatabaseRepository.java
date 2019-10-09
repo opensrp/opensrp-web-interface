@@ -144,5 +144,7 @@ public interface DatabaseRepository {
 	public <T> T countByField(int id, String fieldName, String className);
 
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId);
+	
+	public List<Object[]> getHouseHoldReports(String filterString);
 
 }

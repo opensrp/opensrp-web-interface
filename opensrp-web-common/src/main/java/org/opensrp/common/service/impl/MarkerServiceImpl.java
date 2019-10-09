@@ -112,6 +112,12 @@ public class MarkerServiceImpl implements DatabaseService {
 		return null;
 	}
 
+	@Override
+	public List<Object[]> getHouseHoldReports(String address_value) {
+		// TODO Auto-generated method stub
+		return databaseRepositoryImpl.getHouseHoldReports(address_value);
+	}
+
 	@Transactional
 	public Marker findByName(String name) {
 		// TODO Auto-generated method stub

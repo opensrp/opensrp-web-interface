@@ -111,7 +111,7 @@
 							class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
 				</div>
 			</div>
-
+			<input type="hidden" id ="address_field" name="address_field"/>
 		</form>
 	</div>
 	<div class="card-footer small text-muted"></div>

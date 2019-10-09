@@ -97,6 +97,12 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 
 
+	@Override
+	public List<Object[]> getHouseHoldReports(String address_value) {
+		// TODO Auto-generated method stub
+		return databaseRepositoryImpl.getHouseHoldReports(address_value);
+	}
+
 	@Transactional
 	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
