@@ -92,7 +92,7 @@ public class OpenMRSTeamMemberAPIService implements OpenMRSConnector<Object> {
 		
 		List<String> locationList = new ArrayList<String>();
 		Set<Location> locations = teamMember.getLocations();
-		locationList.add("cd4fb71f-a0b8-4533-8072-73abd55a9c4c");
+		locationList.add("7a5d0462-2158-4eaa-b58d-ef2eb62e3c35");
 //		if (locations.size() != 0) {
 //			for (Location location : locations) {
 //				locationList.add(location.getUuid());
