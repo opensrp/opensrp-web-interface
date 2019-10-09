@@ -4,6 +4,8 @@
 package org.opensrp.web.controller;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -177,4 +179,36 @@ public class ReportController {
 		session.setAttribute("memberList", householdMemberList);
 		return "report/household-member-list";
 	}
+
+	@RequestMapping(value = "/clientDataReport.html", method = RequestMethod.GET)
+	public String getClientDataReportPage(HttpServletRequest request,
+										  HttpSession session,
+										  Model model){
+		List<Object[]> allSKs = databaseServiceImpl.getAllSks();
+		String  startTime = request.getParameter("start");
+		String endTime = request.getParameter("end");
+		String formName = request.getParameter("formName");
+		String sk = request.getParameter("sk");
+		boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null;
+		boolean requestEmptyFlag = false;
+		if(!requestNullFlag){
+			   requestEmptyFlag = startTime.equals("") &&  endTime.equals("") && formName.equals("-1")  && sk.equals("-1");
+		}
+		List<Object[]> allClientInfo = null;
+		if(requestNullFlag == true || requestEmptyFlag == true) {
+			allClientInfo = databaseServiceImpl.getClientInformation();
+		}
+		else allClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,formName,sk);
+
+		 // Search Portion need to implement using servlet request
+
+
+		session.setAttribute("skList",allSKs);
+		session.setAttribute("clientInfoList",allClientInfo);
+
+		return "report/client-data-report";
+
+	}
+
+
 }

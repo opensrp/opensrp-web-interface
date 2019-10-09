@@ -10,6 +10,8 @@ import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.util.SearchBuilder;
 
+
+
 import javax.servlet.http.HttpSession;
 
 /**
@@ -144,5 +146,10 @@ public interface DatabaseRepository {
 	public <T> T countByField(int id, String fieldName, String className);
 
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId);
+
+	public List<Object[]> getAllSK();
+	public List<Object[]> getClientInformation();
+
+	public List<Object[]> getClientInfoFilter(String startTime,String endTime, String formName,String sk);
 
 }

@@ -112,6 +112,21 @@ public class MarkerServiceImpl implements DatabaseService {
 		return null;
 	}
 
+	@Override
+	public List<Object[]> getAllSks() {
+		return null;
+	}
+
+	@Override
+	public List<Object[]> getClientInformation() {
+		return null;
+	}
+
+	@Override
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk) {
+		return null;
+	}
+
 	@Transactional
 	public Marker findByName(String name) {
 		// TODO Auto-generated method stub
