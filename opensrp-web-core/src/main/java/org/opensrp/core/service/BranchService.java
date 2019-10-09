@@ -59,4 +59,9 @@ public class BranchService {
         return repository.findAll(tableClass);
     }
 
+    @Transactional
+    public <T> T findByForeignKey(int id, String fieldName, String className) {
+        return repository.findByForeignKey(id, fieldName, className);
+    }
+
 }

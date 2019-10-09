@@ -38,4 +38,11 @@ public interface DatabaseService {
 	public List<ReportDTO> getMHVListFilterWise(SearchBuilder searchBuilder);
 	
 	public List<Object[]> getHouseHoldReports(String address_value);
+
+	public  List<Object[]> getAllSks();
+
+	public List<Object[]> getClientInformation();
+
+	public List<Object[]> getClientInfoFilter(String startTime,String endTime, String formName,String sk);
+
 }
