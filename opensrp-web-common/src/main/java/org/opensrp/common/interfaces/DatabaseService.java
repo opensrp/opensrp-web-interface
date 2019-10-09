@@ -35,4 +35,10 @@ public interface DatabaseService {
 	public <T> List<T> getCCListByUpazila(SearchBuilder searchBuilder);
 
 	public List<ReportDTO> getMHVListFilterWise(SearchBuilder searchBuilder);
+
+	public  List<Object[]> getAllSks();
+
+	public List<Object[]> getClientInformation();
+
+	public List<Object[]> getClientInfoFilter(String startTime,String endTime, String formName,String sk);
 }
