@@ -17,6 +17,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.opensrp.common.dto.LocationTreeDTO;
@@ -99,12 +100,15 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 	@Override
 	public <T> long saveAll(List<T> t) throws Exception {
+		System.out.println("SAVE ALL");
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
 		long returnValue = -1;
 		try {
 			tx = session.beginTransaction();
+			System.out.println("Save.... "+ t.size());
 			for (int i = 0; i < t.size(); i++) {
+				System.out.println(""+t.toString());
 				session.saveOrUpdate(t.get(i));
 			}
 			logger.info("saved successfully: " + t.getClass().getName());
@@ -116,6 +120,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			returnValue = -1;
 			tx.rollback();
 			logger.error(e);
+			e.printStackTrace();
 			throw new Exception(e.getMessage());
 		}
 		finally {
@@ -168,6 +173,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	public <T> boolean delete(T t) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
+		System.out.println("DELETE METHOD A ASHCHHE");
 		boolean returnValue = false;
 		try {
 			tx = session.beginTransaction();
@@ -184,7 +190,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		finally {
 			session.close();
-			
 		}
 		return returnValue;
 	}
@@ -1375,5 +1380,29 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 
+	public <T> List<T> getUniqueLocation(String village, String ward) {
+		List<T> locations = null;
+		Session session = sessionFactory.openSession();
+
+		try {
+			String hql = "select l1.id as id from core.location l1 join core.location l2 on l1.parent_location_id = l2.id"
+					+ " where l1.location_tag_id = 26 and l2.location_tag_id = 25 and l1.name like concat(:village,':%')"
+					+ " and l2.name like concat(:ward,':%');";
+			Query query = session.createSQLQuery(hql)
+					.addScalar("id", StandardBasicTypes.INTEGER)
+					.setString("village", village)
+					.setString("ward", ward)
+					.setResultTransformer(new AliasToBeanResultTransformer(LocationTreeDTO.class));
+			locations = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		System.out.println("location size::-> "+ locations.size());
+
+		return locations.size()>0?locations:null;
+	}
 
 }

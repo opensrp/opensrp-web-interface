@@ -86,4 +86,10 @@ public class UsersCatchmentArea {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
+    @Override
+    public String toString() {
+        return "UsersCatchmentArea{" + "id=" + id + ", created=" + created + ", updated=" + updated + ", locationId="
+                + locationId + ", parentLocationId=" + parentLocationId + ", userId=" + userId + '}';
+    }
 }

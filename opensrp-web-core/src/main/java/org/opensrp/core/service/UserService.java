@@ -560,12 +560,32 @@ public class UserService {
 		return repository.getProviderLocationTreeByChildRole(memberId, childRoleId);
 	}
 
+	private void updateOfUploadedCatchmentArea(UserLocationDTO userLocationDTO) throws Exception {
+		int locationId = userLocationDTO.getLocations()[0];
+		int userId = userLocationDTO.getUserId();
+		List<UsersCatchmentArea> areas = repository.findAllByForeignKey(userId, "user_id", "UsersCatchmentArea");
+		boolean isExistLocation = false;
+		for (UsersCatchmentArea area: areas) {
+			if (area.getLocationId() == locationId) isExistLocation = true;
+		}
+		if (!isExistLocation) {
+
+			TeamMember teamMember = repository.findByForeignKey(userId, "person_id", "TeamMember");
+			Location location = repository.findById(locationId, "id", Location.class);
+			Set<Location> locationSet = teamMember.getLocations();
+			locationSet.add(location);
+			teamMember.setLocations(locationSet);
+			UsersCatchmentArea usersCatchmentArea = usersCatchmentAreaMapper.map(location, userId);
+			repository.update(teamMember);
+			repository.save(usersCatchmentArea);
+		}
+	}
+
 	public String uploadUser(File csvFile) throws Exception {
 		BufferedReader br = null;
 		String cvsSplitBy = ";";
 		String msg = "";
 		String line = "";
-		String[] userTags = null;
 
 		int position = 0;
 
@@ -574,43 +594,113 @@ public class UserService {
 
 			while ((line = br.readLine()) != null) {
 				String[] users = line.split(cvsSplitBy);
+				System.out.println("LINE->");
+				System.out.println(line);
 
-				if (position == 0) continue;
+				if (position == 0) {
+					position++;
+					continue;
+				}
 				else {
+					System.out.println("USER LENGTH");
+					System.out.println(users.length);
 					for (int i = 0; i < users.length; i++) {
 						UserDTO userDTO = new UserDTO();
 
-						userDTO.setFirstName(users[0]);
-						userDTO.setLastName(users[1]);
-						userDTO.setMobile(users[2]);
-						userDTO.setUsername(users[2]);
-						userDTO.setRoles(users[3]);
-						if (users[3].equalsIgnoreCase("SK")) userDTO.setPassword("brac2019");
-						else userDTO.setPassword("brac123456");
-						userDTO.setEmail("");
-						userDTO.setBranches(branchService.findByKey(users[4], "code", Branch.class));
+						logger.info("USER LENGTH->\n");
+						logger.info("\n"+users[0].length());
+						logger.info("\n"+users[0]);
 
+						if(users[0].length() > 0 && !users[0].equalsIgnoreCase("none")){
+							String fullName[] = users[0].split(" ");
+							logger.info("FULL NAME ->\n");
+							logger.info("\nName: "+users[0]);
 
-						User user = userMapper.map(userDTO);
+							userDTO.setFirstName(fullName[0]);
+							if (fullName.length > 1) userDTO.setLastName(fullName[1]);
+							else if (fullName.length > 2) userDTO.setLastName(fullName[1]+ " " +fullName[2]);
+							else userDTO.setLastName(".");
+							if (users[1].equalsIgnoreCase("yes"))userDTO.setEnableSimPrint(true);
+							else userDTO.setEnableSimPrint(false);
 
-						user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
+//							logger.info("user first name:-> "+ userDTO.getFirstName() + " " + userDTO.getLastName());
 
-						User isExists = repository.findByKey(user.getUsername(), "username", User.class);
-
-						System.out.println("USER CREATED OPENMRS:::");
-						System.out.println(user);
-
-						if (!user.getUuid().isEmpty()) {
-							if (isExists == null) {
-								repository.save(user);
-							} else {
-								logger.info("already exists user:" + user.getUsername());
+							userDTO.setMobile("0"+users[2]);
+							Role role = repository.findByKey(users[3], "name", Role.class);
+							String roles = String.valueOf(role.getId());
+							userDTO.setRoles(roles);
+							if (users[3].equalsIgnoreCase("SK")) {
+								userDTO.setPassword("brac2019");
+								userDTO.setUsername("0"+users[2]);
 							}
-						} else {
-							logger.info("No uuid found for user:" + user.getUsername());
+							else {
+								userDTO.setPassword("brac123456");
+								userDTO.setUsername(String.valueOf(System.currentTimeMillis()));
+							}
+							userDTO.setEmail("");
+							Branch branch = repository.findByKey(users[4], "code", Branch.class);
+							String branches = String.valueOf(branch.getId());
+							userDTO.setBranches(branches);
+
+							logger.info("\nLAST CALL");
+							logger.info("\n"+users[5].toUpperCase());
+							logger.info("\n"+users[6].toUpperCase());
+							List<LocationTreeDTO> locations = repository.getUniqueLocation(users[5].toUpperCase(), users[6].toUpperCase());
+							logger.info("\nSERVER CALL END");
+							logger.info("\n"+locations);
+
+							logger.info("\nlocation size:-> "+locations.size());
+							logger.info("\nlocation id:-> "+locations.get(0).getId());
+
+							User user = userMapper.map(userDTO);
+
+							User isExists = repository.findByKey(user.getUsername(), "username", User.class);
+
+
+							if (locations.size() > 0) {
+								if (isExists == null) {
+									user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
+									if (!user.getUuid().isEmpty()) {
+										repository.save(user);
+										User newUser = repository.findByKey(user.getUsername(), "username", User.class);
+										logger.info("created new user:" + user.getUsername());
+										int[] locationsForSave = new int[1];
+										locationsForSave[0] = locations.get(0).getId();
+										UserLocationDTO userLocationDTO = new UserLocationDTO();
+										userLocationDTO.setUserId(newUser.getId());
+										userLocationDTO.setLocations(locationsForSave);
+										saveTeamMemberAndCatchmentAreas(userLocationDTO);
+									}
+								} else {
+
+									logger.info("\nin else if user already created");
+
+									try {
+										int[] locationsForSave = new int[1];
+										locationsForSave[0] = locations.get(0).getId();
+
+										logger.info("user id in else: "+ isExists.getId());
+										logger.info("location id in else: "+ locations.get(0).getId());
+										logger.info("location for save id in else: "+ locationsForSave[0]);
+
+										UserLocationDTO userLocationDTO = new UserLocationDTO();
+										userLocationDTO.setUserId(isExists.getId());
+										userLocationDTO.setLocations(locationsForSave);
+
+										logger.info("\nuuid found for user:" + isExists.getUuid() + " , user id: "+ isExists.getId());
+
+										updateOfUploadedCatchmentArea(userLocationDTO);
+									} catch (Exception e) {
+										e.printStackTrace();
+										logger.info(e.fillInStackTrace());
+									}
+								}
+							}
+
+							System.out.println("USER CATCHMENT AREA CREATED:::");
+							System.out.println(user);
 
 						}
-
 					}
 				}
 				position++;
@@ -618,6 +708,7 @@ public class UserService {
 
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			logger.info("Some problem occurred, please contact with admin..");
 			msg = "Some problem occurred, please contact with admin..";
 		}
