@@ -101,10 +101,9 @@ public class ReportController {
 
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_AGGREGATED_REPORT')")
 	@RequestMapping(value = "/householdDataReport.html", method = RequestMethod.GET)
-	public String showFormWiseReport(HttpServletRequest request, HttpSession session, Model model, Locale locale,@RequestParam("address_field") String address_value) {
+	public String showFormWiseReport(HttpServletRequest request, HttpSession session, Model model, Locale locale,@RequestParam("address_field") String address_value,@RequestParam("searched_value") String searched_value) {
 		model.addAttribute("locale", locale);
-
-		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(address_value, session);
+		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(address_value, searched_value);
 		session.setAttribute("formWiseAggregatedList", reports);
 		System.out.print(reports.size());
 

@@ -1029,8 +1029,17 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 	
 	@Override
-	public List<Object[]> getHouseHoldReports(String filterString, HttpSession httpSession) {
+	public List<Object[]> getHouseHoldReports(String filterString,String searched_value) {
 		Session session = sessionFactory.openSession();
+		String conditionString = "";
+		
+		if("empty".equalsIgnoreCase(searched_value)) {
+			 conditionString = "";
+		}
+		else {
+			conditionString = " where "+searched_value;
+		}
+		
 		List<Object[]> mhvList = null;
 		try {
 			String hql = "SELECT distinct "+filterString+", \n" + "       Sum(CASE \n"
@@ -1072,7 +1081,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 228  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 420 and gender = 'নারী' THEN 1 ELSE 0 END) ) AS TotalMFAgedNineteenTOThirtyFive,\n"
 					+ "\t\tSum(CASE \n"
 					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 420 THEN 1 ELSE 0 END) AS populationThirtyFiveAndAbove\n"
-					+ "\t\t\t\n" + "\t\t\t \n" + "FROM   core.\"clientInfoFromJSON\"\n" + "\n" + "GROUP  BY "+filterString+";";
+					+ "\t\t\t\n" + "\t\t\t \n" + "FROM   core.\"clientInfoFromJSON\"\n" + "\n" +conditionString+ " GROUP  BY "+filterString+";";
 			Query query = session.createSQLQuery(hql);
 			mhvList = query.list();
 		} catch (Exception e) {
