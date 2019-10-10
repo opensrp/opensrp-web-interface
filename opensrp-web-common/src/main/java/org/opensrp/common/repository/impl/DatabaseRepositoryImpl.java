@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -1115,6 +1116,21 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
+	public List<Object[]> getAllSK() {
+		Session session = sessionFactory.openSession();
+		List<Object[]> allSK = null;
+		try {
+			String hql = "select distinct(u.username) from core.users u join core.user_role ur on u.id = ur.user_id where ur.role_id = 9";
+			allSK = session.createSQLQuery(hql).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return allSK;
+	}
+
+	@Override
 	public <T> List<T> getCatchmentArea(int userId) {
 		Session session = sessionFactory.openSession();
 		List<T> catchmentAreas = null;
@@ -1266,4 +1282,98 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			query.setParameter("age_to", "");
 		}
 	}
+
+	public List<Object[]> getClientInformation(){
+		Session session = sessionFactory.openSession();
+		List<Object[]> clientInfoList = new ArrayList<Object[]>();
+		try {
+
+			String hql = "SELECT c.json ->> 'gender'                                         gender, \n" +
+					"       c.json -> 'addresses' -> 0 -> 'addressFields' ->> 'country' country, \n" +
+					"       c.json->'addresses' -> 0 -> 'addressFields' ->>'stateProvince'  division, \n"+
+					"       c.json->'addresses' -> 0 -> 'addressFields' ->>'countyDistrict'  district, \n"+
+					"       c.json->'addresses' -> 0 -> 'addressFields' ->>'cityVillage'  village, \n"+
+					"       cast(c.json ->> 'birthdate' as date)                                      birthdate, \n" +
+					"       c.json ->> 'firstName'                                      first_name, \n" +
+					"       c.json -> 'attributes' ->> 'phoneNumber'                    phone_number, \n" +
+					"       c.json -> 'attributes' ->> 'householdCode' \n" +
+					"       household_code, \n" +
+					"        e.provider_id                                        provider_id, \n" +
+					"       cast(e.date_created as date)                                    date_created \n" +
+					"FROM   core.client c \n" +
+					"       JOIN core.event_metadata e  \n" +
+					"         ON c.json ->> 'baseEntityId' = e.base_entity_id;";
+//					"FROM core.client c";
+			clientInfoList = session.createSQLQuery(hql).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return clientInfoList;
+	}
+
+	@Override
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk) {
+		String wh = "";
+		List<String> conds = new ArrayList<String>();
+		String stCond,edCond,formCond,skCond;
+		if(startTime != "" && endTime == "")
+			endTime = new Date().toString();
+		if(startTime != "" && endTime != ""){
+			stCond = "e.date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
+			conds.add(stCond);
+		}
+
+		if(formName.contains("-1") == false){
+			formCond = "  e.event_type =\'" + formName +"\'";
+
+			conds.add(formCond);
+		}
+		if(sk.contains("-1") == false){
+			skCond = "e.provider_id =\'" + sk+"\'";
+			conds.add(skCond);
+		}
+		if(conds.size() == 0) wh = "";
+		else {
+			wh = "\nWHERE ";
+			wh += conds.get(0);
+			for(int i = 1; i < conds.size();i++){
+				wh += " AND ";
+				wh += conds.get(i);
+			}
+		}
+
+		Session session = sessionFactory.openSession();
+		List<Object[]> clientInfoList = new ArrayList<Object[]>();
+		try {
+
+			String hql = "SELECT c.json ->> 'gender'                                         gender, \n" +
+					"       c.json -> 'addresses' -> 0 -> 'addressFields' ->> 'country' country,\n" +
+					"\t    c.json->'addresses' -> 0 -> 'addressFields' ->>'stateProvince'  division,\n" +
+					"\t\tc.json->'addresses' -> 0 -> 'addressFields' ->>'countyDistrict'  district, \n" +
+					"\t\tc.json->'addresses' -> 0 -> 'addressFields' ->>'cityVillage'  village,\n" +
+					"       cast(c.json ->> 'birthdate' as date)                                      birthdate, \n" +
+					"       c.json ->> 'firstName'                                      first_name, \n" +
+					"       c.json -> 'attributes' ->> 'phoneNumber'                    phone_number, \n" +
+					"       c.json -> 'attributes' ->> 'householdCode' \n" +
+					"       household_code, \n" +
+					"       e.provider_id                                     provider_id, \n" +
+					"       cast(e.date_created as date)                                      date_created \n" +
+					"FROM   core.client c \n" +
+					"       JOIN core.event_metadata e \n" +
+					"         ON c.json ->> 'baseEntityId' = e.base_entity_id";
+					hql += wh;
+					hql += ";";
+			clientInfoList = session.createSQLQuery(hql).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return clientInfoList;
+	}
+
+
+
 }

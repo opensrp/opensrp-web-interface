@@ -4,6 +4,9 @@
 
 package org.opensrp.core.service;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -25,6 +28,7 @@ import org.opensrp.core.dto.WorkerIdDTO;
 import org.opensrp.core.entity.*;
 import org.opensrp.core.openmrs.service.OpenMRSServiceFactory;
 import org.opensrp.core.openmrs.service.impl.OpenMRSUserAPIService;
+import org.opensrp.core.service.mapper.UserMapper;
 import org.opensrp.core.service.mapper.UsersCatchmentAreaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -76,6 +80,12 @@ public class UserService {
 
 	@Autowired
 	private LocationService locationServiceImpl;
+
+	@Autowired
+	private UserMapper userMapper;
+
+	@Autowired
+	private BranchService branchService;
 
 	@Transactional
 	public <T> long save(T t, boolean isUpdate) throws Exception {
@@ -548,5 +558,69 @@ public class UserService {
 	@Transactional
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId) {
 		return repository.getProviderLocationTreeByChildRole(memberId, childRoleId);
+	}
+
+	public String uploadUser(File csvFile) throws Exception {
+		BufferedReader br = null;
+		String cvsSplitBy = ";";
+		String msg = "";
+		String line = "";
+		String[] userTags = null;
+
+		int position = 0;
+
+		try {
+			br = new BufferedReader(new FileReader(csvFile));
+
+			while ((line = br.readLine()) != null) {
+				String[] users = line.split(cvsSplitBy);
+
+				if (position == 0) continue;
+				else {
+					for (int i = 0; i < users.length; i++) {
+						UserDTO userDTO = new UserDTO();
+
+						userDTO.setFirstName(users[0]);
+						userDTO.setLastName(users[1]);
+						userDTO.setMobile(users[2]);
+						userDTO.setUsername(users[2]);
+						userDTO.setRoles(users[3]);
+						if (users[3].equalsIgnoreCase("SK")) userDTO.setPassword("brac2019");
+						else userDTO.setPassword("brac123456");
+						userDTO.setEmail("");
+						userDTO.setBranches(branchService.findByKey(users[4], "code", Branch.class));
+
+
+						User user = userMapper.map(userDTO);
+
+						user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
+
+						User isExists = repository.findByKey(user.getUsername(), "username", User.class);
+
+						System.out.println("USER CREATED OPENMRS:::");
+						System.out.println(user);
+
+						if (!user.getUuid().isEmpty()) {
+							if (isExists == null) {
+								repository.save(user);
+							} else {
+								logger.info("already exists user:" + user.getUsername());
+							}
+						} else {
+							logger.info("No uuid found for user:" + user.getUsername());
+
+						}
+
+					}
+				}
+				position++;
+			}
+
+		}
+		catch (Exception e) {
+			logger.info("Some problem occurred, please contact with admin..");
+			msg = "Some problem occurred, please contact with admin..";
+		}
+		return msg;
 	}
 }

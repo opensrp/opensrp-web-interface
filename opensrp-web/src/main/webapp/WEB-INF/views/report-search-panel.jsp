@@ -117,3 +117,7 @@
 	</div>
 	<div class="card-footer small text-muted"></div>
 </div>
+
+<script>
+
+</script>

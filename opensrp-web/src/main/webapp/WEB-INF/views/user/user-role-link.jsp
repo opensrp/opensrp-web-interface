@@ -19,5 +19,9 @@
 	<li class="breadcrumb-item">
 		<a  href="<c:url value="/user/hierarchy.html?lang=${locale}"/>"> <strong><spring:message code="lbl.userHiearchy"/></strong></a> <% } %>
 	</li>
+	<% if(AuthenticationManagerUtil.isPermitted("PERM_USER_UPLOAD")){ %>
+	<li class="breadcrumb-item">
+		<a  href="<c:url value="/user/upload.html?lang=${locale}"/>"> <strong><spring:message code="lbl.userUpload"/></strong></a> <% } %>
+	</li>
 </ol>
 
