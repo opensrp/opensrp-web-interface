@@ -37,5 +37,5 @@ public interface DatabaseService {
 
 	public List<ReportDTO> getMHVListFilterWise(SearchBuilder searchBuilder);
 	
-	public List<Object[]> getHouseHoldReports(String address_value);
+	public List<Object[]> getHouseHoldReports(String address_value,String searchedValue);
 }

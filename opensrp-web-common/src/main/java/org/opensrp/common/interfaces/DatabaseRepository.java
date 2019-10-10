@@ -145,6 +145,6 @@ public interface DatabaseRepository {
 
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId);
 	
-	public List<Object[]> getHouseHoldReports(String filterString);
+	public List<Object[]> getHouseHoldReports(String filterString,String searched_value);
 
 }
