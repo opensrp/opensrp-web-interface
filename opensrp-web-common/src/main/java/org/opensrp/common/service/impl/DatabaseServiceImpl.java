@@ -113,9 +113,9 @@ public class DatabaseServiceImpl implements DatabaseService {
 
 
 	@Override
-	public List<Object[]> getHouseHoldReports(String address_value) {
+	public List<Object[]> getHouseHoldReports(String address_value, HttpSession session) {
 		// TODO Auto-generated method stub
-		return databaseRepositoryImpl.getHouseHoldReports(address_value);
+		return databaseRepositoryImpl.getHouseHoldReports(address_value, session);
 	}
 
 	@Transactional

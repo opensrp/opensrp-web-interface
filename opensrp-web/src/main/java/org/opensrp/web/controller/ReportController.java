@@ -104,7 +104,7 @@ public class ReportController {
 	public String showFormWiseReport(HttpServletRequest request, HttpSession session, Model model, Locale locale,@RequestParam("address_field") String address_value) {
 		model.addAttribute("locale", locale);
 
-		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(address_value);
+		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(address_value, session);
 		session.setAttribute("formWiseAggregatedList", reports);
 		System.out.print(reports.size());
 

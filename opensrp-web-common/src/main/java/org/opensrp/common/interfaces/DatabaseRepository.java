@@ -13,6 +13,7 @@ import org.opensrp.common.util.SearchBuilder;
 
 
 import javax.servlet.http.HttpSession;
+import javax.xml.stream.Location;
 
 /**
  * <p>
@@ -147,9 +148,12 @@ public interface DatabaseRepository {
 
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId);
 	
-	public List<Object[]> getHouseHoldReports(String filterString);
+	public List<Object[]> getHouseHoldReports(String filterString, HttpSession session);
 
 	public List<Object[]> getAllSK();
+
+	public <T> List<T> getUniqueLocation(String village, String ward);
+
 	public List<Object[]> getClientInformation();
 
 	public List<Object[]> getClientInfoFilter(String startTime,String endTime, String formName,String sk);
