@@ -65,6 +65,17 @@ jQuery(document).ready(function($) {
 		$("#subunit").html("");
 		$("#mauzapara").html("");
 	});
+//  	$("#healthReport_sk").change(function(event) {   
+//		$("#upazila").html("");
+//		$("#address_field").val("sk_id");
+//		var concatingString = "sk_id = " + "'"+ $("#healthReport_sk").val()+"'";
+//		$("#searched_value").val(concatingString);
+//		$("#union").html("");
+//		$("#ward").html("");
+//		$("#cc").html("");
+//		$("#subunit").html("");
+//		$("#mauzapara").html("");
+//  	});
   	$("#union").change(function(event) { 
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#union").val().split("?")[0]+"&title=","ward") ;
 		$("#cc").html("");

@@ -103,9 +103,10 @@ public class ReportController {
 	@RequestMapping(value = "/householdDataReport.html", method = RequestMethod.GET)
 	public String showFormWiseReport(HttpServletRequest request, HttpSession session, Model model, Locale locale,@RequestParam("address_field") String address_value,@RequestParam("searched_value") String searched_value) {
 		model.addAttribute("locale", locale);
-
+		// List<Object[]> skLists = databaseServiceImpl.getAllSks();
 		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(address_value, searched_value);
 		session.setAttribute("formWiseAggregatedList", reports);
+		// session.setAttribute("skLists", skLists);
 		System.out.print(reports.size());
 
 /*		int totalHousehold = 0, totalPopulation = 0, totalMale = 0, totalFemale = 0;

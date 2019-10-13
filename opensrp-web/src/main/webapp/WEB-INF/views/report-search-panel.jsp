@@ -73,6 +73,20 @@
 
 					</select>
 				</div>
+<%-- 				<div class="col-2">
+                                <select class="custom-select custom-select-lg mb-3" id="healthReport_sk" name="healthReport_sk">
+                                    <option value="-1">Select SK</option>
+                                    <% List<String> ret = (List<String>) session.getAttribute("skLists");%>
+                                    <%
+                                        for (String str : ret) {
+                                    %>
+                                    <option value="<%=str%>"><%=str%></option>
+                                    <%
+
+                                        }
+                                    %>
+                                </select>
+                            </div> --%>
 				<!-- <div class="col-3">
 					<select class="custom-select custom-select-lg mb-3" id="subunit"
 						name="subunit">
