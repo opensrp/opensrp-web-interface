@@ -193,24 +193,15 @@ public class UserController {
 		//end: adding location and team
 		return new ModelAndView("user/add-provider", "command", account);
 	}
-	
+
 	/**
-	 * <p>
-	 * This method render user html form for user information to edit, where login user can update
-	 * user information to save it in permanent storage.This is a get request method, there is a
-	 * post request method at {@UserController} named @editUser which actually
-	 * update the user information in to permanent storage.
-	 * </p>
-	 * 
-	 * @param request is an argument to the servlet's service
-	 * @param session is an argument to the HttpSession's session
-	 * @param model defines a holder for model attributes.
-	 * @param locale is an argument to holds locale.
-	 * @param id is unique id of a user.
-	 * @return user html form.
+	 * @param model
+	 * @param session
+	 * @param id
+	 * @param locale
+	 * @return
 	 * @throws JSONException
 	 */
-	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
 	@RequestMapping(value = "/user/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editUser(Model model, HttpSession session, @PathVariable("id") int id, Locale locale)

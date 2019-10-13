@@ -58,11 +58,7 @@
 		<div class="card mb-3">
 			<div class="card-header">
 				<i class="fa fa-table"></i>
-				<%if (AuthenticationManagerUtil.isUHFPO()){%>
-				<spring:message code="lbl.ccWiseReportStatus"/>
-				<%} else {%>
-				<spring:message code="lbl.mhvWiseReportStatus"/>
-				<%}%>
+				<spring:message code="lbl.summaryStatus"/>
 			</div>
 			<div class="card-body">
 				<!-- Icon Cards-->

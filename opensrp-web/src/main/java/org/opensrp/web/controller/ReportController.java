@@ -105,6 +105,7 @@ public class ReportController {
 		model.addAttribute("locale", locale);
 		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(address_value, searched_value);
 		session.setAttribute("formWiseAggregatedList", reports);
+		searchUtil.setDivisionAttribute(session);
 		System.out.print(reports.size());
 
 /*		int totalHousehold = 0, totalPopulation = 0, totalMale = 0, totalFemale = 0;

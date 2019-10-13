@@ -57,7 +57,10 @@ import javax.xml.transform.Transformer;
 public class DatabaseRepositoryImpl implements DatabaseRepository {
 	
 	private static final Logger logger = Logger.getLogger(DatabaseRepositoryImpl.class);
-	
+	private static final int SK_ID = 28;
+	private static final int VILLAGE_ID = 33;
+	private static final int UNION_ID = 32;
+
 	@Autowired
 	private SessionFactory sessionFactory;
 	
@@ -1050,37 +1053,37 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "         \t WHEN house_hold_type = 'VO' THEN 1 ELSE 0 END) ) AS Total, \n" + "       Sum(CASE \n"
 					+ "             WHEN entity_type = 'ec_family_member' THEN 1 ELSE 0 END) AS population,\n"
 					+ "\t   Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 6 THEN 1 ELSE 0 END) AS zeroToSixMOnths,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 6 THEN 1 ELSE 0 END) AS zeroToSixMonths,\n"
 					+ "\t   Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 6 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 13 THEN 1 ELSE 0 END) AS sevenToTwelveMonths,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 6 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 12 THEN 1 ELSE 0 END) AS sevenToTwelveMonths,\n"
 					+ "\t   Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 12 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 19 THEN 1 ELSE 0 END) AS thirteenToEighteen,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 12 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 18 THEN 1 ELSE 0 END) AS thirteenToEighteen,\n"
 					+ "\t   Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 18 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 25 THEN 1 ELSE 0 END) AS nineteenTotwentyFour,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 18 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 24 THEN 1 ELSE 0 END) AS nineteenToTwentyFour,\n"
 					+ "\t   Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 24 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 37 THEN 1 ELSE 0 END) AS twentyFiveTothirtySix,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 24 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 36 THEN 1 ELSE 0 END) AS twentyFiveToThirtySix,\n"
 					+ "\t   Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 36 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 61 THEN 1 ELSE 0 END) AS thirtySevenToSixty,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 36 and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 60 THEN 1 ELSE 0 END) AS thirtySevenToSixty,\n"
 					+ "\t   Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 60  THEN 1 ELSE 0 END) AS childrenUnderFIve,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 60  THEN 1 ELSE 0 END) AS childrenUnderFIve,\n"
 					+ "\t   Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 60  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 120 THEN 1 ELSE 0 END) AS childrenFIveToten,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 60  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 120 THEN 1 ELSE 0 END) AS childrenFIveToten,\n"
 					+ "\t   Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 120  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 228 and gender = 'পুরুষ' THEN 1 ELSE 0 END) AS tenToNineteenYearMale,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 120  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 228 and gender = 'পুরুষ' THEN 1 ELSE 0 END) AS tenToNineteenYearMale,\n"
 					+ "\t   Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 120  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 228 and gender = 'নারী' THEN 1 ELSE 0 END) AS tenToNineteenYearFemale,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 120  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 228 and gender = 'নারী' THEN 1 ELSE 0 END) AS tenToNineteenYearFemale,\n"
 					+ "\t   (Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 120  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 228 and gender = 'পুরুষ' THEN 1 ELSE 0 END) + Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 120  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 228 and gender = 'নারী' THEN 1 ELSE 0 END) ) AS TotalMFTenToNineteen,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 120  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 228 and gender = 'পুরুষ' THEN 1 ELSE 0 END) + Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 120  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 228 and gender = 'নারী' THEN 1 ELSE 0 END) ) AS TotalMFTenToNineteen,\n"
 					+ "\t\tSum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 228  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 420 and gender = 'পুরুষ' THEN 1 ELSE 0 END) AS nineTeenToThirtyFiveMale,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 228  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 420 and gender = 'পুরুষ' THEN 1 ELSE 0 END) AS nineTeenToThirtyFiveMale,\n"
 					+ "\t   Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 228  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 420 and gender = 'নারী' THEN 1 ELSE 0 END) AS nineTeenToThirtyFiveFemale,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 228  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 420 and gender = 'নারী' THEN 1 ELSE 0 END) AS nineTeenToThirtyFiveFemale,\n"
 					+ "\t   (Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 228  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 420 and gender = 'পুরুষ' THEN 1 ELSE 0 END) + Sum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 228  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) < 420 and gender = 'নারী' THEN 1 ELSE 0 END) ) AS TotalMFAgedNineteenTOThirtyFive,\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 228  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 420 and gender = 'পুরুষ' THEN 1 ELSE 0 END) + Sum(CASE \n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 228  and ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) <= 420 and gender = 'নারী' THEN 1 ELSE 0 END) ) AS TotalMFAgedNineteenTOThirtyFive,\n"
 					+ "\t\tSum(CASE \n"
-					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) >= 420 THEN 1 ELSE 0 END) AS populationThirtyFiveAndAbove\n"
+					+ "             WHEN ((extract( year FROM now() ) - extract( year FROM birth_date)) *12) + extract(MONTH FROM now() ) - extract(MONTH FROM birth_date) > 420 THEN 1 ELSE 0 END) AS populationThirtyFiveAndAbove\n"
 					+ "\t\t\t\n" + "\t\t\t \n" + "FROM   core.\"clientInfoFromJSON\"\n" + "\n" +conditionString+ " GROUP  BY "+filterString+";";
 			Query query = session.createSQLQuery(hql);
 			mhvList = query.list();
@@ -1125,8 +1128,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		List<Object[]> allSK = null;
 		try {
-			String hql = "select distinct(u.username) from core.users u join core.user_role ur on u.id = ur.user_id where ur.role_id = 9";
-			allSK = session.createSQLQuery(hql).list();
+			String hql = "select distinct(u.username) from core.users u join core.user_role ur on u.id = ur.user_id where ur.role_id = :skId";
+			allSK = session.createSQLQuery(hql).setInteger("skId", SK_ID).list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -1293,18 +1296,28 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<Object[]> clientInfoList = new ArrayList<Object[]>();
 		try {
 
-			String hql = "SELECT c.json ->> 'gender'                                         gender, \n" +
-					"       c.json -> 'addresses' -> 0 -> 'addressFields' ->> 'country' country, \n" +
-					"       c.json->'addresses' -> 0 -> 'addressFields' ->>'stateProvince'  division, \n"+
-					"       c.json->'addresses' -> 0 -> 'addressFields' ->>'countyDistrict'  district, \n"+
-					"       c.json->'addresses' -> 0 -> 'addressFields' ->>'cityVillage'  village, \n"+
-					"       cast(c.json ->> 'birthdate' as date)                                      birthdate, \n" +
-					"       c.json ->> 'firstName'                                      first_name, \n" +
-					"       c.json -> 'attributes' ->> 'phoneNumber'                    phone_number, \n" +
-					"       c.json -> 'attributes' ->> 'householdCode' \n" +
-					"       household_code, \n" +
-					"        e.provider_id                                        provider_id, \n" +
-					"       cast(e.date_created as date)                                    date_created \n" +
+			String hql = "SELECT c.json ->> 'gender' gender, \n" +
+					"       c.json->'addresses' -> 0 ->>'country' country, \n" +
+					"       c.json->'addresses' -> 0 ->>'stateProvince' division, \n"+
+					"       c.json->'addresses' -> 0 ->>'countyDistrict' district, \n"+
+					"       c.json->'addresses' -> 0 ->>'cityVillage' village, \n"+
+					"       cast(c.json ->> 'birthdate' as date) birthdate, \n" +
+					"       c.json ->> 'firstName' first_name, \n" +
+					"       c.json -> 'attributes' ->> 'HOH_Phone_Number' phone_number, \n" +
+					"       c.json -> 'attributes' ->> 'house_hold_id' household_code, \n" +
+					"       e.provider_id provider_id, \n" +
+					"       cast(e.date_created as date) date_created, \n" +
+					"       c.json -> 'attributes' ->> 'SS_Name' ss_name, \n"+
+					"       c.json -> 'attributes' ->> 'HH_Type' household_type, \n"+
+					"       c.json -> 'attributes' ->> 'Has_Latrine' has_latrine, \n"+
+					"       c.json -> 'attributes' ->> 'Number_of_HH_Member' total_member, \n"+
+					"       c.json -> 'attributes' ->> 'motherNameEnglish' mother_name, \n"+
+					"       c.json -> 'attributes' ->> 'Relation_with_HOH' relation_household, \n"+
+					"       c.json -> 'attributes' ->> 'Blood_Group' blood_group, \n"+
+					"       c.json -> 'attributes' ->> 'Marital_Status' marital_status, \n"+
+					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address2' upazila, \n"+
+					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address1' city_union, \n"+
+					"       c.json -> 'attributes' ->> 'nationalId' national_id \n"+
 					"FROM   core.client c \n" +
 					"       JOIN core.event_metadata e  \n" +
 					"         ON c.json ->> 'baseEntityId' = e.base_entity_id;";
@@ -1353,18 +1366,28 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<Object[]> clientInfoList = new ArrayList<Object[]>();
 		try {
 
-			String hql = "SELECT c.json ->> 'gender'                                         gender, \n" +
-					"       c.json -> 'addresses' -> 0 -> 'addressFields' ->> 'country' country,\n" +
-					"\t    c.json->'addresses' -> 0 -> 'addressFields' ->>'stateProvince'  division,\n" +
-					"\t\tc.json->'addresses' -> 0 -> 'addressFields' ->>'countyDistrict'  district, \n" +
-					"\t\tc.json->'addresses' -> 0 -> 'addressFields' ->>'cityVillage'  village,\n" +
-					"       cast(c.json ->> 'birthdate' as date)                                      birthdate, \n" +
-					"       c.json ->> 'firstName'                                      first_name, \n" +
-					"       c.json -> 'attributes' ->> 'phoneNumber'                    phone_number, \n" +
-					"       c.json -> 'attributes' ->> 'householdCode' \n" +
-					"       household_code, \n" +
-					"       e.provider_id                                     provider_id, \n" +
-					"       cast(e.date_created as date)                                      date_created \n" +
+			String hql = "SELECT c.json ->> 'gender' gender, \n" +
+					"       c.json->'addresses' -> 0 ->>'country' country, \n" +
+					"       c.json->'addresses' -> 0 ->>'stateProvince' division, \n"+
+					"       c.json->'addresses' -> 0 ->>'countyDistrict' district, \n"+
+					"       c.json->'addresses' -> 0 ->>'cityVillage' village, \n"+
+					"       cast(c.json ->> 'birthdate' as date) birthdate, \n" +
+					"       c.json ->> 'firstName' first_name, \n" +
+					"       c.json -> 'attributes' ->> 'HOH_Phone_Number' phone_number, \n" +
+					"       c.json -> 'attributes' ->> 'householdCode' household_code, \n" +
+					"       e.provider_id provider_id, \n" +
+					"       cast(e.date_created as date) date_created, \n" +
+					"       c.json -> 'attributes' ->> 'SS_Name' ss_name, \n"+
+					"       c.json -> 'attributes' ->> 'HH_Type' household_type, \n"+
+					"       c.json -> 'attributes' ->> 'Has_Latrine' has_latrine, \n"+
+					"       c.json -> 'attributes' ->> 'Number_of_HH_Member' total_member, \n"+
+					"       c.json -> 'attributes' ->> 'motherNameEnglish' mother_name, \n"+
+					"       c.json -> 'attributes' ->> 'Relation_with_HOH' relation_household, \n"+
+					"       c.json -> 'attributes' ->> 'Blood_Group' blood_group, \n"+
+					"       c.json -> 'attributes' ->> 'Marital_Status' marital_status, \n"+
+					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address2' upazila, \n"+
+					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address1' city_union, \n"+
+					"       c.json -> 'attributes' ->> 'nationalId' national_id \n"+
 					"FROM   core.client c \n" +
 					"       JOIN core.event_metadata e \n" +
 					"         ON c.json ->> 'baseEntityId' = e.base_entity_id";
@@ -1386,12 +1409,14 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 		try {
 			String hql = "select l1.id as id from core.location l1 join core.location l2 on l1.parent_location_id = l2.id"
-					+ " where l1.location_tag_id = 26 and l2.location_tag_id = 25 and l1.name like concat(:village,':%')"
+					+ " where l1.location_tag_id = :villageId and l2.location_tag_id = :unionId and l1.name like concat(:village,':%')"
 					+ " and l2.name like concat(:ward,':%');";
 			Query query = session.createSQLQuery(hql)
 					.addScalar("id", StandardBasicTypes.INTEGER)
 					.setString("village", village)
 					.setString("ward", ward)
+					.setInteger("villageId", VILLAGE_ID)
+					.setInteger("unionId", UNION_ID)
 					.setResultTransformer(new AliasToBeanResultTransformer(LocationTreeDTO.class));
 			locations = query.list();
 		} catch (Exception e) {

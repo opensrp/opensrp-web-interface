@@ -612,6 +612,7 @@ public class UserService {
 						logger.info("\n"+users[0]);
 
 						if(users[0].length() > 0 && !users[0].equalsIgnoreCase("none")){
+							users[0] = users[0].trim();
 							String fullName[] = users[0].split(" ");
 							logger.info("FULL NAME ->\n");
 							logger.info("\nName: "+users[0]);
@@ -635,7 +636,12 @@ public class UserService {
 							}
 							else {
 								userDTO.setPassword("brac123456");
-								userDTO.setUsername(String.valueOf(System.currentTimeMillis()));
+								String username = fullName[0]+"-"+users[5];
+								username = username.replaceAll(" ", "");
+								username = username.replaceAll("&", "");
+								username = username.replaceAll("\\(", "");
+								username = username.replaceAll("\\)", "");
+								userDTO.setUsername(username);
 							}
 							userDTO.setEmail("");
 							Branch branch = repository.findByKey(users[4], "code", Branch.class);
