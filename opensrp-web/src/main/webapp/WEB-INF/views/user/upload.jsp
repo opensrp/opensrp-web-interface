@@ -22,7 +22,7 @@
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
-<c:url var="saveUrl" value="/user/upload.html" />
+<c:url var="saveUrl" value="/upload/user-catchment.html" />
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 <jsp:include page="/WEB-INF/views/navbar.jsp" />
