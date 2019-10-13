@@ -30,9 +30,13 @@ function getLocationHierarchy(url,id) {
 
 jQuery(document).ready(function($) {
   	$("#division").change(function(event) {   
-		//event.preventDefault();		
+		//event.preventDefault();	
+  		// var a = $("#division").val().split("?")[1];
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#division").val().split("?")[0]+"&title=","district") ;
-		$("#upazila").html("");		
+		$("#upazila").html("");
+		$("#address_field").val("district");
+		var concatingString = "division = " + "'"+ $("#division").val().split("?")[1]+"'";
+		$("#searched_value").val(concatingString);
 		$("#union").html("");
 		$("#ward").html("");
 		$("#cc").html("");
@@ -42,6 +46,9 @@ jQuery(document).ready(function($) {
   
   	$("#district").change(function(event) {
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#district").val().split("?")[0]+"&title=","upazila") ;
+		$("#address_field").val("upazila");
+		var concatingString = "district = " + "'"+$("#district").val().split("?")[1]+"'";
+		$("#searched_value").val(concatingString);
 		$("#union").html("");		
 		$("#ward").html("");
 		$("#cc").html("");
@@ -50,6 +57,9 @@ jQuery(document).ready(function($) {
 	});
   	$("#upazila").change(function(event) { 
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#upazila").val().split("?")[0]+"&title=","union") ;
+		$("#address_field").val("sk_id");
+		var concatingString = "upazila = " + "'"+$("#upazila").val().split("?")[1]+"'";
+		$("#searched_value").val(concatingString);
 		$("#ward").html("");
 		$("#cc").html("");
 		$("#subunit").html("");
@@ -69,5 +79,5 @@ jQuery(document).ready(function($) {
   	// $("#subunit").change(function(event) {
 	// 	getLocationHierarchy("/opensrp-dashboard/location?id="+$("#subunit").val().split("?")[0]+"&title=","mauzapara") ;
 	// });
-
+  	
  });

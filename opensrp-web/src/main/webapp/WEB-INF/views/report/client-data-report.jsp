@@ -76,8 +76,8 @@
                                 <label><spring:message code="lbl.formName"/></label>
                                 <select class="custom-select custom-select-lg mb-3" id="formName" name="formName">
                                     <option value="-1">Select Form Name</option>
-                                    <option value="Member Registration">Member Registration</option>
-                                    <option value="Household Registration">Household Registration</option>
+                                    <option value="Family Member Registration">Member Registration</option>
+                                    <option value="Family Registration">Household Registration</option>
                                     <option value="Child Registration">Child Registration</option>
 <%--                                    <option value="Woman Member Registration">Woman Member Registration</option>--%>
                                 </select>
@@ -133,12 +133,22 @@
                                 <th><spring:message code="lbl.householdCode"/></th>
                                 <th><spring:message code="lbl.provider"/></th>
                                 <th><spring:message code="lbl.createdDate"/></th>
+                                <th><spring:message code="lbl.ssName"/></th>
+                                <th><spring:message code="lbl.householdType"/></th>
+                                <th><spring:message code="lbl.hasLatrine"/></th>
+                                <th><spring:message code="lbl.totalMember"/></th>
+                                <th><spring:message code="lbl.motherName"/></th>
+                                <th><spring:message code="lbl.relationWithHouseholdHead"/></th>
+                                <th><spring:message code="lbl.bloodGroup"/></th>
+                                <th><spring:message code="lbl.maritalStatus"/></th>
+                                <th><spring:message code="lbl.upazila"/></th>
+                                <th><spring:message code="lbl.union"/></th>
+                                <th><spring:message code="lbl.nationalId"/></th>
                             </tr>
                             </thead>
                             <tbody>
                             <%  List<Object[]> allClientInfo = (List<Object[]>) session.getAttribute("clientInfoList");
                                 for(Object[] object: allClientInfo){
-                                    int cnt = 0;
                             %>
                                 <tr>
                                     <% for(Object obj: object){ %>
@@ -177,12 +187,14 @@
             bInfo: true,
             dom: 'Bfrtip',
             destroy: true,
+            scrollX: true,
             buttons: [
                 'pageLength', 'csv', 'excel', 'pdf'
             ],
             "order": [[ 3, "desc" ]],
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
+        $('.dataTables_length').addClass('bs-select');
     });
     $(document).ready(function() {
         $('#ccListTable').DataTable({

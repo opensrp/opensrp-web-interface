@@ -43,7 +43,7 @@
 			<!-- location info -->
 			<div class="row">
 				<div class="col-2">
-					<select class="custom-select custom-select-lg mb-3" id="division"
+					<select required class="custom-select custom-select-lg mb-3" id="division"
 							name="division">
 						<option value=""><spring:message code="lbl.selectDivision"/>
 						</option>
@@ -111,7 +111,8 @@
 							class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
 				</div>
 			</div>
-
+			<input type="hidden" id ="address_field" name="address_field"/>
+			<input type="hidden" id ="searched_value" name="searched_value"/>
 		</form>
 	</div>
 	<div class="card-footer small text-muted"></div>

@@ -193,24 +193,15 @@ public class UserController {
 		//end: adding location and team
 		return new ModelAndView("user/add-provider", "command", account);
 	}
-	
+
 	/**
-	 * <p>
-	 * This method render user html form for user information to edit, where login user can update
-	 * user information to save it in permanent storage.This is a get request method, there is a
-	 * post request method at {@UserController} named @editUser which actually
-	 * update the user information in to permanent storage.
-	 * </p>
-	 * 
-	 * @param request is an argument to the servlet's service
-	 * @param session is an argument to the HttpSession's session
-	 * @param model defines a holder for model attributes.
-	 * @param locale is an argument to holds locale.
-	 * @param id is unique id of a user.
-	 * @return user html form.
+	 * @param model
+	 * @param session
+	 * @param id
+	 * @param locale
+	 * @return
 	 * @throws JSONException
 	 */
-	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
 	@RequestMapping(value = "/user/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editUser(Model model, HttpSession session, @PathVariable("id") int id, Locale locale)
@@ -586,51 +577,6 @@ public class UserController {
 		return "user/upload";
 	}
 
-
-	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_USER')")
-	@RequestMapping(value = "/user/upload_csv.html", method = RequestMethod.POST)
-	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
-			throws Exception {
-		if (file.isEmpty()) {
-			model.put("msg", "failed to upload file because its empty");
-			model.addAttribute("msg", "Failed to upload file because its empty");
-			return new ModelAndView("/user/upload_csv");
-		} else if (!"text/csv".equalsIgnoreCase(file.getContentType())) {
-			model.addAttribute("msg", "File type should be '.csv'");
-			return new ModelAndView("/user/upload_csv");
-		}
-
-		String rootPath = request.getSession().getServletContext().getRealPath("/");
-		File dir = new File(rootPath + File.separator + "uploadedFile");
-		if (!dir.exists()) dir.mkdirs();
-		File csvFile = new File(dir.getAbsolutePath() + File.separator + file.getOriginalFilename());
-
-		try {
-			try (InputStream is = file.getInputStream();
-			     BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(csvFile))) {
-				int i;
-
-				while ((i = is.read()) != -1) {
-					stream.write(i);
-				}
-				stream.flush();
-			}
-		}
-		catch (IOException e) {
-			model.put("msg", "failed to process file because : " + e.getMessage());
-			return new ModelAndView("/health-id/upload_csv");
-		}
-		String msg = userServiceImpl.uploadUser(csvFile);
-
-		model.addAttribute("locale", locale);
-		if (!msg.isEmpty()) {
-			model.put("msg", msg);
-			return new ModelAndView("/health-id/upload_csv");
-		}
-		return new ModelAndView("redirect:/cbhc-dashboard?lang=" + locale);
-	}
-
-
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logoutPage(HttpServletRequest request, HttpServletResponse response, Locale locale) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -694,9 +640,12 @@ public class UserController {
 		return new ResponseEntity<>(array.toString(), OK);
 	}
 
-	@RequestMapping(value = "/upload/user.html", method = RequestMethod.POST)
+	@RequestMapping(value = "/upload/user-catchment.html", method = RequestMethod.POST)
 	public ModelAndView uploadUser(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
 			throws Exception {
+
+		System.out.println("ALMASS:--> "+ file);
+
 		if (file.isEmpty()) {
 			model.put("msg", "failed to upload user data because its empty");
 			model.addAttribute("msg", "failed to upload file because its empty");
@@ -707,6 +656,8 @@ public class UserController {
 		}
 
 		String rootPath = request.getSession().getServletContext().getRealPath("/");
+
+		System.out.println("Root Path:-> " + rootPath);
 		File dir = new File(rootPath + File.separator + "uploadedfile");
 		if (!dir.exists()) {
 			dir.mkdirs();
@@ -729,6 +680,10 @@ public class UserController {
 			model.put("msg", "failed to process file because : " + e.getMessage());
 			return new ModelAndView("/user/upload");
 		}
+
+		System.out.println("CSV FILE->");
+		System.out.println(csvFile);
+
 		String msg = userServiceImpl.uploadUser(csvFile);
 		if (!msg.isEmpty()) {
 			model.put("msg", msg);

@@ -17,6 +17,8 @@
 	String populationCount = (String) session.getAttribute("totalPopulation");
 	String malePercentage = (String) session.getAttribute("totalMale");
 	String femalePercentage = (String) session.getAttribute("totalFemale");
+	
+	List<Object[]>houseHoldReports = (List<Object[]>)session.getAttribute("formWiseAggregatedList");
 %>
 
 <!DOCTYPE html>
@@ -56,15 +58,11 @@
 		<div class="card mb-3">
 			<div class="card-header">
 				<i class="fa fa-table"></i>
-				<%if (AuthenticationManagerUtil.isUHFPO()){%>
-				<spring:message code="lbl.ccWiseReportStatus"/>
-				<%} else {%>
-				<spring:message code="lbl.mhvWiseReportStatus"/>
-				<%}%>
+				<spring:message code="lbl.summaryStatus"/>
 			</div>
 			<div class="card-body">
 				<!-- Icon Cards-->
-				<div class="row">
+<%-- 				<div class="row">
 					<div class="col-xl-3 col-sm-6 mb-4">
 						<div class="card text-white o-hidden h-100 bg-primary">
 							<div class="card-body">
@@ -129,7 +127,7 @@
                 </div>
             </div>
         </div>  -->
-				</div>
+				</div> --%>
 
 				<div class="row">
 					<div class="col-sm-12" id="content">
@@ -170,41 +168,41 @@
 							</thead>
 							<tbody>
 							<%
-								List<ReportDTO> reports = (List<ReportDTO>) session.getAttribute("formWiseAggregatedList");
-								for (ReportDTO report: reports) {
-									int population = SearchUtil.randomBetween(600, 20);
-									int male = SearchUtil.randomBetween(population, 20);
+							for( Object[] list: houseHoldReports ) {
 							%>
 							<tr>
-								<td>
+								<%-- <td>
 									<a href="<c:url value="/report/individual-mhv-works.html">
 											<c:param name="mhvUsername" value="<%=report.getMhv()%>"/></c:url>">
 										<%=report.getMhv()%>
 									</a>
-								</td><!--provider-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--household registered-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--vo-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--nvo-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--total-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--population-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--zero to six-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--seven to twelve-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--thirteen to eighteen-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--nineteen to twenty four-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--twenty five to thirty six-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--thirty seven to sixty-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--children under five years-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--children 5-10 years-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--adolescent male-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--adolescent female-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--adolescent total-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--aged 19-35 years male-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--aged 19-35 years female-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--aged 19-35 years total-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--number of population 35/35 years old-->
-								<td><%=SearchUtil.randomBetween(100, 20)%></td><!--number of sanitary with hh-->
+								</td> --%>
+								<td><%=list[0]%></td>
+								<td><%=list[1]%></td><!--household registered-->
+								<td><%=list[3]%></td><!--vo-->
+								<td><%=list[2]%></td><!--nvo-->
+								<td><%=list[4]%></td><!--total-->
+								<td><%=list[5]%></td><!--population-3-->
+								<td><%=list[6]%></td> <!--zero to six-->
+								<td><%=list[7]%><!--seven to twelve-->
+								<td><%=list[8]%></td><!--thirteen to eighteen-->
+								<td><%=list[9]%></td><!--nineteen to twenty four-->
+								<td><%=list[10]%></td><!--twenty five to thirty six-->
+								<td><%=list[11]%></td><!--thirty seven to sixty-->
+								<td><%=list[12]%></td><!--children under five years-->
+								<td><%=list[13]%></td><!--children 5-10 years-->
+								<td><%=list[14]%></td><!--adolescent male-->
+								<td><%=list[15]%></td><!--adolescent female-->
+								<td><%=list[16]%></td><!--adolescent total-->
+								<td><%=list[17]%></td><!--aged 19-35 years male-->
+								<td><%=list[18]%></td><!--aged 19-35 years female-->
+								<td><%=list[19]%></td><!--aged 19-35 years total-->
+								<td><%=list[20]%></td><!--number of population 35/35 years old-->
+								<td>0</td><!--number of sanitary with hh-->
 							</tr>
-							<%}%>
+							<%
+							}
+							%>
 							</tbody>
 						</table>
 					</div>
@@ -239,7 +237,10 @@
 				'pageLength', 'csv', 'excel', 'pdf'
 			],
 			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-			scrollX: true
+			scrollX: true,
+		    language: {
+		        searchPlaceholder: "Location / Provider"
+		    }
 		});
 		$('.dataTables_length').addClass('bs-select');
 	});
