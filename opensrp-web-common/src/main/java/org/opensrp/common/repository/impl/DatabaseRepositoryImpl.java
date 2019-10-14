@@ -1296,7 +1296,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<Object[]> clientInfoList = new ArrayList<Object[]>();
 		try {
 
-			String hql = "SELECT c.json ->> 'gender' gender, \n" +
+			String hql = "SELECT Distinct On(c.json ->> 'baseEntityId')" +
+					"		c.json ->> 'gender' gender, \n" +
 					"       c.json->'addresses' -> 0 ->>'country' country, \n" +
 					"       c.json->'addresses' -> 0 ->>'stateProvince' division, \n"+
 					"       c.json->'addresses' -> 0 ->>'countyDistrict' district, \n"+
@@ -1366,7 +1367,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<Object[]> clientInfoList = new ArrayList<Object[]>();
 		try {
 
-			String hql = "SELECT c.json ->> 'gender' gender, \n" +
+			String hql = "SELECT Distinct On(c.json ->> 'baseEntityId')\n" +
+					"		c.json ->> 'gender' gender, \n" +
 					"       c.json->'addresses' -> 0 ->>'country' country, \n" +
 					"       c.json->'addresses' -> 0 ->>'stateProvince' division, \n"+
 					"       c.json->'addresses' -> 0 ->>'countyDistrict' district, \n"+
