@@ -112,8 +112,8 @@ public class FacilityController {
 		paginationUtil.createPagination(request, session, Facility.class);
 		model.addAttribute("locale", locale);
 
-		String startDate = new Timestamp(DateUtil.atEndOfDay(DateUtils.addDays(new Date(), -1)).getTime()).toString();
-		String endDate = new Timestamp(DateUtil.atStartOfDay(DateUtils.addDays(new Date(), -8)).getTime()).toString();
+		String startDate = new Timestamp(DateUtil.atEndOfDay(DateUtils.addDays(new Date(), -0)).getTime()).toString();
+		String endDate = new Timestamp(DateUtil.atStartOfDay(DateUtils.addDays(new Date(), -7)).getTime()).toString();
 
 		List<Object[]> objects1 = facilityService.getTable1Data();
 		List<Object[]> objects2 = facilityService.lastSevenDaysData(startDate, endDate);
