@@ -124,6 +124,12 @@ public class User implements UserDetails {
 	@Column(name = "enable_sim_print")
 	private Boolean enableSimPrint;
 
+	@Column(name = "active_status")
+	private Boolean activeStatus;
+
+	@Column(name = "ss_no")
+	private String ssNo;
+
 	public User() {
 	}
 	
@@ -305,6 +311,22 @@ public class User implements UserDetails {
 
 	public void setEnableSimPrint(Boolean enableSimPrint) {
 		this.enableSimPrint = enableSimPrint;
+	}
+
+	public Boolean getActiveStatus() {
+		return activeStatus;
+	}
+
+	public void setActiveStatus(Boolean activeStatus) {
+		this.activeStatus = activeStatus;
+	}
+
+	public String getSsNo() {
+		return ssNo;
+	}
+
+	public void setSsNo(String ssNo) {
+		this.ssNo = ssNo;
 	}
 
 	@Transient

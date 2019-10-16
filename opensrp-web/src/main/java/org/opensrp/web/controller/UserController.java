@@ -155,6 +155,7 @@ public class UserController {
 		model.addAttribute("account", new User());
 		List<Role> roles = userServiceImpl.setRolesAttributes(selectedRoles, session);
 		List<Branch> branches = branchService.findAll("Branch");
+		System.out.println("BRANCH:-> "+ branches.size());
 		model.addAttribute("locale", locale);
 		model.addAttribute("roles", roles);
 		
@@ -644,8 +645,6 @@ public class UserController {
 	public ModelAndView uploadUser(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
 			throws Exception {
 
-		System.out.println("ALMASS:--> "+ file);
-
 		if (file.isEmpty()) {
 			model.put("msg", "failed to upload user data because its empty");
 			model.addAttribute("msg", "failed to upload file because its empty");
@@ -680,9 +679,6 @@ public class UserController {
 			model.put("msg", "failed to process file because : " + e.getMessage());
 			return new ModelAndView("/user/upload");
 		}
-
-		System.out.println("CSV FILE->");
-		System.out.println(csvFile);
 
 		String msg = userServiceImpl.uploadUser(csvFile);
 		if (!msg.isEmpty()) {

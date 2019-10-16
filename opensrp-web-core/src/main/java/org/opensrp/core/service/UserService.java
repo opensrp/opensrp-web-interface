@@ -603,23 +603,19 @@ public class UserService {
 							if (users[1].equalsIgnoreCase("yes"))userDTO.setEnableSimPrint(true);
 							else userDTO.setEnableSimPrint(false);
 
-							userDTO.setMobile("0"+users[2]);
+							userDTO.setMobile("0"+users[2].trim());
 							Role role = repository.findByKey(users[3], "name", Role.class);
 							String roles = String.valueOf(role.getId());
 							userDTO.setRoles(roles);
 
 							if (users[3].equalsIgnoreCase("SK")) {
 								userDTO.setPassword("brac2019");
-								userDTO.setUsername("0"+users[2]);
+								userDTO.setUsername("0"+users[7].trim());
 							}
-							else {
+							else if (users[3].equalsIgnoreCase("SS")){
 								userDTO.setPassword("brac123456");
-								String username = fullName[0]+"-"+users[5];
-								username = username.replaceAll(" ", "");
-								username = username.replaceAll("&", "");
-								username = username.replaceAll("\\(", "");
-								username = username.replaceAll("\\)", "");
-								userDTO.setUsername(username);
+								userDTO.setUsername("0"+users[7].trim());
+								userDTO.setSsNo(users[8].trim());
 							}
 
 							userDTO.setEmail("");

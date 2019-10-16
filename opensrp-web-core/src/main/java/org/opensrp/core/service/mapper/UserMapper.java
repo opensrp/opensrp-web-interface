@@ -35,6 +35,9 @@ public class UserMapper {
         user.setParentUser(parentUser);
         user.setBranches(userService.setBranches(branches));
 
+        user.setActiveStatus(userDTO.getActiveStatus());
+        user.setSsNo(userDTO.getSsNo());
+
         return user;
     }
 }

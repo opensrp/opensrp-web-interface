@@ -87,8 +87,26 @@
 
 				<div class="row col-12 tag-height">
 					<div class="form-group required">
+						<label class="label-width"  for="role">
+							<spring:message code="lbl.role"/>
+						</label>
+						<select id="role" onchange="toggleUsername()"
+								class="form-control mx-sm-3 js-example-basic-multiple"
+								name="role" required>
+							<c:forEach items="${roles}" var="role">
+								<option value="${role.id}">${role.name}</option>
+							</c:forEach>
+						</select>
+					</div>
+				</div>
+
+				<div class="row col-12 tag-height" id = 'showUsername'>
+					<div class="form-group required">
 						<label class="label-width" for="username"><spring:message code="lbl.userName"/></label>
-						<form:input path="username" class="form-control mx-sm-3"
+						<form:input autocomplete="false"
+									path="username"
+									class="form-control mx-sm-3"
+									id = 'username'
 									required="required" />
 						<small id="passwordHelpInline" class="text-muted text-para">
 							<spring:message code="lbl.userMessage"/>
@@ -127,21 +145,6 @@
 						</small>
 					</div>
 
-				</div>
-
-				<div class="row col-12 tag-height">
-					<div class="form-group required">
-						<label class="label-width"  for="role">
-							<spring:message code="lbl.role"/>
-						</label>
-						<select id="role"
-								class="form-control mx-sm-3 js-example-basic-multiple"
-								name="role" required>
-							<c:forEach items="${roles}" var="role">
-								<option value="${role.id}">${role.name}</option>
-							</c:forEach>
-						</select>
-					</div>
 				</div>
 
 				<div class="row col-12 tag-height">
@@ -322,6 +325,9 @@
 </script>
 
 <script>
+	function toggleUsername() {
+		$('#showUsername').toggle($('#role').val() == 9);
+	}
 	$(document).ready(function() {
 		$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
 	});

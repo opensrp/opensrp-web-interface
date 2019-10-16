@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 public class HealthIdService {
 	
 	private static final Logger logger = Logger.getLogger(HealthIdService.class);
-	private static int HEALTH_ID_LIMIT = 200;
+	private static int HEALTH_ID_LIMIT = 50;
 	
 	@Autowired
 	private DatabaseRepository repository;

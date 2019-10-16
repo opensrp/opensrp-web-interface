@@ -1,7 +1,5 @@
 package org.opensrp.common.dto;
 
-import java.util.Arrays;
-
 public class UserDTO {
 	
 	private String firstName;
@@ -31,6 +29,10 @@ public class UserDTO {
 	private boolean teamMember;
 
 	private Boolean enableSimPrint;
+
+	private Boolean activeStatus;
+
+	private String ssNo;
 	
 	public boolean isTeamMember() {
 		return teamMember;
@@ -142,6 +144,22 @@ public class UserDTO {
 
 	public void setEnableSimPrint(Boolean enableSimPrint) {
 		this.enableSimPrint = enableSimPrint;
+	}
+
+	public Boolean getActiveStatus() {
+		return activeStatus;
+	}
+
+	public String getSsNo() {
+		return ssNo;
+	}
+
+	public void setSsNo(String ssNo) {
+		this.ssNo = ssNo;
+	}
+
+	public void setActiveStatus(Boolean activeStatus) {
+		this.activeStatus = activeStatus;
 	}
 
 	@Override
