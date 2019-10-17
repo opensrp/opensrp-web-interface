@@ -197,7 +197,7 @@ public class ReportController {
 		}
 		List<Object[]> allClientInfo = null;
 		if(requestNullFlag == true || requestEmptyFlag == true) {
-			allClientInfo = databaseServiceImpl.getClientInformation();
+			allClientInfo = new ArrayList<>();
 		}
 		else allClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,formName,sk);
 

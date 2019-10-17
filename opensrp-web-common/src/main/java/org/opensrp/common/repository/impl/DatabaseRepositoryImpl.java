@@ -1296,7 +1296,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<Object[]> clientInfoList = new ArrayList<Object[]>();
 		try {
 
-			String hql = "SELECT Distinct On(c.json ->> 'baseEntityId')" +
+			String hql = "SELECT Distinct On(c.json ->> 'baseEntityId')\n" +
 					"		c.json ->> 'gender' gender, \n" +
 					"       c.json->'addresses' -> 0 ->>'country' country, \n" +
 					"       c.json->'addresses' -> 0 ->>'stateProvince' division, \n"+
@@ -1304,8 +1304,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					"       c.json->'addresses' -> 0 ->>'cityVillage' village, \n"+
 					"       cast(c.json ->> 'birthdate' as date) birthdate, \n" +
 					"       c.json ->> 'firstName' first_name, \n" +
+//					" 		c.json -> 'attributes' ->> 'Cluster' cluster, \n"+
+					" 		c.json -> 'attributes' ->> 'HH_Type' household_type, \n"+
 					"       c.json -> 'attributes' ->> 'HOH_Phone_Number' phone_number, \n" +
-					"       c.json -> 'attributes' ->> 'house_hold_id' household_code, \n" +
+					"       c.json -> 'attributes' ->> 'householdCode' household_code, \n" +
 					"       e.provider_id provider_id, \n" +
 					"       cast(e.date_created as date) date_created, \n" +
 					"       c.json -> 'attributes' ->> 'SS_Name' ss_name, \n"+
@@ -1320,9 +1322,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address1' city_union, \n"+
 					"       c.json -> 'attributes' ->> 'nationalId' national_id \n"+
 					"FROM   core.client c \n" +
-					"       JOIN core.event_metadata e  \n" +
-					"         ON c.json ->> 'baseEntityId' = e.base_entity_id;";
-//					"FROM core.client c";
+					"       JOIN core.event_metadata e \n" +
+					"         ON c.json ->> 'baseEntityId' = e.base_entity_id";
+
 			clientInfoList = session.createSQLQuery(hql).list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1367,32 +1369,36 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<Object[]> clientInfoList = new ArrayList<Object[]>();
 		try {
 
-			String hql = "SELECT Distinct On(c.json ->> 'baseEntityId')\n" +
-					"		c.json ->> 'gender' gender, \n" +
-					"       c.json->'addresses' -> 0 ->>'country' country, \n" +
-					"       c.json->'addresses' -> 0 ->>'stateProvince' division, \n"+
-					"       c.json->'addresses' -> 0 ->>'countyDistrict' district, \n"+
-					"       c.json->'addresses' -> 0 ->>'cityVillage' village, \n"+
-					"       cast(c.json ->> 'birthdate' as date) birthdate, \n" +
-					"       c.json ->> 'firstName' first_name, \n" +
-					"       c.json -> 'attributes' ->> 'HOH_Phone_Number' phone_number, \n" +
-					"       c.json -> 'attributes' ->> 'householdCode' household_code, \n" +
-					"       e.provider_id provider_id, \n" +
-					"       cast(e.date_created as date) date_created, \n" +
-					"       c.json -> 'attributes' ->> 'SS_Name' ss_name, \n"+
-					"       c.json -> 'attributes' ->> 'HH_Type' household_type, \n"+
-					"       c.json -> 'attributes' ->> 'Has_Latrine' has_latrine, \n"+
-					"       c.json -> 'attributes' ->> 'Number_of_HH_Member' total_member, \n"+
-					"       c.json -> 'attributes' ->> 'motherNameEnglish' mother_name, \n"+
-					"       c.json -> 'attributes' ->> 'Relation_with_HOH' relation_household, \n"+
-					"       c.json -> 'attributes' ->> 'Blood_Group' blood_group, \n"+
-					"       c.json -> 'attributes' ->> 'Marital_Status' marital_status, \n"+
-					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address2' upazila, \n"+
-					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address1' city_union, \n"+
-					"       c.json -> 'attributes' ->> 'nationalId' national_id \n"+
-					"FROM   core.client c \n" +
-					"       JOIN core.event_metadata e \n" +
-					"         ON c.json ->> 'baseEntityId' = e.base_entity_id";
+//			String hql = "SELECT Distinct On(c.json ->> 'baseEntityId')\n" +
+//					"		c.json ->> 'gender' gender, \n" +
+//					"       c.json->'addresses' -> 0 ->>'country' country, \n" +
+//					"       c.json->'addresses' -> 0 ->>'stateProvince' division, \n"+
+//					"       c.json->'addresses' -> 0 ->>'countyDistrict' district, \n"+
+//					"       c.json->'addresses' -> 0 ->>'cityVillage' village, \n"+
+//					"       cast(c.json ->> 'birthdate' as date) birthdate, \n" +
+//					"       c.json ->> 'firstName' first_name, \n" +
+////					" 		c.json -> 'attributes' ->> 'Cluster' cluster, \n"+
+//					" 		c.json -> 'attributes' ->> 'HH_Type' household_type, \n"+
+//					"       c.json -> 'attributes' ->> 'HOH_Phone_Number' phone_number, \n" +
+//					"       c.json -> 'attributes' ->> 'householdCode' household_code, \n" +
+//					"       e.provider_id provider_id, \n" +
+//					"       cast(e.date_created as date) date_created, \n" +
+//					"       c.json -> 'attributes' ->> 'SS_Name' ss_name, \n"+
+//					"       c.json -> 'attributes' ->> 'HH_Type' household_type, \n"+
+//					"       c.json -> 'attributes' ->> 'Has_Latrine' has_latrine, \n"+
+//					"       c.json -> 'attributes' ->> 'Number_of_HH_Member' total_member, \n"+
+//					"       c.json -> 'attributes' ->> 'motherNameEnglish' mother_name, \n"+
+//					"       c.json -> 'attributes' ->> 'Relation_with_HOH' relation_household, \n"+
+//					"       c.json -> 'attributes' ->> 'Blood_Group' blood_group, \n"+
+//					"       c.json -> 'attributes' ->> 'Marital_Status' marital_status, \n"+
+//					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address2' upazila, \n"+
+//					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address1' city_union, \n"+
+//					"       c.json -> 'attributes' ->> 'nationalId' national_id \n"+
+//					"FROM   core.client c \n" +
+//					"       JOIN core.event_metadata e \n" +
+//					"         ON c.json ->> 'baseEntityId' = e.base_entity_id";
+			String hql = "select *\n" +
+					"FROM core.\"viewJsonDataConversionOfClient\"";
 					hql += wh;
 					hql += ";";
 			clientInfoList = session.createSQLQuery(hql).list();
