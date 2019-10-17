@@ -1342,17 +1342,17 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		if(startTime != "" && endTime == "")
 			endTime = new Date().toString();
 		if(startTime != "" && endTime != ""){
-			stCond = "e.date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
+			stCond = "date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
 			conds.add(stCond);
 		}
 
 		if(formName.contains("-1") == false){
-			formCond = "  e.event_type =\'" + formName +"\'";
+			formCond = "  event_type =\'" + formName +"\'";
 
 			conds.add(formCond);
 		}
 		if(sk.contains("-1") == false){
-			skCond = "e.provider_id =\'" + sk+"\'";
+			skCond = " provider_id =\'" + sk+"\'";
 			conds.add(skCond);
 		}
 		if(conds.size() == 0) wh = "";
@@ -1397,8 +1397,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 //					"FROM   core.client c \n" +
 //					"       JOIN core.event_metadata e \n" +
 //					"         ON c.json ->> 'baseEntityId' = e.base_entity_id";
-			String hql = "select *\n" +
-					"FROM core.\"viewJsonDataConversionOfClient\"";
+			String hql = "select * FROM core.\"viewJsonDataConversionOfClient\" ";
 					hql += wh;
 					hql += ";";
 			clientInfoList = session.createSQLQuery(hql).list();
