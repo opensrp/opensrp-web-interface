@@ -52,7 +52,6 @@
 						%>
 						<option value="<%=objects[1]%>?<%=objects[0]%>"><%=objects[0]%></option>
 						<%
-
 							}
 						%>
 					</select>

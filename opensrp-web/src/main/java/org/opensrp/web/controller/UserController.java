@@ -23,6 +23,7 @@ import org.opensrp.core.entity.*;
 import org.opensrp.core.service.*;
 import org.opensrp.core.util.FacilityHelperUtil;
 import org.opensrp.web.util.PaginationUtil;
+import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +61,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class UserController {
 	
 	private static final Logger logger = Logger.getLogger(UserController.class);
-	private static final int childRoleId = 13;
+	private static final int childRoleId = 29;
 	
 	@Value("#{opensrp['bahmni.url']}")
 	private String BAHMNI_VISIT_URL;
@@ -112,6 +113,9 @@ public class UserController {
 
 	@Autowired
 	private UsersCatchmentAreaService usersCatchmentAreaService;
+
+	@Autowired
+	private SearchUtil searchUtil;
 	
 	/**
 	 * <p>
@@ -128,8 +132,13 @@ public class UserController {
 	@RequestMapping(value = "/user.html", method = RequestMethod.GET)
 	public String userList(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
-		Class<User> entityClassName = User.class;
-		paginationUtil.createPagination(request, session, entityClassName);
+		searchUtil.setDivisionAttribute(session);
+//
+//		Class<User> entityClassName = User.class;
+//		paginationUtil.createPagination(request, session, entityClassName);
+
+
+		System.out.println("CALL ASHCHHE USER LIST A :D");
 		return "user/index";
 	}
 	
