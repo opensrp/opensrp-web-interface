@@ -14,7 +14,7 @@
 <%@page import="java.util.List"%>
 
 <%
-
+	List<Object[]> users = (List<Object[]>) session.getAttribute("users");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,6 +24,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><spring:message code="lbl.userList"/></title>
 	<jsp:include page="/WEB-INF/views/css.jsp" />
+	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
+	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
+	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
+	<style>
+		th, td {
+			text-align: center;
+		}
+	</style>
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -55,7 +63,30 @@
 			<div class="card-body">
 				<div class="table-responsive">
 					<table class="display" id="userList">
-
+						<thead>
+							<tr>
+								<th><spring:message code="lbl.fullName"></spring:message></th>
+								<th><spring:message code="lbl.userName"></spring:message></th>
+								<th><spring:message code="lbl.role"></spring:message></th>
+								<th><spring:message code="lbl.phoneNumber"></spring:message></th>
+								<th><spring:message code="lbl.branch"></spring:message></th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+								for (Object[] user: users) {
+							%>
+							<tr>
+								<td><%=user[1]%></td>
+								<td><%=user[0]%></td>
+								<td><%=user[3]%></td>
+								<td><%=user[2]%></td>
+								<td><%=user[4]%></td>
+							</tr>
+							<%
+								}
+							%>
+						</tbody>
 					</table>
 				</div>
 			</div>
@@ -66,5 +97,34 @@
 	<!-- /.content-wrapper-->
 	<jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
+<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
+<script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
+<script src="<c:url value='/resources/js/datepicker.js' />"></script>
+<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>
+<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
+<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
+<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
+<script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
+<script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
+<script src="<c:url value='/resources/js/jszip.js' />"></script>
+<script src="<c:url value='/resources/js/pdfmake.js' />"></script>
+<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>
+<script>
+	$(document).ready(function() {
+		$('#userList').DataTable({
+			bFilter: true,
+			bInfo: true,
+			dom: 'Bfrtip',
+			destroy: true,
+			buttons: [
+				'pageLength', 'csv', 'excel', 'pdf'
+			],
+			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+			language: {
+				searchPlaceholder: "Username / Mobile"
+			}
+		});
+	});
+</script>
 </body>
 </html>

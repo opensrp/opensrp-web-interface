@@ -1404,6 +1404,48 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return clientInfoList;
 	}
 
+	@Override
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId) {
+		System.out.println("IN REPO->");
+		System.out.println(locationId+ " " +locationTagId);
+		Session session = sessionFactory.openSession();
+		List<Object[]> userList = null;
+		try {
+			String sql = "WITH recursive main_location_tree AS \n" + "( \n" + "       SELECT * \n"
+					+ "       FROM   core.location \n" + "       WHERE  id IN ( WITH recursive location_tree AS \n"
+					+ "                     ( \n" + "                            SELECT * \n"
+					+ "                            FROM   core.location l \n"
+					+ "                            WHERE  l.id = :locationId \n" + "                            UNION ALL \n"
+					+ "                            SELECT loc.* \n"
+					+ "                            FROM   core.location loc \n"
+					+ "                            JOIN   location_tree lt \n"
+					+ "                            ON     lt.id = loc.parent_location_id ) \n"
+					+ "              SELECT DISTINCT(lt.id) \n" + "              FROM            location_tree lt \n"
+					+ "              WHERE           lt.location_tag_id = :locationTagId ) \n" + "UNION ALL \n" + "SELECT l.* \n"
+					+ "FROM   core.location l \n" + "JOIN   main_location_tree mlt \n"
+					+ "ON     l.id = mlt.parent_location_id ) \n" + "SELECT DISTINCT(u.username),\n"
+					+ "\t\t\t\tconcat(u.first_name, ' ', u.last_name) as full_name,\n" + "\t\t\t\tu.mobile,\n"
+					+ "                r.NAME role_name, \n" + "                b.NAME branch_name \n"
+					+ "FROM            main_location_tree mlt \n" + "JOIN            core.users_catchment_area uca \n"
+					+ "ON              uca.location_id = mlt.id \n" + "JOIN            core.users u \n"
+					+ "ON              u.id = uca.user_id \n" + "JOIN            core.user_branch ub \n"
+					+ "ON              ub.user_id = u.id \n" + "JOIN            core.branch b \n"
+					+ "ON              b.id = ub.branch_id \n" + "JOIN            core.user_role ur \n"
+					+ "ON              u.id = ur.user_id \n" + "JOIN            core.role r \n"
+					+ "ON              ur.role_id = r.id;";
+
+			Query query = session.createSQLQuery(sql);
+			userList = query
+					.setInteger("locationId", locationId)
+					.setInteger("locationTagId", locationTagId)
+					.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return userList;
+	}
 
 	public <T> List<T> getUniqueLocation(String village, String ward) {
 		List<T> locations = null;

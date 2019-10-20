@@ -62,6 +62,7 @@ public class UserController {
 	
 	private static final Logger logger = Logger.getLogger(UserController.class);
 	private static final int childRoleId = 29;
+	private static final int villageTagId = 33;
 	
 	@Value("#{opensrp['bahmni.url']}")
 	private String BAHMNI_VISIT_URL;
@@ -116,6 +117,7 @@ public class UserController {
 
 	@Autowired
 	private SearchUtil searchUtil;
+
 	
 	/**
 	 * <p>
@@ -133,12 +135,9 @@ public class UserController {
 	public String userList(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		searchUtil.setDivisionAttribute(session);
-//
-//		Class<User> entityClassName = User.class;
-//		paginationUtil.createPagination(request, session, entityClassName);
-
-
-		System.out.println("CALL ASHCHHE USER LIST A :D");
+		int locationId = locationServiceImpl.getLocationId(request);
+		List<Object[]> users = userServiceImpl.getUserListByFilterString(locationId, villageTagId);
+		session.setAttribute("users", users);
 		return "user/index";
 	}
 	

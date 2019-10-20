@@ -668,4 +668,8 @@ public class UserService {
 		}
 		return msg;
 	}
+
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId) {
+		return repository.getUserListByFilterString(locationId, locationTagId);
+	}
 }

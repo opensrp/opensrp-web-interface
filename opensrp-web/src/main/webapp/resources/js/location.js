@@ -64,4 +64,7 @@ jQuery(document).ready(function($) {
   	$("#union").change(function(event) { 
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#union").val().split("?")[0]+"&title=","village") ;
 	});
+	$("#branch").change(function(event) {
+		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#union").val().split("?")[0]+"&title=","village") ;
+	});
  });
