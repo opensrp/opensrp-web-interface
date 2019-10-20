@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -21,6 +22,7 @@ import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
+import org.opensrp.web.util.ModelConverter;
 import org.opensrp.web.util.PaginationHelperUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,9 +199,15 @@ public class ReportController {
 		}
 		List<Object[]> allClientInfo = null;
 		if(requestNullFlag == true || requestEmptyFlag == true) {
+			session.setAttribute("headerList", ModelConverter.headerListForClientData(""));
 			allClientInfo = new ArrayList<>();
 		}
-		else allClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,formName,sk);
+		else {
+			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,formName,sk);
+			List<String> headerList = ModelConverter.headerListForClientData(formName);
+			session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
+			allClientInfo = ModelConverter.modelConverterForClientData(formName,tempClientInfo);
+		}
 
 		 // Search Portion need to implement using servlet request
 

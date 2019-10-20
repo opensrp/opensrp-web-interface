@@ -1,5 +1,6 @@
 package org.opensrp.common.repository.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -1340,7 +1341,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<String> conds = new ArrayList<String>();
 		String stCond,edCond,formCond,skCond;
 		if(startTime != "" && endTime == "")
-			endTime = new Date().toString();
+			endTime = new SimpleDateFormat("yyyy-dd-MM").format(new Date()).toString();
 		if(startTime != "" && endTime != ""){
 			stCond = "date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
 			conds.add(stCond);
@@ -1357,7 +1358,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		if(conds.size() == 0) wh = "";
 		else {
-			wh = "\nWHERE ";
+			wh = " WHERE ";
 			wh += conds.get(0);
 			for(int i = 1; i < conds.size();i++){
 				wh += " AND ";
@@ -1369,36 +1370,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<Object[]> clientInfoList = new ArrayList<Object[]>();
 		try {
 
-//			String hql = "SELECT Distinct On(c.json ->> 'baseEntityId')\n" +
-//					"		c.json ->> 'gender' gender, \n" +
-//					"       c.json->'addresses' -> 0 ->>'country' country, \n" +
-//					"       c.json->'addresses' -> 0 ->>'stateProvince' division, \n"+
-//					"       c.json->'addresses' -> 0 ->>'countyDistrict' district, \n"+
-//					"       c.json->'addresses' -> 0 ->>'cityVillage' village, \n"+
-//					"       cast(c.json ->> 'birthdate' as date) birthdate, \n" +
-//					"       c.json ->> 'firstName' first_name, \n" +
-////					" 		c.json -> 'attributes' ->> 'Cluster' cluster, \n"+
-//					" 		c.json -> 'attributes' ->> 'HH_Type' household_type, \n"+
-//					"       c.json -> 'attributes' ->> 'HOH_Phone_Number' phone_number, \n" +
-//					"       c.json -> 'attributes' ->> 'householdCode' household_code, \n" +
-//					"       e.provider_id provider_id, \n" +
-//					"       cast(e.date_created as date) date_created, \n" +
-//					"       c.json -> 'attributes' ->> 'SS_Name' ss_name, \n"+
-//					"       c.json -> 'attributes' ->> 'HH_Type' household_type, \n"+
-//					"       c.json -> 'attributes' ->> 'Has_Latrine' has_latrine, \n"+
-//					"       c.json -> 'attributes' ->> 'Number_of_HH_Member' total_member, \n"+
-//					"       c.json -> 'attributes' ->> 'motherNameEnglish' mother_name, \n"+
-//					"       c.json -> 'attributes' ->> 'Relation_with_HOH' relation_household, \n"+
-//					"       c.json -> 'attributes' ->> 'Blood_Group' blood_group, \n"+
-//					"       c.json -> 'attributes' ->> 'Marital_Status' marital_status, \n"+
-//					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address2' upazila, \n"+
-//					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address1' city_union, \n"+
-//					"       c.json -> 'attributes' ->> 'nationalId' national_id \n"+
-//					"FROM   core.client c \n" +
-//					"       JOIN core.event_metadata e \n" +
-//					"         ON c.json ->> 'baseEntityId' = e.base_entity_id";
-			String hql = "select * FROM core.\"viewJsonDataConversionOfClient\" ";
+//			String testWh = " WHERE event_type=\"Family Registration\"";
+//			String hql = "SELECT * FROM core.\"viewJsonDataConversionOfClient\"";
+			String hql = "SELECT * FROM core.\"viewJsonDataConversionOfClient\"";
 					hql += wh;
+//			)		hql += testWh;
 					hql += ";";
 			clientInfoList = session.createSQLQuery(hql).list();
 		} catch (Exception e) {

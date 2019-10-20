@@ -76,8 +76,8 @@
                                 <label><spring:message code="lbl.formName"/></label>
                                 <select class="custom-select custom-select-lg mb-3" id="formName" name="formName">
                                     <option value="-1">Select Form Name</option>
-                                    <option value="Family Member Registration">Member Registration</option>
-                                    <option value="Family Registration">Household Registration</option>
+                                    <option value="Member Registration">Member Registration</option>
+                                    <option value="Household Registration">Household Registration</option>
                                     <option value="Child Registration">Child Registration</option>
 <%--                                    <option value="Woman Member Registration">Woman Member Registration</option>--%>
                                 </select>
@@ -121,30 +121,12 @@
                         <table class="display" id="clientTableList"
                                style="width: 100%;">
                             <thead>
-                            <tr>
-                                <th><spring:message code="lbl.gender"/></th>
-                                <th><spring:message code="lbl.country"/></th>
-                                <th><spring:message code="lbl.division"/></th>
-                                <th><spring:message code="lbl.district"/></th>
-                                <th><spring:message code="lbl.village"/></th>
-                                <th><spring:message code="lbl.birthDate"/></th>
-                                <th><spring:message code="lbl.firstName"/></th>
-                                <th><spring:message code="lbl.phoneNumber"/></th>
-                                <th><spring:message code="lbl.householdCode"/></th>
-                                <th><spring:message code="lbl.provider"/></th>
-                                <th><spring:message code="lbl.createdDate"/></th>
-                                <th><spring:message code="lbl.ssName"/></th>
-                                <th><spring:message code="lbl.householdType"/></th>
-                                <th><spring:message code="lbl.hasLatrine"/></th>
-                                <th><spring:message code="lbl.totalMember"/></th>
-                                <th><spring:message code="lbl.motherName"/></th>
-                                <th><spring:message code="lbl.relationWithHouseholdHead"/></th>
-                                <th><spring:message code="lbl.bloodGroup"/></th>
-                                <th><spring:message code="lbl.maritalStatus"/></th>
-                                <th><spring:message code="lbl.upazila"/></th>
-                                <th><spring:message code="lbl.union"/></th>
-                                <th><spring:message code="lbl.nationalId"/></th>
-                            </tr>
+                               <tr>
+                                   <% List<String> ths = (List<String>) session.getAttribute("headerList"); %>
+                                   <% for(String str: ths) {%>
+                                    <th><%=str%></th>
+                                   <% } %>
+                                </tr>
                             </thead>
                             <tbody>
                             <%  List<Object[]> allClientInfo = (List<Object[]>) session.getAttribute("clientInfoList");
