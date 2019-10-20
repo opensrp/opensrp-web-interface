@@ -524,7 +524,8 @@ public class LocationService {
 	}
 
 	public int getLocationId(HttpServletRequest request) {
-		int locationId = 1;
+		Location country = repository.findByKey("BANGLADESH", "name", Location.class);
+		int locationId = country.getId();
 		if (request.getParameterMap().containsKey("division")) {
 			System.out.println("Division: "+ request.getParameter("division"));
 			String division = (String) request.getParameter("division");
