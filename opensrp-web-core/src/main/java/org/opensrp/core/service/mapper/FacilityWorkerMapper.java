@@ -17,7 +17,7 @@ public class FacilityWorkerMapper {
         facilityWorker.setName(user.getFullName());
         facilityWorker.setIdentifier(user.getMobile());
 
-        facilityWorker.setFacility(facility);
+        if (facility != null) facilityWorker.setFacility(facility);
         facilityWorker.setFacilityWorkerType(facilityWorkerType);
         facilityWorker.setOrganization("Community Clinic");
 

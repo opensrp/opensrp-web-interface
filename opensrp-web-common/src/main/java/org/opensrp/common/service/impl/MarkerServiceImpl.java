@@ -98,7 +98,7 @@ public class MarkerServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public <T> List<T> getUpazilaList() {
+	public <T> List<T> getUpazilaList(String upazila) {
 		return null;
 	}
 

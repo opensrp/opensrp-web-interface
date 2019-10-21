@@ -59,6 +59,7 @@
 			<div class="row">
 
 				<div class="col-2">
+					<%if (!AuthenticationManagerUtil.isUHFPO()){%>
 					<select class="custom-select custom-select-lg mb-3" id="division"
 							name="division">
 						<option value=""><spring:message code="lbl.selectDivision"/>
@@ -72,22 +73,27 @@
 							}
 						%>
 					</select>
+					<%}%>
 				</div>
 
 				<div class="col-2">
+					<%if (!AuthenticationManagerUtil.isUHFPO()){%>
 					<select class="custom-select custom-select-lg mb-3" id="district"
 							name="district">
 						<option value="0?"><spring:message code="lbl.selectDistrict"/></option>
 						<option value=""></option>
 					</select>
+					<%}%>
 				</div>
 				<div class="col-2">
+					<%if (!AuthenticationManagerUtil.isUHFPO()){%>
 					<select class="custom-select custom-select-lg mb-3" id="upazila"
 							name="upazila">
 						<option value="0?"><spring:message code="lbl.selectUpazila"/></option>
 						<option value=""></option>
 
 					</select>
+					<%}%>
 				</div>
 				<div class="col-2">
 					<%if (!AuthenticationManagerUtil.isUHFPO()){%>

@@ -960,13 +960,17 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public <T> List<T> getUpazilaList() {
+	public <T> List<T> getUpazilaList(String upazila) {
 		Session session = sessionFactory.openSession();
 		List<T> upazilaList = null;
 		try {
 			String hql = "select distinct(upazila), count(case when entity_type = 'ec_household' then 1 end) as household_count," +
-					" count(case when entity_type != 'ec_household' then 1 end) as population_count from core.\"viewJsonDataConversionOfClient\" group by upazila;\n";
-			Query query = session.createSQLQuery(hql);
+					" count(case when gender = 'M' or gender = 'F' then 1 end) as population_count,"
+					+ " count(case when gender = 'M' then 1 end) as male_count,"
+					+ " count(case when gender = 'F' then 1 end) as female_count"
+					+ " from core.\"viewJsonDataConversionOfClient\""
+					+ " where cc_name != '' and provider_id != '' and upazila = :upazila group by upazila;\n";
+			Query query = session.createSQLQuery(hql).setString("upazila", upazila);
 			upazilaList = query.list();
 		} catch (Exception e) {
 			logger.error(e);

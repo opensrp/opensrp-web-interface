@@ -4,8 +4,10 @@
 package org.opensrp.web.controller;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,8 +16,12 @@ import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Facility;
+import org.opensrp.core.entity.Location;
+import org.opensrp.core.entity.TeamMember;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.FacilityService;
+import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.TeamMemberService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
@@ -56,6 +62,12 @@ public class ReportController {
 
 	@Autowired
 	private FacilityService facilityService;
+
+	@Autowired
+	private TeamMemberService teamMemberService;
+
+	@Autowired
+	private LocationService locationService;
 
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_REPORT')")
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
@@ -114,6 +126,10 @@ public class ReportController {
 		session.setAttribute("formWiseAggregatedList", reports);
 
 		if (AuthenticationManagerUtil.isUHFPO()) {
+			User user = userService.getLoggedInUser();
+			TeamMember teamMember = teamMemberService.findByForeignKey(user.getId(), "person_id", "TeamMember");
+			List<Location> locations = new ArrayList<>(teamMember.getLocations());
+			searchBuilder.setUpazila(locations.get(0).getName());
 			reports = databaseServiceImpl.getCCListByUpazila(searchBuilder);
 			session.setAttribute("ccList", reports);
 		}

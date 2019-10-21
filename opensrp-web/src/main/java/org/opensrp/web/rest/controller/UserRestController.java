@@ -65,6 +65,8 @@ public class UserRestController {
 	@Autowired
 	private UserMapper userMapper;
 
+	private static final Integer UHFPO_ROLE_ID = 11;
+
 	private static final Logger logger = Logger.getLogger(UserRestController.class);
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -100,7 +102,11 @@ public class UserRestController {
 
 			if (!isExists) {
 				User user = userMapper.map(userDTO);
-				user.setChcp(facility.getId() + "");
+
+				String[] roleId = userDTO.getRoles().trim().split(" ");
+				int role = Integer.parseInt(roleId[0]);
+
+				if (role != UHFPO_ROLE_ID) user.setChcp(facility.getId() + "");
 				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
 				
 				if (userDTO.isTeamMember()) {
@@ -119,7 +125,7 @@ public class UserRestController {
 					FacilityWorker facilityWorker = facilityWorkerMapper.map(user, facility, facilityWorkerType);
 
 					logger.info(" \nFacilityWorkerType : "+ facilityWorkerType.toString() + "\n");
-					facilityWorkerTypeService.save(facilityWorker);
+					if (role != UHFPO_ROLE_ID)facilityWorkerTypeService.save(facilityWorker);
 					String mailBody = "Dear " + user.getFullName()
 					        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + user.getUsername()
 					        + "\npassword : " + userDTO.getPassword();

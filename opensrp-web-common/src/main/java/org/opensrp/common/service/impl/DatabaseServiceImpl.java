@@ -81,8 +81,8 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public <T> List<T> getUpazilaList() {
-		return databaseRepositoryImpl.getUpazilaList();
+	public <T> List<T> getUpazilaList(String upazila) {
+		return databaseRepositoryImpl.getUpazilaList(upazila);
 	}
 
 	@Override

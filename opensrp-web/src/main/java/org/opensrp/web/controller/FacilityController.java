@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -23,12 +24,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
-import org.opensrp.core.entity.Facility;
-import org.opensrp.core.entity.FacilityWorker;
-import org.opensrp.core.service.FacilityService;
-import org.opensrp.core.service.FacilityWorkerService;
-import org.opensrp.core.service.FacilityWorkerTrainingService;
-import org.opensrp.core.service.FacilityWorkerTypeService;
+import org.opensrp.core.entity.*;
+import org.opensrp.core.service.*;
 import org.opensrp.core.util.FacilityHelperUtil;
 import org.opensrp.web.util.HighChart;
 import org.opensrp.web.util.PaginationUtil;
@@ -72,6 +69,12 @@ public class FacilityController {
 
 	@Autowired
 	private DatabaseServiceImpl databaseServiceImpl;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private TeamMemberService teamMemberService;
 	
 	@Value("#{opensrp['bahmni.url']}")
 	private String BAHMNI_VISIT_URL;
@@ -285,7 +288,10 @@ public class FacilityController {
 	@RequestMapping(value = "facility/uhfpo-dashboard.html", method = RequestMethod.GET)
 	public String getUHFPOData(Model model, HttpSession session, Locale locale) {
 
-		List<Object []> upazilaList = databaseServiceImpl.getUpazilaList();
+		User user = userService.getLoggedInUser();
+		TeamMember teamMember = teamMemberService.findByForeignKey(user.getId(), "person_id", "TeamMember");
+		List<Location> locations = new ArrayList<>(teamMember.getLocations());
+		List<Object []> upazilaList = databaseServiceImpl.getUpazilaList(locations.get(0).getName());
 
 		session.setAttribute("upazilaList", upazilaList);
 

@@ -128,7 +128,7 @@ public interface DatabaseRepository {
 
 	public <T> List<T> getMemberListByCC(String ccName);
 
-	public <T> List<T> getUpazilaList();
+	public <T> List<T> getUpazilaList(String upazila);
 
 	public  List<ReportDTO> getCCListByUpazila(SearchBuilder searchBuilder);
 

@@ -43,11 +43,61 @@
                 <i class="fa fa-table"></i> <spring:message code="lbl.upazilaWiseDataStatus"/>
             </div>
             <div class="card-body">
-                <div>
-                    <div>
-
+                <div class="row">
+                    <div class="col-xl-3 col-sm-6 mb-4">
+                        <div class="card text-white o-hidden h-100 bg-primary">
+                            <div class="card-body">
+                                <div class="card-body-icon">
+                                    <!-- <i class="fa fa-fw fa-female"></i>  -->
+                                </div>
+                                <div class="mr-5">
+                                    <h3><%=upazilaList.get(0)[1]%></h3>
+                                    <h5>Total Registered Household</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 mb-4">
+                        <div class="card text-white o-hidden h-100 bg-primary">
+                            <div class="card-body">
+                                <div class="card-body-icon">
+                                    <!-- <i class="fa fa-fw fa-female"></i>  -->
+                                </div>
+                                <div class="mr-5">
+                                    <h3><%=upazilaList.get(0)[2]%></h3>
+                                    <h5>Total Population</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 mb-4">
+                        <div class="card text-white o-hidden h-100 bg-primary">
+                            <div class="card-body">
+                                <div class="card-body-icon">
+                                    <!-- <i class="fa fa-fw fa-female"></i>  -->
+                                </div>
+                                <div class="mr-5">
+                                    <h3><%=upazilaList.get(0)[4]%></h3>
+                                    <h5>Total Female</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 mb-4">
+                        <div class="card text-white o-hidden h-100 bg-primary">
+                            <div class="card-body">
+                                <div class="card-body-icon">
+                                    <!-- <i class="fa fa-fw fa-female"></i>  -->
+                                </div>
+                                <div class="mr-5">
+                                    <h3><%=upazilaList.get(0)[3]%></h3>
+                                    <h5>Total Male</h5>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="row" style="margin-top: 30px;">
                     <div class="col-sm-12" id="content">
                         <table class="display" id="householdMemberListTable"
@@ -74,8 +124,6 @@
             </div>
         </div>
     </div>
-
-
 </div>
 
 <jsp:include page="/WEB-INF/views/footer.jsp" />

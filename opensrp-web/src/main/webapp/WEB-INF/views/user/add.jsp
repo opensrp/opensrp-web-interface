@@ -23,8 +23,9 @@ String selectedPersonName = (String)session.getAttribute("personName");
 
 Integer selectetTeamId = (Integer)session.getAttribute("selectetTeamId");
 
-int roleIdCHCP= -1;
-int roleIdProvider= -1;
+int roleIdCHCP = -1;
+int roleIdProvider = -1;
+int roleIdUHFPO = -1;
 
 
 	%>
@@ -158,10 +159,12 @@ int roleIdProvider= -1;
 									<%
 										List<Role> roles = (List<Role>) session.getAttribute("roles");											
 										for (Role role : roles) {
-											if(role.getName().equals("Provider")){
+											if (role.getName().equals("Provider")) {
 												roleIdProvider = role.getId();
-											}else if(role.getName().equals("CHCP")){
+											} else if (role.getName().equals("CHCP")) {
 												roleIdCHCP = role.getId();
+											} else if (role.getName().equals("UHFPO")) {
+												roleIdUHFPO = role.getId();
 											}
 									%>									
 										<form:checkbox 
@@ -247,29 +250,40 @@ int roleIdProvider= -1;
 	
 	<script type="text/javascript">
 	var locationMagicSuggest;
-	var isCHCP= 0;
-	var isProvider= 0;
+	var isCHCP = 0;
+	var isProvider = 0;
+	var isUHFPO = 0;
 	function roleSelect(cBox){
 		//alert(cBox.checked+" - "+cBox.value);
 		var roleIdOfCHCP = <%=roleIdCHCP%>;
 		var roleIdOfProvider = <%=roleIdProvider%>;
+		var roleIdOfUHFPO = <%=roleIdUHFPO%>
 		var roleIdOfClickedCheckbox = cBox.value;
 		
-		if(roleIdOfClickedCheckbox == roleIdOfCHCP){
-			if(cBox.checked){
+		if (roleIdOfClickedCheckbox == roleIdOfCHCP) {
+			if (cBox.checked) {
 				isCHCP= 1;
-			}else{
+			} else {
 				isCHCP= 0;
 			}
 		}
 		
-		if(roleIdOfClickedCheckbox == roleIdOfProvider){
-			if(cBox.checked){
-				isProvider= 1;
-			}else{
-				isProvider= 0;
+		if (roleIdOfClickedCheckbox == roleIdOfProvider) {
+			if (cBox.checked) {
+				isProvider = 1;
+			} else {
+				isProvider = 0;
 			}
 		}
+
+		if (roleIdOfClickedCheckbox == roleIdOfUHFPO) {
+			if (cBox.checked) {
+				isUHFPO = 1;
+			} else {
+				isUHFPO = 0;
+			}
+		}
+
 		showTeamAndLocationDiv();
 	}
 	
@@ -300,7 +314,7 @@ int roleIdProvider= -1;
 	}
 	
 	function isTeamMember(){
-		if(isCHCP== 1 || isProvider== 1){
+		if(isCHCP== 1 || isProvider== 1 || isUHFPO == 1){
 			return true;
 		}
 		return false;

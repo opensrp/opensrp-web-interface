@@ -45,7 +45,9 @@
 <div class="content-wrapper">
 	<div class="container-fluid">
 
+		<%if (!AuthenticationManagerUtil.isUHFPO()){%>
 		<jsp:include page="/WEB-INF/views/report-search-panel.jsp" />
+		<%}%>
 
 		<div class="card mb-3">
 			<div class="card-header">
