@@ -1405,11 +1405,16 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId) {
-		System.out.println("IN REPO->");
-		System.out.println(locationId+ " " +locationTagId);
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId) {
 		Session session = sessionFactory.openSession();
 		List<Object[]> userList = null;
+		String where = " where ";
+		if (branchId > 0) where += "b.id = "+branchId;
+		if (roleId > 0) {
+			if (branchId > 0) where += " and r.id = " + roleId;
+			else where += "r.id = " + roleId;
+		}
+		where += ";";
 		try {
 			String sql = "WITH recursive main_location_tree AS \n" + "( \n" + "       SELECT * \n"
 					+ "       FROM   core.location \n" + "       WHERE  id IN ( WITH recursive location_tree AS \n"
@@ -1425,16 +1430,16 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "FROM   core.location l \n" + "JOIN   main_location_tree mlt \n"
 					+ "ON     l.id = mlt.parent_location_id ) \n" + "SELECT DISTINCT(u.username),\n"
 					+ "\t\t\t\tconcat(u.first_name, ' ', u.last_name) as full_name,\n" + "\t\t\t\tu.mobile,\n"
-					+ "                r.NAME role_name, \n" + "                b.NAME branch_name \n"
+					+ "                r.NAME role_name, \n" + "                b.NAME branch_name, u.id \n"
 					+ "FROM            main_location_tree mlt \n" + "JOIN            core.users_catchment_area uca \n"
 					+ "ON              uca.location_id = mlt.id \n" + "JOIN            core.users u \n"
 					+ "ON              u.id = uca.user_id \n" + "JOIN            core.user_branch ub \n"
 					+ "ON              ub.user_id = u.id \n" + "JOIN            core.branch b \n"
 					+ "ON              b.id = ub.branch_id \n" + "JOIN            core.user_role ur \n"
 					+ "ON              u.id = ur.user_id \n" + "JOIN            core.role r \n"
-					+ "ON              ur.role_id = r.id;";
+					+ "ON              ur.role_id = r.id";
 
-			Query query = session.createSQLQuery(sql);
+			Query query = session.createSQLQuery((branchId > 0 || roleId > 0)?sql+where:sql+";");
 			userList = query
 					.setInteger("locationId", locationId)
 					.setInteger("locationTagId", locationTagId)

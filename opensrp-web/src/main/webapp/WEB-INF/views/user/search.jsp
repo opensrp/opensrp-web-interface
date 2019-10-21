@@ -1,6 +1,8 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
+<%@ page import="org.opensrp.core.entity.Branch" %>
+<%@ page import="org.opensrp.core.entity.Role" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 		 pageEncoding="ISO-8859-1"%>
 
@@ -12,9 +14,8 @@
 
 <%
 	List<Object[]> divisions = (List<Object[]>) session.getAttribute("divisions");
-
-	String startDate = (String) session.getAttribute("startDate");
-	String endDate = (String) session.getAttribute("endDate");
+	List<Branch> branches = (List<Branch>) session.getAttribute("branches");
+	List<Role> roles = (List<Role>) session.getAttribute("roles");
 %>
 <div class="card mb-3">
 	<div class="card-header">
@@ -90,17 +91,29 @@
 				<div class="col-2">
 					<select class="custom-select custom-select-lg mb-3" id="role"
 							name="role">
-						<option value="0?"><spring:message code="lbl.selectRole"/></option>
-						<option value=""></option>
+						<option value=""><spring:message code="lbl.selectRole"/></option>
+						<%
+							for(Role role: roles) {
 
+						%>
+						<option value="<%=role.getId()%>"><%=role.getName()%></option>
+						<%
+							}
+						%>
 					</select>
 				</div>
 
 				<div class="col-2">
 					<select class="custom-select custom-select-lg mb-3" id="branch" name="branch">
-						<option value="0?"><spring:message code="lbl.selectBranch"/></option>
-						<option value=""></option>
+						<option value=""><spring:message code="lbl.selectBranch"/></option>
+						<%
+							for(Branch branch: branches) {
 
+						%>
+						<option value="<%=branch.getId()%>"><%=branch.getName()%></option>
+						<%
+							}
+						%>
 					</select>
 				</div>
 			</div>

@@ -158,5 +158,5 @@ public interface DatabaseRepository {
 
 	public List<Object[]> getClientInfoFilter(String startTime,String endTime, String formName,String sk);
 
-	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId);
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId);
 }

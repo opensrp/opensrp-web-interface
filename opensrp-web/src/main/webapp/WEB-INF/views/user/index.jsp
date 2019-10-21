@@ -70,11 +70,15 @@
 								<th><spring:message code="lbl.role"></spring:message></th>
 								<th><spring:message code="lbl.phoneNumber"></spring:message></th>
 								<th><spring:message code="lbl.branch"></spring:message></th>
+								<th><spring:message code="lbl.action"></spring:message></th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
 								for (Object[] user: users) {
+									String stringId = user[5].toString();
+									Integer id = Integer.parseInt(stringId);
+									session.setAttribute("id", id);
 							%>
 							<tr>
 								<td><%=user[1]%></td>
@@ -82,6 +86,12 @@
 								<td><%=user[3]%></td>
 								<td><%=user[2]%></td>
 								<td><%=user[4]%></td>
+                                <td>
+                                    <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
+                                    <a href="<c:url value="/user/${id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
+                                    <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
+                                    <a href="<c:url value="/user/${id}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>
+                                </td>
 							</tr>
 							<%
 								}

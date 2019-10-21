@@ -132,12 +132,25 @@ public class UserController {
 	 */
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_USER_LIST')")
 	@RequestMapping(value = "/user.html", method = RequestMethod.GET)
-	public String userList(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+	public String userList(HttpServletRequest request,
+	                       HttpSession session,
+	                       Model model,
+	                       @RequestParam(value = "role", required = false) Integer roleId,
+	                       @RequestParam(value = "branch", required = false) Integer branchId,
+	                       Locale locale) {
 		model.addAttribute("locale", locale);
+		roleId = (roleId==null?0:roleId);
+		branchId = (branchId==null?0:branchId);
 		searchUtil.setDivisionAttribute(session);
 		int locationId = locationServiceImpl.getLocationId(request);
-		List<Object[]> users = userServiceImpl.getUserListByFilterString(locationId, villageTagId);
+		List<Object[]> users = userServiceImpl.getUserListByFilterString(locationId, villageTagId, roleId, branchId);
+		List<Branch> branches = branchService.findAll("Branch");
+		List<Role> roles = roleServiceImpl.findAll("Role");
 		session.setAttribute("users", users);
+		session.setAttribute("branches", branches);
+		session.setAttribute("roles", roles);
+		session.setAttribute("selectedRole", roleId);
+		session.setAttribute("selectedBranch", branchId);
 		return "user/index";
 	}
 	
