@@ -21,9 +21,9 @@ public  class ModelConverter {
         }
         else if(formName.equals("Household Registration") || formName.equals("Family Registration")){
             for(Object[] row: dataList){
-                Object[] newRow = new Object[11];
+                Object[] newRow = new Object[10];
                 newRow[0] = row[0];
-                int[] columns = {18,42,17,19,20,16,23,20,25,21};
+                int[] columns = {18,42,17,19,16,23,20,25,21};
                 int j = 1;
                 for(int i = 0; i < columns.length;i++){
                     newRow[j++] = row[columns[i]];
@@ -47,8 +47,7 @@ public  class ModelConverter {
         }
         else if(formName.equals("Household Registration")|| formName.equals("Family Registration")){
             String[] arTemp = {"Id","SS Name","Village Name","Cluster","Household Type",
-                    "HH Number","Household Number",
-                                "Household Name","Household Phone Number", "Number of Household Member"
+                     "Household Number", "Household Name","Household Phone Number", "Number of Household Member"
                                 ,"Has Latrine"};
 
             ar = arTemp;

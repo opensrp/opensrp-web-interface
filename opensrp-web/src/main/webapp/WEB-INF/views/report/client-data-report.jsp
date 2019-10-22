@@ -111,6 +111,8 @@
             <div class="card-footer small text-muted"></div>
         </div>
 
+      <% int flag = (int) session.getAttribute("emptyFlag"); %>
+       <% if(flag == 0) { %>
         <div class="card mb-3">
             <div class="card-header">
                 <i class="fa fa-table"></i> ${title.toString()} <spring:message code="lbl.clientDataTable"/>
@@ -146,6 +148,7 @@
             </div>
             <div class="card-footer small text-muted"></div>
         </div>
+    <% } %>
 
     </div>
     <jsp:include page="/WEB-INF/views/footer.jsp" />

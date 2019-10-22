@@ -200,9 +200,11 @@ public class ReportController {
 		List<Object[]> allClientInfo = null;
 		if(requestNullFlag == true || requestEmptyFlag == true) {
 			session.setAttribute("headerList", ModelConverter.headerListForClientData(""));
+			session.setAttribute("emptyFlag",1);
 			allClientInfo = new ArrayList<>();
 		}
 		else {
+			session.setAttribute("emptyFlag",0);
 			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,formName,sk);
 			List<String> headerList = ModelConverter.headerListForClientData(formName);
 			session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
