@@ -47,7 +47,7 @@
 	Integer selectedTeamId = (Integer)session.getAttribute("selectedTeamId");
 	int roleIdCHCP= -1;
 	int roleIdProvider= -1;
-
+	List<Role> selectedRole = (List<Role>) session.getAttribute("selectedRoles");
 %>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -83,10 +83,9 @@
 					</div>
 
 					<div class="row col-12 tag-height">
-						<div class="form-group required">
+						<div class="form-group">
 							<label class="label-width"  for="inputPassword6"> <spring:message code="lbl.email"/> </label>
-							<input type="email" class="form-control mx-sm-3" name="email" value="${account.getEmail()}" required="required">
-
+							<input type="email" class="form-control mx-sm-3" name="email" value="${account.getEmail()}">
 						</div>
 					</div>
 
@@ -96,18 +95,6 @@
 							<form:input path="mobile" class="form-control mx-sm-3" />
 						</div>
 					</div>
-
-<%--					<div class="row col-12 tag-height">--%>
-<%--						<div class="form-group">--%>
-<%--							<label class="label-width" for="inputPassword6"><spring:message code="lbl.identifier"/></label>--%>
-<%--							<form:input path="idetifier" class="form-control mx-sm-3" />--%>
-<%--							<small id="passwordHelpInline" class="text-muted text-para">--%>
-<%--								<spring:message code="lbl.identifierMsg"/>--%>
-<%--							</small>--%>
-<%--						</div>--%>
-<%--					</div>--%>
-
-
 
 					<div class="row col-12 tag-height">
 						<div class="form-group required">
@@ -119,53 +106,29 @@
 							</small>
 						</div>
 					</div>
-<%--					<form:hidden path="parentUser" id="parentUser" value="<%=selectedParentId %>"/>--%>
-<%--					<div class="row col-12 tag-height">--%>
-<%--						<div class="form-group">--%>
-<%--							<label class="label-width" for="inputPassword6"><spring:message code="lbl.parentUser"/></label>--%>
-<%--							<select id="combobox" class="form-control">	</select>--%>
-<%--						</div>--%>
-<%--					</div>--%>
-
 
 					<form:hidden path="uuid" />
 					<form:hidden path="personUUid" />
 					<form:hidden path="provider" />
-					<form:hidden path="chcp" />
-
-
-					<form:hidden path="id" />
+					<form:hidden path="ssNo" />
+					<form:hidden path="id"/>
 					<form:hidden path="password" />
+					<form:hidden path="enableSimPrint" />
 
 					<div class="row col-12 tag-height">
 						<div class="form-group required">
-							<label class="label-width"  for="inputPassword6"><spring:message code="lbl.role"/></label>
-							<%
-								if(session.getAttribute("roles")!=null){
-									List<Role> roles = (List<Role>) session.getAttribute("roles");
-									int[] selectedRoles = (int[]) session.getAttribute("selectedRoles");
-									for (Role role : roles) {
-										if(role.getName().equals("Provider")){
-											roleIdProvider = role.getId();
-										}else if(role.getName().equals("CHCP")){
-											roleIdCHCP = role.getId();
-										}
-							%>
-
-							<form:radiobutton class="checkBoxClass form-check-input"
-										   path="roles" value="<%=role.getId()%>" onclick='roleSelect(this)'
-										   checked="<%=CheckboxHelperUtil.checkCheckedBox(selectedRoles,role.getId())%>" />
-							<label class="form-control mx-sm-3" for="defaultCheck1"> <%=role.getName()%>
+							<label class="label-width"  for="role">
+								<spring:message code="lbl.role"/>
 							</label>
-
-							<%
-									}
-								}
-							%>
+							<select id="role"
+									class="form-control mx-sm-3 js-example-basic-multiple"
+									name="roles" required>
+								<c:forEach items="${roles}" var="role">
+									<option value="${role.id}">${role.name}</option>
+								</c:forEach>
+							</select>
 						</div>
 					</div>
-
-
 
 					<!-- for location -->
 					<div class="row col-12 tag-height" id="locationDiv" style="display:none">
@@ -177,12 +140,6 @@
 							</div>
 						</div>
 					</div>
-
-					<%--  <div id="cm" class="ui-widget">
-                                    <label><spring:message code="lbl.location"/> </label>
-                                    <div id="locationsTag"></div>
-                                    <span class="text-red">${locationSelectErrorMessage}</span>
-                    </div> --%>
 
 					<div class="row col-12 tag-height">
 						<div class="form-group required">
@@ -240,8 +197,8 @@
 
 					<div class="row col-12 tag-height">
 						<div class="form-group">
-							<input type="submit" value="<spring:message code="lbl.edit"/>"
-								   class="btn btn-primary btn-block" />
+							<input type="submit" value="<spring:message code="lbl.saveChanges"/>"
+								   class="btn btn-primary btn-block btn-sm" />
 						</div>
 					</div>
 				</form:form>
@@ -467,8 +424,18 @@
 				selectedBranchList.push(<%=branch.getId()%>);
 			<%}
 		}%>
-		$('.js-example-basic-multiple').val(selectedBranchList);
-		$('.js-example-basic-multiple').select2().refresh();
+		$('#branches').val(selectedBranchList);
+		$('#branches').trigger('change');
+	});
+</script>
+<script>
+	$(document).ready(function () {
+		console.log("before role check");
+		$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
+		var selectedRole = <%=selectedRole.get(0).getId()%>;
+		console.log(selectedRole);
+		$('#role').val(selectedRole);
+		$('#role').trigger('change');
 	});
 </script>
 </html>

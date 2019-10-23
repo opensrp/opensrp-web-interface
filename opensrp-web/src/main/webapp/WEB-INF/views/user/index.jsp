@@ -15,6 +15,7 @@
 
 <%
 	List<Object[]> users = (List<Object[]>) session.getAttribute("users");
+	List<Object[]> usersWithoutCatchmentArea = (List<Object[]>) session.getAttribute("usersWithoutCatchmentArea");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,7 +103,56 @@
 			</div>
 			<div class="card-footer small text-muted"></div>
 		</div>
+
+		<!-- Example DataTables Card-->
+		<div class="card mb-3">
+			<div class="card-header">
+				<spring:message code="lbl.usersWithoutCatchmentArea"/>
+			</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="display" id="userListWithoutCatchmentArea">
+						<thead>
+						<tr>
+							<th><spring:message code="lbl.fullName"></spring:message></th>
+							<th><spring:message code="lbl.userName"></spring:message></th>
+							<th><spring:message code="lbl.role"></spring:message></th>
+							<th><spring:message code="lbl.phoneNumber"></spring:message></th>
+							<th><spring:message code="lbl.branch"></spring:message></th>
+							<th><spring:message code="lbl.action"></spring:message></th>
+						</tr>
+						</thead>
+						<tbody>
+						<%
+							for (Object[] user: usersWithoutCatchmentArea) {
+								String stringId = user[5].toString();
+								Integer id = Integer.parseInt(stringId);
+								session.setAttribute("id", id);
+						%>
+						<tr>
+							<td><%=user[1]%></td>
+							<td><%=user[0]%></td>
+							<td><%=user[3]%></td>
+							<td><%=user[2]%></td>
+							<td><%=user[4]%></td>
+							<td>
+								<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
+								<a href="<c:url value="/user/${id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
+								<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
+								<a href="<c:url value="/user/${id}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>
+							</td>
+						</tr>
+						<%
+							}
+						%>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="card-footer small text-muted"></div>
+		</div>
 	</div>
+</div>
 	<!-- /.container-fluid-->
 	<!-- /.content-wrapper-->
 	<jsp:include page="/WEB-INF/views/footer.jsp" />
@@ -122,6 +172,22 @@
 <script>
 	$(document).ready(function() {
 		$('#userList').DataTable({
+			bFilter: true,
+			bInfo: true,
+			dom: 'Bfrtip',
+			destroy: true,
+			buttons: [
+				'pageLength', 'csv', 'excel', 'pdf'
+			],
+			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+			language: {
+				searchPlaceholder: "Username / Mobile"
+			}
+		});
+	});
+
+	$(document).ready(function() {
+		$('#userListWithoutCatchmentArea').DataTable({
 			bFilter: true,
 			bInfo: true,
 			dom: 'Bfrtip',

@@ -219,7 +219,6 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 	
 	@Override
 	public JSONArray getByQuery(String query) throws JSONException {
-		
 		JSONObject user = apiServiceFactory.getApiService("openmrs").getByQuery(query, USER_URL);
 		JSONArray userArray = new JSONArray();
 		userArray = (JSONArray) user.get("results");

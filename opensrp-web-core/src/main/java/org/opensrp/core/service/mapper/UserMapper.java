@@ -21,22 +21,28 @@ public class UserMapper {
         user.setGender("");
         user.setIdetifier(userDTO.getIdetifier());
 
-        user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
         user.setEnabled(true);
+        user.setEnableSimPrint(userDTO.getEnableSimPrint());
 
         user.setLastName(userDTO.getLastName());
         user.setMobile(userDTO.getMobile());
         user.setPassword(userDTO.getPassword());
-        user.setEnableSimPrint(userDTO.getEnableSimPrint());
 
         user.setRoles(userService.setRoles(roles));
         User parentUser = userService.findById(userDTO.getParentUser(), "id", User.class);
         user.setParentUser(parentUser);
         user.setBranches(userService.setBranches(branches));
 
-        user.setActiveStatus(userDTO.getActiveStatus());
-        user.setSsNo(userDTO.getSsNo());
+        String ssNo = "";
+
+        if (userDTO.getSsNo() != null && userDTO.getSsNo().length() > 0){
+            int length = userDTO.getSsNo().length();
+            user.setSsNo(userDTO.getSsNo().substring(1, length));
+            ssNo = userDTO.getSsNo();
+        }
+        user.setUsername(userDTO.getUsername()+ssNo);
+
 
         return user;
     }

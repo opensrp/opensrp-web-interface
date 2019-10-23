@@ -15,6 +15,7 @@
 <%
     Map<Integer, String> teams =  (Map<Integer, String>)session.getAttribute("teams");
     Integer selectedTeamId = (Integer)session.getAttribute("selectedTeamId");
+    Role ss = (Role) session.getAttribute("ss");
 %>
 
 <head>
@@ -87,23 +88,53 @@
 
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
+                        <label class="label-width"  for="role">
+                            <spring:message code="lbl.role"/>
+                        </label>
+                        <select onchange="isSS()"
+                                id="role"
+                                class="form-control mx-sm-3 js-example-basic-multiple"
+                                name="role" required>
+                            <c:forEach items="${roles}" var="role">
+                                <option value="${role.id}">${role.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row col-12 tag-height" id="ssOption" style="display: none;">
+                    <div class="form-group">
+                        <label class="label-width" for="ssNo"><spring:message code="lbl.ssNo"/></label>
+                        <select id="ssNo"
+                                class="form-control mx-sm-3 js-example-basic-multiple"
+                                name="ssNo">
+                            <option value="">Please Select SS No</option>
+                            <option value="-SS-1">SS-1</option>
+                            <option value="-SS-2">SS-2</option>
+                            <option value="-SS-3">SS-3</option>
+                            <option value="-SS-4">SS-4</option>
+                            <option value="-SS-5">SS-5</option>
+                            <option value="-SS-6">SS-6</option>
+                            <option value="-SS-7">SS-7</option>
+                            <option value="-SS-8">SS-8</option>
+                            <option value="-SS-9">SS-9</option>
+                            <option value="-SS-10">SS-10</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row col-12 tag-height">
+                    <div class="form-group required">
                         <label class="label-width" for="username"><spring:message code="lbl.userName"/></label>
                         <form:input path="username" class="form-control mx-sm-3"
                                     required="required" />
-                        <small id="passwordHelpInline" class="text-muted text-para">
+                        <small id="usernameHelpInline" class="text-muted text-para">
                             <spring:message code="lbl.userMessage"/>
                         </small>
                     </div>
                 </div>
 
                 <form:hidden path="parentUser" id="parentUser"/>
-                <%-- <div class="row col-12 tag-height">
-                   <div class="form-group">
-                       <label class="label-width" for="inputPassword6"><spring:message code="lbl.parentUser"/></label>
-                       <select id="combobox" class="form-control">	</select>
-                    </div>
-                </div> --%>
-
 
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
@@ -122,26 +153,11 @@
                         <label class="label-width"  for="retypePassword"><spring:message code="lbl.confirmedPassword"/></label>
                         <form:password path="retypePassword" class="form-control mx-sm-3" id="retypePassword"
                                        required="required" />
-                        <small id="passwordHelpInline" class="text-muted text-para">
+                        <small id="confirmPasswordHelpInline" class="text-muted text-para">
                             <span class="text-red" id="passwordNotmatchedMessage"></span> <spring:message code="lbl.retypePasswordMessage"/>
                         </small>
                     </div>
 
-                </div>
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width"  for="role">
-                            <spring:message code="lbl.role"/>
-                        </label>
-                        <select id="role"
-                                class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="role" required>
-                            <c:forEach items="${roles}" var="role">
-                                <option value="${role.id}">${role.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
                 </div>
 
                 <div class="row col-12 tag-height">
@@ -151,7 +167,7 @@
                         </label>
                         <select id="branches"
                                 class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="branches[]" multiple="multiple" required>
+                                name="branches" multiple="multiple" required>
                             <c:forEach items="${branches}" var="branch">
                                 <option value="${branch.id}">${branch.name} (${branch.code})</option>
                             </c:forEach>
@@ -231,6 +247,16 @@
 
 <script type="text/javascript">
 
+    function isSS() {
+        var selectedRoleId = $('#role').val();
+        var ssId = <%=ss.getId()%>;
+        if (ssId != selectedRoleId) {
+            $('#ssNo').val("");
+            $('#ssNo').trigger('change');
+        }
+        $('#ssOption').toggle();
+    }
+
     function toggleVisibilityOfPassword() {
         var password = document.getElementById("password");
         var retypePassword = document.getElementById("retypePassword");
@@ -260,6 +286,8 @@
         var header = $("meta[name='_csrf_header']").attr("content");
         var formData;
 
+        console.log($('#ssNo').val());
+
         formData = {
             'firstName': $('input[name=firstName]').val(),
             'lastName': $('input[name=lastName]').val(),
@@ -268,10 +296,11 @@
             'username': $('input[name=username]').val(),
             'password': $('input[name=password]').val(),
             'parentUser': $('input[name=parentUser]').val(),
+            'ssNo': $('#ssNo').val(),
             'roles': $('#role').val(),
             'team': $('#team').val(),
             'teamMember': false,
-            'branches': getBranches()
+            'branches': getBranches(),
         };
 
         event.preventDefault();

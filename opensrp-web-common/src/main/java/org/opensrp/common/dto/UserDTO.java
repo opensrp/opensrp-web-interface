@@ -30,8 +30,6 @@ public class UserDTO {
 
 	private Boolean enableSimPrint;
 
-	private Boolean activeStatus;
-
 	private String ssNo;
 	
 	public boolean isTeamMember() {
@@ -146,10 +144,6 @@ public class UserDTO {
 		this.enableSimPrint = enableSimPrint;
 	}
 
-	public Boolean getActiveStatus() {
-		return activeStatus;
-	}
-
 	public String getSsNo() {
 		return ssNo;
 	}
@@ -158,16 +152,12 @@ public class UserDTO {
 		this.ssNo = ssNo;
 	}
 
-	public void setActiveStatus(Boolean activeStatus) {
-		this.activeStatus = activeStatus;
-	}
-
 	@Override
 	public String toString() {
-		return "UserDTO [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", mobile=" + mobile
-		        + ", idetifier=" + idetifier + ", username=" + username + ", password=" + password + ", roles=" + roles
-		        + ", parentUser=" + parentUser + ", locationList=" + locationList + ", team=" + team + ", teamMember="
-		        + teamMember + "]";
+		return "UserDTO{" + "firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\''
+				+ ", mobile='" + mobile + '\'' + ", idetifier='" + idetifier + '\'' + ", username='" + username + '\''
+				+ ", password='" + password + '\'' + ", roles='" + roles + '\'' + ", branches='" + branches + '\''
+				+ ", parentUser=" + parentUser + ", locationList='" + locationList + '\'' + ", team=" + team
+				+ ", teamMember=" + teamMember + ", enableSimPrint=" + enableSimPrint + ", ssNo='" + ssNo + '\'' + '}';
 	}
-	
 }

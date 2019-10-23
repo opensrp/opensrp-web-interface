@@ -672,4 +672,8 @@ public class UserService {
 	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId) {
 		return repository.getUserListByFilterString(locationId, locationTagId, roleId, branchId);
 	}
+
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId) {
+		return repository.getUserListWithoutCatchmentArea(roleId, branchId);
+	}
 }

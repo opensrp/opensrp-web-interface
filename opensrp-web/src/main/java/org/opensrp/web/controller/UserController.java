@@ -1,10 +1,7 @@
 package org.opensrp.web.controller;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import com.google.gson.Gson;
 import javassist.tools.framedump;
@@ -144,8 +141,10 @@ public class UserController {
 		searchUtil.setDivisionAttribute(session);
 		int locationId = locationServiceImpl.getLocationId(request);
 		List<Object[]> users = userServiceImpl.getUserListByFilterString(locationId, villageTagId, roleId, branchId);
+		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId);
 		List<Branch> branches = branchService.findAll("Branch");
 		List<Role> roles = roleServiceImpl.findAll("Role");
+		session.setAttribute("usersWithoutCatchmentArea", usersWithoutCatchmentArea);
 		session.setAttribute("users", users);
 		session.setAttribute("branches", branches);
 		session.setAttribute("roles", roles);
@@ -176,7 +175,7 @@ public class UserController {
 		model.addAttribute("account", new User());
 		List<Role> roles = userServiceImpl.setRolesAttributes(selectedRoles, session);
 		List<Branch> branches = branchService.findAll("Branch");
-		System.out.println("BRANCH:-> "+ branches.size());
+		Role ss = roleServiceImpl.findByKey("SS", "name", Role.class);
 		model.addAttribute("locale", locale);
 		model.addAttribute("roles", roles);
 		
@@ -187,6 +186,7 @@ public class UserController {
 		session.setAttribute("locationList", locationServiceImpl.list().toString());
 		int[] locations = new int[0];
 		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+		session.setAttribute("ss", ss);
 		//end: adding location and team
 		return new ModelAndView("user/add", "command", account);
 	}
@@ -252,6 +252,8 @@ public class UserController {
 		/** end parent user section */
 		userServiceImpl.setRolesAttributes(userServiceImpl.getSelectedRoles(account), session);
 
+		List<Role> roles = new ArrayList<>(account.getRoles());
+		session.setAttribute("selectedRoles", roles);
 		session.setAttribute("selectedBranches", account.getBranches());
 
 		//for teamMember
@@ -388,11 +390,13 @@ public class UserController {
 	                             @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
 	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
 
+		System.out.println("ROLES->");
+		System.out.println(roles);
+		System.out.println(userServiceImpl.setRoles(roles));
+
 		account.setRoles(userServiceImpl.setRoles(roles));
 		account.setBranches(userServiceImpl.setBranches(branches));
 		account.setId(id);
-		User parentUser = userServiceImpl.findById(parentUserId, "id", User.class);
-		account.setParentUser(parentUser);
 		logger.info("\n\nUSER : "+ account.toString()+"\n");
 		userServiceImpl.update(account);
 		

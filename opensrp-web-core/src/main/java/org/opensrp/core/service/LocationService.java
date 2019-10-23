@@ -529,7 +529,8 @@ public class LocationService {
 		if (request.getParameterMap().containsKey("division")) {
 			System.out.println("Division: "+ request.getParameter("division"));
 			String division = (String) request.getParameter("division");
-			if (division != null) {
+			if (division != null && division.length() > 0) {
+				System.out.println("Division: "+division +" "+division.length());
 				String[] location = division.split("\\?");
 				if (!location[0].trim().equalsIgnoreCase("0"))
 					locationId = Integer.parseInt(location[0].trim());

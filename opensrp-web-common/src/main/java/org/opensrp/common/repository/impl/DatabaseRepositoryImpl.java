@@ -1404,6 +1404,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return clientInfoList;
 	}
 
+
+
 	@Override
 	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId) {
 		Session session = sessionFactory.openSession();
@@ -1450,6 +1452,30 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			session.close();
 		}
 		return userList;
+	}
+
+	@Override
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId) {
+		List<Object[]> users = new ArrayList<Object[]>();
+		Session session = sessionFactory.openSession();
+		try {
+			String hql = "select \n" + "\tdistinct(u.username),\n" + "\tconcat(u.first_name, ' ', u.last_name) full_name,\n"
+					+ "\tu.mobile,\n" + "\tr.name role_name,\n" + "\tb.name branch_name,\n"
+					+ "\tu.id from core.users as u \n" + "\t\tjoin core.user_role ur on ur.user_id = u.id \n"
+					+ "\t\tjoin core.user_branch ub on ub.user_id = u.id\n"
+					+ "\t\tleft join core.team_member tm on tm.person_id = u.id\n"
+					+ "\t\tjoin core.role r on r.id = ur.role_id\n" + "\t\tjoin core.branch b on b.id = ub.branch_id\n"
+					+ "\twhere tm.id is null";
+			if (branchId > 0) hql += " and ub.branch_id = "+branchId;
+			if (roleId > 0) hql += " and ur.role_id = "+roleId;
+			Query query = session.createSQLQuery(hql);
+			users = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return users;
 	}
 
 	public <T> List<T> getUniqueLocation(String village, String ward) {

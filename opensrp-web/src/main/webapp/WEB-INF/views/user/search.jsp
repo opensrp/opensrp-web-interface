@@ -29,7 +29,7 @@
 			<!-- location info -->
 			<div class="row">
 				<div class="col-2">
-					<select required class="custom-select custom-select-lg mb-3" id="division"
+					<select class="custom-select custom-select-lg mb-3" id="division"
 							name="division">
 						<option value=""><spring:message code="lbl.selectDivision"/>
 						</option>
