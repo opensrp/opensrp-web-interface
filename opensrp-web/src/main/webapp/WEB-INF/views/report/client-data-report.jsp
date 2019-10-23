@@ -76,8 +76,8 @@
                                 <label><spring:message code="lbl.formName"/></label>
                                 <select class="custom-select custom-select-lg mb-3" id="formName" name="formName">
                                     <option value="-1">Select Form Name</option>
-                                    <option value="Member Registration">Member Registration</option>
-                                    <option value="Household Registration">Household Registration</option>
+                                    <option value="Family Member Registration">Member Registration</option>
+                                    <option value="Family Registration">Household Registration</option>
                                     <option value="Child Registration">Child Registration</option>
 <%--                                    <option value="Woman Member Registration">Woman Member Registration</option>--%>
                                 </select>
@@ -193,6 +193,7 @@
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
     });
-
+    <%--$('#formName').val('${formName}');--%>
+    <%--$('#sk').val('${sk}');--%>
 </script>
 </body>

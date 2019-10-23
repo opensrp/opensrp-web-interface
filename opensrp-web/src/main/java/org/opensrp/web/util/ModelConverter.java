@@ -23,7 +23,7 @@ public  class ModelConverter {
             for(Object[] row: dataList){
                 Object[] newRow = new Object[10];
                 newRow[0] = row[0];
-                int[] columns = {18,42,17,19,16,23,20,25,21};
+                int[] columns = {18,43,17,19,22,23,20,24,21};
                 int j = 1;
                 for(int i = 0; i < columns.length;i++){
                     newRow[j++] = row[columns[i]];

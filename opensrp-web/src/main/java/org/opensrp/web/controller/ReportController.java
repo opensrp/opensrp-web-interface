@@ -192,6 +192,7 @@ public class ReportController {
 		String endTime = request.getParameter("end");
 		String formName = request.getParameter("formName");
 		String sk = request.getParameter("sk");
+
 		boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null;
 		boolean requestEmptyFlag = false;
 		if(!requestNullFlag){
@@ -205,6 +206,7 @@ public class ReportController {
 		}
 		else {
 			session.setAttribute("emptyFlag",0);
+
 			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,formName,sk);
 			List<String> headerList = ModelConverter.headerListForClientData(formName);
 			session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));

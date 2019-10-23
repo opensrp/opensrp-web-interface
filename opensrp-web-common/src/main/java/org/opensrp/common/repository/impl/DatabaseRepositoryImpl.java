@@ -1131,6 +1131,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		try {
 			String hql = "select distinct(u.username) from core.users u join core.user_role ur on u.id = ur.user_id where ur.role_id = :skId";
 			allSK = session.createSQLQuery(hql).setInteger("skId", SK_ID).list();
+//			String hql = "select distinct(provider_id) " +
+//					"FROM core.\"viewJsonDataConversionOfClient\"";
+//			allSK = session.createSQLQuery(hql).list();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
