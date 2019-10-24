@@ -2,6 +2,7 @@
 <%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
 <%@ page import="org.opensrp.common.dto.ReportDTO" %>
 <%@ page import="org.opensrp.web.util.SearchUtil" %>
+<%@ page import="org.opensrp.common.util.FormName" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
 
@@ -76,10 +77,16 @@
                                 <label><spring:message code="lbl.formName"/></label>
                                 <select class="custom-select custom-select-lg mb-3" id="formName" name="formName">
                                     <option value="-1">Select Form Name</option>
-                                    <option value="Family Member Registration">Member Registration</option>
-                                    <option value="Family Registration">Household Registration</option>
-                                    <option value="Child Registration">Child Registration</option>
+<%--                                    <option value="Family Member Registration">Member Registration</option>--%>
+<%--                                    <option value="Family Registration">Household Registration</option>--%>
+<%--                                    <option value="Child Registration">Child Registration</option>--%>
 <%--                                    <option value="Woman Member Registration">Woman Member Registration</option>--%>
+<%--                                    <% List<FormName> formName = (List<FormName>) session.getAttribute("formName"); %>--%>
+                                    <%
+                                        for(FormName name: FormName.values()){
+                                    %>
+                                    <option value="<%=name%>"><%=name%></option>
+                                    <% }%>
                                 </select>
                             </div>
                             <div class="col-2">

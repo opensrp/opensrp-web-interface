@@ -1,61 +1,47 @@
 package org.opensrp.web.util;
 
 import javafx.beans.binding.ObjectExpression;
+import org.opensrp.common.util.FormName;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public  class ModelConverter {
+    private static String[] columnNamesOfMember = {"Id", "Relation with HOH","Mother Name", "Mobile Number",
+            "Id Type","NID Number","Birth Id Number","DOB_Known","Date of Birth","Age", "Gender"
+            ,"Marital Status", "Blood Group"};
+    private static String[] columnNamesOfFamily = {"Id","SS Name","Village Name","Cluster","Household Type",
+            "Household Number", "Household Name","Household Phone Number", "Number of Household Member"
+            ,"Has Latrine"};
+
+    private static int[] rowForMember = {0,25,26,27,28,29,30,31,32,33,34,35,36};
+    private static int[] rowForFamily = {0,18,43,17,19,22,23,20,24,21};
+    private static List<int[]> arrayOfRows = new ArrayList<>();
+
     public static List<Object[]> modelConverterForClientData(String formName, List<Object[]> dataList){
         List<Object[]> ret = new ArrayList<>();
-        if(formName.equals("Member Registration") || formName.equals("Family Member Registration")) {
-            for(Object[] row: dataList){
-                Object[] newRow = new Object[13] ;
-                newRow[0] = row[0];
-                int j = 1;
-                for(int i = 25; i <= 36;i++){
-                    newRow[j++] = row[i];
-                }
-                ret.add(newRow);
-            }
-        }
-        else if(formName.equals("Household Registration") || formName.equals("Family Registration")){
-            for(Object[] row: dataList){
-                Object[] newRow = new Object[10];
-                newRow[0] = row[0];
-                int[] columns = {18,43,17,19,22,23,20,24,21};
-                int j = 1;
-                for(int i = 0; i < columns.length;i++){
-                    newRow[j++] = row[columns[i]];
-                }
-                ret.add(newRow);
-            }
-        }
 
+        arrayOfRows.add(rowForMember);
+        arrayOfRows.add(rowForFamily);
+        int[] rows = arrayOfRows.get(FormName.valueOf(formName).ordinal());
+
+        for(Object[] data: dataList){
+            Object[] newData = new Object[rows.length];
+            for(int i = 0; i < rows.length;i++)
+                newData[i] = data[rows[i]];
+
+            ret.add(newData);
+        }
         return ret;
     }
 
     public static List<String> headerListForClientData(String formName){
-        List<String> ret = new ArrayList<>();
-        String [] ar = new String[]{};
-        if(formName.equals("Member Registration") || formName.equals("Family Member Registration")) {
-             String[] arTemp = {"Id", "Relation with HOH","Mother Name", "Mobile Number",
-                            "Id Type","NID Number","Birth Id Number","DOB_Known","Date of Birth","Age", "Gender"
-                            ,"Marital Status", "Blood Group"};
-
-             ar = arTemp;
-        }
-        else if(formName.equals("Household Registration")|| formName.equals("Family Registration")){
-            String[] arTemp = {"Id","SS Name","Village Name","Cluster","Household Type",
-                     "Household Number", "Household Name","Household Phone Number", "Number of Household Member"
-                                ,"Has Latrine"};
-
-            ar = arTemp;
-        }
-        else ar = new String[]{"Data not Available!"};
-        for(String str: ar){
-            ret.add(str);
-        }
-        return ret;
+        String[] nullData = {"No Data Available"};
+        List<List<String>> columns = new ArrayList<>();
+        columns.add(Arrays.asList(columnNamesOfMember));
+        columns.add(Arrays.asList(columnNamesOfFamily));
+        columns.add(Arrays.asList(nullData));
+        return formName != "" ? columns.get(FormName.valueOf(formName).ordinal()) : columns.get(columns.size()-1);
     }
 }

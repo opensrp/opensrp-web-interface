@@ -4,10 +4,8 @@
 package org.opensrp.web.controller;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Stream;
 
 import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.common.util.FormName;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.User;
@@ -193,7 +192,8 @@ public class ReportController {
 		String formName = request.getParameter("formName");
 		String sk = request.getParameter("sk");
 
-		boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null;
+
+        boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null;
 		boolean requestEmptyFlag = false;
 		if(!requestNullFlag){
 			   requestEmptyFlag = startTime.equals("") &&  endTime.equals("") && formName.equals("-1")  && sk.equals("-1");
@@ -206,8 +206,10 @@ public class ReportController {
 		}
 		else {
 			session.setAttribute("emptyFlag",0);
+			String _formName = formName.replaceAll("\\_"," ");
 
-			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,formName,sk);
+
+			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,_formName,sk);
 			List<String> headerList = ModelConverter.headerListForClientData(formName);
 			session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
 			allClientInfo = ModelConverter.modelConverterForClientData(formName,tempClientInfo);
