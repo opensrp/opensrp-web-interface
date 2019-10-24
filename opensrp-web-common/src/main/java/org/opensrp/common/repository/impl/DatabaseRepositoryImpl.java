@@ -1374,11 +1374,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<Object[]> clientInfoList = new ArrayList<Object[]>();
 		try {
 
-//			String testWh = " WHERE event_type=\"Family Registration\"";
-//			String hql = "SELECT * FROM core.\"viewJsonDataConversionOfClient\"";
 			String hql = "SELECT * FROM core.\"viewJsonDataConversionOfClient\"";
 					hql += wh;
-//			)		hql += testWh;
 					hql += ";";
 			clientInfoList = session.createSQLQuery(hql).list();
 		} catch (Exception e) {

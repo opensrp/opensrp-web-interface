@@ -214,10 +214,6 @@ public class ReportController {
 			session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
 			allClientInfo = ModelConverter.modelConverterForClientData(formName,tempClientInfo);
 		}
-
-		 // Search Portion need to implement using servlet request
-
-
 		session.setAttribute("skList",allSKs);
 		session.setAttribute("clientInfoList",allClientInfo);
 

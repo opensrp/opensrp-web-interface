@@ -1,6 +1,5 @@
 package org.opensrp.web.util;
 
-import javafx.beans.binding.ObjectExpression;
 import org.opensrp.common.util.FormName;
 
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ public  class ModelConverter {
 
         arrayOfRows.add(rowForMember);
         arrayOfRows.add(rowForFamily);
+
         int[] rows = arrayOfRows.get(FormName.valueOf(formName).ordinal());
 
         for(Object[] data: dataList){
@@ -39,9 +39,11 @@ public  class ModelConverter {
     public static List<String> headerListForClientData(String formName){
         String[] nullData = {"No Data Available"};
         List<List<String>> columns = new ArrayList<>();
+
         columns.add(Arrays.asList(columnNamesOfMember));
         columns.add(Arrays.asList(columnNamesOfFamily));
         columns.add(Arrays.asList(nullData));
+
         return formName != "" ? columns.get(FormName.valueOf(formName).ordinal()) : columns.get(columns.size()-1);
     }
 }
