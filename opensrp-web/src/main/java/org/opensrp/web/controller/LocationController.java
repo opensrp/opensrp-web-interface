@@ -162,8 +162,7 @@ public class LocationController {
 	@RequestMapping(value = "/location", method = RequestMethod.GET)
 	public String getChildLocationList(HttpServletRequest request, HttpSession session, Model model, @RequestParam int id, @RequestParam String title) {
 		List<Object[]> parentData = null;
-		if (title.length() == 0) parentData = locationServiceImpl.getChildData(id);
-		else parentData = facilityServiceImpl.getCCDataByWardName(title);
+		parentData = locationServiceImpl.getChildData(id);
 		session.setAttribute("data", parentData);
 		return "/location";
 	}

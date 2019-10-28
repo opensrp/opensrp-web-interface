@@ -1,10 +1,7 @@
 package org.opensrp.web.controller;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import com.google.gson.Gson;
 import javassist.tools.framedump;
@@ -23,6 +20,7 @@ import org.opensrp.core.entity.*;
 import org.opensrp.core.service.*;
 import org.opensrp.core.util.FacilityHelperUtil;
 import org.opensrp.web.util.PaginationUtil;
+import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +58,8 @@ import static org.springframework.http.HttpStatus.OK;
 public class UserController {
 	
 	private static final Logger logger = Logger.getLogger(UserController.class);
-	private static final int childRoleId = 13;
+	private static final int childRoleId = 29;
+	private static final int villageTagId = 33;
 	
 	@Value("#{opensrp['bahmni.url']}")
 	private String BAHMNI_VISIT_URL;
@@ -112,6 +111,10 @@ public class UserController {
 
 	@Autowired
 	private UsersCatchmentAreaService usersCatchmentAreaService;
+
+	@Autowired
+	private SearchUtil searchUtil;
+
 	
 	/**
 	 * <p>
@@ -126,10 +129,27 @@ public class UserController {
 	 */
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_USER_LIST')")
 	@RequestMapping(value = "/user.html", method = RequestMethod.GET)
-	public String userList(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+	public String userList(HttpServletRequest request,
+	                       HttpSession session,
+	                       Model model,
+	                       @RequestParam(value = "role", required = false) Integer roleId,
+	                       @RequestParam(value = "branch", required = false) Integer branchId,
+	                       Locale locale) {
 		model.addAttribute("locale", locale);
-		Class<User> entityClassName = User.class;
-		paginationUtil.createPagination(request, session, entityClassName);
+		roleId = (roleId==null?0:roleId);
+		branchId = (branchId==null?0:branchId);
+		searchUtil.setDivisionAttribute(session);
+		int locationId = locationServiceImpl.getLocationId(request);
+		List<Object[]> users = userServiceImpl.getUserListByFilterString(locationId, villageTagId, roleId, branchId);
+		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId);
+		List<Branch> branches = branchService.findAll("Branch");
+		List<Role> roles = roleServiceImpl.findAll("Role");
+		session.setAttribute("usersWithoutCatchmentArea", usersWithoutCatchmentArea);
+		session.setAttribute("users", users);
+		session.setAttribute("branches", branches);
+		session.setAttribute("roles", roles);
+		session.setAttribute("selectedRole", roleId);
+		session.setAttribute("selectedBranch", branchId);
 		return "user/index";
 	}
 	
@@ -155,6 +175,7 @@ public class UserController {
 		model.addAttribute("account", new User());
 		List<Role> roles = userServiceImpl.setRolesAttributes(selectedRoles, session);
 		List<Branch> branches = branchService.findAll("Branch");
+		Role ss = roleServiceImpl.findByKey("SS", "name", Role.class);
 		model.addAttribute("locale", locale);
 		model.addAttribute("roles", roles);
 		
@@ -165,6 +186,7 @@ public class UserController {
 		session.setAttribute("locationList", locationServiceImpl.list().toString());
 		int[] locations = new int[0];
 		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+		session.setAttribute("ss", ss);
 		//end: adding location and team
 		return new ModelAndView("user/add", "command", account);
 	}
@@ -230,6 +252,8 @@ public class UserController {
 		/** end parent user section */
 		userServiceImpl.setRolesAttributes(userServiceImpl.getSelectedRoles(account), session);
 
+		List<Role> roles = new ArrayList<>(account.getRoles());
+		session.setAttribute("selectedRoles", roles);
 		session.setAttribute("selectedBranches", account.getBranches());
 
 		//for teamMember
@@ -366,11 +390,13 @@ public class UserController {
 	                             @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
 	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
 
+		System.out.println("ROLES->");
+		System.out.println(roles);
+		System.out.println(userServiceImpl.setRoles(roles));
+
 		account.setRoles(userServiceImpl.setRoles(roles));
 		account.setBranches(userServiceImpl.setBranches(branches));
 		account.setId(id);
-		User parentUser = userServiceImpl.findById(parentUserId, "id", User.class);
-		account.setParentUser(parentUser);
 		logger.info("\n\nUSER : "+ account.toString()+"\n");
 		userServiceImpl.update(account);
 		
@@ -644,8 +670,6 @@ public class UserController {
 	public ModelAndView uploadUser(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
 			throws Exception {
 
-		System.out.println("ALMASS:--> "+ file);
-
 		if (file.isEmpty()) {
 			model.put("msg", "failed to upload user data because its empty");
 			model.addAttribute("msg", "failed to upload file because its empty");
@@ -680,9 +704,6 @@ public class UserController {
 			model.put("msg", "failed to process file because : " + e.getMessage());
 			return new ModelAndView("/user/upload");
 		}
-
-		System.out.println("CSV FILE->");
-		System.out.println(csvFile);
 
 		String msg = userServiceImpl.uploadUser(csvFile);
 		if (!msg.isEmpty()) {

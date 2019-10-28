@@ -1387,6 +1387,79 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 
+
+	@Override
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId) {
+		Session session = sessionFactory.openSession();
+		List<Object[]> userList = null;
+		String where = " where ";
+		if (branchId > 0) where += "b.id = "+branchId;
+		if (roleId > 0) {
+			if (branchId > 0) where += " and r.id = " + roleId;
+			else where += "r.id = " + roleId;
+		}
+		where += ";";
+		try {
+			String sql = "WITH recursive main_location_tree AS \n" + "( \n" + "       SELECT * \n"
+					+ "       FROM   core.location \n" + "       WHERE  id IN ( WITH recursive location_tree AS \n"
+					+ "                     ( \n" + "                            SELECT * \n"
+					+ "                            FROM   core.location l \n"
+					+ "                            WHERE  l.id = :locationId \n" + "                            UNION ALL \n"
+					+ "                            SELECT loc.* \n"
+					+ "                            FROM   core.location loc \n"
+					+ "                            JOIN   location_tree lt \n"
+					+ "                            ON     lt.id = loc.parent_location_id ) \n"
+					+ "              SELECT DISTINCT(lt.id) \n" + "              FROM            location_tree lt \n"
+					+ "              WHERE           lt.location_tag_id = :locationTagId ) \n" + "UNION ALL \n" + "SELECT l.* \n"
+					+ "FROM   core.location l \n" + "JOIN   main_location_tree mlt \n"
+					+ "ON     l.id = mlt.parent_location_id ) \n" + "SELECT DISTINCT(u.username),\n"
+					+ "\t\t\t\tconcat(u.first_name, ' ', u.last_name) as full_name,\n" + "\t\t\t\tu.mobile,\n"
+					+ "                r.NAME role_name, \n" + "                b.NAME branch_name, u.id \n"
+					+ "FROM            main_location_tree mlt \n" + "JOIN            core.users_catchment_area uca \n"
+					+ "ON              uca.location_id = mlt.id \n" + "JOIN            core.users u \n"
+					+ "ON              u.id = uca.user_id \n" + "JOIN            core.user_branch ub \n"
+					+ "ON              ub.user_id = u.id \n" + "JOIN            core.branch b \n"
+					+ "ON              b.id = ub.branch_id \n" + "JOIN            core.user_role ur \n"
+					+ "ON              u.id = ur.user_id \n" + "JOIN            core.role r \n"
+					+ "ON              ur.role_id = r.id";
+
+			Query query = session.createSQLQuery((branchId > 0 || roleId > 0)?sql+where:sql+";");
+			userList = query
+					.setInteger("locationId", locationId)
+					.setInteger("locationTagId", locationTagId)
+					.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return userList;
+	}
+
+	@Override
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId) {
+		List<Object[]> users = new ArrayList<Object[]>();
+		Session session = sessionFactory.openSession();
+		try {
+			String hql = "select \n" + "\tdistinct(u.username),\n" + "\tconcat(u.first_name, ' ', u.last_name) full_name,\n"
+					+ "\tu.mobile,\n" + "\tr.name role_name,\n" + "\tb.name branch_name,\n"
+					+ "\tu.id from core.users as u \n" + "\t\tjoin core.user_role ur on ur.user_id = u.id \n"
+					+ "\t\tjoin core.user_branch ub on ub.user_id = u.id\n"
+					+ "\t\tleft join core.team_member tm on tm.person_id = u.id\n"
+					+ "\t\tjoin core.role r on r.id = ur.role_id\n" + "\t\tjoin core.branch b on b.id = ub.branch_id\n"
+					+ "\twhere tm.id is null";
+			if (branchId > 0) hql += " and ub.branch_id = "+branchId;
+			if (roleId > 0) hql += " and ur.role_id = "+roleId;
+			Query query = session.createSQLQuery(hql);
+			users = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return users;
+	}
+
 	public <T> List<T> getUniqueLocation(String village, String ward) {
 		List<T> locations = null;
 		Session session = sessionFactory.openSession();

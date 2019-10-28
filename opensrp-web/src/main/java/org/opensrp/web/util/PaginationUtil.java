@@ -59,7 +59,7 @@ public class PaginationUtil {
 			searchBuilder = searchBuilder.clear();
 		}
 		PaginationHelperUtil.getPaginationLink(request, session);
-		
+
 		pagination(request, session, searchBuilder, entityClassName);
 	}
 	
