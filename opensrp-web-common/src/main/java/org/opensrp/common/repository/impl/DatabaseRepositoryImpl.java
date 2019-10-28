@@ -1,5 +1,6 @@
 package org.opensrp.common.repository.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -1130,6 +1131,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		try {
 			String hql = "select distinct(u.username) from core.users u join core.user_role ur on u.id = ur.user_id where ur.role_id = :skId";
 			allSK = session.createSQLQuery(hql).setInteger("skId", SK_ID).list();
+//			String hql = "select distinct(provider_id) " +
+//					"FROM core.\"viewJsonDataConversionOfClient\"";
+//			allSK = session.createSQLQuery(hql).list();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -1296,77 +1301,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<Object[]> clientInfoList = new ArrayList<Object[]>();
 		try {
 
-			String hql = "SELECT Distinct On(c.json ->> 'baseEntityId')" +
-					"		c.json ->> 'gender' gender, \n" +
-					"       c.json->'addresses' -> 0 ->>'country' country, \n" +
-					"       c.json->'addresses' -> 0 ->>'stateProvince' division, \n"+
-					"       c.json->'addresses' -> 0 ->>'countyDistrict' district, \n"+
-					"       c.json->'addresses' -> 0 ->>'cityVillage' village, \n"+
-					"       cast(c.json ->> 'birthdate' as date) birthdate, \n" +
-					"       c.json ->> 'firstName' first_name, \n" +
-					"       c.json -> 'attributes' ->> 'HOH_Phone_Number' phone_number, \n" +
-					"       c.json -> 'attributes' ->> 'house_hold_id' household_code, \n" +
-					"       e.provider_id provider_id, \n" +
-					"       cast(e.date_created as date) date_created, \n" +
-					"       c.json -> 'attributes' ->> 'SS_Name' ss_name, \n"+
-					"       c.json -> 'attributes' ->> 'HH_Type' household_type, \n"+
-					"       c.json -> 'attributes' ->> 'Has_Latrine' has_latrine, \n"+
-					"       c.json -> 'attributes' ->> 'Number_of_HH_Member' total_member, \n"+
-					"       c.json -> 'attributes' ->> 'motherNameEnglish' mother_name, \n"+
-					"       c.json -> 'attributes' ->> 'Relation_with_HOH' relation_household, \n"+
-					"       c.json -> 'attributes' ->> 'Blood_Group' blood_group, \n"+
-					"       c.json -> 'attributes' ->> 'Marital_Status' marital_status, \n"+
-					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address2' upazila, \n"+
-					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address1' city_union, \n"+
-					"       c.json -> 'attributes' ->> 'nationalId' national_id \n"+
-					"FROM   core.client c \n" +
-					"       JOIN core.event_metadata e  \n" +
-					"         ON c.json ->> 'baseEntityId' = e.base_entity_id;";
-//					"FROM core.client c";
-			clientInfoList = session.createSQLQuery(hql).list();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return clientInfoList;
-	}
-
-	@Override
-	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk) {
-		String wh = "";
-		List<String> conds = new ArrayList<String>();
-		String stCond,edCond,formCond,skCond;
-		if(startTime != "" && endTime == "")
-			endTime = new Date().toString();
-		if(startTime != "" && endTime != ""){
-			stCond = "e.date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
-			conds.add(stCond);
-		}
-
-		if(formName.contains("-1") == false){
-			formCond = "  e.event_type =\'" + formName +"\'";
-
-			conds.add(formCond);
-		}
-		if(sk.contains("-1") == false){
-			skCond = "e.provider_id =\'" + sk+"\'";
-			conds.add(skCond);
-		}
-		if(conds.size() == 0) wh = "";
-		else {
-			wh = "\nWHERE ";
-			wh += conds.get(0);
-			for(int i = 1; i < conds.size();i++){
-				wh += " AND ";
-				wh += conds.get(i);
-			}
-		}
-
-		Session session = sessionFactory.openSession();
-		List<Object[]> clientInfoList = new ArrayList<Object[]>();
-		try {
-
 			String hql = "SELECT Distinct On(c.json ->> 'baseEntityId')\n" +
 					"		c.json ->> 'gender' gender, \n" +
 					"       c.json->'addresses' -> 0 ->>'country' country, \n" +
@@ -1375,6 +1309,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					"       c.json->'addresses' -> 0 ->>'cityVillage' village, \n"+
 					"       cast(c.json ->> 'birthdate' as date) birthdate, \n" +
 					"       c.json ->> 'firstName' first_name, \n" +
+//					" 		c.json -> 'attributes' ->> 'Cluster' cluster, \n"+
+					" 		c.json -> 'attributes' ->> 'HH_Type' household_type, \n"+
 					"       c.json -> 'attributes' ->> 'HOH_Phone_Number' phone_number, \n" +
 					"       c.json -> 'attributes' ->> 'householdCode' household_code, \n" +
 					"       e.provider_id provider_id, \n" +
@@ -1393,6 +1329,52 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					"FROM   core.client c \n" +
 					"       JOIN core.event_metadata e \n" +
 					"         ON c.json ->> 'baseEntityId' = e.base_entity_id";
+
+			clientInfoList = session.createSQLQuery(hql).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return clientInfoList;
+	}
+
+	@Override
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk) {
+		String wh = "";
+		List<String> conds = new ArrayList<String>();
+		String stCond,edCond,formCond,skCond;
+		if(startTime != "" && endTime == "")
+			endTime = new SimpleDateFormat("yyyy-dd-MM").format(new Date()).toString();
+		if(startTime != "" && endTime != ""){
+			stCond = "date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
+			conds.add(stCond);
+		}
+
+		if(formName.contains("-1") == false){
+			formCond = "  event_type =\'" + formName +"\'";
+
+			conds.add(formCond);
+		}
+		if(sk.contains("-1") == false){
+			skCond = " provider_id =\'" + sk+"\'";
+			conds.add(skCond);
+		}
+		if(conds.size() == 0) wh = "";
+		else {
+			wh = " WHERE ";
+			wh += conds.get(0);
+			for(int i = 1; i < conds.size();i++){
+				wh += " AND ";
+				wh += conds.get(i);
+			}
+		}
+
+		Session session = sessionFactory.openSession();
+		List<Object[]> clientInfoList = new ArrayList<Object[]>();
+		try {
+
+			String hql = "SELECT * FROM core.\"viewJsonDataConversionOfClient\"";
 					hql += wh;
 					hql += ";";
 			clientInfoList = session.createSQLQuery(hql).list();

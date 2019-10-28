@@ -4,16 +4,16 @@
 package org.opensrp.web.controller;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Stream;
 
+import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.common.util.FormName;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.User;
@@ -21,6 +21,7 @@ import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
+import org.opensrp.web.util.ModelConverter;
 import org.opensrp.web.util.PaginationHelperUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -190,20 +191,29 @@ public class ReportController {
 		String endTime = request.getParameter("end");
 		String formName = request.getParameter("formName");
 		String sk = request.getParameter("sk");
-		boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null;
+
+
+        boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null;
 		boolean requestEmptyFlag = false;
 		if(!requestNullFlag){
 			   requestEmptyFlag = startTime.equals("") &&  endTime.equals("") && formName.equals("-1")  && sk.equals("-1");
 		}
 		List<Object[]> allClientInfo = null;
 		if(requestNullFlag == true || requestEmptyFlag == true) {
-			allClientInfo = databaseServiceImpl.getClientInformation();
+			session.setAttribute("headerList", ModelConverter.headerListForClientData(""));
+			session.setAttribute("emptyFlag",1);
+			allClientInfo = new ArrayList<>();
 		}
-		else allClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,formName,sk);
+		else {
+			session.setAttribute("emptyFlag",0);
+			String _formName = formName.replaceAll("\\_"," ");
 
-		 // Search Portion need to implement using servlet request
 
-
+			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,_formName,sk);
+			List<String> headerList = ModelConverter.headerListForClientData(formName);
+			session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
+			allClientInfo = ModelConverter.modelConverterForClientData(formName,tempClientInfo);
+		}
 		session.setAttribute("skList",allSKs);
 		session.setAttribute("clientInfoList",allClientInfo);
 
