@@ -192,6 +192,9 @@ public class ReportController {
 		String formName = request.getParameter("formName");
 		String sk = request.getParameter("sk");
 
+        ModelConverter.mapLoad();
+
+        model.addAttribute("formNameList",ModelConverter.formNameListMap);
 
         boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null;
 		boolean requestEmptyFlag = false;
@@ -206,10 +209,10 @@ public class ReportController {
 		}
 		else {
 			session.setAttribute("emptyFlag",0);
-			String _formName = formName.replaceAll("\\_"," ");
+//			String _formName = formName.replaceAll("\\_"," ");
 
 
-			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,_formName,sk);
+			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,formName,sk);
 			List<String> headerList = ModelConverter.headerListForClientData(formName);
 			session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
 			allClientInfo = ModelConverter.modelConverterForClientData(formName,tempClientInfo);

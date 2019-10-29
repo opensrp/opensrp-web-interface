@@ -82,11 +82,14 @@
 <%--                                    <option value="Child Registration">Child Registration</option>--%>
 <%--                                    <option value="Woman Member Registration">Woman Member Registration</option>--%>
 <%--                                    <% List<FormName> formName = (List<FormName>) session.getAttribute("formName"); %>--%>
-                                    <%
-                                        for(FormName name: FormName.values()){
-                                    %>
-                                    <option value="<%=name%>"><%=name%></option>
-                                    <% }%>
+<%--                                    <%--%>
+<%--                                        for(FormName name: FormName.values()){--%>
+<%--                                    %>--%>
+<%--                                    <option value="<%=name%>"><%=name%></option>--%>
+<%--                                    <% }%>--%>
+                                    <c:forEach var="map" items="${formNameList}">
+                                        <option value="${map.key}"><c:out value="${map.value}"/></option>
+                                    </c:forEach>
                                 </select>
                             </div>
                             <div class="col-2">
