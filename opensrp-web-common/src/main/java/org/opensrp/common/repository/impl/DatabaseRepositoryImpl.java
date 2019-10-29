@@ -377,6 +377,33 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		session.close();
 		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
 	}
+
+	@Override
+	public List<Object[]> findFacilityWorkerByFacilityId(Integer facilityId) {
+		List<Object[]> facilityWorkers = new ArrayList<Object[]>();
+		Session session = sessionFactory.openSession();
+		try {
+			String hql = "select \n" + "\ttmp.*,\n"
+					+ "\t(select string_agg(l.name, ', ') from core.team_member_location ntml\n"
+					+ "\t\tjoin core.location l on l.id = ntml.location_id\n"
+					+ "\t\twhere ntml.team_member_id = tmp.team_member_id)\n" + "\tlocations \n" + "\tfrom (\n"
+					+ "\t\tselect fwt.name fw_name, fw.*, tml.team_member_id, u.username u_username\n"
+					+ "\t\t\tfrom core.facility_worker fw\n"
+					+ "\t\t\tjoin core.facility_worker_type fwt on fw.facility_worker_type_id = fwt.id\n"
+					+ "\t\t\tjoin core.users u on fw.name = concat(u.first_name, ' ', u.last_name)\n"
+					+ "\t\t\tjoin core.team_member tm on u.id = tm.person_id\n"
+					+ "\t\t\tjoin core.team_member_location tml on tm.id = tml.team_member_id\n"
+					+ "\t\twhere cast(u.chcp as integer) = :facilityId and fw.facility_id = :facilityId and u.username is not null and fw.facility_worker_type_id != 1\n"
+					+ ") tmp;";
+			Query query = session.createSQLQuery(hql).setInteger("facilityId", facilityId);
+			facilityWorkers = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return facilityWorkers;
+	}
 	
 	/**
 	 * <p>

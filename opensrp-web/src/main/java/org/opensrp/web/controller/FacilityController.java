@@ -166,7 +166,9 @@ public class FacilityController {
 	public String updateWorker(ModelMap model, HttpSession session, Locale locale, @PathVariable("id") int facilityId) {
 		facilityWorkerService.setWorkerToAddToSession(session, facilityId);
 		Facility facility = facilityService.findById(facilityId, "id", Facility.class);
+		List<Object[]> facilityWorkers = facilityService.findFacilityWorkerByFacilityId(facilityId);
 		model.addAttribute("facility", facility);
+		session.setAttribute("facilityWorkers", facilityWorkers);
 		model.addAttribute("locale", locale);
 		session.setAttribute("bahmniVisitURL", BAHMNI_VISIT_URL);
 		return "facility/add-worker";

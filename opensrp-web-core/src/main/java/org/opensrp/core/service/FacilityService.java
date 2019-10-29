@@ -206,4 +206,8 @@ public class FacilityService {
 	public List<Object[]> countPopulation() {
 		return repository.countPopulation();
 	}
+
+	public List<Object[]> findFacilityWorkerByFacilityId(Integer facilityId) {
+		return repository.findFacilityWorkerByFacilityId(facilityId);
+	}
 }

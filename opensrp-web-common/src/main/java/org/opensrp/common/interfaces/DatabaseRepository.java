@@ -141,4 +141,6 @@ public interface DatabaseRepository {
 	public List<Object[]> countPopulation();
 
 	public Object availableHealthId();
+
+	public List<Object[]> findFacilityWorkerByFacilityId(Integer facilityId);
 }
