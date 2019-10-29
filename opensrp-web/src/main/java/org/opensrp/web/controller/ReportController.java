@@ -15,6 +15,7 @@ import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.FormName;
 import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.FacilityService;
@@ -186,17 +187,28 @@ public class ReportController {
 	public String getClientDataReportPage(HttpServletRequest request,
 										  HttpSession session,
 										  Model model){
-		List<Object[]> allSKs = databaseServiceImpl.getAllSks();
 		String  startTime = request.getParameter("start");
 		String endTime = request.getParameter("end");
 		String formName = request.getParameter("formName");
+		String branchId = request.getParameter("branch");
 		String sk = request.getParameter("sk");
-
-
-        boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null;
+		List<Object[]> allSKs = ((branchId == null || branchId.equals("-1"))?
+				databaseServiceImpl.getAllSks(null):databaseServiceImpl.getSKByBranch(Integer.parseInt(branchId)));
+		User user = userService.getLoggedInUser();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = new ArrayList<Object[]>();
+			for (Branch branch: user.getBranches()) {
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}
+			allSKs = databaseServiceImpl.getAllSks(branches);
+		}
+        boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null && branchId == null;
 		boolean requestEmptyFlag = false;
 		if(!requestNullFlag){
-			   requestEmptyFlag = startTime.equals("") &&  endTime.equals("") && formName.equals("-1")  && sk.equals("-1");
+			   requestEmptyFlag = startTime.equals("") &&  endTime.equals("") && formName.equals("-1")  && sk.equals("-1") && branchId.equals("-1");
 		}
 		List<Object[]> allClientInfo = null;
 		if(requestNullFlag == true || requestEmptyFlag == true) {
@@ -207,15 +219,14 @@ public class ReportController {
 		else {
 			session.setAttribute("emptyFlag",0);
 			String _formName = formName.replaceAll("\\_"," ");
-
-
-			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,_formName,sk);
+			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,_formName,sk, allSKs);
 			List<String> headerList = ModelConverter.headerListForClientData(formName);
 			session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
 			allClientInfo = ModelConverter.modelConverterForClientData(formName,tempClientInfo);
 		}
 		session.setAttribute("skList",allSKs);
 		session.setAttribute("clientInfoList",allClientInfo);
+		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
 
 		return "report/client-data-report";
 

@@ -121,7 +121,12 @@ public class MarkerServiceImpl implements DatabaseService {
   }
   
   @Override
-	public List<Object[]> getAllSks() {
+	public List<Object[]> getAllSks(List<Object[]> branches) {
+		return null;
+	}
+
+	@Override
+	public List<Object[]> getSKByBranch(Integer branchId) {
 		return null;
 	}
 
@@ -131,7 +136,7 @@ public class MarkerServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk) {
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs) {
 		return null;
 	}
 

@@ -1125,15 +1125,22 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public List<Object[]> getAllSK() {
+	public List<Object[]> getAllSK(List<Object[]> branches) {
 		Session session = sessionFactory.openSession();
 		List<Object[]> allSK = null;
+		String additionalQuery = "";
+		if (branches != null) {
+			additionalQuery = " and ub.branch_id in (";
+			int size = branches.size();
+			for (int i = 0; i < size; i++) {
+				additionalQuery += branches.get(i)[0].toString();
+				if (i != size-1) additionalQuery += ",";
+			}
+			additionalQuery += ");";
+		}
 		try {
-			String hql = "select distinct(u.username) from core.users u join core.user_role ur on u.id = ur.user_id where ur.role_id = :skId";
+			String hql = "select u.id, u.username, concat(u.first_name, ' ', u.last_name) from core.users u join core.user_role ur on u.id = ur.user_id join core.user_branch ub on u.id = ub.user_id where ur.role_id = :skId" + additionalQuery;
 			allSK = session.createSQLQuery(hql).setInteger("skId", SK_ID).list();
-//			String hql = "select distinct(provider_id) " +
-//					"FROM core.\"viewJsonDataConversionOfClient\"";
-//			allSK = session.createSQLQuery(hql).list();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1141,6 +1148,26 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			session.close();
 		}
 		return allSK;
+	}
+
+	@Override
+	public List<Object[]> getSKByBranch(Integer branchId) {
+		Session session = sessionFactory.openSession();
+		List<Object[]> skList = null;
+		try {
+			String hql = "select u.id, u.username, concat(u.first_name, ' ', u.last_name) from core.users u join core.user_role ur on u.id = ur.user_id"
+					+ " join core.user_branch ub on u.id = ub.user_id where ur.role_id = :skId and ub.branch_id = :branchId";
+			skList = session.createSQLQuery(hql)
+					.setInteger("skId", SK_ID)
+					.setInteger("branchId", branchId)
+					.list();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return skList;
 	}
 
 	@Override
@@ -1340,7 +1367,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk) {
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs) {
 		String wh = "";
 		List<String> conds = new ArrayList<String>();
 		String stCond,edCond,formCond,skCond;
@@ -1358,6 +1385,15 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		if(sk.contains("-1") == false){
 			skCond = " provider_id =\'" + sk+"\'";
+			conds.add(skCond);
+		} else {
+			String providerIds = "";
+			int size = allSKs.size();
+			for (int i = 0; i < size; i++) {
+				providerIds += "'"+allSKs.get(i)[1].toString()+"'";
+				if (i != size-1) providerIds += ",";
+			}
+			skCond = " provider_id in ("+providerIds+")";
 			conds.add(skCond);
 		}
 		if(conds.size() == 0) wh = "";

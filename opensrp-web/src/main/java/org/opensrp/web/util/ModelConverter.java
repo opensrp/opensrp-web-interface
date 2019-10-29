@@ -7,14 +7,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public  class ModelConverter {
-    private static String[] columnNamesOfMember = {"Id", "Relation with HOH","Mother Name", "Mobile Number",
+    private static String[] columnNamesOfMember = {"Id", "Name", "Relation with HOH","Mother Name", "Mobile Number",
             "Id Type","NID Number","Birth Id Number","DOB_Known","Date of Birth","Age", "Gender"
             ,"Marital Status", "Blood Group"};
     private static String[] columnNamesOfFamily = {"Id","SS Name","Village Name","Cluster","Household Type",
             "Household Number", "Household Name","Household Phone Number", "Number of Household Member"
             ,"Has Latrine"};
 
-    private static int[] rowForMember = {0,25,26,27,28,29,30,31,32,33,34,35,36};
+    private static int[] rowForMember = {0,9,25,26,27,28,29,30,31,32,33,34,35,36};
     private static int[] rowForFamily = {0,18,43,17,19,22,23,20,24,21};
     private static List<int[]> arrayOfRows = new ArrayList<>();
 

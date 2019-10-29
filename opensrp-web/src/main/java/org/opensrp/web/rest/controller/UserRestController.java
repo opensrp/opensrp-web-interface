@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import org.apache.log4j.Logger;
 import org.opensrp.common.dto.UserDTO;
+import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.dto.UserLocationDTO;
 import org.opensrp.core.entity.*;
 import org.opensrp.core.service.*;
@@ -13,14 +14,11 @@ import org.opensrp.core.service.mapper.UsersCatchmentAreaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.google.gson.Gson;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -59,7 +57,7 @@ public class UserRestController {
 
 	@Autowired
 	private UserMapper userMapper;
-	
+
 	private static final Logger logger = Logger.getLogger(UserRestController.class);
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -190,5 +188,4 @@ public class UserRestController {
 		userServiceImpl.updateTeamMemberAndCatchmentAreas(userLocationDTO);
 		return new ResponseEntity<>(new Gson().toJson(errorMessage), OK);
 	}
-
 }
