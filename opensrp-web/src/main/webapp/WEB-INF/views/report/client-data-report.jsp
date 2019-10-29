@@ -3,6 +3,7 @@
 <%@ page import="org.opensrp.common.dto.ReportDTO" %>
 <%@ page import="org.opensrp.web.util.SearchUtil" %>
 <%@ page import="org.opensrp.common.util.FormName" %>
+<%@ page import="org.opensrp.core.entity.Branch" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
 
@@ -13,15 +14,6 @@
 <%@ taglib prefix="security"
            uri="http://www.springframework.org/security/tags"%>
 
-<%--<%--%>
-<%--    String householdCount = (String) session.getAttribute("totalHousehold");--%>
-<%--    String populationCount = (String) session.getAttribute("totalPopulation");--%>
-<%--    String malePercentage = (String) session.getAttribute("totalMale");--%>
-<%--    String femalePercentage = (String) session.getAttribute("totalFemale");--%>
-<%--%>--%>
-<%--<%--%>
-<%--    List<Object[]> skList = (List<Object[]>) session.getAttribute("SkList");--%>
-<%--%>--%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,6 +65,20 @@
                                 <input class="form-control custom-select custom-select-lg mb-3" type=text
                                        name="end" id="end" value="">
                             </div>
+                            <% if (AuthenticationManagerUtil.isAM()) {%>
+                            <div class="col-2">
+                                <label><spring:message code="lbl.branches"/></label>
+                                <select class="custom-select custom-select-lg mb-3" id="branch" name="branch" onchange="branchChange()">
+                                    <option value="-1">Select Branch</option>
+                                    <%
+                                        List<Branch> ret = (List<Branch>) session.getAttribute("branchList");
+                                        for (Branch str : ret) {
+                                    %>
+                                    <option value="<%=str.getId()%>"><%=str.getName()%></option>
+                                    <%}%>
+                                </select>
+                            </div>
+                            <%}%>
                             <div class="col-2">
                                 <label><spring:message code="lbl.formName"/></label>
                                 <select class="custom-select custom-select-lg mb-3" id="formName" name="formName">
@@ -94,17 +100,14 @@
                             </div>
                             <div class="col-2">
                                 <label><spring:message code="lbl.sk"/></label>
-                                <select class="custom-select custom-select-lg mb-3" id="sk" name="sk">
+                                <select class="custom-select custom-select-lg mb-3" id="skList" name="sk">
                                     <option value="-1">Select SK</option>
-                                    <% List<String> ret = (List<String>) session.getAttribute("skList");%>
                                     <%
-                                        for (String str : ret) {
+                                        List<Object[]> ret = (List<Object[]>) session.getAttribute("skList");
+                                        for (Object[] str : ret) {
                                     %>
-                                    <option value="<%=str%>"><%=str%></option>
-                                    <%
-
-                                        }
-                                    %>
+                                    <option value="<%=str[1]%>"><%=str[2]%>(<%=str[1]%>)</option>
+                                    <% } %>
                                 </select>
                             </div>
                         </div>
@@ -121,7 +124,7 @@
             <div class="card-footer small text-muted"></div>
         </div>
 
-      <% int flag = (int) session.getAttribute("emptyFlag"); %>
+      <% Integer flag = (Integer) session.getAttribute("emptyFlag"); %>
        <% if(flag == 0) { %>
         <div class="card mb-3">
             <div class="card-header">
@@ -176,6 +179,32 @@
 <script src="<c:url value='/resources/js/pdfmake.js' />"></script>
 <script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>
 <script>
+    function branchChange() {
+        console.log("in branch change");
+        var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
+        $("#skList").html("");
+        $.ajax({
+            type : "GET",
+            contentType : "application/json",
+            url : url,
+            dataType : 'html',
+            timeout : 100000,
+            beforeSend: function() {},
+            success : function(data) {
+                console.log(data);
+                $("#skList").html(data);
+            },
+            error : function(e) {
+                console.log("ERROR: ", e);
+                display(e);
+            },
+            done : function(e) {
+
+                console.log("DONE");
+                //enableSearchButton(true);
+            }
+        });
+    }
     $(document).ready(function() {
         $('#clientTableList').DataTable({
             bFilter: true,

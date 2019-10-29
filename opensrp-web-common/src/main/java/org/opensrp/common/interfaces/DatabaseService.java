@@ -1,5 +1,6 @@
 package org.opensrp.common.interfaces;
 
+import org.dom4j.Branch;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.util.SearchBuilder;
 
@@ -39,10 +40,12 @@ public interface DatabaseService {
 	
 	public List<Object[]> getHouseHoldReports(String address_value,String searchedValue);
 
-	public  List<Object[]> getAllSks();
+	public  List<Object[]> getAllSks(List<Object[]> branches);
+
+	public List<Object[]> getSKByBranch(Integer branchId);
 
 	public List<Object[]> getClientInformation();
 
-	public List<Object[]> getClientInfoFilter(String startTime,String endTime, String formName,String sk);
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs);
 
 }
