@@ -192,6 +192,12 @@ public class ReportController {
 		String formName = request.getParameter("formName");
 		String branchId = request.getParameter("branch");
 		String sk = request.getParameter("sk");
+
+        ModelConverter.mapLoad();
+
+        model.addAttribute("formNameList",ModelConverter.formNameListMap);
+
+        boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null;
 		List<Object[]> allSKs = ((branchId == null || branchId.equals("-1"))?
 				databaseServiceImpl.getAllSks(null):databaseServiceImpl.getSKByBranch(Integer.parseInt(branchId)));
 		User user = userService.getLoggedInUser();
@@ -205,7 +211,6 @@ public class ReportController {
 			}
 			allSKs = databaseServiceImpl.getAllSks(branches);
 		}
-        boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null && branchId == null;
 		boolean requestEmptyFlag = false;
 		if(!requestNullFlag){
 			   requestEmptyFlag = startTime.equals("") &&  endTime.equals("") && formName.equals("-1")  && sk.equals("-1") && branchId.equals("-1");
@@ -218,6 +223,7 @@ public class ReportController {
 		}
 		else {
 			session.setAttribute("emptyFlag",0);
+
 			String _formName = formName.replaceAll("\\_"," ");
 			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,_formName,sk, allSKs);
 			List<String> headerList = ModelConverter.headerListForClientData(formName);
