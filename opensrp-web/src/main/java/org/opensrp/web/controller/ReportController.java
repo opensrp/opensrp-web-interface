@@ -211,7 +211,6 @@ public class ReportController {
 			}
 			allSKs = databaseServiceImpl.getAllSks(branches);
 		}
-        boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null && branchId == null;
 		boolean requestEmptyFlag = false;
 		if(!requestNullFlag){
 			   requestEmptyFlag = startTime.equals("") &&  endTime.equals("") && formName.equals("-1")  && sk.equals("-1") && branchId.equals("-1");
@@ -224,15 +223,9 @@ public class ReportController {
 		}
 		else {
 			session.setAttribute("emptyFlag",0);
-<<<<<<<
-//			String _formName = formName.replaceAll("\\_"," ");
 
-
-			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,formName,sk);
-=======
 			String _formName = formName.replaceAll("\\_"," ");
 			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,_formName,sk, allSKs);
->>>>>>>
 			List<String> headerList = ModelConverter.headerListForClientData(formName);
 			session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
 			allClientInfo = ModelConverter.modelConverterForClientData(formName,tempClientInfo);

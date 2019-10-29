@@ -9,13 +9,13 @@ public  class ModelConverter {
             "Id Type","NID Number","Birth Id Number","DOB_Known","Date of Birth","Age", "Gender"
             ,"Marital Status", "Blood Group"};
     private static String[] columnNamesOfFamily = {"Id","Household Number","SS Name","Village Name","Cluster","Household Type",
-            "Household Number", "Household Name","Household Phone Number", "Number of Household Member"
+             "Household Name","Household Phone Number", "Number of Household Member"
             ,"Has Latrine"};
     private static String[] columnNamesOfChild={"Id","Member Number","Name","Relation with HOH",
             "Mother Name","Date of Birth","Gender","Blood Group"};
 
     private static int[] rowForMember = {0,61,25,26,27,28,29,30,31,32,33,34,35,36};
-    private static int[] rowForFamily = {0,61,18,43,17,19,22,23,20,24,21};
+    private static int[] rowForFamily = {0,61,18,43,17,19,23,20,24,21};
     private static int[] rowForChild = {0,61,9,25,26,32,34,36};
     private static List<int[]> arrayOfRows = new ArrayList<>();
     public static Map<String,String> formNameListMap = new HashMap<String, String>();
