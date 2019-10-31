@@ -58,17 +58,17 @@
                             <div class="col-2">
                                 <label><spring:message code="lbl.startDate"/></label>
                                 <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                       name="start" id="start" value="${startDate}">
+                                       name="start" id="start" required="required" value="${startDate}">
                             </div>
                             <div class="col-2">
                                 <label><spring:message code="lbl.endDate"/></label>
                                 <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                       name="end" id="end" value="${endDate}">
+                                       name="end" id="end" required="required" value="${endDate}">
                             </div>
                             <% if (AuthenticationManagerUtil.isAM()) {%>
                             <div class="col-2">
                                 <label><spring:message code="lbl.branches"/></label>
-                                <select class="custom-select custom-select-lg mb-3" id="branch" name="branch" onchange="branchChange()">
+                                <select class="custom-select custom-select-lg mb-3" id="branch"  name="branch" onchange="branchChange()">
                                     <option value="-1">Select Branch</option>
                                     <%
                                         List<Branch> ret = (List<Branch>) session.getAttribute("branchList");
@@ -81,7 +81,7 @@
                             <%}%>
                             <div class="col-2">
                                 <label><spring:message code="lbl.formName"/></label>
-                                <select class="custom-select custom-select-lg mb-3" id="formName" name="formName">
+                                <select class="custom-select custom-select-lg mb-3" id="formName" required="required" name="formName">
                                     <option value="-1">Select Form Name</option>
 <%--                                    <option value="Family Member Registration">Member Registration</option>--%>
 <%--                                    <option value="Family Registration">Household Registration</option>--%>
@@ -100,7 +100,7 @@
                             </div>
                             <div class="col-2">
                                 <label><spring:message code="lbl.sk"/></label>
-                                <select class="custom-select custom-select-lg mb-3" id="skList" name="sk">
+                                <select class="custom-select custom-select-lg mb-3" id="skList" name="sk" required="required">
                                     <option value="-1">Select SK</option>
                                     <%
                                         List<Object[]> ret = (List<Object[]>) session.getAttribute("skList");
