@@ -235,6 +235,7 @@ public class ReportController {
 		model.addAttribute("endDate",endTime);
 		model.addAttribute("formName",formName);
 		model.addAttribute("sk",sk);
+		model.addAttribute("branchId", branchId);
 		session.setAttribute("skList",allSKs);
 		session.setAttribute("clientInfoList",allClientInfo);
 		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));

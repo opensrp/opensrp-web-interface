@@ -210,6 +210,7 @@
         $('.dataTables_length').addClass('bs-select');
         $('#formName').val('${formName}');
         $('#skList').val('${sk}');
+        $('#branch').val('${branchId}');
     });
     $(document).ready(function() {
         $('#ccListTable').DataTable({
@@ -218,7 +219,7 @@
             dom: 'Bfrtip',
             destroy: true,
             buttons: [
-                'pageLength', 'excel',
+                'pageLength', 'excel'
             ],
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
