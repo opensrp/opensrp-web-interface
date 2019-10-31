@@ -80,25 +80,6 @@
                             </div>
                             <%}%>
                             <div class="col-2">
-                                <label><spring:message code="lbl.formName"/></label>
-                                <select class="custom-select custom-select-lg mb-3" id="formName" name="formName">
-                                    <option value="-1">Select Form Name</option>
-<%--                                    <option value="Family Member Registration">Member Registration</option>--%>
-<%--                                    <option value="Family Registration">Household Registration</option>--%>
-<%--                                    <option value="Child Registration">Child Registration</option>--%>
-<%--                                    <option value="Woman Member Registration">Woman Member Registration</option>--%>
-<%--                                    <% List<FormName> formName = (List<FormName>) session.getAttribute("formName"); %>--%>
-<%--                                    <%--%>
-<%--                                        for(FormName name: FormName.values()){--%>
-<%--                                    %>--%>
-<%--                                    <option value="<%=name%>"><%=name%></option>--%>
-<%--                                    <% }%>--%>
-                                    <c:forEach var="map" items="${formNameList}">
-                                        <option value="${map.key}"><c:out value="${map.value}"/></option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                            <div class="col-2">
                                 <label><spring:message code="lbl.sk"/></label>
                                 <select class="custom-select custom-select-lg mb-3" id="skList" name="sk">
                                     <option value="-1">Select SK</option>
@@ -108,6 +89,15 @@
                                     %>
                                     <option value="<%=str[1]%>"><%=str[2]%>(<%=str[1]%>)</option>
                                     <% } %>
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <label><spring:message code="lbl.formName"/></label>
+                                <select class="custom-select custom-select-lg mb-3" id="formName" name="formName">
+                                    <option value="-1">Select Form Name</option>
+                                    <c:forEach var="map" items="${formNameList}">
+                                        <option value="${map.key}"><c:out value="${map.value}"/></option>
+                                    </c:forEach>
                                 </select>
                             </div>
                         </div>
