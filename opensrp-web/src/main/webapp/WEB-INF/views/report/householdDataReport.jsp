@@ -202,7 +202,7 @@
 								<td><%=list[18]%></td><!--aged 19-35 years female-->
 								<td><%=list[19]%></td><!--aged 19-35 years total-->
 								<td><%=list[20]%></td><!--number of population 35/35 years old-->
-								<td>list[21]</td><!--number of sanitary with hh-->
+								<td><%=list[21]%></td><!--number of sanitary with hh-->
 							</tr>
 							<%
 							}
