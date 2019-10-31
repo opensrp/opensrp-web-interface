@@ -167,7 +167,7 @@
 <script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
 <script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
 <script src="<c:url value='/resources/js/jszip.js' />"></script>
-<script src="<c:url value='/resources/js/pdfmake.js' />"></script>
+<%--<script src="<c:url value='/resources/js/pdfmake.js' />"></script>--%>
 <script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>
 <script>
 	$(document).ready(function() {
@@ -177,7 +177,7 @@
 			dom: 'Bfrtip',
 			destroy: true,
 			buttons: [
-				'pageLength', 'csv', 'excel', 'pdf'
+				'pageLength', 'excel'
 			],
 			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			language: {
@@ -193,7 +193,7 @@
 			dom: 'Bfrtip',
 			destroy: true,
 			buttons: [
-				'pageLength', 'csv', 'excel', 'pdf'
+				'pageLength', 'excel'
 			],
 			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			language: {
