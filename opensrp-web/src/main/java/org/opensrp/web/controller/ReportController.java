@@ -217,6 +217,7 @@ public class ReportController {
 		}
 		List<Object[]> allClientInfo = null;
 		if(requestNullFlag == true || requestEmptyFlag == true) {
+
 			session.setAttribute("headerList", ModelConverter.headerListForClientData(""));
 			session.setAttribute("emptyFlag",1);
 			allClientInfo = new ArrayList<>();
@@ -230,6 +231,10 @@ public class ReportController {
 			session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
 			allClientInfo = ModelConverter.modelConverterForClientData(formName,tempClientInfo);
 		}
+		model.addAttribute("startDate",startTime);
+		model.addAttribute("endDate",endTime);
+		model.addAttribute("formName",formName);
+		model.addAttribute("sk",sk);
 		session.setAttribute("skList",allSKs);
 		session.setAttribute("clientInfoList",allClientInfo);
 		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));

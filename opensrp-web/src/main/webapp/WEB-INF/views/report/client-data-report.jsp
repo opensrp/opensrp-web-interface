@@ -58,12 +58,12 @@
                             <div class="col-2">
                                 <label><spring:message code="lbl.startDate"/></label>
                                 <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                       name="start" id="start" value="">
+                                       name="start" id="start" value="${startDate}">
                             </div>
                             <div class="col-2">
                                 <label><spring:message code="lbl.endDate"/></label>
                                 <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                       name="end" id="end" value="">
+                                       name="end" id="end" value="${endDate}">
                             </div>
                             <% if (AuthenticationManagerUtil.isAM()) {%>
                             <div class="col-2">
@@ -208,6 +208,8 @@
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
         $('.dataTables_length').addClass('bs-select');
+        $('#formName').val('${formName}');
+        $('#skList').val('${sk}');
     });
     $(document).ready(function() {
         $('#ccListTable').DataTable({
