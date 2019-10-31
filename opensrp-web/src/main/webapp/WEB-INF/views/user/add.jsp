@@ -253,8 +253,10 @@
         if (ssId != selectedRoleId) {
             $('#ssNo').val("");
             $('#ssNo').trigger('change');
+            $('#ssOption').hide();
+        } else {
+            $('#ssOption').show();
         }
-        $('#ssOption').toggle();
     }
 
     function toggleVisibilityOfPassword() {
