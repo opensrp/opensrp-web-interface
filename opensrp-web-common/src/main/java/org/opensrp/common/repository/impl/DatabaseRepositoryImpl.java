@@ -1,13 +1,14 @@
 package org.opensrp.common.repository.impl;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.google.gson.JsonObject;
+import com.sun.jmx.snmp.Timestamp;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
+import org.exolab.castor.types.DateTime;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -25,6 +26,7 @@ import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.SearchBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -32,6 +34,8 @@ import org.springframework.stereotype.Repository;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import javax.xml.transform.Transformer;
+
+import static org.apache.commons.lang3.time.DateUtils.parseDate;
 
 /**
  * <p>
@@ -1371,8 +1375,24 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		String wh = "";
 		List<String> conds = new ArrayList<String>();
 		String stCond,edCond,formCond,skCond;
+		if(endTime != ""){
+			try{
+				Date date = new SimpleDateFormat("yyyy-MM-dd").parse(endTime);
+
+				date = DateUtil.atEndOfDay(DateUtils.addDays(date, 1));
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+				endTime = simpleDateFormat.format(date);
+//				System.out.println("Check");
+			}
+			catch (Exception ex){
+				ex.printStackTrace();
+			}
+
+		}
+
 		if(startTime != "" && endTime == "")
-			endTime = new SimpleDateFormat("yyyy-dd-MM").format(new Date()).toString();
+			endTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString();
 		if(startTime != "" && endTime != ""){
 			stCond = "date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
 			conds.add(stCond);
