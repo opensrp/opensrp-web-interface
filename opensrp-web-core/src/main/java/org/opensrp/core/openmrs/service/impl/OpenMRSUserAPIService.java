@@ -155,7 +155,7 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 			user.setPersonUUid(createdPerson.getString("uuid"));
 			JSONObject createdUser = apiServiceFactory.getApiService("openmrs").add(PAYLOAD,
 			    generateUserJsonObject(user, isUpdate, null), USER_URL);
-			roleUpdate(user.getRoles());
+			roleUpdate();
 			if (createdUser.has("uuid")) {
 				userUuid = (String) createdUser.get("uuid");
 				user.setUuid(userUuid);
@@ -190,7 +190,7 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 		boolean isUpdate = true;
 		JSONObject updatedUser = apiServiceFactory.getApiService("openmrs").update(PAYLOAD,
 		    generateUserJsonObject(user, isUpdate, jsonOb), uuid, USER_URL);
-		roleUpdate(user.getRoles());
+		roleUpdate();
 		if (updatedUser.has("uuid")) {
 			userUuid = (String) updatedUser.get("uuid");
 		} else {
@@ -220,7 +220,7 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 		return userArray;
 	}
 	
-	public void roleUpdate(Set<Role> roles) {
+	public void roleUpdate() {
 		
 		try {
 			JSONObject user = apiServiceFactory.getApiService("openmrs").get("", "", ROLE_URL);
@@ -229,17 +229,11 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 			String name = "";
 			String roleUid = "";
 			String bahmniID = "";
-			String role = "";
-			for (Object r: roles) {
-				role = r.toString();
-			}
 			for (int i = 0; i < userArray.length(); i++) {
 				JSONObject jsonOb = (JSONObject) userArray.get(i);
 				name = (String) jsonOb.get("display");
 
-				System.out.println("ROLE: "+ role);
-
-				if (name.equalsIgnoreCase(role) && (name.equalsIgnoreCase("CHCP") || name.equalsIgnoreCase("UHFPO"))) {
+				if (name.equalsIgnoreCase("CHCP")) {
 					roleUid = (String) jsonOb.get("uuid");
 				}
 				if (name.equalsIgnoreCase("Bahmni-App")) {
