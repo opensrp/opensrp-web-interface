@@ -44,7 +44,7 @@ jQuery(document).ready(function($) {
 		var concatingString = "district = " + "'"+$("#district").val().split("?")[1]+"'";
 		$("#searched_value").val(concatingString);
 		$("#pourasabha").html("");
-		$("#union").html("");		
+		$("#union").html("");
 		$("#village").html("");
 	});
   	$("#upazila").change(function(event) { 
