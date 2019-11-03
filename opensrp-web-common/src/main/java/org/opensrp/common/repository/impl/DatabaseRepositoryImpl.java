@@ -1430,6 +1430,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 			String hql = "SELECT * FROM core.\"viewJsonDataConversionOfClient\"";
 					hql += wh;
+					hql += "limit 10";
 					hql += ";";
 			clientInfoList = session.createSQLQuery(hql).list();
 		} catch (Exception e) {

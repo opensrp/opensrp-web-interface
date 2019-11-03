@@ -30,9 +30,9 @@
 
     <jsp:include page="/WEB-INF/views/css.jsp" />
 
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
+<%--    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">--%>
+<%--    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">--%>
+<%--    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">--%>
     <style>
         th, td {
             text-align: center;
@@ -121,8 +121,13 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-12" id="content">
+                    <div style="overflow-x:auto;" class="col-sm-12" id="content">
                         <table class="display" id="clientTableList"
+                               data-show-header="true"
+                               data-pagination="true"
+                               data-id-field="name"
+                               data-page-list="[5, 10, 25, 50, 100, ALL]"
+                               data-page-size="5"
                                style="width: 100%;">
                             <thead>
                                <tr>
@@ -159,15 +164,20 @@
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script src="<c:url value='/resources/js/datepicker.js' />"></script>
 <%--<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>--%>
-<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
-<script src="<c:url value='/resources/js/jszip.js' />"></script>
+<%--<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>--%>
+<%--<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>--%>
+<%--<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>--%>
+<%--<script src="<c:url value='/resources/js/buttons.flash.js' />"></script>--%>
+<%--<script src="<c:url value='/resources/js/buttons.html5.js' />"></script>--%>
+<%--<script src="<c:url value='/resources/js/jszip.js' />"></script>--%>
 <%--<script src="<c:url value='/resources/js/pdfmake.js' />"></script>--%>
 <%--<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>--%>
 <script>
+    $(document).ready(function() {
+        $('#formName').val('${formName}');
+        $('#skList').val('${sk}');
+        $('#branch').val('${branchId}');
+    });
     function branchChange() {
         console.log("in branch change");
         var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
@@ -194,36 +204,33 @@
             }
         });
     }
-    $(document).ready(function() {
-        $('#clientTableList').DataTable({
-            bFilter: true,
-            bInfo: true,
-            dom: 'Bfrtip',
-            destroy: true,
-            scrollX: true,
-            buttons: [
-                'pageLength', 'excel'
-            ],
-            "order": [[ 3, "desc" ]],
-            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
-        });
-        $('.dataTables_length').addClass('bs-select');
-        $('#formName').val('${formName}');
-        $('#skList').val('${sk}');
-        $('#branch').val('${branchId}');
-    });
-    $(document).ready(function() {
-        $('#ccListTable').DataTable({
-            bFilter: true,
-            bInfo: true,
-            dom: 'Bfrtip',
-            destroy: true,
-            buttons: [
-                'pageLength', 'excel'
-            ],
-            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
-        });
-    });
+    // $(document).ready(function() {
+    //     $('#clientTableList').DataTable({
+    //         bFilter: true,
+    //         bInfo: true,
+    //         dom: 'Bfrtip',
+    //         destroy: true,
+    //         scrollX: true,
+    //         buttons: [
+    //             'pageLength', 'excel'
+    //         ],
+    //         "order": [[ 3, "desc" ]],
+    //         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+    //     });
+    //     $('.dataTables_length').addClass('bs-select');
+    // });
+    // $(document).ready(function() {
+    //     $('#ccListTable').DataTable({
+    //         bFilter: true,
+    //         bInfo: true,
+    //         dom: 'Bfrtip',
+    //         destroy: true,
+    //         buttons: [
+    //             'pageLength', 'excel'
+    //         ],
+    //         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+    //     });
+    // });
     <%--$('#formName').val('${formName}');--%>
     <%--$('#sk').val('${sk}');--%>
 </script>

@@ -3,17 +3,14 @@
  */
 package org.opensrp.web.controller;
 
-import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Stream;
 
-import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.opensrp.common.dto.ReportDTO;
+import org.apache.commons.lang.time.DateUtils;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
-import org.opensrp.common.util.FormName;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Facility;
@@ -21,11 +18,13 @@ import org.opensrp.core.entity.User;
 import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
+import org.opensrp.web.repository.UserRepository;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.ModelConverter;
 import org.opensrp.web.util.PaginationHelperUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,6 +59,9 @@ public class ReportController {
 
 	@Autowired
 	private FacilityService facilityService;
+
+	@Autowired
+	private UserRepository commonRepository;
 
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_REPORT')")
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
@@ -187,11 +189,17 @@ public class ReportController {
 	public String getClientDataReportPage(HttpServletRequest request,
 										  HttpSession session,
 										  Model model){
-		String  startTime = request.getParameter("start");
-		String endTime = request.getParameter("end");
-		String formName = request.getParameter("formName");
-		String branchId = request.getParameter("branch");
-		String sk = request.getParameter("sk");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		List<User> clientInfos = commonRepository.getClientInfoFilter(PageRequest.of(1, 10)).getRows();
+		System.out.println("Client info size: "+ clientInfos.size());
+		String  startTime = request.getParameterMap().containsKey("start")?
+				request.getParameter("start"): formatter.format(DateUtils.addMonths(new Date(), -3));
+		String endTime = request.getParameterMap().containsKey("end")?
+				request.getParameter("end"):formatter.format(new Date());
+		String formName = request.getParameterMap().containsKey("formName")?
+				request.getParameter("formName"):"Family Registration";
+		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch"):"-1";
+		String sk = request.getParameterMap().containsKey("sk")?request.getParameter("sk"):"-1";
 
         ModelConverter.mapLoad();
 
