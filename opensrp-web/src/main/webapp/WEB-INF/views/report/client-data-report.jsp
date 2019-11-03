@@ -2,6 +2,8 @@
 <%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
 <%@ page import="org.opensrp.common.dto.ReportDTO" %>
 <%@ page import="org.opensrp.web.util.SearchUtil" %>
+<%@ page import="org.opensrp.common.util.FormName" %>
+<%@ page import="org.opensrp.core.entity.Branch" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
 
@@ -12,15 +14,6 @@
 <%@ taglib prefix="security"
            uri="http://www.springframework.org/security/tags"%>
 
-<%--<%--%>
-<%--    String householdCount = (String) session.getAttribute("totalHousehold");--%>
-<%--    String populationCount = (String) session.getAttribute("totalPopulation");--%>
-<%--    String malePercentage = (String) session.getAttribute("totalMale");--%>
-<%--    String femalePercentage = (String) session.getAttribute("totalFemale");--%>
-<%--%>--%>
-<%--<%--%>
-<%--    List<Object[]> skList = (List<Object[]>) session.getAttribute("SkList");--%>
-<%--%>--%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,36 +58,45 @@
                             <div class="col-2">
                                 <label><spring:message code="lbl.startDate"/></label>
                                 <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                       name="start" id="start" value="">
+                                       name="start" id="start" value="${startDate}">
                             </div>
                             <div class="col-2">
                                 <label><spring:message code="lbl.endDate"/></label>
                                 <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                       name="end" id="end" value="">
+                                       name="end" id="end" value="${endDate}">
+                            </div>
+                            <% if (AuthenticationManagerUtil.isAM()) {%>
+                            <div class="col-2">
+                                <label><spring:message code="lbl.branches"/></label>
+                                <select class="custom-select custom-select-lg mb-3" id="branch" name="branch" onchange="branchChange()">
+                                    <option value="-1">Select Branch</option>
+                                    <%
+                                        List<Branch> ret = (List<Branch>) session.getAttribute("branchList");
+                                        for (Branch str : ret) {
+                                    %>
+                                    <option value="<%=str.getId()%>"><%=str.getName()%></option>
+                                    <%}%>
+                                </select>
+                            </div>
+                            <%}%>
+                            <div class="col-2">
+                                <label><spring:message code="lbl.sk"/></label>
+                                <select class="custom-select custom-select-lg mb-3" id="skList" name="sk">
+                                    <option value="-1">Select SK</option>
+                                    <%
+                                        List<Object[]> ret = (List<Object[]>) session.getAttribute("skList");
+                                        for (Object[] str : ret) {
+                                    %>
+                                    <option value="<%=str[1]%>"><%=str[2]%>(<%=str[1]%>)</option>
+                                    <% } %>
+                                </select>
                             </div>
                             <div class="col-2">
                                 <label><spring:message code="lbl.formName"/></label>
                                 <select class="custom-select custom-select-lg mb-3" id="formName" name="formName">
-                                    <option value="-1">Select Form Name</option>
-                                    <option value="Member Registration">Member Registration</option>
-                                    <option value="Household Registration">Household Registration</option>
-                                    <option value="Child Registration">Child Registration</option>
-<%--                                    <option value="Woman Member Registration">Woman Member Registration</option>--%>
-                                </select>
-                            </div>
-                            <div class="col-2">
-                                <label><spring:message code="lbl.sk"/></label>
-                                <select class="custom-select custom-select-lg mb-3" id="sk" name="sk">
-                                    <option value="-1">Select SK</option>
-                                    <% List<String> ret = (List<String>) session.getAttribute("skList");%>
-                                    <%
-                                        for (String str : ret) {
-                                    %>
-                                    <option value="<%=str%>"><%=str%></option>
-                                    <%
-
-                                        }
-                                    %>
+                                    <c:forEach var="map" items="${formNameList}">
+                                        <option value="${map.key}"><c:out value="${map.value}"/></option>
+                                    </c:forEach>
                                 </select>
                             </div>
                         </div>
@@ -111,6 +113,8 @@
             <div class="card-footer small text-muted"></div>
         </div>
 
+      <% Integer flag = (Integer) session.getAttribute("emptyFlag"); %>
+       <% if(flag == 0) { %>
         <div class="card mb-3">
             <div class="card-header">
                 <i class="fa fa-table"></i> ${title.toString()} <spring:message code="lbl.clientDataTable"/>
@@ -121,24 +125,16 @@
                         <table class="display" id="clientTableList"
                                style="width: 100%;">
                             <thead>
-                            <tr>
-                                <th><spring:message code="lbl.gender"/></th>
-                                <th><spring:message code="lbl.country"/></th>
-                                <th><spring:message code="lbl.division"/></th>
-                                <th><spring:message code="lbl.district"/></th>
-                                <th><spring:message code="lbl.village"/></th>
-                                <th><spring:message code="lbl.birthDate"/></th>
-                                <th><spring:message code="lbl.firstName"/></th>
-                                <th><spring:message code="lbl.phoneNumber"/></th>
-                                <th><spring:message code="lbl.householdCode"/></th>
-                                <th><spring:message code="lbl.provider"/></th>
-                                <th><spring:message code="lbl.createdDate"/></th>
-                            </tr>
+                               <tr>
+                                   <% List<String> ths = (List<String>) session.getAttribute("headerList"); %>
+                                   <% for(String str: ths) {%>
+                                    <th><%=str%></th>
+                                   <% } %>
+                                </tr>
                             </thead>
                             <tbody>
                             <%  List<Object[]> allClientInfo = (List<Object[]>) session.getAttribute("clientInfoList");
                                 for(Object[] object: allClientInfo){
-                                    int cnt = 0;
                             %>
                                 <tr>
                                     <% for(Object obj: object){ %>
@@ -154,6 +150,7 @@
             </div>
             <div class="card-footer small text-muted"></div>
         </div>
+    <% } %>
 
     </div>
     <jsp:include page="/WEB-INF/views/footer.jsp" />
@@ -161,28 +158,58 @@
 <script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script src="<c:url value='/resources/js/datepicker.js' />"></script>
-<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>
+<%--<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>--%>
 <script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
 <script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
 <script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
 <script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
 <script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
 <script src="<c:url value='/resources/js/jszip.js' />"></script>
-<script src="<c:url value='/resources/js/pdfmake.js' />"></script>
-<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>
+<%--<script src="<c:url value='/resources/js/pdfmake.js' />"></script>--%>
+<%--<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>--%>
 <script>
+    function branchChange() {
+        console.log("in branch change");
+        var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
+        $("#skList").html("");
+        $.ajax({
+            type : "GET",
+            contentType : "application/json",
+            url : url,
+            dataType : 'html',
+            timeout : 100000,
+            beforeSend: function() {},
+            success : function(data) {
+                console.log(data);
+                $("#skList").html(data);
+            },
+            error : function(e) {
+                console.log("ERROR: ", e);
+                display(e);
+            },
+            done : function(e) {
+
+                console.log("DONE");
+                //enableSearchButton(true);
+            }
+        });
+    }
     $(document).ready(function() {
         $('#clientTableList').DataTable({
             bFilter: true,
             bInfo: true,
             dom: 'Bfrtip',
             destroy: true,
+            scrollX: true,
             buttons: [
-                'pageLength', 'csv', 'excel', 'pdf'
+                'pageLength', 'excel'
             ],
             "order": [[ 3, "desc" ]],
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
+        $('.dataTables_length').addClass('bs-select');
+        $('#formName').val('${formName}');
+        $('#skList').val('${sk}');
     });
     $(document).ready(function() {
         $('#ccListTable').DataTable({
@@ -191,11 +218,12 @@
             dom: 'Bfrtip',
             destroy: true,
             buttons: [
-                'pageLength', 'csv', 'excel', 'pdf'
+                'pageLength', 'excel',
             ],
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
     });
-
+    <%--$('#formName').val('${formName}');--%>
+    <%--$('#sk').val('${sk}');--%>
 </script>
 </body>

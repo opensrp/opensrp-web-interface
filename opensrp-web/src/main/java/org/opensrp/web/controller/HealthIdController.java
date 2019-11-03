@@ -50,8 +50,8 @@ public class HealthIdController {
 	@Autowired
 	private HealthId healthId;
 	
-	private static int CHILD_ROLE_ID = 23;
-	private static int LOCATION_TAG_ID = 26;
+	private static int CHILD_ROLE_ID = 29;
+	private static int LOCATION_TAG_ID = 33;
 
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_HEALTH_ID')")
 	@RequestMapping(value = "/healthId/upload_csv.html", method = RequestMethod.GET)

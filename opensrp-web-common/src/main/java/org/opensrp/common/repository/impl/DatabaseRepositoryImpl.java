@@ -1,12 +1,12 @@
 package org.opensrp.common.repository.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-import com.google.gson.JsonObject;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
+import org.exolab.castor.types.DateTime;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -24,6 +24,7 @@ import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.SearchBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -31,6 +32,8 @@ import org.springframework.stereotype.Repository;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import javax.xml.transform.Transformer;
+
+import static org.apache.commons.lang3.time.DateUtils.parseDate;
 
 /**
  * <p>
@@ -57,7 +60,10 @@ import javax.xml.transform.Transformer;
 public class DatabaseRepositoryImpl implements DatabaseRepository {
 	
 	private static final Logger logger = Logger.getLogger(DatabaseRepositoryImpl.class);
-	
+	private static final int SK_ID = 28;
+	private static final int VILLAGE_ID = 33;
+	private static final int UNION_ID = 32;
+
 	@Autowired
 	private SessionFactory sessionFactory;
 	
@@ -1110,18 +1116,49 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public List<Object[]> getAllSK() {
+	public List<Object[]> getAllSK(List<Object[]> branches) {
 		Session session = sessionFactory.openSession();
 		List<Object[]> allSK = null;
+		String additionalQuery = "";
+		if (branches != null) {
+			additionalQuery = " and ub.branch_id in (";
+			int size = branches.size();
+			for (int i = 0; i < size; i++) {
+				additionalQuery += branches.get(i)[0].toString();
+				if (i != size-1) additionalQuery += ",";
+			}
+			additionalQuery += ");";
+		}
 		try {
-			String hql = "select distinct(u.username) from core.users u join core.user_role ur on u.id = ur.user_id where ur.role_id = 9";
-			allSK = session.createSQLQuery(hql).list();
+			String hql = "select u.id, u.username, concat(u.first_name, ' ', u.last_name) from core.users u join core.user_role ur on u.id = ur.user_id join core.user_branch ub on u.id = ub.user_id where ur.role_id = :skId" + additionalQuery;
+			allSK = session.createSQLQuery(hql).setInteger("skId", SK_ID).list();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			session.close();
 		}
 		return allSK;
+	}
+
+	@Override
+	public List<Object[]> getSKByBranch(Integer branchId) {
+		Session session = sessionFactory.openSession();
+		List<Object[]> skList = null;
+		try {
+			String hql = "select u.id, u.username, concat(u.first_name, ' ', u.last_name) from core.users u join core.user_role ur on u.id = ur.user_id"
+					+ " join core.user_branch ub on u.id = ub.user_id where ur.role_id = :skId and ub.branch_id = :branchId";
+			skList = session.createSQLQuery(hql)
+					.setInteger("skId", SK_ID)
+					.setInteger("branchId", branchId)
+					.list();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return skList;
 	}
 
 	@Override
@@ -1282,22 +1319,35 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<Object[]> clientInfoList = new ArrayList<Object[]>();
 		try {
 
-			String hql = "SELECT c.json ->> 'gender'                                         gender, \n" +
-					"       c.json -> 'addresses' -> 0 -> 'addressFields' ->> 'country' country, \n" +
-					"       c.json->'addresses' -> 0 -> 'addressFields' ->>'stateProvince'  division, \n"+
-					"       c.json->'addresses' -> 0 -> 'addressFields' ->>'countyDistrict'  district, \n"+
-					"       c.json->'addresses' -> 0 -> 'addressFields' ->>'cityVillage'  village, \n"+
-					"       cast(c.json ->> 'birthdate' as date)                                      birthdate, \n" +
-					"       c.json ->> 'firstName'                                      first_name, \n" +
-					"       c.json -> 'attributes' ->> 'phoneNumber'                    phone_number, \n" +
-					"       c.json -> 'attributes' ->> 'householdCode' \n" +
-					"       household_code, \n" +
-					"        e.provider_id                                        provider_id, \n" +
-					"       cast(e.date_created as date)                                    date_created \n" +
+			String hql = "SELECT Distinct On(c.json ->> 'baseEntityId')\n" +
+					"		c.json ->> 'gender' gender, \n" +
+					"       c.json->'addresses' -> 0 ->>'country' country, \n" +
+					"       c.json->'addresses' -> 0 ->>'stateProvince' division, \n"+
+					"       c.json->'addresses' -> 0 ->>'countyDistrict' district, \n"+
+					"       c.json->'addresses' -> 0 ->>'cityVillage' village, \n"+
+					"       cast(c.json ->> 'birthdate' as date) birthdate, \n" +
+					"       c.json ->> 'firstName' first_name, \n" +
+//					" 		c.json -> 'attributes' ->> 'Cluster' cluster, \n"+
+					" 		c.json -> 'attributes' ->> 'HH_Type' household_type, \n"+
+					"       c.json -> 'attributes' ->> 'HOH_Phone_Number' phone_number, \n" +
+					"       c.json -> 'attributes' ->> 'householdCode' household_code, \n" +
+					"       e.provider_id provider_id, \n" +
+					"       cast(e.date_created as date) date_created, \n" +
+					"       c.json -> 'attributes' ->> 'SS_Name' ss_name, \n"+
+					"       c.json -> 'attributes' ->> 'HH_Type' household_type, \n"+
+					"       c.json -> 'attributes' ->> 'Has_Latrine' has_latrine, \n"+
+					"       c.json -> 'attributes' ->> 'Number_of_HH_Member' total_member, \n"+
+					"       c.json -> 'attributes' ->> 'motherNameEnglish' mother_name, \n"+
+					"       c.json -> 'attributes' ->> 'Relation_with_HOH' relation_household, \n"+
+					"       c.json -> 'attributes' ->> 'Blood_Group' blood_group, \n"+
+					"       c.json -> 'attributes' ->> 'Marital_Status' marital_status, \n"+
+					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address2' upazila, \n"+
+					"       c.json->'addresses' -> 0 -> 'addressFields' ->> 'address1' city_union, \n"+
+					"       c.json -> 'attributes' ->> 'nationalId' national_id \n"+
 					"FROM   core.client c \n" +
-					"       JOIN core.event_metadata e  \n" +
-					"         ON c.json ->> 'baseEntityId' = e.base_entity_id;";
-//					"FROM core.client c";
+					"       JOIN core.event_metadata e \n" +
+					"         ON c.json ->> 'baseEntityId' = e.base_entity_id";
+
 			clientInfoList = session.createSQLQuery(hql).list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1308,29 +1358,54 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk) {
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs) {
 		String wh = "";
 		List<String> conds = new ArrayList<String>();
 		String stCond,edCond,formCond,skCond;
+		if(endTime != ""){
+			try{
+				Date date = new SimpleDateFormat("yyyy-MM-dd").parse(endTime);
+
+				date = DateUtil.atEndOfDay(DateUtils.addDays(date, 1));
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+				endTime = simpleDateFormat.format(date);
+//				System.out.println("Check");
+			}
+			catch (Exception ex){
+				ex.printStackTrace();
+			}
+
+		}
+
 		if(startTime != "" && endTime == "")
-			endTime = new Date().toString();
+			endTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString();
 		if(startTime != "" && endTime != ""){
-			stCond = "e.date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
+			stCond = "date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
 			conds.add(stCond);
 		}
 
 		if(formName.contains("-1") == false){
-			formCond = "  e.event_type =\'" + formName +"\'";
+			formCond = "  event_type =\'" + formName +"\'";
 
 			conds.add(formCond);
 		}
 		if(sk.contains("-1") == false){
-			skCond = "e.provider_id =\'" + sk+"\'";
+			skCond = " provider_id =\'" + sk+"\'";
+			conds.add(skCond);
+		} else {
+			String providerIds = "";
+			int size = allSKs.size();
+			for (int i = 0; i < size; i++) {
+				providerIds += "'"+allSKs.get(i)[1].toString()+"'";
+				if (i != size-1) providerIds += ",";
+			}
+			skCond = " provider_id in ("+providerIds+")";
 			conds.add(skCond);
 		}
 		if(conds.size() == 0) wh = "";
 		else {
-			wh = "\nWHERE ";
+			wh = " WHERE ";
 			wh += conds.get(0);
 			for(int i = 1; i < conds.size();i++){
 				wh += " AND ";
@@ -1342,21 +1417,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<Object[]> clientInfoList = new ArrayList<Object[]>();
 		try {
 
-			String hql = "SELECT c.json ->> 'gender'                                         gender, \n" +
-					"       c.json -> 'addresses' -> 0 -> 'addressFields' ->> 'country' country,\n" +
-					"\t    c.json->'addresses' -> 0 -> 'addressFields' ->>'stateProvince'  division,\n" +
-					"\t\tc.json->'addresses' -> 0 -> 'addressFields' ->>'countyDistrict'  district, \n" +
-					"\t\tc.json->'addresses' -> 0 -> 'addressFields' ->>'cityVillage'  village,\n" +
-					"       cast(c.json ->> 'birthdate' as date)                                      birthdate, \n" +
-					"       c.json ->> 'firstName'                                      first_name, \n" +
-					"       c.json -> 'attributes' ->> 'phoneNumber'                    phone_number, \n" +
-					"       c.json -> 'attributes' ->> 'householdCode' \n" +
-					"       household_code, \n" +
-					"       e.provider_id                                     provider_id, \n" +
-					"       cast(e.date_created as date)                                      date_created \n" +
-					"FROM   core.client c \n" +
-					"       JOIN core.event_metadata e \n" +
-					"         ON c.json ->> 'baseEntityId' = e.base_entity_id";
+			String hql = "SELECT * FROM core.\"viewJsonDataConversionOfClient\"";
 					hql += wh;
 					hql += ";";
 			clientInfoList = session.createSQLQuery(hql).list();
@@ -1369,18 +1430,93 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 
+
+	@Override
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId) {
+		Session session = sessionFactory.openSession();
+		List<Object[]> userList = null;
+		String where = " where ";
+		if (branchId > 0) where += "b.id = "+branchId;
+		if (roleId > 0) {
+			if (branchId > 0) where += " and r.id = " + roleId;
+			else where += "r.id = " + roleId;
+		}
+		where += ";";
+		try {
+			String sql = "WITH recursive main_location_tree AS \n" + "( \n" + "       SELECT * \n"
+					+ "       FROM   core.location \n" + "       WHERE  id IN ( WITH recursive location_tree AS \n"
+					+ "                     ( \n" + "                            SELECT * \n"
+					+ "                            FROM   core.location l \n"
+					+ "                            WHERE  l.id = :locationId \n" + "                            UNION ALL \n"
+					+ "                            SELECT loc.* \n"
+					+ "                            FROM   core.location loc \n"
+					+ "                            JOIN   location_tree lt \n"
+					+ "                            ON     lt.id = loc.parent_location_id ) \n"
+					+ "              SELECT DISTINCT(lt.id) \n" + "              FROM            location_tree lt \n"
+					+ "              WHERE           lt.location_tag_id = :locationTagId ) \n" + "UNION ALL \n" + "SELECT l.* \n"
+					+ "FROM   core.location l \n" + "JOIN   main_location_tree mlt \n"
+					+ "ON     l.id = mlt.parent_location_id ) \n" + "SELECT DISTINCT(u.username),\n"
+					+ "\t\t\t\tconcat(u.first_name, ' ', u.last_name) as full_name,\n" + "\t\t\t\tu.mobile,\n"
+					+ "                r.NAME role_name, \n" + "                b.NAME branch_name, u.id \n"
+					+ "FROM            main_location_tree mlt \n" + "JOIN            core.users_catchment_area uca \n"
+					+ "ON              uca.location_id = mlt.id \n" + "JOIN            core.users u \n"
+					+ "ON              u.id = uca.user_id \n" + "JOIN            core.user_branch ub \n"
+					+ "ON              ub.user_id = u.id \n" + "JOIN            core.branch b \n"
+					+ "ON              b.id = ub.branch_id \n" + "JOIN            core.user_role ur \n"
+					+ "ON              u.id = ur.user_id \n" + "JOIN            core.role r \n"
+					+ "ON              ur.role_id = r.id";
+
+			Query query = session.createSQLQuery((branchId > 0 || roleId > 0)?sql+where:sql+";");
+			userList = query
+					.setInteger("locationId", locationId)
+					.setInteger("locationTagId", locationTagId)
+					.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return userList;
+	}
+
+	@Override
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId) {
+		List<Object[]> users = new ArrayList<Object[]>();
+		Session session = sessionFactory.openSession();
+		try {
+			String hql = "select \n" + "\tdistinct(u.username),\n" + "\tconcat(u.first_name, ' ', u.last_name) full_name,\n"
+					+ "\tu.mobile,\n" + "\tr.name role_name,\n" + "\tb.name branch_name,\n"
+					+ "\tu.id from core.users as u \n" + "\t\tjoin core.user_role ur on ur.user_id = u.id \n"
+					+ "\t\tjoin core.user_branch ub on ub.user_id = u.id\n"
+					+ "\t\tleft join core.team_member tm on tm.person_id = u.id\n"
+					+ "\t\tjoin core.role r on r.id = ur.role_id\n" + "\t\tjoin core.branch b on b.id = ub.branch_id\n"
+					+ "\twhere tm.id is null";
+			if (branchId > 0) hql += " and ub.branch_id = "+branchId;
+			if (roleId > 0) hql += " and ur.role_id = "+roleId;
+			Query query = session.createSQLQuery(hql);
+			users = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return users;
+	}
+
 	public <T> List<T> getUniqueLocation(String village, String ward) {
 		List<T> locations = null;
 		Session session = sessionFactory.openSession();
 
 		try {
 			String hql = "select l1.id as id from core.location l1 join core.location l2 on l1.parent_location_id = l2.id"
-					+ " where l1.location_tag_id = 26 and l2.location_tag_id = 25 and l1.name like concat(:village,':%')"
+					+ " where l1.location_tag_id = :villageId and l2.location_tag_id = :unionId and l1.name like concat(:village,':%')"
 					+ " and l2.name like concat(:ward,':%');";
 			Query query = session.createSQLQuery(hql)
 					.addScalar("id", StandardBasicTypes.INTEGER)
 					.setString("village", village)
 					.setString("ward", ward)
+					.setInteger("villageId", VILLAGE_ID)
+					.setInteger("unionId", UNION_ID)
 					.setResultTransformer(new AliasToBeanResultTransformer(LocationTreeDTO.class));
 			locations = query.list();
 		} catch (Exception e) {

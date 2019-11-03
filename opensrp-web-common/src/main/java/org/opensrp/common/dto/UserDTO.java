@@ -1,7 +1,5 @@
 package org.opensrp.common.dto;
 
-import java.util.Arrays;
-
 public class UserDTO {
 	
 	private String firstName;
@@ -31,6 +29,8 @@ public class UserDTO {
 	private boolean teamMember;
 
 	private Boolean enableSimPrint;
+
+	private String ssNo;
 	
 	public boolean isTeamMember() {
 		return teamMember;
@@ -144,12 +144,20 @@ public class UserDTO {
 		this.enableSimPrint = enableSimPrint;
 	}
 
+	public String getSsNo() {
+		return ssNo;
+	}
+
+	public void setSsNo(String ssNo) {
+		this.ssNo = ssNo;
+	}
+
 	@Override
 	public String toString() {
-		return "UserDTO [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", mobile=" + mobile
-		        + ", idetifier=" + idetifier + ", username=" + username + ", password=" + password + ", roles=" + roles
-		        + ", parentUser=" + parentUser + ", locationList=" + locationList + ", team=" + team + ", teamMember="
-		        + teamMember + "]";
+		return "UserDTO{" + "firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\''
+				+ ", mobile='" + mobile + '\'' + ", idetifier='" + idetifier + '\'' + ", username='" + username + '\''
+				+ ", password='" + password + '\'' + ", roles='" + roles + '\'' + ", branches='" + branches + '\''
+				+ ", parentUser=" + parentUser + ", locationList='" + locationList + '\'' + ", team=" + team
+				+ ", teamMember=" + teamMember + ", enableSimPrint=" + enableSimPrint + ", ssNo='" + ssNo + '\'' + '}';
 	}
-	
 }

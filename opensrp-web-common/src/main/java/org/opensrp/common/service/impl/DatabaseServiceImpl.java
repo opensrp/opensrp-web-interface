@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
+import org.dom4j.Branch;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -97,8 +98,13 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public List<Object[]> getAllSks() {
-		return databaseRepositoryImpl.getAllSK();
+	public List<Object[]> getAllSks(List<Object[]> branches) {
+		return databaseRepositoryImpl.getAllSK(branches);
+	}
+
+	@Override
+	public List<Object[]> getSKByBranch(Integer branchId) {
+		return databaseRepositoryImpl.getSKByBranch(branchId);
 	}
 
 	@Override
@@ -107,8 +113,8 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk) {
-		return databaseRepositoryImpl.getClientInfoFilter(startTime,endTime,formName,sk);
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs) {
+		return databaseRepositoryImpl.getClientInfoFilter(startTime, endTime, formName, sk, allSKs);
 	}
 
 

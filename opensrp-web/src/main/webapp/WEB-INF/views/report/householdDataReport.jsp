@@ -58,81 +58,9 @@
 		<div class="card mb-3">
 			<div class="card-header">
 				<i class="fa fa-table"></i>
-				<%if (AuthenticationManagerUtil.isUHFPO()){%>
-				<spring:message code="lbl.ccWiseReportStatus"/>
-				<%} else {%>
-				<spring:message code="lbl.mhvWiseReportStatus"/>
-				<%}%>
+				<spring:message code="lbl.summaryStatus"/>
 			</div>
 			<div class="card-body">
-				<!-- Icon Cards-->
-<%-- 				<div class="row">
-					<div class="col-xl-3 col-sm-6 mb-4">
-						<div class="card text-white o-hidden h-100 bg-primary">
-							<div class="card-body">
-								<div class="card-body-icon">
-									<!-- <i class="fa fa-fw fa-female"></i>  -->
-								</div>
-								<div class="mr-5">
-									<h3><%=householdCount%></h3>
-									<h5>Total Registered Household</h5>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-sm-6 mb-4">
-						<div class="card text-white o-hidden h-100 bg-primary">
-							<div class="card-body">
-								<div class="card-body-icon">
-									<!-- <i class="fa fa-fw fa-female"></i>  -->
-								</div>
-								<div class="mr-5">
-									<h3><%=populationCount%></h3>
-									<h5>Total Population</h5>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-sm-6 mb-4">
-						<div class="card text-white o-hidden h-100 bg-primary">
-							<div class="card-body">
-								<div class="card-body-icon">
-									<!-- <i class="fa fa-fw fa-female"></i>  -->
-								</div>
-								<div class="mr-5">
-									<h3><%=femalePercentage%></h3>
-									<h5>Total Female Percentage</h5>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-sm-6 mb-4">
-						<div class="card text-white o-hidden h-100 bg-primary">
-							<div class="card-body">
-								<div class="card-body-icon">
-									<!-- <i class="fa fa-fw fa-female"></i>  -->
-								</div>
-								<div class="mr-5">
-									<h3><%=malePercentage%></h3>
-									<h5>Total Male Percentage</h5>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- <div class="col-xl-4 col-sm-6 mb-4">
-                        <div class="card text-white o-hidden h-100 bg-primary">
-                            <div class="card-body">
-                                <div class="card-body-icon">  -->
-					<!-- <i class="fa fa-fw fa-female"></i>  -->
-					<!-- </div>
-                    <div class="mr-5">
-                        <h5>Other Percentage</h5>
-                    </div>
-                </div>
-            </div>
-        </div>  -->
-				</div> --%>
-
 				<div class="row">
 					<div class="col-sm-12" id="content">
 						<table class="display" id="formWiseAggregatedListTable"
@@ -221,15 +149,15 @@
 <script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script src="<c:url value='/resources/js/datepicker.js' />"></script>
-<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>
+<%--<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>--%>
 <script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
 <script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
 <script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
 <script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
 <script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
 <script src="<c:url value='/resources/js/jszip.js' />"></script>
-<script src="<c:url value='/resources/js/pdfmake.js' />"></script>
-<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>
+<%--<script src="<c:url value='/resources/js/pdfmake.js' />"></script>--%>
+<%--<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>--%>
 <script>
 	$(document).ready(function() {
 		$('#formWiseAggregatedListTable').DataTable({
@@ -238,7 +166,7 @@
 			dom: 'Bfrtip',
 			destroy: true,
 			buttons: [
-				'pageLength', 'csv', 'excel', 'pdf'
+				'pageLength', 'excel'
 			],
 			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			scrollX: true,
@@ -256,7 +184,7 @@
 			dom: 'Bfrtip',
 			destroy: true,
 			buttons: [
-				'pageLength', 'csv', 'excel', 'pdf'
+				'pageLength', 'excel'
 			],
 			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
 		});

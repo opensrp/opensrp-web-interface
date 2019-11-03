@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.dom4j.Branch;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.opensrp.common.dto.LocationTreeDTO;
@@ -150,12 +151,17 @@ public interface DatabaseRepository {
 	
 	public List<Object[]> getHouseHoldReports(String filterString,String searched_value);
 
-	public List<Object[]> getAllSK();
+	public List<Object[]> getAllSK(List<Object[]> branches);
+
+	public List<Object[]> getSKByBranch(Integer branchId);
 
 	public <T> List<T> getUniqueLocation(String village, String ward);
 
 	public List<Object[]> getClientInformation();
 
-	public List<Object[]> getClientInfoFilter(String startTime,String endTime, String formName,String sk);
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs);
 
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId);
+
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId);
 }

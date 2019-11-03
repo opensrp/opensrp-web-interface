@@ -58,41 +58,42 @@ public class AuthenticationManagerUtil {
 	}
 	
 	// static method to return if logged in user is CHCP or not
-		public static boolean isProvider(){
+		public static boolean isSK(){
 			List<String> roleList = getLoggedInUserRoles();
-			if(roleList.contains("Provider")){
-				logger.info("\nIsProvider :"+"True\n");
+			if(roleList.contains("SK")){
+				logger.info("\nIsSK :"+"True\n");
 				return true;
 			}
-			logger.info("\nIsProvider :"+"False\n");
+			logger.info("\nIsSK :"+"False\n");
 			return false;
 		}
 		
 	// static method to return if logged in user is CHCP or not
-	public static boolean isCHCP(){
+	public static boolean isAM(){
 		List<String> roleList = getLoggedInUserRoles();
-		if(roleList.contains("CHCP")){
-			logger.info("\nIsCHCP :"+"True\n");
+		if(roleList.contains("AM")){
+			logger.info("\nIsAM :"+"True\n");
 			return true;
 		}
-		logger.info("\nIsCHCP :"+"False\n");
+		logger.info("\nIsAM :"+"False\n");
 		return false;
 	}
 	
-	public static void showRoleAndstatus(){
+	public static void showRoleAndStatus(){
 		logger.info("\nIsAdmin : "+isAdmin()
-				+"\nIsCHCP : "+isCHCP()
-				+"\nIsProvider : "+isProvider()
+				+"\nIsCHCP : "+isAM()
+				+"\nIsCHCP : "+isSK()
+				+"\nIsCHCP : "+isSS()
 				+"\n");
 	}
 
-	public static boolean isUHFPO() {
+	public static boolean isSS() {
 		List<String> roleList = getLoggedInUserRoles();
-		if (roleList.contains("UHFPO")) {
-			logger.info("\nIsUHFPO:"+"True\n");
+		if (roleList.contains("SS")) {
+			logger.info("\nIsSS:"+"True\n");
 			return  true;
 		}
-		logger.info("\nIsUHFPO :"+"False\n");
+		logger.info("\nIsSS :"+"False\n");
 		return false;
 	}
 }

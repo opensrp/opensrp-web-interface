@@ -20,7 +20,7 @@
 	User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 	List<String> roleList = AuthenticationManagerUtil.getLoggedInUserRoles();
 	boolean isAdmin = AuthenticationManagerUtil.isAdmin();
-	AuthenticationManagerUtil.showRoleAndstatus();
+	AuthenticationManagerUtil.showRoleAndStatus();
 	List<FacilityWorker> workerList = (List<FacilityWorker>) session.getAttribute("facilityWorkerList");
 	String creator = "";
 	if(workerList!=null){

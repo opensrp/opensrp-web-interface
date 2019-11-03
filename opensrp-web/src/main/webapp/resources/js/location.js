@@ -1,5 +1,5 @@
 
-function getLocationHierarchy(url,id) {
+function getLocationHierarchy(url, id) {
   $.ajax({
    type : "GET",
    contentType : "application/json",
@@ -7,12 +7,8 @@ function getLocationHierarchy(url,id) {
  
    dataType : 'html',
    timeout : 100000,
-   beforeSend: function() {
-    
-   
-   },
+   beforeSend: function() {},
    success : function(data) {
-   
     $("#"+id).html(data);
    },
    error : function(e) {
@@ -34,14 +30,12 @@ jQuery(document).ready(function($) {
   		// var a = $("#division").val().split("?")[1];
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#division").val().split("?")[0]+"&title=","district") ;
 		$("#upazila").html("");
+		$("#pourasabha").html("");
 		$("#address_field").val("district");
 		var concatingString = "division = " + "'"+ $("#division").val().split("?")[1]+"'";
 		$("#searched_value").val(concatingString);
 		$("#union").html("");
-		$("#ward").html("");
-		$("#cc").html("");
-		$("#subunit").html("");
-		$("#mauzapara").html("");
+		$("#village").html("");
   	});
   
   	$("#district").change(function(event) {
@@ -49,46 +43,25 @@ jQuery(document).ready(function($) {
 		$("#address_field").val("upazila");
 		var concatingString = "district = " + "'"+$("#district").val().split("?")[1]+"'";
 		$("#searched_value").val(concatingString);
-		$("#union").html("");		
-		$("#ward").html("");
-		$("#cc").html("");
-		$("#subunit").html("");
-		$("#mauzapara").html("");
+		$("#pourasabha").html("");
+		$("#union").html("");
+		$("#village").html("");
 	});
   	$("#upazila").change(function(event) { 
-		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#upazila").val().split("?")[0]+"&title=","union") ;
+		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#upazila").val().split("?")[0]+"&title=","pourasabha") ;
 		$("#address_field").val("sk_id");
 		var concatingString = "upazila = " + "'"+$("#upazila").val().split("?")[1]+"'";
 		$("#searched_value").val(concatingString);
 		$("#ward").html("");
-		$("#cc").html("");
-		$("#subunit").html("");
-		$("#mauzapara").html("");
 	});
-//  	$("#healthReport_sk").change(function(event) {   
-//		$("#upazila").html("");
-//		$("#address_field").val("sk_id");
-//		var concatingString = "sk_id = " + "'"+ $("#healthReport_sk").val()+"'";
-//		$("#searched_value").val(concatingString);
-//		$("#union").html("");
-//		$("#ward").html("");
-//		$("#cc").html("");
-//		$("#subunit").html("");
-//		$("#mauzapara").html("");
-//  	});
+	$("#pourasabha").change(function(event) {
+		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#pourasabha").val().split("?")[0]+"&title=","union") ;
+		$("#address_field").val("sk_id");
+		var concatingString = "pourasabha = " + "'"+$("#pourasabha").val().split("?")[1]+"'";
+		$("#searched_value").val(concatingString);
+		$("#village").html("");
+	});
   	$("#union").change(function(event) { 
-		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#union").val().split("?")[0]+"&title=","ward") ;
-		$("#cc").html("");
-		// $("#subunit").html("");
-		// $("#mauzapara").html("");
+		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#union").val().split("?")[0]+"&title=","village") ;
 	});
-  	$("#ward").change(function(event) { 
-		// getLocationHierarchy("/opensrp-dashboard/location?id="+$("#ward").val().split("?")[0]+"&title=","subunit") ;
-		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#ward").val().split("?")[0]+"&title="+$("#ward").val().split("?")[1],"cc") ;
-		// $("#mauzapara").html("");
-	});
-  	// $("#subunit").change(function(event) {
-	// 	getLocationHierarchy("/opensrp-dashboard/location?id="+$("#subunit").val().split("?")[0]+"&title=","mauzapara") ;
-	// });
-  	
  });

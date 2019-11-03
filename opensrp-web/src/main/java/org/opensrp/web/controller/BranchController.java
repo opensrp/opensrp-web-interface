@@ -1,5 +1,7 @@
 package org.opensrp.web.controller;
 
+import com.google.gson.Gson;
+import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.service.BranchService;
@@ -12,8 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Locale;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @Controller
 public class BranchController {
@@ -23,6 +29,9 @@ public class BranchController {
 
     @Autowired
     private BranchMapper branchMapper;
+
+    @Autowired
+    private DatabaseServiceImpl databaseServiceImpl;
 
     @PostAuthorize("hasPermission(returnObject, 'PERM_READ_BRANCH_LIST')")
     @RequestMapping(value = "/branch-list.html", method = RequestMethod.GET)
@@ -51,5 +60,13 @@ public class BranchController {
         model.addAttribute("branch", new Branch());
         model.addAttribute("branchDTO", branchMapper.map(branch));
         return "branch/edit";
+    }
+
+    @RequestMapping(value = "/branches/sk", method = RequestMethod.GET)
+    public String getBranchList(HttpServletRequest request, HttpSession session, @RequestParam("branchId") Integer branchId) {
+        List<Object[]> sks = databaseServiceImpl.getSKByBranch(branchId);
+        session.setAttribute("data", sks);
+        String errorMessage = "";
+        return "/make-select-option";
     }
 }

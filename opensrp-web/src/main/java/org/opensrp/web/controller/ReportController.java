@@ -4,23 +4,24 @@
 package org.opensrp.web.controller;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
+import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.common.util.FormName;
 import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
+import org.opensrp.web.util.ModelConverter;
 import org.opensrp.web.util.PaginationHelperUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,7 +107,7 @@ public class ReportController {
 		// List<Object[]> skLists = databaseServiceImpl.getAllSks();
 		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(address_value, searched_value);
 		session.setAttribute("formWiseAggregatedList", reports);
-		// session.setAttribute("skLists", skLists);
+		searchUtil.setDivisionAttribute(session);
 		System.out.print(reports.size());
 
 /*		int totalHousehold = 0, totalPopulation = 0, totalMale = 0, totalFemale = 0;
@@ -186,27 +187,57 @@ public class ReportController {
 	public String getClientDataReportPage(HttpServletRequest request,
 										  HttpSession session,
 										  Model model){
-		List<Object[]> allSKs = databaseServiceImpl.getAllSks();
 		String  startTime = request.getParameter("start");
 		String endTime = request.getParameter("end");
 		String formName = request.getParameter("formName");
+		String branchId = request.getParameter("branch");
 		String sk = request.getParameter("sk");
-		boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null;
+
+        ModelConverter.mapLoad();
+
+        model.addAttribute("formNameList",ModelConverter.formNameListMap);
+
+        boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null;
+		List<Object[]> allSKs = ((branchId == null || branchId.equals("-1"))?
+				databaseServiceImpl.getAllSks(null):databaseServiceImpl.getSKByBranch(Integer.parseInt(branchId)));
+		User user = userService.getLoggedInUser();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = new ArrayList<Object[]>();
+			for (Branch branch: user.getBranches()) {
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}
+			allSKs = databaseServiceImpl.getAllSks(branches);
+		}
 		boolean requestEmptyFlag = false;
 		if(!requestNullFlag){
-			   requestEmptyFlag = startTime.equals("") &&  endTime.equals("") && formName.equals("-1")  && sk.equals("-1");
+			   requestEmptyFlag = startTime.equals("") &&  endTime.equals("") && formName.equals("-1")  && sk.equals("-1") && branchId.equals("-1");
 		}
 		List<Object[]> allClientInfo = null;
 		if(requestNullFlag == true || requestEmptyFlag == true) {
-			allClientInfo = databaseServiceImpl.getClientInformation();
+
+			session.setAttribute("headerList", ModelConverter.headerListForClientData(""));
+			session.setAttribute("emptyFlag",1);
+			allClientInfo = new ArrayList<>();
 		}
-		else allClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,formName,sk);
+		else {
+			session.setAttribute("emptyFlag",0);
 
-		 // Search Portion need to implement using servlet request
-
-
+			String _formName = formName.replaceAll("\\_"," ");
+			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,_formName,sk, allSKs);
+			List<String> headerList = ModelConverter.headerListForClientData(formName);
+			session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
+			allClientInfo = ModelConverter.modelConverterForClientData(formName,tempClientInfo);
+		}
+		model.addAttribute("startDate",startTime);
+		model.addAttribute("endDate",endTime);
+		model.addAttribute("formName",formName);
+		model.addAttribute("sk",sk);
 		session.setAttribute("skList",allSKs);
 		session.setAttribute("clientInfoList",allClientInfo);
+		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
 
 		return "report/client-data-report";
 
