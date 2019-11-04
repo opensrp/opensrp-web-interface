@@ -61,7 +61,7 @@ public class ReportController {
 	private FacilityService facilityService;
 
 	@Autowired
-	private UserRepository commonRepository;
+	private UserRepository userRepository;
 
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_REPORT')")
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
@@ -190,7 +190,7 @@ public class ReportController {
 										  HttpSession session,
 										  Model model){
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		List<User> clientInfos = commonRepository.getClientInfoFilter(PageRequest.of(1, 10)).getRows();
+		List<User> clientInfos = userRepository.getClientInfoFilter(PageRequest.of(1, 10)).getRows();
 		System.out.println("Client info size: "+ clientInfos.size());
 		String  startTime = request.getParameterMap().containsKey("start")?
 				request.getParameter("start"): formatter.format(DateUtils.addMonths(new Date(), -3));
