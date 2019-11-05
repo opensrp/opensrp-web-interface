@@ -136,7 +136,11 @@ public class MarkerServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs) {
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs, Integer pageNumber) {
+		return null;
+	}
+
+	public Integer getClientInfoFilterCount(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs){
 		return null;
 	}
 

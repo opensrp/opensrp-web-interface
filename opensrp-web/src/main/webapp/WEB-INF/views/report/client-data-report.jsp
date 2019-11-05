@@ -46,7 +46,7 @@
                 <div class="row">
 
                 </div>
-            <form id="search_form" autocomplete="off">
+            <div id="search_form" autocomplete="off">
                     <div class="form-group">
                         <div class="row">
                             <div class="col-2">
@@ -97,13 +97,15 @@
                         <div class="row">
 
                             <div class="col-6">
-                                <button name="search" type="submit" id="bth-search"
+                                <button name="search" id="bth-search" onclick="getClientDataReportTable()"
                                         class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
+
+            <div id="client-data-report-table"></div>
             <div class="card-footer small text-muted"></div>
         </div>
     </div>
@@ -118,6 +120,12 @@
         $('#formName').val('${formName}');
         $('#skList').val('${sk}');
         $('#branch').val('${branchId}');
+
+
+    });
+    $("a").on("click", function(event) {
+        event.preventDefault();
+        alert(event.target.id+" and "+$(event.target).attr('class'));
     });
     function branchChange() {
         console.log("in branch change");
@@ -144,6 +152,45 @@
                 //enableSearchButton(true);
             }
         });
+    }
+
+    function getClientDataReportTable(pageNo = 0) {
+
+        var url = "/opensrp-dashboard/report/clientDataReportTable?";
+        $.ajax({
+            type : "GET",
+            contentType : "application/json",
+            url : url,
+            dataType : 'html',
+            timeout : 100000,
+            data: {
+                startDate: $("#start").val(),
+                endDate: $("#end").val(),
+                formName: $("#formName").val(),
+                branch: $("#branch").val(),
+                sk: $("#skList").val(),
+                pageNo: pageNo
+            },
+            beforeSend: function() {},
+            success : function(data) {
+                console.log(data);
+                $("#client-data-report-table").html(data);
+            },
+            error : function(e) {
+                console.log("ERROR: ", e);
+                display(e);
+            },
+            done : function(e) {
+
+                console.log("DONE");
+                //enableSearchButton(true);
+            }
+        });
+    }
+
+    function goTo(pageNo){
+
+        getClientDataReportTable(pageNo);
     }
 </script>
 </body>

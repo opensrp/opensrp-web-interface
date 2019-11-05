@@ -46,13 +46,11 @@
 					if (disabledLINK != 0) {
 				%>
 				<li class="paginate_button page-item previous"
-					id="dataTable_previous"><a data-dt-idx="0" tabindex="0"
-					class="page-link" href="?offSet=<%=0%><%=paginationLink%>&lang=${locale}">Start</a></li>
+					id="dataTable_previous"><a data-dt-idx="0" tabindex="0">Start</a></li>
 
 				<li class="paginate_button page-item previous"
 					id="dataTable_previous"><a data-dt-idx="0" tabindex="0"
-					class="page-link"
-					href="?offSet=<%=disabledLINK - 1%><%=paginationLink%>&lang=${locale}">Previous</a>
+					class="page-link">Previous</a>
 				</li>
 				<%
 					}
@@ -64,15 +62,13 @@
 							if (disabledLINK != size) {
 				%>
 				<li class="paginate_button page-item disabled"><a
-					data-dt-idx="1" tabindex="0" class="page-link"
-					href="${pageName.toString()}?offSet=<%=i%><%=paginationLink%>&lang=${locale}"><%=i + ""%></a></li>
+					data-dt-idx="1" tabindex="0" class="page-link" onclick="goTo(<%=i%>)" > <%=i + ""%></a></li>
 				<%
 					}
 						} else {
 				%>
 				<li class="paginate_button page-item active"><a data-dt-idx="1"
-					tabindex="0" class="page-link"
-					href="${pageName.toString()}?offSet=<%=i%><%=paginationLink%>&lang=${locale}"><%=i + ""%></a></li>
+					tabindex="0" class="page-link"  onclick="goTo(<%=i%>)"  > <%=i + ""%></a></li>
 				<%
 					}
 					}
@@ -85,12 +81,10 @@
 					} else {
 				%>
 				<li class="paginate_button page-item next" id="dataTable_next"><a
-					data-dt-idx="7" tabindex="0" class="page-link"
-					href="${pageName.toString()}?offSet=<%=disabledLINK + 1%><%=paginationLink%>&lang=${locale}">Next</a>
+					data-dt-idx="7" tabindex="0" class="page-link">Next</a>
 				</li>
 				<li class="paginate_button page-item next" id="dataTable_next"><a
-					data-dt-idx="7" tabindex="0" class="page-link"
-					href="${pageName.toString()}?offSet=<%=size%><%=paginationLink%>&lang=${locale}">End</a>
+					data-dt-idx="7" tabindex="0" class="page-link">End</a>
 				</li>
 				<%
 					}

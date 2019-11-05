@@ -113,8 +113,14 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs) {
-		return databaseRepositoryImpl.getClientInfoFilter(startTime, endTime, formName, sk, allSKs);
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs, Integer pageNumber) {
+		return databaseRepositoryImpl.getClientInfoFilter(startTime, endTime, formName, sk, allSKs, pageNumber);
+	}
+
+
+	@Override
+	public Integer getClientInfoFilterCount(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs) {
+		return databaseRepositoryImpl.getClientInfoFilterCount(startTime, endTime, formName, sk, allSKs);
 	}
 
 

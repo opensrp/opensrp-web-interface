@@ -185,7 +185,8 @@ public class ReportController {
 	@RequestMapping(value = "/clientDataReport.html", method = RequestMethod.GET)
 	public String getClientDataReportPage(HttpServletRequest request,
 										  HttpSession session,
-										  Model model){
+										  Model model,
+                                          Locale locale){
 		model.addAttribute("formNameList", ModelConverter.mapLoad());
 		List<Object[]> allSKs = new ArrayList<>();
 		User user = userService.getLoggedInUser();
@@ -211,19 +212,51 @@ public class ReportController {
 		return "report/client-data-report";
 	}
 
-    @RequestMapping(value = "/clientDataReport.html", method = RequestMethod.GET)
+    @RequestMapping(value = "/clientDataReportTable", method = RequestMethod.GET)
     public String getClientDataReportTable(HttpServletRequest request,
                                           HttpSession session,
-                                          Model model) {
+                                          Model model,
+                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer RESULT_SIZE) {
+
+	    // Request Parameters
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        String  startTime =
+                request.getParameterMap().containsKey("start")?
+                request.getParameter("start"): formatter.format(DateUtils.addMonths(new Date(), -3));
+
+        String endTime = request.getParameterMap().containsKey("end")?
+                request.getParameter("end"):formatter.format(new Date());
+
+        String formName = request.getParameterMap().containsKey("formName")?
+                request.getParameter("formName"):"Family Registration";
+
+        String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "-1";
+
+        String sk = request.getParameterMap().containsKey("sk")?request.getParameter("sk"):"-1";
+
+        Integer pageNumber = Integer.parseInt(request.getParameter("pageNo"));
+        List<Object[]> allSKs = databaseServiceImpl.getAllSks(null);
+
+	    List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime, endTime, formName.replaceAll("\\_"," ") , sk, allSKs, pageNumber);
+        List allClientInfo =  ModelConverter.modelConverterForClientData(formName,tempClientInfo);
 
 
+        Integer size = databaseServiceImpl.getClientInfoFilterCount(startTime, endTime, formName.replaceAll("\\_"," ") , sk, allSKs);
+        if ((size % RESULT_SIZE) == 0) {
+            session.setAttribute("size", (size / RESULT_SIZE) - 1);
+        } else {
+            session.setAttribute("size", size / RESULT_SIZE);
+        }
 
-//        if(requestNullFlag == true || requestEmptyFlag == true) {
-//
-//            session.setAttribute("headerList", ModelConverter.headerListForClientData(""));
-//            session.setAttribute("emptyFlag",1);
-//            allClientInfo = new ArrayList<>();
-//        }
+        new PaginationUtil().createPageList(session, pageNumber.toString());
+
+        System.out.println("---> debug Size: "+ size);
+
+        session.setAttribute("clientInfoList",allClientInfo);
+        session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
+        session.setAttribute("emptyFlag",1);
+
 
 	    return "report/client-data-report-table";
 
