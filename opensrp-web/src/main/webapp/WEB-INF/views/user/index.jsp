@@ -159,16 +159,16 @@
 </div>
 <script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
-<script src="<c:url value='/resources/js/datepicker.js' />"></script>
-<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>
+<%--<script src="<c:url value='/resources/js/datepicker.js' />"></script>--%>
+<%--<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>--%>
 <script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
 <script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
 <script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
 <script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
 <script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
-<script src="<c:url value='/resources/js/jszip.js' />"></script>
+<%--<script src="<c:url value='/resources/js/jszip.js' />"></script>--%>
 <%--<script src="<c:url value='/resources/js/pdfmake.js' />"></script>--%>
-<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>
+<%--<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>--%>
 <script>
 	$(document).ready(function() {
 		$('#userList').DataTable({
@@ -177,7 +177,7 @@
 			dom: 'Bfrtip',
 			destroy: true,
 			buttons: [
-				'pageLength', 'excel'
+				'pageLength'
 			],
 			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			language: {
@@ -193,7 +193,7 @@
 			dom: 'Bfrtip',
 			destroy: true,
 			buttons: [
-				'pageLength', 'excel'
+				'pageLength'
 			],
 			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			language: {

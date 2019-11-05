@@ -114,7 +114,7 @@ public class MarkerServiceImpl implements DatabaseService {
 
 
 	@Override
-	public List<Object[]> getHouseHoldReports(String address_value,
+	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String address_value,
 			String searchedValue) {
 		// TODO Auto-generated method stub
 		return null;

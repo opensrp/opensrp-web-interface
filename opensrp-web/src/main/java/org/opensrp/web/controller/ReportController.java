@@ -4,14 +4,17 @@
 package org.opensrp.web.controller;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.FormName;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Branch;
@@ -102,56 +105,22 @@ public class ReportController {
 
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_AGGREGATED_REPORT')")
 	@RequestMapping(value = "/householdDataReport.html", method = RequestMethod.GET)
-	public String showFormWiseReport(HttpServletRequest request, HttpSession session, Model model, Locale locale,@RequestParam("address_field") String address_value,@RequestParam("searched_value") String searched_value) {
+	public String showFormWiseReport(HttpServletRequest request,
+	                                 HttpSession session,
+	                                 Model model,
+	                                 Locale locale,
+	                                 @RequestParam("address_field") String address_value,
+	                                 @RequestParam("searched_value") String searched_value) {
 		model.addAttribute("locale", locale);
 		// List<Object[]> skLists = databaseServiceImpl.getAllSks();
-		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(address_value, searched_value);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String startDate = formatter.format(DateUtil.atStartOfDay(DateUtils.addYears(new Date(), -1)));
+		String endDate = formatter.format(DateUtil.atEndOfDay(new Date()));
+		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value);
 		session.setAttribute("formWiseAggregatedList", reports);
 		searchUtil.setDivisionAttribute(session);
-		System.out.print(reports.size());
-
-/*		int totalHousehold = 0, totalPopulation = 0, totalMale = 0, totalFemale = 0;
-		String malePercentage;
-		String femalePercentage;
-		for (int i = 0; i < reports.size(); i++) {
-			totalHousehold += reports.get(i).getHousehold();
-			totalPopulation += reports.get(i).getPopulation();
-			totalMale += reports.get(i).getMale();
-			totalFemale += reports.get(i).getFemale();
-		}
-
-		DecimalFormat df = new DecimalFormat("#.##");
-
-		if (totalPopulation == 0) {
-			malePercentage = "0";
-			femalePercentage = "0";
-		}
-		else {
-			femalePercentage = df.format((100.0/totalPopulation)*totalFemale);
-			malePercentage = df.format((100.0/totalPopulation)*totalMale);
-		}
-
-		//for setting start date and end date in report
-		String startDate = "";
-		String endDate = "";
-		String memberType = "";
-		if (request.getParameterMap().containsKey("start")) {
-			startDate = (String) request.getParameter("start");
-		}
-		if (request.getParameterMap().containsKey("end")) {
-			endDate = (String) request.getParameter("end");
-		}
-		if (request.getParameterMap().containsKey("memberType")) {
-			memberType = (String) request.getParameter("memberType");
-		}
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
-		session.setAttribute("memberType", memberType);
-		session.setAttribute("totalHousehold", String.valueOf(totalHousehold));
-		session.setAttribute("totalPopulation", String.valueOf(totalPopulation));
-		session.setAttribute("totalMale", malePercentage);
-		session.setAttribute("totalFemale", femalePercentage);*/
-		//end: setting start date and end date in report
 		return "report/householdDataReport";
 	}
 
@@ -244,5 +213,23 @@ public class ReportController {
 
 	}
 
+	@RequestMapping(value = "/aggregated", method = RequestMethod.GET)
+	public String generateAggregatedReportOnSearch(HttpServletRequest request,
+	                                               HttpSession session,
+	                                               @RequestParam(value = "address_field", required = false) String address_value,
+	                                               @RequestParam(value = "searched_value", required = false) String searched_value,
+	                                               @RequestParam(value = "startDate", required = false) String startDate,
+	                                               @RequestParam(value = "endDate", required = false) String endDate) {
+		if (searched_value == null || searched_value.equals("")) searched_value = "empty";
+		if (address_value == null || address_value.equals("")) address_value = "division";
+		System.out.println("Start Date: "+ startDate);
+		System.out.println("End Date: "+ endDate);
+		System.out.println("Address Field: "+ address_value);
+		System.out.println("Searched Value: "+ searched_value);
+		List<Object[]> aggregatedReport = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value);
+		System.out.println("SIZE: "+aggregatedReport.size());
+		session.setAttribute("aggregatedReport", aggregatedReport);
+		return "/report/aggregated-report";
+	}
 
 }
