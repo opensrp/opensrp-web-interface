@@ -1,8 +1,12 @@
 package org.opensrp.web.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -12,8 +16,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.entity.ExportEntity;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.core.entity.Role;
+import org.opensrp.core.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -81,6 +91,25 @@ public class ExportController {
 		exportEntity.setId(Integer.parseInt(Id));
 		databaseServiceImpl.update(exportEntity);
 		return new ModelAndView("redirect:/export/exportlist.html?lang=" + locale);
+	}
+
+
+
+	@RequestMapping(value = "/export/table", method = RequestMethod.GET)
+	public String  getExportTable(HttpSession session) {
+
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		List<String> roleName = new ArrayList<String>();
+		Set<Role> roles = (Set<Role>) user.getRoles();
+		for (Role role : roles) {
+			roleName.add(role.getName());
+		}
+		List<Object[]> exportData = databaseServiceImpl.getByCreator(user.getUsername());
+
+		System.out.println("---->>> Export Data Size: "+ exportData.size());
+		session.setAttribute("exportData", exportData);
+		return "/export/table";
 	}
 	
 	private void setHouseholdAttributes(HttpSession session) throws JSONException {

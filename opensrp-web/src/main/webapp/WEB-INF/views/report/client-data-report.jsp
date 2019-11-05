@@ -24,6 +24,12 @@
           content="<%=session.getMaxInactiveInterval()%>;url=/login" />
 
     <title>Form Wise Client Data Report</title>
+    <style>
+        #errorMsg{
+            color: darkred;
+            margin-bottom: 10px;
+        }
+    </style>
 
     <jsp:include page="/WEB-INF/views/css.jsp" />
 
@@ -63,7 +69,7 @@
                             <div class="col-2">
                                 <label><spring:message code="lbl.branches"/></label>
                                 <select class="custom-select custom-select-lg mb-3" id="branch" name="branch" onchange="branchChange()">
-                                    <option value="-1">Select Branch</option>
+                                    <option value="0">Select Branch</option>
                                     <%
                                         List<Branch> ret = (List<Branch>) session.getAttribute("branchList");
                                         for (Branch str : ret) {
@@ -76,7 +82,7 @@
                             <div class="col-2">
                                 <label><spring:message code="lbl.sk"/></label>
                                 <select class="custom-select custom-select-lg mb-3" id="skList" name="sk">
-                                    <option value="-1">Select SK</option>
+                                    <option value="">Select SK</option>
                                     <%
                                         List<Object[]> ret = (List<Object[]>) session.getAttribute("skList");
                                         for (Object[] str : ret) {
@@ -94,11 +100,22 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="row" id="msg">
+                            <div class="col-6" id="errorMsg"> </div>
+                        </div>
                         <div class="row">
 
-                            <div class="col-6">
+                            <div class="col-1">
                                 <button name="search" id="bth-search" onclick="getClientDataReportTable()"
                                         class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
+                            </div>
+                            <div class="col-1">
+                                <button name="export" id="bth-export" onclick="generateExportData()"
+                                        class="btn btn-primary" value="export"><spring:message code="lbl.export"/></button>
+                            </div>
+                            <div class="col-6">
+                                <button name="export-list" id="bth-export-list" onclick="getExportTable()()"
+                                        class="btn btn-primary" value="export-lsit"><spring:message code="lbl.exportListBtn"/></button>
                             </div>
                         </div>
                     </div>
@@ -106,7 +123,6 @@
             </div>
 
             <div id="client-data-report-table"></div>
-            <div class="card-footer small text-muted"></div>
         </div>
     </div>
     <jsp:include page="/WEB-INF/views/footer.jsp" />
@@ -120,6 +136,7 @@
         $('#formName').val('${formName}');
         $('#skList').val('${sk}');
         $('#branch').val('${branchId}');
+        $("#msg").hide();
 
 
     });
@@ -156,7 +173,7 @@
 
     function getClientDataReportTable(pageNo = 0) {
 
-        var url = "/opensrp-dashboard/report/clientDataReportTable?";
+        var url = "/opensrp-dashboard/report/clientDataReportTable";
         $.ajax({
             type : "GET",
             contentType : "application/json",
@@ -191,6 +208,77 @@
     function goTo(pageNo){
 
         getClientDataReportTable(pageNo);
+    }
+
+    function generateExportData() {
+
+        if($("#start").val() == "" || $("#start").val() == null || $("#end").val() == "" || $("#end").val() == null) {
+            $("#msg").show();
+            $("#errorMsg").html("date can not be empty");
+            return false;
+        }
+
+        if($("#formName").val() == "" || $("#formName").val() == null) {
+            $("#msg").show();
+            $("#errorMsg").html("formName can not be empty");
+            return false;
+        }
+
+        var url = "/opensrp-dashboard/rest/api/v1/export/data";
+        $("#msg").hide();
+        $.ajax({
+            type : "GET",
+            contentType : "application/json",
+            url : url,
+            dataType : 'html',
+            timeout : 100000,
+            data: {
+                startDate: $("#start").val(),
+                endDate: $("#end").val(),
+                formName: $("#formName").val(),
+                branch: $("#branch").val(),
+                sk: $("#skList").val()
+            },
+            beforeSend: function() {},
+            success : function(data) {
+                getExportTable();
+            },
+            error : function(e) {
+                console.log("ERROR: ", e);
+                display(e);
+            },
+            done : function(e) {
+
+                console.log("DONE");
+                //enableSearchButton(true);
+            }
+        });
+    }
+
+    function getExportTable(){
+
+        var url = "/opensrp-dashboard/export/table";
+        $.ajax({
+            type : "GET",
+            contentType : "application/json",
+            url : url,
+            dataType : 'html',
+            timeout : 100000,
+            beforeSend: function() {},
+            success : function(data) {
+                console.log(data);
+                $("#client-data-report-table").html(data);
+            },
+            error : function(e) {
+                console.log("ERROR: ", e);
+                display(e);
+            },
+            done : function(e) {
+
+                console.log("DONE");
+                //enableSearchButton(true);
+            }
+        });
     }
 </script>
 </body>

@@ -12,6 +12,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.opensrp.common.dto.ReportDTO;
+import org.opensrp.common.entity.ExportEntity;
 import org.opensrp.common.interfaces.DatabaseService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.opensrp.common.util.SearchBuilder;
@@ -121,6 +122,11 @@ public class DatabaseServiceImpl implements DatabaseService {
 	@Override
 	public Integer getClientInfoFilterCount(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs) {
 		return databaseRepositoryImpl.getClientInfoFilterCount(startTime, endTime, formName, sk, allSKs);
+	}
+
+	@Override
+	public List<Object[]> getByCreator(String username) {
+		return databaseRepositoryImpl.getExportByCreator(username);
 	}
 
 

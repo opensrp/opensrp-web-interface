@@ -149,4 +149,8 @@ public class MarkerServiceImpl implements DatabaseService {
 		// TODO Auto-generated method stub
 		return databaseRepositoryImpl.findByKey(name, "name", Marker.class);
 	}
+
+	public List<Object[]> getByCreator(String username){
+		return null;
+	}
 }

@@ -2,6 +2,7 @@ package org.opensrp.common.interfaces;
 
 import org.dom4j.Branch;
 import org.opensrp.common.dto.ReportDTO;
+import org.opensrp.common.entity.ExportEntity;
 import org.opensrp.common.util.SearchBuilder;
 
 import javax.servlet.http.HttpSession;
@@ -49,5 +50,7 @@ public interface DatabaseService {
 	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs, Integer pageNumber);
 
 	public Integer getClientInfoFilterCount(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs);
+
+	List<Object[]> getByCreator(String username);
 
 }

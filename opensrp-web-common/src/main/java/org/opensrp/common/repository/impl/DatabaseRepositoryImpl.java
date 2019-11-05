@@ -1515,6 +1515,23 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return clientInfoCount;
 	}
 
+	@Override
+	public List<Object[]> getExportByCreator(String username) {
+		Session session = sessionFactory.openSession();
+		List<Object[]> exportData = new ArrayList<Object[]>();
+		try	{
+			exportData = session.createSQLQuery("select file_name, status from export where creator = :username order by id desc")
+					.setParameter("username", username).list();
+
+
+		}  catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return exportData;
+	}
+
 
 	@Override
 	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId) {

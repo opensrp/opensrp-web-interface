@@ -163,6 +163,8 @@ public interface DatabaseRepository {
 
 	public Integer getClientInfoFilterCount(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs);
 
+	List<Object[]> getExportByCreator(String username);
+
 	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId);
 
 	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId);
