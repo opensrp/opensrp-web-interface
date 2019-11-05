@@ -1,8 +1,5 @@
 <%@page import="java.util.List"%>
 <%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
-<%@ page import="org.opensrp.common.dto.ReportDTO" %>
-<%@ page import="org.opensrp.web.util.SearchUtil" %>
-<%@ page import="org.opensrp.common.util.FormName" %>
 <%@ page import="org.opensrp.core.entity.Branch" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
@@ -30,9 +27,6 @@
 
     <jsp:include page="/WEB-INF/views/css.jsp" />
 
-<%--    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">--%>
-<%--    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">--%>
-<%--    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">--%>
     <style>
         th, td {
             text-align: center;
@@ -58,12 +52,12 @@
                             <div class="col-2">
                                 <label><spring:message code="lbl.startDate"/></label>
                                 <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                       name="start" id="start" value="${startDate}">
+                                       name="start" id="start">
                             </div>
                             <div class="col-2">
                                 <label><spring:message code="lbl.endDate"/></label>
                                 <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                       name="end" id="end" value="${endDate}">
+                                       name="end" id="end">
                             </div>
                             <% if (AuthenticationManagerUtil.isAM()) {%>
                             <div class="col-2">
@@ -112,66 +106,13 @@
             </div>
             <div class="card-footer small text-muted"></div>
         </div>
-
-      <% Integer flag = (Integer) session.getAttribute("emptyFlag"); %>
-       <% if(flag == 0) { %>
-        <div class="card mb-3">
-            <div class="card-header">
-                <i class="fa fa-table"></i> ${title.toString()} <spring:message code="lbl.clientDataTable"/>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div style="overflow-x:auto;" class="col-sm-12" id="content">
-                        <table class="display" id="clientTableList"
-                               data-show-header="true"
-                               data-pagination="true"
-                               data-id-field="name"
-                               data-page-list="[5, 10, 25, 50, 100, ALL]"
-                               data-page-size="5"
-                               style="width: 100%;">
-                            <thead>
-                               <tr>
-                                   <% List<String> ths = (List<String>) session.getAttribute("headerList"); %>
-                                   <% for(String str: ths) {%>
-                                    <th><%=str%></th>
-                                   <% } %>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            <%  List<Object[]> allClientInfo = (List<Object[]>) session.getAttribute("clientInfoList");
-                                for(Object[] object: allClientInfo){
-                            %>
-                                <tr>
-                                    <% for(Object obj: object){ %>
-                                        <td><%=obj%></td>
-                                    <% } %>
-                                </tr>
-                            <%  } %>
-                            </tbody>
-                        </table>
-
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer small text-muted"></div>
-        </div>
-    <% } %>
-
     </div>
     <jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
 <script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script src="<c:url value='/resources/js/datepicker.js' />"></script>
-<%--<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>--%>
-<%--<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>--%>
-<%--<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>--%>
-<%--<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>--%>
-<%--<script src="<c:url value='/resources/js/buttons.flash.js' />"></script>--%>
-<%--<script src="<c:url value='/resources/js/buttons.html5.js' />"></script>--%>
-<%--<script src="<c:url value='/resources/js/jszip.js' />"></script>--%>
-<%--<script src="<c:url value='/resources/js/pdfmake.js' />"></script>--%>
-<%--<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>--%>
+
 <script>
     $(document).ready(function() {
         $('#formName').val('${formName}');
@@ -204,34 +145,5 @@
             }
         });
     }
-    // $(document).ready(function() {
-    //     $('#clientTableList').DataTable({
-    //         bFilter: true,
-    //         bInfo: true,
-    //         dom: 'Bfrtip',
-    //         destroy: true,
-    //         scrollX: true,
-    //         buttons: [
-    //             'pageLength', 'excel'
-    //         ],
-    //         "order": [[ 3, "desc" ]],
-    //         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
-    //     });
-    //     $('.dataTables_length').addClass('bs-select');
-    // });
-    // $(document).ready(function() {
-    //     $('#ccListTable').DataTable({
-    //         bFilter: true,
-    //         bInfo: true,
-    //         dom: 'Bfrtip',
-    //         destroy: true,
-    //         buttons: [
-    //             'pageLength', 'excel'
-    //         ],
-    //         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
-    //     });
-    // });
-    <%--$('#formName').val('${formName}');--%>
-    <%--$('#sk').val('${sk}');--%>
 </script>
 </body>

@@ -19,10 +19,7 @@ import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
 import org.opensrp.web.repository.UserRepository;
-import org.opensrp.web.util.AuthenticationManagerUtil;
-import org.opensrp.web.util.ModelConverter;
-import org.opensrp.web.util.PaginationHelperUtil;
-import org.opensrp.web.util.SearchUtil;
+import org.opensrp.web.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -60,8 +57,8 @@ public class ReportController {
 	@Autowired
 	private FacilityService facilityService;
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private PaginationUtil paginationUtil;
 
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_REPORT')")
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
@@ -189,28 +186,11 @@ public class ReportController {
 	public String getClientDataReportPage(HttpServletRequest request,
 										  HttpSession session,
 										  Model model){
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		List<User> clientInfos = userRepository.getClientInfoFilter(PageRequest.of(1, 10)).getRows();
-		System.out.println("Client info size: "+ clientInfos.size());
-		String  startTime = request.getParameterMap().containsKey("start")?
-				request.getParameter("start"): formatter.format(DateUtils.addMonths(new Date(), -3));
-		String endTime = request.getParameterMap().containsKey("end")?
-				request.getParameter("end"):formatter.format(new Date());
-		String formName = request.getParameterMap().containsKey("formName")?
-				request.getParameter("formName"):"Family Registration";
-		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch"):"-1";
-		String sk = request.getParameterMap().containsKey("sk")?request.getParameter("sk"):"-1";
-
-        ModelConverter.mapLoad();
-
-        model.addAttribute("formNameList",ModelConverter.formNameListMap);
-
-        boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null;
-		List<Object[]> allSKs = ((branchId == null || branchId.equals("-1"))?
-				databaseServiceImpl.getAllSks(null):databaseServiceImpl.getSKByBranch(Integer.parseInt(branchId)));
+		model.addAttribute("formNameList", ModelConverter.mapLoad());
+		List<Object[]> allSKs = new ArrayList<>();
 		User user = userService.getLoggedInUser();
 		if (AuthenticationManagerUtil.isAM()) {
-			List<Object[]> branches = new ArrayList<Object[]>();
+			List<Object[]> branches = new ArrayList<>();
 			for (Branch branch: user.getBranches()) {
 				Object[] obj = new Object[10];
 				obj[0] = branch.getId();
@@ -218,39 +198,34 @@ public class ReportController {
 				branches.add(obj);
 			}
 			allSKs = databaseServiceImpl.getAllSks(branches);
+		} else if (AuthenticationManagerUtil.isAdmin()){
+			allSKs = databaseServiceImpl.getAllSks(null);
 		}
-		boolean requestEmptyFlag = false;
-		if(!requestNullFlag){
-			   requestEmptyFlag = startTime.equals("") &&  endTime.equals("") && formName.equals("-1")  && sk.equals("-1") && branchId.equals("-1");
-		}
-		List<Object[]> allClientInfo = null;
-		if(requestNullFlag == true || requestEmptyFlag == true) {
 
-			session.setAttribute("headerList", ModelConverter.headerListForClientData(""));
-			session.setAttribute("emptyFlag",1);
-			allClientInfo = new ArrayList<>();
-		}
-		else {
-			session.setAttribute("emptyFlag",0);
-
-			String _formName = formName.replaceAll("\\_"," ");
-			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,_formName,sk, allSKs);
-			List<String> headerList = ModelConverter.headerListForClientData(formName);
-			session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
-			allClientInfo = ModelConverter.modelConverterForClientData(formName,tempClientInfo);
-		}
-		model.addAttribute("startDate",startTime);
-		model.addAttribute("endDate",endTime);
-		model.addAttribute("formName",formName);
-		model.addAttribute("sk",sk);
-		model.addAttribute("branchId", branchId);
 		session.setAttribute("skList",allSKs);
-		session.setAttribute("clientInfoList",allClientInfo);
 		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
 
-		return "report/client-data-report";
+        paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "ec_family");
+        model.addAttribute("locale", locale);
 
+		return "report/client-data-report";
 	}
 
+    @RequestMapping(value = "/clientDataReport.html", method = RequestMethod.GET)
+    public String getClientDataReportTable(HttpServletRequest request,
+                                          HttpSession session,
+                                          Model model) {
 
+
+
+//        if(requestNullFlag == true || requestEmptyFlag == true) {
+//
+//            session.setAttribute("headerList", ModelConverter.headerListForClientData(""));
+//            session.setAttribute("emptyFlag",1);
+//            allClientInfo = new ArrayList<>();
+//        }
+
+	    return "report/client-data-report-table";
+
+    }
 }
