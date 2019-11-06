@@ -17,25 +17,17 @@ import org.apache.commons.lang.time.DateUtils;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
-import org.opensrp.common.util.FormName;
-
-import org.opensrp.common.service.impl.DatabaseServiceImpl;
 
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Facility;
-import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
-import org.opensrp.web.repository.UserRepository;
 import org.opensrp.web.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -202,10 +194,6 @@ public class ReportController {
 	                                               @RequestParam(value = "endDate", required = false) String endDate) {
 		if (searched_value == null || searched_value.equals("")) searched_value = "empty";
 		if (address_value == null || address_value.equals("")) address_value = "division";
-		System.out.println("Start Date: "+ startDate);
-		System.out.println("End Date: "+ endDate);
-		System.out.println("Address Field: "+ address_value);
-		System.out.println("Searched Value: "+ searched_value);
 		List<Object[]> aggregatedReport = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value);
 		System.out.println("SIZE: "+aggregatedReport.size());
 		session.setAttribute("aggregatedReport", aggregatedReport);

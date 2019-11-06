@@ -163,10 +163,6 @@
 		var district = $("#district").val();
 		var upazila = $("#upazila").val();
 
-		console.log(division);
-		console.log(district);
-		console.log(upazila);
-
 		var divisionA = division == null?division:division.split("?")[1];
 		var districtA = district == null?district:district.split("?")[1];
 		var upazilaA = upazila == null?upazila:upazila.split("?")[1];
