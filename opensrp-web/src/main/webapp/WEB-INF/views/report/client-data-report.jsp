@@ -115,7 +115,7 @@
                             </div>
                             <div class="col-6">
                                 <button name="export-list" id="bth-export-list" onclick="getExportTable()()"
-                                        class="btn btn-primary" value="export-lsit"><spring:message code="lbl.exportListBtn"/></button>
+                                        class="btn btn-primary" value="export-lsit"><spring:message code="lbl.refreshExportListBtn"/></button>
                             </div>
                         </div>
                     </div>

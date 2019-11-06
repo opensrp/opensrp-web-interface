@@ -6,7 +6,7 @@
 <%
     List<Object[]>  dataList = (List<Object[]>)session.getAttribute("data");
 %>
-<option value="-1"><spring:message code="lbl.pleaseSelect"/></option>
+<option value=""><spring:message code="lbl.pleaseSelect"/></option>
 <%   for (Object[] objects : dataList) {%>
 <option value="<%=objects[1]%>"><%=objects[2]%>(<%=objects[1]%>)</option>    <%
     }
