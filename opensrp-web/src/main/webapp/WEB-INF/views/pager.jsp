@@ -12,7 +12,7 @@
 <%
 	List<Integer> pageList = (List<Integer>) session
 			.getAttribute("pageList");
-	String offSet = request.getParameter("offSet");
+	String offSet = request.getParameter("pageNumber");
 
 	Map<String, String> paginationAtributes = (Map<String, String>) session
 			.getAttribute("paginationAtributes");
@@ -42,53 +42,31 @@
 		<div class="dataTables_paginate paging_simple_numbers"
 			id="dataTable_paginate">
 			<ul class="pagination">
-				<%
-					if (disabledLINK != 0) {
-				%>
-				<li class="paginate_button page-item previous"
-					id="dataTable_previous"><a data-dt-idx="0" tabindex="0">Start</a></li>
 
-				<li class="paginate_button page-item previous"
-					id="dataTable_previous"><a data-dt-idx="0" tabindex="0"
-					class="page-link">Previous</a>
+				<li class="paginate_button page-item next" id="dataTable_next" onclick="goTo(0)">
+					<a data-dt-idx="7" tabindex="0" class="page-link">Start</a>
 				</li>
-				<%
-					}
-				%>
 
 				<%
 					for (Integer i : pageList) {
 						if (disabledLINK == i) {
 							if (disabledLINK != size) {
 				%>
-				<li class="paginate_button page-item disabled"><a
+				<li class="paginate_button page-item disabled" ><a
 					data-dt-idx="1" tabindex="0" class="page-link" onclick="goTo(<%=i%>)" > <%=i + ""%></a></li>
 				<%
 					}
 						} else {
 				%>
-				<li class="paginate_button page-item active"><a data-dt-idx="1"
+				<li class="paginate_button page-item active" ><a data-dt-idx="1"
 					tabindex="0" class="page-link"  onclick="goTo(<%=i%>)"  > <%=i + ""%></a></li>
 				<%
 					}
 					}
 				%>
-				<%
-					if (disabledLINK == size) {
-				%>
-
-				<%
-					} else {
-				%>
 				<li class="paginate_button page-item next" id="dataTable_next"><a
-					data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+					data-dt-idx="7" tabindex="0" class="page-link" onclick="goTo(<%=  Integer.parseInt(session.getAttribute("size").toString()) -1 %>)" >End</a>
 				</li>
-				<li class="paginate_button page-item next" id="dataTable_next"><a
-					data-dt-idx="7" tabindex="0" class="page-link">End</a>
-				</li>
-				<%
-					}
-				%>
 			</ul>
 		</div>
 	</div>

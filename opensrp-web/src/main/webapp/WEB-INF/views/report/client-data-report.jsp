@@ -203,7 +203,17 @@
 
     function goTo(pageNo){
 
+        var activeElement = document.getElementById("pageBtn"+pageNo);
+
+        if(activeElement != null) {
+            console.log("adding active class. "+pageNo);
+            activeElement.classList.remove("active");
+            activeElement.classList.add("disabled");
+        }
+
+
         getClientDataReportTable(pageNo);
+
     }
 
     function generateExportData() {
