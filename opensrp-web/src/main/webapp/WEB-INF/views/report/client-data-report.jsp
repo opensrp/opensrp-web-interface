@@ -1,8 +1,5 @@
 <%@page import="java.util.List"%>
 <%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
-<%@ page import="org.opensrp.common.dto.ReportDTO" %>
-<%@ page import="org.opensrp.web.util.SearchUtil" %>
-<%@ page import="org.opensrp.common.util.FormName" %>
 <%@ page import="org.opensrp.core.entity.Branch" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
@@ -27,12 +24,15 @@
           content="<%=session.getMaxInactiveInterval()%>;url=/login" />
 
     <title>Form Wise Client Data Report</title>
+    <style>
+        #errorMsg{
+            color: darkred;
+            margin-bottom: 10px;
+        }
+    </style>
 
     <jsp:include page="/WEB-INF/views/css.jsp" />
 
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
     <style>
         th, td {
             text-align: center;
@@ -52,24 +52,24 @@
                 <div class="row">
 
                 </div>
-            <form id="search_form" autocomplete="off">
+            <div id="search_form" autocomplete="off">
                     <div class="form-group">
                         <div class="row">
                             <div class="col-2">
                                 <label><spring:message code="lbl.startDate"/></label>
                                 <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                       name="start" id="start" value="${startDate}">
+                                       name="start" id="start">
                             </div>
                             <div class="col-2">
                                 <label><spring:message code="lbl.endDate"/></label>
                                 <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                       name="end" id="end" value="${endDate}">
+                                       name="end" id="end">
                             </div>
                             <% if (AuthenticationManagerUtil.isAM()) {%>
                             <div class="col-2">
                                 <label><spring:message code="lbl.branches"/></label>
                                 <select class="custom-select custom-select-lg mb-3" id="branch" name="branch" onchange="branchChange()">
-                                    <option value="-1">Select Branch</option>
+                                    <option value="0">Select Branch</option>
                                     <%
                                         List<Branch> ret = (List<Branch>) session.getAttribute("branchList");
                                         for (Branch str : ret) {
@@ -82,7 +82,7 @@
                             <div class="col-2">
                                 <label><spring:message code="lbl.sk"/></label>
                                 <select class="custom-select custom-select-lg mb-3" id="skList" name="sk">
-                                    <option value="-1">Select SK</option>
+                                    <option value="">Select SK</option>
                                     <%
                                         List<Object[]> ret = (List<Object[]>) session.getAttribute("skList");
                                         for (Object[] str : ret) {
@@ -100,74 +100,50 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="row" id="msg">
+                            <div class="col-6" id="errorMsg"> </div>
+                        </div>
                         <div class="row">
 
-                            <div class="col-6">
-                                <button name="search" type="submit" id="bth-search"
+                            <div class="col-1">
+                                <button name="search" id="bth-search" onclick="getClientDataReportTable()"
                                         class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
+                            </div>
+                            <div class="col-1">
+                                <button name="export" id="bth-export" onclick="generateExportData()"
+                                        class="btn btn-primary" value="export"><spring:message code="lbl.export"/></button>
+                            </div>
+                            <div class="col-6">
+                                <button name="export-list" id="bth-export-list" onclick="getExportTable()()"
+                                        class="btn btn-primary" value="export-lsit"><spring:message code="lbl.exportListBtn"/></button>
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
-            <div class="card-footer small text-muted"></div>
-        </div>
-
-      <% Integer flag = (Integer) session.getAttribute("emptyFlag"); %>
-       <% if(flag == 0) { %>
-        <div class="card mb-3">
-            <div class="card-header">
-                <i class="fa fa-table"></i> ${title.toString()} <spring:message code="lbl.clientDataTable"/>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-12" id="content">
-                        <table class="display" id="clientTableList"
-                               style="width: 100%;">
-                            <thead>
-                               <tr>
-                                   <% List<String> ths = (List<String>) session.getAttribute("headerList"); %>
-                                   <% for(String str: ths) {%>
-                                    <th><%=str%></th>
-                                   <% } %>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            <%  List<Object[]> allClientInfo = (List<Object[]>) session.getAttribute("clientInfoList");
-                                for(Object[] object: allClientInfo){
-                            %>
-                                <tr>
-                                    <% for(Object obj: object){ %>
-                                        <td><%=obj%></td>
-                                    <% } %>
-                                </tr>
-                            <%  } %>
-                            </tbody>
-                        </table>
-
-                    </div>
                 </div>
             </div>
-            <div class="card-footer small text-muted"></div>
-        </div>
-    <% } %>
 
+            <div id="client-data-report-table"></div>
+        </div>
     </div>
     <jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
 <script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script src="<c:url value='/resources/js/datepicker.js' />"></script>
-<%--<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>--%>
-<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
-<script src="<c:url value='/resources/js/jszip.js' />"></script>
-<%--<script src="<c:url value='/resources/js/pdfmake.js' />"></script>--%>
-<%--<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>--%>
+
 <script>
+    $(document).ready(function() {
+        $('#formName').val('${formName}');
+        $('#skList').val('${sk}');
+        $('#branch').val('${branchId}');
+        $("#msg").hide();
+
+
+    });
+    $("a").on("click", function(event) {
+        event.preventDefault();
+        alert(event.target.id+" and "+$(event.target).attr('class'));
+    });
     function branchChange() {
         console.log("in branch change");
         var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
@@ -194,37 +170,115 @@
             }
         });
     }
-    $(document).ready(function() {
-        $('#clientTableList').DataTable({
-            bFilter: true,
-            bInfo: true,
-            dom: 'Bfrtip',
-            destroy: true,
-            scrollX: true,
-            buttons: [
-                'pageLength', 'excel'
-            ],
-            "order": [[ 3, "desc" ]],
-            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+
+    function getClientDataReportTable(pageNo = 0) {
+
+        var url = "/opensrp-dashboard/report/clientDataReportTable";
+        $.ajax({
+            type : "GET",
+            contentType : "application/json",
+            url : url,
+            dataType : 'html',
+            timeout : 100000,
+            data: {
+                startDate: $("#start").val(),
+                endDate: $("#end").val(),
+                formName: $("#formName").val(),
+                branch: $("#branch").val(),
+                sk: $("#skList").val(),
+                pageNo: pageNo
+            },
+            beforeSend: function() {},
+            success : function(data) {
+                console.log(data);
+                $("#client-data-report-table").html(data);
+            },
+            error : function(e) {
+                console.log("ERROR: ", e);
+                display(e);
+            },
+            done : function(e) {
+
+                console.log("DONE");
+                //enableSearchButton(true);
+            }
         });
-        $('.dataTables_length').addClass('bs-select');
-        $('#formName').val('${formName}');
-        $('#skList').val('${sk}');
-        $('#branch').val('${branchId}');
-    });
-    $(document).ready(function() {
-        $('#ccListTable').DataTable({
-            bFilter: true,
-            bInfo: true,
-            dom: 'Bfrtip',
-            destroy: true,
-            buttons: [
-                'pageLength', 'excel'
-            ],
-            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+    }
+
+    function goTo(pageNo){
+
+        getClientDataReportTable(pageNo);
+    }
+
+    function generateExportData() {
+
+        if($("#start").val() == "" || $("#start").val() == null || $("#end").val() == "" || $("#end").val() == null) {
+            $("#msg").show();
+            $("#errorMsg").html("date can not be empty");
+            return false;
+        }
+
+        if($("#formName").val() == "" || $("#formName").val() == null) {
+            $("#msg").show();
+            $("#errorMsg").html("formName can not be empty");
+            return false;
+        }
+
+        var url = "/opensrp-dashboard/rest/api/v1/export/data";
+        $("#msg").hide();
+        $.ajax({
+            type : "GET",
+            contentType : "application/json",
+            url : url,
+            dataType : 'html',
+            timeout : 100000,
+            data: {
+                startDate: $("#start").val(),
+                endDate: $("#end").val(),
+                formName: $("#formName").val(),
+                branch: $("#branch").val(),
+                sk: $("#skList").val()
+            },
+            beforeSend: function() {},
+            success : function(data) {
+                getExportTable();
+            },
+            error : function(e) {
+                console.log("ERROR: ", e);
+                display(e);
+            },
+            done : function(e) {
+
+                console.log("DONE");
+                //enableSearchButton(true);
+            }
         });
-    });
-    <%--$('#formName').val('${formName}');--%>
-    <%--$('#sk').val('${sk}');--%>
+    }
+
+    function getExportTable(){
+
+        var url = "/opensrp-dashboard/export/table";
+        $.ajax({
+            type : "GET",
+            contentType : "application/json",
+            url : url,
+            dataType : 'html',
+            timeout : 100000,
+            beforeSend: function() {},
+            success : function(data) {
+                console.log(data);
+                $("#client-data-report-table").html(data);
+            },
+            error : function(e) {
+                console.log("ERROR: ", e);
+                display(e);
+            },
+            done : function(e) {
+
+                console.log("DONE");
+                //enableSearchButton(true);
+            }
+        });
+    }
 </script>
 </body>

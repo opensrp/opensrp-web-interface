@@ -184,7 +184,7 @@ public class PaginationUtil {
 	 * @return {@link Void}
 	 **/
 	
-	private void createPageList(HttpSession session, String offset) {		
+	public void createPageList(HttpSession session, String offset) {
 		List<Integer> pageList = new ArrayList<Integer>();		
 		if (offset != null) {
 			int listsize = Integer.parseInt(session.getAttribute("size").toString());

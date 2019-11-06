@@ -18,11 +18,12 @@ public  class ModelConverter {
     private static int[] rowForFamily = {0,61,18,43,17,19,23,20,24,21};
     private static int[] rowForChild = {0,61,23,25,26,32,34,36};
     private static List<int[]> arrayOfRows = new ArrayList<>();
-    public static Map<String,String> formNameListMap = new HashMap<String, String>();
-    public static void mapLoad(){
+    public static Map<String,String> mapLoad(){
+        Map<String,String> formNameListMap = new HashMap<>();
         formNameListMap.put("Family Registration","Household Registration");
         formNameListMap.put("Family Member Registration","Member Registration");
         formNameListMap.put("Child Registration","Child Registration");
+        return formNameListMap;
     }
 
     public static List<Object[]> modelConverterForClientData(String formName, List<Object[]> dataList){

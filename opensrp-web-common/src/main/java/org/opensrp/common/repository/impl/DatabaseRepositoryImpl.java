@@ -1,5 +1,6 @@
 package org.opensrp.common.repository.impl;
 
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -1368,7 +1369,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs) {
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs, Integer pageNumber) {
 		String wh = "";
 		List<String> conds = new ArrayList<String>();
 		String stCond,edCond,formCond,skCond;
@@ -1429,6 +1430,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 			String hql = "SELECT * FROM core.\"viewJsonDataConversionOfClient\"";
 					hql += wh;
+					hql += "limit 10 offset 10 * "+ pageNumber;
 					hql += ";";
 			clientInfoList = session.createSQLQuery(hql).list();
 		} catch (Exception e) {
@@ -1439,6 +1441,95 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return clientInfoList;
 	}
 
+
+	@Override
+	public Integer getClientInfoFilterCount(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs) {
+		String wh = "";
+		List<String> conds = new ArrayList<String>();
+		String stCond,edCond,formCond,skCond;
+		if(endTime != ""){
+			try{
+				Date date = new SimpleDateFormat("yyyy-MM-dd").parse(endTime);
+
+				date = DateUtil.atEndOfDay(DateUtils.addDays(date, 1));
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+				endTime = simpleDateFormat.format(date);
+//				System.out.println("Check");
+			}
+			catch (Exception ex){
+				ex.printStackTrace();
+			}
+
+		}
+
+		if(startTime != "" && endTime == "")
+			endTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString();
+		if(startTime != "" && endTime != ""){
+			stCond = "date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
+			conds.add(stCond);
+		}
+
+		if(formName.contains("-1") == false){
+			formCond = "  event_type =\'" + formName +"\'";
+
+			conds.add(formCond);
+		}
+		if(sk.contains("-1") == false){
+			skCond = " provider_id =\'" + sk+"\'";
+			conds.add(skCond);
+		} else {
+			String providerIds = "";
+			int size = allSKs.size();
+			for (int i = 0; i < size; i++) {
+				providerIds += "'"+allSKs.get(i)[1].toString()+"'";
+				if (i != size-1) providerIds += ",";
+			}
+			skCond = " provider_id in ("+providerIds+")";
+			conds.add(skCond);
+		}
+		if(conds.size() == 0) wh = "";
+		else {
+			wh = " WHERE ";
+			wh += conds.get(0);
+			for(int i = 1; i < conds.size();i++){
+				wh += " AND ";
+				wh += conds.get(i);
+			}
+		}
+
+		Session session = sessionFactory.openSession();
+		Integer clientInfoCount = 0;
+		try {
+
+			String hql = "SELECT COUNT(*) FROM core.\"viewJsonDataConversionOfClient\"";
+			hql += wh;
+			hql += ";";
+			clientInfoCount = ((BigInteger)session.createSQLQuery(hql).uniqueResult()).intValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return clientInfoCount;
+	}
+
+	@Override
+	public List<Object[]> getExportByCreator(String username) {
+		Session session = sessionFactory.openSession();
+		List<Object[]> exportData = new ArrayList<Object[]>();
+		try	{
+			exportData = session.createSQLQuery("select file_name, status from export where creator = :username order by id desc")
+					.setParameter("username", username).list();
+
+
+		}  catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return exportData;
+	}
 
 
 	@Override

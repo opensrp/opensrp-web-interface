@@ -159,7 +159,11 @@ public interface DatabaseRepository {
 
 	public List<Object[]> getClientInformation();
 
-	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs);
+	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs, Integer pageNumber);
+
+	public Integer getClientInfoFilterCount(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs);
+
+	List<Object[]> getExportByCreator(String username);
 
 	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId);
 

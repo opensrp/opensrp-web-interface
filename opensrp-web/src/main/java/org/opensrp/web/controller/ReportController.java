@@ -3,32 +3,39 @@
  */
 package org.opensrp.web.controller;
 
+
 import java.text.DecimalFormat;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.time.DateUtils;
+
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.FormName;
+
+import org.opensrp.common.service.impl.DatabaseServiceImpl;
+
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Facility;
+import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
-import org.opensrp.web.util.AuthenticationManagerUtil;
-import org.opensrp.web.util.ModelConverter;
-import org.opensrp.web.util.PaginationHelperUtil;
-import org.opensrp.web.util.SearchUtil;
+import org.opensrp.web.repository.UserRepository;
+import org.opensrp.web.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,6 +69,9 @@ public class ReportController {
 
 	@Autowired
 	private FacilityService facilityService;
+
+    @Autowired
+    private PaginationUtil paginationUtil;
 
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_REPORT')")
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
@@ -155,23 +165,13 @@ public class ReportController {
 	@RequestMapping(value = "/clientDataReport.html", method = RequestMethod.GET)
 	public String getClientDataReportPage(HttpServletRequest request,
 										  HttpSession session,
-										  Model model){
-		String  startTime = request.getParameter("start");
-		String endTime = request.getParameter("end");
-		String formName = request.getParameter("formName");
-		String branchId = request.getParameter("branch");
-		String sk = request.getParameter("sk");
-
-        ModelConverter.mapLoad();
-
-        model.addAttribute("formNameList",ModelConverter.formNameListMap);
-
-        boolean requestNullFlag = startTime == null && endTime == null && formName == null && sk == null;
-		List<Object[]> allSKs = ((branchId == null || branchId.equals("-1"))?
-				databaseServiceImpl.getAllSks(null):databaseServiceImpl.getSKByBranch(Integer.parseInt(branchId)));
+										  Model model,
+                                          Locale locale){
+		model.addAttribute("formNameList", ModelConverter.mapLoad());
+		List<Object[]> allSKs = new ArrayList<>();
 		User user = userService.getLoggedInUser();
 		if (AuthenticationManagerUtil.isAM()) {
-			List<Object[]> branches = new ArrayList<Object[]>();
+			List<Object[]> branches = new ArrayList<>();
 			for (Branch branch: user.getBranches()) {
 				Object[] obj = new Object[10];
 				obj[0] = branch.getId();
@@ -179,39 +179,19 @@ public class ReportController {
 				branches.add(obj);
 			}
 			allSKs = databaseServiceImpl.getAllSks(branches);
+		} else if (AuthenticationManagerUtil.isAdmin()){
+			allSKs = databaseServiceImpl.getAllSks(null);
 		}
-		boolean requestEmptyFlag = false;
-		if(!requestNullFlag){
-			   requestEmptyFlag = startTime.equals("") &&  endTime.equals("") && formName.equals("-1")  && sk.equals("-1") && branchId.equals("-1");
-		}
-		List<Object[]> allClientInfo = null;
-		if(requestNullFlag == true || requestEmptyFlag == true) {
 
-			session.setAttribute("headerList", ModelConverter.headerListForClientData(""));
-			session.setAttribute("emptyFlag",1);
-			allClientInfo = new ArrayList<>();
-		}
-		else {
-			session.setAttribute("emptyFlag",0);
-
-			String _formName = formName.replaceAll("\\_"," ");
-			List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime,endTime,_formName,sk, allSKs);
-			List<String> headerList = ModelConverter.headerListForClientData(formName);
-			session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
-			allClientInfo = ModelConverter.modelConverterForClientData(formName,tempClientInfo);
-		}
-		model.addAttribute("startDate",startTime);
-		model.addAttribute("endDate",endTime);
-		model.addAttribute("formName",formName);
-		model.addAttribute("sk",sk);
-		model.addAttribute("branchId", branchId);
 		session.setAttribute("skList",allSKs);
-		session.setAttribute("clientInfoList",allClientInfo);
 		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
 
-		return "report/client-data-report";
+        paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "ec_family");
+        model.addAttribute("locale", locale);
 
+		return "report/client-data-report";
 	}
+
 
 	@RequestMapping(value = "/aggregated", method = RequestMethod.GET)
 	public String generateAggregatedReportOnSearch(HttpServletRequest request,
@@ -232,4 +212,67 @@ public class ReportController {
 		return "/report/aggregated-report";
 	}
 
+    @RequestMapping(value = "/clientDataReportTable", method = RequestMethod.GET)
+    public String getClientDataReportTable(HttpServletRequest request,
+                                          HttpSession session,
+                                          Model model,
+                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer RESULT_SIZE) {
+
+	    // Request Parameters
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        String  startTime =
+                request.getParameterMap().containsKey("start")?
+                request.getParameter("start"): formatter.format(DateUtils.addMonths(new Date(), -3));
+
+        String endTime = request.getParameterMap().containsKey("end")?
+                request.getParameter("end"):formatter.format(new Date());
+
+        String formName = request.getParameterMap().containsKey("formName")?
+                request.getParameter("formName"):"Family Registration";
+
+        String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "-1";
+
+        String sk = request.getParameterMap().containsKey("sk")?request.getParameter("sk"):"-1";
+
+        Integer pageNumber = Integer.parseInt(request.getParameter("pageNo"));
+        List<Object[]> allSKs = new ArrayList<>();
+
+		User user = userService.getLoggedInUser();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = new ArrayList<>();
+			for (Branch branch: user.getBranches()) {
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}
+			allSKs = databaseServiceImpl.getAllSks(branches);
+		} else if (AuthenticationManagerUtil.isAdmin()){
+			allSKs = databaseServiceImpl.getAllSks(null);
+		}
+
+	    List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime, endTime, formName.replaceAll("\\_"," ") , sk, allSKs, pageNumber);
+        List allClientInfo =  ModelConverter.modelConverterForClientData(formName,tempClientInfo);
+
+
+        Integer size = databaseServiceImpl.getClientInfoFilterCount(startTime, endTime, formName.replaceAll("\\_"," ") , sk, allSKs);
+        if ((size % RESULT_SIZE) == 0) {
+            session.setAttribute("size", (size / RESULT_SIZE) - 1);
+        } else {
+            session.setAttribute("size", size / RESULT_SIZE);
+        }
+
+        new PaginationUtil().createPageList(session, pageNumber.toString());
+
+        System.out.println("---> debug Size: "+ size);
+
+        session.setAttribute("clientInfoList",allClientInfo);
+        session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
+        session.setAttribute("emptyFlag",1);
+
+
+	    return "report/client-data-report-table";
+
+    }
 }
