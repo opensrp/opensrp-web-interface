@@ -12,8 +12,8 @@
 %>
 <tr>
     <td>
-        <% if (list[22] != null) {%>
-        <%=list[22]%>(<%=list[0]%>)
+        <% if (list[24] != null) {%>
+        <%=list[24]%>(<%=list[0]%>)
         <%} else {%>
         <%=list[0]%>
         <% } %>
@@ -39,6 +39,8 @@
     <td><%=list[19]%></td><!--aged 19-35 years total-->
     <td><%=list[20]%></td><!--number of population 35/35 years old-->
     <td><%=list[21]%></td><!--number of sanitary with hh-->
+    <td><%=list[22]%></td><!--number of sanitary with hh-->
+    <td><%=list[23]%></td><!--number of sanitary with hh-->
 </tr>
 <%
     }

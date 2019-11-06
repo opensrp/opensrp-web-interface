@@ -1071,7 +1071,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "sum(case when ((extract( year from now() ) - extract( year from birth_date)) * 12) + extract(month from now() ) - extract(month from birth_date) >= 228 and ((extract( year from now() ) - extract( year from birth_date)) * 12) + extract(month from now() ) - extract(month from birth_date) < 420 and gender = 'F' then 1 else 0 end) as nineteen_to_thirty_five_female,"
 					+ "(sum(case when ((extract( year from now() ) - extract( year from birth_date)) * 12) + extract(month from now() ) - extract(month from birth_date) >= 228 and ((extract( year from now() ) - extract( year from birth_date)) * 12) + extract(month from now() ) - extract(month from birth_date) < 420 and gender = 'M' then 1 else 0 end) + sum(case when ((extract( year from now() ) - extract( year from birth_date)) * 12) + extract(month from now() ) - extract(month from birth_date) >= 228 and ((extract( year from now() ) - extract( year from birth_date)) * 12) + extract(month from now() ) - extract(month from birth_date) < 420 and gender = 'F' then 1 else 0 end) ) as total_mf_aged_nineteen_tO_thirty_five,"
 					+ "sum(case when ((extract( year from now() ) - extract( year from birth_date)) * 12) + extract(month from now() ) - extract(month from birth_date) >= 420 and entity_type = 'ec_family_member' then 1 else 0 end) as population_thirty_five_and_above,"
-					+ "sum(case when hh_has_latrine = 'Yes' then 1 else 0 end) as count_has_sanitary_latrine"
+					+ "sum(case when hh_has_latrine = 'Yes' then 1 else 0 end) as count_has_sanitary_latrine,"
+					+ "sum(finger_print_taken) as total_finger_print_taken,"
+					+ "sum(finger_print_availability) as total_finger_print_availability"
 					+ " from core.\"clientInfoFromJSON\" "
 					+ conditionString
 					+ " group by "+filterString+") tmp"
@@ -1085,6 +1087,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "sum(total_mf_ten_to_nineteen)," + "sum(nineteen_to_thirty_five_male),"
 					+ "sum(nineteen_to_thirty_five_female)," + "sum(total_mf_aged_nineteen_tO_thirty_five),"
 					+ "sum(population_thirty_five_and_above)," + "sum(count_has_sanitary_latrine),"
+					+ "sum(total_finger_print_taken)," + "sum(total_finger_print_availability),"
 					+ "null" + " from report;";
 			Query query = session.createSQLQuery(hql)
 					.setString("startDate", startDate)
