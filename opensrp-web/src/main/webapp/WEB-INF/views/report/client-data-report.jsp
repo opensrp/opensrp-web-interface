@@ -140,10 +140,6 @@
 
 
     });
-    $("a").on("click", function(event) {
-        event.preventDefault();
-        alert(event.target.id+" and "+$(event.target).attr('class'));
-    });
     function branchChange() {
         console.log("in branch change");
         var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
