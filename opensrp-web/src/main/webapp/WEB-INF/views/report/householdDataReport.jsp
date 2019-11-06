@@ -13,12 +13,9 @@
 		   uri="http://www.springframework.org/security/tags"%>
 
 <%
-	String householdCount = (String) session.getAttribute("totalHousehold");
-	String populationCount = (String) session.getAttribute("totalPopulation");
-	String malePercentage = (String) session.getAttribute("totalMale");
-	String femalePercentage = (String) session.getAttribute("totalFemale");
-	
 	List<Object[]>houseHoldReports = (List<Object[]>)session.getAttribute("formWiseAggregatedList");
+	String startDate = (String) session.getAttribute("startDate");
+	String endDate = (String) session.getAttribute("endDate");
 %>
 
 <!DOCTYPE html>
@@ -37,9 +34,6 @@
 
 	<jsp:include page="/WEB-INF/views/css.jsp" />
 
-	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
-	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
-	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
 	<style>
 		th, td {
 			text-align: center;
@@ -52,17 +46,26 @@
 <jsp:include page="/WEB-INF/views/navbar.jsp" />
 <div class="content-wrapper">
 	<div class="container-fluid">
-
 		<jsp:include page="/WEB-INF/views/report-search-panel.jsp" />
-
 		<div class="card mb-3">
 			<div class="card-header">
 				<i class="fa fa-table"></i>
 				<spring:message code="lbl.summaryStatus"/>
 			</div>
 			<div class="card-body">
+				<div class="row" style="margin-bottom: 10px;">
+					<div class="col-sm-2" id="startDate">
+						<b>START DATE: </b> <span><%=startDate%></span>
+					</div>
+					<div class="col-sm-2" id="endDate">
+						<b>END DATE: </b> <span><%=endDate%></span>
+					</div>
+					<div class="col-sm-2" id="divisionS"></div>
+					<div class="col-sm-2" id="districtS"></div>
+					<div class="col-sm-4" id="upazilaS"></div>
+				</div>
 				<div class="row">
-					<div class="col-sm-12" id="content">
+					<div class="col-sm-12" id="content" style="overflow-x: auto;">
 						<table class="display" id="formWiseAggregatedListTable"
 							   style="width: 100%;">
 							<thead>
@@ -78,7 +81,6 @@
 								<th colspan="3"><spring:message code="lbl.agedNineteenToThirtyFive"/></th>
 								<th rowspan="2"><spring:message code="lbl.numberOfPopulationThirtyFiveDivideThirtyFivePlusYearsOld"/></th>
 								<th rowspan="2"><spring:message code="lbl.numberOfHHWithSanitaryLatrine"/></th>
-
 							</tr>
 							<tr>
 								<th><spring:message code="lbl.vo"/></th>
@@ -98,25 +100,25 @@
 								<th><spring:message code="lbl.total"/></th>
 							</tr>
 							</thead>
-							<tbody>
+							<tbody id="t-body">
 							<%
-							for( Object[] list: houseHoldReports ) {
+								for( Object[] list: houseHoldReports ) {
 							%>
 							<tr>
-								<%-- <td>
-									<a href="<c:url value="/report/individual-mhv-works.html">
-											<c:param name="mhvUsername" value="<%=report.getMhv()%>"/></c:url>">
-										<%=report.getMhv()%>
-									</a>
-								</td> --%>
-								<td><%=list[0]%></td>
+								<td>
+									<% if (list[22] != null) {%>
+									<%=list[22]%>(<%=list[0]%>)
+									<%} else {%>
+									<%=list[0]%>
+									<% } %>
+								</td>
 								<td><%=list[1]%></td><!--household registered-->
 								<td><%=list[3]%></td><!--vo-->
 								<td><%=list[2]%></td><!--nvo-->
 								<td><%=list[4]%></td><!--total-->
 								<td><%=list[5]%></td><!--population-3-->
 								<td><%=list[6]%></td> <!--zero to six-->
-								<td><%=list[7]%><!--seven to twelve-->
+								<td><%=list[7]%></td><!--seven to twelve-->
 								<td><%=list[8]%></td><!--thirteen to eighteen-->
 								<td><%=list[9]%></td><!--nineteen to twenty four-->
 								<td><%=list[10]%></td><!--twenty five to thirty six-->
@@ -133,7 +135,7 @@
 								<td><%=list[21]%></td><!--number of sanitary with hh-->
 							</tr>
 							<%
-							}
+								}
 							%>
 							</tbody>
 						</table>
@@ -146,49 +148,72 @@
 
 	<jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
+<script src="<c:url value='/resources/js/datepicker.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
-<script src="<c:url value='/resources/js/datepicker.js' />"></script>
-<%--<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>--%>
-<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
-<script src="<c:url value='/resources/js/jszip.js' />"></script>
-<%--<script src="<c:url value='/resources/js/pdfmake.js' />"></script>--%>
-<%--<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>--%>
 <script>
-	$(document).ready(function() {
-		$('#formWiseAggregatedListTable').DataTable({
-			bFilter: true,
-			bInfo: true,
-			dom: 'Bfrtip',
-			destroy: true,
-			buttons: [
-				'pageLength', 'excel'
-			],
-			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-			scrollX: true,
-		    language: {
-		        searchPlaceholder: "Location / Provider"
-		    }
-		});
-		$('.dataTables_length').addClass('bs-select');
-	});
+	function onSearchClicked() {
+		$("#startDate").html("");
+		$("#endDate").html("");
+		$("#divisionS").html("");
+		$("#districtS").html("");
+		$("#upazilaS").html("");
 
-	$(document).ready(function() {
-		$('#ccListTable').DataTable({
-			bFilter: true,
-			bInfo: true,
-			dom: 'Bfrtip',
-			destroy: true,
-			buttons: [
-				'pageLength', 'excel'
-			],
-			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+		var division = $("#division").val();
+		var district = $("#district").val();
+		var upazila = $("#upazila").val();
+
+		console.log(division);
+		console.log(district);
+		console.log(upazila);
+
+		var divisionA = division == null?division:division.split("?")[1];
+		var districtA = district == null?district:district.split("?")[1];
+		var upazilaA = upazila == null?upazila:upazila.split("?")[1];
+
+		$("#startDate").append("<b>START DATE: </b> <span>"+ $("#start").val()+"</span>");
+		$("#endDate").append("<b>END DATE: </b> <span>"+ $("#end").val()+"</span>");
+
+		if (divisionA != null && divisionA != undefined && divisionA != '') {
+			$("#divisionS").append("<b>DIVISION: </b> <span>"+ divisionA.split(":")[0]+"</span>");
+		}
+		if (districtA != null && districtA != undefined && districtA != '') {
+			$("#districtS").append("<b>DISTRICT: </b> <span>"+ districtA.split(":")[0]+"</span>");
+		}
+		if (upazilaA != null && upazilaA != undefined && upazilaA != '') {
+			$("#upazilaS").append("<b>UPAZILA/CITY CORPORATION: </b> <span>"+ upazilaA.split(":")[0]+"</span>");
+		}
+
+		var url = "/opensrp-dashboard/report/aggregated";
+		$("#t-body").html("");
+		$.ajax({
+			type : "GET",
+			contentType : "application/json",
+			url : url,
+			dataType : 'html',
+			timeout : 100000,
+			data: {
+				searched_value: $("#searched_value").val(),
+				address_field: $("#address_field").val(),
+				startDate: $("#start").val(),
+				endDate: $("#end").val()
+			},
+			beforeSend: function() {},
+			success : function(data) {
+				console.log(data);
+				$("#t-body").html(data);
+			},
+			error : function(e) {
+				console.log("ERROR: ", e);
+				display(e);
+			},
+			done : function(e) {
+
+				console.log("DONE");
+				//enableSearchButton(true);
+			}
 		});
-	});
+	}
 </script>
 </body>
 </html>

@@ -149,7 +149,7 @@ public interface DatabaseRepository {
 
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId);
 	
-	public List<Object[]> getHouseHoldReports(String filterString,String searched_value);
+	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String filterString,String searched_value);
 
 	public List<Object[]> getAllSK(List<Object[]> branches);
 

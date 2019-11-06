@@ -6,6 +6,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
+<%@ page import="org.opensrp.core.entity.User" %>
 <style>
 	strong{ padding:5px;
 		font-size: 17px;
@@ -46,6 +47,7 @@
 	boolean PERM_READ_AGGREGATED_REPORT = AuthenticationManagerUtil.isPermitted("PERM_READ_AGGREGATED_REPORT");
 	boolean MEMBER_APPROVAL = AuthenticationManagerUtil.isPermitted("MEMBER_APPROVAL");
 	boolean PERM_READ_BRANCH_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_BRANCH_LIST");
+	User user = (User) AuthenticationManagerUtil.getLoggedInUser();
 %>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
 	 id="mainNav">
@@ -238,6 +240,7 @@
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="<c:url value="/report/householdDataReport.html?lang=${locale}&address_field=division&searched_value=empty"/>">
 						<strong><spring:message code="lbl.aggregatedReport"/></strong></a>
+					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="<c:url value="/report/clientDataReport.html?lang=${locale}"/>">
 						<strong><spring:message code="lbl.clientDataReport"/></strong></a>
 					<% } %>
@@ -354,9 +357,8 @@
 					</a>
 				</div>
 			</li>
-
 			<li class="nav-item"><a class="nav-link" data-toggle="modal"
-									data-target="#exampleModal"> <i class="fa fa-fw fa-sign-out"></i><spring:message code="lbl.logout"/>
+									data-target="#exampleModal">(<%=user.getUsername()%>) <i class="fa fa-fw fa-sign-out"></i><spring:message code="lbl.logout"/>
 			</a></li>
 		</ul>
 	</div>

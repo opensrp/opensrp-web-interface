@@ -24,25 +24,19 @@
 
 		<div class="row">
 		</div>
-		<form id="search-form" autocomplete="off">
-<%--			<div class="form-group">--%>
-<%--				<div class="row">--%>
-<%--					<div class="col-2">--%>
-<%--						<label><spring:message code="lbl.startDate"/></label>--%>
-<%--						<input class="form-control custom-select custom-select-lg mb-3" type=text--%>
-<%--							   name="start" id="start" value="<%=startDate%>">--%>
-<%--					</div>--%>
-<%--					<div class="col-2">--%>
-<%--						<label><spring:message code="lbl.endDate"/></label>--%>
-<%--						<input class="form-control custom-select custom-select-lg mb-3" type="text"--%>
-<%--							   name="end" id="end" value="<%=endDate%>">--%>
-<%--					</div>--%>
-<%--				</div>--%>
-<%--			</div>--%>
-
-			<!-- location info -->
 			<div class="row">
 				<div class="col-2">
+					<label><spring:message code="lbl.startDate"/></label>
+					<input class="form-control custom-select custom-select-lg mb-3" type=text
+						   name="start" id="start" value="<%=startDate%>">
+				</div>
+				<div class="col-2">
+					<label><spring:message code="lbl.endDate"/></label>
+					<input class="form-control custom-select custom-select-lg mb-3" type="text"
+						   name="end" id="end" value="<%=endDate%>">
+				</div>
+				<div class="col-2">
+					<label><spring:message code="lbl.selectDivision"/></label>
 					<select required class="custom-select custom-select-lg mb-3" id="division"
 							name="division">
 						<option value=""><spring:message code="lbl.selectDivision"/>
@@ -58,6 +52,7 @@
 				</div>
 
 				<div class="col-2">
+					<label><spring:message code="lbl.selectDistrict"/></label>
 					<select class="custom-select custom-select-lg mb-3" id="district"
 							name="district">
 						<option value="0?"><spring:message code="lbl.selectDistrict"/></option>
@@ -65,6 +60,7 @@
 					</select>
 				</div>
 				<div class="col-2">
+					<label><spring:message code="lbl.selectUpazila"/></label>
 					<select class="custom-select custom-select-lg mb-3" id="upazila"
 							name="upazila">
 						<option value="0?"><spring:message code="lbl.selectUpazila"/></option>
@@ -72,65 +68,19 @@
 
 					</select>
 				</div>
-<%-- 				<div class="col-2">
-                                <select class="custom-select custom-select-lg mb-3" id="healthReport_sk" name="healthReport_sk">
-                                    <option value="-1">Select SK</option>
-                                    <% List<String> ret = (List<String>) session.getAttribute("skLists");%>
-                                    <%
-                                        for (String str : ret) {
-                                    %>
-                                    <option value="<%=str%>"><%=str%></option>
-                                    <%
-
-                                        }
-                                    %>
-                                </select>
-                            </div> --%>
-				<!-- <div class="col-3">
-					<select class="custom-select custom-select-lg mb-3" id="subunit"
-						name="subunit">
-						<option value="0?"><spring:message code="lbl.selectSubunit"/></option>
-						<option value=""></option>
-					</select>
-				</div>
-				<div class="col-3">
-					<select class="custom-select custom-select-lg mb-3" id="mauzapara"
-						name="mauzapara">
-						<option value="0?"><spring:message code="lbl.selectMauzapara"/></option>
-						<option value=""></option>
-					</select>
-				</div>  -->
-				<%-- <div class="col-3">
-					<select class="custom-select custom-select-lg mb-3" id="memberType"
-						name="memberType">
-						<option value="0?"><spring:message code="lbl.selectMemberType"/></option>
-						<option value="Pregnant Woman">Pregnant Woman</option>
-						<option value="Child (0-2 month)">Child (0-2 month)</option>
-						<option value="Child(2 month - 5 years)">Child(2 month - 5 years)</option>
-						<option value="Adult (above 50 years)">Adult (above 50 years)</option>
-					</select>
-				</div> --%>
-			</div>
-			<!-- end: location info -->
-
-			<!--   <div class="row">
-
-               </div> -->
-
-			<div class="row">
-
-				<div class="col-6">
-					<button name="search" type="submit" id="bth-search"
-							class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
-				</div>
 			</div>
 			<input type="hidden" id ="address_field" name="address_field"/>
 			<input type="hidden" id ="searched_value" name="searched_value"/>
-		</form>
+			<div class="row">
+
+				<div class="col-6">
+					<button onclick="onSearchClicked()"
+							type="submit"
+							class="btn btn-primary">
+						<spring:message code="lbl.search"/>
+					</button>
+				</div>
+			</div>
 	</div>
 	<div class="card-footer small text-muted"></div>
 </div>
-
-<script>
-
-</script>
