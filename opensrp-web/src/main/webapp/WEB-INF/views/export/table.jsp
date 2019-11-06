@@ -34,7 +34,7 @@
                                     for(Object[] object: allClientInfo){
                                 %>
                                 <tr>
-                                    <td> <a href="http://192.168.19.146:8080/opt/multimedia/export/<%=object[0]%>" > <%=object[0]%></a> </td>
+                                    <td> <a href="http://mhealthtest.brac.net:8080/opt/multimedia/export/<%=object[0]%>" > <%=object[0]%></a> </td>
                                     <td><%=object[1]%></td>
                                 </tr>
                                 <%  } %>

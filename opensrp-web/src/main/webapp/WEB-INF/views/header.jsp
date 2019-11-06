@@ -17,4 +17,5 @@
 <title>${param.title.toString()}</title>
 
 <jsp:include page="/WEB-INF/views/css.jsp" />
+<meta http-equiv="Cache-control" content="public">
 </head>

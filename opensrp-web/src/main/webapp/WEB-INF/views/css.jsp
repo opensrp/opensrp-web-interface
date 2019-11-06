@@ -12,7 +12,8 @@
  
 <link type="text/css"
 	href="<c:url value="/resources/vendor/bootstrap/css/bootstrap.min.css"/>"
-	rel="stylesheet">
+	rel="stylesheet"
+	http-equiv="Cache-control" content="public">
 <link type="text/css"
 	href="<c:url value="/resources/css/style.css"/>"
 	rel="stylesheet">

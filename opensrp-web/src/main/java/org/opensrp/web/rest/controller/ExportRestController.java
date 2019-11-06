@@ -60,7 +60,7 @@ public class ExportRestController {
         StringBuffer content = new StringBuffer();
         try {
             URL url = new URL(
-                    "http://192.168.19.146:9070/data-export?"+params);
+                    "http://mhealthtest.brac.net:9070/data-export?"+params);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
