@@ -52,7 +52,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
 	 id="mainNav">
 	<a class="navbar-brand" href="<c:url value="/?lang=${locale}"/>"><img
-			src="<c:url value="/resources/img/ministry.png"/>" style = "height: 46px"></a>
+			src="<c:url value="/resources/img/brac-logo.png"/>" style = "height: 46px"></a>
 
 	<div class="collapse navbar-collapse" id="navbarResponsive">
 
