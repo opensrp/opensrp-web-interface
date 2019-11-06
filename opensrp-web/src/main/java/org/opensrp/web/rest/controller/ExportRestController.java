@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,9 @@ import java.util.Set;
 public class ExportRestController {
 
     @RequestMapping(value = "/data", method = RequestMethod.GET)
-    public ResponseEntity<String> exportData(HttpServletRequest request) throws Exception {
+    public ResponseEntity<String> exportData(
+            @RequestParam(value = "branch", required = false, defaultValue = "0") String branch,
+            HttpServletRequest request) throws Exception {
 
         JSONObject error = new JSONObject();
         error.put("identifiers", "");
@@ -44,15 +47,16 @@ public class ExportRestController {
         String endDate = request.getParameter("endDate");
         String userName = user.getUsername();
         String userType = roleName.get(0);
-        String branch = request.getParameter("branch").equals("") ? "0" : request.getParameter("branch");
+
         String sk = request.getParameter("sk");
 
 
         StringBuffer content = new StringBuffer();
         try {
 
+            System.out.println("http://192.168.19.146:9070/data-export?branch="+branch+"&form_name="+formName+"&start="+startDate+"&end="+endDate+"&sk="+sk+"&user="+userName+"&user_type="+userType);
             URL url = new URL(
-                    "http://localhost:9070/data-export?branch="+branch+"&form_name="+formName+"&start="+startDate+"&end="+endDate+"&sk="+sk+"&user="+userName+"&user_type="+userType);
+                    "http://192.168.19.146:9070/data-export?branch="+branch+"&form_name="+formName+"&start="+startDate+"&end="+endDate+"&sk="+sk+"&user="+userName+"&user_type="+userType);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
