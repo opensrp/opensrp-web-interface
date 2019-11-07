@@ -11,6 +11,11 @@
 <%@ taglib prefix="security"
            uri="http://www.springframework.org/security/tags"%>
 
+<%@ page import = "java.util.ResourceBundle" %>
+<% ResourceBundle resource = ResourceBundle.getBundle("project");
+    String name=resource.getString("download.url");
+    String surname=resource.getString("psurname"); %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,6 +33,9 @@
         #errorMsg{
             color: darkred;
             margin-bottom: 10px;
+        }
+        #downloadFailedMsg {
+            color: darkred;
         }
     </style>
 
@@ -113,9 +121,11 @@
                                 <button name="export" id="bth-export" onclick="generateExportData()"
                                         class="btn btn-primary" value="export"><spring:message code="lbl.export"/></button>
                             </div>
-                            <div class="col-6">
-                                <button name="export-list" id="bth-export-list" onclick="getExportTable()()"
-                                        class="btn btn-primary" value="export-lsit"><spring:message code="lbl.refreshExportListBtn"/></button>
+                            <div class="col-6" id="downloadingFile" style="margin-top: 5px">
+                                <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Downloading..
+                            </div>
+                            <div class="col-6" id="downloadFailedMsg" >
+                                <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Failed to export data.
                             </div>
                         </div>
                     </div>
@@ -127,22 +137,22 @@
     </div>
     <jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
-<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
-<script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
-<script src="<c:url value='/resources/js/datepicker.js' />"></script>
 
 <script>
+
+    var downloadInterval = null;
     $(document).ready(function() {
         $('#formName').val('${formName}');
         $('#skList').val('${sk}');
         $('#branch').val('${branchId}');
         $("#msg").hide();
-
+        $("#downloadingFile").hide();
+        $("#downloadFailedMsg").hide();
 
     });
     function branchChange() {
         console.log("in branch change");
-        var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
+        var url = "http://192.168.22.152:8080/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
         $("#skList").html("");
         $.ajax({
             type : "GET",
@@ -168,6 +178,7 @@
     }
 
     function getClientDataReportTable(pageNo = 0) {
+        getValidationMsg();
 
         var url = "/opensrp-dashboard/report/clientDataReportTable";
         $.ajax({
@@ -202,33 +213,12 @@
     }
 
     function goTo(pageNo){
-
-        var activeElement = document.getElementById("pageBtn"+pageNo);
-
-        if(activeElement != null) {
-            console.log("adding active class. "+pageNo);
-            activeElement.classList.remove("active");
-            activeElement.classList.add("disabled");
-        }
-
-
         getClientDataReportTable(pageNo);
 
     }
 
     function generateExportData() {
-
-        if($("#start").val() == "" || $("#start").val() == null || $("#end").val() == "" || $("#end").val() == null) {
-            $("#msg").show();
-            $("#errorMsg").html("date can not be empty");
-            return false;
-        }
-
-        if($("#formName").val() == "" || $("#formName").val() == null) {
-            $("#msg").show();
-            $("#errorMsg").html("formName can not be empty");
-            return false;
-        }
+        getValidationMsg();
 
         var url = "/opensrp-dashboard/rest/api/v1/export/data";
         $("#msg").hide();
@@ -247,7 +237,10 @@
             },
             beforeSend: function() {},
             success : function(data) {
-                getExportTable();
+                $("#downloadFailedMsg").hide();
+                $("#downloadingFile").show();
+                $('#bth-export').attr("disabled", true);
+                downloadInterval = setInterval(getExportTable, 3000);
             },
             error : function(e) {
                 console.log("ERROR: ", e);
@@ -263,7 +256,7 @@
 
     function getExportTable(){
 
-        var url = "/opensrp-dashboard/export/table";
+        var url = "/opensrp-dashboard/rest/api/v1/export/download-data";
         $.ajax({
             type : "GET",
             contentType : "application/json",
@@ -272,8 +265,18 @@
             timeout : 100000,
             beforeSend: function() {},
             success : function(data) {
-                console.log(data);
-                $("#client-data-report-table").html(data);
+                $("#downloadingFile").hide();
+                $('#bth-export').attr("disabled", false);
+                data = JSON.parse(data);
+                console.log("Successfully get the data and clear the interval", data);
+
+                if(data[0][1].toLowerCase() === "completed") {
+                    downloadFile("/opt/multimedia/export/" + data[0][0]);
+                    clearInterval(downloadInterval);
+                }
+                else {
+                    $("#downloadFailedMsg").show();
+                }
             },
             error : function(e) {
                 console.log("ERROR: ", e);
@@ -285,6 +288,31 @@
                 //enableSearchButton(true);
             }
         });
+    }
+
+    function downloadFile(url) {
+
+        console.log("File to download ", url);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = url.split('/').pop();
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+    function getValidationMsg() {
+        if($("#start").val() == "" || $("#start").val() == null || $("#end").val() == "" || $("#end").val() == null) {
+            $("#msg").show();
+            $("#errorMsg").html("Date can not be empty");
+            return false;
+        }
+
+        if($("#formName").val() == "" || $("#formName").val() == null) {
+            $("#msg").show();
+            $("#errorMsg").html("Form Name can not be empty");
+            return false;
+        }
     }
 </script>
 </body>

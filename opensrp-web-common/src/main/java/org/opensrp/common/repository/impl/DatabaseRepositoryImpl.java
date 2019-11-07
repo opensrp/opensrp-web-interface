@@ -1376,35 +1376,18 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		String wh = "";
 		List<String> conds = new ArrayList<String>();
 		String stCond,edCond,formCond,skCond;
-		if(endTime != ""){
-			try{
-				Date date = new SimpleDateFormat("yyyy-MM-dd").parse(endTime);
 
-				date = DateUtil.atEndOfDay(DateUtils.addDays(date, 1));
-				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-				endTime = simpleDateFormat.format(date);
-//				System.out.println("Check");
-			}
-			catch (Exception ex){
-				ex.printStackTrace();
-			}
 
-		}
+		stCond = "Date(date_created) BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
+		conds.add(stCond);
 
-		if(startTime != "" && endTime == "")
-			endTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString();
-		if(startTime != "" && endTime != ""){
-			stCond = "date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
-			conds.add(stCond);
-		}
 
-		if(formName.contains("-1") == false){
-			formCond = "  event_type =\'" + formName +"\'";
 
-			conds.add(formCond);
-		}
-		if(sk.contains("-1") == false){
+		formCond = "  event_type =\'" + formName +"\'";
+		conds.add(formCond);
+
+		if(!sk.isEmpty()){
 			skCond = " provider_id =\'" + sk+"\'";
 			conds.add(skCond);
 		} else {
@@ -1450,35 +1433,19 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		String wh = "";
 		List<String> conds = new ArrayList<String>();
 		String stCond,edCond,formCond,skCond;
-		if(endTime != ""){
-			try{
-				Date date = new SimpleDateFormat("yyyy-MM-dd").parse(endTime);
 
-				date = DateUtil.atEndOfDay(DateUtils.addDays(date, 1));
-				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-				endTime = simpleDateFormat.format(date);
-//				System.out.println("Check");
-			}
-			catch (Exception ex){
-				ex.printStackTrace();
-			}
 
-		}
+		stCond = "date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
+		conds.add(stCond);
 
-		if(startTime != "" && endTime == "")
-			endTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString();
-		if(startTime != "" && endTime != ""){
-			stCond = "date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
-			conds.add(stCond);
-		}
 
 		if(formName.contains("-1") == false){
 			formCond = "  event_type =\'" + formName +"\'";
 
 			conds.add(formCond);
 		}
-		if(sk.contains("-1") == false){
+		if(!sk.isEmpty()){
 			skCond = " provider_id =\'" + sk+"\'";
 			conds.add(skCond);
 		} else {
@@ -1522,7 +1489,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		List<Object[]> exportData = new ArrayList<Object[]>();
 		try	{
-			exportData = session.createSQLQuery("select file_name, status from export where creator = :username order by id desc")
+			exportData = session.createSQLQuery("select file_name, status from export where creator = :username order by id desc limit 1")
 					.setParameter("username", username).list();
 
 

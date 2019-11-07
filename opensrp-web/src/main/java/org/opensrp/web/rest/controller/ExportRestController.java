@@ -1,8 +1,10 @@
 package org.opensrp.web.rest.controller;
 
 import org.json.JSONObject;
+import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +28,9 @@ import java.util.Set;
 @RequestMapping("rest/api/v1/export")
 @RestController
 public class ExportRestController {
+
+    @Autowired
+    private DatabaseServiceImpl databaseServiceImpl;
 
     @RequestMapping(value = "/data", method = RequestMethod.GET)
     public ResponseEntity<String> exportData(
@@ -86,5 +91,22 @@ public class ExportRestController {
         }
         session.setAttribute("params", params);
         return new ResponseEntity<String>(content.toString(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/download-data", method = RequestMethod.GET)
+    public List<Object[]>  getExportTable(HttpSession session) {
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        List<String> roleName = new ArrayList<String>();
+        Set<Role> roles = (Set<Role>) user.getRoles();
+        for (Role role : roles) {
+            roleName.add(role.getName());
+        }
+        return  databaseServiceImpl.getByCreator(user.getUsername());
+
+//		System.out.println("---->>> Export Data Size: "+ exportData.size());
+//		session.setAttribute("exportData", exportData);
+//		return "/export/table";
     }
 }

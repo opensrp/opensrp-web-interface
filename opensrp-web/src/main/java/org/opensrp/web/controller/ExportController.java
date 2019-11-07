@@ -94,23 +94,6 @@ public class ExportController {
 	}
 
 
-
-	@RequestMapping(value = "/export/table", method = RequestMethod.GET)
-	public String  getExportTable(HttpSession session) {
-
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		List<String> roleName = new ArrayList<String>();
-		Set<Role> roles = (Set<Role>) user.getRoles();
-		for (Role role : roles) {
-			roleName.add(role.getName());
-		}
-		List<Object[]> exportData = databaseServiceImpl.getByCreator(user.getUsername());
-
-		System.out.println("---->>> Export Data Size: "+ exportData.size());
-		session.setAttribute("exportData", exportData);
-		return "/export/table";
-	}
 	
 	private void setHouseholdAttributes(HttpSession session) throws JSONException {
 		List<Object> exportAttributesForHousehold = databaseServiceImpl.executeSelectQuery("SELECT a.attname "

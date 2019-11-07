@@ -259,6 +259,9 @@ public class ReportController {
         session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
         session.setAttribute("emptyFlag",1);
         session.setAttribute("pageNumber", pageNumber);
+        session.setAttribute("startTime", startTime);
+        session.setAttribute("endTime", endTime);
+        session.setAttribute("formName", formName);
 
 
 	    return "report/client-data-report-table";
