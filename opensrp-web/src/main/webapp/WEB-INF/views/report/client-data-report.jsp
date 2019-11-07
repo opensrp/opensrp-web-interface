@@ -13,8 +13,8 @@
 
 <%@ page import = "java.util.ResourceBundle" %>
 <% ResourceBundle resource = ResourceBundle.getBundle("project");
-    String name=resource.getString("download.url");
-    String surname=resource.getString("psurname"); %>
+    String downloadUrl = resource.getString("download.url");
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -125,7 +125,7 @@
                                 <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Downloading..
                             </div>
                             <div class="col-6" id="downloadFailedMsg" >
-                                <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Failed to export data.
+                                 Failed to export data.
                             </div>
                         </div>
                     </div>
@@ -137,7 +137,9 @@
     </div>
     <jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
-
+<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
+<script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
+<script src="<c:url value='/resources/js/datepicker.js' />"></script>
 <script>
 
     var downloadInterval = null;
