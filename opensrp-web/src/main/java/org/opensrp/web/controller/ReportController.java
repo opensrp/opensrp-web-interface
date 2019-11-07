@@ -113,15 +113,56 @@ public class ReportController {
 	                                 @RequestParam("address_field") String address_value,
 	                                 @RequestParam("searched_value") String searched_value) {
 		model.addAttribute("locale", locale);
+		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
+		System.err.println("branchId"+branchId);
+		User user = userService.getLoggedInUser();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = new ArrayList<>();
+			for (Branch branch: user.getBranches()) {
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}
+		}
+		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
+		List<Object[]> allSKs = new ArrayList<>();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = new ArrayList<>();
+			if(!branchId.isEmpty() ){
+				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
+				
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}else {
+				
+				for (Branch branch: user.getBranches()) {
+					Object[] obj = new Object[10];
+					obj[0] = branch.getId();
+					obj[1] = branch.getName();
+					branches.add(obj);
+				}
+			}
+			allSKs = databaseServiceImpl.getAllSks(branches);
+		} else if (AuthenticationManagerUtil.isAdmin()){
+			allSKs =  new ArrayList<Object[]>();
+		}
+		
 		// List<Object[]> skLists = databaseServiceImpl.getAllSks();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String startDate = formatter.format(DateUtil.atStartOfDay(DateUtils.addYears(new Date(), -1)));
 		String endDate = formatter.format(DateUtil.atEndOfDay(new Date()));
-		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value);
+		System.err.println("address_value:"+address_value);
+		System.err.println("searched_value:"+searched_value);
+
+		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value,allSKs);
 		session.setAttribute("formWiseAggregatedList", reports);
 		searchUtil.setDivisionAttribute(session);
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
+		session.setAttribute("startDate", startDate);
 		return "report/householdDataReport";
 	}
 
@@ -171,7 +212,7 @@ public class ReportController {
 			}
 			allSKs = databaseServiceImpl.getAllSks(branches);
 		} else if (AuthenticationManagerUtil.isAdmin()){
-			allSKs = databaseServiceImpl.getAllSks(null);
+			allSKs =  new ArrayList<Object[]>();
 		}
 
 		session.setAttribute("skList",allSKs);
@@ -191,9 +232,46 @@ public class ReportController {
 	                                               @RequestParam(value = "searched_value", required = false) String searched_value,
 	                                               @RequestParam(value = "startDate", required = false) String startDate,
 	                                               @RequestParam(value = "endDate", required = false) String endDate) {
-		if (searched_value == null || searched_value.equals("")) searched_value = "empty";
-		if (address_value == null || address_value.equals("")) address_value = "division";
-		List<Object[]> aggregatedReport = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value);
+		
+		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
+		String locationType = request.getParameterMap().containsKey("locationValue")?request.getParameter("locationValue") : "";
+		User user = userService.getLoggedInUser();
+		List<Object[]> allSKs = new ArrayList<>();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = new ArrayList<>();
+			if(!branchId.isEmpty() ){
+				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
+				
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}else {
+				
+				for (Branch branch: user.getBranches()) {
+					Object[] obj = new Object[10];
+					obj[0] = branch.getId();
+					obj[1] = branch.getName();
+					branches.add(obj);
+				}
+			}
+			allSKs = databaseServiceImpl.getAllSks(branches);
+		} else if (AuthenticationManagerUtil.isAdmin()){
+			allSKs = new ArrayList<Object[]>();
+		}
+		
+		if (locationType.equalsIgnoreCase("catchmentArea")) {
+			address_value = "sk_id";
+			searched_value = "empty";
+			
+		}
+		else{
+			if (searched_value == null || searched_value.equals("")) searched_value = "empty";
+			if (address_value == null || address_value.equals("")) address_value = "division";
+		}
+		
+		System.err.println("searched_value:"+searched_value+"address_value:"+address_value);
+		List<Object[]> aggregatedReport = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value,allSKs);
 		System.out.println("SIZE: "+aggregatedReport.size());
 		session.setAttribute("aggregatedReport", aggregatedReport);
 		return "/report/aggregated-report";

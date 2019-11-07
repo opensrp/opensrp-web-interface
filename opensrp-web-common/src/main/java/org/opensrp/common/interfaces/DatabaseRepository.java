@@ -13,6 +13,7 @@ import org.opensrp.common.util.SearchBuilder;
 
 
 
+
 import javax.servlet.http.HttpSession;
 import javax.xml.stream.Location;
 
@@ -149,7 +150,7 @@ public interface DatabaseRepository {
 
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId);
 	
-	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String filterString,String searched_value);
+	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String filterString,String searched_value,List<Object[]> allSKs);
 
 	public List<Object[]> getAllSK(List<Object[]> branches);
 

@@ -26,6 +26,16 @@ function getLocationHierarchy(url, id) {
 }
 
 jQuery(document).ready(function($) {
+	debugger;
+	var currentUser = $("#currentUser").val();
+	if(currentUser == "true") {
+		$('#locationoptions').show();
+		$('#divisionHide').hide();
+		$('#districtHide').hide();
+		$('#upazilaHide').hide();
+		$('#branchHide').hide();
+	}
+	
 	$("#division").change(function(event) {
 		var division = $("#division").val();
 		if (division != '' && division != null && division != -1 && division != undefined && division != "0?") {
@@ -69,5 +79,36 @@ jQuery(document).ready(function($) {
 	});
 	$("#union").change(function(event) {
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#union").val().split("?")[0]+"&title=","village") ;
+	});
+	
+	$("#locationoptions").change(function(event) {
+		var location = $("#locationoptions").val();
+		if (location == 'catchmentArea') {
+			$('#divisionHide').hide();
+			$('#districtHide').hide();
+			$('#upazilaHide').hide();
+		}
+	});
+	
+	$("#locationoptions").change(function(event) {
+		var location = $("#locationoptions").val();
+		if (location == 'catchmentArea') {
+			$('#divisionHide').hide();
+			$('#districtHide').hide();
+			$('#upazilaHide').hide();
+			$('#branchHide').show();
+		}
+		if (location == 'geolocation') {
+			$('#branchHide').hide();
+			$('#divisionHide').show();
+			$('#districtHide').show();
+			$('#upazilaHide').show();
+		}
+		if (location == "") {
+			$('#branchHide').hide();
+			$('#divisionHide').hide();
+			$('#districtHide').hide();
+			$('#upazilaHide').hide();
+		}
 	});
 });

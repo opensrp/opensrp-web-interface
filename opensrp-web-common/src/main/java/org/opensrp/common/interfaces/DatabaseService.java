@@ -39,7 +39,7 @@ public interface DatabaseService {
 
 	public List<ReportDTO> getMHVListFilterWise(SearchBuilder searchBuilder);
 	
-	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String address_value,String searchedValue);
+	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String address_value,String searchedValue,List<Object[]> allSKs);
 
 	public  List<Object[]> getAllSks(List<Object[]> branches);
 
