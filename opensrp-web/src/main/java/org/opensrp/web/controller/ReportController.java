@@ -5,7 +5,6 @@ package org.opensrp.web.controller;
 
 
 import java.text.DecimalFormat;
-
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -13,15 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.time.DateUtils;
-
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
-
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.User;
+import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
@@ -64,7 +62,8 @@ public class ReportController {
 
     @Autowired
     private PaginationUtil paginationUtil;
-
+    @Autowired
+    private BranchService branchService;
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_REPORT')")
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
 	public String childGrowthReport(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
@@ -240,11 +239,21 @@ public class ReportController {
 		User user = userService.getLoggedInUser();
 		if (AuthenticationManagerUtil.isAM()) {
 			List<Object[]> branches = new ArrayList<>();
-			for (Branch branch: user.getBranches()) {
+			if(!branchId.isEmpty() ){
+				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
+				
 				Object[] obj = new Object[10];
 				obj[0] = branch.getId();
 				obj[1] = branch.getName();
 				branches.add(obj);
+			}else {
+				
+				for (Branch branch: user.getBranches()) {
+					Object[] obj = new Object[10];
+					obj[0] = branch.getId();
+					obj[1] = branch.getName();
+					branches.add(obj);
+				}
 			}
 			allSKs = databaseServiceImpl.getAllSks(branches);
 		} else if (AuthenticationManagerUtil.isAdmin()){
