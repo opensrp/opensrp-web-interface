@@ -180,7 +180,7 @@
     }
 
     function getClientDataReportTable(pageNo = 0) {
-        getValidationMsg();
+        if(!getValidationMsg())return false;
 
         var url = "/opensrp-dashboard/report/clientDataReportTable";
         $.ajax({
@@ -220,7 +220,7 @@
     }
 
     function generateExportData() {
-        getValidationMsg();
+        if(!getValidationMsg())return false;
 
         var url = "/opensrp-dashboard/rest/api/v1/export/data";
         $("#msg").hide();
@@ -273,7 +273,7 @@
                 console.log("Successfully get the data and clear the interval", data);
 
                 if(data[0][1].toLowerCase() === "completed") {
-                    downloadFile("/opt/multimedia/export/" + data[0][0]);
+                    downloadFile("http://192.168.22.152:8080/opt/multimedia/export/" + data[0][0]);
                     clearInterval(downloadInterval);
                 }
                 else {
@@ -315,6 +315,7 @@
             $("#errorMsg").html("Form Name can not be empty");
             return false;
         }
+        return true;
     }
 </script>
 </body>
