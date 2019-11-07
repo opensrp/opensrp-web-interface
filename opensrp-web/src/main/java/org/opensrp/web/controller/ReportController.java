@@ -114,6 +114,17 @@ public class ReportController {
 	                                 @RequestParam("address_field") String address_value,
 	                                 @RequestParam("searched_value") String searched_value) {
 		model.addAttribute("locale", locale);
+		User user = userService.getLoggedInUser();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = new ArrayList<>();
+			for (Branch branch: user.getBranches()) {
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}
+		}
+		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
 		// List<Object[]> skLists = databaseServiceImpl.getAllSks();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String startDate = formatter.format(DateUtil.atStartOfDay(DateUtils.addYears(new Date(), -1)));

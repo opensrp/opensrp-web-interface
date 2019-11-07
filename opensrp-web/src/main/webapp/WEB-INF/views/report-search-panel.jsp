@@ -3,6 +3,7 @@
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 		 pageEncoding="ISO-8859-1"%>
+		 <%@ page import="org.opensrp.core.entity.Branch" %>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -12,7 +13,6 @@
 
 <%
 	List<Object[]> divisions = (List<Object[]>) session.getAttribute("divisions");
-
 	String startDate = (String) session.getAttribute("startDate");
 	String endDate = (String) session.getAttribute("endDate");
 %>
@@ -36,6 +36,32 @@
 						   name="end" id="end" value="<%=endDate%>">
 				</div>
 				<div class="col-2">
+					<label for="">Location Options</label>
+					<select  class="custom-select custom-select-lg mb-3" id="locationoptions"
+							name="division">
+							<option value="">Select location</option>
+							
+						<option value="catchmentArea">Own Catchment Area
+						</option>
+						<option value="geolocation">Geo Location
+						</option>
+					</select>
+				</div>             
+                        <% if (AuthenticationManagerUtil.isAM()) {%>
+                            <div class="col-2" id="branchHide">
+                                <label><spring:message code="lbl.branches"/></label>
+                                <select class="custom-select custom-select-lg mb-3" id="branchaggregate" name="branch">
+                                    <option value="">All Branch</option>
+                                    <%
+                                        List<Branch> ret = (List<Branch>) session.getAttribute("branchList");
+                                        for (Branch str : ret) {
+                                    %>
+                                    <option value="<%=str.getId()%>"><%=str.getName()%></option>
+                                    <%}%>
+                                </select>
+                            </div>
+                            <%}%>
+				<div class="col-2" id="divisionHide">
 					<label><spring:message code="lbl.selectDivision"/></label>
 					<select required class="custom-select custom-select-lg mb-3" id="division"
 							name="division">
@@ -51,7 +77,7 @@
 					</select>
 				</div>
 
-				<div class="col-2">
+				<div class="col-2" id="districtHide">
 					<label><spring:message code="lbl.selectDistrict"/></label>
 					<select class="custom-select custom-select-lg mb-3" id="district"
 							name="district">
@@ -59,7 +85,7 @@
 						<option value=""></option>
 					</select>
 				</div>
-				<div class="col-2">
+				<div class="col-2" id="upazilaHide">
 					<label><spring:message code="lbl.selectUpazila"/></label>
 					<select class="custom-select custom-select-lg mb-3" id="upazila"
 							name="upazila">

@@ -3,6 +3,7 @@
 <%@page import="java.util.List"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+
 <%
     List<Object[]> houseHoldReports = (List<Object[]>)session.getAttribute("aggregatedReport");
 %>

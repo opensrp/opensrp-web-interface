@@ -70,4 +70,37 @@ jQuery(document).ready(function($) {
 	$("#union").change(function(event) {
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#union").val().split("?")[0]+"&title=","village") ;
 	});
+	
+	$("#locationoptions").change(function(event) {
+		debugger;
+		var location = $("#locationoptions").val();
+		if (location == 'catchmentArea') {
+			$('#divisionHide').hide();
+			$('#districtHide').hide();
+			$('#upazilaHide').hide();
+		}
+	});
+	
+	$("#locationoptions").change(function(event) {
+		debugger;
+		var location = $("#locationoptions").val();
+		if (location == 'catchmentArea') {
+			$('#divisionHide').hide();
+			$('#districtHide').hide();
+			$('#upazilaHide').hide();
+			$('#branchHide').show();
+		}
+		if (location == 'geolocation') {
+			$('#branchHide').hide();
+			$('#divisionHide').show();
+			$('#districtHide').show();
+			$('#upazilaHide').show();
+		}
+		if (location == "") {
+			$('#branchHide').show();
+			$('#divisionHide').show();
+			$('#districtHide').show();
+			$('#upazilaHide').show();
+		}
+	});
 });
