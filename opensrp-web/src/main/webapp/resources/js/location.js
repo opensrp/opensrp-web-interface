@@ -26,6 +26,16 @@ function getLocationHierarchy(url, id) {
 }
 
 jQuery(document).ready(function($) {
+	debugger;
+	var currentUser = $("#currentUser").val();
+	if(currentUser == "true") {
+		$('#locationoptions').show();
+		$('#divisionHide').hide();
+		$('#districtHide').hide();
+		$('#upazilaHide').hide();
+		$('#branchHide').hide();
+	}
+	
 	$("#division").change(function(event) {
 		var division = $("#division").val();
 		if (division != '' && division != null && division != -1 && division != undefined && division != "0?") {
@@ -72,7 +82,6 @@ jQuery(document).ready(function($) {
 	});
 	
 	$("#locationoptions").change(function(event) {
-		debugger;
 		var location = $("#locationoptions").val();
 		if (location == 'catchmentArea') {
 			$('#divisionHide').hide();
@@ -82,7 +91,6 @@ jQuery(document).ready(function($) {
 	});
 	
 	$("#locationoptions").change(function(event) {
-		debugger;
 		var location = $("#locationoptions").val();
 		if (location == 'catchmentArea') {
 			$('#divisionHide').hide();
@@ -97,10 +105,10 @@ jQuery(document).ready(function($) {
 			$('#upazilaHide').show();
 		}
 		if (location == "") {
-			$('#branchHide').show();
-			$('#divisionHide').show();
-			$('#districtHide').show();
-			$('#upazilaHide').show();
+			$('#branchHide').hide();
+			$('#divisionHide').hide();
+			$('#districtHide').hide();
+			$('#upazilaHide').hide();
 		}
 	});
 });

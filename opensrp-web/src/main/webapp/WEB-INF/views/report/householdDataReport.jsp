@@ -162,11 +162,12 @@
 		$("#divisionS").html("");
 		$("#districtS").html("");
 		$("#upazilaS").html("");
-
+		debugger;
+		var branch = $("#branchaggregate").val();
 		var division = $("#division").val();
 		var district = $("#district").val();
 		var upazila = $("#upazila").val();
-
+		
 		var divisionA = division == null?division:division.split("?")[1];
 		var districtA = district == null?district:district.split("?")[1];
 		var upazilaA = upazila == null?upazila:upazila.split("?")[1];
@@ -196,7 +197,9 @@
 				searched_value: $("#searched_value").val(),
 				address_field: $("#address_field").val(),
 				startDate: $("#start").val(),
-				endDate: $("#end").val()
+				endDate: $("#end").val(),
+				branch: $("#branchaggregate").val(),
+				locationValue: $("#locationoptions").val()
 			},
 			beforeSend: function() {},
 			success : function(data) {

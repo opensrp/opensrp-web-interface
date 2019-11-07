@@ -35,18 +35,20 @@
 					<input class="form-control custom-select custom-select-lg mb-3" type="text"
 						   name="end" id="end" value="<%=endDate%>">
 				</div>
+				<% if (AuthenticationManagerUtil.isAM()){%>
 				<div class="col-2">
-					<label for="">Location Options</label>
+					<label for="">Report Options</label>
 					<select  class="custom-select custom-select-lg mb-3" id="locationoptions"
 							name="division">
 							<option value="">Select location</option>
 							
-						<option value="catchmentArea">Own Catchment Area
+						<option value="catchmentArea">Own Area
 						</option>
 						<option value="geolocation">Geo Location
 						</option>
 					</select>
-				</div>             
+				</div>   
+				<%}%>
                         <% if (AuthenticationManagerUtil.isAM()) {%>
                             <div class="col-2" id="branchHide">
                                 <label><spring:message code="lbl.branches"/></label>
@@ -97,6 +99,7 @@
 			</div>
 			<input type="hidden" id ="address_field" name="address_field"/>
 			<input type="hidden" id ="searched_value" name="searched_value"/>
+			<input type="hidden" id ="currentUser" value="<%= AuthenticationManagerUtil.isAM()%>">
 			<div class="row">
 
 				<div class="col-6">

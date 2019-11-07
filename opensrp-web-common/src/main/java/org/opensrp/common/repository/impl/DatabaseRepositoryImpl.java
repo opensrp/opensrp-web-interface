@@ -1036,7 +1036,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 	
 	@Override
-	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String filterString,String searched_value) {
+	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String filterString,String searched_value,List<Object[]> allSKs) {
 		String[] values = searched_value.split(":");
 		searched_value = values[0]+(values.length > 1?"'":"");
 		Session session = sessionFactory.openSession();
@@ -1045,6 +1045,20 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		if(!"empty".equalsIgnoreCase(searched_value)) {
 			conditionString += " and "+searched_value;
 		}
+		System.out.println("SIze"+ allSKs.size());
+		if (allSKs.size() != 0) {
+			String providerIds = "";
+			int size = allSKs.size();
+			for (int i = 0; i < size; i++) {
+				providerIds += "'" + allSKs.get(i)[1].toString() + "'";
+				if (i != size - 1)
+					providerIds += ",";
+			}
+			conditionString = conditionString + " and sk_id in (" + providerIds + ")";
+
+		}
+		
+		System.out.println("conditionstring"+ conditionString);
 
 		List<Object[]> mhvList = null;
 		try {
@@ -1089,9 +1103,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "sum(population_thirty_five_and_above)," + "sum(count_has_sanitary_latrine),"
 					+ "sum(total_finger_print_taken)," + "sum(total_finger_print_availability),"
 					+ "null" + " from report;";
+			
 			Query query = session.createSQLQuery(hql)
 					.setString("startDate", startDate)
 					.setString("endDate", endDate);
+			System.out.println("Query"+ hql);
 			mhvList = query.list();
 		} catch (Exception e) {
 			logger.error(e);
