@@ -105,7 +105,7 @@
                             <thead>
                             <tr>
                                 <th><spring:message code="lbl.total"/> <spring:message code="lbl.targetPopulation"/> </th>
-                                <th><spring:message code="lbl.total"/> <spring:message code="lbl.collectedHousehold"/> </th>
+                                <th><spring:message code="lbl.total"/> <spring:message code="lbl.collectedPopulation"/> </th>
                             </tr>
                             </thead>
                             <tbody>
