@@ -26,7 +26,6 @@ function getLocationHierarchy(url, id) {
 }
 
 jQuery(document).ready(function($) {
-	debugger;
 	var currentUser = $("#currentUser").val();
 	if(currentUser == "true") {
 		$('#locationoptions').show();

@@ -154,7 +154,7 @@
     });
     function branchChange() {
         console.log("in branch change");
-        var url = "http://192.168.22.152:8080/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
+        var url = "http://mhealth.brac.net:8080/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
         $("#skList").html("");
         $.ajax({
             type : "GET",
@@ -273,7 +273,7 @@
                 console.log("Successfully get the data and clear the interval", data);
 
                 if(data[0][1].toLowerCase() === "completed") {
-                    downloadFile("http://192.168.22.152:8080/opt/multimedia/export/" + data[0][0]);
+                    downloadFile("http://mhealth.brac.net:8080/opt/multimedia/export/" + data[0][0]);
                     clearInterval(downloadInterval);
                 }
                 else {

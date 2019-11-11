@@ -112,13 +112,13 @@ public class MarkerServiceImpl implements DatabaseService {
 		return null;
 	}
 
-
 	@Override
-	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String address_value,
-			String searchedValue) {
-		// TODO Auto-generated method stub
+	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String address_value, String searchedValue, List<Object[]> allSKs) {
 		return null;
-  }
+	}
+
+
+
   
   @Override
 	public List<Object[]> getAllSks(List<Object[]> branches) {

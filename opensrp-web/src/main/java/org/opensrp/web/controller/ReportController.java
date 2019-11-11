@@ -212,7 +212,7 @@ public class ReportController {
 			}
 			allSKs = databaseServiceImpl.getAllSks(branches);
 		} else if (AuthenticationManagerUtil.isAdmin()){
-			allSKs =  new ArrayList<Object[]>();
+			allSKs =  databaseServiceImpl.getAllSks(null);
 		}
 
 		session.setAttribute("skList",allSKs);
@@ -296,9 +296,9 @@ public class ReportController {
         String formName = request.getParameterMap().containsKey("formName")?
                 request.getParameter("formName"):"Family Registration";
 
-        String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "-1";
+        String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
 
-        String sk = request.getParameterMap().containsKey("sk")?request.getParameter("sk"):"-1";
+        String sk = request.getParameterMap().containsKey("sk")?request.getParameter("sk"):"";
 
         Integer pageNumber = Integer.parseInt(request.getParameter("pageNo"));
         List<Object[]> allSKs = new ArrayList<>();
