@@ -41,23 +41,17 @@
 		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
 			<property name="paramName" value="lang" />
 		</bean>
-<!--		<mvc:interceptor>-->
-<!--			<mvc:mapping path="/resources/**"/>-->
+		<mvc:interceptor>
+			<mvc:mapping path="/resources/**"/>
 			<bean id="webContentInterceptor"
 				  class="org.springframework.web.servlet.mvc.WebContentInterceptor">
-				<property name="cacheSeconds" value="0"/>
+				<property name="cacheSeconds" value="2678400"/>
 				<property name="alwaysMustRevalidate" value="true"/>
 				<property name="useExpiresHeader" value="true"/>
 				<property name="useCacheControlHeader" value="true"/>
 				<property name="useCacheControlNoStore" value="true"/>
-				<property name="cacheMappings">
-					<props>
-						<!-- 2678400 seconds = 31 days -->
-						<prop key="/resources/vendor/bootstrap/css/*.css">2678400</prop>
-					</props>
-				</property>
 			</bean>
-<!--		</mvc:interceptor>-->
+		</mvc:interceptor>
 	</mvc:interceptors>
 
 

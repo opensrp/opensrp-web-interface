@@ -49,7 +49,7 @@ public class ExportRestController {
             roleName.add(role.getName());
         }
 
-        String formName = request.getParameter("formName").replaceAll(" ", "F");
+        String formName = request.getParameter("formName").replaceAll(" ", "-");
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
         String userName = user.getUsername();
@@ -104,9 +104,5 @@ public class ExportRestController {
             roleName.add(role.getName());
         }
         return  databaseServiceImpl.getByCreator(user.getUsername());
-
-//		System.out.println("---->>> Export Data Size: "+ exportData.size());
-//		session.setAttribute("exportData", exportData);
-//		return "/export/table";
     }
 }

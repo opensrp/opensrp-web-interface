@@ -274,11 +274,11 @@
 
                 if(data[0][1].toLowerCase() === "completed") {
                     downloadFile("http://mhealth.brac.net:8080/opt/multimedia/export/" + data[0][0]);
-                    clearInterval(downloadInterval);
                 }
                 else {
                     $("#downloadFailedMsg").show();
                 }
+                clearInterval(downloadInterval);
             },
             error : function(e) {
                 console.log("ERROR: ", e);
