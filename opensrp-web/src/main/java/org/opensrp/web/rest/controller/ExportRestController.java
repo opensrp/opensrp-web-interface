@@ -49,7 +49,7 @@ public class ExportRestController {
             roleName.add(role.getName());
         }
 
-        String formName = request.getParameter("formName").replaceAll(" ", "-");
+        String formName = request.getParameter("formName").replaceAll(" ", "F");
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
         String userName = user.getUsername();
