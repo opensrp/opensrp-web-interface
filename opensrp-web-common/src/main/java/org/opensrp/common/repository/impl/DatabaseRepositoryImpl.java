@@ -1036,7 +1036,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 	
 	@Override
-	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String filterString,String searched_value,List<Object[]> allSKs) {
+	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String filterString, String searched_value, List<Object[]> allSKs) {
 		String[] values = searched_value.split(":");
 		searched_value = values[0]+(values.length > 1?"'":"");
 		Session session = sessionFactory.openSession();
@@ -1045,7 +1045,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		if(!"empty".equalsIgnoreCase(searched_value)) {
 			conditionString += " and "+searched_value;
 		}
-		System.out.println("SIze"+ allSKs.size());
+		System.out.println("Size:"+ allSKs.size());
+		System.out.println(filterString + " " + searched_value);
 		if (allSKs.size() != 0) {
 			String providerIds = "";
 			int size = allSKs.size();
@@ -1054,8 +1055,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 				if (i != size - 1)
 					providerIds += ",";
 			}
-			conditionString = conditionString + " and sk_id in (" + providerIds + ")";
-
+			if (filterString.equalsIgnoreCase("sk_id") && searched_value.equalsIgnoreCase("empty")) {
+				conditionString = conditionString + " and sk_id in (" + providerIds + ")";
+			}
 		}
 		
 		System.out.println("conditionstring"+ conditionString);
@@ -1160,7 +1162,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			additionalQuery += ");";
 		}
 		try {
-			String hql = "select u.id, u.username, concat(u.first_name, ' ', u.last_name) from core.users u join core.user_role ur on u.id = ur.user_id join core.user_branch ub on u.id = ub.user_id where ur.role_id = :skId" + additionalQuery;
+			String hql = "select u.id, u.username, concat(u.first_name, ' ', u.last_name) from core.users u"
+					+ " join core.user_role ur on u.id = ur.user_id join core.user_branch ub on u.id = ub.user_id"
+					+ " where ur.role_id = :skId" + additionalQuery;
 			allSK = session.createSQLQuery(hql).setInteger("skId", SK_ID).list();
 
 		} catch (Exception e) {
@@ -1432,7 +1436,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 			String hql = "SELECT * FROM core.\"viewJsonDataConversionOfClient\"";
 					hql += wh;
-					hql += "limit 10 offset 10 * "+ pageNumber;
+					hql += "order by date_created desc limit 10 offset 10 * "+ pageNumber;
 					hql += ";";
 			clientInfoList = session.createSQLQuery(hql).list();
 		} catch (Exception e) {

@@ -104,9 +104,5 @@ public class ExportRestController {
             roleName.add(role.getName());
         }
         return  databaseServiceImpl.getByCreator(user.getUsername());
-
-//		System.out.println("---->>> Export Data Size: "+ exportData.size());
-//		session.setAttribute("exportData", exportData);
-//		return "/export/table";
     }
 }
