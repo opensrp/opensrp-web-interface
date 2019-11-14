@@ -243,13 +243,11 @@ public class ReportController {
 			List<Object[]> branches = new ArrayList<>();
 			if(!branchId.isEmpty() ){
 				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
-				
 				Object[] obj = new Object[10];
 				obj[0] = branch.getId();
 				obj[1] = branch.getName();
 				branches.add(obj);
 			}else {
-				
 				for (Branch branch: user.getBranches()) {
 					Object[] obj = new Object[10];
 					obj[0] = branch.getId();
@@ -265,17 +263,16 @@ public class ReportController {
 		if (locationType.equalsIgnoreCase("catchmentArea")) {
 			address_value = "sk_id";
 			searched_value = "empty";
-			
 		}
 		else{
 			if (searched_value == null || searched_value.equals("")) searched_value = "empty";
 			if (address_value == null || address_value.equals("")) address_value = "division";
 		}
 		
-		System.err.println("searched_value:"+searched_value+"address_value:"+address_value);
+		System.err.println("searched_value:"+searched_value+" address_value:"+address_value);
 		endDate = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
 		System.out.println("END DATE: "+ endDate);
-		List<Object[]> aggregatedReport = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value,allSKs);
+		List<Object[]> aggregatedReport = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value, allSKs);
 		System.out.println("SIZE: "+aggregatedReport.size());
 		session.setAttribute("aggregatedReport", aggregatedReport);
 		return "/report/aggregated-report";

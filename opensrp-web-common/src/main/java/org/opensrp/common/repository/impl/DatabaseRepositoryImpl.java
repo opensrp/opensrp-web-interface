@@ -1036,7 +1036,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 	
 	@Override
-	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String filterString,String searched_value,List<Object[]> allSKs) {
+	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String filterString, String searched_value, List<Object[]> allSKs) {
 		String[] values = searched_value.split(":");
 		searched_value = values[0]+(values.length > 1?"'":"");
 		Session session = sessionFactory.openSession();
@@ -1045,7 +1045,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		if(!"empty".equalsIgnoreCase(searched_value)) {
 			conditionString += " and "+searched_value;
 		}
-		System.out.println("SIze"+ allSKs.size());
+		System.out.println("Size:"+ allSKs.size());
+		System.out.println(filterString + " " + searched_value);
 		if (allSKs.size() != 0) {
 			String providerIds = "";
 			int size = allSKs.size();
@@ -1054,8 +1055,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 				if (i != size - 1)
 					providerIds += ",";
 			}
-			conditionString = conditionString + " and sk_id in (" + providerIds + ")";
-
+			if (filterString.equalsIgnoreCase("sk_id") && searched_value.equalsIgnoreCase("empty")) {
+				conditionString = conditionString + " and sk_id in (" + providerIds + ")";
+			}
 		}
 		
 		System.out.println("conditionstring"+ conditionString);
