@@ -10,7 +10,7 @@
 <%--      <div class="container">--%>
 <%--        <div class="text-center">--%>
 <%--          <small>--%>
-<%--&lt;%&ndash;              <img src="<c:url value="/resources/img/community.png"/>" style = "height: 46px">&ndash;%&gt;--%>
+<%--              <img src="<c:url value="/resources/img/community.png"/>" style = "height: 46px">--%>
 <%--		Copyright © mPower Social Enterprises Ltd. 2019</small>--%>
 <%--        </div>--%>
 <%--      </div>--%>
@@ -58,38 +58,14 @@
 <div class="app-wrapper-footer">
    <div class="app-footer">
       <div class="app-footer__inner">
-         <div class="app-footer-left">
-            <ul class="nav">
-               <li class="nav-item">
-                  <a href="javascript:void(0);" class="nav-link">
-                     Footer Link 1
-                  </a>
-               </li>
-               <li class="nav-item">
-                  <a href="javascript:void(0);" class="nav-link">
-                     Footer Link 2
-                  </a>
-               </li>
-            </ul>
-         </div>
-         <div class="app-footer-right">
-            <ul class="nav">
-               <li class="nav-item">
-                  <a href="javascript:void(0);" class="nav-link">
-                     Footer Link 3
-                  </a>
-               </li>
-               <li class="nav-item">
-                  <a href="javascript:void(0);" class="nav-link">
-                     <div class="badge badge-success mr-1 ml-0">
-                        <small>NEW</small>
-                     </div>
-                     Footer Link 4
-                  </a>
-               </li>
-            </ul>
+         <div style="margin: auto;">
+            <small>
+               <img src="<c:url value="/resources/img/footer.png"/>" style = "height: 32px">
+               Copyright © mPower Social Enterprises Ltd. 2019
+            </small>
          </div>
       </div>
    </div>
 </div>
+<script src="<c:url value="/resources/preloader.js"/> "></script>
 <script src="<c:url value='/resources/architectui/assets/scripts/main.js'/>"></script>
