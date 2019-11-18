@@ -138,6 +138,8 @@ public interface DatabaseRepository {
 
 	public List<Object[]> lastSevenDaysData(String startDate, String endDate);
 
+	public List<Object[]> lastSevenDaysDataUpazilaWise();
+
 	public List<Object[]> countPopulation();
 
 	public Object availableHealthId();

@@ -15,10 +15,12 @@
 <%
     List<Object[]> table1Data = (List<Object[]>) session.getAttribute("table1Data");
     List<Object[]> sevenDaysData = (List<Object[]>) session.getAttribute("sevenDaysData");
+    List<Object[]> sevenDaysDataUpazilaWise = (List<Object[]>) session.getAttribute("sevenDaysDataUpazilaWise");
     List<Object[]> countPopulation = (List<Object[]>) session.getAttribute("countPopulation");
     JSONArray countPopulationArray = (JSONArray) session.getAttribute("countPopulationArray");
     JSONArray genderChart = (JSONArray) session.getAttribute("genderChart");
     JSONArray categories = (JSONArray) session.getAttribute("categories");
+    Integer length = sevenDaysDataUpazilaWise.size();
 %>
 
 
@@ -92,6 +94,55 @@
         </div>
         <br>
         <br>
+
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fa fa-table"></i>
+                <spring:message code="lbl.lastSevenDaysDataUpazilaWise"/>
+            </div>
+
+            <div class="card-body">
+                <table id="lastSevenDaysDataUpazilaWise" class="display">
+                    <thead>
+                    <tr>
+                        <th> <spring:message code="lbl.upazila"></spring:message></th>
+                        <th> <%=sevenDaysDataUpazilaWise.get(length-1)[1]%> </th>
+                        <th> <%=sevenDaysDataUpazilaWise.get(length-1)[2]%> </th>
+                        <th> <%=sevenDaysDataUpazilaWise.get(length-1)[3]%> </th>
+                        <th> <%=sevenDaysDataUpazilaWise.get(length-1)[4]%> </th>
+                        <th> <%=sevenDaysDataUpazilaWise.get(length-1)[5]%> </th>
+                        <th> <%=sevenDaysDataUpazilaWise.get(length-1)[6]%> </th>
+                        <th> <%=sevenDaysDataUpazilaWise.get(length-1)[7]%> </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        Integer count = 0;
+                        for (Object[] list: sevenDaysDataUpazilaWise) {
+                            count++;
+                            if (count == length) break;
+                    %>
+                    <tr>
+                        <td><%=list[0]%></td>
+                        <td><%=list[1]%></td>
+                        <td><%=list[2]%></td>
+                        <td><%=list[3]%></td>
+                        <td><%=list[4]%></td>
+                        <td><%=list[5]%></td>
+                        <td><%=list[6]%></td>
+                        <td><%=list[7]%></td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer small text-muted"></div>
+        </div>
+        <br>
+        <br>
+
         <div class="card mb-3">
             <div class="card-header">
                 <i class="fa fa-table"></i>
@@ -131,6 +182,7 @@
         </div>
         <br>
         <br>
+
         <div class="card mb-3">
             <div class="card-header">
                 <i class="fa fa-table"></i>
@@ -252,9 +304,16 @@
             ],
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
-    });
-
-    $(document).ready(function() {
+        $('#lastSevenDaysDataUpazilaWise').DataTable({
+            bFilter: true,
+            bInfo: true,
+            dom: 'Bfrtip',
+            destroy: true,
+            buttons: [
+                'pageLength', 'csv', 'excel', 'pdf'
+            ],
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+        });
         $('#mhvWiseStatistics').DataTable({
             bFilter: true,
             bInfo: true,
@@ -266,6 +325,7 @@
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
     });
+
 </script>
 <script>
     Highcharts.chart('count_population', {

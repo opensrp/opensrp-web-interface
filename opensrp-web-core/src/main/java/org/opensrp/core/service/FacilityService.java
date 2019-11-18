@@ -203,6 +203,10 @@ public class FacilityService {
 		return repository.lastSevenDaysData(startDate, endDate);
 	}
 
+	public List<Object[]> lastSevenDaysDataUpazilaWise() {
+		return repository.lastSevenDaysDataUpazilaWise();
+	}
+
 	public List<Object[]> countPopulation() {
 		return repository.countPopulation();
 	}

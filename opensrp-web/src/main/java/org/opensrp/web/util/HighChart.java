@@ -12,13 +12,13 @@ public class HighChart {
 		JSONArray countPopulationArray = new JSONArray();
 
 		JSONObject a = new JSONObject();
-		a.put("name", "Total Collected Population");
+		a.put("name", "Collected Population");
 		a.put("y", objects3.get(0)[2]);
 		countPopulationArray.put(a);
 
 		a = new JSONObject();
 
-		a.put("name", "Total Targeted Population");
+		a.put("name", "Remaining Population");
 		a.put("y", objects3.get(0)[3]);
 
 		countPopulationArray.put(a);

@@ -1,10 +1,13 @@
 package org.opensrp.common.repository.impl;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -21,6 +24,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.SearchBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -1149,6 +1153,40 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return lastSevenDaysData;
  	}
+
+	@Override
+	public List<Object[]> lastSevenDaysDataUpazilaWise() {
+		List<Object[]> lastSevenDaysDataUpazilaWise = null;
+		Session session = sessionFactory.openSession();
+		String[] sevenDaysDate = new String[8];
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		for (int i = -1; i < 7; i++) {
+			sevenDaysDate[i+1] = sdf.format(DateUtil.atEndOfDay(DateUtils.addDays(new Date(), -i)).getTime());
+			System.out.println("Dates:-> "+sevenDaysDate[i+1]);
+		}
+		try {
+			String sql = "with t as (select date(date_created), upazila, sum(case when gender = 'M' or gender = 'F' then 1 else 0 end) as population"
+					+ " from core.\"viewJsonDataConversionOfClient\" where date_created between '"+sevenDaysDate[7]+"' and '"+sevenDaysDate[0]+"' group by date(date_created), upazila) "
+					+ "select upazila, "
+					+ "cast(sum(case when date = '"+sevenDaysDate[7]+"' then population else 0 end) as text) one, "
+					+ "cast(sum(case when date = '"+sevenDaysDate[6]+"' then population else 0 end) as text) two, "
+					+ "cast(sum(case when date = '"+sevenDaysDate[5]+"' then population else 0 end) as text) three, "
+					+ "cast(sum(case when date = '"+sevenDaysDate[4]+"' then population else 0 end) as text) four, "
+					+ "cast(sum(case when date = '"+sevenDaysDate[3]+"' then population else 0 end) as text) five, "
+					+ "cast(sum(case when date = '"+sevenDaysDate[2]+"' then population else 0 end) as text) six, "
+					+ "cast(sum(case when date = '"+sevenDaysDate[1]+"' then population else 0 end) as text) seven "
+					+ "from t group by upazila union all "
+					+ "select 'Dates', '"+sevenDaysDate[7]+"', '"+sevenDaysDate[6]+"', '"+sevenDaysDate[5]+"', "
+					+ "'"+sevenDaysDate[4]+"', '"+sevenDaysDate[3]+"', '"+sevenDaysDate[2]+"', '"+sevenDaysDate[1]+"';";
+			lastSevenDaysDataUpazilaWise = session.createSQLQuery(sql).list();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return lastSevenDaysDataUpazilaWise;
+	}
 
 	@Override
 	public List<Object[]> countPopulation() {

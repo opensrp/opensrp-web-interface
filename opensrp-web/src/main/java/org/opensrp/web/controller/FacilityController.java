@@ -121,6 +121,7 @@ public class FacilityController {
 		List<Object[]> objects1 = facilityService.getTable1Data();
 		List<Object[]> objects2 = facilityService.lastSevenDaysData(startDate, endDate);
 		List<Object[]> objects3 = facilityService.countPopulation();
+		List<Object[]> objects4 = facilityService.lastSevenDaysDataUpazilaWise();
 
 		System.out.println(objects2.size());
 
@@ -133,6 +134,7 @@ public class FacilityController {
 		session.setAttribute("countPopulation", objects3);
 		session.setAttribute("countPopulationArray", countPopulationArray);
 		session.setAttribute("sevenDaysData", objects2);
+		session.setAttribute("sevenDaysDataUpazilaWise", objects4);
 		session.setAttribute("table1Data", objects1);
 
 
@@ -288,14 +290,20 @@ public class FacilityController {
 	}
 
 	@RequestMapping(value = "facility/uhfpo-dashboard.html", method = RequestMethod.GET)
-	public String getUHFPOData(Model model, HttpSession session, Locale locale) {
+	public String getUHFPOData(Model model, HttpSession session, Locale locale) throws JSONException {
 
 		User user = userService.getLoggedInUser();
 		TeamMember teamMember = teamMemberService.findByForeignKey(user.getId(), "person_id", "TeamMember");
 		List<Location> locations = new ArrayList<>(teamMember.getLocations());
 		List<Object []> upazilaList = databaseServiceImpl.getUpazilaList(locations.get(0).getName());
+		List<Object[]> objects3 = facilityService.countPopulation();
+		List<Object[]> objects4 = facilityService.lastSevenDaysDataUpazilaWise();
+		JSONArray countPopulationArray = HighChart.countPopulation(objects3);
 
 		session.setAttribute("upazilaList", upazilaList);
+		session.setAttribute("countPopulation", objects3);
+		session.setAttribute("countPopulationArray", countPopulationArray);
+		session.setAttribute("sevenDaysDataUpazilaWise", objects4);
 
 		model.addAttribute("locale", locale);
 		return "facility/uhfpo-dashboard";
