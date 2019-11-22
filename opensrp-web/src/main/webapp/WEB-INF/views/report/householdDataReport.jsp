@@ -30,7 +30,7 @@
 	<meta http-equiv="refresh"
 		  content="<%=session.getMaxInactiveInterval()%>;url=/login" />
 
-	<title>Form Wise Report Status</title>
+	<title>Aggregated Report</title>
 
 	<jsp:include page="/WEB-INF/views/css.jsp" />
 
@@ -157,16 +157,34 @@
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script>
 	function onSearchClicked() {
+		var flagS = true;
+		var flagE = true;
+		if (!checkDate($('#start').val())) {
+			$('#startDateValidation').show();
+			flagS = false;
+		} else {
+			$('#startDateValidation').hide();
+			flagS = true;
+		}
+		if (!checkDate($('#end').val())) {
+			$('#endDateValidation').show();
+			flagE = false;
+		} else {
+			$('#endDateValidation').hide();
+			flagE = true;
+		}
+		if (!flagE || !flagS) return false;
+
 		$("#startDate").html("");
 		$("#endDate").html("");
 		$("#divisionS").html("");
 		$("#districtS").html("");
 		$("#upazilaS").html("");
-		debugger;
 		var branch = $("#branchaggregate").val();
 		var division = $("#division").val();
 		var district = $("#district").val();
 		var upazila = $("#upazila").val();
+		var location = $("#locationoptions").val();
 		
 		var divisionA = division == null?division:division.split("?")[1];
 		var districtA = district == null?district:district.split("?")[1];
@@ -174,15 +192,16 @@
 
 		$("#startDate").append("<b>START DATE: </b> <span>"+ $("#start").val()+"</span>");
 		$("#endDate").append("<b>END DATE: </b> <span>"+ $("#end").val()+"</span>");
-
-		if (divisionA != null && divisionA != undefined && divisionA != '') {
-			$("#divisionS").append("<b>DIVISION: </b> <span>"+ divisionA.split(":")[0]+"</span>");
-		}
-		if (districtA != null && districtA != undefined && districtA != '') {
-			$("#districtS").append("<b>DISTRICT: </b> <span>"+ districtA.split(":")[0]+"</span>");
-		}
-		if (upazilaA != null && upazilaA != undefined && upazilaA != '') {
-			$("#upazilaS").append("<b>UPAZILA/CITY CORPORATION: </b> <span>"+ upazilaA.split(":")[0]+"</span>");
+		if (location != 'catchmentArea') {
+			if (divisionA != null && divisionA != undefined && divisionA != '') {
+				$("#divisionS").append("<b>DIVISION: </b> <span>" + divisionA.split(":")[0] + "</span>");
+			}
+			if (districtA != null && districtA != undefined && districtA != '') {
+				$("#districtS").append("<b>DISTRICT: </b> <span>" + districtA.split(":")[0] + "</span>");
+			}
+			if (upazilaA != null && upazilaA != undefined && upazilaA != '') {
+				$("#upazilaS").append("<b>UPAZILA/CITY CORPORATION: </b> <span>" + upazilaA.split(":")[0] + "</span>");
+			}
 		}
 
 		var url = "/opensrp-dashboard/report/aggregated";
@@ -195,6 +214,7 @@
 			timeout : 100000,
 			data: {
 				searched_value: $("#searched_value").val(),
+				searched_value_id: $("#searched_value_id").val(),
 				address_field: $("#address_field").val(),
 				startDate: $("#start").val(),
 				endDate: $("#end").val(),

@@ -60,54 +60,58 @@
                 <div class="row">
 
                 </div>
-            <div id="search_form" autocomplete="off">
+                <div id="search_form">
                     <div class="form-group">
-                        <div class="row">
-                            <div class="col-2">
-                                <label><spring:message code="lbl.startDate"/></label>
-                                <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                       name="start" id="start">
+                        <form autocomplete="off">
+                            <div class="row">
+                                <div class="col-2">
+                                    <label><spring:message code="lbl.startDate"/></label>
+                                    <input class="form-control custom-select custom-select-lg mb-3" type=text
+                                           name="start" id="start">
+                                    <label style="display: none;" class="text-danger" id="startDateValidation"><small>Input is not valid for date</small></label>
+                                </div>
+                                <div class="col-2">
+                                    <label><spring:message code="lbl.endDate"/></label>
+                                    <input class="form-control custom-select custom-select-lg mb-3" type=text
+                                           name="end" id="end">
+                                    <label style="display: none;" class="text-danger" id="endDateValidation"><small>Input is not valid for date</small></label>
+                                </div>
+                                <% if (AuthenticationManagerUtil.isAM()) {%>
+                                <div class="col-2">
+                                    <label><spring:message code="lbl.branches"/></label>
+                                    <select class="custom-select custom-select-lg mb-3" id="branch" name="branch" onchange="branchChange()">
+                                        <option value="0">Select Branch</option>
+                                        <%
+                                            List<Branch> ret = (List<Branch>) session.getAttribute("branchList");
+                                            for (Branch str : ret) {
+                                        %>
+                                        <option value="<%=str.getId()%>"><%=str.getName()%></option>
+                                        <%}%>
+                                    </select>
+                                </div>
+                                <%}%>
+                                <div class="col-2">
+                                    <label><spring:message code="lbl.sk"/></label>
+                                    <select class="custom-select custom-select-lg mb-3" id="skList" name="sk">
+                                        <option value="">Select SK</option>
+                                        <%
+                                            List<Object[]> ret = (List<Object[]>) session.getAttribute("skList");
+                                            for (Object[] str : ret) {
+                                        %>
+                                        <option value="<%=str[1]%>"><%=str[2]%>(<%=str[1]%>)</option>
+                                        <% } %>
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <label><spring:message code="lbl.formName"/></label>
+                                    <select class="custom-select custom-select-lg mb-3" id="formName" name="formName">
+                                        <c:forEach var="map" items="${formNameList}">
+                                            <option value="${map.key}"><c:out value="${map.value}"/></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="col-2">
-                                <label><spring:message code="lbl.endDate"/></label>
-                                <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                       name="end" id="end">
-                            </div>
-                            <% if (AuthenticationManagerUtil.isAM()) {%>
-                            <div class="col-2">
-                                <label><spring:message code="lbl.branches"/></label>
-                                <select class="custom-select custom-select-lg mb-3" id="branch" name="branch" onchange="branchChange()">
-                                    <option value="0">Select Branch</option>
-                                    <%
-                                        List<Branch> ret = (List<Branch>) session.getAttribute("branchList");
-                                        for (Branch str : ret) {
-                                    %>
-                                    <option value="<%=str.getId()%>"><%=str.getName()%></option>
-                                    <%}%>
-                                </select>
-                            </div>
-                            <%}%>
-                            <div class="col-2">
-                                <label><spring:message code="lbl.sk"/></label>
-                                <select class="custom-select custom-select-lg mb-3" id="skList" name="sk">
-                                    <option value="">Select SK</option>
-                                    <%
-                                        List<Object[]> ret = (List<Object[]>) session.getAttribute("skList");
-                                        for (Object[] str : ret) {
-                                    %>
-                                    <option value="<%=str[1]%>"><%=str[2]%>(<%=str[1]%>)</option>
-                                    <% } %>
-                                </select>
-                            </div>
-                            <div class="col-2">
-                                <label><spring:message code="lbl.formName"/></label>
-                                <select class="custom-select custom-select-lg mb-3" id="formName" name="formName">
-                                    <c:forEach var="map" items="${formNameList}">
-                                        <option value="${map.key}"><c:out value="${map.value}"/></option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </div>
+                        </form>
                         <div class="row" id="msg">
                             <div class="col-6" id="errorMsg"> </div>
                         </div>
@@ -125,7 +129,7 @@
                                 <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Downloading..
                             </div>
                             <div class="col-6" id="downloadFailedMsg" >
-                                 Failed to export data.
+                                Failed to export data.
                             </div>
                         </div>
                     </div>
@@ -154,7 +158,7 @@
     });
     function branchChange() {
         console.log("in branch change");
-        var url = "http://mhealth.brac.net:8080/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
+        var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
         $("#skList").html("");
         $.ajax({
             type : "GET",
@@ -180,6 +184,25 @@
     }
 
     function getClientDataReportTable(pageNo = 0) {
+
+        var flagS = true;
+        var flagE = true;
+        if (!checkDate($('#start').val())) {
+            $('#startDateValidation').show();
+            flagS = false;
+        } else {
+            $('#startDateValidation').hide();
+            flagS = true;
+        }
+        if (!checkDate($('#end').val())) {
+            $('#endDateValidation').show();
+            flagE = false;
+        } else {
+            $('#endDateValidation').hide();
+            flagE = true;
+        }
+        if (!flagE || !flagS) return false;
+
         if(!getValidationMsg())return false;
 
         var url = "/opensrp-dashboard/report/clientDataReportTable";
@@ -199,8 +222,9 @@
             },
             beforeSend: function() {},
             success : function(data) {
-                console.log(data);
                 $("#client-data-report-table").html(data);
+                $('#pagination-'+pageNo).addClass("active");
+                if (pageNo != 0) $('#pagination-'+0).removeClass("active");
             },
             error : function(e) {
                 console.log("ERROR: ", e);
@@ -216,10 +240,28 @@
 
     function goTo(pageNo){
         getClientDataReportTable(pageNo);
-
     }
 
     function generateExportData() {
+
+        var flagS = true;
+        var flagE = true;
+        if (!checkDate($('#start').val())) {
+            $('#startDateValidation').show();
+            flagS = false;
+        } else {
+            $('#startDateValidation').hide();
+            flagS = true;
+        }
+        if (!checkDate($('#end').val())) {
+            $('#endDateValidation').show();
+            flagE = false;
+        } else {
+            $('#endDateValidation').hide();
+            flagE = true;
+        }
+        if (!flagE || !flagS) return false;
+
         if(!getValidationMsg())return false;
 
         var url = "/opensrp-dashboard/rest/api/v1/export/data";
@@ -273,7 +315,7 @@
                 console.log("Successfully get the data and clear the interval", data);
 
                 if(data[0][1].toLowerCase() === "completed") {
-                    downloadFile("http://mhealth.brac.net:8080/opt/multimedia/export/" + data[0][0]);
+                    downloadFile("/opensrp/opt/multimedia/export/" + data[0][0]);
                 }
                 else {
                     $("#downloadFailedMsg").show();
@@ -314,6 +356,9 @@
             $("#msg").show();
             $("#errorMsg").html("Form Name can not be empty");
             return false;
+        } else {
+            $("#msg").hide();
+            $("#errorMsg").html("");
         }
         return true;
     }

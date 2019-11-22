@@ -150,7 +150,7 @@ public interface DatabaseRepository {
 
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId);
 	
-	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String filterString,String searched_value,List<Object[]> allSKs);
+	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String filterString,String searched_value,List<Object[]> allSKs, Integer searchedValueId);
 
 	public List<Object[]> getAllSK(List<Object[]> branches);
 

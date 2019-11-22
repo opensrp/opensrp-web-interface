@@ -112,7 +112,8 @@ public class ReportController {
 	                                 Model model,
 	                                 Locale locale,
 	                                 @RequestParam("address_field") String address_value,
-	                                 @RequestParam("searched_value") String searched_value) throws ParseException {
+	                                 @RequestParam("searched_value") String searched_value,
+	                                 @RequestParam("searched_value_id") Integer searchedValueId) throws ParseException {
 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		model.addAttribute("locale", locale);
@@ -154,12 +155,12 @@ public class ReportController {
 		}
 		
 		// List<Object[]> skLists = databaseServiceImpl.getAllSks();
-		String startDate = formatter.format(DateUtils.addYears(new Date(), -1));
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
 		String endDate = formatter.format(new Date());
 		System.err.println("address_value:"+address_value);
 		System.err.println("searched_value:"+searched_value);
 		String endDateValue = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
-		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(startDate, endDateValue, address_value, searched_value,allSKs);
+		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(startDate, endDateValue, address_value, searched_value,allSKs, searchedValueId);
 		session.setAttribute("formWiseAggregatedList", reports);
 		searchUtil.setDivisionAttribute(session);
 		session.setAttribute("startDate", startDate);
@@ -231,9 +232,13 @@ public class ReportController {
 	                                               HttpSession session,
 	                                               @RequestParam(value = "address_field", required = false) String address_value,
 	                                               @RequestParam(value = "searched_value", required = false) String searched_value,
+	                                               @RequestParam(value = "searched_value_id", required = false) Integer searchedValueId,
 	                                               @RequestParam(value = "startDate", required = false) String startDate,
 	                                               @RequestParam(value = "endDate", required = false) String endDate)
 			throws ParseException {
+
+		System.out.println("HIGH CHECK: "+ searchedValueId);
+
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
 		String locationType = request.getParameterMap().containsKey("locationValue")?request.getParameter("locationValue") : "";
@@ -272,7 +277,7 @@ public class ReportController {
 		System.err.println("searched_value:"+searched_value+" address_value:"+address_value);
 		endDate = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
 		System.out.println("END DATE: "+ endDate);
-		List<Object[]> aggregatedReport = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value, allSKs);
+		List<Object[]> aggregatedReport = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value, allSKs, searchedValueId);
 		System.out.println("SIZE: "+aggregatedReport.size());
 		session.setAttribute("aggregatedReport", aggregatedReport);
 		return "/report/aggregated-report";
@@ -348,6 +353,7 @@ public class ReportController {
         System.out.println("---> debug Size: "+ size);
 
         session.setAttribute("clientInfoList",allClientInfo);
+        session.setAttribute("recordSize", size);
         session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
         session.setAttribute("emptyFlag",1);
         session.setAttribute("pageNumber", pageNumber);

@@ -43,29 +43,30 @@
 			id="dataTable_paginate">
 			<ul class="pagination">
 
-				<li class="paginate_button page-item next" id="dataTable_next" onclick="goTo(0)">
+				<li class="paginate_button page-item next active" id="pagination-<%=0%>" onclick="goTo(0)">
 					<a data-dt-idx="7" tabindex="0" class="page-link">Start</a>
 				</li>
 
 				<%
 					for (Integer i : pageList) {
+						if (i == size) break;
 						if (disabledLINK == i) {
 							if (disabledLINK != size) {
 				%>
-				<li class="paginate_button page-item disabled" ><a
-					data-dt-idx="1" tabindex="0" class="page-link" onclick="goTo(<%=i%>)" > <%=i + ""%></a></li>
+				<li class="paginate_button page-item disabled"><a
+					data-dt-idx="1" tabindex="0" class="page-link" onclick="goTo(<%=i%>)" > <%=(i+1) + ""%></a></li>
 				<%
 					}
 						} else {
 				%>
-				<li class="paginate_button page-item active" ><a data-dt-idx="1"
-					tabindex="0" class="page-link"  onclick="goTo(<%=i%>)"  > <%=i + ""%></a></li>
+				<li class="paginate_button page-item" id="pagination-<%=i%>"><a data-dt-idx="1"
+					tabindex="0" class="page-link"  onclick="goTo(<%=i%>)"  > <%=(i+1) + ""%></a></li>
 				<%
 					}
 					}
 				%>
-				<li class="paginate_button page-item next" id="dataTable_next"><a
-					data-dt-idx="7" tabindex="0" class="page-link" onclick="goTo(<%=  Integer.parseInt(session.getAttribute("size").toString()) -1 %>)" >End</a>
+				<li class="paginate_button page-item next" id="pagination-<%=size%>"><a
+					data-dt-idx="7" tabindex="0" class="page-link" onclick="goTo(<%=  Integer.parseInt(session.getAttribute("size").toString())%>)" >End</a>
 				</li>
 			</ul>
 		</div>

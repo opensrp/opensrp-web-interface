@@ -86,7 +86,13 @@ public class DateUtil {
 		}
 		return date;
 	}
-	
+
+	public static Date getFirstDayOfMonth(Date date) {
+		Calendar calendar = Calendar.getInstance();   // this takes current date
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		return calendar.getTime();
+	}
+
 	public static Date getDateTFromString(JSONObject doc, String key) throws ParseException, JSONException {
 		Date date = null;
 		if (doc.has(key) && !"null".equalsIgnoreCase(doc.getString(key)) && !doc.getString(key).isEmpty()) {

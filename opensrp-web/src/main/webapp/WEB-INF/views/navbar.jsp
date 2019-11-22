@@ -238,7 +238,7 @@
 
 					<% if(PERM_READ_AGGREGATED_REPORT){ %>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/report/householdDataReport.html?lang=${locale}&address_field=division&searched_value=empty"/>">
+					<a class="dropdown-item" href="<c:url value="/report/householdDataReport.html?lang=${locale}&address_field=division&searched_value=empty&searched_value_id=9265"/>">
 						<strong><spring:message code="lbl.aggregatedReport"/></strong></a>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="<c:url value="/report/clientDataReport.html?lang=${locale}"/>">

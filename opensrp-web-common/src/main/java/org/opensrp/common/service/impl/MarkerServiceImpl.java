@@ -113,7 +113,7 @@ public class MarkerServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String address_value, String searchedValue, List<Object[]> allSKs) {
+	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String address_value, String searchedValue, List<Object[]> allSKs, Integer searchedValueId) {
 		return null;
 	}
 

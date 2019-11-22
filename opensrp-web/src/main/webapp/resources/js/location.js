@@ -47,8 +47,10 @@ jQuery(document).ready(function($) {
 		$("#upazila").append("<option value='0?'>Select Upazila/City Corporation</option>");
 		$("#pourasabha").html("");
 		var division = $("#division").val().split("?")[1];
+		var divisionId = $("#division").val().split("?")[0];
 		$("#address_field").val(division == undefined?"division":"district");
 		$("#searched_value").val(division == undefined?"empty":"division = " + "'"+ division +"'");
+		$("#searched_value_id").val(division == undefined?9265:divisionId);
 		$("#union").html("");
 		$("#village").html("");
 	});
@@ -56,8 +58,10 @@ jQuery(document).ready(function($) {
 	$("#district").change(function(event) {
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#district").val().split("?")[0]+"&title=","upazila") ;
 		var district = $("#district").val().split("?")[1];
+		var districtId = $("#district").val().split("?")[0];
 		$("#address_field").val(district == ''?"district":"upazila");
 		$("#searched_value").val(district == ''?"empty":"district = " + "'"+ district +"'");
+		$("#searched_value_id").val(district == ''?0:districtId);
 		$("#pourasabha").html("");
 		$("#union").html("");
 		$("#village").html("");
@@ -65,8 +69,10 @@ jQuery(document).ready(function($) {
 	$("#upazila").change(function(event) {
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#upazila").val().split("?")[0]+"&title=","pourasabha") ;
 		var upazila = $("#upazila").val().split("?")[1];
+		var upazilaId = $("#upazila").val().split("?")[0];
 		$("#address_field").val(upazila == ''?"upazila":"sk_id");
 		$("#searched_value").val(upazila == ''?"empty":"upazila = " + "'"+ upazila +"'");
+		$("#searched_value_id").val(upazila == ''?0:upazilaId);
 		$("#ward").html("");
 	});
 	$("#pourasabha").change(function(event) {
@@ -86,15 +92,6 @@ jQuery(document).ready(function($) {
 			$('#divisionHide').hide();
 			$('#districtHide').hide();
 			$('#upazilaHide').hide();
-		}
-	});
-	
-	$("#locationoptions").change(function(event) {
-		var location = $("#locationoptions").val();
-		if (location == 'catchmentArea') {
-			$('#divisionHide').hide();
-			$('#districtHide').hide();
-			$('#upazilaHide').hide();
 			$('#branchHide').show();
 		}
 		if (location == 'geolocation') {
@@ -102,6 +99,7 @@ jQuery(document).ready(function($) {
 			$('#divisionHide').show();
 			$('#districtHide').show();
 			$('#upazilaHide').show();
+			if ($("#searched_value_id").val() == null || $("#searched_value_id").val() == '' ) $("#searched_value_id").val(9265);
 		}
 		if (location == "") {
 			$('#branchHide').hide();

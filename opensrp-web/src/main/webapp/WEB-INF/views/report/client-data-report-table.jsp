@@ -7,6 +7,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    Integer recordSize = (Integer) session.getAttribute("recordSize");
+%>
 <div>
     <div class="card mb-3">
         <div class="card-header">
@@ -45,12 +48,13 @@
 
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
-
-                    <jsp:include page="/WEB-INF/views/pager.jsp" />
                 </div>
+            </div>
+            <jsp:include page="/WEB-INF/views/pager.jsp" />
+            <div style="margin: auto;">
+                <b style="text-align: center;">Total Number of Records: <%=recordSize%></b>
             </div>
         </div>
     </div>
