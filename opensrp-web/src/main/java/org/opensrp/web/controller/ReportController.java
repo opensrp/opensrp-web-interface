@@ -302,7 +302,7 @@ public class ReportController {
         endTime = formatter.format(DateUtils.addDays(formatter.parse(endTime), 1));
 
         String formName = request.getParameterMap().containsKey("formName")?
-                request.getParameter("formName"):"Family Registration";
+                request.getParameter("formName"):"ec_family";
 
         String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
 

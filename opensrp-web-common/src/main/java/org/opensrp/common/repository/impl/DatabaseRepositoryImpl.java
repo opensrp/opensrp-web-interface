@@ -1460,12 +1460,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 
 
-		stCond = "Date(date_created) BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
+		stCond = "Date(created_date) BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
 		conds.add(stCond);
 
 
 
-		formCond = "  event_type =\'" + formName +"\'";
+		formCond = "  entity_type =\'" + formName.replaceAll(" ", "_") +"\'";
 		conds.add(formCond);
 
 		if(!sk.isEmpty()){
@@ -1497,7 +1497,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 			String hql = "SELECT * FROM core.\"viewJsonDataConversionOfClient\"";
 					hql += wh;
-					hql += "order by date_created desc limit 10 offset 10 * "+ pageNumber;
+					hql += "order by created_date desc limit 10 offset 10 * "+ pageNumber;
 					hql += ";";
 			clientInfoList = session.createSQLQuery(hql).list();
 		} catch (Exception e) {
@@ -1517,12 +1517,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 
 
-		stCond = "date_created BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
+		stCond = "Date(created_date) BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
 		conds.add(stCond);
 
 
 		if(formName.contains("-1") == false){
-			formCond = "  event_type =\'" + formName +"\'";
+			formCond = "  entity_type =\'" + formName.replaceAll(" ", "_") +"\'";
 
 			conds.add(formCond);
 		}

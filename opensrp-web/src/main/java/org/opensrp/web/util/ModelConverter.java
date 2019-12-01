@@ -20,9 +20,9 @@ public  class ModelConverter {
     private static List<int[]> arrayOfRows = new ArrayList<>();
     public static Map<String,String> mapLoad(){
         Map<String,String> formNameListMap = new HashMap<>();
-        formNameListMap.put("Family Registration","Household Registration");
-        formNameListMap.put("Family Member Registration","Member Registration");
-        formNameListMap.put("Child Registration","Child Registration");
+        formNameListMap.put("ec_family","Household Registration");
+        formNameListMap.put("ec_family_member","Member Registration");
+        formNameListMap.put("ec_child","Child Registration");
         return formNameListMap;
     }
 

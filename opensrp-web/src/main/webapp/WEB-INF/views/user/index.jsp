@@ -8,9 +8,6 @@
 <%@ taglib prefix="security"
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
-<%@page import="org.opensrp.core.entity.User"%>
-<%@page import="org.opensrp.core.entity.Role"%>
-<%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
 
 <%
@@ -78,11 +75,12 @@
 							<%
 								for (Object[] user: users) {
 									String stringId = user[5].toString();
+									String fullName = String.valueOf(user[1]).replaceAll(" .", "");
 									Integer id = Integer.parseInt(stringId);
 									session.setAttribute("id", id);
 							%>
 							<tr>
-								<td><%=user[1]%></td>
+								<td><%=fullName%></td>
 								<td><%=user[0]%></td>
 								<td><%=user[3]%></td>
 								<td><%=user[2]%></td>
@@ -126,11 +124,12 @@
 						<%
 							for (Object[] user: usersWithoutCatchmentArea) {
 								String stringId = user[5].toString();
+								String fullName = String.valueOf(user[1]).replaceAll(" .", "");
 								Integer id = Integer.parseInt(stringId);
 								session.setAttribute("id", id);
 						%>
 						<tr>
-							<td><%=user[1]%></td>
+							<td><%=fullName%></td>
 							<td><%=user[0]%></td>
 							<td><%=user[3]%></td>
 							<td><%=user[2]%></td>

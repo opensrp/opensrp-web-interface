@@ -1,7 +1,7 @@
 package org.opensrp.common.util;
 
 public enum FormName {
-    Family_Member_Registration,
-    Family_Registration,
-    Child_Registration
+    ec_family_member,
+    ec_family,
+    ec_child
 }

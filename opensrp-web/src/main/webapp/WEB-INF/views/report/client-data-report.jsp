@@ -315,7 +315,7 @@
                 console.log("Successfully get the data and clear the interval", data);
 
                 if(data[0][1].toLowerCase() === "completed") {
-                    downloadFile("/opensrp/opt/multimedia/export/" + data[0][0]);
+                    downloadFile("/opt/multimedia/export/" + data[0][0]);
                 }
                 else {
                     $("#downloadFailedMsg").show();
