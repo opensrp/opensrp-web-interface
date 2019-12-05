@@ -7,6 +7,7 @@ import java.util.Map;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.opensrp.common.dto.ReportDTO;
+import org.opensrp.common.dto.UpazilaInfoDTO;
 import org.opensrp.common.util.SearchBuilder;
 
 import javax.servlet.http.HttpSession;
@@ -133,6 +134,8 @@ public interface DatabaseRepository {
 	public  List<ReportDTO> getCCListByUpazila(SearchBuilder searchBuilder);
 
 	public List<ReportDTO> getMHVListFilterWise(String filterString);
+
+	public UpazilaInfoDTO getUpazilaInfo(Integer upazilaId);
 
 	public List<Object[]> getTable1Data();
 

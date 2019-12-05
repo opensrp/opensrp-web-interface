@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import org.json.JSONObject;
+import org.opensrp.common.dto.UpazilaInfoDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
 import org.opensrp.core.entity.*;
@@ -295,15 +296,13 @@ public class FacilityController {
 		User user = userService.getLoggedInUser();
 		TeamMember teamMember = teamMemberService.findByForeignKey(user.getId(), "person_id", "TeamMember");
 		List<Location> locations = new ArrayList<>(teamMember.getLocations());
-		List<Object []> upazilaList = databaseServiceImpl.getUpazilaList(locations.get(0).getName());
-		List<Object[]> objects3 = facilityService.countPopulation();
+		UpazilaInfoDTO infoDTO = databaseServiceImpl.getUpazilaInfo(locations.get(0).getId());
 		List<Object[]> objects4 = facilityService.lastSevenDaysDataUpazilaWise();
-		JSONArray countPopulationArray = HighChart.countPopulation(objects3);
+		JSONArray countPopulationArray = HighChart.countPopulationUpazilaWise(infoDTO);
 
-		session.setAttribute("upazilaList", upazilaList);
-		session.setAttribute("countPopulation", objects3);
 		session.setAttribute("countPopulationArray", countPopulationArray);
 		session.setAttribute("sevenDaysDataUpazilaWise", objects4);
+		session.setAttribute("upazilaInfo", infoDTO);
 
 		model.addAttribute("locale", locale);
 		return "facility/uhfpo-dashboard";

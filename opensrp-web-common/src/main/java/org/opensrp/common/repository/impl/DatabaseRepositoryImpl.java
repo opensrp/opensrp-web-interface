@@ -19,9 +19,11 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.opensrp.common.dto.ReportDTO;
+import org.opensrp.common.dto.UpazilaInfoDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
@@ -1064,6 +1066,41 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			session.close();
 		}
 		return mhvList;
+	}
+
+	@Override
+	public UpazilaInfoDTO getUpazilaInfo(Integer upazilaId) {
+		Session session = sessionFactory.openSession();
+		List<UpazilaInfoDTO> dtos = new ArrayList<UpazilaInfoDTO>();
+		try {
+			String hql = "with temp as ("
+					+ "select l.id as id, l.name as name, "
+					+ "count(case when v.gender = 'M' or v.gender = 'F' then 1 end) as collectedPopulation, "
+					+ "count(case when v.entity_type = 'ec_household' then 1 end) as collectedHousehold, "
+					+ "(select targeted_population as targetedPopulation from core.upazila_stat where upazila_id = :upazilaId) "
+					+ "from core.location l join core.\"viewJsonDataConversionOfClient\" v on v.upazila = l.name "
+					+ "where v.provider_id != '' and v.cc_name != '' and l.id = :upazilaId group by l.name,  l.id) "
+					+ "select *, (targetedPopulation-collectedPopulation) as remainingPopulation,"
+					+ " round(collectedPopulation*100.00/targetedPopulation, 2) as progress,"
+					+ " (100.0-round(collectedPopulation*100.00/targetedPopulation, 2)) as regress from temp;";
+			Query query = session.createSQLQuery(hql)
+					.addScalar("id", StandardBasicTypes.INTEGER)
+					.addScalar("name", StandardBasicTypes.STRING)
+					.addScalar("collectedHousehold", StandardBasicTypes.STRING)
+					.addScalar("collectedPopulation", StandardBasicTypes.STRING)
+					.addScalar("targetedPopulation", StandardBasicTypes.STRING)
+					.addScalar("remainingPopulation", StandardBasicTypes.STRING)
+					.addScalar("progress", StandardBasicTypes.STRING)
+					.addScalar("regress", StandardBasicTypes.STRING)
+					.setInteger("upazilaId", upazilaId)
+					.setResultTransformer(new AliasToBeanResultTransformer(UpazilaInfoDTO.class));
+			dtos = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return dtos.get(0);
 	}
 
 	@Override

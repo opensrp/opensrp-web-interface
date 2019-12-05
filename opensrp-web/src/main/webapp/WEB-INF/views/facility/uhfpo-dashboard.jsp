@@ -15,10 +15,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <%@ page import="org.json.JSONArray" %>
+<%@ page import="org.opensrp.common.dto.UpazilaInfoDTO" %>
 
 <%
-    List<Object[]> countPopulation = (List<Object[]>) session.getAttribute("countPopulation");
-    List<Object[]> upazilaList = (List<Object[]>) session.getAttribute("upazilaList");
+    UpazilaInfoDTO upazilaInfo = (UpazilaInfoDTO) session.getAttribute("upazilaInfo");
     JSONArray countPopulationArray = (JSONArray) session.getAttribute("countPopulationArray");
     List<Object[]> sevenDaysDataUpazilaWise = (List<Object[]>) session.getAttribute("sevenDaysDataUpazilaWise");
     Integer length = sevenDaysDataUpazilaWise.size();
@@ -41,7 +41,7 @@
     <jsp:include page="/WEB-INF/views/css.jsp" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/>">
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -62,7 +62,7 @@
                                     <!-- <i class="fa fa-fw fa-female"></i>  -->
                                 </div>
                                 <div class="mr-5">
-                                    <h3><%=upazilaList.get(0)[1]%></h3>
+                                    <h3><%=upazilaInfo.getCollectedHousehold()%></h3>
                                     <h5>Total Registered Household</h5>
                                 </div>
                             </div>
@@ -75,8 +75,8 @@
                                     <!-- <i class="fa fa-fw fa-female"></i>  -->
                                 </div>
                                 <div class="mr-5">
-                                    <h3><%=upazilaList.get(0)[2]%></h3>
-                                    <h5>Total Population</h5>
+                                    <h3><%=upazilaInfo.getCollectedPopulation()%></h3>
+                                    <h5>Total Collected Population</h5>
                                 </div>
                             </div>
                         </div>
@@ -88,8 +88,8 @@
                                     <!-- <i class="fa fa-fw fa-female"></i>  -->
                                 </div>
                                 <div class="mr-5">
-                                    <h3><%=upazilaList.get(0)[4]%></h3>
-                                    <h5>Total Female</h5>
+                                    <h3><%=upazilaInfo.getTargetedPopulation()%></h3>
+                                    <h5>Targeted Population</h5>
                                 </div>
                             </div>
                         </div>
@@ -101,8 +101,8 @@
                                     <!-- <i class="fa fa-fw fa-female"></i>  -->
                                 </div>
                                 <div class="mr-5">
-                                    <h3><%=upazilaList.get(0)[3]%></h3>
-                                    <h5>Total Male</h5>
+                                    <h3><%=upazilaInfo.getRemainingPopulation()%></h3>
+                                    <h5>Remaining Population</h5>
                                 </div>
                             </div>
                         </div>
@@ -114,20 +114,18 @@
                         <table class="display" id="householdMemberListTable"
                                style="width: 100%;">
                             <thead>
-                            <tr>
-                                <th><spring:message code="lbl.upazila"/></th>
-                                <th><spring:message code="lbl.householdCount"/></th>
-                                <th><spring:message code="lbl.population"/></th>
-                            </tr>
+                                <tr>
+                                    <th><spring:message code="lbl.upazila"/></th>
+                                    <th><spring:message code="lbl.householdCount"/></th>
+                                    <th><spring:message code="lbl.population"/></th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <% for (int i = 0; i < upazilaList.size(); i++) {%>
-                            <tr>
-                                <td><%=upazilaList.get(i)[0]%></td>
-                                <td><%=upazilaList.get(i)[1]%></td>
-                                <td><%=upazilaList.get(i)[2]%></td>
-                            </tr>
-                            <%}%>
+                                <tr>
+                                    <td><%=upazilaInfo.getName()%></td>
+                                    <td><%=upazilaInfo.getCollectedHousehold()%></td>
+                                    <td><%=upazilaInfo.getCollectedPopulation()%></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -203,16 +201,10 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <%
-                                for (Object[] list: countPopulation) {
-                            %>
                             <tr>
-                                <td><%=list[0]%></td>
-                                <td><%=list[1]%></td>
+                                <td><%=upazilaInfo.getTargetedPopulation()%></td>
+                                <td><%=upazilaInfo.getCollectedPopulation()%></td>
                             </tr>
-                            <%
-                                }
-                            %>
                             </tbody>
                         </table>
                     </div>

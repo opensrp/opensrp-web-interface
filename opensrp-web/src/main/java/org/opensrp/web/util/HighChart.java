@@ -3,6 +3,7 @@ package org.opensrp.web.util;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.common.dto.UpazilaInfoDTO;
 
 import java.util.List;
 
@@ -22,6 +23,25 @@ public class HighChart {
 		a.put("y", objects3.get(0)[3]);
 
 		countPopulationArray.put(a);
+		return countPopulationArray;
+	}
+
+	public static JSONArray countPopulationUpazilaWise(UpazilaInfoDTO infoDTO) throws JSONException {
+		JSONArray countPopulationArray = new JSONArray();
+
+		System.out.println("PROGRESS: "+ infoDTO.getProgress());
+		System.out.println("REGRESS: "+ infoDTO.getRegress());
+
+		JSONObject a = new JSONObject();
+		a.put("name", "Remaining Population");
+		a.put("y", Double.parseDouble(infoDTO.getRegress()));
+		countPopulationArray.put(a);
+
+		a = new JSONObject();
+		a.put("name", "Collected Population");
+		a.put("y", Double.parseDouble(infoDTO.getProgress()));
+		countPopulationArray.put(a);
+
 		return countPopulationArray;
 	}
 

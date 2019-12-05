@@ -11,6 +11,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.opensrp.common.dto.ReportDTO;
+import org.opensrp.common.dto.UpazilaInfoDTO;
 import org.opensrp.common.interfaces.DatabaseService;
 import org.opensrp.common.repository.impl.DatabaseRepositoryImpl;
 import org.opensrp.common.util.SearchBuilder;
@@ -243,6 +244,10 @@ public class DatabaseServiceImpl implements DatabaseService {
 	@Transactional
 	public <T> List<T> getReportData(SearchBuilder searchBuilder) {
 		return databaseRepositoryImpl.getReportData(searchBuilder, "test2_report");
+	}
+
+	public UpazilaInfoDTO getUpazilaInfo(Integer upazilaId) {
+		return databaseRepositoryImpl.getUpazilaInfo(upazilaId);
 	}
 
 }
