@@ -631,6 +631,7 @@ public class UserService {
 								if (isExists == null) {
 									user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
 									if (!user.getUuid().isEmpty()) {
+										user.setPassword(passwordEncoder.encode(user.getPassword()));
 										repository.save(user);
 										User newUser = repository.findByKey(user.getUsername(), "username", User.class);
 										logger.info("created new user:" + user.getUsername());
