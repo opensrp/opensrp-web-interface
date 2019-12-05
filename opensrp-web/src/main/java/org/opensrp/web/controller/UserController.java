@@ -14,7 +14,9 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.opensrp.common.dto.LocationTreeDTO;
+import org.opensrp.common.dto.UserAssignedLocationDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.entity.*;
 import org.opensrp.core.service.*;
@@ -634,16 +636,24 @@ public class UserController {
 		String parentIndication = "#";
 		String parentKey = "parent";
 		List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByForeignKey(id, "user_id", "UsersCatchmentArea");
-		JSONArray data = locationServiceImpl.getLocationDataAsJson(parentIndication, parentKey);
 		TeamMember member = teamMemberServiceImpl.findByForeignKey(id, "person_id", "TeamMember");
 		boolean isTeamMember = member!=null?true:false;
 		List<Object[]> catchmentAreas = userServiceImpl.getUsersCatchmentAreaTableAsJson(id);
+		User user = userServiceImpl.findById(id, "id", User.class);
+
+		List<Role> roles = new ArrayList<>(user.getRoles());
+		Integer roleId = roles.get(0).getId();
+		List<UserAssignedLocationDTO> userAssignedLocationDTOS = userServiceImpl.assignedLocationByRole(roleId);
+
+		JSONArray data = locationServiceImpl.getLocationWithDisableFacility(parentIndication, parentKey, userAssignedLocationDTOS, user.getId());
 
 		session.setAttribute("usersCatchmentAreas", usersCatchmentAreas);
 		session.setAttribute("catchmentAreaTable", catchmentAreas);
 		session.setAttribute("locationTreeData", data);
 		session.setAttribute("isTeamMember", isTeamMember);
 		session.setAttribute("userId", id);
+		session.setAttribute("user", user);
+		session.setAttribute("assignedLocation", userAssignedLocationDTOS);
 		System.out.println("EVERYTHING IS OKAY");
 		return "user/catchment-area";
 	}

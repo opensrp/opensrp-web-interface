@@ -23,6 +23,7 @@ import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.ReportDTO;
+import org.opensrp.common.dto.UserAssignedLocationDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
@@ -1653,6 +1654,32 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			session.close();
 		}
 		return users;
+	}
+
+	@Override
+	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId) {
+		System.out.println("ROLE ID INSIDE:-> "+ roleId);
+		Session session = sessionFactory.openSession();
+		List<UserAssignedLocationDTO> userAssignedLocationDTOS = new ArrayList<UserAssignedLocationDTO>();
+		try {
+			String hql = "select u.id as id, u.username as username, concat(u.first_name, ' ', u.last_name) as name, "
+					+ "uca.location_id as locationId, ur.role_id as roleId from core.users u "
+					+ "join core.user_role ur on u.id = ur.user_id join core.users_catchment_area uca on "
+					+ "u.id = uca.user_id where ur.role_id = "+roleId+";";
+			userAssignedLocationDTOS = session.createSQLQuery(hql)
+					.addScalar("id", StandardBasicTypes.INTEGER)
+					.addScalar("username", StandardBasicTypes.STRING)
+					.addScalar("name", StandardBasicTypes.STRING)
+					.addScalar("locationId", StandardBasicTypes.INTEGER)
+					.addScalar("roleId", StandardBasicTypes.INTEGER)
+					.setResultTransformer(new AliasToBeanResultTransformer(UserAssignedLocationDTO.class))
+					.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return userAssignedLocationDTOS;
 	}
 
 	public <T> List<T> getUniqueLocation(String village, String ward) {

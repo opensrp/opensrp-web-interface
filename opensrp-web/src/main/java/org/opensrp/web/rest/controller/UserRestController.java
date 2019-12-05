@@ -67,9 +67,9 @@ public class UserRestController {
 		String userNameUniqueError = "";
 		Team team = new Team();
 		try {
-			boolean isExists = userServiceImpl.isUserExist(userDTO.getUsername());
+			User user = userMapper.map(userDTO);
+			boolean isExists = userServiceImpl.isUserExist(user.getUsername());
 			if (!isExists) {
-				User user = userMapper.map(userDTO);
 				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
 //				String mailBody = "Dear " + user.getFullName()
 //						+ ",\n\nYour login credentials for HNPP are given below -\nusername : " + user.getUsername()

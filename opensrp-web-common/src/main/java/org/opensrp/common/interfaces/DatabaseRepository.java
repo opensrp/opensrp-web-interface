@@ -9,6 +9,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.ReportDTO;
+import org.opensrp.common.dto.UserAssignedLocationDTO;
 import org.opensrp.common.util.SearchBuilder;
 
 
@@ -169,4 +170,6 @@ public interface DatabaseRepository {
 	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId);
 
 	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId);
+
+	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId);
 }

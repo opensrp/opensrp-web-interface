@@ -27,15 +27,17 @@
     <%@ page import="org.opensrp.core.entity.UsersCatchmentArea" %>
     <%@ page import="java.util.List" %>
     <%@ page import="org.opensrp.core.entity.User" %>
+    <%@ page import="org.opensrp.common.dto.UserAssignedLocationDTO" %>
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 <%
     JSONArray locationTreeData = (JSONArray)session.getAttribute("locationTreeData");
     Integer userId = (Integer) session.getAttribute("userId");
+    User user = (User) session.getAttribute("user");
     Boolean isTeamMember = (Boolean) session.getAttribute("isTeamMember");
     List<Object[]> catchmentAreas = (List<Object[]>) session.getAttribute("catchmentAreaTable");
     List<UsersCatchmentArea> usersCatchmentAreas = (List<UsersCatchmentArea>) session.getAttribute("usersCatchmentAreas");
-
+    List<UserAssignedLocationDTO> userAssignedLocationDTOS = (List<UserAssignedLocationDTO>) session.getAttribute("assignedLocation");
 %>
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 <jsp:include page="/WEB-INF/views/navbar.jsp" />
@@ -49,15 +51,31 @@
 
         <div class="card mb-3">
             <div class="card-header">
+                <spring:message code="lbl.userInfo"/>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4><%=user.getFullName()%></h4>
+                    </div>
+                    <div class="col-sm-6">
+                        <h5><%=user.getUsername()%></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">
                 <spring:message code="lbl.viewLocationsHierarchy"/>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-5" style="overflow-y: auto; max-height: 350px;">
                         <div id="locationTree">
                         </div>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-sm-6">
                         <select id='locations' multiple='multiple'>
                         </select>
                     </div>
@@ -151,7 +169,7 @@
 <script src="<c:url value='/resources/js/jquery.multi-select.js'/>"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-
+        $('[data-toggle="tooltip"]').tooltip();
         $('#locationTree').jstree({
             'core' : {
                 'data' : <%=locationTreeData %>
@@ -199,6 +217,13 @@
             }
 
             $('#locations').val(ids);
+
+            <% for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
+                if(user.getId() != dto.getId()) {%>
+            	    $('#locations option[value=<%=dto.getLocationId()%>]').attr("disabled", 'disabled');
+                <%}
+            }%>
+
             $('#locations').multiSelect('refresh');
             console.log($('#locations').val());
         }).jstree();
@@ -228,10 +253,9 @@
                     xhr.setRequestHeader(header, token);
                 },
                 success : function(data) {
-                    if(data == ""){
+                    if(data == "") {
                         window.location.replace("/opensrp-dashboard/user.html");
                     }
-
                 },
                 error : function(e) {
                     console.log(data);

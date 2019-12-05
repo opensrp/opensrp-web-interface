@@ -180,7 +180,9 @@ public class User implements UserDetails {
 	
 	@Transient
 	public String getFullName() {
-		return firstName + " " + lastName;
+		if (lastName != null)
+			return firstName + " " + lastName.replaceAll(".", "");
+		return firstName;
 	}
 	
 	public String getEmail() {

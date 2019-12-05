@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.LocationTreeDTO;
+import org.opensrp.common.dto.UserAssignedLocationDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.util.TreeNode;
 import org.opensrp.core.entity.Location;
@@ -260,6 +261,56 @@ public class LocationService {
 		
 		return dataArray;
 		
+	}
+
+	public JSONArray getLocationWithDisableFacility(String parentIndication, String parentKey, List<UserAssignedLocationDTO> userAssignedLocationDTOS, Integer userId) throws JSONException {
+		JSONArray dataArray = new JSONArray();
+
+		Map<Integer, Integer> locationMap = new HashMap<>();
+		for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
+			locationMap.put(dto.getLocationId(), dto.getId());
+		}
+
+		List<Location> locations = findAll("Location");
+		Collections.reverse(locations);
+		for (Location location : locations) {
+			JSONObject dataObject = new JSONObject();
+			Location parentLocation = location.getParentLocation();
+			if (parentLocation != null) {
+				dataObject.put(parentKey, parentLocation.getId());
+			} else {
+				dataObject.put(parentKey, parentIndication);
+			}
+			JSONObject state = new JSONObject();
+
+			if (locationMap.get(location.getId())!=null && !locationMap.get(location.getId()).equals(userId) ) {
+
+				if (locationMap.containsKey(location.getId())) {
+					state.put("disabled", true);
+				} else if (locationMap.get(location.getId()) != null && location.getParentLocation() != null
+						&& !locationMap.get(location.getParentLocation().getId()).equals(userId)) {
+
+					if (locationMap.containsKey(location.getParentLocation().getId())) {
+						locationMap.put(location.getId(), locationMap.get(location.getParentLocation().getId()));
+						state.put("disabled", true);
+					}
+					else state.put("disabled", false);
+				} else {
+					state.put("disabled", false);
+				}
+			} else {
+				state.put("disabled", false);
+			}
+
+			dataObject.put("id", location.getId());
+			dataObject.put("text", location.getName());
+			dataObject.put("icon", location.getLocationTag().getName());
+			dataObject.put("state", state);
+			dataArray.put(dataObject);
+		}
+
+		return dataArray;
+
 	}
 	
 	@Transactional

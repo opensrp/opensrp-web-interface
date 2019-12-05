@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.LocationTreeDTO;
+import org.opensrp.common.dto.UserAssignedLocationDTO;
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.core.dto.UserLocationDTO;
@@ -675,5 +676,9 @@ public class UserService {
 
 	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId) {
 		return repository.getUserListWithoutCatchmentArea(roleId, branchId);
+	}
+
+	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId) {
+		return repository.assignedLocationByRole(roleId);
 	}
 }
