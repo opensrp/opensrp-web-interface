@@ -3,6 +3,7 @@ package org.opensrp.web.rest.controller;
 import static org.springframework.http.HttpStatus.OK;
 
 import org.apache.log4j.Logger;
+import org.opensrp.common.dto.ChangePasswordDTO;
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.dto.UserLocationDTO;
@@ -88,6 +89,21 @@ public class UserRestController {
 			userNameUniqueError = "Some problem occurred please contact with Admin";
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
+	}
+
+	@RequestMapping(value = "/change-password", method = RequestMethod.POST)
+	public ResponseEntity<String> changeUserPassword(@RequestBody ChangePasswordDTO dto, ModelMap model) throws Exception {
+
+		System.out.println("USERNAME: "+ dto.getUsername());
+		System.out.println("PASSWORD: "+ dto.getPassword());
+
+		try {
+			userServiceImpl.changePassword(dto);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(new Gson().toJson(""), OK);
 	}
 	
 	@RequestMapping(value = "/{id}/mhv", method = RequestMethod.POST)

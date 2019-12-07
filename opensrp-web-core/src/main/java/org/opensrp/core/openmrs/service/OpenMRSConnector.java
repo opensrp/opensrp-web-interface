@@ -11,6 +11,8 @@ import org.json.JSONObject;
 public interface OpenMRSConnector<T> {
 	
 	public T add(T jsonObject) throws JSONException;
+
+	public T post(T jsonObject) throws JSONException;
 	
 	public String update(T jsonObject, String uuid, JSONObject ob) throws JSONException;
 	

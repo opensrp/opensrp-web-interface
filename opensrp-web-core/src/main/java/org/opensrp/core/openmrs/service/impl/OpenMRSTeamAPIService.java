@@ -44,7 +44,12 @@ public class OpenMRSTeamAPIService implements OpenMRSConnector<Object> {
 		}
 		return team;
 	}
-	
+
+	@Override
+	public Object post(Object jsonObject) throws JSONException {
+		return null;
+	}
+
 	@Override
 	public String update(Object teamOb, String uuid, JSONObject jsonObject) throws JSONException {
 		Team team = (Team) teamOb;

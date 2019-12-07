@@ -41,7 +41,12 @@ public class OpenMRSTagAPIService implements OpenMRSConnector<Object> {
 		}
 		return tag;
 	}
-	
+
+	@Override
+	public Object post(Object jsonObject) throws JSONException {
+		return null;
+	}
+
 	@Override
 	public String update(Object tagOb, String uuid, JSONObject jsonObject) throws JSONException {
 		LocationTag tag = (LocationTag) tagOb;

@@ -36,7 +36,7 @@ public class UserMapper {
 
         String ssNo = "";
 
-        if (userDTO.getSsNo() != null && userDTO.getSsNo().length() > 0){
+        if (userDTO.getSsNo() != null && userDTO.getSsNo().length() > 0 && userDTO.getUsername().length() < 12){
             int length = userDTO.getSsNo().length();
             user.setSsNo(userDTO.getSsNo().substring(1, length));
             ssNo = userDTO.getSsNo();

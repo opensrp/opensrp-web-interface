@@ -3,9 +3,6 @@ package org.opensrp.web.controller;
 import java.io.*;
 import java.util.*;
 
-import com.google.gson.Gson;
-import javassist.tools.framedump;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,9 +11,11 @@ import javax.validation.Valid;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.UserAssignedLocationDTO;
+import org.opensrp.common.exception.BadFormatException;
+import org.opensrp.common.exception.BranchNotFoundException;
+import org.opensrp.common.exception.LocationNotFoundException;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.entity.*;
 import org.opensrp.core.service.*;
@@ -542,7 +541,8 @@ public class UserController {
 		model.addAttribute("locale", locale);
 		User account = userServiceImpl.findById(id, "id", User.class);
 		model.addAttribute("account", account);
-		return new ModelAndView("user/password", "command", account);
+		session.setAttribute("username", account.getUsername());
+		return new ModelAndView("user/change-password", "command", account);
 	}
 	
 	/**
@@ -684,7 +684,8 @@ public class UserController {
 			model.put("msg", "failed to upload user data because its empty");
 			model.addAttribute("msg", "failed to upload file because its empty");
 			return new ModelAndView("/user/upload");
-		} else if (!"text/csv".equalsIgnoreCase(file.getContentType())) {
+		} else if (!"text/csv".equalsIgnoreCase(file.getContentType())
+				&& !"application/vnd.ms-excel".equalsIgnoreCase(file.getContentType())) {
 			model.addAttribute("msg", "file type should be '.csv'");
 			return new ModelAndView("/user/upload");
 		}
@@ -709,13 +710,21 @@ public class UserController {
 				}
 				stream.flush();
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			model.put("msg", "failed to process file because : " + e.getMessage());
 			return new ModelAndView("/user/upload");
 		}
 
-		String msg = userServiceImpl.uploadUser(csvFile);
+		String msg = "";
+		try {
+			msg = userServiceImpl.uploadUser(csvFile);
+		} catch (LocationNotFoundException lnf) {
+			msg = lnf.getErrorMessage();
+		} catch (BranchNotFoundException bnf) {
+			msg = bnf.getErrorMessage();
+		} catch (BadFormatException bf) {
+			msg = bf.getErrorMessage();
+		}
 		if (!msg.isEmpty()) {
 			model.put("msg", msg);
 			return new ModelAndView("/user/upload");

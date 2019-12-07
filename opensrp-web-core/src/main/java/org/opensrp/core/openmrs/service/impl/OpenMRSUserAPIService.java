@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.common.dto.ChangePasswordDTO;
 import org.opensrp.common.util.RoleUtil;
 import org.opensrp.connector.openmrs.service.APIServiceFactory;
 import org.opensrp.core.entity.Role;
@@ -188,7 +189,17 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 		
 		return user;
 	}
-	
+
+	@Override
+	public Object post(Object jsonObject) throws JSONException {
+		ChangePasswordDTO dto = (ChangePasswordDTO) jsonObject;
+		JSONObject changePasswordBody = new JSONObject();
+		changePasswordBody.put("userName", dto.getUsername());
+		changePasswordBody.put("password", dto.getPassword());
+		JSONObject response = apiServiceFactory.getApiService("openmrs").add(PAYLOAD, changePasswordBody, "");
+		return response;
+	}
+
 	@Override
 	public String update(Object userOb, String uuid, JSONObject jsonOb) throws JSONException {
 		User user = (User) userOb;

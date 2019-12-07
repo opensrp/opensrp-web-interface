@@ -65,6 +65,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	private static final int SK_ID = 28;
 	private static final int VILLAGE_ID = 33;
 	private static final int UNION_ID = 32;
+	private static final int POURASABHA_ID = 31;
 
 	@Autowired
 	private SessionFactory sessionFactory;

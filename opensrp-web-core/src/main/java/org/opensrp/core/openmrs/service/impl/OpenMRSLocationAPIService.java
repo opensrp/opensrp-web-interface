@@ -58,7 +58,12 @@ public class OpenMRSLocationAPIService extends OpensrpProperties implements Open
 		}
 		return location;
 	}
-	
+
+	@Override
+	public Object post(Object jsonObject) throws JSONException {
+		return null;
+	}
+
 	@Override
 	public String update(Object locationOb, String uuid, JSONObject jsonObject) throws JSONException {
 		Location location = (Location) locationOb;
