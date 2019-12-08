@@ -1595,7 +1595,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			if (branchId > 0) where += " and r.id = " + roleId;
 			else where += "r.id = " + roleId;
 		}
-		where += ";";
+		where += " ";
 		try {
 			String sql = "WITH recursive main_location_tree AS \n" + "( \n" + "       SELECT * \n"
 					+ "       FROM   core.location \n" + "       WHERE  id IN ( WITH recursive location_tree AS \n"
@@ -1618,12 +1618,13 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "ON              ub.user_id = u.id \n" + "JOIN            core.branch b \n"
 					+ "ON              b.id = ub.branch_id \n" + "JOIN            core.user_role ur \n"
 					+ "ON              u.id = ur.user_id \n" + "JOIN            core.role r \n"
-					+ "ON              ur.role_id = r.id";
+					+ "ON              ur.role_id = r.id ";
 
-			Query query = session.createSQLQuery((branchId > 0 || roleId > 0)?sql+where:sql+";");
+			Query query = session.createSQLQuery((branchId > 0 || roleId > 0)?sql+where:sql+ " order by u.id desc ");
 			userList = query
 					.setInteger("locationId", locationId)
 					.setInteger("locationTagId", locationTagId)
+					.setMaxResults(300)					
 					.list();
 		} catch (Exception e) {
 			e.printStackTrace();

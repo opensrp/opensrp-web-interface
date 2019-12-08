@@ -182,10 +182,10 @@ public class LocationController {
 			model.put("msg", "failed to upload file because its empty");
 			model.addAttribute("msg", "failed to upload file because its empty");
 			return new ModelAndView("/location/upload_csv");
-		} else if (!"text/csv".equalsIgnoreCase(file.getContentType())) {
+		} /*else if (!"text/csv".equalsIgnoreCase(file.getContentType())) {
 			model.addAttribute("msg", "file type should be '.csv'");
 			return new ModelAndView("/location/upload_csv");
-		}
+		}*/
 		
 		String rootPath = request.getSession().getServletContext().getRealPath("/");
 		File dir = new File(rootPath + File.separator + "uploadedfile");
