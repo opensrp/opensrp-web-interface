@@ -402,7 +402,7 @@ public class LocationService {
 		return locationJsonArray;
 	}
 	
-	@SuppressWarnings("resource")
+	@SuppressWarnings({ "resource", "unused" })
 	public String uploadLocation(File csvFile) throws Exception {
 		String msg = "";
 		BufferedReader br = null;
@@ -423,6 +423,8 @@ public class LocationService {
 					tags = locations;
 				} else {
 					for (int i = 0; i < locations.length; i = i + 2) {
+						Long start = System.currentTimeMillis();
+						System.err.println("start timestamp request->>>>>>>>>>>>>>>>>>>>>>"+start);
 						tag = tags[i + 1];
 						code = locations[i];
 						name = locations[i + 1];
@@ -438,28 +440,32 @@ public class LocationService {
 						}
 						Location isExists = findByKey(name.toUpperCase().trim(), "name", Location.class);
 						Location location = new Location();
-						location.setCode(code);
-
-						location.setName(name.toUpperCase().trim());
-
-						location.setLocationTag(locationTag);
-						location.setParentLocation(parentLocation);
-						location.setDescription(name);
-						location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
-
+						if(isExists == null){							
+							location.setCode(code);
+							location.setName(name.toUpperCase().trim());
+							location.setLocationTag(locationTag);
+							location.setParentLocation(parentLocation);
+							location.setDescription(name);
+							location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
+							if (!location.getUuid().isEmpty()) {								
+								repository.save(location);
+								
+							} else {
+								logger.info("No uuid found for location:" + location.getName());
+								
+							}
+							
+						}else{
+							logger.info("already exists location:" + location.getName());
+						}
+						
 						System.out.println("LOCATION CREATED OPENMRS:::");
 						System.out.println(location);
 
-						if (!location.getUuid().isEmpty()) {
-							if (isExists == null) {
-								repository.save(location);
-							} else {
-								logger.info("already exists location:" + location.getName());
-							}
-						} else {
-							logger.info("No uuid found for location:" + location.getName());
-							
-						}
+						
+						Long end = System.currentTimeMillis();
+						Long dif = end-start;
+						System.err.println("End timestamp:"+end+" time difference.>>>>>>>>>>>>>>>>>>>>>>>>>>>:"+dif);
 						
 					}
 				}
@@ -468,8 +474,9 @@ public class LocationService {
 			
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			logger.info("Some problem occurred, please contact with admin..");
-			msg = "Some problem occurred, please contact with admin..";
+			msg = "Some problem occurred, please contact with admin..at position:";
 		}
 		return msg;
 	}

@@ -116,6 +116,13 @@
 						%>
 					</select>
 				</div>
+				
+				<div class="col-2">
+					<div class="form-group">
+						<input name="name" style="font-size:12px" type="search" class="form-control"
+							 placeholder="User name">
+					</div>
+				</div>
 			</div>
 			<!-- end: location info -->
 

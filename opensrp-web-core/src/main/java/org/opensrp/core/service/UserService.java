@@ -688,12 +688,12 @@ public class UserService {
 		return msg;
 	}
 
-	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId) {
-		return repository.getUserListByFilterString(locationId, locationTagId, roleId, branchId);
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId,String name) {
+		return repository.getUserListByFilterString(locationId, locationTagId, roleId, branchId,name);
 	}
 
-	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId) {
-		return repository.getUserListWithoutCatchmentArea(roleId, branchId);
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId,String name) {
+		return repository.getUserListWithoutCatchmentArea(roleId, branchId,name);
 	}
 
 	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId) {

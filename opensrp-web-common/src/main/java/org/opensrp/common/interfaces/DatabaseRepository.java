@@ -167,9 +167,9 @@ public interface DatabaseRepository {
 
 	List<Object[]> getExportByCreator(String username);
 
-	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId);
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId,String name);
 
-	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId);
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId,String name);
 
 	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId);
 }

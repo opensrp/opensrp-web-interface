@@ -90,6 +90,8 @@
                                     <a href="<c:url value="/user/${id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
                                     <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
                                     <a href="<c:url value="/user/${id}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>
+                                   <%--  <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
+								 | <a href="<c:url value="/user/${id}/password.html?lang=${locale}"/>"><spring:message code="lbl.changePassword"/></a> <%} %> --%>
                                 </td>
 							</tr>
 							<%
@@ -139,6 +141,9 @@
 								<a href="<c:url value="/user/${id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
 								<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
 								<a href="<c:url value="/user/${id}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>
+								
+								<%-- <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
+								 | <a href="<c:url value="/user/${id}/password.html?lang=${locale}"/>"><spring:message code="lbl.changePassword"/></a> <%} %> --%>
 							</td>
 						</tr>
 						<%

@@ -135,14 +135,16 @@ public class UserController {
 	                       Model model,
 	                       @RequestParam(value = "role", required = false) Integer roleId,
 	                       @RequestParam(value = "branch", required = false) Integer branchId,
+	                       @RequestParam(value = "name", required = false) String name,
 	                       Locale locale) {
 		model.addAttribute("locale", locale);
+		System.out.println("name"+name);
 		roleId = (roleId==null?0:roleId);
 		branchId = (branchId==null?0:branchId);
 		searchUtil.setDivisionAttribute(session);
 		int locationId = locationServiceImpl.getLocationId(request);
-		List<Object[]> users = userServiceImpl.getUserListByFilterString(locationId, villageTagId, roleId, branchId);
-		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId);
+		List<Object[]> users = userServiceImpl.getUserListByFilterString(locationId, villageTagId, roleId, branchId,name);
+		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId,name);
 		List<Branch> branches = branchService.findAll("Branch");
 		List<Role> roles = roleServiceImpl.findAll("Role");
 		session.setAttribute("usersWithoutCatchmentArea", usersWithoutCatchmentArea);

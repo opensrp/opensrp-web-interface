@@ -5,8 +5,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
+import org.castor.util.StringUtil;
 import org.exolab.castor.types.DateTime;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -1586,16 +1588,21 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 
 	@Override
-	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId) {
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId,String name) {
 		Session session = sessionFactory.openSession();
 		List<Object[]> userList = null;
+		
+		
 		String where = " where ";
-		if (branchId > 0) where += "b.id = "+branchId;
-		if (roleId > 0) {
-			if (branchId > 0) where += " and r.id = " + roleId;
-			else where += "r.id = " + roleId;
+		if (branchId > 0) where += "b.id = "+branchId +" and ";
+		
+		if (roleId > 0) where += "  r.id = " + roleId +" and ";
+			//else where += "r.id = " + roleId;
+		//}
+		if(!org.apache.commons.lang3.StringUtils.isBlank(name)){
+			where += " u.username like '" + name.trim() + "%' and ";
 		}
-		where += " ";
+		where += " 1=1";
 		try {
 			String sql = "WITH recursive main_location_tree AS \n" + "( \n" + "       SELECT * \n"
 					+ "       FROM   core.location \n" + "       WHERE  id IN ( WITH recursive location_tree AS \n"
@@ -1620,7 +1627,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "ON              u.id = ur.user_id \n" + "JOIN            core.role r \n"
 					+ "ON              ur.role_id = r.id ";
 
-			Query query = session.createSQLQuery((branchId > 0 || roleId > 0)?sql+where:sql+ " order by u.id desc ");
+			Query query = session.createSQLQuery(sql+where+ " order by u.id desc ");
 			userList = query
 					.setInteger("locationId", locationId)
 					.setInteger("locationTagId", locationTagId)
@@ -1635,7 +1642,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId) {
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId,String name) {
 		List<Object[]> users = new ArrayList<Object[]>();
 		Session session = sessionFactory.openSession();
 		try {
