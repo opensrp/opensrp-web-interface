@@ -81,17 +81,20 @@
                     </div>
                     <div class="col-sm-1">
                         <input id="userId" value="<%=userId%>" type="hidden">
-                        <button id="saveCatchmentArea"
-                                class="btn btn-primary btn-sm"
-                                style="position: absolute; top: 50%;
+                        <div class="row">
+                            <button id="saveCatchmentArea"
+                                    class="btn btn-primary btn-sm"
+                                    style="position: absolute; top: 50%;
                                 transform: translateY(-50%);">
-                            Save
-                        </button>
+                                Save
+                            </button>
+                            <p id="pleaseWait" style="display: none; color: red;">Please wait...</p>
+                        </div>
                     </div>
                 </div>
                 <%if (catchmentAreas != null && catchmentAreas.size() > 0) {%>
                 <div class="row" style="margin-top: 60px;">
-                    <table>
+                    <table style="overflow-x: auto;">
                         <thead>
                         <tr>
                             <th><spring:message code="lbl.division"/></th>
@@ -229,6 +232,9 @@
         }).jstree();
 
         $('#saveCatchmentArea').unbind().click(function () {
+            // window.location.replace("/opensrp-dashboard/user.html");
+            $('#saveCatchmentArea').prop('disabled', true);
+            $('#pleaseWait').show();
             var url = "";
             <% if (isTeamMember) {%>
             url = "/opensrp-dashboard/rest/api/v1/user/catchment-area/update";
@@ -259,9 +265,13 @@
                 },
                 error : function(e) {
                     console.log(data);
+                    $('#saveCatchmentArea').prop('disabled', false);
+                    $('#pleaseWait').hide();
                 },
                 done : function(e) {
                     console.log("DONE");
+                    $('#saveCatchmentArea').prop('disabled', false);
+                    $('#pleaseWait').hide();
                 }
             });
         });

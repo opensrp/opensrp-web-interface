@@ -81,13 +81,20 @@ public class UsersCatchmentAreaService {
     }
 
     @Transactional
-    public List<UsersCatchmentArea> findAllByParentAndUser(int parentId, int userId) {
+    public Integer deleteAllByParentAndUser(int parentId, int userId) {
         Session session = sessionFactory.openSession();
-        List<UsersCatchmentArea> usersCatchmentAreas = new ArrayList<>();
-        String hql = "from UsersCatchmentArea where parent_location_id = :parentId and user_id = :userId";
-        usersCatchmentAreas = session.createQuery(hql)
-                .setInteger("parentId", parentId)
-                .setInteger("userId", userId).list();
+        Integer usersCatchmentAreas = 0;
+        try {
+            String hql = "delete from core.users_catchment_area where parent_location_id = :parentId and user_id = :userId";
+            usersCatchmentAreas = session.createSQLQuery(hql)
+                    .setInteger("parentId", parentId)
+                    .setInteger("userId", userId).executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
         return usersCatchmentAreas;
     }
 

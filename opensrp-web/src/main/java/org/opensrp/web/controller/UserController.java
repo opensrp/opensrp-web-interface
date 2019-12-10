@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -538,13 +539,12 @@ public class UserController {
 	 * @return user html password form.
 	 */
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
-	@RequestMapping(value = "/user/{id}/password.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/user/{id}/change-password.html", method = RequestMethod.GET)
 	public ModelAndView editPassword(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
 		model.addAttribute("locale", locale);
 		User account = userServiceImpl.findById(id, "id", User.class);
-		model.addAttribute("account", account);
 		session.setAttribute("username", account.getUsername());
-		return new ModelAndView("user/change-password", "command", account);
+		return new ModelAndView("user/change-password");
 	}
 	
 	/**
@@ -561,22 +561,22 @@ public class UserController {
 	 * @param account is submitted user object.
 	 * @param binding Serves as result holder for a {@link DataBinder}.
 	 */
-	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
-	@RequestMapping(value = "/user/{id}/password.html", method = RequestMethod.POST)
-	public ModelAndView editPassword(@Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
-	                                 HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
-		User gettingAccount = userServiceImpl.findById(id, "id", User.class);
-		if (userServiceImpl.isPasswordMatched(account)) {
-			account.setId(id);
-			account.setEnabled(true);
-			account.setRoles(gettingAccount.getRoles());
-			userServiceImpl.updatePassword(account);
-		} else {
-			
-			return new ModelAndView("user/password", "command", gettingAccount);
-		}
-		return new ModelAndView("redirect:/user.html?lang=" + locale);
-	}
+//	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
+//	@RequestMapping(value = "/user/{id}/password.html", method = RequestMethod.POST)
+//	public ModelAndView editPassword(@Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
+//	                                 HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
+//		User gettingAccount = userServiceImpl.findById(id, "id", User.class);
+//		if (userServiceImpl.isPasswordMatched(account)) {
+//			account.setId(id);
+//			account.setEnabled(true);
+//			account.setRoles(gettingAccount.getRoles());
+//			userServiceImpl.updatePassword(account);
+//		} else {
+//
+//			return new ModelAndView("user/password", "command", gettingAccount);
+//		}
+//		return new ModelAndView("redirect:/user.html?lang=" + locale);
+//	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginPage() {
@@ -647,7 +647,7 @@ public class UserController {
 		Integer roleId = roles.get(0).getId();
 		List<UserAssignedLocationDTO> userAssignedLocationDTOS = userServiceImpl.assignedLocationByRole(roleId);
 
-		JSONArray data = locationServiceImpl.getLocationWithDisableFacility(parentIndication, parentKey, userAssignedLocationDTOS, user.getId());
+		JSONArray data = locationServiceImpl.getLocationWithDisableFacility(session, parentIndication, parentKey, userAssignedLocationDTOS, user.getId());
 
 		session.setAttribute("usersCatchmentAreas", usersCatchmentAreas);
 		session.setAttribute("catchmentAreaTable", catchmentAreas);

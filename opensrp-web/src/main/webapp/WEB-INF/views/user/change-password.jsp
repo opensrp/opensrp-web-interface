@@ -30,8 +30,6 @@
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
-<c:url var="saveUrl" value="/user/add.html" />
-
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 <jsp:include page="/WEB-INF/views/navbar.jsp" />
 
@@ -51,16 +49,12 @@
                 </div>
 
             </div>
-            <form:form id="UserInfo" class="form-inline" autocomplete="false">
+            <div id="changePassword" class="form-inline" autocomplete="false">
 
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
                         <label class="label-width" for="password"><spring:message code="lbl.password"/></label>
                         <input type="password" class="form-control mx-sm-3" id="password" name="password"  required />
-                        <small id="passwordHelpInline" class="text-muted text-para">
-                                <%-- <spring:message code="lbl.passwordMEssage"/> --%>
-
-                        </small>
                         <input type="checkbox" onclick="toggleVisibilityOfPassword()">Show Password
                     </div>
                 </div>
@@ -68,10 +62,10 @@
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
                         <label class="label-width"  for="retypePassword"><spring:message code="lbl.confirmedPassword"/></label>
-                        <form:password path="retypePassword" class="form-control mx-sm-3" id="retypePassword"
+                        <input type="password" class="form-control mx-sm-3" id="retypePassword"
                                        required="required" />
                         <small id="confirmPasswordHelpInline" class="text-muted text-para">
-                            <span class="text-red" id="passwordNotmatchedMessage"></span> <spring:message code="lbl.retypePasswordMessage"/>
+                            <span class="text-red" id="passwordNotMatchedMessage"></span> <spring:message code="lbl.retypePasswordMessage"/>
                         </small>
                     </div>
                 </div>
@@ -80,12 +74,12 @@
                     <div class="form-group">
                         <input
                                 type="submit"
-                                onclick="return Validate()"
+                                onclick="submitted()"
                                 value="<spring:message code="lbl.resetPassword"/>"
                                 class="btn btn-primary btn-block btn-center" />
                     </div>
                 </div>
-            </form:form>
+            </div>
         </div>
 
     </div>
@@ -115,23 +109,26 @@
         }
     }
 
-    $("#UserInfo").submit(function(event) {
+    function submitted() {
+
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("retypePassword").value;
+        if (password != confirmPassword) {
+            $("#passwordNotMatchedMessage").html("Your password is not similar with confirm password. Please enter same password in both");
+            return;
+        }
+        $("#passwordNotMatchedMessage").html("");
+
         $("#loading").show();
+        console.log("first chance");
         var url = "/opensrp-dashboard/rest/api/v1/user/change-password";
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
-        var formData;
-
-        console.log($('#ssNo').val());
-
-        formData = {
-            'username': <%=username%>,
-            'password': $('input[name=password]').val(),
+        console.log("last chance <%=username%>");
+        var formData = {
+            'username': "<%=username%>",
+            'password': $('input[name=password]').val()
         };
-
-        event.preventDefault();
-
-        console.log(formData);
 
         $.ajax({
             contentType : "application/json",
@@ -153,20 +150,20 @@
 
             },
             error : function(e) {
-
+                $("#loading").hide();
             },
             done : function(e) {
+                $("#loading").hide();
                 console.log("DONE");
             }
         });
-    });
+    }
 
     function Validate() {
         var password = document.getElementById("password").value;
         var confirmPassword = document.getElementById("retypePassword").value;
         if (password != confirmPassword) {
             $("#passwordNotMatchedMessage").html("Your password is not similar with confirm password. Please enter same password in both");
-
             return false;
         }
 

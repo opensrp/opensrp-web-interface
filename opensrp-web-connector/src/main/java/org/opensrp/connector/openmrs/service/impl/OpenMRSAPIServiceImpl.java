@@ -29,6 +29,10 @@ public class OpenMRSAPIServiceImpl extends OpenmrsCredentialsService implements 
 		        .body());
 	}
 
+	public HttpResponse post(String payload, JSONObject jsonObject, String URL) {
+		return HttpUtil.post(getURL() + "/" + URL, payload, jsonObject.toString(), OPENMRS_USER, OPENMRS_PWD);
+	}
+
 	public JSONObject update(String payload, JSONObject jsonObject, String URL) throws JSONException {
 		return null;
 	}

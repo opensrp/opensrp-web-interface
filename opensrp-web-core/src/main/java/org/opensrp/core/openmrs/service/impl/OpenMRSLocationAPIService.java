@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.util.OpensrpProperties;
 import org.opensrp.connector.openmrs.service.APIServiceFactory;
+import org.opensrp.connector.util.HttpResponse;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.openmrs.service.OpenMRSConnector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class OpenMRSLocationAPIService extends OpensrpProperties implements Open
 	}
 
 	@Override
-	public Object post(Object jsonObject) throws JSONException {
+	public HttpResponse post(Object jsonObject) {
 		return null;
 	}
 

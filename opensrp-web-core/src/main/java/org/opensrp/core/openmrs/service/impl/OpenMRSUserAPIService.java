@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import org.opensrp.common.dto.ChangePasswordDTO;
 import org.opensrp.common.util.RoleUtil;
 import org.opensrp.connector.openmrs.service.APIServiceFactory;
+import org.opensrp.connector.util.HttpResponse;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.openmrs.service.OpenMRSConnector;
@@ -34,6 +35,8 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 	final String ROLE_URL = "ws/rest/v1/role";
 	
 	final String PROVIDER_URL = "ws/rest/v1/provider";
+
+	final String CHANGE_PASSWORD = "ws/rest/v1/manage-accounts/change-password";
 	
 	final static String ageKey = "age";
 	
@@ -191,12 +194,12 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 	}
 
 	@Override
-	public Object post(Object jsonObject) throws JSONException {
+	public HttpResponse post(Object jsonObject) throws JSONException {
 		ChangePasswordDTO dto = (ChangePasswordDTO) jsonObject;
 		JSONObject changePasswordBody = new JSONObject();
 		changePasswordBody.put("userName", dto.getUsername());
 		changePasswordBody.put("password", dto.getPassword());
-		JSONObject response = apiServiceFactory.getApiService("openmrs").add(PAYLOAD, changePasswordBody, "");
+		HttpResponse response = apiServiceFactory.getApiService("openmrs").post(PAYLOAD, changePasswordBody, CHANGE_PASSWORD);
 		return response;
 	}
 

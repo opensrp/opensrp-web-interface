@@ -5,11 +5,7 @@
 package org.opensrp.core.service;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -26,6 +22,7 @@ import org.opensrp.common.exception.BadFormatException;
 import org.opensrp.common.exception.BranchNotFoundException;
 import org.opensrp.common.exception.LocationNotFoundException;
 import org.opensrp.common.interfaces.DatabaseRepository;
+import org.opensrp.connector.util.HttpResponse;
 import org.opensrp.core.dto.UserLocationDTO;
 import org.opensrp.core.dto.WorkerIdDTO;
 import org.opensrp.core.entity.*;
@@ -147,11 +144,13 @@ public class UserService {
 		return createdUser;
 	}
 
-	public <T> String changePassword(ChangePasswordDTO dto) {
+	public String changePassword(ChangePasswordDTO dto) {
 		try {
-			JSONObject response = (JSONObject) openMRSServiceFactory.getOpenMRSConnector("user").post(dto);
-
-			System.out.println("RESPONSE HOILO-> "+ response.toString());
+			Integer statusCode = openMRSServiceFactory.getOpenMRSConnector("user").post(dto).statusCode();
+			if (statusCode == 200) {
+				dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+				int response = repository.updatePassword(dto);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -479,6 +478,7 @@ public class UserService {
 		TeamMember teamMember = teamMemberServiceImpl.findByForeignKey(userLocationDTO.getUserId(), "person_id", "TeamMember");
 
 		try {
+			Integer isDeleted = 0;
 			if (userLocationDTO.getLocations().length > 0) {
 				int locationId = userLocationDTO.getLocations()[0];
 				Location location = locationServiceImpl.findById(locationId, "id", Location.class);
@@ -493,21 +493,26 @@ public class UserService {
 						}
 					}
 
-					for (int newLocationId: userLocationDTO.getLocations()) {
-						Location newLocation = locationServiceImpl.findById(newLocationId, "id", Location.class);
-						locationSet.add(newLocation);
+					List<Integer> locationIds = new ArrayList<Integer>();
+					for (Integer id: userLocationDTO.getLocations()) {
+						locationIds.add(id);
 					}
+					List<Location> newLocations = locationServiceImpl.findAllById(locationIds, "id", "Location");
+
+					for (Location l: newLocations) {
+						locationSet.add(l);
+					}
+
 					teamMember.setLocations(locationSet);
 
-					List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByParentAndUser(
+					isDeleted = usersCatchmentAreaService.deleteAllByParentAndUser(
 							parentId,
-							userLocationDTO.getUserId());
-
-					for (UsersCatchmentArea usersCatchmentArea : usersCatchmentAreas) {
-						usersCatchmentAreaService.delete(usersCatchmentArea);
-					}
+							userLocationDTO.getUserId()
+					);
+					System.out.println("IS DELETED: "+isDeleted);
 				}
 			}
+
 			teamMemberServiceImpl.update(teamMember);
 			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(
 					userLocationDTO.getLocations(),
@@ -620,11 +625,11 @@ public class UserService {
 						String roles = String.valueOf(role.getId());
 						userDTO.setRoles(roles);
 
-						if (users[3].equalsIgnoreCase("SK")) {
+						if (users[3].trim().equalsIgnoreCase("SK")) {
 							userDTO.setPassword(userDTO.getMobile().substring(7));
 							userDTO.setUsername(users[7].trim());
 						}
-						else if (users[3].equalsIgnoreCase("SS")){
+						else if (users[3].trim().equalsIgnoreCase("SS")){
 							userDTO.setPassword("brac123456");
 							userDTO.setUsername(users[7].trim());
 							userDTO.setSsNo(users[8].trim());
@@ -646,8 +651,10 @@ public class UserService {
 
 						if (locations != null && locations.size() > 0) {
 							if (isExists == null) {
-								user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
-								if (user != null && !user.getUuid().isEmpty()) {
+								if (!users[3].trim().equalsIgnoreCase("SS")) {
+									user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
+								}
+								if ((user != null && !user.getUuid().isEmpty()) || users[3].trim().equalsIgnoreCase("SS")) {
 									user.setPassword(passwordEncoder.encode(user.getPassword()));
 									repository.save(user);
 									User newUser = repository.findByKey(user.getUsername(), "username", User.class);

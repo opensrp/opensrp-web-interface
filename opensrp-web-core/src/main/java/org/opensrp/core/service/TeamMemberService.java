@@ -77,6 +77,11 @@ public class TeamMemberService {
 		return createdTeamMember;
 	}
 
+	public <T> long saveWithoutSendToOpenMRS(T t) throws Exception {
+		TeamMember teamMember = (TeamMember) t;
+		return repository.save(teamMember);
+	}
+
 	@Transactional
 	public <T> int update(T t) throws JSONException {
 		TeamMember teamMember = (TeamMember) t;
@@ -91,6 +96,13 @@ public class TeamMemberService {
 		}
 		return updatedTag;
 	}
+
+	@Transactional
+	public <T> int updateWithoutSendToOpenMRS(T t) throws JSONException {
+		TeamMember teamMember = (TeamMember) t;
+		return repository.update(teamMember);
+	}
+
 
 	@Transactional
 	public <T> boolean delete(T t) throws JSONException {

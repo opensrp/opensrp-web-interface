@@ -114,6 +114,11 @@ public class LocationService {
 	public <T> T findById(int id, String fieldName, Class<?> className) {
 		return repository.findById(id, fieldName, className);
 	}
+
+	@Transactional
+	public <T> List<T> findAllById(List<Integer> ids, String fieldName, String className) {
+		return repository.findAllById(ids, fieldName, className);
+	}
 	
 	@Transactional
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
@@ -123,6 +128,11 @@ public class LocationService {
 	@Transactional
 	public <T> List<T> findAll(String tableClass) {
 		return repository.findAll(tableClass);
+	}
+
+	@Transactional
+	public <T> List<T> findAllLocation(String tableClass) {
+		return repository.findAllLocation(tableClass);
 	}
 	
 	public Location setCreatorParentLocationTagAttributeInLocation(Location location, int parentLocationId, int tagId) {
@@ -263,16 +273,23 @@ public class LocationService {
 		
 	}
 
-	public JSONArray getLocationWithDisableFacility(String parentIndication, String parentKey, List<UserAssignedLocationDTO> userAssignedLocationDTOS, Integer userId) throws JSONException {
+	public JSONArray getLocationWithDisableFacility(HttpSession session, String parentIndication, String parentKey, List<UserAssignedLocationDTO> userAssignedLocationDTOS, Integer userId) throws JSONException {
 		JSONArray dataArray = new JSONArray();
 
 		Map<Integer, Integer> locationMap = new HashMap<>();
 		for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
 			locationMap.put(dto.getLocationId(), dto.getId());
 		}
-
-		List<Location> locations = findAll("Location");
-		Collections.reverse(locations);
+		List<Location> locations = new ArrayList<>();
+		if (session.getAttribute("Location") != null) {
+			locations = (List<Location>) session.getAttribute("Location");
+			System.out.println("FROM SESSION");
+		} else {
+			locations = findAllLocation("Location");
+			System.out.println("FROM DATABASE");
+			session.setAttribute("Location", locations);
+		}
+//		Collections.reverse(locations);
 		for (Location location : locations) {
 			JSONObject dataObject = new JSONObject();
 			Location parentLocation = location.getParentLocation();
@@ -476,7 +493,7 @@ public class LocationService {
 		catch (Exception e) {
 			e.printStackTrace();
 			logger.info("Some problem occurred, please contact with admin..");
-			msg = "Some problem occurred, please contact with admin..at position:";
+			msg = "Some problem occurred, at position:" + position;
 		}
 		return msg;
 	}

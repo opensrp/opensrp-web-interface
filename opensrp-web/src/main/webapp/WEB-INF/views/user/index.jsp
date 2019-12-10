@@ -73,11 +73,12 @@
 						</thead>
 						<tbody>
 							<%
-								for (Object[] user: users) {
-									String stringId = user[5].toString();
-									String fullName = String.valueOf(user[1]).replaceAll(" .", "");
-									Integer id = Integer.parseInt(stringId);
-									session.setAttribute("id", id);
+								if (users != null){
+									for (Object[] user: users) {
+										String stringId = user[5].toString();
+										String fullName = String.valueOf(user[1]).replaceAll(" .", "");
+										Integer id = Integer.parseInt(stringId);
+										session.setAttribute("id", id);
 							%>
 							<tr>
 								<td><%=fullName%></td>
@@ -90,11 +91,12 @@
                                     <a href="<c:url value="/user/${id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
                                     <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
                                     <a href="<c:url value="/user/${id}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>
-                                   <%--  <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-								 | <a href="<c:url value="/user/${id}/password.html?lang=${locale}"/>"><spring:message code="lbl.changePassword"/></a> <%} %> --%>
+                                   <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
+								 | <a href="<c:url value="/user/${id}/change-password.html?lang=${locale}"/>"><spring:message code="lbl.changePassword"/></a> <%} %>
                                 </td>
 							</tr>
 							<%
+									}
 								}
 							%>
 						</tbody>
@@ -124,11 +126,12 @@
 						</thead>
 						<tbody>
 						<%
-							for (Object[] user: usersWithoutCatchmentArea) {
-								String stringId = user[5].toString();
-								String fullName = String.valueOf(user[1]).replaceAll(" .", "");
-								Integer id = Integer.parseInt(stringId);
-								session.setAttribute("id", id);
+							if (users != null) {
+								for (Object[] user: usersWithoutCatchmentArea) {
+									String stringId = user[5].toString();
+									String fullName = String.valueOf(user[1]).replaceAll(" .", "");
+									Integer id = Integer.parseInt(stringId);
+									session.setAttribute("id", id);
 						%>
 						<tr>
 							<td><%=fullName%></td>
@@ -141,12 +144,12 @@
 								<a href="<c:url value="/user/${id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
 								<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
 								<a href="<c:url value="/user/${id}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>
-								
-								<%-- <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-								 | <a href="<c:url value="/user/${id}/password.html?lang=${locale}"/>"><spring:message code="lbl.changePassword"/></a> <%} %> --%>
-							</td>
+                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
+                                | <a href="<c:url value="/user/${id}/change-password.html?lang=${locale}"/>"><spring:message code="lbl.changePassword"/></a> <%} %>
+                            </td>
 						</tr>
 						<%
+								}
 							}
 						%>
 						</tbody>

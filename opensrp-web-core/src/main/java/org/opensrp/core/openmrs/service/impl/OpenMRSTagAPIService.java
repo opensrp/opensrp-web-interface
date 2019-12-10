@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.connector.openmrs.service.APIServiceFactory;
+import org.opensrp.connector.util.HttpResponse;
 import org.opensrp.core.entity.LocationTag;
 import org.opensrp.core.openmrs.service.OpenMRSConnector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class OpenMRSTagAPIService implements OpenMRSConnector<Object> {
 	}
 
 	@Override
-	public Object post(Object jsonObject) throws JSONException {
+	public HttpResponse post(Object jsonObject) {
 		return null;
 	}
 

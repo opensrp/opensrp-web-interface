@@ -7,6 +7,7 @@ import java.util.Map;
 import org.dom4j.Branch;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.opensrp.common.dto.ChangePasswordDTO;
 import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.dto.UserAssignedLocationDTO;
@@ -85,6 +86,8 @@ public interface DatabaseRepository {
 	
 	public <T> T findById(int id, String fieldName, Class<?> className);
 
+	public <T> List<T> findAllById(List<Integer> ids, String fieldName, String className);
+
 	public <T> T findByForeignKey(int id, String fieldName, String className);
 
 	public <T> List<T> findAllByForeignKey(int id, String fieldName, String className);
@@ -92,7 +95,9 @@ public interface DatabaseRepository {
 	public <T> T findByKey(String value, String fieldName, Class<?> className);
 	
 	public <T> List<T> findAll(String tableClass);
-	
+
+	public <T> List<T> findAllLocation(String tableClass);
+
 	public <T> T findByKeys(Map<String, Object> fielaValues, Class<?> className);
 	
 	public <T> T findLastByKey(Map<String, Object> fielaValues, String orderByFieldName, Class<?> className);
@@ -172,4 +177,6 @@ public interface DatabaseRepository {
 	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId,String name);
 
 	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId);
+
+	public int updatePassword(ChangePasswordDTO dto);
 }

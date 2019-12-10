@@ -23,6 +23,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
+import org.opensrp.common.dto.ChangePasswordDTO;
 import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.dto.UserAssignedLocationDTO;
@@ -222,26 +223,61 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	@Override
 	public <T> T findById(int id, String fieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		criteria.add(Restrictions.eq(fieldName, id));
-		List<T> result = criteria.list();
-		session.close();
+		List<T> result = new ArrayList<T>();
+		try {
+			Criteria criteria = session.createCriteria(className);
+			criteria.add(Restrictions.eq(fieldName, id));
+			result = criteria.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+	}
+
+	@Override
+	public <T> List<T> findAllById(List<Integer> ids, String fieldName, String className) {
+		Session session = sessionFactory.openSession();
+		List<T> result = new ArrayList<T>();
+		try {
+			String hql = "from "+className+" where "+fieldName+" in :ids";
+			Query query = session.createQuery(hql).setParameterList("ids", ids);
+			result = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
 	}
 
 	public <T> T findByForeignKey(int id, String fieldName, String className) {
 		Session session = sessionFactory.openSession();
-		String hql = "from "+className+" where " + fieldName + " = :id";
-		List<T> result = session.createQuery(hql).setInteger("id", id).list();
-		session.close();
+		List<T> result = new ArrayList<T>();
+		try {
+			String hql = "from "+className+" where " + fieldName + " = :id";
+			Query query = session.createQuery(hql).setInteger("id", id);
+			result = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 
 	public <T> List<T> findAllByForeignKey(int id, String fieldName, String className) {
 		Session session = sessionFactory.openSession();
-		String hql = "from "+className+" where " + fieldName + " = :id";
-		List<T> result = session.createQuery(hql).setInteger("id", id).list();
-		session.close();
+		List<T> result = new ArrayList<T>();
+		try {
+			String hql = "from "+className+" where " + fieldName + " = :id";
+			result = session.createQuery(hql).setInteger("id", id).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return (result.size() > 0 ? result : null);
 	}
 	
@@ -262,11 +298,16 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	@Override
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		criteria.add(Restrictions.eq(fieldName, value));
-		@SuppressWarnings("unchecked")
-		List<T> result = criteria.list();
-		session.close();
+		List<T> result = new ArrayList<T>();
+		try {
+			Criteria criteria = session.createCriteria(className);
+			criteria.add(Restrictions.eq(fieldName, value));
+			result = criteria.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 	
@@ -288,7 +329,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	@Override
 	public <T> T findByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
-		@SuppressWarnings("unchecked")
 		List<T> result = null;
 		try {
 			Criteria criteria = session.createCriteria(className);
@@ -322,14 +362,19 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	@Override
 	public <T> T findLastByKey(Map<String, Object> fielaValues, String orderByFieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
-			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		List<T> result = new ArrayList<T>();
+		try {
+			Criteria criteria = session.createCriteria(className);
+			for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+				criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+			}
+			criteria.addOrder(Order.desc(orderByFieldName));
+			result = criteria.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
-		criteria.addOrder(Order.desc(orderByFieldName));
-		@SuppressWarnings("unchecked")
-		List<T> result = criteria.list();
-		session.close();
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 	
@@ -356,15 +401,22 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	public <T> T findLastByKeyLessThanDateConditionOneField(Map<String, Object> fielaValues, Date fieldDateValue,
 	                                                        String field, String orderByFieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
-			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+		List<T> result = new ArrayList<T>();
+
+		try {
+			Criteria criteria = session.createCriteria(className);
+			for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+				criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+			}
+			criteria.add(Restrictions.lt(field, fieldDateValue));
+			criteria.addOrder(Order.desc(orderByFieldName));
+			result = criteria.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
-		criteria.add(Restrictions.lt(field, fieldDateValue));
-		criteria.addOrder(Order.desc(orderByFieldName));
-		@SuppressWarnings("unchecked")
-		List<T> result = criteria.list();
-		session.close();
+
 		return (T) (result.size() > 0 ? (T) result.get(0) : null);
 	}
 	
@@ -462,13 +514,19 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	@SuppressWarnings("unchecked")
 	public boolean isExists(Map<String, Object> fielaValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
-			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
-			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<Object> result = new ArrayList<Object>();
+		try {
+			Criteria criteria = session.createCriteria(className);
+			for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+				criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			}
+			result = criteria.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
-		List<Object> result = criteria.list();
-		session.close();
 		return (result.size() > 0 ? true : false);
 	}
 	
@@ -530,6 +588,24 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			session.close();
 		}
 		
+		return (List<T>) result;
+	}
+
+	@Override
+	public <T> List<T> findAllLocation(String tableClass) {
+		Session session = sessionFactory.openSession();
+		List<T> result = null;
+		try {
+			Query query = session.createQuery("from " + tableClass + " t order by t.id asc");
+			result = (List<T>) query.list();
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+
 		return (List<T>) result;
 	}
 	
@@ -1642,7 +1718,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId,String name) {
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId, String name) {
 		List<Object[]> users = new ArrayList<Object[]>();
 		Session session = sessionFactory.openSession();
 		try {
@@ -1689,6 +1765,24 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			session.close();
 		}
 		return userAssignedLocationDTOS;
+	}
+
+	@Override
+	public int updatePassword(ChangePasswordDTO dto) {
+		Session session = sessionFactory.openSession();
+		int result = 0;
+		try {
+			String sql = "update core.users set password = :password where username = :username";
+			Query query = session.createSQLQuery(sql)
+					.setString("password", dto.getPassword())
+					.setString("username", dto.getUsername());
+			result = query.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return result;
 	}
 
 	public <T> List<T> getUniqueLocation(String village, String ward) {
