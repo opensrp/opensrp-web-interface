@@ -6,17 +6,14 @@ package org.opensrp.core.openmrs.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.ChangePasswordDTO;
-import org.opensrp.common.util.RoleUtil;
 import org.opensrp.connector.openmrs.service.APIServiceFactory;
 import org.opensrp.connector.util.HttpResponse;
-import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.openmrs.service.OpenMRSConnector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +32,7 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 	final String ROLE_URL = "ws/rest/v1/role";
 	
 	final String PROVIDER_URL = "ws/rest/v1/provider";
-
+	
 	final String CHANGE_PASSWORD = "ws/rest/v1/manage-accounts/change-password";
 	
 	final static String ageKey = "age";
@@ -90,61 +87,18 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 	public JSONObject generateUserJsonObject(User user, boolean isUpdate, JSONObject userOb) throws JSONException {
 		JSONArray roleArray = new JSONArray();
 		JSONObject userJsonObject = new JSONObject();
+		JSONObject roleObject = new JSONObject();
+		roleObject.put("role", "Provider");
+		roleArray.put(roleObject);
+		
 		if (!isUpdate) {
-			/***
-			 * when new user created here come from two point 1. new user create 2. update user a
-			 * openmrs role such as Provider / CHCP
-			 */
-			Set<Role> roles = user.getRoles();
-
-			System.out.println("BEFORE OPENMRS ROLES:-> "+ roles);
-//
-//			for (Role role : roles) {
-//				JSONObject roleObject = new JSONObject();
-//				if (RoleUtil.containsRole(role.getName())) {
-//					roleObject.put("role", role.getName());
-//					roleArray.put(roleObject);
-//				}
-//			}
-			JSONObject roleObject = new JSONObject();
-			roleObject.put("role", "Provider");
-			roleArray.put(roleObject);
-			userJsonObject.put(rolesKey, roleArray);
 			userJsonObject.put(passwordKey, user.getPassword());
-		} else {
-			/**
-			 * when update user information..
-			 */
-			List<String> list = new ArrayList<String>();
-			if (userOb != null) {
-				JSONArray userRoles = userOb.getJSONArray("roles");
-				for (int i = 0; i < userRoles.length(); i++) {
-					JSONObject roleOb = (JSONObject) userRoles.get(i);
-					list.add(roleOb.getString("name"));
-				}
-				Set<Role> roles = user.getRoles();
-				for (Role role : roles) {
-					JSONObject roleObject = new JSONObject();
-					if (RoleUtil.containsRole(role.getName()) && !list.contains(role.getName())) {
-						roleObject.put("role", role.getName());
-						roleArray.put(roleObject);
-					}
-				}
-				if (roleArray.length() != 0) {
-					/**
-					 * when update password..
-					 */
-					userJsonObject.put(rolesKey, roleArray);
-				}
-			} else {
-				userJsonObject.put(passwordKey, user.getPassword());
-			}
+			userJsonObject.put(rolesKey, roleArray);
 		}
+		
 		userJsonObject.put(usernameKey, user.getUsername());
-		userJsonObject.put(personKey, user.getPersonUUid());
-		
+		userJsonObject.put(personKey, generatePersonObject(user));
 		return userJsonObject;
-		
 	}
 	
 	private JSONObject makeProviderObject(User user) throws JSONException {
@@ -159,50 +113,36 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 		User user = (User) userOb;
 		String userUuid = "";
 		boolean isUpdate = false;
-		JSONObject createdPerson = apiServiceFactory.getApiService("openmrs").add(PAYLOAD, generatePersonObject(user),
-		    PERSON_URL);
-		if (createdPerson.has("uuid")) {
-			user.setPersonUUid(createdPerson.getString("uuid"));
-			JSONObject createdUser = apiServiceFactory.getApiService("openmrs").add(PAYLOAD,
-			    generateUserJsonObject(user, isUpdate, null), USER_URL);
-//			roleUpdate();
-			if (createdUser.has("uuid")) {
-				userUuid = (String) createdUser.get("uuid");
-				user.setUuid(userUuid);
-				/**
-				 * make user as a provider
-				 */
-				apiServiceFactory.getApiService("openmrs").add(PAYLOAD, makeProviderObject(user), PROVIDER_URL);
-				
-			}else {
-				// need to handle exception....
-				user.setFirstName("error");
-				String errorMessage =createdUser.toString();
-				errorMessage = errorMessage.split("\\[")[1];
-				errorMessage = errorMessage.split("\\]")[0];
-				user.setLastName(errorMessage);
-			}
+		
+		JSONObject createdUser = apiServiceFactory.getApiService("openmrs").add(PAYLOAD,
+		    generateUserJsonObject(user, isUpdate, null), USER_URL);
+		if (createdUser.has("person")) {
+			JSONObject person = createdUser.getJSONObject("person");
+			user.setPersonUUid(person.getString("uuid"));
+		}
+		if (createdUser.has("uuid")) {
+			userUuid = (String) createdUser.get("uuid");
+			user.setUuid(userUuid);
+			apiServiceFactory.getApiService("openmrs").add(PAYLOAD, makeProviderObject(user), PROVIDER_URL);
+			
 		} else {
-			// need to handle exception....
-			user.setFirstName("error");
-			String errorMessage = "Invalid First Name / Last Name";
-			user.setLastName(errorMessage);
-			//user.setLastName(createdPerson.toString());
+			
 		}
 		
 		return user;
 	}
-
+	
 	@Override
 	public HttpResponse post(Object jsonObject) throws JSONException {
 		ChangePasswordDTO dto = (ChangePasswordDTO) jsonObject;
 		JSONObject changePasswordBody = new JSONObject();
 		changePasswordBody.put("userName", dto.getUsername());
 		changePasswordBody.put("password", dto.getPassword());
-		HttpResponse response = apiServiceFactory.getApiService("openmrs").post(PAYLOAD, changePasswordBody, CHANGE_PASSWORD);
+		HttpResponse response = apiServiceFactory.getApiService("openmrs")
+		        .post(PAYLOAD, changePasswordBody, CHANGE_PASSWORD);
 		return response;
 	}
-
+	
 	@Override
 	public String update(Object userOb, String uuid, JSONObject jsonOb) throws JSONException {
 		User user = (User) userOb;
@@ -210,7 +150,6 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 		boolean isUpdate = true;
 		JSONObject updatedUser = apiServiceFactory.getApiService("openmrs").update(PAYLOAD,
 		    generateUserJsonObject(user, isUpdate, jsonOb), uuid, USER_URL);
-		roleUpdate();
 		if (updatedUser.has("uuid")) {
 			userUuid = (String) updatedUser.get("uuid");
 		} else {
@@ -264,7 +203,6 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 			list.add(bahmniID);
 			JSONObject roleOb = new JSONObject();
 			roleOb.put("inheritedRoles", list);
-			System.err.println("roleOb:" + roleOb);
 			JSONObject updatedUser = apiServiceFactory.getApiService("openmrs").update(PAYLOAD, roleOb, roleUid, ROLE_URL);
 			
 		}
