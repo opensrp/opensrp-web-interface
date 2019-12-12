@@ -1,7 +1,9 @@
 package org.opensrp.common.dto;
 
 public class UserDTO {
-	
+
+	private Integer id;
+
 	private String firstName;
 	
 	private String lastName;
@@ -31,7 +33,15 @@ public class UserDTO {
 	private Boolean enableSimPrint;
 
 	private String ssNo;
-	
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public boolean isTeamMember() {
 		return teamMember;
 	}
@@ -150,6 +160,10 @@ public class UserDTO {
 
 	public void setSsNo(String ssNo) {
 		this.ssNo = ssNo;
+	}
+
+	public String getFullName() {
+		return this.firstName+" "+(this.lastName.equalsIgnoreCase(".")?"":this.lastName);
 	}
 
 	@Override

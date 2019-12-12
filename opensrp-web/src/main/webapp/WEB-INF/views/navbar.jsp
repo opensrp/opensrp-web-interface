@@ -47,6 +47,7 @@
 	boolean PERM_READ_AGGREGATED_REPORT = AuthenticationManagerUtil.isPermitted("PERM_READ_AGGREGATED_REPORT");
 	boolean MEMBER_APPROVAL = AuthenticationManagerUtil.isPermitted("MEMBER_APPROVAL");
 	boolean PERM_READ_BRANCH_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_BRANCH_LIST");
+	boolean PERM_SK_LIST = AuthenticationManagerUtil.isPermitted("PERM_SK_LIST");
 	User user = (User) AuthenticationManagerUtil.getLoggedInUser();
 %>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"

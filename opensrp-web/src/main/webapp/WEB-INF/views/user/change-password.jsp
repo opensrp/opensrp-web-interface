@@ -117,6 +117,10 @@
             $("#passwordNotMatchedMessage").html("Your password is not similar with confirm password. Please enter same password in both");
             return;
         }
+        if (password.length < 4) {
+            $("#passwordNotMatchedMessage").html("Password should be 4 character long...");
+            return;
+        }
         $("#passwordNotMatchedMessage").html("");
 
         $("#loading").show();

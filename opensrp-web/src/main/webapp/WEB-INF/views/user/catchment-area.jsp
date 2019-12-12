@@ -28,6 +28,7 @@
     <%@ page import="java.util.List" %>
     <%@ page import="org.opensrp.core.entity.User" %>
     <%@ page import="org.opensrp.common.dto.UserAssignedLocationDTO" %>
+    <%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 <%
@@ -93,8 +94,8 @@
                     </div>
                 </div>
                 <%if (catchmentAreas != null && catchmentAreas.size() > 0) {%>
-                <div class="row" style="margin-top: 60px;">
-                    <table style="overflow-x: auto;">
+                <div class="row" style="margin-top: 60px; overflow-x: auto;">
+                    <table class="display">
                         <thead>
                         <tr>
                             <th><spring:message code="lbl.division"/></th>
@@ -243,7 +244,15 @@
             <% } %>
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
+            var allLocation = [];
+            $("#locations option").each(function() {
+                allLocation.push($(this).val());
+            });
+
+            console.log(allLocation);
+
             var formData = {
+                allLocation: allLocation,
                 locations: $('#locations').val(),
                 userId: $('#userId').val()
             };
@@ -260,7 +269,7 @@
                 },
                 success : function(data) {
                     if(data == "") {
-                        window.location.replace("/opensrp-dashboard/user.html");
+                        window.history.back();
                     }
                 },
                 error : function(e) {

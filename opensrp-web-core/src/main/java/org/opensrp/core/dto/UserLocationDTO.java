@@ -5,6 +5,9 @@ import java.util.Arrays;
 public class UserLocationDTO {
 
     private int[] locations;
+
+    private int[] allLocation;
+
     private int userId;
 
     public int[] getLocations() {
@@ -13,6 +16,14 @@ public class UserLocationDTO {
 
     public void setLocations(int[] locations) {
         this.locations = locations;
+    }
+
+    public int[] getAllLocation() {
+        return allLocation;
+    }
+
+    public void setAllLocation(int[] allLocation) {
+        this.allLocation = allLocation;
     }
 
     public int getUserId() {

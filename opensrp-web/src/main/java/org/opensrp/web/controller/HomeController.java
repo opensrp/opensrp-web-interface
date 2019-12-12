@@ -40,10 +40,8 @@ public class HomeController extends OpensrpProperties {
 		String targetUrl = dashboardUrl;
 		if (roleName.contains("admin")) {
 			targetUrl = dashboardUrl;
-		} else if (roleName.contains("CHCP")) {
-			targetUrl = "/facility/" + acc.getChcp() + "/details.html";
-		} else if (roleName.contains("UHFPO")) {
-			targetUrl = "/facility/uhfpo-dashboard.html";
+		} else if (roleName.contains("AM")) {
+			targetUrl = "/user/sk-list.html";
 		}
 		model.addAttribute("locale", locale);
 		return new ModelAndView("redirect:" + targetUrl);

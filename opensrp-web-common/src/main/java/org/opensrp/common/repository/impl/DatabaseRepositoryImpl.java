@@ -23,10 +23,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
-import org.opensrp.common.dto.ChangePasswordDTO;
-import org.opensrp.common.dto.LocationTreeDTO;
-import org.opensrp.common.dto.ReportDTO;
-import org.opensrp.common.dto.UserAssignedLocationDTO;
+import org.opensrp.common.dto.*;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
@@ -1783,6 +1780,86 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			session.close();
 		}
 		return result;
+	}
+
+	@Override
+	public <T> List<T> getChildUserByParentUptoUnion(Integer userId, String roleName) {
+		Session session = sessionFactory.openSession();
+		List<T> users = new ArrayList<T>();
+		try {
+			String hql = "with recursive loc_tree as (select * from core.location loc1 "
+					+ "where loc1.id in (select location_id from core.users_catchment_area where user_id = :userId) "
+					+ "union all select loc2.* from core.location loc2 "
+					+ "join loc_tree lt on lt.id = loc2.parent_location_id "
+					+ ") select distinct u.id, u.username, u.first_name firstName, u.last_name lastName, u.mobile, "
+					+ "(select string_agg(b.name, ', ') from core.user_branch ub join core.branch b on ub.branch_id = b.id "
+					+ "where ub.user_id = u.id) branches, "
+					+ "(select string_agg(distinct(loc_p.name), ', ') from core.users_catchment_area uca1 "
+					+ "join core.location loc_c on loc_c.id = uca1.location_id join core.location loc_p on loc_p.id = loc_c.parent_location_id "
+					+ "where uca1.user_id = u.id) locationList "
+					+ "from loc_tree lt "
+					+ "join core.users_catchment_area uca on lt.id = uca.location_id "
+					+ "join core.users u on u.id = uca.user_id join core.user_role ur on u.id = ur.user_id "
+					+ "join core.role r on r.id = ur.role_id where r.name = '"+roleName+"' order by firstName;";
+
+			Query query = session.createSQLQuery(hql)
+					.addScalar("id", StandardBasicTypes.INTEGER)
+					.addScalar("username", StandardBasicTypes.STRING)
+					.addScalar("firstName", StandardBasicTypes.STRING)
+					.addScalar("lastName", StandardBasicTypes.STRING)
+					.addScalar("mobile", StandardBasicTypes.STRING)
+					.addScalar("branches", StandardBasicTypes.STRING)
+					.addScalar("locationList", StandardBasicTypes.STRING)
+					.setInteger("userId", userId)
+					.setResultTransformer(new AliasToBeanResultTransformer(UserDTO.class));
+			users = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return users;
+	}
+
+	@Override
+	public <T> List<T> getChildUserByParentUptoVillage(Integer userId, String roleName) {
+		Session session = sessionFactory.openSession();
+		List<T> users = new ArrayList<T>();
+		try {
+			String hql = "with recursive loc_tree as (select * from core.location loc1 "
+					+ "where loc1.id in (select location_id from core.users_catchment_area where user_id = :userId) "
+					+ "union all select loc2.* from core.location loc2 "
+					+ "join loc_tree lt on lt.id = loc2.parent_location_id "
+					+ ") select distinct u.id, u.username, u.first_name firstName, u.last_name lastName, u.mobile, "
+					+ "(select string_agg(b.name, ', ') from core.user_branch ub join core.branch b on ub.branch_id = b.id "
+					+ "where ub.user_id = u.id) branches, "
+					+ "(select string_agg(distinct(loc_c.name), ', ') from core.users_catchment_area uca1 "
+					+ "join core.location loc_c on loc_c.id = uca1.location_id "
+					+ "where uca1.user_id = u.id) locationList "
+					+ "from loc_tree lt "
+					+ "join core.users_catchment_area uca on lt.id = uca.location_id "
+					+ "join core.users u on u.id = uca.user_id join core.user_role ur on u.id = ur.user_id "
+					+ "join core.role r on r.id = ur.role_id where r.name = '"+roleName+"' order by firstName;";
+
+			Query query = session.createSQLQuery(hql)
+					.addScalar("id", StandardBasicTypes.INTEGER)
+					.addScalar("username", StandardBasicTypes.STRING)
+					.addScalar("firstName", StandardBasicTypes.STRING)
+					.addScalar("lastName", StandardBasicTypes.STRING)
+					.addScalar("mobile", StandardBasicTypes.STRING)
+					.addScalar("branches", StandardBasicTypes.STRING)
+					.addScalar("locationList", StandardBasicTypes.STRING)
+					.setInteger("userId", userId)
+					.setResultTransformer(new AliasToBeanResultTransformer(UserDTO.class));
+			users = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return users;
 	}
 
 	public <T> List<T> getUniqueLocation(String village, String ward) {

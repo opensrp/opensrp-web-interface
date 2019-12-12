@@ -179,4 +179,8 @@ public interface DatabaseRepository {
 	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId);
 
 	public int updatePassword(ChangePasswordDTO dto);
+
+	public <T> List<T> getChildUserByParentUptoUnion(Integer userId, String roleName);
+
+	public <T> List<T> getChildUserByParentUptoVillage(Integer userId, String roleName);
 }

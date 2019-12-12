@@ -6,6 +6,9 @@ import org.opensrp.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserMapper {
 
@@ -45,5 +48,11 @@ public class UserMapper {
 
 
         return user;
+    }
+
+    public List<User> map(List<UserDTO> dtos) {
+        List<User> users = new ArrayList<>();
+        dtos.forEach(r->users.add(this.map(r)));
+        return users;
     }
 }

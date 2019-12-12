@@ -479,11 +479,18 @@ public class UserService {
 
 		try {
 			Integer isDeleted = 0;
-			if (userLocationDTO.getLocations().length > 0) {
-				int locationId = userLocationDTO.getLocations()[0];
+
+			for (Integer locationId: userLocationDTO.getAllLocation()) {
+				System.out.println("Location ID: "+ locationId);
+			}
+			System.out.println("GET LOCATION SIZE: "+ userLocationDTO.getLocations());
+			if (userLocationDTO.getAllLocation().length > 0) {
+				int locationId = userLocationDTO.getAllLocation()[0];
 				Location location = locationServiceImpl.findById(locationId, "id", Location.class);
+				System.out.println("Name: "+ location.getName());
 				if (location != null) {
 					parentId = location.getParentLocation().getId();
+					System.out.println("Parent: "+ parentId);
 
 					Set<Location> locationSet = new HashSet<>();
 
@@ -494,15 +501,16 @@ public class UserService {
 					}
 
 					List<Integer> locationIds = new ArrayList<Integer>();
-					for (Integer id: userLocationDTO.getLocations()) {
-						locationIds.add(id);
-					}
-					List<Location> newLocations = locationServiceImpl.findAllById(locationIds, "id", "Location");
+					if (userLocationDTO.getLocations() != null) {
+						for (Integer id: userLocationDTO.getLocations()) {
+							locationIds.add(id);
+						}
+						List<Location> newLocations = locationServiceImpl.findAllById(locationIds, "id", "Location");
 
-					for (Location l: newLocations) {
-						locationSet.add(l);
+						for (Location l: newLocations) {
+							locationSet.add(l);
+						}
 					}
-
 					teamMember.setLocations(locationSet);
 
 					isDeleted = usersCatchmentAreaService.deleteAllByParentAndUser(
@@ -514,10 +522,12 @@ public class UserService {
 			}
 
 			teamMemberServiceImpl.update(teamMember);
-			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(
-					userLocationDTO.getLocations(),
-					userLocationDTO.getUserId());
-			usersCatchmentAreaService.saveAll(usersCatchmentAreas);
+			if (userLocationDTO.getLocations() != null) {
+				List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(
+						userLocationDTO.getLocations(),
+						userLocationDTO.getUserId());
+				usersCatchmentAreaService.saveAll(usersCatchmentAreas);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			errorMessage = "something went wrong";
@@ -705,5 +715,11 @@ public class UserService {
 
 	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId) {
 		return repository.assignedLocationByRole(roleId);
+	}
+
+	public List<UserDTO> getChildUserFromParent(Integer userId, String roleName) {
+		return roleName.equalsIgnoreCase("SK")?
+				repository.getChildUserByParentUptoUnion(userId, roleName):
+				repository.getChildUserByParentUptoVillage(userId, roleName);
 	}
 }

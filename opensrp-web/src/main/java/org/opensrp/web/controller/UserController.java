@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.UserAssignedLocationDTO;
+import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.exception.BadFormatException;
 import org.opensrp.common.exception.BranchNotFoundException;
 import org.opensrp.common.exception.LocationNotFoundException;
@@ -21,6 +22,7 @@ import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.entity.*;
 import org.opensrp.core.service.*;
 import org.opensrp.core.util.FacilityHelperUtil;
+import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.PaginationUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -732,5 +734,23 @@ public class UserController {
 			return new ModelAndView("/user/upload");
 		}
 		return new ModelAndView("redirect:/user.html?lang=" + locale);
+	}
+
+	@RequestMapping(value = "/user/sk-list.html", method = RequestMethod.GET)
+	public String getSKByPM(HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<UserDTO> users = userServiceImpl.getChildUserFromParent(loggedInUser.getId(), "SK");
+		session.setAttribute("allSK", users);
+		return "user/sk-list";
+	}
+
+	@RequestMapping(value = "/user/{skId}/my-ss.html", method = RequestMethod.GET)
+	public String getSSBySK(@PathVariable("skId") Integer skId, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<UserDTO> users = userServiceImpl.getChildUserFromParent(skId, "SS");
+		session.setAttribute("allSS", users);
+		return "user/ss-list";
 	}
 }
