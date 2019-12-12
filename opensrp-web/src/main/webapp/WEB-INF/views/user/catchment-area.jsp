@@ -269,7 +269,7 @@
                 },
                 success : function(data) {
                     if(data == "") {
-                        window.history.back();
+                        window.history.go(-1);
                     }
                 },
                 error : function(e) {

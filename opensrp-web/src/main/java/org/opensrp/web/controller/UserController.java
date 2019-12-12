@@ -670,9 +670,11 @@ public class UserController {
 		List<Role> roles = new ArrayList<>(user.getRoles());
 		Integer roleId = roles.get(0).getId();
 		List<UserAssignedLocationDTO> userAssignedLocationDTOS = userServiceImpl.assignedLocationByRole(roleId);
-		
-		JSONArray data = locationServiceImpl.getLocationWithDisableFacility(session, parentIndication, parentKey,
-		    userAssignedLocationDTOS, user.getId());
+		String role = "Admin";
+		if (AuthenticationManagerUtil.isAM()) role = "AM";
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		JSONArray data = locationServiceImpl.getLocationWithDisableFacility(parentIndication, parentKey,
+		    userAssignedLocationDTOS, user.getId(), role, loggedInUser.getId());
 		
 		session.setAttribute("usersCatchmentAreas", usersCatchmentAreas);
 		session.setAttribute("catchmentAreaTable", catchmentAreas);

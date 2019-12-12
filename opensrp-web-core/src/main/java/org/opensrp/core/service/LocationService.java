@@ -22,6 +22,7 @@ import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.UserAssignedLocationDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.util.TreeNode;
+import org.opensrp.common.dto.LocationDTO;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.LocationTag;
 import org.opensrp.core.entity.User;
@@ -134,7 +135,18 @@ public class LocationService {
 	public <T> List<T> findAllLocation(String tableClass) {
 		return repository.findAllLocation(tableClass);
 	}
-	
+
+	@Transactional
+	public <T> List<T> findAllLocationPartialProperty() {
+		return repository.findAllLocationPartialProperty();
+	}
+
+	@Transactional
+	public <T> List<T> findAllLocationByAM(Integer userId) {
+		return repository.getLocationByAM(userId);
+	}
+
+
 	public Location setCreatorParentLocationTagAttributeInLocation(Location location, int parentLocationId, int tagId) {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -273,21 +285,27 @@ public class LocationService {
 		
 	}
 
-	public JSONArray getLocationWithDisableFacility(HttpSession session, String parentIndication, String parentKey, List<UserAssignedLocationDTO> userAssignedLocationDTOS, Integer userId) throws JSONException {
+	public JSONArray getLocationWithDisableFacility(String parentIndication, String parentKey, List<UserAssignedLocationDTO> userAssignedLocationDTOS, Integer userId, String role, Integer loggedInUserId) throws JSONException {
 		JSONArray dataArray = new JSONArray();
 
 		Map<Integer, Integer> locationMap = new HashMap<>();
 		for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
 			locationMap.put(dto.getLocationId(), dto.getId());
 		}
-		List<Location> locations = findAllLocation("Location");
+		List<LocationDTO> locations = new ArrayList<>();
+
+		if (role.equalsIgnoreCase("AM")) {
+			locations = findAllLocationByAM(loggedInUserId);
+		} else {
+			locations = findAllLocationPartialProperty();
+		}
+
 
 //		Collections.reverse(locations);
-		for (Location location : locations) {
+		for (LocationDTO location : locations) {
 			JSONObject dataObject = new JSONObject();
-			Location parentLocation = location.getParentLocation();
-			if (parentLocation != null) {
-				dataObject.put(parentKey, parentLocation.getId());
+			if (location.getParentLocationId() != null) {
+				dataObject.put(parentKey, location.getParentLocationId());
 			} else {
 				dataObject.put(parentKey, parentIndication);
 			}
@@ -297,11 +315,11 @@ public class LocationService {
 
 				if (locationMap.containsKey(location.getId())) {
 					state.put("disabled", true);
-				} else if (locationMap.get(location.getId()) != null && location.getParentLocation() != null
-						&& !locationMap.get(location.getParentLocation().getId()).equals(userId)) {
+				} else if (locationMap.get(location.getId()) != null && location.getParentLocationId() != null
+						&& !locationMap.get(location.getParentLocationId()).equals(userId)) {
 
-					if (locationMap.containsKey(location.getParentLocation().getId())) {
-						locationMap.put(location.getId(), locationMap.get(location.getParentLocation().getId()));
+					if (locationMap.containsKey(location.getParentLocationId())) {
+						locationMap.put(location.getId(), locationMap.get(location.getParentLocationId()));
 						state.put("disabled", true);
 					}
 					else state.put("disabled", false);
@@ -313,8 +331,8 @@ public class LocationService {
 			}
 
 			dataObject.put("id", location.getId());
-			dataObject.put("text", location.getName());
-			dataObject.put("icon", location.getLocationTag().getName());
+			dataObject.put("text", location.getLocationName());
+			dataObject.put("icon", location.getLocationTagName());
 			dataObject.put("state", state);
 			dataArray.put(dataObject);
 		}

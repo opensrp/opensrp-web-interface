@@ -96,6 +96,8 @@ public interface DatabaseRepository {
 	
 	public <T> List<T> findAll(String tableClass);
 
+	public <T> List<T> findAllLocationPartialProperty();
+
 	public <T> List<T> findAllLocation(String tableClass);
 
 	public <T> T findByKeys(Map<String, Object> fielaValues, Class<?> className);
@@ -183,4 +185,6 @@ public interface DatabaseRepository {
 	public <T> List<T> getChildUserByParentUptoUnion(Integer userId, String roleName);
 
 	public <T> List<T> getChildUserByParentUptoVillage(Integer userId, String roleName);
+
+	public <T> List<T> getLocationByAM(Integer userId);
 }
