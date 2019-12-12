@@ -493,8 +493,8 @@ public class UserService {
 
 		try {
 			Integer isDeleted = 0;
-			if (userLocationDTO.getLocations().length > 0) {
-				int locationId = userLocationDTO.getLocations()[0];
+			if (userLocationDTO.getAllLocation()!= null && userLocationDTO.getAllLocation().length > 0) {
+				int locationId = userLocationDTO.getAllLocation()[0];
 				Location location = locationServiceImpl.findById(locationId, "id", Location.class);
 				if (location != null) {
 					parentId = location.getParentLocation().getId();
