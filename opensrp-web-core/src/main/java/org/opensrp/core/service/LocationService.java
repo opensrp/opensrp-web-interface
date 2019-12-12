@@ -280,15 +280,8 @@ public class LocationService {
 		for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
 			locationMap.put(dto.getLocationId(), dto.getId());
 		}
-		List<Location> locations = new ArrayList<>();
-		if (session.getAttribute("Location") != null) {
-			locations = (List<Location>) session.getAttribute("Location");
-			System.out.println("FROM SESSION");
-		} else {
-			locations = findAllLocation("Location");
-			System.out.println("FROM DATABASE");
-			session.setAttribute("Location", locations);
-		}
+		List<Location> locations = findAllLocation("Location");
+		if (Authenticat)
 //		Collections.reverse(locations);
 		for (Location location : locations) {
 			JSONObject dataObject = new JSONObject();
