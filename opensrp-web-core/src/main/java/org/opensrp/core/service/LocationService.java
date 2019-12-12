@@ -281,7 +281,7 @@ public class LocationService {
 			locationMap.put(dto.getLocationId(), dto.getId());
 		}
 		List<Location> locations = findAllLocation("Location");
-		if (Authenticat)
+		
 //		Collections.reverse(locations);
 		for (Location location : locations) {
 			JSONObject dataObject = new JSONObject();
