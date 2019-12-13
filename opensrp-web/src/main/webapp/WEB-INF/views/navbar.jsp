@@ -343,7 +343,7 @@
 				</div>
 			</li>
 			<% } %>
-			<li class="nav-item dropdown">
+			<%-- <li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle mr-lg-2" id="languageDropdown" href="#"
 				   data-toggle="dropdown"><spring:message code="lbl.language"/> </a>
 				<div class="dropdown-menu">
@@ -357,7 +357,7 @@
 						<strong><spring:message code="lbl.english"/></strong>
 					</a>
 				</div>
-			</li>
+			</li> --%>
 			<li class="nav-item"><a class="nav-link" data-toggle="modal"
 									data-target="#exampleModal">(<%=user.getUsername()%>) <i class="fa fa-fw fa-sign-out"></i><spring:message code="lbl.logout"/>
 			</a></li>

@@ -161,7 +161,8 @@
                         <form:password path="retypePassword" class="form-control mx-sm-3" id="retypePassword"
                                        required="required" />
                         <small id="confirmPasswordHelpInline" class="text-muted text-para">
-                            <span class="text-red" id="passwordNotmatchedMessage"></span> <spring:message code="lbl.retypePasswordMessage"/>
+                            <span class="text-red" id="passwordNotmatchedMessage"></span> 
+                            <spring:message code="lbl.retypePasswordMessage"/>
                         </small>
                     </div>
 
@@ -231,21 +232,20 @@
 <!-- /.content-wrapper-->
 
 <jsp:include page="/WEB-INF/views/footer.jsp" />
-<script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
-<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
+<%-- <script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
+<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script> --%>
 
 <!-- Bootstrap core JavaScript-->
-<script src="<c:url value='/resources/js/jquery-1.10.2.js'/>"></script>
 <script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.bundle.min.js'/>"></script>
 <script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.min.js'/>"></script>
 
 <!-- Core plugin JavaScript-->
-<script src="<c:url value='/resources/vendor/jquery-easing/jquery.easing.min.js'/>"></script>
-
+<%-- <script src="<c:url value='/resources/vendor/jquery-easing/jquery.easing.min.js'/>"></script>
+ --%>
 
 <!-- Custom scripts for all pages-->
-<script src="<c:url value='/resources/js/sb-admin.min.js'/>"></script>
-<!-- Custom scripts for this page-->
+<%-- <script src="<c:url value='/resources/js/sb-admin.min.js'/>"></script>
+ --%><!-- Custom scripts for this page-->
 <%-- <script src="<c:url value='/resources/js/sb-admin-datatables.min.js'/>"></script> --%>
 <script src="<c:url value='/resources/js/location.js'/>"></script>
 <script src="<c:url value='/resources/js/checkbox.js'/>"></script>
@@ -268,8 +268,10 @@ $('#_enableSimprint').hide();
             $('#ssNo').val("");
             $('#ssNo').trigger('change');
             $('#ssOption').hide();
+            $("#ssNo").prop('required',false);
         } else {
             $('#ssOption').show();
+            $("#ssNo").prop('required',true);
         }
         
         
@@ -360,14 +362,14 @@ $('#_enableSimprint').hide();
     function Validate() {
         var password = document.getElementById("password").value;
         var confirmPassword = document.getElementById("retypePassword").value;
-        if (password != confirmPassword) {
-            $("#passwordNotMatchedMessage").html("Your password is not similar with confirm password. Please enter same password in both");
-
-            return false;
-        }
+        if (password != confirmPassword) {        	
+            $("#usernameUniqueErrorMessage").html("Your password is not similar with confirm password. Please enter same password in both");
+			return false;
+        }else{
 
         $("#passwordNotMatchedMessage").html("");
         return true;
+        }
     }
 
 </script>
