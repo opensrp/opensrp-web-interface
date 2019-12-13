@@ -178,6 +178,7 @@ JSONArray locatationTreeData = (JSONArray)session.getAttribute("locatationTreeDa
           .val( value )
           .attr( "title", "" )          
            .attr( "name", "parentLocationName" )
+           .attr( "required", true)
           .addClass( "form-control custom-combobox-input ui-widget ui-widget-content  ui-corner-left" )
           .autocomplete({
             delay: 0,

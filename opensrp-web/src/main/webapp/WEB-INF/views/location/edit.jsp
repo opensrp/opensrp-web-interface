@@ -163,7 +163,8 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
         this.input = $( "<input>" )
           .appendTo( this.wrapper )
           .val( value )
-          .attr( "title", "" )          
+          .attr( "title", "" )  
+          .attr( "required", true)
            .attr( "name", "parentLocationName" )
           .addClass( "form-control custom-combobox-input ui-widget ui-widget-content ui-corner-left" )
           .autocomplete({
