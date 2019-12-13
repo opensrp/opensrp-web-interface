@@ -260,6 +260,8 @@ public class UserController {
 		User account = userServiceImpl.findById(id, "id", User.class);
 		model.addAttribute("account", account);
 		model.addAttribute("id", id);
+		
+		session.setAttribute("ssPrefix", account.getSsNo());
 		/**
 		 * Parent user section start . this section prepare parent user information and render to
 		 * view for showing. parentUserName shows to the parent user text field named
@@ -285,24 +287,23 @@ public class UserController {
 		session.setAttribute("selectedBranches", account.getBranches());
 		
 		//for teamMember
-		Map<String, Object> fieldValues = new HashMap<String, Object>();
+		/*Map<String, Object> fieldValues = new HashMap<String, Object>();
 		fieldValues.put("person", account);
 		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
 		
 		if (teamMember != null) {
 			
-			//System.out.println(teamMember.toString());
-			//model.addAttribute("id", id);
+			
 			teamMember.setPerson(account);
 			model.addAttribute("teamMember", teamMember);
 			int[] locations = teamMemberServiceImpl.getLocationIds(teamMember.getLocations());
-			//User person = teamMember.getPerson();
+			
 			String personName = account.getUsername() + " (" + account.getFullName() + ")";
 			teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
 			
-			//return new ModelAndView("team-member/edit", "command", teamMember);
+			
 		} else {
-			//for adding location and team
+			
 			TeamMember newTeamMember = new TeamMember();
 			newTeamMember.setPerson(account);
 			model.addAttribute("teamMember", newTeamMember);
@@ -310,8 +311,8 @@ public class UserController {
 			session.setAttribute("locationList", locationServiceImpl.list().toString());
 			int[] locations = new int[0];
 			teamMemberServiceImpl.setSessionAttribute(session, newTeamMember, personName, locations);
-			//end: adding location and team
-		}
+			
+		}*/
 		//end: for teamMember
 		
 		//return new ModelAndView("user/edit", "command", teamMember);
@@ -413,55 +414,25 @@ public class UserController {
 	public ModelAndView editUser(@RequestParam(value = "parentUser", required = false) Integer parentUserId,
 	                             @RequestParam(value = "roles", required = false) String[] roles,
 	                             @RequestParam(value = "team", required = false) Integer teamId,
+	                             @RequestParam(value = "ssNo", required = false) String ssNo,
 	                             @RequestParam(value = "branches", required = false) String[] branches,
 	                             @RequestParam(value = "locationList[]", required = false) int[] locations,
 	                             @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
 	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
 		
-		System.out.println("ROLES->");
-		System.out.println(roles);
-		System.out.println(userServiceImpl.setRoles(roles));
-		
 		account.setRoles(userServiceImpl.setRoles(roles));
 		account.setBranches(userServiceImpl.setBranches(branches));
+		String ssPrefix = "";
+		
+		/*if (!StringUtils.isBlank(ssNo)) {
+			ssPrefix = ssNo.substring(1);
+		}*/
+		
 		account.setId(id);
-		logger.info("\n\nUSER : " + account.toString() + "\n");
+		account.setSsNo(ssNo);
+		
 		userServiceImpl.update(account);
 		
-		/*Map<String, Object> fieldValues = new HashMap<String, Object>();
-		fieldValues.put("person", account);
-		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
-		if (teamMember != null) {
-			if (teamId != null) {
-				teamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(teamMember,
-				    account.getId(), teamId, locations);
-				teamMember.setIdentifier(account.getIdetifier());
-				
-				//teamMember.setId(id);
-				if (!teamMemberServiceImpl.isPersonAndIdentifierExists(model, teamMember, locations)) {
-					teamMemberServiceImpl.update(teamMember);
-					
-				} else {
-					teamMemberServiceImpl.setSessionAttribute(session, teamMember, teamMember.getPerson().getFullName(),
-					    locations);
-					return new ModelAndView("/team-member/edit");
-				}
-			} else {
-				teamMemberServiceImpl.delete(teamMember);
-			}
-		} else {
-			if (teamId != null && teamId > 0) {
-				TeamMember newTeamMember = new TeamMember();
-				newTeamMember = teamMemberServiceImpl.setCreatorLocationAndPersonAndTeamAttributeInLocation(newTeamMember,
-				    account.getId(), teamId, locations);
-				newTeamMember.setIdentifier(account.getIdetifier());
-				
-				if (!teamMemberServiceImpl.isPersonAndIdentifierExists(model, newTeamMember, locations)) {
-					teamMemberServiceImpl.save(newTeamMember);
-				}
-			}
-		}
-		*/
 		return new ModelAndView("redirect:/user.html?lang=" + locale);
 		
 	}
@@ -671,7 +642,8 @@ public class UserController {
 		Integer roleId = roles.get(0).getId();
 		List<UserAssignedLocationDTO> userAssignedLocationDTOS = userServiceImpl.assignedLocationByRole(roleId);
 		String role = "Admin";
-		if (AuthenticationManagerUtil.isAM()) role = "AM";
+		if (AuthenticationManagerUtil.isAM())
+			role = "AM";
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		JSONArray data = locationServiceImpl.getLocationWithDisableFacility(parentIndication, parentKey,
 		    userAssignedLocationDTOS, user.getId(), role, loggedInUser.getId());
@@ -765,7 +737,7 @@ public class UserController {
 		}
 		return new ModelAndView("redirect:/user.html?lang=" + locale);
 	}
-
+	
 	@RequestMapping(value = "/user/sk-list.html", method = RequestMethod.GET)
 	public String getSKByPM(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
@@ -775,7 +747,7 @@ public class UserController {
 		session.setAttribute("fromRole", "SK");
 		return "user/sk-list";
 	}
-
+	
 	@RequestMapping(value = "/user/{skId}/my-ss.html", method = RequestMethod.GET)
 	public String getSSBySK(@PathVariable("skId") Integer skId, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);

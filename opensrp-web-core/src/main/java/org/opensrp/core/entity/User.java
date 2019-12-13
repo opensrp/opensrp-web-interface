@@ -64,7 +64,7 @@ public class User implements UserDetails {
 	
 	@Column(name = "last_name")
 	private String lastName;
-
+	
 	@Column(name = "email")
 	private String email;
 	
@@ -93,9 +93,9 @@ public class User implements UserDetails {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", schema = "core", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	private Set<Role> roles = new HashSet<Role>();
-
+	
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_branch", schema = "core", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "branch_id")})
+	@JoinTable(name = "user_branch", schema = "core", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "branch_id") })
 	private Set<Branch> branches = new HashSet<>();
 	
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -120,13 +120,13 @@ public class User implements UserDetails {
 	
 	@Column(name = "chcp")
 	private String chcp;
-
+	
 	@Column(name = "enable_sim_print")
 	private Boolean enableSimPrint;
-
+	
 	@Column(name = "ss_no")
 	private String ssNo;
-
+	
 	public User() {
 	}
 	
@@ -295,31 +295,31 @@ public class User implements UserDetails {
 	public void setChcp(String chcp) {
 		this.chcp = chcp;
 	}
-
+	
 	public Set<Branch> getBranches() {
 		return branches;
 	}
-
+	
 	public void setBranches(Set<Branch> branches) {
 		this.branches = branches;
 	}
-
+	
 	public Boolean getEnableSimPrint() {
 		return enableSimPrint;
 	}
-
+	
 	public void setEnableSimPrint(Boolean enableSimPrint) {
 		this.enableSimPrint = enableSimPrint;
 	}
-
+	
 	public String getSsNo() {
 		return ssNo;
 	}
-
+	
 	public void setSsNo(String ssNo) {
 		this.ssNo = ssNo;
 	}
-
+	
 	@Transient
 	public Set<Permission> getPermissions() {
 		Set<Permission> perms = new HashSet<Permission>();
@@ -341,9 +341,12 @@ public class User implements UserDetails {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((branches == null) ? 0 : branches.hashCode());
+		result = prime * result + ((chcp == null) ? 0 : chcp.hashCode());
 		result = prime * result + ((created == null) ? 0 : created.hashCode());
 		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((enableSimPrint == null) ? 0 : enableSimPrint.hashCode());
 		result = prime * result + (enabled ? 1231 : 1237);
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
@@ -357,7 +360,7 @@ public class User implements UserDetails {
 		result = prime * result + (provider ? 1231 : 1237);
 		result = prime * result + ((retypePassword == null) ? 0 : retypePassword.hashCode());
 		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
-		result = prime * result + ((branches == null) ? 0 : branches.hashCode());
+		result = prime * result + ((ssNo == null) ? 0 : ssNo.hashCode());
 		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
@@ -373,6 +376,16 @@ public class User implements UserDetails {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
+		if (branches == null) {
+			if (other.branches != null)
+				return false;
+		} else if (!branches.equals(other.branches))
+			return false;
+		if (chcp == null) {
+			if (other.chcp != null)
+				return false;
+		} else if (!chcp.equals(other.chcp))
+			return false;
 		if (created == null) {
 			if (other.created != null)
 				return false;
@@ -387,6 +400,11 @@ public class User implements UserDetails {
 			if (other.email != null)
 				return false;
 		} else if (!email.equals(other.email))
+			return false;
+		if (enableSimPrint == null) {
+			if (other.enableSimPrint != null)
+				return false;
+		} else if (!enableSimPrint.equals(other.enableSimPrint))
 			return false;
 		if (enabled != other.enabled)
 			return false;
@@ -447,10 +465,10 @@ public class User implements UserDetails {
 				return false;
 		} else if (!roles.equals(other.roles))
 			return false;
-		if (branches == null) {
-			if (other.branches != null)
+		if (ssNo == null) {
+			if (other.ssNo != null)
 				return false;
-		} else if (!branches.equals(other.branches))
+		} else if (!ssNo.equals(other.ssNo))
 			return false;
 		if (updated == null) {
 			if (other.updated != null)
@@ -473,11 +491,11 @@ public class User implements UserDetails {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", uuid=" + uuid + ", firstName=" + firstName + ", lastName="
-		        + lastName + ", email=" + email + ", password=" + password + ", retypePassword=" + retypePassword + ", branches=" + branches
+		        + lastName + ", email=" + email + ", password=" + password + ", retypePassword=" + retypePassword
 		        + ", enabled=" + enabled + ", created=" + created + ", updated=" + updated + ", roles=" + roles
-		        + ", creator=" + creator + ", gender=" + gender + ", mobile=" + mobile + ", idetifier=" + idetifier
-		        + ", provider=" + provider + ", personUUid=" + personUUid + ", parentUser=" + parentUser + ", chcp=" + chcp
-		        + "]";
+		        + ", branches=" + branches + ", creator=" + creator + ", gender=" + gender + ", mobile=" + mobile
+		        + ", idetifier=" + idetifier + ", provider=" + provider + ", personUUid=" + personUUid + ", parentUser="
+		        + parentUser + ", chcp=" + chcp + ", enableSimPrint=" + enableSimPrint + ", ssNo=" + ssNo + "]";
 	}
 	
 }

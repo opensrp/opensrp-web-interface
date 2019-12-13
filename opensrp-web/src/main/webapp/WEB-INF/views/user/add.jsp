@@ -122,6 +122,13 @@
                         </select>
                     </div>
                 </div>
+                <div class="row col-12 tag-height" id="_enableSimprint">
+						<div class="form-group">
+							<label class="label-width" for="inputPassword6"><spring:message code="lbl.enableSimprint"/></label>
+							<form:checkbox class="checkBoxClass form-check-input"
+										   path="enableSimPrint" />
+						</div>
+				</div>
 
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
@@ -154,7 +161,8 @@
                         <form:password path="retypePassword" class="form-control mx-sm-3" id="retypePassword"
                                        required="required" />
                         <small id="confirmPasswordHelpInline" class="text-muted text-para">
-                            <span class="text-red" id="passwordNotmatchedMessage"></span> <spring:message code="lbl.retypePasswordMessage"/>
+                            <span class="text-red" id="passwordNotmatchedMessage"></span> 
+                            <spring:message code="lbl.retypePasswordMessage"/>
                         </small>
                     </div>
 
@@ -175,7 +183,7 @@
                     </div>
                 </div>
 
-                <div class="row col-12 tag-height" id="teamDiv" style="display:none">
+                <%-- <div class="row col-12 tag-height" id="teamDiv" style="display:none">
                     <div class="form-group">
                         <label class="label-width" for="team"><spring:message code="lbl.cc"/></label>
                         <select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
@@ -196,7 +204,7 @@
                         </select>
                     </div>
 
-                </div>
+                </div> --%>
                 <!--end: for team -->
 
 
@@ -224,21 +232,20 @@
 <!-- /.content-wrapper-->
 
 <jsp:include page="/WEB-INF/views/footer.jsp" />
-<script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
-<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
+<%-- <script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
+<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script> --%>
 
 <!-- Bootstrap core JavaScript-->
-<script src="<c:url value='/resources/js/jquery-1.10.2.js'/>"></script>
 <script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.bundle.min.js'/>"></script>
 <script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.min.js'/>"></script>
 
 <!-- Core plugin JavaScript-->
-<script src="<c:url value='/resources/vendor/jquery-easing/jquery.easing.min.js'/>"></script>
-
+<%-- <script src="<c:url value='/resources/vendor/jquery-easing/jquery.easing.min.js'/>"></script>
+ --%>
 
 <!-- Custom scripts for all pages-->
-<script src="<c:url value='/resources/js/sb-admin.min.js'/>"></script>
-<!-- Custom scripts for this page-->
+<%-- <script src="<c:url value='/resources/js/sb-admin.min.js'/>"></script>
+ --%><!-- Custom scripts for this page-->
 <%-- <script src="<c:url value='/resources/js/sb-admin-datatables.min.js'/>"></script> --%>
 <script src="<c:url value='/resources/js/location.js'/>"></script>
 <script src="<c:url value='/resources/js/checkbox.js'/>"></script>
@@ -246,17 +253,28 @@
 
 
 <script type="text/javascript">
-
-    function isSS() {
+$('#_enableSimprint').hide();
+    function isSS() {    	
         var selectedRoleId = $('#role').val();
-        var ssId = <%=ss.getId()%>;
-        if (ssId != selectedRoleId) {
+        var selectedRoleName = $('#role option:selected').text();        
+        var ssId = <%=ss.getId()%>;       
+        if(selectedRoleName == "SK"){        	
+        	$('#_enableSimprint').show();        	 
+        }else{ 
+        	$('input[type="checkbox"][name="enableSimPrint"]').prop("checked", false).change();
+            $('#_enableSimprint').hide();
+        }
+        if (selectedRoleName != "SS") {
             $('#ssNo').val("");
             $('#ssNo').trigger('change');
             $('#ssOption').hide();
+            $("#ssNo").prop('required',false);
         } else {
             $('#ssOption').show();
+            $("#ssNo").prop('required',true);
         }
+        
+        
     }
 
     function toggleVisibilityOfPassword() {
@@ -287,9 +305,12 @@
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
         var formData;
-
-        console.log($('#ssNo').val());
-
+        var enableSimPrint = false;
+        if ($('#enableSimPrint1').is(":checked"))
+        {
+        	enableSimPrint = true;
+        }
+		
         formData = {
             'firstName': $('input[name=firstName]').val(),
             'lastName': $('input[name=lastName]').val(),
@@ -303,6 +324,7 @@
             'team': $('#team').val(),
             'teamMember': false,
             'branches': getBranches(),
+            'enableSimPrint': enableSimPrint
         };
 
         event.preventDefault();
@@ -340,14 +362,14 @@
     function Validate() {
         var password = document.getElementById("password").value;
         var confirmPassword = document.getElementById("retypePassword").value;
-        if (password != confirmPassword) {
-            $("#passwordNotMatchedMessage").html("Your password is not similar with confirm password. Please enter same password in both");
-
-            return false;
-        }
+        if (password != confirmPassword) {        	
+            $("#usernameUniqueErrorMessage").html("Your password is not similar with confirm password. Please enter same password in both");
+			return false;
+        }else{
 
         $("#passwordNotMatchedMessage").html("");
         return true;
+        }
     }
 
 </script>
