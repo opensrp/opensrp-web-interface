@@ -68,7 +68,7 @@
                             if (users != null){
                                 for (UserDTO user: users) {
                                     Integer id = user.getId();
-                                    session.setAttribute("skId", id);
+                                    session.setAttribute("ssId", id);
                         %>
                         <tr>
                             <td><%=user.getFullName()%></td>
@@ -78,11 +78,11 @@
                             <td><%=user.getLocationList()%></td>
                             <td>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
-                                <a href="<c:url value="/user/${skId}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
+                                <a href="<c:url value="/user/${ssId}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-                                <a href="<c:url value="/user/${skId}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>
+                                <a href="<c:url value="/user/${ssId}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-                                | <a href="<c:url value="/user/${skId}/change-password.html?lang=${locale}"/>"><spring:message code="lbl.changePassword"/></a> <%} %>
+                                | <a href="<c:url value="/user/${ssId}/change-password.html?lang=${locale}"/>"><spring:message code="lbl.changePassword"/></a> <%} %>
                             </td>
                         </tr>
                         <%

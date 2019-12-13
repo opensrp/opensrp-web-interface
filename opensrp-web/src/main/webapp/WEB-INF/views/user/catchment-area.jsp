@@ -39,6 +39,9 @@
     List<Object[]> catchmentAreas = (List<Object[]>) session.getAttribute("catchmentAreaTable");
     List<UsersCatchmentArea> usersCatchmentAreas = (List<UsersCatchmentArea>) session.getAttribute("usersCatchmentAreas");
     List<UserAssignedLocationDTO> userAssignedLocationDTOS = (List<UserAssignedLocationDTO>) session.getAttribute("assignedLocation");
+    String fromRole = (String) session.getAttribute("fromRole");
+    String role = AuthenticationManagerUtil.isAM()?"AM":"";
+    Integer skId = (Integer) session.getAttribute("idFinal");
 %>
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 <jsp:include page="/WEB-INF/views/navbar.jsp" />
@@ -84,6 +87,7 @@
                         <input id="userId" value="<%=userId%>" type="hidden">
                         <div class="row">
                             <button id="saveCatchmentArea"
+                                    disabled = true
                                     class="btn btn-primary btn-sm"
                                     style="position: absolute; top: 50%;
                                 transform: translateY(-50%);">
@@ -188,7 +192,16 @@
 
         $('#locations').multiSelect();
 
+        $('#locations').change(function(){
+            if ($('#locations').val() != null) {
+                $('#saveCatchmentArea').prop('disabled', false);
+            } else {
+                $('#saveCatchmentArea').prop('disabled', true);
+            }
+        });
+
         $('#locationTree').on('changed.jstree', function (e, data) {
+            $('#saveCatchmentArea').prop('disabled', true);
             $('#locations option').remove();
             $('#locations').multiSelect('refresh');
             var selectedAreas = [];
@@ -220,16 +233,13 @@
                 });
             }
 
-            $('#locations').val(ids);
-
             <% for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
                 if(user.getId() != dto.getId()) {%>
             	    $('#locations option[value=<%=dto.getLocationId()%>]').attr("disabled", 'disabled');
                 <%}
             }%>
-
+            $('#locations').val(ids);
             $('#locations').multiSelect('refresh');
-            console.log($('#locations').val());
         }).jstree();
 
         $('#saveCatchmentArea').unbind().click(function () {
@@ -249,7 +259,21 @@
                 allLocation.push($(this).val());
             });
 
-            console.log(allLocation);
+            var redirectUrl = "/opensrp-dashboard/user.html";
+            var role = "<%=role%>";
+            var fromRole = "<%=fromRole%>";
+            var skId = "<%=skId%>";
+
+            console.log(role);
+            if (role == 'AM') {
+                if (fromRole == 'SK') {
+                    redirectUrl = "/opensrp-dashboard/user/sk-list.html";
+                } else if (fromRole == 'SS') {
+                    redirectUrl = "/opensrp-dashboard/user/"+skId+"/my-ss.html?lang=en"
+                }
+            }
+
+            console.log("redirect url: "+ redirectUrl);
 
             var formData = {
                 allLocation: allLocation,
@@ -269,7 +293,7 @@
                 },
                 success : function(data) {
                     if(data == "") {
-                        window.history.go(-1);
+                        window.location.replace(redirectUrl);
                     }
                 },
                 error : function(e) {
@@ -286,6 +310,7 @@
         });
     });
     function editLocation(parentId) {
+        $('#saveCatchmentArea').prop('disabled', false);
         $('#locations option').remove();
         $('#locations').multiSelect('refresh');
         var i, selectedAreas = [], z = [], locations = [], ids = [];
@@ -317,6 +342,12 @@
         }
 
         $('#locations').val(ids);
+        <% for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
+            if(user.getId() != dto.getId()) {%>
+                $('#locations option[value=<%=dto.getLocationId()%>]').attr("disabled", 'disabled');
+            <%}
+        }%>
+
         $('#locations').multiSelect('refresh');
         console.log($('#locations').val());
     }
