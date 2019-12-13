@@ -122,6 +122,13 @@
                         </select>
                     </div>
                 </div>
+                <div class="row col-12 tag-height" id="_enableSimprint">
+						<div class="form-group">
+							<label class="label-width" for="inputPassword6"><spring:message code="lbl.enableSimprint"/></label>
+							<form:checkbox class="checkBoxClass form-check-input"
+										   path="enableSimPrint" />
+						</div>
+				</div>
 
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
@@ -175,7 +182,7 @@
                     </div>
                 </div>
 
-                <div class="row col-12 tag-height" id="teamDiv" style="display:none">
+                <%-- <div class="row col-12 tag-height" id="teamDiv" style="display:none">
                     <div class="form-group">
                         <label class="label-width" for="team"><spring:message code="lbl.cc"/></label>
                         <select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
@@ -196,7 +203,7 @@
                         </select>
                     </div>
 
-                </div>
+                </div> --%>
                 <!--end: for team -->
 
 
@@ -246,17 +253,26 @@
 
 
 <script type="text/javascript">
-
-    function isSS() {
+$('#_enableSimprint').hide();
+    function isSS() {    	
         var selectedRoleId = $('#role').val();
-        var ssId = <%=ss.getId()%>;
-        if (ssId != selectedRoleId) {
+        var selectedRoleName = $('#role option:selected').text();        
+        var ssId = <%=ss.getId()%>;       
+        if(selectedRoleName == "SK"){        	
+        	$('#_enableSimprint').show();        	 
+        }else{ 
+        	$('input[type="checkbox"][name="enableSimPrint"]').prop("checked", false).change();
+            $('#_enableSimprint').hide();
+        }
+        if (selectedRoleName != "SS") {
             $('#ssNo').val("");
             $('#ssNo').trigger('change');
             $('#ssOption').hide();
         } else {
             $('#ssOption').show();
         }
+        
+        
     }
 
     function toggleVisibilityOfPassword() {
@@ -287,9 +303,12 @@
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
         var formData;
-
-        console.log($('#ssNo').val());
-
+        var enableSimPrint = false;
+        if ($('#enableSimPrint1').is(":checked"))
+        {
+        	enableSimPrint = true;
+        }
+		
         formData = {
             'firstName': $('input[name=firstName]').val(),
             'lastName': $('input[name=lastName]').val(),
@@ -303,6 +322,7 @@
             'team': $('#team').val(),
             'teamMember': false,
             'branches': getBranches(),
+            'enableSimPrint': enableSimPrint
         };
 
         event.preventDefault();

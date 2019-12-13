@@ -48,6 +48,7 @@
 	int roleIdCHCP= -1;
 	int roleIdProvider= -1;
 	List<Role> selectedRole = (List<Role>) session.getAttribute("selectedRoles");
+	String ssPrefix = (String)session.getAttribute("ssPrefix");
 %>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -113,22 +114,52 @@
 					<form:hidden path="ssNo" />
 					<form:hidden path="id"/>
 					<form:hidden path="password" />
-					<form:hidden path="enableSimPrint" />
+					
 
-					<div class="row col-12 tag-height">
-						<div class="form-group required">
-							<label class="label-width"  for="role">
-								<spring:message code="lbl.role"/>
-							</label>
-							<select id="role"
-									class="form-control mx-sm-3 js-example-basic-multiple"
-									name="roles" required>
-								<c:forEach items="${roles}" var="role">
-									<option value="${role.id}">${role.name}</option>
-								</c:forEach>
-							</select>
+					 <div class="row col-12 tag-height">
+                    <div class="form-group required">
+                        <label class="label-width"  for="role">
+                            <spring:message code="lbl.role"/>
+                        </label>
+                        <select onchange="isSS()"
+                                id="role"
+                                class="form-control mx-sm-3 js-example-basic-multiple"
+                                name="roles" required>
+                            <c:forEach items="${roles}" var="role">
+                                <option value="${role.id}">${role.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
+					
+				<%-- <div class="row col-12 tag-height" id="ssOption" style="display: none;">
+                    <div class="form-group">
+                        <label class="label-width" for="ssNo"><spring:message code="lbl.ssNo"/></label>
+                        <select id="ssNo"
+                                class="form-control mx-sm-3 js-example-basic-multiple"
+                                name="ssNo" readonly="true">
+                            <option value="">Please Select SS No</option>
+                            <option value="-SS-1">SS-1</option>
+                            <option value="-SS-2">SS-2</option>
+                            <option value="-SS-3">SS-3</option>
+                            <option value="-SS-4">SS-4</option>
+                            <option value="-SS-5">SS-5</option>
+                            <option value="-SS-6">SS-6</option>
+                            <option value="-SS-7">SS-7</option>
+                            <option value="-SS-8">SS-8</option>
+                            <option value="-SS-9">SS-9</option>
+                            <option value="-SS-10">SS-10</option>
+                        </select>
+                    </div>
+                </div> --%>
+                
+                <div class="row col-12 tag-height" id="_enableSimprint">
+						<div class="form-group">
+							<label class="label-width" for="inputPassword6"><spring:message code="lbl.enableSimprint"/></label>
+							<form:checkbox class="checkBoxClass form-check-input"
+										   path="enableSimPrint" value="${account.getEnableSimPrint()}" />
 						</div>
-					</div>
+				</div>
 
 					<!-- for location -->
 					<div class="row col-12 tag-height" id="locationDiv" style="display:none">
@@ -161,7 +192,7 @@
 
 					<!-- end: for location -->
 					<!-- for team -->
-					 <div class="row col-12 tag-height" id="teamDiv" style="display:none">
+					 <%-- <div class="row col-12 tag-height" id="teamDiv" style="display:none">
 							<div class="form-group">
 								<label class="label-width" for="inputPassword6"><spring:message code="lbl.team"/></label>
 									<select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
@@ -182,7 +213,7 @@
 										</select>
 							</div>
 
-					</div>
+					</div> --%>
 					<!--end: for team -->
 
 
@@ -216,7 +247,35 @@
 <script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
 <script src="<c:url value='/resources/js/select2.js' />"></script>
+<script>
+var ssId = "-<%=ssPrefix%>";       
 
+//alert(ssId); 
+function isSS() {    
+	
+    var selectedRoleId = $('#role').val();
+    var selectedRoleName = $('#role option:selected').text();        
+           
+    if(selectedRoleName == "SK"){        	
+    	$('#_enableSimprint').show();        	 
+    }else{ 
+    	$('input[type="checkbox"][name="enableSimPrint"]').prop("checked", false).change();
+        $('#_enableSimprint').hide();
+    }
+    if (selectedRoleName != "SS") {
+    	
+        $('#ssNo').val("");
+        $('#ssNo').trigger('change');
+        $('#ssOption').hide();
+    } else {    	
+    	//$('#ssNo').val(ssId);
+		$('#ssNo').trigger('change');    	
+        $('#ssOption').show();
+    }
+    
+    
+}
+</script>
 <script>
 	var locationMagicSuggest;
 	var isCHCP= 0;
