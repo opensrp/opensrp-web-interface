@@ -526,7 +526,7 @@ public class UserService {
 				}
 			}
 
-			teamMemberServiceImpl.update(teamMember);
+			teamMemberServiceImpl.updateWithoutSendToOpenMRS(teamMember);
 			if (userLocationDTO.getLocations() != null) {
 				List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(
 						userLocationDTO.getLocations(),
@@ -554,10 +554,10 @@ public class UserService {
 			    "TeamMember");
 
 			if (isExist == null) {
-				teamMemberServiceImpl.save(teamMember);
+				teamMemberServiceImpl.saveWithoutSendToOpenMRS(teamMember);
 			} else {
 				isExist.setLocations(teamMember.getLocations());
-				teamMemberServiceImpl.update(isExist);
+				teamMemberServiceImpl.updateWithoutSendToOpenMRS(isExist);
 			}
 			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(userLocationDTO.getLocations(),
 			    userLocationDTO.getUserId());

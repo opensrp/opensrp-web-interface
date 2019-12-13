@@ -744,6 +744,7 @@ public class UserController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<UserDTO> users = userServiceImpl.getChildUserFromParent(loggedInUser.getId(), "SK");
 		session.setAttribute("allSK", users);
+		session.setAttribute("fromRole", "SK");
 		return "user/sk-list";
 	}
 	
@@ -753,6 +754,8 @@ public class UserController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<UserDTO> users = userServiceImpl.getChildUserFromParent(skId, "SS");
 		session.setAttribute("allSS", users);
+		session.setAttribute("fromRole", "SS");
+		session.setAttribute("idFinal", skId);
 		return "user/ss-list";
 	}
 }
