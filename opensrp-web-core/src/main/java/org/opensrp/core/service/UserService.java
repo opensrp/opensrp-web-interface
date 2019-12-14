@@ -159,10 +159,19 @@ public class UserService {
 
 	public String changePassword(ChangePasswordDTO dto) {
 		try {
-			Integer statusCode = openMRSServiceFactory.getOpenMRSConnector("user").post(dto).statusCode();
-			if (statusCode == 200) {
+			User user = findByKey(dto.getUsername(), "username", User.class);
+			Set <Role> roles = user.getRoles();
+			Role firstRole = roles.iterator().next();
+			String role  = firstRole.getName();
+			if (role.equalsIgnoreCase("SS")) {
 				dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-				int response = repository.updatePassword(dto);
+				repository.updatePassword(dto);
+			} else {
+				Integer statusCode = openMRSServiceFactory.getOpenMRSConnector("user").post(dto).statusCode();
+				if (statusCode == 200) {
+					dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+					repository.updatePassword(dto);
+				}
 			}
 		}
 		catch (Exception e) {

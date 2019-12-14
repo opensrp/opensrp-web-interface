@@ -42,6 +42,7 @@
     String fromRole = (String) session.getAttribute("fromRole");
     String role = AuthenticationManagerUtil.isAM()?"AM":"";
     Integer skId = (Integer) session.getAttribute("idFinal");
+    String skUsername = (String) session.getAttribute("usernameFinal");
 %>
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 <jsp:include page="/WEB-INF/views/navbar.jsp" />
@@ -269,6 +270,7 @@
             var role = "<%=role%>";
             var fromRole = "<%=fromRole%>";
             var skId = "<%=skId%>";
+            var skUsername = "<%=skUsername%>";
 
             console.log(role);
             if (role == 'AM') {
