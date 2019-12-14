@@ -1701,34 +1701,35 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		where += " 1=1";
 		try {
-			String sql = "WITH recursive main_location_tree AS \n" + "( \n" + "       SELECT * \n"
-					+ "       FROM   core.location \n" + "       WHERE  id IN ( WITH recursive location_tree AS \n"
-					+ "                     ( \n" + "                            SELECT * \n"
-					+ "                            FROM   core.location l \n"
-					+ "                            WHERE  l.id = :locationId \n" + "                            UNION ALL \n"
-					+ "                            SELECT loc.* \n"
-					+ "                            FROM   core.location loc \n"
-					+ "                            JOIN   location_tree lt \n"
-					+ "                            ON     lt.id = loc.parent_location_id ) \n"
-					+ "              SELECT DISTINCT(lt.id) \n" + "              FROM            location_tree lt \n"
-					+ "              WHERE           lt.location_tag_id = :locationTagId ) \n" + "UNION ALL \n" + "SELECT l.* \n"
-					+ "FROM   core.location l \n" + "JOIN   main_location_tree mlt \n"
-					+ "ON     l.id = mlt.parent_location_id ) \n" + "SELECT DISTINCT(u.username),\n"
-					+ "\t\t\t\tconcat(u.first_name, ' ', u.last_name) as full_name,\n" + "\t\t\t\tu.mobile,\n"
-					+ "                r.NAME role_name, \n" + "                b.NAME branch_name, u.id \n"
-					+ "FROM            main_location_tree mlt \n" + "JOIN            core.users_catchment_area uca \n"
-					+ "ON              uca.location_id = mlt.id \n" + "JOIN            core.users u \n"
-					+ "ON              u.id = uca.user_id \n" + "JOIN            core.user_branch ub \n"
-					+ "ON              ub.user_id = u.id \n" + "JOIN            core.branch b \n"
-					+ "ON              b.id = ub.branch_id \n" + "JOIN            core.user_role ur \n"
-					+ "ON              u.id = ur.user_id \n" + "JOIN            core.role r \n"
-					+ "ON              ur.role_id = r.id ";
+			String sql = "WITH recursive main_location_tree AS (SELECT * "
+					+ "FROM core.location WHERE  id IN ( WITH recursive location_tree AS "
+					+ "(SELECT * "
+					+ "FROM   core.location l "
+					+ "WHERE  l.id = :locationId UNION ALL "
+					+ "SELECT loc.* "
+					+ "FROM   core.location loc "
+					+ "JOIN   location_tree lt "
+					+ "ON lt.id = loc.parent_location_id ) "
+					+ "SELECT DISTINCT(lt.id) FROM location_tree lt "
+					+ "WHERE lt.location_tag_id = :locationTagId ) UNION ALL SELECT l.* "
+					+ "FROM core.location l JOIN   main_location_tree mlt "
+					+ "ON l.id = mlt.parent_location_id ) SELECT DISTINCT(u.username), "
+					+ "concat(u.first_name, ' ', u.last_name) as full_name, u.mobile, "
+					+ "r.NAME role_name, (select string_agg(b1.name, ', ') "
+					+ "from core.branch b1 join core.user_branch ub1 on b1.id = ub1.branch_id where ub1.user_id = u.id) branch_name, u.id "
+					+ "FROM main_location_tree mlt JOIN core.users_catchment_area uca "
+					+ "ON uca.location_id = mlt.id JOIN core.users u "
+					+ "ON u.id = uca.user_id JOIN core.user_branch ub "
+					+ "ON ub.user_id = u.id JOIN core.branch b "
+					+ "ON b.id = ub.branch_id JOIN core.user_role ur "
+					+ "ON u.id = ur.user_id JOIN core.role r "
+					+ "ON ur.role_id = r.id ";
 
 			Query query = session.createSQLQuery(sql+where+ " order by u.id desc ");
 			userList = query
 					.setInteger("locationId", locationId)
 					.setInteger("locationTagId", locationTagId)
-					.setMaxResults(300)					
+					.setMaxResults(300)
 					.list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1744,7 +1745,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		try {
 			String hql = "select distinct(u.username), concat(u.first_name, ' ', u.last_name) full_name, "
-					+ "u.mobile, r.name role_name, b.name branch_name, "
+					+ "u.mobile, r.name role_name, (select string_agg(b1.name, ', ') "
+					+ "from core.branch b1 join core.user_branch ub1 on b1.id = ub1.branch_id where ub1.user_id = u.id) branch_name, "
 					+ "u.id from core.users as u join core.user_role ur on ur.user_id = u.id "
 					+ "join core.user_branch ub on ub.user_id = u.id "
 					+ "left join core.team_member tm on tm.person_id = u.id "
