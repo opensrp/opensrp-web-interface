@@ -285,7 +285,7 @@ public class LocationService {
 		
 	}
 
-	public JSONArray getLocationWithDisableFacility(String parentIndication, String parentKey, List<UserAssignedLocationDTO> userAssignedLocationDTOS, Integer userId, String role, Integer loggedInUserId) throws JSONException {
+	public JSONArray getLocationWithDisableFacility(HttpSession session, String parentIndication, String parentKey, List<UserAssignedLocationDTO> userAssignedLocationDTOS, Integer userId, String role, Integer loggedInUserId) throws JSONException {
 		JSONArray dataArray = new JSONArray();
 
 		Map<Integer, Integer> locationMap = new HashMap<>();
@@ -297,11 +297,15 @@ public class LocationService {
 		if (role.equalsIgnoreCase("AM")) {
 			locations = findAllLocationByAM(loggedInUserId);
 		} else {
-			locations = findAllLocationPartialProperty();
+			if (session.getAttribute("allLocation") != null) {
+				locations = (List<LocationDTO>) session.getAttribute("allLocation");
+
+			} else {
+				locations = findAllLocationPartialProperty();
+				session.setAttribute("allLocation", locations);
+			}
 		}
 
-
-//		Collections.reverse(locations);
 		for (LocationDTO location : locations) {
 			JSONObject dataObject = new JSONObject();
 			if (location.getParentLocationId() != null) {

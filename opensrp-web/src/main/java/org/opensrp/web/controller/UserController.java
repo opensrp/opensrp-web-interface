@@ -646,7 +646,7 @@ public class UserController {
 		if (AuthenticationManagerUtil.isAM())
 			role = "AM";
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		JSONArray data = locationServiceImpl.getLocationWithDisableFacility(parentIndication, parentKey,
+		JSONArray data = locationServiceImpl.getLocationWithDisableFacility(session, parentIndication, parentKey,
 		    userAssignedLocationDTOS, user.getId(), role, loggedInUser.getId());
 		
 		session.setAttribute("usersCatchmentAreas", usersCatchmentAreas);
