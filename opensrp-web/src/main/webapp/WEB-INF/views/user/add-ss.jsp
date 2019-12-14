@@ -64,10 +64,10 @@
                 </div>
 
                 <div class="row col-12 tag-height">
-                    <div class="form-group required">
+                    <div class="form-group">
                         <label class="label-width" for="lastName"> <spring:message code="lbl.lastName"/> </label>
                         <form:input path="lastName" class="form-control mx-sm-3"
-                                    required="required"/>
+                                   />
                     </div>
                 </div>
 
@@ -115,6 +115,7 @@
                             <option value="-SS-10">SS-10</option>
                             <option value="-SS-11">SS-11</option>
                             <option value="-SS-12">SS-12</option>
+                            
                         </select>
                     </div>
                 </div>

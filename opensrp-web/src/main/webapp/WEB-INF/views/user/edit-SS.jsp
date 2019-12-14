@@ -74,10 +74,9 @@
 					</div>
 
 					<div class="row col-12 tag-height">
-						<div class="form-group required">
+						<div class="form-group">
 							<label class="label-width" for="inputPassword6"><spring:message code="lbl.lastName"/> </label>
-							<form:input path="lastName" class="form-control mx-sm-3"
-										required="required"/>
+							<form:input path="lastName" class="form-control mx-sm-3"/>
 						</div>
 					</div>
 
