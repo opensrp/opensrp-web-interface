@@ -277,7 +277,7 @@
                 if (fromRole == 'SK') {
                     redirectUrl = "/opensrp-dashboard/user/sk-list.html";
                 } else if (fromRole == 'SS') {
-                    redirectUrl = "/opensrp-dashboard/user/"+skId+"/my-ss.html?lang=en"
+                    redirectUrl = "/opensrp-dashboard/user/"+skId+"/"+skUsername+"/my-ss.html?lang=en"
                 }
             }
 
