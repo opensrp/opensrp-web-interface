@@ -41,7 +41,7 @@
             <a  href="<c:url value="/user/add.html?lang=${locale}"/>">
                 <strong>
                     <spring:message code="lbl.addNew"/>
-                    <spring:message code="lbl.user"/>
+                    <spring:message code="lbl.sk"/>
                 </strong> </a> <%} %>
         </div>
 

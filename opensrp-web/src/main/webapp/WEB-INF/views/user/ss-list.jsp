@@ -42,7 +42,7 @@
             <a  href="<c:url value="/user/add-SS.html?skId=${skId}&skUsername=${skUsername}&lang=${locale}"/>">
                 <strong>
                     <spring:message code="lbl.addNew"/>
-                    <spring:message code="lbl.user"/>
+                    <spring:message code="lbl.ss"/>
                 </strong> </a> <%} %>
         </div>
 
