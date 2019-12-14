@@ -592,7 +592,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		List<T> result = null;
 		try {
-			String hql = "select l.id, l.name locationName, l.parent_location_id parentLocationId, lt.name locationTagName"
+			String hql = "select l.id, split_part(l.name, ':', 1) locationName, l.parent_location_id parentLocationId, lt.name locationTagName"
 					+ " from core.location l join core.location_tag lt on lt.id = l.location_tag_id order by id asc;";
 			Query query = session.createSQLQuery(hql)
 					.addScalar("id", StandardBasicTypes.INTEGER)
@@ -1820,7 +1820,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "sk.last_name lastName, sk.mobile mobile, "
 					+ "(select string_agg(b.name, ', ') from core.user_branch ub "
 					+ "join core.branch b on ub.branch_id = b.id where ub.user_id = sk.id) branches, "
-					+ "(select string_agg(distinct(loc_p.name), ', ') from core.users_catchment_area uca1 "
+					+ "(select string_agg(distinct(split_part(loc_p.name, ':', 1)), ', ') from core.users_catchment_area uca1 "
 					+ "join core.location loc_c on loc_c.id = uca1.location_id "
 					+ "join core.location loc_p on loc_p.id = loc_c.parent_location_id "
 					+ "where uca1.user_id = sk.id) locationList "
@@ -1858,7 +1858,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ ") select distinct u.id, u.username, u.first_name firstName, u.last_name lastName, u.mobile, "
 					+ "(select string_agg(b.name, ', ') from core.user_branch ub join core.branch b on ub.branch_id = b.id "
 					+ "where ub.user_id = u.id) branches, "
-					+ "(select string_agg(distinct(loc_c.name), ', ') from core.users_catchment_area uca1 "
+					+ "(select string_agg(distinct(split_part(loc_c.name, ':', 1)), ', ') from core.users_catchment_area uca1 "
 					+ "join core.location loc_c on loc_c.id = uca1.location_id "
 					+ "where uca1.user_id = u.id) locationList "
 					+ "from loc_tree lt "
@@ -1896,13 +1896,13 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "select * from (with recursive loc_tree as (select * from core.location loc1 where loc1.id in "
 					+ "(select location_id from core.users_catchment_area where user_id = :userId) union all select loc2.* "
 					+ "from core.location loc2 join loc_tree lt on lt.parent_location_id = loc2.id ) "
-					+ "select ltr.id, ltr.name locationName, ltr.parent_location_id parentLocationId, lt.name locationTagName "
+					+ "select ltr.id, split_part(ltr.name, ':', 1) locationName, ltr.parent_location_id parentLocationId, lt.name locationTagName "
 					+ "from loc_tree ltr join core.location_tag lt on lt.id = ltr.location_tag_id) a "
 					+ "union "
 					+ "select * from (with recursive loc_tree as (select * from core.location loc1 where loc1.id in "
 					+ "(select location_id from core.users_catchment_area where user_id = :userId) union all select loc2.* "
 					+ "from core.location loc2 join loc_tree lt on lt.id = loc2.parent_location_id ) "
-					+ "select ltr.id, ltr.name locationName, ltr.parent_location_id parentLocationId, lt.name locationTagName "
+					+ "select ltr.id, split_part(ltr.name, ':', 1) locationName, ltr.parent_location_id parentLocationId, lt.name locationTagName "
 					+ "from loc_tree ltr join core.location_tag lt on lt.id = ltr.location_tag_id) b "
 					+ ") select * from final_loc order by id asc;";
 			Query query = session.createSQLQuery(hql)
@@ -1920,6 +1920,38 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 
 		return locations;
+	}
+
+	@Override
+	public <T> List<T> getSSWithoutCatchmentAreaByAM(Integer userId) {
+		Session session = sessionFactory.openSession();
+		List<T> ssList = new ArrayList<T>();
+		try {
+			String hql = "select u.id, u.username, u.first_name firstName, u.last_name lastName, u.mobile, "
+					+ "(select string_agg(b.name, ', ') from core.user_branch ub2 join core.branch b on ub2.branch_id = b.id "
+					+ "where ub2.user_id = u.id) branches from core.users u join core.user_branch ub on ub.user_id = u.id "
+					+ "join core.user_role ur on ur.user_id = u.id "
+					+ "left join core.users_catchment_area uca on uca.user_id = u.id "
+					+ "where ur.role_id = 29 and ub.branch_id in ( "
+					+ "select ub1.branch_id from core.user_branch ub1 join core.users u1 on u1.id = ub1.user_id where u1.id = :userId"
+					+ ") and uca.user_id is null;";
+
+			ssList = session.createSQLQuery(hql)
+					.addScalar("id", StandardBasicTypes.INTEGER)
+					.addScalar("username", StandardBasicTypes.STRING)
+					.addScalar("firstName", StandardBasicTypes.STRING)
+					.addScalar("lastName", StandardBasicTypes.STRING)
+					.addScalar("mobile", StandardBasicTypes.STRING)
+					.addScalar("branches", StandardBasicTypes.STRING)
+					.setInteger("userId", userId)
+					.setResultTransformer(new AliasToBeanResultTransformer(UserDTO.class)).list();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return ssList;
 	}
 
 	public <T> List<T> getUniqueLocation(String village, String ward) {

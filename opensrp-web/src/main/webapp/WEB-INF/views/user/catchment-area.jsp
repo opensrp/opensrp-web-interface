@@ -176,6 +176,7 @@
 <script src="<c:url value='/resources/js/jstree.min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery.multi-select.js'/>"></script>
 <script type="text/javascript">
+    var tempEdit = false;
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();
         $('#locationTree').jstree({
@@ -196,11 +197,17 @@
             if ($('#locations').val() != null) {
                 $('#saveCatchmentArea').prop('disabled', false);
             } else {
-                $('#saveCatchmentArea').prop('disabled', true);
+                console.log(tempEdit);
+                if (tempEdit == true) {
+                    $('#saveCatchmentArea').prop('disabled', false);
+                } else {
+                    $('#saveCatchmentArea').prop('disabled', true);
+                }
             }
         });
 
         $('#locationTree').on('changed.jstree', function (e, data) {
+            tempEdit = false;
             $('#saveCatchmentArea').prop('disabled', true);
             $('#locations option').remove();
             $('#locations').multiSelect('refresh');
@@ -243,7 +250,6 @@
         }).jstree();
 
         $('#saveCatchmentArea').unbind().click(function () {
-            // window.location.replace("/opensrp-dashboard/user.html");
             $('#saveCatchmentArea').prop('disabled', true);
             $('#pleaseWait').show();
             var url = "";
@@ -310,6 +316,7 @@
         });
     });
     function editLocation(parentId) {
+        tempEdit = true;
         $('#saveCatchmentArea').prop('disabled', false);
         $('#locations option').remove();
         $('#locations').multiSelect('refresh');

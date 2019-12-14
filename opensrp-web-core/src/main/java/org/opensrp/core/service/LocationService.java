@@ -64,7 +64,7 @@ public class LocationService {
 	
 	@Transactional
 	public List<Object[]> getChildData(int parentId) {
-		String sqlQuery = "SELECT location.name,location.id from core.location where parent_location_id=:parentId";
+		String sqlQuery = "SELECT split_part(location.name, ':', 1),location.id from core.location where parent_location_id=:parentId";
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("parentId", parentId);
 		return repository.executeSelectQuery(sqlQuery, params);

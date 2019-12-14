@@ -187,4 +187,7 @@ public interface DatabaseRepository {
 	public <T> List<T> getChildUserByParentUptoVillage(Integer userId, String roleName);
 
 	public <T> List<T> getLocationByAM(Integer userId);
+
+	public <T> List<T> getSSWithoutCatchmentAreaByAM(Integer userId);
+
 }

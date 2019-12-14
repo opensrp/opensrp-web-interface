@@ -753,9 +753,11 @@ public class UserController {
 		model.addAttribute("locale", locale);
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<UserDTO> users = userServiceImpl.getChildUserFromParent(skId, "SS");
+		List<UserDTO> ssWithoutCatchment = userServiceImpl.getSSWithoutCatchmentArea(skId);
 		session.setAttribute("allSS", users);
 		session.setAttribute("fromRole", "SS");
 		session.setAttribute("idFinal", skId);
+		session.setAttribute("ssWithoutCatchment", ssWithoutCatchment);
 		return "user/ss-list";
 	}
 }

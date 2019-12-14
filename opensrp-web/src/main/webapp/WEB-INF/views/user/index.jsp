@@ -76,7 +76,7 @@
 								if (users != null){
 									for (Object[] user: users) {
 										String stringId = user[5].toString();
-										String fullName = String.valueOf(user[1]).replaceAll(" .", "");
+										String fullName = String.valueOf(user[1]).replaceAll("\\.", "");
 										Integer id = Integer.parseInt(stringId);
 										session.setAttribute("id", id);
 							%>
@@ -129,7 +129,7 @@
 							if (users != null) {
 								for (Object[] user: usersWithoutCatchmentArea) {
 									String stringId = user[5].toString();
-									String fullName = String.valueOf(user[1]).replaceAll(" .", "");
+									String fullName = String.valueOf(user[1]).replaceAll("\\.", "");
 									Integer id = Integer.parseInt(stringId);
 									session.setAttribute("id", id);
 						%>

@@ -26,7 +26,7 @@
     <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <title><spring:message code="lbl.addUserTitle"/></title>
+    <title><spring:message code="lbl.changePassword"/></title>
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -65,7 +65,7 @@
                         <input type="password" class="form-control mx-sm-3" id="retypePassword"
                                        required="required" />
                         <small id="confirmPasswordHelpInline" class="text-muted text-para">
-                            <span class="text-red" id="passwordNotMatchedMessage"></span> <spring:message code="lbl.retypePasswordMessage"/>
+                            <span class="text-red" id="passwordNotMatchedMessage"></span>
                         </small>
                     </div>
                 </div>
@@ -114,7 +114,7 @@
         var password = document.getElementById("password").value;
         var confirmPassword = document.getElementById("retypePassword").value;
         if (password != confirmPassword) {
-            $("#passwordNotMatchedMessage").html("Your password is not similar with confirm password. Please enter same password in both");
+            $("#passwordNotMatchedMessage").html("Your password doesn't match. Please enter same.");
             return;
         }
         if (password.length < 4) {
@@ -167,7 +167,7 @@
         var password = document.getElementById("password").value;
         var confirmPassword = document.getElementById("retypePassword").value;
         if (password != confirmPassword) {
-            $("#passwordNotMatchedMessage").html("Your password is not similar with confirm password. Please enter same password in both");
+            $("#passwordNotMatchedMessage").html("Your password doesn't match. Please enter same.");
             return false;
         }
 

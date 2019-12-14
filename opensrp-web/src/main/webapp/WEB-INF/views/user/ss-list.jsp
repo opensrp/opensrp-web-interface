@@ -14,6 +14,7 @@
 
 <%
     List<UserDTO> users = (List<UserDTO>) session.getAttribute("allSS");
+    List<UserDTO> ssWithoutCatchment = (List<UserDTO>) session.getAttribute("ssWithoutCatchment");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -76,6 +77,57 @@
                             <td><%=user.getMobile()%></td>
                             <td><%=user.getBranches()%></td>
                             <td><%=user.getLocationList()%></td>
+                            <td>
+                                <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
+                                <a href="<c:url value="/user/${ssId}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
+                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
+                                <a href="<c:url value="/user/${ssId}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>
+                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
+                                | <a href="<c:url value="/user/${ssId}/change-password.html?lang=${locale}"/>"><spring:message code="lbl.changePassword"/></a> <%} %>
+                            </td>
+                        </tr>
+                        <%
+                                }
+                            }
+                        %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer small text-muted"></div>
+        </div>
+
+        <br>
+        <br>
+        <!-- Example DataTables Card-->
+        <div class="card mb-3">
+            <div class="card-header">
+                <spring:message code="lbl.ssWithoutCatchment"/>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="display">
+                        <thead>
+                        <tr>
+                            <th><spring:message code="lbl.fullName"></spring:message></th>
+                            <th><spring:message code="lbl.userName"></spring:message></th>
+                            <th><spring:message code="lbl.phoneNumber"></spring:message></th>
+                            <th><spring:message code="lbl.branches"></spring:message></th>
+                            <th><spring:message code="lbl.action"></spring:message></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <%
+                            if (users != null){
+                                for (UserDTO user: ssWithoutCatchment) {
+                                    Integer id = user.getId();
+                                    session.setAttribute("ssId", id);
+                        %>
+                        <tr>
+                            <td><%=user.getFullName()%></td>
+                            <td><%=user.getUsername()%></td>
+                            <td><%=user.getMobile()%></td>
+                            <td><%=user.getBranches()%></td>
                             <td>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
                                 <a href="<c:url value="/user/${ssId}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>

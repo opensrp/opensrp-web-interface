@@ -733,4 +733,8 @@ public class UserService {
 				repository.getChildUserByParentUptoUnion(userId, roleName):
 				repository.getChildUserByParentUptoVillage(userId, roleName);
 	}
+
+	public List<UserDTO> getSSWithoutCatchmentArea(Integer userId) {
+		return repository.getSSWithoutCatchmentAreaByAM(userId);
+	}
 }
