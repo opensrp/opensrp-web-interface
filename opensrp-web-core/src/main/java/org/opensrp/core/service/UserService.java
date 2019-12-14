@@ -106,13 +106,13 @@ public class UserService {
 		User user = (User) t;
 		long createdUser = 0;
 		Set<Role> roles = user.getRoles();
-		boolean isAdmin = roleServiceImpl.isOpenMRSRole(roles);
+		boolean isAdminOrSS = roleServiceImpl.isOpenMRSRole(roles);
 		JSONArray existingOpenMRSUser = new JSONArray();
 		String query = "";
 		String existingUserUUid = "";
 		String existingUserPersonUUid = "";
 		query = "v=full&username=" + user.getUsername();
-		if (!isAdmin) {
+		if (!isAdminOrSS) {
 			existingOpenMRSUser = openMRSServiceFactory.getOpenMRSConnector("user").getByQuery(query);
 			if (existingOpenMRSUser.length() == 0) {
 				user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
@@ -175,9 +175,9 @@ public class UserService {
 	@Transactional
 	public <T> int update(T t) throws Exception {
 		User user = (User) t;
-		boolean isProvider = roleServiceImpl.isOpenMRSRole(user.getRoles());
-		System.err.println("isProvider:" + isProvider);
-		if (!isProvider) {
+		boolean isAdminOrSS = roleServiceImpl.isOpenMRSRole(user.getRoles());
+		System.err.println("isAdminOrSS:" + isAdminOrSS);
+		if (!isAdminOrSS) {
 			user.setProvider(true);
 			save(user, true);
 		} else {
