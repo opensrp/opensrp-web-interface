@@ -38,8 +38,8 @@
 
         <div class="form-group">
             <h5><spring:message code="lbl.ssListTitle"/></h5>
-            <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-            <a  href="<c:url value="/user/add.html?lang=${locale}"/>">
+            <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>
+            <a  href="<c:url value="/user/add-SS.html?skId=${skId}&skUsername=${skUsername}&lang=${locale}"/>">
                 <strong>
                     <spring:message code="lbl.addNew"/>
                     <spring:message code="lbl.user"/>

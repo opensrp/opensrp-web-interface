@@ -68,7 +68,9 @@
                             if (users != null){
                                 for (UserDTO user: users) {
                                 	Integer id = user.getId();
+                                	String username = user.getUsername();
                                     session.setAttribute("skId", id);
+                                    session.setAttribute("skUsername", username);
                         %>
                         <tr>
                             <td><%=user.getFullName()%></td>
@@ -83,7 +85,7 @@
                                 <a href="<c:url value="/user/${skId}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
                                 | <a href="<c:url value="/user/${skId}/change-password.html?lang=${locale}"/>"><spring:message code="lbl.changePassword"/></a> <%} %>
-                                | <a href="<c:url value="/user/${skId}/my-ss.html?lang=${locale}"/>"><spring:message code="lbl.ssList"/></a>
+                                | <a href="<c:url value="/user/${skId}/${skUsername}/my-ss.html?lang=${locale}"/>"><spring:message code="lbl.ssList"/></a>
                             </td>
                         </tr>
                         <%

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -748,16 +749,50 @@ public class UserController {
 		return "user/sk-list";
 	}
 	
-	@RequestMapping(value = "/user/{skId}/my-ss.html", method = RequestMethod.GET)
-	public String getSSBySK(@PathVariable("skId") Integer skId, HttpSession session, Model model, Locale locale) {
+	@RequestMapping(value = "/user/{skId}/{skUsername}/my-ss.html", method = RequestMethod.GET)
+	public String getSSBySK(@PathVariable("skId") Integer skId, @PathVariable("skUsername") String skUsername,
+	                        HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<UserDTO> users = userServiceImpl.getChildUserFromParent(skId, "SS");
 		List<UserDTO> ssWithoutCatchment = userServiceImpl.getSSWithoutCatchmentArea(skId);
+		model.addAttribute("skUsername", skUsername);
+		model.addAttribute("skId", skId);
 		session.setAttribute("allSS", users);
 		session.setAttribute("fromRole", "SS");
 		session.setAttribute("idFinal", skId);
 		session.setAttribute("ssWithoutCatchment", ssWithoutCatchment);
 		return "user/ss-list";
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_ADD_SS')")
+	@RequestMapping(value = "/user/add-SS.html", method = RequestMethod.GET)
+	public ModelAndView addSS(Model model, HttpSession session, @RequestParam("skId") Integer skId,
+	                          @RequestParam("skUsername") String skUsername, Locale locale) throws JSONException {
+		int[] selectedRoles = null;
+		model.addAttribute("account", new User());
+		List<Role> roles = userServiceImpl.setRolesAttributes(selectedRoles, session);
+		List<Branch> branches = branchService.findAll("Branch");
+		Role ss = roleServiceImpl.findByKey("SS", "name", Role.class);
+		model.addAttribute("locale", locale);
+		model.addAttribute("roles", roles);
+		
+		//for adding location and team
+		model.addAttribute("teamMember", new TeamMember());
+		model.addAttribute("branches", branches);
+		String personName = "";
+		session.setAttribute("locationList", locationServiceImpl.list().toString());
+		int[] locations = new int[0];
+		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+		session.setAttribute("ss", ss);
+		session.setAttribute("skId", skId);
+		System.err.println("skId:::::" + skId);
+		String redirectUrl = "redirect:/user/sk-list.html";
+		if (StringUtils.isBlank(skUsername)) {
+			return new ModelAndView(redirectUrl + "?lang=" + locale);
+		}
+		model.addAttribute("skUsername", skUsername);
+		//end: adding location and team
+		return new ModelAndView("user/add-ss", "command", account);
 	}
 }
