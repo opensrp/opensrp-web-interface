@@ -170,7 +170,7 @@ public class UserRestController {
 				user.setFirstName(firstName);
 				user.setLastName(lastName);
 			} else {
-				userNameUniqueError = "some Problem ocuured please contact with Admin";
+				userNameUniqueError = "Some problem occurred please contact with Admin";
 			}
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);

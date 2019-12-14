@@ -8,6 +8,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="org.opensrp.core.entity.Role"%>
+<%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,6 +30,13 @@
     <title><spring:message code="lbl.changePassword"/></title>
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
+
+<%
+    String fromRole = (String) session.getAttribute("fromRole");
+    String role = AuthenticationManagerUtil.isAM()?"AM":"";
+    Integer skId = (Integer) session.getAttribute("idFinal");
+    String skUsername = (String) session.getAttribute("usernameFinal");
+%>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 <jsp:include page="/WEB-INF/views/navbar.jsp" />
@@ -134,6 +142,21 @@
             'password': $('input[name=password]').val()
         };
 
+        var redirectUrl = "/opensrp-dashboard/user.html";
+        var role = "<%=role%>";
+        var fromRole = "<%=fromRole%>";
+        var skId = "<%=skId%>";
+        var skUsername = "<%=skUsername%>";
+
+        console.log(role);
+        if (role == 'AM') {
+            if (fromRole == 'SK') {
+                redirectUrl = "/opensrp-dashboard/user/sk-list.html";
+            } else if (fromRole == 'SS') {
+                redirectUrl = "/opensrp-dashboard/user/"+skId+"/"+skUsername+"/my-ss.html?lang=en"
+            }
+        }
+
         $.ajax({
             contentType : "application/json",
             type: "POST",
@@ -149,7 +172,7 @@
                 $("#usernameUniqueErrorMessage").html(data);
                 $("#loading").hide();
                 if(data == ""){
-                    window.location.replace("/opensrp-dashboard/user.html");
+                    window.location.replace(redirectUrl);
                 }
 
             },

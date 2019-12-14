@@ -763,6 +763,7 @@ public class UserController {
 		session.setAttribute("allSS", users);
 		session.setAttribute("fromRole", "SS");
 		session.setAttribute("idFinal", skId);
+		session.setAttribute("usernameFinal", skUsername);
 		session.setAttribute("ssWithoutCatchment", ssWithoutCatchment);
 		return "user/ss-list";
 	}
