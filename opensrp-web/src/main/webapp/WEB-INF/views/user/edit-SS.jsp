@@ -110,7 +110,7 @@
 					<form:hidden path="provider" />
 					<form:hidden path="ssNo" />
 					<form:hidden path="id"/>
-					<form:hidden path="password" />
+					<form:hidden path="password" value="###" />
 					<input type="hidden" type="text" value="${skId}" name="skId">
 					<input type="hidden" type="text" value="${skUsername}" name="skUsername">
 					<form:hidden path="password" />

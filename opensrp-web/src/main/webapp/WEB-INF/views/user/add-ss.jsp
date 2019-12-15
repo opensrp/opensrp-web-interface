@@ -113,9 +113,7 @@
                             <option value="-SS-7">SS-7</option>
                             <option value="-SS-8">SS-8</option>
                             <option value="-SS-9">SS-9</option>
-                            <option value="-SS-10">SS-10</option>
-                            <option value="-SS-11">SS-11</option>
-                            <option value="-SS-12">SS-12</option>
+                            <option value="-SS-10">SS-10</option>                            
                             
                         </select>
                     </div>
@@ -255,7 +253,7 @@
             'email': $('input[name=email]').val(),
             'mobile': $('input[name=mobile]').val(),
             'username': username,
-            'password': "",
+            'password': "###",
             'parentUser': $('input[name=parentUser]').val(),
             'ssNo': $('#ssNo').val(),
             'roles': ssRole,
@@ -264,13 +262,7 @@
             'branches': getBranches(),
             'enableSimPrint': enableSimPrint
         };
-        console.log(formData);
-
-        
-        event.preventDefault();
-
-        console.log(formData);
-
+       event.preventDefault();
         $.ajax({
             contentType : "application/json",
             type: "POST",

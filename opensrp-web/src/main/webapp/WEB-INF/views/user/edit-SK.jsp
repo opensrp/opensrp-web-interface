@@ -168,8 +168,8 @@
 								   class="btn btn-primary btn-block btn-sm" />
 						</div>
 						<div class="form-group">
-	                    	<a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
-	                    </div>
+                    <a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
+                    </div>
 					</div>
 				</form:form>
 
