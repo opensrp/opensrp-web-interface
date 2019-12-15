@@ -7,6 +7,7 @@ package org.opensrp.core.openmrs.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,7 +71,11 @@ public class OpenMRSUserAPIService implements OpenMRSConnector<Object> {
 		JSONObject personObject = new JSONObject();
 		personObject.put("givenName", user.getFirstName());
 		personObject.put("middleName", "");
-		personObject.put("familyName", user.getLastName());
+		if (!StringUtils.isBlank(user.getLastName())) {
+			personObject.put("familyName", user.getLastName());
+		} else {
+			personObject.put("familyName", ".");
+		}
 		personArray.put(personObject);
 		
 		person.put(genderKey, female);

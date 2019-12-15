@@ -48,7 +48,7 @@
         </div>
         <div class="card mb-3">
             <div class="card-header" id="data">
-                <i class="fa fa-table"></i> <spring:message code="lbl.addUser"/>
+                Change Password
             </div>
             <div class="card-body">
 

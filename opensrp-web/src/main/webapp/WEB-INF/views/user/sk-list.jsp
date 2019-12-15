@@ -31,14 +31,21 @@
 <div class="content-wrapper">
     <div class="container-fluid">
 
-        <div class="form-group">
+       <%--  <div class="form-group">
             <jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />
-        </div>
+        </div> --%>
+        <%--  <div class="form-group">
+        <ol class="breadcrumb">	
+			<li class="breadcrumb-item">
+				<a  href="<c:url value="?lang=en"/>"><strong> Home</strong></a> <spring:message code="lbl.userList"/>
+			</li>	
+		</ol>  
+		</div>   --%>   
 
         <div class="form-group">
-            <h5><spring:message code="lbl.skListTitle"/></h5>
-            <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-            <a  href="<c:url value="/user/add.html?lang=${locale}"/>">
+            
+            <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SK")){ %>
+            <a  href="<c:url value="/user/add-SK.html?lang=${locale}"/>">
                 <strong>
                     <spring:message code="lbl.addNew"/>
                     <spring:message code="lbl.sk"/>
@@ -48,7 +55,7 @@
         <!-- Example DataTables Card-->
         <div class="card mb-3">
             <div class="card-header">
-                <spring:message code="lbl.userList"/>
+                SK List
             </div>
             <div class="card-body">
                 <div class="table-responsive" style="overflow-x: auto;">
@@ -80,7 +87,7 @@
                             <td><%=user.getLocationList()%></td>
                             <td>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
-                                <a href="<c:url value="/user/${skId}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
+                                <a href="<c:url value="/user/${skId}/edit-SK.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
                                 <a href="<c:url value="/user/${skId}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>

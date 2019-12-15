@@ -845,4 +845,78 @@ public class UserController {
 		//return new ModelAndView("redirect:/user.html?lang=" + locale);
 		
 	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_ADD_SK')")
+	@RequestMapping(value = "/user/add-SK.html", method = RequestMethod.GET)
+	public ModelAndView addSK(Model model, HttpSession session, Locale locale) throws JSONException {
+		int[] selectedRoles = null;
+		model.addAttribute("account", new User());
+		List<Role> roles = userServiceImpl.setRolesAttributes(selectedRoles, session);
+		List<Branch> branches = branchService.findAll("Branch");
+		Role sk = roleServiceImpl.findByKey("SK", "name", Role.class);
+		model.addAttribute("locale", locale);
+		model.addAttribute("roles", roles);
+		
+		//for adding location and team
+		model.addAttribute("teamMember", new TeamMember());
+		model.addAttribute("branches", branches);
+		String personName = "";
+		session.setAttribute("locationList", locationServiceImpl.list().toString());
+		int[] locations = new int[0];
+		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+		session.setAttribute("sk", sk);
+		//session.setAttribute("skId", skId);
+		//System.err.println("skId:::::" + skId);
+		String redirectUrl = "redirect:/user/sk-list.html";
+		/*if (StringUtils.isBlank(skUsername)) {
+			return new ModelAndView(redirectUrl + "?lang=" + locale);
+		}*/
+		//model.addAttribute("skUsername", skUsername);
+		//end: adding location and team
+		return new ModelAndView("user/add-SK", "command", account);
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_ADD_SK')")
+	@RequestMapping(value = "/user/{id}/edit-SK.html", method = RequestMethod.GET)
+	public ModelAndView editSK(HttpSession session, @PathVariable("id") int id, Locale locale, Model model)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
+		User account = userServiceImpl.findById(id, "id", User.class);
+		model.addAttribute("account", account);
+		model.addAttribute("id", id);
+		//model.addAttribute("skId", skId);
+		//model.addAttribute("skUsername", skUsername);
+		//session.setAttribute("ssPrefix", account.getSsNo());
+		
+		String parentUserName = "";
+		int parentUserId = 0;
+		
+		List<Branch> branches = branchService.findAll("Branch");
+		
+		model.addAttribute("branches", branches);
+		session.setAttribute("parentUserName", parentUserName);
+		session.setAttribute("parentUserId", parentUserId);
+		
+		session.setAttribute("selectedBranches", account.getBranches());
+		
+		return new ModelAndView("user/edit-SK", "command", account);
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
+	@RequestMapping(value = "/user/{id}/edit-SK.html", method = RequestMethod.POST)
+	public ModelAndView editSKPost(@RequestParam(value = "branches", required = false) String[] branches,
+	                               @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
+	                               HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
+		Role ss = roleServiceImpl.findByKey("SK", "name", Role.class);
+		Set<Role> roles = new HashSet<Role>();
+		roles.add(ss);
+		account.setRoles(roles);
+		account.setBranches(userServiceImpl.setBranches(branches));
+		account.setId(id);
+		String redirectUrl = "redirect:/user/sk-list.html";
+		userServiceImpl.update(account);
+		return new ModelAndView(redirectUrl + "?lang=" + locale);
+		
+	}
+	
 }

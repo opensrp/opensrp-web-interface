@@ -32,10 +32,11 @@
 <div class="content-wrapper">
     <div class="container-fluid">
 
+      <c:url var="back" value="/user/sk-list.html" />
       
 
         <div class="form-group">
-            <h5><spring:message code="lbl.ssListTitle"/></h5>
+           <a href="${back }"><strong>My SK </strong></a>  |
             <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>
             <a  href="<c:url value="/user/add-SS.html?skId=${skId}&skUsername=${skUsername}&lang=${locale}"/>">
                 <strong>
@@ -47,7 +48,7 @@
         <!-- Example DataTables Card-->
         <div class="card mb-3">
             <div class="card-header">
-                <spring:message code="lbl.userList"/>
+                SS List
             </div>
             <div class="card-body">
                 <div class="table-responsive">

@@ -28,10 +28,9 @@
 	<link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
 	<jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
+<c:url var="cancelUrl" value="/user/sk-list.html" />
 
-<c:url var="saveUrl" value="/user/${id}/edit-SS.html" />
-<c:url var="cancelUrl" value="/user/${skId}/${skUsername}/my-ss.html?lang=en" />
-
+<c:url var="saveUrl" value="/user/${id}/edit-SK.html" />
 <%
 	Set<Branch> selectedBranches = (Set<Branch>)session.getAttribute("selectedBranches");
 	String selectedParentUser = (String)session.getAttribute("parentUserName");
@@ -58,10 +57,13 @@
 
 <div class="content-wrapper">
 	<div class="container-fluid">
-		
+		<%-- <div class="form-group">
+			<jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />
+		</div> --%>
 		<div class="card mb-3">
 			<div class="card-header">
-				Edit SS			</div>
+				Edit SK Information				
+			</div>
 			<div class="card-body">
 				<form:form method="POST" action="${saveUrl}"
 						   modelAttribute="account" class="form-inline">
@@ -78,7 +80,8 @@
 					<div class="row col-12 tag-height">
 						<div class="form-group">
 							<label class="label-width" for="inputPassword6"><spring:message code="lbl.lastName"/> </label>
-							<form:input path="lastName" class="form-control mx-sm-3"/>
+							<form:input path="lastName" class="form-control mx-sm-3"
+										/>
 						</div>
 					</div>
 
@@ -101,7 +104,9 @@
 							<label class="label-width" for="inputPassword6"><spring:message code="lbl.userName"/></label>
 							<form:input path="username" class="form-control mx-sm-3"
 										readonly="true"	required="required"/>
-							
+							<small id="passwordHelpInline" class="text-muted text-para">
+								<span class="text-red" id="usernameUniqueErrorMessage"></span> <spring:message code="lbl.userMessage"/>
+							</small>
 						</div>
 					</div>
 
@@ -111,9 +116,25 @@
 					<form:hidden path="ssNo" />
 					<form:hidden path="id"/>
 					<form:hidden path="password" />
-					<input type="hidden" type="text" value="${skId}" name="skId">
-					<input type="hidden" type="text" value="${skUsername}" name="skUsername">
-					<form:hidden path="password" />
+					                
+                <div class="row col-12 tag-height" id="_enableSimprint">
+						<div class="form-group">
+							<label class="label-width" for="inputPassword6"><spring:message code="lbl.enableSimprint"/></label>
+							<form:checkbox class="checkBoxClass form-check-input"
+										   path="enableSimPrint" value="${account.getEnableSimPrint()}" />
+						</div>
+				</div>
+
+					<!-- for location -->
+					<div class="row col-12 tag-height" id="locationDiv" style="display:none">
+						<div class="form-group">
+							<label class="label-width" for="inputPassword6"><spring:message code="lbl.location"/></label>
+							<div id="cm" class="ui-widget ">
+								<div id="locationsTag" ></div>
+								<span class="text-red">${locationSelectErrorMessage}</span>
+							</div>
+						</div>
+					</div>
 
 					<div class="row col-12 tag-height">
 						<div class="form-group required">
@@ -132,6 +153,15 @@
 							</select>
 						</div>
 					</div>
+
+					<div class="row col-12 tag-height">
+						<div class="form-group">
+							<label class="label-width" for="inputPassword6"><spring:message code="lbl.activeUser"/></label>
+							<form:checkbox class="checkBoxClass form-check-input"
+										   path="enabled" value="${account.isEnabled()}"/>
+						</div>
+					</div>
+
 					<div class="row col-12 tag-height">
 						<div class="form-group">
 							<input type="submit" value="<spring:message code="lbl.saveChanges"/>"
@@ -156,7 +186,35 @@
 <script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
 <script src="<c:url value='/resources/js/select2.js' />"></script>
+<script>
+<%-- var ssId = "-<%=ssPrefix%>";       
 
+//alert(ssId); 
+function isSS() {    
+	
+    var selectedRoleId = $('#role').val();
+    var selectedRoleName = $('#role option:selected').text();        
+           
+    if(selectedRoleName == "SK"){        	
+    	$('#_enableSimprint').show();        	 
+    }else{ 
+    	$('input[type="checkbox"][name="enableSimPrint"]').prop("checked", false).change();
+        $('#_enableSimprint').hide();
+    }
+    if (selectedRoleName != "SS") {
+    	
+        $('#ssNo').val("");
+        $('#ssNo').trigger('change');
+        $('#ssOption').hide();
+    } else {    	
+    	//$('#ssNo').val(ssId);
+		$('#ssNo').trigger('change');    	
+        $('#ssOption').show();
+    }
+    
+    
+} --%>
+</script>
 <script>
 	var locationMagicSuggest;
 	var isCHCP= 0;
@@ -334,7 +392,7 @@
 
 	} );
 </script>
-<script type="text/javascript">
+<%-- <script type="text/javascript">
 
 	locationMagicSuggest = $('#locationsTag').magicSuggest({
 		required: true,
@@ -354,7 +412,7 @@
 		}
 
 	});
-</script>
+</script> --%>
 <script>
 	$(document).ready(function() {
 		$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
@@ -368,5 +426,14 @@
 		$('#branches').trigger('change');
 	});
 </script>
-
+<%-- <script>
+	$(document).ready(function () {
+		console.log("before role check");
+		$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
+		var selectedRole = <%=selectedRole.get(0).getId()%>;
+		console.log(selectedRole);
+		$('#role').val(selectedRole);
+		$('#role').trigger('change');
+	});
+</script> --%>
 </html>

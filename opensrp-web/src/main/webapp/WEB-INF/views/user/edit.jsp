@@ -30,6 +30,8 @@
 </head>
 
 <c:url var="saveUrl" value="/user/${id}/edit.html" />
+<c:url var="cancelUrl" value="/user.html" />
+
 <%
 	Set<Branch> selectedBranches = (Set<Branch>)session.getAttribute("selectedBranches");
 	String selectedParentUser = (String)session.getAttribute("parentUserName");
@@ -76,10 +78,9 @@
 					</div>
 
 					<div class="row col-12 tag-height">
-						<div class="form-group required">
+						<div class="form-group">
 							<label class="label-width" for="inputPassword6"><spring:message code="lbl.lastName"/> </label>
-							<form:input path="lastName" class="form-control mx-sm-3"
-										required="required"/>
+							<form:input path="lastName" class="form-control mx-sm-3"/>
 						</div>
 					</div>
 
@@ -132,27 +133,7 @@
                     </div>
                 </div>
 					
-				<%-- <div class="row col-12 tag-height" id="ssOption" style="display: none;">
-                    <div class="form-group">
-                        <label class="label-width" for="ssNo"><spring:message code="lbl.ssNo"/></label>
-                        <select id="ssNo"
-                                class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="ssNo" readonly="true">
-                            <option value="">Please Select SS No</option>
-                            <option value="-SS-1">SS-1</option>
-                            <option value="-SS-2">SS-2</option>
-                            <option value="-SS-3">SS-3</option>
-                            <option value="-SS-4">SS-4</option>
-                            <option value="-SS-5">SS-5</option>
-                            <option value="-SS-6">SS-6</option>
-                            <option value="-SS-7">SS-7</option>
-                            <option value="-SS-8">SS-8</option>
-                            <option value="-SS-9">SS-9</option>
-                            <option value="-SS-10">SS-10</option>
-                        </select>
-                    </div>
-                </div> --%>
-                
+				
                 <div class="row col-12 tag-height" id="_enableSimprint">
 						<div class="form-group">
 							<label class="label-width" for="inputPassword6"><spring:message code="lbl.enableSimprint"/></label>
@@ -231,6 +212,9 @@
 							<input type="submit" value="<spring:message code="lbl.saveChanges"/>"
 								   class="btn btn-primary btn-block btn-sm" />
 						</div>
+						<div class="form-group">
+	                    	<a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
+	                 </div>
 					</div>
 				</form:form>
 

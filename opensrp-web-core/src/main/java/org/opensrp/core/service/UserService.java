@@ -53,54 +53,54 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-
+	
 	private static final Logger logger = Logger.getLogger(UserService.class);
-
+	
 	@Autowired
 	private RoleService roleService;
-
+	
 	@Autowired
 	private TeamService teamService;
-
+	
 	@Autowired
 	private TeamMemberService teamMemberServiceImpl;
-
+	
 	@Autowired
 	private FacilityWorkerTypeService facilityWorkerTypeService;
-
+	
 	@Autowired
 	private DatabaseRepository repository;
-
+	
 	@Autowired
 	private OpenMRSServiceFactory openMRSServiceFactory;
-
+	
 	@Autowired
 	private RoleService roleServiceImpl;
-
+	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
+	
 	@Autowired
 	private EmailService emailService;
-
+	
 	@Autowired
 	private FacilityService facilityService;
-
+	
 	@Autowired
 	private UsersCatchmentAreaService usersCatchmentAreaService;
-
+	
 	@Autowired
 	private UsersCatchmentAreaMapper usersCatchmentAreaMapper;
-
+	
 	@Autowired
 	private LocationService locationServiceImpl;
-
+	
 	@Autowired
 	private UserMapper userMapper;
-
+	
 	@Autowired
 	private BranchService branchService;
-
+	
 	@Transactional
 	public <T> long save(T t, boolean isUpdate) throws Exception {
 		User user = (User) t;
@@ -141,28 +141,28 @@ public class UserService {
 				} else {
 					openMRSServiceFactory.getOpenMRSConnector("user").update(user, existingUserUUid, userOb);
 				}
-
+				
 				if (!isUpdate) {
 					user.setPassword(passwordEncoder.encode(user.getPassword()));
 				}
 				createdUser = repository.save(user);
 			}
-
+			
 		} else {
 			user.setProvider(false);
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			createdUser = repository.save(user);
 		}
-
+		
 		return createdUser;
 	}
-
+	
 	public String changePassword(ChangePasswordDTO dto) {
 		try {
 			User user = findByKey(dto.getUsername(), "username", User.class);
-			Set <Role> roles = user.getRoles();
+			Set<Role> roles = user.getRoles();
 			Role firstRole = roles.iterator().next();
-			String role  = firstRole.getName();
+			String role = firstRole.getName();
 			if (role.equalsIgnoreCase("SS")) {
 				dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 				repository.updatePassword(dto);
@@ -177,10 +177,10 @@ public class UserService {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 		return null;
 	}
-
+	
 	@Transactional
 	public <T> int update(T t) throws Exception {
 		User user = (User) t;
@@ -194,33 +194,33 @@ public class UserService {
 		}
 		return repository.update(user);
 	}
-
+	
 	@Transactional
 	public <T> boolean delete(T t) {
 		return repository.delete(t);
 	}
-
+	
 	@Transactional
 	public <T> T findById(int id, String fieldName, Class<?> className) {
 		return repository.findById(id, fieldName, className);
-
+		
 	}
-
+	
 	@Transactional
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
 		return repository.findByKey(value, fieldName, className);
 	}
-
+	
 	@Transactional
 	public <T> List<T> findAll(String tableClass) {
 		return repository.findAll(tableClass);
 	}
-
+	
 	@Transactional
 	public <T> T findOneByKeys(Map<String, Object> fielaValues, Class<?> className) {
 		return repository.findByKeys(fielaValues, className);
 	}
-
+	
 	@Transactional
 	public Set<Role> setRoles(String[] selectedRoles) {
 		Set<Role> roles = new HashSet<Role>();
@@ -232,7 +232,7 @@ public class UserService {
 		}
 		return roles;
 	}
-
+	
 	@Transactional
 	public Set<Branch> setBranches(String[] selectedBranches) {
 		Set<Branch> branches = new HashSet<>();
@@ -244,17 +244,17 @@ public class UserService {
 		}
 		return branches;
 	}
-
+	
 	public boolean isPasswordMatched(User account) {
 		return passwordEncoder.matches(account.getRetypePassword(), passwordEncoder.encode(account.getPassword()));
 	}
-
+	
 	public boolean isUserExist(String userName) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("username", userName);
 		return repository.isExists(params, User.class);
 	}
-
+	
 	public User convert(UserDTO userDTO) {
 		User user = new User();
 		String[] roles = userDTO.getRoles().split(",");
@@ -270,11 +270,11 @@ public class UserService {
 		user.setRoles(setRoles(roles));
 		User parentUser = findById(userDTO.getParentUser(), "id", User.class);
 		user.setParentUser(parentUser);
-
+		
 		return user;
-
+		
 	}
-
+	
 	// for setting user attributes from jsonObject -- April 10, 2019
 	public User setUserInfoFromJSONObject(String username, JSONObject inputJSONObject, String password, Facility facility)
 	    throws Exception {
@@ -315,19 +315,19 @@ public class UserService {
 		user.setRoles(setRoles(roles));
 		// User parentUser = findById(userDTO.getParentUser(), "id",User.class);
 		// user.setParentUser("");
-
+		
 		// from user rest controller -- April 11, 2019
 		user.setChcp(facility.getId() + "");
 		logger.info(" \nUser : " + user.toString() + "\n");
 		int numberOfUserSaved = (int) save(user, false);
 		logger.info("\nNumUSER: " + numberOfUserSaved + " \nUser : " + user.toString() + "\n");
-
+		
 		// get facility by name from team table and then add it to team member
 		Team team = new Team();
 		TeamMember teamMember = new TeamMember();
 		team = teamService.findByKey(facility.getName(), "name", Team.class);
 		logger.info(" \nTeam : " + team.toString() + "\n");
-
+		
 		int[] locations = new int[5];
 		locations[0] = team.getLocation().getId();
 		user = findById(user.getId(), "id", User.class);
@@ -337,7 +337,7 @@ public class UserService {
 		teamMember.setIdentifier(facilityHeadIdentifier);
 		logger.info(" \nTeamMember : " + teamMember.toString() + "\n");
 		teamMemberServiceImpl.save(teamMember);
-
+		
 		FacilityWorker facilityWorker = new FacilityWorker();
 		facilityWorker.setName(user.getFullName());
 		facilityWorker.setIdentifier(user.getMobile());
@@ -348,20 +348,20 @@ public class UserService {
 		facilityWorker.setFacilityWorkerType(facilityWorkerType);
 		logger.info(" \nFacilityWorkerType : " + facilityWorkerType.toString() + "\n");
 		facilityWorkerTypeService.save(facilityWorker);
-
+		
 		String mailBody = "Dear " + user.getFullName()
 		        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + user.getUsername()
 		        + "\npassword : " + password;
 		if (numberOfUserSaved > 0) {
 			logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
 			emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
-
+			
 		}
 		return user;
 	}
-
+	
 	// end: setting user attributes from jsonObject
-
+	
 	public int[] getSelectedRoles(User account) {
 		int[] selectedRoles = new int[200];
 		Set<Role> getRoles = account.getRoles();
@@ -372,19 +372,19 @@ public class UserService {
 		}
 		return selectedRoles;
 	}
-
+	
 	public User getLoggedInUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = repository.findByKey(auth.getName(), "username", User.class);
 		return user;
 	}
-
+	
 	@Transactional
 	public <T> int updatePassword(T t) throws Exception {
 		int updatedUser = 0;
 		User user = (User) t;
 		Set<Role> roles = user.getRoles();
-
+		
 		boolean isProvider = roleServiceImpl.isOpenMRSRole(roles);
 		if (isProvider) {
 			String uuid = openMRSServiceFactory.getOpenMRSConnector("user").update(user, user.getUuid(), null);
@@ -398,24 +398,24 @@ public class UserService {
 		}
 		return updatedUser;
 	}
-
+	
 	public Map<Integer, String> getUserListAsMap() {
 		List<User> users = findAll("User");
 		Map<Integer, String> usersMap = new HashMap<Integer, String>();
 		for (User user : users) {
 			usersMap.put(user.getId(), user.getUsername());
-
+			
 		}
 		return usersMap;
 	}
-
+	
 	@Transactional
 	public List<User> findAllByKeysWithALlMatches(String name, boolean isProvider) {
 		Map<String, String> fielaValues = new HashMap<String, String>();
 		fielaValues.put("username", name);
 		return repository.findAllByKeysWithALlMatches(isProvider, fielaValues, User.class);
 	}
-
+	
 	@Transactional
 	public Map<Integer, String> getProviderListAsMap() {
 		Map<String, String> fielaValues = new HashMap<String, String>();
@@ -425,12 +425,12 @@ public class UserService {
 		if (users != null) {
 			for (User user : users) {
 				usersMap.put(user.getId(), user.getUsername());
-
+				
 			}
 		}
 		return usersMap;
 	}
-
+	
 	/**
 	 * <p>
 	 * This method set roles attribute to session, all roles and selected roles.
@@ -450,10 +450,10 @@ public class UserService {
 		session.setAttribute("selectedRoles", roles);
 		return activeRoles;
 	}
-
+	
 	public JSONArray getUserDataAsJson(String parentIndication, String parentKey) throws JSONException {
 		JSONArray dataArray = new JSONArray();
-
+		
 		List<User> users = findAll("User");
 		for (User user : users) {
 			JSONObject dataObject = new JSONObject();
@@ -467,11 +467,11 @@ public class UserService {
 			dataObject.put("text", user.getFullName());
 			dataArray.put(dataObject);
 		}
-
+		
 		return dataArray;
-
+		
 	}
-
+	
 	public boolean deleteMHV(WorkerIdDTO workerIdDTO) throws JSONException {
 		FacilityWorker facilityWorker = facilityWorkerTypeService.findById(workerIdDTO.getWorkerId(), "id",
 		    FacilityWorker.class);
@@ -484,71 +484,71 @@ public class UserService {
 		TeamMember teamMember = new TeamMember();
 		if (user != null)
 			teamMemberServiceImpl.findByKey(String.valueOf(user.getId()), "person_id", TeamMember.class);
-
+		
 		String teamMemberDeleteStatus = openMRSServiceFactory.getOpenMRSConnector("member").delete(teamMember.getUuid());
-
+		
 		if (user != null)
 			openMRSServiceFactory.getOpenMRSConnector("user").delete(user.getUuid());
-
+		
 		return true;
 	}
-
+	
 	@Transactional
 	public String updateTeamMemberAndCatchmentAreas(UserLocationDTO userLocationDTO) throws Exception {
 		int parentId = 0;
 		String errorMessage = "";
 		TeamMember teamMember = teamMemberServiceImpl.findByForeignKey(userLocationDTO.getUserId(), "person_id",
 		    "TeamMember");
-
+		
 		try {
 			Integer isDeleted = 0;
-			if (userLocationDTO.getAllLocation()!= null && userLocationDTO.getAllLocation().length > 0) {
+			if (userLocationDTO.getAllLocation() != null && userLocationDTO.getAllLocation().length > 0) {
 				int locationId = userLocationDTO.getAllLocation()[0];
 				Location location = locationServiceImpl.findById(locationId, "id", Location.class);
 				if (location != null) {
 					parentId = location.getParentLocation().getId();
-
+					
 					Set<Location> locationSet = new HashSet<>();
-
+					
 					for (Location teamMemberLocation : teamMember.getLocations()) {
 						if (teamMemberLocation.getParentLocation().getId() != parentId) {
 							locationSet.add(teamMemberLocation);
 						}
 					}
-
+					
 					List<Integer> locationIds = new ArrayList<Integer>();
 					if (userLocationDTO.getLocations() != null) {
-						for (Integer id: userLocationDTO.getLocations()) {
+						for (Integer id : userLocationDTO.getLocations()) {
 							locationIds.add(id);
 						}
 						List<Location> newLocations = locationServiceImpl.findAllById(locationIds, "id", "Location");
-
-						for (Location l: newLocations) {
+						
+						for (Location l : newLocations) {
 							locationSet.add(l);
 						}
 					}
-
+					
 					teamMember.setLocations(locationSet);
-
+					
 					isDeleted = usersCatchmentAreaService.deleteAllByParentAndUser(parentId, userLocationDTO.getUserId());
 					System.out.println("IS DELETED: " + isDeleted);
 				}
 			}
-
+			
 			teamMemberServiceImpl.updateWithoutSendToOpenMRS(teamMember);
 			if (userLocationDTO.getLocations() != null) {
-				List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(
-						userLocationDTO.getLocations(),
-						userLocationDTO.getUserId());
+				List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(userLocationDTO.getLocations(),
+				    userLocationDTO.getUserId());
 				usersCatchmentAreaService.saveAll(usersCatchmentAreas);
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			errorMessage = "something went wrong";
 		}
 		return errorMessage;
 	}
-
+	
 	@Transactional
 	public String saveTeamMemberAndCatchmentAreas(UserLocationDTO userLocationDTO) throws Exception {
 		String teamName = "HNPP-BRAC";
@@ -558,10 +558,10 @@ public class UserService {
 		try {
 			teamMember = teamMemberServiceImpl.setLocationAndPersonAndTeamAttributeInLocation(teamMember,
 			    userLocationDTO.getUserId(), team, userLocationDTO.getLocations());
-
+			
 			TeamMember isExist = teamMemberServiceImpl.findByForeignKey(userLocationDTO.getUserId(), "person_id",
 			    "TeamMember");
-
+			
 			if (isExist == null) {
 				teamMemberServiceImpl.saveWithoutSendToOpenMRS(teamMember);
 			} else {
@@ -578,17 +578,17 @@ public class UserService {
 		}
 		return errorMessage;
 	}
-
+	
 	@Transactional
 	public List<Object[]> getUsersCatchmentAreaTableAsJson(int userId) {
 		return usersCatchmentAreaService.getUsersCatchmentAreaTableAsJson(userId);
 	}
-
+	
 	@Transactional
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId) {
 		return repository.getProviderLocationTreeByChildRole(memberId, childRoleId);
 	}
-
+	
 	private void updateOfUploadedCatchmentArea(UserLocationDTO userLocationDTO) throws Exception {
 		int locationId = userLocationDTO.getLocations()[0];
 		int userId = userLocationDTO.getUserId();
@@ -599,7 +599,7 @@ public class UserService {
 				isExistLocation = true;
 		}
 		if (!isExistLocation) {
-
+			
 			TeamMember teamMember = repository.findByForeignKey(userId, "person_id", "TeamMember");
 			Location location = repository.findById(locationId, "id", Location.class);
 			Set<Location> locationSet = teamMember.getLocations();
@@ -610,17 +610,17 @@ public class UserService {
 			repository.save(usersCatchmentArea);
 		}
 	}
-
+	
 	public String uploadUser(File csvFile) throws Exception {
 		BufferedReader br = null;
 		String cvsSplitBy = ";";
 		String msg = "";
 		String line = "";
-
+		
 		int position = 0;
-
+		
 		br = new BufferedReader(new FileReader(csvFile));
-
+		
 		while ((line = br.readLine()) != null) {
 			String[] users = line.split(cvsSplitBy);
 			if (position == 0) {
@@ -633,24 +633,24 @@ public class UserService {
 						users[0] = users[0].trim();
 						String fullName[] = users[0].split(" ");
 						userDTO.setFirstName(fullName[0]);
-
+						
 						if (fullName.length > 1)
 							userDTO.setLastName(fullName[1]);
 						else if (fullName.length > 2)
 							userDTO.setLastName(fullName[1] + " " + fullName[2]);
 						else
 							userDTO.setLastName(".");
-
+						
 						if (users[1].equalsIgnoreCase("yes"))
 							userDTO.setEnableSimPrint(true);
 						else
 							userDTO.setEnableSimPrint(false);
-
+						
 						userDTO.setMobile(users[2].trim());
 						Role role = repository.findByKey(users[3], "name", Role.class);
 						String roles = String.valueOf(role.getId());
 						userDTO.setRoles(roles);
-
+						
 						if (users[3].trim().equalsIgnoreCase("SK")) {
 							userDTO.setPassword(userDTO.getMobile().substring(7));
 							userDTO.setUsername(users[7].trim());
@@ -659,7 +659,7 @@ public class UserService {
 							userDTO.setUsername(users[7].trim());
 							userDTO.setSsNo(users[8].trim());
 						}
-
+						
 						userDTO.setEmail("");
 						Branch branch = repository.findByKey(users[4], "code", Branch.class);
 						String branches = "";
@@ -675,7 +675,7 @@ public class UserService {
 						    users[6].toUpperCase());
 						User user = userMapper.map(userDTO);
 						User isExists = repository.findByKey(user.getUsername(), "username", User.class);
-
+						
 						if (locations != null && locations.size() > 0) {
 							if (isExists == null) {
 								if (!users[3].trim().equalsIgnoreCase("SS")) {
@@ -724,25 +724,24 @@ public class UserService {
 		}
 		return msg;
 	}
-
+	
 	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId, String name) {
 		return repository.getUserListByFilterString(locationId, locationTagId, roleId, branchId, name);
 	}
-
+	
 	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId, String name) {
 		return repository.getUserListWithoutCatchmentArea(roleId, branchId, name);
 	}
-
+	
 	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId) {
 		return repository.assignedLocationByRole(roleId);
 	}
-
+	
 	public List<UserDTO> getChildUserFromParent(Integer userId, String roleName) {
-		return roleName.equalsIgnoreCase("SK")?
-				repository.getChildUserByParentUptoUnion(userId, roleName):
-				repository.getChildUserByParentUptoVillage(userId, roleName);
+		return roleName.equalsIgnoreCase("SK") ? repository.getChildUserByParentUptoUnion(userId, roleName) : repository
+		        .getChildUserByParentUptoVillage(userId, roleName);
 	}
-
+	
 	public List<UserDTO> getSSWithoutCatchmentArea(Integer userId) {
 		return repository.getSSWithoutCatchmentAreaByAM(userId);
 	}
