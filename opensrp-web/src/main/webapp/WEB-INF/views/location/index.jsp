@@ -120,7 +120,7 @@ if (paginationAtributes.containsKey("name")) {
 						</table>
 					</div>
 				</div>
-				<jsp:include page="/WEB-INF/views/pager.jsp" />
+				<jsp:include page="/WEB-INF/views/pager-server.jsp" />
 				<div class="card-footer small text-muted"></div>
 			</div>
 		</div>
