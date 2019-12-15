@@ -31,9 +31,6 @@
 
 <div class="content-wrapper">
     <div class="container-fluid">
-
-      
-
         <div class="form-group">
             <h5><spring:message code="lbl.ssListTitle"/></h5>
             <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>

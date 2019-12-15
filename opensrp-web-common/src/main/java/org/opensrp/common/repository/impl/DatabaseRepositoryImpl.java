@@ -1749,10 +1749,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "from core.branch b1 join core.user_branch ub1 on b1.id = ub1.branch_id where ub1.user_id = u.id) branch_name, "
 					+ "u.id from core.users as u join core.user_role ur on ur.user_id = u.id "
 					+ "join core.user_branch ub on ub.user_id = u.id "
-					+ "left join core.team_member tm on tm.person_id = u.id "
-					+ "left join core.team_member_location tml on tml.team_member_id = tm.id "
+					+ "left join core.users_catchment_area uca on uca.user_id = u.id "
 					+ "join core.role r on r.id = ur.role_id join core.branch b on b.id = ub.branch_id "
-					+ "where tm.id is null or tml.location_id is null";
+					+ "where uca.user_id is null";
 			if (branchId > 0) hql += " and ub.branch_id = "+branchId;
 			if (roleId > 0) hql += " and ur.role_id = "+roleId;
 			Query query = session.createSQLQuery(hql);
@@ -1818,7 +1817,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "join core.user_branch ub on ub.user_id = u.id join core.user_role ur on ur.user_id = u.id "
 					+ "join core.role r on r.id = ur.role_id where ub.branch_id in ( "
 					+ "select branch_id from core.user_branch where user_id = :userId) and r.name = '"+roleName+"' "
-					+ ") select sk.id id, sk.username username, sk.first_name firstName, "
+					+ ") select distinct sk.id id, sk.username username, sk.first_name firstName, "
 					+ "sk.last_name lastName, sk.mobile mobile, "
 					+ "(select string_agg(b.name, ', ') from core.user_branch ub "
 					+ "join core.branch b on ub.branch_id = b.id where ub.user_id = sk.id) branches, "

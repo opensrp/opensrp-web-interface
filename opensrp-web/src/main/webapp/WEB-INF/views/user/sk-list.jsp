@@ -22,6 +22,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><spring:message code="lbl.userList"/></title>
+    <link type="text/css" href="<c:url value="/resources/css/jquery.toast.css"/>" rel="stylesheet">
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -69,6 +70,9 @@
                                 for (UserDTO user: users) {
                                 	Integer id = user.getId();
                                 	String username = user.getUsername();
+                                	if (user.getLocationList() == null) {
+                                		user.setLocationList("Location not assigned");
+                                    }
                                     session.setAttribute("skId", id);
                                     session.setAttribute("skUsername", username);
                         %>
@@ -104,3 +108,26 @@
 </div>
 </body>
 </html>
+<script src="<c:url value='/resources/js/jquery.toast.js'/>"></script>
+<script>
+    $(document).ready(function () {
+        var heading = "<%=(String) session.getAttribute("heading")%>";
+        var toastMessage = "<%=(String) session.getAttribute("toastMessage")%>";
+        var icon = "<%=(String) session.getAttribute("icon")%>";
+        console.log("heading: "+ toastMessage);
+        if (heading != null && heading != "" && heading != 'null') {
+            $.toast({
+                heading: heading,
+                text: toastMessage,
+                icon: icon,
+                position: 'top-right',
+                loader: false
+            });
+        }
+        <%
+            session.setAttribute("heading", "");
+            session.setAttribute("toastMessage", "");
+            session.setAttribute("icon", "");
+        %>
+    });
+</script>

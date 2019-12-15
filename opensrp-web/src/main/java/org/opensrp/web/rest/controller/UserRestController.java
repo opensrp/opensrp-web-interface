@@ -92,13 +92,13 @@ public class UserRestController {
 	}
 
 	@RequestMapping(value = "/change-password", method = RequestMethod.POST)
-	public ResponseEntity<String> changeUserPassword(@RequestBody ChangePasswordDTO dto, ModelMap model) {
+	public ResponseEntity<String> changeUserPassword(HttpSession session, @RequestBody ChangePasswordDTO dto, ModelMap model) {
 
 		System.out.println("USERNAME: "+ dto.getUsername());
 		System.out.println("PASSWORD: "+ dto.getPassword());
 
 		try {
-			userServiceImpl.changePassword(dto);
+			userServiceImpl.changePassword(session, dto);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

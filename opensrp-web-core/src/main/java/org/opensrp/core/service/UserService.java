@@ -157,7 +157,7 @@ public class UserService {
 		return createdUser;
 	}
 
-	public String changePassword(ChangePasswordDTO dto) {
+	public String changePassword(HttpSession session, ChangePasswordDTO dto) {
 		try {
 			User user = findByKey(dto.getUsername(), "username", User.class);
 			Set <Role> roles = user.getRoles();
@@ -173,9 +173,15 @@ public class UserService {
 					repository.updatePassword(dto);
 				}
 			}
+			session.setAttribute("heading", "Success");
+			session.setAttribute("toastMessage", "Your Password has been changed successfully!");
+			session.setAttribute("icon", "success");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+			session.setAttribute("heading", "Error");
+			session.setAttribute("toastMessage", "Your password not changed. Please try later.");
+			session.setAttribute("icon", "error");
 		}
 
 		return null;

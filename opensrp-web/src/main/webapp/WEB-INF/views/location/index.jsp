@@ -85,8 +85,7 @@ if (paginationAtributes.containsKey("name")) {
 							<tbody>
 							
 							<%
-								List<Location> locations = (List<Location>) session
-														.getAttribute("dataList");
+								List<Location> locations = (List<Location>) session.getAttribute("dataList");
 								String tagName = "";
 								String creator = "";
 								for (Location location : locations) 

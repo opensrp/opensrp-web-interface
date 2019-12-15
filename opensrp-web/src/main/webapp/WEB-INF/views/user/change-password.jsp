@@ -169,15 +169,16 @@
                 xhr.setRequestHeader(header, token);
             },
             success : function(data) {
+                console.log("response data: "+data);
                 $("#usernameUniqueErrorMessage").html(data);
                 $("#loading").hide();
                 if(data == ""){
                     window.location.replace(redirectUrl);
                 }
-
             },
             error : function(e) {
                 $("#loading").hide();
+                console.log("In Error");
             },
             done : function(e) {
                 $("#loading").hide();

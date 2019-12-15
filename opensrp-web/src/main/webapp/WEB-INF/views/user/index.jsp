@@ -25,6 +25,8 @@
 	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
 	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
 	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
+	<link type="text/css" href="<c:url value="/resources/css/jquery.toast.css"/>" rel="stylesheet">
+
 	<style>
 		th, td {
 			text-align: center;
@@ -76,7 +78,7 @@
 								if (users != null){
 									for (Object[] user: users) {
 										String stringId = user[5].toString();
-										String fullName = String.valueOf(user[1]).replaceAll("\\.", "");
+										String fullName = String.valueOf(user[1]).replaceAll("\\.$", "");
 										Integer id = Integer.parseInt(stringId);
 										session.setAttribute("id", id);
 							%>
@@ -129,7 +131,7 @@
 							if (users != null) {
 								for (Object[] user: usersWithoutCatchmentArea) {
 									String stringId = user[5].toString();
-									String fullName = String.valueOf(user[1]).replaceAll("\\.", "");
+									String fullName = String.valueOf(user[1]).replaceAll("\\.$", "");
 									Integer id = Integer.parseInt(stringId);
 									session.setAttribute("id", id);
 						%>
@@ -168,6 +170,7 @@
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <%--<script src="<c:url value='/resources/js/datepicker.js' />"></script>--%>
 <%--<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>--%>
+<script src="<c:url value='/resources/js/jquery.toast.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
 <script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
 <script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
@@ -178,6 +181,24 @@
 <%--<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>--%>
 <script>
 	$(document).ready(function() {
+		var heading = "<%=(String) session.getAttribute("heading")%>";
+		var toastMessage = "<%=(String) session.getAttribute("toastMessage")%>";
+		var icon = "<%=(String) session.getAttribute("icon")%>";
+		console.log("heading: "+ toastMessage);
+		if (heading != null && heading != "" && heading != 'null') {
+			$.toast({
+				heading: heading,
+				text: toastMessage,
+				icon: icon,
+				position: 'top-right',
+				loader: false
+			});
+		}
+		<%
+            session.setAttribute("heading", "");
+            session.setAttribute("toastMessage", "");
+            session.setAttribute("icon", "");
+        %>
 		$('#userList').DataTable({
 			bFilter: true,
 			bInfo: true,
