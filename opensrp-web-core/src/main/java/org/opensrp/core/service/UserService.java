@@ -157,12 +157,18 @@ public class UserService {
 		return createdUser;
 	}
 
+	public void setToasterToSession(HttpSession session, String heading, String message) {
+		session.setAttribute("heading", heading);
+		session.setAttribute("toastMessage", message);
+		session.setAttribute("icon", heading.toLowerCase());
+	}
+
 	public String changePassword(HttpSession session, ChangePasswordDTO dto) {
 		try {
 			User user = findByKey(dto.getUsername(), "username", User.class);
-			Set <Role> roles = user.getRoles();
+			Set<Role> roles = user.getRoles();
 			Role firstRole = roles.iterator().next();
-			String role  = firstRole.getName();
+			String role = firstRole.getName();
 			if (role.equalsIgnoreCase("SS")) {
 				dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 				repository.updatePassword(dto);
@@ -173,15 +179,13 @@ public class UserService {
 					repository.updatePassword(dto);
 				}
 			}
-			session.setAttribute("heading", "Success");
-			session.setAttribute("toastMessage", "Your Password has been changed successfully!");
-			session.setAttribute("icon", "success");
+			String message = "Your Password has been changed successfully!";
+			setToasterToSession(session, "Success", message);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			session.setAttribute("heading", "Error");
-			session.setAttribute("toastMessage", "Your password not changed. Please try later.");
-			session.setAttribute("icon", "error");
+			String message = "Your password not changed. Please try later.";
+			setToasterToSession(session, "Error", message);
 		}
 
 		return null;
@@ -500,7 +504,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public String updateTeamMemberAndCatchmentAreas(UserLocationDTO userLocationDTO) throws Exception {
+	public String updateTeamMemberAndCatchmentAreas(HttpSession session, UserLocationDTO userLocationDTO) throws Exception {
 		int parentId = 0;
 		String errorMessage = "";
 		TeamMember teamMember = teamMemberServiceImpl.findByForeignKey(userLocationDTO.getUserId(), "person_id",
@@ -508,7 +512,7 @@ public class UserService {
 
 		try {
 			Integer isDeleted = 0;
-			if (userLocationDTO.getAllLocation()!= null && userLocationDTO.getAllLocation().length > 0) {
+			if (userLocationDTO.getAllLocation() != null && userLocationDTO.getAllLocation().length > 0) {
 				int locationId = userLocationDTO.getAllLocation()[0];
 				Location location = locationServiceImpl.findById(locationId, "id", Location.class);
 				if (location != null) {
@@ -524,12 +528,12 @@ public class UserService {
 
 					List<Integer> locationIds = new ArrayList<Integer>();
 					if (userLocationDTO.getLocations() != null) {
-						for (Integer id: userLocationDTO.getLocations()) {
+						for (Integer id : userLocationDTO.getLocations()) {
 							locationIds.add(id);
 						}
 						List<Location> newLocations = locationServiceImpl.findAllById(locationIds, "id", "Location");
 
-						for (Location l: newLocations) {
+						for (Location l : newLocations) {
 							locationSet.add(l);
 						}
 					}
@@ -543,20 +547,24 @@ public class UserService {
 
 			teamMemberServiceImpl.updateWithoutSendToOpenMRS(teamMember);
 			if (userLocationDTO.getLocations() != null) {
-				List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(
-						userLocationDTO.getLocations(),
-						userLocationDTO.getUserId());
+				List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(userLocationDTO.getLocations(),
+				    userLocationDTO.getUserId());
 				usersCatchmentAreaService.saveAll(usersCatchmentAreas);
 			}
-		} catch (Exception e) {
+			String message = "Location updated successfully!";
+			setToasterToSession(session, "Success", message);
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			errorMessage = "something went wrong";
+			String message = "Location updated failed!";
+			setToasterToSession(session, "Error", message);
 		}
 		return errorMessage;
 	}
 
 	@Transactional
-	public String saveTeamMemberAndCatchmentAreas(UserLocationDTO userLocationDTO) throws Exception {
+	public String saveTeamMemberAndCatchmentAreas(HttpSession session, UserLocationDTO userLocationDTO) throws Exception {
 		String teamName = "HNPP-BRAC";
 		String errorMessage = "";
 		Team team = teamService.findByKey(teamName, "name", Team.class);
@@ -577,10 +585,14 @@ public class UserService {
 			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(userLocationDTO.getLocations(),
 			    userLocationDTO.getUserId());
 			usersCatchmentAreaService.saveAll(usersCatchmentAreas);
+			String message = "Location saved successfully!";
+			setToasterToSession(session, "Success", message);
 		}
 		catch (Exception e) {
 			errorMessage = "something went wrong";
 			e.printStackTrace();
+			String message = "Location saved failed!";
+			setToasterToSession(session, "Error", message);
 		}
 		return errorMessage;
 	}
@@ -617,7 +629,7 @@ public class UserService {
 		}
 	}
 
-	public String uploadUser(File csvFile) throws Exception {
+	public String uploadUser(HttpSession session, File csvFile) throws Exception {
 		BufferedReader br = null;
 		String cvsSplitBy = ";";
 		String msg = "";
@@ -697,7 +709,7 @@ public class UserService {
 									UserLocationDTO userLocationDTO = new UserLocationDTO();
 									userLocationDTO.setUserId(newUser.getId());
 									userLocationDTO.setLocations(locationsForSave);
-									saveTeamMemberAndCatchmentAreas(userLocationDTO);
+									saveTeamMemberAndCatchmentAreas(session, userLocationDTO);
 								} else {
 									String errorMessage = "OpenMRS: Bad format found for this user. Please check line "
 									        + (position + 1) + " of the csv file ";
@@ -744,9 +756,8 @@ public class UserService {
 	}
 
 	public List<UserDTO> getChildUserFromParent(Integer userId, String roleName) {
-		return roleName.equalsIgnoreCase("SK")?
-				repository.getChildUserByParentUptoUnion(userId, roleName):
-				repository.getChildUserByParentUptoVillage(userId, roleName);
+		return roleName.equalsIgnoreCase("SK") ? repository.getChildUserByParentUptoUnion(userId, roleName) : repository
+		        .getChildUserByParentUptoVillage(userId, roleName);
 	}
 
 	public List<UserDTO> getSSWithoutCatchmentArea(Integer userId) {

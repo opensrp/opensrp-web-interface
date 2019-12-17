@@ -33,6 +33,8 @@
 </head>
 
 <c:url var="saveUrl" value="/user/add.html" />
+<c:url var="cancelUrl" value="/user.html" />
+
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 <jsp:include page="/WEB-INF/views/navbar.jsp" />
@@ -65,10 +67,10 @@
                 </div>
 
                 <div class="row col-12 tag-height">
-                    <div class="form-group required">
+                    <div class="form-group">
                         <label class="label-width" for="lastName"> <spring:message code="lbl.lastName"/> </label>
                         <form:input path="lastName" class="form-control mx-sm-3"
-                                    required="required"/>
+                                    />
                     </div>
                 </div>
 
@@ -222,6 +224,9 @@
                                 value="<spring:message code="lbl.save"/>"
                                 class="btn btn-primary btn-block btn-center" />
                     </div>
+                    <div class="form-group">
+	                    	<a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
+	                 </div>
                 </div>
             </form:form>
         </div>

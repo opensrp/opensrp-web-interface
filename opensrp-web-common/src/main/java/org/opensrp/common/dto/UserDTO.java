@@ -1,9 +1,10 @@
 package org.opensrp.common.dto;
 
+
 public class UserDTO {
-
+	
 	private Integer id;
-
+	
 	private String firstName;
 	
 	private String lastName;
@@ -19,7 +20,7 @@ public class UserDTO {
 	private String password;
 	
 	private String roles;
-
+	
 	private String branches;
 	
 	private int parentUser;
@@ -29,19 +30,19 @@ public class UserDTO {
 	private int team;
 	
 	private boolean teamMember;
-
+	
 	private Boolean enableSimPrint;
-
+	
 	private String ssNo;
-
+	
 	public Integer getId() {
 		return id;
 	}
-
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	
 	public boolean isTeamMember() {
 		return teamMember;
 	}
@@ -71,7 +72,7 @@ public class UserDTO {
 	}
 	
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		this.firstName = firstName.trim();
 	}
 	
 	public String getLastName() {
@@ -137,41 +138,41 @@ public class UserDTO {
 	public void setParentUser(int parentUser) {
 		this.parentUser = parentUser;
 	}
-
+	
 	public String getBranches() {
 		return branches;
 	}
-
+	
 	public void setBranches(String branches) {
 		this.branches = branches;
 	}
-
+	
 	public Boolean getEnableSimPrint() {
 		return enableSimPrint;
 	}
-
+	
 	public void setEnableSimPrint(Boolean enableSimPrint) {
 		this.enableSimPrint = enableSimPrint;
 	}
-
+	
 	public String getSsNo() {
 		return ssNo;
 	}
-
+	
 	public void setSsNo(String ssNo) {
 		this.ssNo = ssNo;
 	}
-
+	
 	public String getFullName() {
-		return this.firstName+" "+(this.lastName.equalsIgnoreCase(".")?"":this.lastName);
+		return this.firstName + " " + (this.lastName.equalsIgnoreCase(".") ? "" : this.lastName);
 	}
-
+	
 	@Override
 	public String toString() {
 		return "UserDTO{" + "firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\''
-				+ ", mobile='" + mobile + '\'' + ", idetifier='" + idetifier + '\'' + ", username='" + username + '\''
-				+ ", password='" + password + '\'' + ", roles='" + roles + '\'' + ", branches='" + branches + '\''
-				+ ", parentUser=" + parentUser + ", locationList='" + locationList + '\'' + ", team=" + team
-				+ ", teamMember=" + teamMember + ", enableSimPrint=" + enableSimPrint + ", ssNo='" + ssNo + '\'' + '}';
+		        + ", mobile='" + mobile + '\'' + ", idetifier='" + idetifier + '\'' + ", username='" + username + '\''
+		        + ", password='" + password + '\'' + ", roles='" + roles + '\'' + ", branches='" + branches + '\''
+		        + ", parentUser=" + parentUser + ", locationList='" + locationList + '\'' + ", team=" + team
+		        + ", teamMember=" + teamMember + ", enableSimPrint=" + enableSimPrint + ", ssNo='" + ssNo + '\'' + '}';
 	}
 }

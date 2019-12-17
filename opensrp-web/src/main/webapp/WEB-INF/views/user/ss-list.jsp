@@ -23,6 +23,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><spring:message code="lbl.userList"/></title>
+    <link type="text/css" href="<c:url value="/resources/css/jquery.toast.css"/>" rel="stylesheet">
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -31,8 +32,12 @@
 
 <div class="content-wrapper">
     <div class="container-fluid">
+
+      <c:url var="back" value="/user/sk-list.html" />
+
+
         <div class="form-group">
-            <h5><spring:message code="lbl.ssListTitle"/></h5>
+           <a href="${back }"><strong>My SK </strong></a>  |
             <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>
             <a  href="<c:url value="/user/add-SS.html?skId=${skId}&skUsername=${skUsername}&lang=${locale}"/>">
                 <strong>
@@ -44,7 +49,7 @@
         <!-- Example DataTables Card-->
         <div class="card mb-3">
             <div class="card-header">
-                <spring:message code="lbl.userList"/>
+                SS List
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -146,3 +151,27 @@
 </div>
 </body>
 </html>
+
+<script src="<c:url value='/resources/js/jquery.toast.js'/>"></script>
+<script>
+    $(document).ready(function () {
+        var heading = "<%=(String) session.getAttribute("heading")%>";
+        var toastMessage = "<%=(String) session.getAttribute("toastMessage")%>";
+        var icon = "<%=(String) session.getAttribute("icon")%>";
+        console.log("heading: "+ toastMessage);
+        if (heading != null && heading != "" && heading != 'null') {
+            $.toast({
+                heading: heading,
+                text: toastMessage,
+                icon: icon,
+                position: 'top-right',
+                loader: false
+            });
+        }
+        <%
+            session.setAttribute("heading", "");
+            session.setAttribute("toastMessage", "");
+            session.setAttribute("icon", "");
+        %>
+    });
+</script>

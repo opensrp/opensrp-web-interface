@@ -5,25 +5,38 @@ import static org.springframework.http.HttpStatus.OK;
 import org.apache.log4j.Logger;
 import org.opensrp.common.dto.ChangePasswordDTO;
 import org.opensrp.common.dto.UserDTO;
-import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.dto.UserLocationDTO;
-import org.opensrp.core.entity.*;
-import org.opensrp.core.service.*;
+import org.opensrp.core.entity.Facility;
+import org.opensrp.core.entity.FacilityWorker;
+import org.opensrp.core.entity.FacilityWorkerType;
+import org.opensrp.core.entity.Location;
+import org.opensrp.core.entity.Role;
+import org.opensrp.core.entity.Team;
+import org.opensrp.core.entity.TeamMember;
+import org.opensrp.core.entity.User;
+import org.opensrp.core.service.EmailService;
+import org.opensrp.core.service.FacilityService;
+import org.opensrp.core.service.FacilityWorkerTypeService;
+import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.RoleService;
+import org.opensrp.core.service.TeamMemberService;
+import org.opensrp.core.service.TeamService;
+import org.opensrp.core.service.UserService;
 import org.opensrp.core.service.mapper.FacilityWorkerMapper;
 import org.opensrp.core.service.mapper.UserMapper;
-import org.opensrp.core.service.mapper.UsersCatchmentAreaMapper;
+import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @RequestMapping("rest/api/v1/user")
 @RestController
@@ -64,21 +77,23 @@ public class UserRestController {
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO, ModelMap model) throws Exception {
 		
-		TeamMember teamMember = new TeamMember();
+		//TeamMember teamMember = new TeamMember();
 		String userNameUniqueError = "";
-		Team team = new Team();
+		//Team team = new Team();
 		try {
 			User user = userMapper.map(userDTO);
+			User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+			user.setCreator(loggedInUser);
 			boolean isExists = userServiceImpl.isUserExist(user.getUsername());
 			if (!isExists) {
 				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
-//				String mailBody = "Dear " + user.getFullName()
-//						+ ",\n\nYour login credentials for HNPP are given below -\nusername : " + user.getUsername()
-//						+ "\npassword : " + userDTO.getPassword();
-//				if (numberOfUserSaved > 0) {
-//					logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
-//					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
-//				}
+				//				String mailBody = "Dear " + user.getFullName()
+				//						+ ",\n\nYour login credentials for HNPP are given below -\nusername : " + user.getUsername()
+				//						+ "\npassword : " + userDTO.getPassword();
+				//				if (numberOfUserSaved > 0) {
+				//					logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
+				//					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
+				//				}
 
 			} else {
 				userNameUniqueError = "User name already taken.";
@@ -142,7 +157,7 @@ public class UserRestController {
 				teamMemberServiceImpl.save(teamMember);
 
 				FacilityWorkerType facilityWorkerType = facilityWorkerTypeService.findByKey("MULTIPURPOSE HEALTH VOLUNTEER",
-						"name", FacilityWorkerType.class);
+				    "name", FacilityWorkerType.class);
 
 				FacilityWorker facilityWorker = facilityWorkerMapper.map(user, facility, facilityWorkerType);
 
@@ -191,17 +206,17 @@ public class UserRestController {
 	}
 
 	@RequestMapping(value = "/catchment-area/save", method = RequestMethod.POST)
-	public ResponseEntity<String> saveUsersCatchmentArea(@RequestBody UserLocationDTO userLocationDTO) throws Exception {
+	public ResponseEntity<String> saveUsersCatchmentArea(HttpSession session, @RequestBody UserLocationDTO userLocationDTO) throws Exception {
 		String errorMessage = "";
 		System.out.println("ERROR 500");
-		userServiceImpl.saveTeamMemberAndCatchmentAreas(userLocationDTO);
+		userServiceImpl.saveTeamMemberAndCatchmentAreas(session, userLocationDTO);
 		return new ResponseEntity<>(new Gson().toJson(errorMessage), OK);
 	}
 
 	@RequestMapping(value = "/catchment-area/update", method = RequestMethod.POST)
-	public ResponseEntity<String> updateUsersCatchmentArea(@RequestBody UserLocationDTO userLocationDTO) throws Exception {
+	public ResponseEntity<String> updateUsersCatchmentArea(HttpSession session, @RequestBody UserLocationDTO userLocationDTO) throws Exception {
 		String errorMessage = "";
-		userServiceImpl.updateTeamMemberAndCatchmentAreas(userLocationDTO);
+		userServiceImpl.updateTeamMemberAndCatchmentAreas(session, userLocationDTO);
 		return new ResponseEntity<>(new Gson().toJson(errorMessage), OK);
 	}
 }

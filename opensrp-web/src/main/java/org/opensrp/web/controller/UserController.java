@@ -73,6 +73,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * <p>
@@ -682,7 +683,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/upload/user-catchment.html", method = RequestMethod.POST)
-	public ModelAndView uploadUser(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model,
+	public ModelAndView uploadUser(HttpSession session, @RequestParam MultipartFile file, HttpServletRequest request, ModelMap model,
 	                               Locale locale) throws Exception {
 		
 		if (file.isEmpty()) {
@@ -723,7 +724,7 @@ public class UserController {
 		
 		String msg = "";
 		try {
-			msg = userServiceImpl.uploadUser(csvFile);
+			msg = userServiceImpl.uploadUser(session, csvFile);
 		}
 		catch (LocationNotFoundException lnf) {
 			msg = lnf.getErrorMessage();
@@ -775,7 +776,9 @@ public class UserController {
 		int[] selectedRoles = null;
 		model.addAttribute("account", new User());
 		List<Role> roles = userServiceImpl.setRolesAttributes(selectedRoles, session);
-		List<Branch> branches = branchService.findAll("Branch");
+		//List<Branch> branches = branchService.findAll("Branch");
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
 		Role ss = roleServiceImpl.findByKey("SS", "name", Role.class);
 		model.addAttribute("locale", locale);
 		model.addAttribute("roles", roles);
@@ -815,8 +818,9 @@ public class UserController {
 		String parentUserName = "";
 		int parentUserId = 0;
 		
-		List<Branch> branches = branchService.findAll("Branch");
-		
+		//List<Branch> branches = branchService.findAll("Branch");
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
 		model.addAttribute("branches", branches);
 		session.setAttribute("parentUserName", parentUserName);
 		session.setAttribute("parentUserId", parentUserId);
@@ -832,17 +836,100 @@ public class UserController {
 	                               @RequestParam(value = "skId", required = false) String skId,
 	                               @RequestParam(value = "branches", required = false) String[] branches,
 	                               @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
+	                               
 	                               HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
+		
 		Role ss = roleServiceImpl.findByKey("SS", "name", Role.class);
 		Set<Role> roles = new HashSet<Role>();
 		roles.add(ss);
 		account.setRoles(roles);
 		account.setBranches(userServiceImpl.setBranches(branches));
 		account.setId(id);
+		//account.setPassword("");
 		String redirectUrl = "redirect:/user/" + skId + "/" + skUsername + "/my-ss.html";
 		userServiceImpl.update(account);
 		return new ModelAndView(redirectUrl + "?lang=" + locale);
 		//return new ModelAndView("redirect:/user.html?lang=" + locale);
 		
 	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_ADD_SK')")
+	@RequestMapping(value = "/user/add-SK.html", method = RequestMethod.GET)
+	public ModelAndView addSK(Model model, HttpSession session, Locale locale) throws JSONException {
+		int[] selectedRoles = null;
+		model.addAttribute("account", new User());
+		List<Role> roles = userServiceImpl.setRolesAttributes(selectedRoles, session);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		Role sk = roleServiceImpl.findByKey("SK", "name", Role.class);
+		model.addAttribute("locale", locale);
+		model.addAttribute("roles", roles);
+		
+		//for adding location and team
+		model.addAttribute("teamMember", new TeamMember());
+		model.addAttribute("branches", branches);
+		String personName = "";
+		session.setAttribute("locationList", locationServiceImpl.list().toString());
+		int[] locations = new int[0];
+		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+		session.setAttribute("sk", sk);
+		//session.setAttribute("skId", skId);
+		//System.err.println("skId:::::" + skId);
+		String redirectUrl = "redirect:/user/sk-list.html";
+		/*if (StringUtils.isBlank(skUsername)) {
+			return new ModelAndView(redirectUrl + "?lang=" + locale);
+		}*/
+		//model.addAttribute("skUsername", skUsername);
+		//end: adding location and team
+		return new ModelAndView("user/add-SK", "command", account);
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_ADD_SK')")
+	@RequestMapping(value = "/user/{id}/edit-SK.html", method = RequestMethod.GET)
+	public ModelAndView editSK(HttpSession session, @PathVariable("id") int id, Locale locale, Model model)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
+		User account = userServiceImpl.findById(id, "id", User.class);
+		model.addAttribute("account", account);
+		model.addAttribute("id", id);
+		//model.addAttribute("skId", skId);
+		//model.addAttribute("skUsername", skUsername);
+		//session.setAttribute("ssPrefix", account.getSsNo());
+		
+		String parentUserName = "";
+		int parentUserId = 0;
+		
+		//List<Branch> branches = branchService.findAll("Branch");
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		model.addAttribute("branches", branches);
+		session.setAttribute("parentUserName", parentUserName);
+		session.setAttribute("parentUserId", parentUserId);
+		
+		session.setAttribute("selectedBranches", account.getBranches());
+		
+		return new ModelAndView("user/edit-SK", "command", account);
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
+	@RequestMapping(value = "/user/{id}/edit-SK.html", method = RequestMethod.POST)
+	public ModelAndView editSKPost(@RequestParam(value = "branches", required = false) String[] branches,
+	                               @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
+	                               HttpSession session, @PathVariable("id") int id, Locale locale,
+	                               RedirectAttributes redirectAttributes) throws Exception {
+		Role ss = roleServiceImpl.findByKey("SK", "name", Role.class);
+		Set<Role> roles = new HashSet<Role>();
+		roles.add(ss);
+		account.setRoles(roles);
+		redirectAttributes.addAttribute("message", "Success");
+		account.setBranches(userServiceImpl.setBranches(branches));
+		account.setId(id);
+		String redirectUrl = "redirect:/user/sk-list.html";
+		
+		userServiceImpl.update(account);
+		return new ModelAndView(redirectUrl + "?lang=" + locale);
+		
+	}
+	
 }
