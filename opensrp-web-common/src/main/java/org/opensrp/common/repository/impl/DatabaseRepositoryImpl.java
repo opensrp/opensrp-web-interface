@@ -1852,20 +1852,21 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		List<T> users = new ArrayList<T>();
 		try {
-			String hql = "with recursive loc_tree as (select * from core.location loc1 "
-					+ "where loc1.id in (select location_id from core.users_catchment_area where user_id = :userId) "
-					+ "union all select loc2.* from core.location loc2 "
-					+ "join loc_tree lt on lt.id = loc2.parent_location_id "
-					+ ") select distinct u.id, u.username, u.first_name firstName, u.last_name lastName, u.mobile, "
-					+ "(select string_agg(b.name, ', ') from core.user_branch ub join core.branch b on ub.branch_id = b.id "
-					+ "where ub.user_id = u.id) branches, "
-					+ "(select string_agg(distinct(split_part(loc_c.name, ':', 1)), ', ') from core.users_catchment_area uca1 "
-					+ "join core.location loc_c on loc_c.id = uca1.location_id "
-					+ "where uca1.user_id = u.id) locationList "
-					+ "from loc_tree lt "
-					+ "join core.users_catchment_area uca on lt.id = uca.location_id "
-					+ "join core.users u on u.id = uca.user_id join core.user_role ur on u.id = ur.user_id "
-					+ "join core.role r on r.id = ur.role_id where r.name = '"+roleName+"' order by firstName;";
+//			String hql = "with recursive loc_tree as (select * from core.location loc1 "
+//					+ "where loc1.id in (select location_id from core.users_catchment_area where user_id = :userId) "
+//					+ "union all select loc2.* from core.location loc2 "
+//					+ "join loc_tree lt on lt.id = loc2.parent_location_id "
+//					+ ") select distinct u.id, u.username, u.first_name firstName, u.last_name lastName, u.mobile, "
+//					+ "(select string_agg(b.name, ', ') from core.user_branch ub join core.branch b on ub.branch_id = b.id "
+//					+ "where ub.user_id = u.id) branches, "
+//					+ "(select string_agg(distinct(split_part(loc_c.name, ':', 1)), ', ') from core.users_catchment_area uca1 "
+//					+ "join core.location loc_c on loc_c.id = uca1.location_id "
+//					+ "where uca1.user_id = u.id) locationList "
+//					+ "from loc_tree lt "
+//					+ "join core.users_catchment_area uca on lt.id = uca.location_id "
+//					+ "join core.users u on u.id = uca.user_id join core.user_role ur on u.id = ur.user_id "
+//					+ "join core.role r on r.id = ur.role_id where r.name = '"+roleName+"' order by firstName;";
+			String hql = "select * from core.get_ss_by_sk(:userId);";
 
 			Query query = session.createSQLQuery(hql)
 					.addScalar("id", StandardBasicTypes.INTEGER)
@@ -1888,30 +1889,19 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public <T> List<T> getLocationByAM(Integer userId) {
+	public <T> List<T> getLocationByAM(Integer amId) {
 		Session session = sessionFactory.openSession();
 		List<T> locations = new ArrayList<T>();
 
 		try {
-			String hql = "with final_loc as ("
-					+ "select * from (with recursive loc_tree as (select * from core.location loc1 where loc1.id in "
-					+ "(select location_id from core.users_catchment_area where user_id = :userId) union all select loc2.* "
-					+ "from core.location loc2 join loc_tree lt on lt.parent_location_id = loc2.id ) "
-					+ "select ltr.id, split_part(ltr.name, ':', 1) locationName, ltr.parent_location_id parentLocationId, lt.name locationTagName "
-					+ "from loc_tree ltr join core.location_tag lt on lt.id = ltr.location_tag_id) a "
-					+ "union "
-					+ "select * from (with recursive loc_tree as (select * from core.location loc1 where loc1.id in "
-					+ "(select location_id from core.users_catchment_area where user_id = :userId) union all select loc2.* "
-					+ "from core.location loc2 join loc_tree lt on lt.id = loc2.parent_location_id ) "
-					+ "select ltr.id, split_part(ltr.name, ':', 1) locationName, ltr.parent_location_id parentLocationId, lt.name locationTagName "
-					+ "from loc_tree ltr join core.location_tag lt on lt.id = ltr.location_tag_id) b "
-					+ ") select * from final_loc order by id asc;";
+			String hql = "select _id id, _locationname locationname, _parentlocationid parentlocationid, "
+					+ "_locationtagname locationtagname from core.get_location_by_am(:amId);";
 			Query query = session.createSQLQuery(hql)
 					.addScalar("id", StandardBasicTypes.INTEGER)
 					.addScalar("locationName", StandardBasicTypes.STRING)
 					.addScalar("parentLocationId", StandardBasicTypes.INTEGER)
 					.addScalar("locationTagName", StandardBasicTypes.STRING)
-					.setInteger("userId", userId)
+					.setInteger("amId", amId)
 					.setResultTransformer(new AliasToBeanResultTransformer(LocationDTO.class));
 			locations = query.list();
 		} catch (Exception e) {

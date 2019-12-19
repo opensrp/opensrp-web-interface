@@ -335,8 +335,8 @@ public class LocationService {
 			}
 
 			dataObject.put("id", location.getId());
-			dataObject.put("text", location.getLocationName());
-			dataObject.put("icon", location.getLocationTagName());
+			dataObject.put("text", location.getLocationName()+"("+location.getLocationTagName()+")");
+			dataObject.put("icon", location.getLocationName());
 			dataObject.put("state", state);
 			dataArray.put(dataObject);
 		}

@@ -13,8 +13,6 @@
 <html lang="en">
 
 <%
-    Map<Integer, String> teams =  (Map<Integer, String>)session.getAttribute("teams");
-    Integer selectedTeamId = (Integer)session.getAttribute("selectedTeamId");
     Role ss = (Role) session.getAttribute("ss");
     Integer skId = (Integer)session.getAttribute("skId");
 %>
@@ -67,8 +65,7 @@
                 <div class="row col-12 tag-height">
                     <div class="form-group">
                         <label class="label-width" for="lastName"> <spring:message code="lbl.lastName"/> </label>
-                        <form:input path="lastName" class="form-control mx-sm-3"
-                                   />
+                        <form:input path="lastName" class="form-control mx-sm-3"/>
                     </div>
                 </div>
 
@@ -90,7 +87,7 @@
                 
                  <div class="row col-12 tag-height">
                     <div class="form-group required">
-                        <label class="label-width" for="username">SK Mobile</label>
+                        <label class="label-width" for="username">SK Username</label>
                         <form:input path="username" class="form-control mx-sm-3"
                                     required="required" value="${skUsername}" readonly="true"/>
                        
@@ -118,13 +115,9 @@
                         </select>
                     </div>
                 </div>
-               
-               
 
                 <form:hidden path="parentUser" id="parentUser"/>
-
-               
-
+\
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
                         <label class="label-width"  for="branches">
@@ -190,29 +183,6 @@
 
 
 <script type="text/javascript">
-<%-- $('#_enableSimprint').hide();
-    function isSS() {    	
-        var selectedRoleId = $('#role').val();
-        var selectedRoleName = $('#role option:selected').text();        
-        var ssId = <%=ss.getId()%>;       
-        if(selectedRoleName == "SK"){        	
-        	$('#_enableSimprint').show();        	 
-        }else{ 
-        	$('input[type="checkbox"][name="enableSimPrint"]').prop("checked", false).change();
-            $('#_enableSimprint').hide();
-        }
-        if (selectedRoleName != "SS") {
-            $('#ssNo').val("");
-            $('#ssNo').trigger('change');
-            $('#ssOption').hide();
-            $("#ssNo").prop('required',false);
-        } else {
-            $('#ssOption').show();
-            $("#ssNo").prop('required',true);
-        }
-        
-        
-    } --%>
 
     function toggleVisibilityOfPassword() {
         var password = document.getElementById("password");
@@ -254,7 +224,7 @@
             'mobile': $('input[name=mobile]').val(),
             'username': username,
             'password': "###",
-            'parentUser': $('input[name=parentUser]').val(),
+            'parentUser': skId,
             'ssNo': $('#ssNo').val(),
             'roles': ssRole,
             'team': "",

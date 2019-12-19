@@ -13,8 +13,7 @@
 <html lang="en">
 
 <%
-    Map<Integer, String> teams =  (Map<Integer, String>)session.getAttribute("teams");
-    Integer selectedTeamId = (Integer)session.getAttribute("selectedTeamId");
+    Integer amId = (Integer) session.getAttribute("amId");
     Role sk = (Role) session.getAttribute("sk");
 %>
 
@@ -39,9 +38,6 @@
 
 <div class="content-wrapper">
     <div class="container-fluid">
-        <%-- <div class="form-group">
-            <jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />
-        </div> --%>
         <div class="card mb-3">
             <div class="card-header" id="data">
                 Add new SK
@@ -86,42 +82,6 @@
                     </div>
                 </div>
 
-                <%-- <div class="row col-12 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width"  for="role">
-                            <spring:message code="lbl.role"/>
-                        </label>
-                        <select onchange="isSS()"
-                                id="role"
-                                class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="role" required>
-                            <c:forEach items="${roles}" var="role">
-                                <option value="${role.id}">${role.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div> --%>
-
-                <%-- <div class="row col-12 tag-height" id="ssOption" style="display: none;">
-                    <div class="form-group">
-                        <label class="label-width" for="ssNo"><spring:message code="lbl.ssNo"/></label>
-                        <select id="ssNo"
-                                class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="ssNo">
-                            <option value="">Please Select SS No</option>
-                            <option value="-SS-1">SS-1</option>
-                            <option value="-SS-2">SS-2</option>
-                            <option value="-SS-3">SS-3</option>
-                            <option value="-SS-4">SS-4</option>
-                            <option value="-SS-5">SS-5</option>
-                            <option value="-SS-6">SS-6</option>
-                            <option value="-SS-7">SS-7</option>
-                            <option value="-SS-8">SS-8</option>
-                            <option value="-SS-9">SS-9</option>
-                            <option value="-SS-10">SS-10</option>
-                        </select>
-                    </div>
-                </div> --%>
                 <div class="row col-12 tag-height" id="_enableSimprint">
 						<div class="form-group">
 							<label class="label-width" for="inputPassword6"><spring:message code="lbl.enableSimprint"/></label>
@@ -183,31 +143,6 @@
                     </div>
                 </div>
 
-                <%-- <div class="row col-12 tag-height" id="teamDiv" style="display:none">
-                    <div class="form-group">
-                        <label class="label-width" for="team"><spring:message code="lbl.cc"/></label>
-                        <select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
-                            <option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
-                            <%
-                                for (Map.Entry<Integer, String> entry : teams.entrySet())
-                                {
-                                    if(selectedTeamId==entry.getKey()){ %>
-                            <option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
-                            <% }else{
-                            %>
-                            <option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
-                            <%
-                                    }
-
-                                }
-                            %>
-                        </select>
-                    </div>
-
-                </div> --%>
-                <!--end: for team -->
-
-
                 <div class="row col-12 tag-height">
                     <div class="form-group">
                         <label class="label-width"></label>
@@ -231,55 +166,17 @@
 
     </div>
 </div>
-<!-- /.container-fluid-->
-<!-- /.content-wrapper-->
 
 <jsp:include page="/WEB-INF/views/footer.jsp" />
-<%-- <script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
-<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script> --%>
-
-<!-- Bootstrap core JavaScript-->
 <script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.bundle.min.js'/>"></script>
 <script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.min.js'/>"></script>
-
-<!-- Core plugin JavaScript-->
-<%-- <script src="<c:url value='/resources/vendor/jquery-easing/jquery.easing.min.js'/>"></script>
- --%>
-
-<!-- Custom scripts for all pages-->
-<%-- <script src="<c:url value='/resources/js/sb-admin.min.js'/>"></script>
- --%><!-- Custom scripts for this page-->
-<%-- <script src="<c:url value='/resources/js/sb-admin-datatables.min.js'/>"></script> --%>
 <script src="<c:url value='/resources/js/location.js'/>"></script>
 <script src="<c:url value='/resources/js/checkbox.js'/>"></script>
 <script src="<c:url value='/resources/js/select2.js' />"></script>
 
 
 <script type="text/javascript">
-<%-- $('#_enableSimprint').hide();
-    function isSS() {    	
-        var selectedRoleId = $('#role').val();
-        var selectedRoleName = $('#role option:selected').text();        
-        var ssId = <%=sk.getId()%>;       
-        if(selectedRoleName == "SK"){        	
-        	$('#_enableSimprint').show();        	 
-        }else{ 
-        	$('input[type="checkbox"][name="enableSimPrint"]').prop("checked", false).change();
-            $('#_enableSimprint').hide();
-        }
-        if (selectedRoleName != "SS") {
-            $('#ssNo').val("");
-            $('#ssNo').trigger('change');
-            $('#ssOption').hide();
-            $("#ssNo").prop('required',false);
-        } else {
-            $('#ssOption').show();
-            $("#ssNo").prop('required',true);
-        }
-        
-        
-    }
- --%>
+
     function toggleVisibilityOfPassword() {
         var password = document.getElementById("password");
         var retypePassword = document.getElementById("retypePassword");
@@ -314,6 +211,7 @@
         	enableSimPrint = true;
         }
         var skRole = <%=sk.getId()%>;
+        var amId = <%=amId%>;
         formData = {
             'firstName': $('input[name=firstName]').val(),
             'lastName': $('input[name=lastName]').val(),
@@ -321,7 +219,7 @@
             'mobile': $('input[name=mobile]').val(),
             'username': $('input[name=username]').val(),
             'password': $('input[name=password]').val(),
-            'parentUser': $('input[name=parentUser]').val(),
+            'parentUser': amId,
             'ssNo': $('#ssNo').val(),
             'roles': skRole,
             'team': "",

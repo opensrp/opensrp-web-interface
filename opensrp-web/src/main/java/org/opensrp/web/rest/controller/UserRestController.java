@@ -3,40 +3,30 @@ package org.opensrp.web.rest.controller;
 import static org.springframework.http.HttpStatus.OK;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.opensrp.common.dto.ChangePasswordDTO;
+import org.opensrp.common.dto.UserAssignedLocationDTO;
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.core.dto.UserLocationDTO;
-import org.opensrp.core.entity.Facility;
-import org.opensrp.core.entity.FacilityWorker;
-import org.opensrp.core.entity.FacilityWorkerType;
-import org.opensrp.core.entity.Location;
-import org.opensrp.core.entity.Role;
-import org.opensrp.core.entity.Team;
-import org.opensrp.core.entity.TeamMember;
-import org.opensrp.core.entity.User;
-import org.opensrp.core.service.EmailService;
-import org.opensrp.core.service.FacilityService;
-import org.opensrp.core.service.FacilityWorkerTypeService;
-import org.opensrp.core.service.LocationService;
-import org.opensrp.core.service.RoleService;
-import org.opensrp.core.service.TeamMemberService;
-import org.opensrp.core.service.TeamService;
-import org.opensrp.core.service.UserService;
+import org.opensrp.core.entity.*;
+import org.opensrp.core.service.*;
 import org.opensrp.core.service.mapper.FacilityWorkerMapper;
 import org.opensrp.core.service.mapper.UserMapper;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 @RequestMapping("rest/api/v1/user")
 @RestController
@@ -72,10 +62,14 @@ public class UserRestController {
 	@Autowired
 	private UserMapper userMapper;
 
+	@Autowired
+	private UsersCatchmentAreaService usersCatchmentAreaService;
+
 	private static final Logger logger = Logger.getLogger(UserRestController.class);
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO, ModelMap model) throws Exception {
+	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO,
+	                                       ModelMap model) throws Exception {
 		
 		//TeamMember teamMember = new TeamMember();
 		String userNameUniqueError = "";
@@ -108,10 +102,6 @@ public class UserRestController {
 
 	@RequestMapping(value = "/change-password", method = RequestMethod.POST)
 	public ResponseEntity<String> changeUserPassword(HttpSession session, @RequestBody ChangePasswordDTO dto, ModelMap model) {
-
-		System.out.println("USERNAME: "+ dto.getUsername());
-		System.out.println("PASSWORD: "+ dto.getPassword());
-
 		try {
 			userServiceImpl.changePassword(session, dto);
 		}
@@ -218,5 +208,38 @@ public class UserRestController {
 		String errorMessage = "";
 		userServiceImpl.updateTeamMemberAndCatchmentAreas(session, userLocationDTO);
 		return new ResponseEntity<>(new Gson().toJson(errorMessage), OK);
+	}
+
+	@RequestMapping(value = "/{id}/catchment-area", method = RequestMethod.GET)
+	public ResponseEntity<String> catchmentArea(Model model, HttpSession session, @PathVariable("id") int id, Locale locale)
+			throws JSONException {
+
+		String role = "Admin";
+		if (AuthenticationManagerUtil.isAM())
+			role = "AM";
+
+		String parentIndication = "#";
+		String parentKey = "parent";
+		List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByForeignKey(id, "user_id",
+				"UsersCatchmentArea");
+		List<Object[]> catchmentAreas = userServiceImpl.getUsersCatchmentAreaTableAsJson(id);
+		User user = userServiceImpl.findById(id, "id", User.class);
+		List<Role> roles = new ArrayList<>(user.getRoles());
+
+		Integer roleId = roles.get(0).getId();
+		List<UserAssignedLocationDTO> userAssignedLocationDTOS = userServiceImpl.assignedLocationByRole(roleId);
+
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		JSONArray data = locationService.getLocationWithDisableFacility(session, parentIndication, parentKey,
+				userAssignedLocationDTOS, user.getId(), role, loggedInUser.getId());
+
+		session.setAttribute("locationTreeData", data);
+		session.setAttribute("user", user);
+		session.setAttribute("assignedLocation", userAssignedLocationDTOS);
+		session.setAttribute("userId", id);
+		session.setAttribute("usersCatchmentAreas", usersCatchmentAreas);
+		session.setAttribute("catchmentAreaTable", catchmentAreas);
+
+		return new ResponseEntity<>(new Gson().toJson("done"), OK);
 	}
 }

@@ -49,6 +49,7 @@ import org.opensrp.core.service.RoleService;
 import org.opensrp.core.service.TeamMemberService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.core.service.UsersCatchmentAreaService;
+import org.opensrp.core.service.mapper.UserMapper;
 import org.opensrp.core.util.FacilityHelperUtil;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.PaginationUtil;
@@ -148,6 +149,9 @@ public class UserController {
 	
 	@Autowired
 	private SearchUtil searchUtil;
+
+	@Autowired
+	private UserMapper userMapper;
 	
 	/**
 	 * <p>
@@ -660,7 +664,7 @@ public class UserController {
 		session.setAttribute("user", user);
 		session.setAttribute("assignedLocation", userAssignedLocationDTOS);
 		System.out.println("EVERYTHING IS OKAY");
-		return "user/catchment-area";
+		return "user/catchment-area-modal";
 	}
 	
 	@RequestMapping(value = "/provider/location-tree", method = RequestMethod.GET)
@@ -855,12 +859,17 @@ public class UserController {
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_ADD_SK')")
 	@RequestMapping(value = "/user/add-SK.html", method = RequestMethod.GET)
-	public ModelAndView addSK(Model model, HttpSession session, Locale locale) throws JSONException {
+	public ModelAndView addSK(Model model, HttpSession session, Locale locale,
+	                          @RequestParam(value = "amId", required = false) Integer amId) throws JSONException {
 		int[] selectedRoles = null;
 		model.addAttribute("account", new User());
 		List<Role> roles = userServiceImpl.setRolesAttributes(selectedRoles, session);
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		
+		if (AuthenticationManagerUtil.isAM()) {
+			session.setAttribute("amId", loggedInUser.getId());
+		} else {
+			session.setAttribute("amId", amId);
+		}
 		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
 		Role sk = roleServiceImpl.findByKey("SK", "name", Role.class);
 		model.addAttribute("locale", locale);
