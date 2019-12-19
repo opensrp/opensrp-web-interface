@@ -664,7 +664,7 @@ public class UserController {
 		session.setAttribute("user", user);
 		session.setAttribute("assignedLocation", userAssignedLocationDTOS);
 		System.out.println("EVERYTHING IS OKAY");
-		return "user/catchment-area-modal";
+		return "user/catchment-area";
 	}
 	
 	@RequestMapping(value = "/provider/location-tree", method = RequestMethod.GET)
