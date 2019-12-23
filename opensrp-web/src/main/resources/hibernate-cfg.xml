@@ -47,6 +47,7 @@
 				<value>org.opensrp.core.entity.Reviews</value>
 				<value>org.opensrp.core.entity.Branch</value>
 				<value>org.opensrp.core.entity.UsersCatchmentArea</value>
+				<value>org.opensrp.core.entity.Imei</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

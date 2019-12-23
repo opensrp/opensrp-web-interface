@@ -112,7 +112,9 @@ public interface DatabaseRepository {
 	public <T> List<T> findAllByKeysWithALlMatches(boolean isProvider, Map<String, String> fielaValues, Class<?> className);
 	
 	public boolean isExists(Map<String, Object> fielaValues, Class<?> className);
-	
+
+	public boolean isExistsCustom(String value, Class<?> className);
+
 	public <T> boolean entityExistsNotEualThisId(int id, T value, String fieldName, Class<?> className);
 	
 	public <T> List<T> findAllByKey(String value, String fieldName, Class<?> className);
@@ -186,7 +188,7 @@ public interface DatabaseRepository {
 
 	public <T> List<T> getChildUserByParentUptoVillage(Integer userId, String roleName);
 
-	public <T> List<T> getLocationByAM(Integer userId);
+	public <T> List<T> getLocationByAM(Integer userId, Integer roleId);
 
 	public <T> List<T> getSSWithoutCatchmentAreaByAM(Integer userId);
 

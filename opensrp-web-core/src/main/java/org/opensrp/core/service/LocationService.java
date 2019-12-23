@@ -142,8 +142,8 @@ public class LocationService {
 	}
 
 	@Transactional
-	public <T> List<T> findAllLocationByAM(Integer userId) {
-		return repository.getLocationByAM(userId);
+	public <T> List<T> findAllLocationByAM(Integer userId, Integer roleId) {
+		return repository.getLocationByAM(userId, roleId);
 	}
 
 
@@ -285,7 +285,7 @@ public class LocationService {
 		
 	}
 
-	public JSONArray getLocationWithDisableFacility(HttpSession session, String parentIndication, String parentKey, List<UserAssignedLocationDTO> userAssignedLocationDTOS, Integer userId, String role, Integer loggedInUserId) throws JSONException {
+	public JSONArray getLocationWithDisableFacility(HttpSession session, String parentIndication, String parentKey, List<UserAssignedLocationDTO> userAssignedLocationDTOS, Integer userId, String role, Integer loggedInUserId, Integer roleId) throws JSONException {
 		JSONArray dataArray = new JSONArray();
 
 		Map<Integer, Integer> locationMap = new HashMap<>();
@@ -295,7 +295,7 @@ public class LocationService {
 		List<LocationDTO> locations = new ArrayList<>();
 
 		if (role.equalsIgnoreCase("AM")) {
-			locations = findAllLocationByAM(loggedInUserId);
+			locations = findAllLocationByAM(loggedInUserId, roleId);
 		} else {
 			if (session.getAttribute("allLocation") != null) {
 				locations = (List<LocationDTO>) session.getAttribute("allLocation");
@@ -336,7 +336,8 @@ public class LocationService {
 
 			dataObject.put("id", location.getId());
 			dataObject.put("text", location.getLocationName()+"("+location.getLocationTagName()+")");
-			dataObject.put("icon", location.getLocationName());
+			dataObject.put("icon", location.getUsers()==null?
+					location.getLocationName():location.getLocationName()+"("+location.getUsers()+")");
 			dataObject.put("state", state);
 			dataArray.put(dataObject);
 		}

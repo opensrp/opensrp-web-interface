@@ -179,7 +179,6 @@
 <script type="text/javascript">
     var tempEdit = false;
     $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
         $('#locationTree').jstree({
             'core' : {
                 'data' : <%=locationTreeData %>

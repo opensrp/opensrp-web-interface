@@ -50,7 +50,7 @@
 	boolean PERM_SK_LIST = AuthenticationManagerUtil.isPermitted("PERM_SK_LIST");
 	User user = (User) AuthenticationManagerUtil.getLoggedInUser();
 %>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
+<nav style="z-index: 1" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
 	 id="mainNav">
 	<a class="navbar-brand" href="<c:url value="/?lang=${locale}"/>"><img
 			src="<c:url value="/resources/img/brac-logo.png"/>" style = "height: 46px"></a>

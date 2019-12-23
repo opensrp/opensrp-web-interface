@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.opensrp.common.dto.ChangePasswordDTO;
 import org.opensrp.common.dto.UserAssignedLocationDTO;
 import org.opensrp.common.dto.UserDTO;
@@ -66,7 +67,9 @@ public class UserRestController {
 	private UsersCatchmentAreaService usersCatchmentAreaService;
 
 	private static final Logger logger = Logger.getLogger(UserRestController.class);
-	
+	private static final Integer SK_ROLE_ID = 28;
+	private static final Integer SS_ROLE_ID = 29;
+
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO,
 	                                       ModelMap model) throws Exception {
@@ -222,24 +225,41 @@ public class UserRestController {
 		String parentKey = "parent";
 		List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByForeignKey(id, "user_id",
 				"UsersCatchmentArea");
-		List<Object[]> catchmentAreas = userServiceImpl.getUsersCatchmentAreaTableAsJson(id);
 		User user = userServiceImpl.findById(id, "id", User.class);
 		List<Role> roles = new ArrayList<>(user.getRoles());
+
+		TeamMember member = teamMemberServiceImpl.findByForeignKey(id, "person_id", "TeamMember");
+		boolean isTeamMember = member != null ? true : false;
 
 		Integer roleId = roles.get(0).getId();
 		List<UserAssignedLocationDTO> userAssignedLocationDTOS = userServiceImpl.assignedLocationByRole(roleId);
 
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		JSONArray data = locationService.getLocationWithDisableFacility(session, parentIndication, parentKey,
-				userAssignedLocationDTOS, user.getId(), role, loggedInUser.getId());
+		JSONArray locationTree = locationService.getLocationWithDisableFacility(session, parentIndication, parentKey,
+				userAssignedLocationDTOS, id, role, loggedInUser.getId(), SK_ROLE_ID);
 
-		session.setAttribute("locationTreeData", data);
-		session.setAttribute("user", user);
-		session.setAttribute("assignedLocation", userAssignedLocationDTOS);
+		JSONArray assignedLocations = new JSONArray();
+		for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
+			JSONObject jOb = new JSONObject();
+			jOb.put("userId", dto.getId());
+			jOb.put("locationId", dto.getLocationId());
+			assignedLocations.put(jOb);
+		}
+
+		JSONArray catchmentAreas = new JSONArray();
+		if (usersCatchmentAreas != null)
+		for (UsersCatchmentArea area: usersCatchmentAreas) {
+			catchmentAreas.put(area.getLocationId());
+		}
+
+		JSONObject finalResponse = new JSONObject();
+		finalResponse.put("locationTree", locationTree);
+		finalResponse.put("assignedLocation", assignedLocations);
+		finalResponse.put("catchmentAreas", catchmentAreas);
+		finalResponse.put("isTeamMember", isTeamMember);
+
 		session.setAttribute("userId", id);
-		session.setAttribute("usersCatchmentAreas", usersCatchmentAreas);
-		session.setAttribute("catchmentAreaTable", catchmentAreas);
 
-		return new ResponseEntity<>(new Gson().toJson("done"), OK);
+		return new ResponseEntity<>(finalResponse.toString(), OK);
 	}
 }

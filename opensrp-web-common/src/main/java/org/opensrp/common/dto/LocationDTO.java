@@ -10,6 +10,8 @@ public class LocationDTO {
 
 	private String locationTagName;
 
+	private String users;
+
 	public Integer getId() {
 		return id;
 	}
@@ -40,5 +42,13 @@ public class LocationDTO {
 
 	public void setLocationTagName(String locationTagName) {
 		this.locationTagName = locationTagName;
+	}
+
+	public String getUsers() {
+		return users;
+	}
+
+	public void setUsers(String users) {
+		this.users = users;
 	}
 }
