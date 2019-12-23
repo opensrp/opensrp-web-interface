@@ -112,6 +112,8 @@ public interface DatabaseRepository {
 	public <T> List<T> findAllByKeysWithALlMatches(boolean isProvider, Map<String, String> fielaValues, Class<?> className);
 	
 	public boolean isExists(Map<String, Object> fielaValues, Class<?> className);
+
+	public boolean isExistsCustom(String value, Class<?> className);
 	
 	public <T> boolean entityExistsNotEualThisId(int id, T value, String fieldName, Class<?> className);
 	

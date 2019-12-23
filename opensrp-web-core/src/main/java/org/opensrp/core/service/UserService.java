@@ -32,16 +32,7 @@ import org.opensrp.common.exception.LocationNotFoundException;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.core.dto.UserLocationDTO;
 import org.opensrp.core.dto.WorkerIdDTO;
-import org.opensrp.core.entity.Branch;
-import org.opensrp.core.entity.Facility;
-import org.opensrp.core.entity.FacilityWorker;
-import org.opensrp.core.entity.FacilityWorkerType;
-import org.opensrp.core.entity.Location;
-import org.opensrp.core.entity.Role;
-import org.opensrp.core.entity.Team;
-import org.opensrp.core.entity.TeamMember;
-import org.opensrp.core.entity.User;
-import org.opensrp.core.entity.UsersCatchmentArea;
+import org.opensrp.core.entity.*;
 import org.opensrp.core.openmrs.service.OpenMRSServiceFactory;
 import org.opensrp.core.service.mapper.UserMapper;
 import org.opensrp.core.service.mapper.UsersCatchmentAreaMapper;
@@ -763,4 +754,9 @@ public class UserService {
 	public List<UserDTO> getSSWithoutCatchmentArea(Integer userId) {
 		return repository.getSSWithoutCatchmentAreaByAM(userId);
 	}
+
+	public boolean checkImei(String imei) {
+		return repository.isExistsCustom(imei, Imei.class);
+	}
+
 }

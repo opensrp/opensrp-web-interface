@@ -17,9 +17,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
@@ -525,7 +523,27 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return (result.size() > 0 ? true : false);
 	}
-	
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public boolean isExistsCustom(String value, Class<?> className) {
+		Session session = sessionFactory.openSession();
+		List<Object> result = new ArrayList<Object>();
+		try {
+			Criteria criteria = session.createCriteria(className);
+			Criterion criterion1 = Restrictions.eq("imei1", value);
+			Criterion criterion2 = Restrictions.eq("imei2", value);
+			LogicalExpression orExp = Restrictions.or(criterion1, criterion2);
+			criteria.add(orExp);
+			result = criteria.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return (result.size() > 0 ? true : false);
+	}
+
 	/**
 	 * <p>
 	 * {@link #entityExistsNotEualThisId(String, String, Class)} fetch entity by

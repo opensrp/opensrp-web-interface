@@ -56,6 +56,7 @@ import org.opensrp.web.util.PaginationUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.Authentication;
@@ -940,5 +941,10 @@ public class UserController {
 		return new ModelAndView(redirectUrl + "?lang=" + locale);
 		
 	}
-	
+
+	@RequestMapping(value = "/user/check-imei", method = RequestMethod.GET)
+	public ResponseEntity<String> getHouseholdIds(@RequestParam("imei") String imei) {
+		String isVerified = userServiceImpl.checkImei(imei)?"true":"false";
+		return new ResponseEntity<>(isVerified, OK);
+	}
 }
