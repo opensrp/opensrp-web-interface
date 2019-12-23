@@ -321,12 +321,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 */
 	
 	@Override
-	public <T> T findByKeys(Map<String, Object> fielaValues, Class<?> className) {
+	public <T> T findByKeys(Map<String, Object> fieldValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		List<T> result = null;
 		try {
 			Criteria criteria = session.createCriteria(className);
-			for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+			for (Map.Entry<String, Object> entry : fieldValues.entrySet()) {
 				criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
 			}
 			result = criteria.list();
@@ -354,12 +354,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * @return Entity object or null.
 	 */
 	@Override
-	public <T> T findLastByKey(Map<String, Object> fielaValues, String orderByFieldName, Class<?> className) {
+	public <T> T findLastByKey(Map<String, Object> fieldValues, String orderByFieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		List<T> result = new ArrayList<T>();
 		try {
 			Criteria criteria = session.createCriteria(className);
-			for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+			for (Map.Entry<String, Object> entry : fieldValues.entrySet()) {
 				criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
 			}
 			criteria.addOrder(Order.desc(orderByFieldName));
@@ -430,10 +430,11 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 */
 	
 	@Override
-	public <T> List<T> findAllByKeys(Map<String, Object> fielaValues, Class<?> className) {
+	public <T> List<T> findAllByKeys(Map<String, Object> fieldValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		Criteria criteria = session.createCriteria(className);
-		for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+		for (Map.Entry<String, Object> entry : fieldValues.entrySet()) {
+			System.out.println(entry.getKey() + " in repo " + entry.getValue());
 			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		}
@@ -1390,6 +1391,45 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 		return catchmentAreas;
 	}
+
+	@Override
+	public <T> List<T> getCatchmentAreaForUser(int userId) {
+		Session session = sessionFactory.openSession();
+		List<T> catchmentAreas = null;
+		try {
+			String hql = "select * from core.get_user_location(:userId)";
+			catchmentAreas = session.createSQLQuery(hql).setInteger("userId", userId).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return catchmentAreas;
+	}
+
+	@Override
+	public <T> List<T> getSSListByLocation(Integer locationId, Integer roleId) {
+		Session session = sessionFactory.openSession();
+		List<T> ssList = new ArrayList<T>();
+		try {
+			String hql = "select concat(u.first_name, ' - ',u.username) ssName, uca.id ucaId from core.users_catchment_area uca "
+					+ "join core.user_role ur on ur.user_id = uca.user_id join core.users u on u.id = uca.user_id "
+					+ "where ur.role_id = :roleId and uca.location_id = "+locationId+";";
+			Query query = session.createSQLQuery(hql)
+					.addScalar("ssName", StandardBasicTypes.STRING)
+					.addScalar("ucaId", StandardBasicTypes.INTEGER)
+					.setInteger("roleId", roleId)
+					.setResultTransformer(new AliasToBeanResultTransformer(SSWithUCAIdDTO.class));
+			ssList = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return ssList;
+	}
+
 
 	@Override
 	public <T> List<T> getVillageIdByProvider(int memberId, int childRoleId, int locationTagId) {

@@ -66,8 +66,8 @@ public class UsersCatchmentAreaService {
     }
 
     @Transactional
-    public <T> List<T> findAllByKeys(Map<String, Object> fieldValues, Class<?> className) {
-        return repository.findAllByKeys(fieldValues, className);
+    public <T> List<T> findAllByKeys(Map<String, Object> fieldValues) {
+        return repository.findAllByKeys(fieldValues, UsersCatchmentArea.class);
     }
 
     @Transactional
@@ -101,6 +101,11 @@ public class UsersCatchmentAreaService {
     @Transactional
     public List<Object[]> getUsersCatchmentAreaTableAsJson(int userId) {
         return repository.getCatchmentArea(userId);
+    }
+
+    @Transactional
+    public List<Object[]> getCatchmentAreaForUserAsJson(int userId) {
+        return repository.getCatchmentAreaForUser(userId);
     }
 
 }

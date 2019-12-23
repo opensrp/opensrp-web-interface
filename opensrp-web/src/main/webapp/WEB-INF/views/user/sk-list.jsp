@@ -75,9 +75,17 @@
                     </div>
                 </div>
             </div>
+            <div id="table-body" class="row" style="overflow-x: auto; margin-bottom: 10px;">
+            </div>
             <a class="btn btn-sm btn-dark" href="#" rel="modal:close" style="float: right; bottom: 0px">Close</a>
-        </div>
+            <div class="modal" id="delete-modal" style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1150; max-width: 70%;">
+                <h4>Do you really want to delete this location from this SK?</h4>
+                <p id="delete-ss-validation"></p>
+                <a class="btn btn-sm btn-danger" href="#" onclick="deleteConfirm()" style="float: right; bottom: 0px; margin-left: 5px;">Yes</a>
+                <a class="btn btn-sm btn-dark" href="#" rel="modal:close" style="float: right; bottom: 0px">Close</a>
+            </div>
 
+        </div>
         <!-- Example DataTables Card-->
         <div class="card mb-3">
             <div class="card-header">
@@ -146,6 +154,9 @@
 <script src="<c:url value='/resources/js/jquery.multi-select.js'/>"></script>
 <script>
     var isTeamMember = false;
+    var ssWithUCAId = [];
+    var currentSK = -1;
+    var currentLocation = -1;
     $(document).ready(function () {
         <%
             session.setAttribute("heading", "");
@@ -171,13 +182,13 @@
 
     function catchmentLoad(skId) {
         $('#locationTree').jstree(true).destroy();
+        $('#table-body').html("");
         $('#locations option').remove();
         $('#locations').multiSelect('refresh');
-        $('#catchment-area').modal('show');
         $('#catchment-area').modal({
             escapeClose: false,
             clickClose: false,
-            showClose: false
+            show: true
         });
 
         var url = "/opensrp-dashboard/rest/api/v1/user/"+skId+"/catchment-area";
@@ -198,6 +209,8 @@
                 var locationData = data["locationTree"];
                 var assignedLocation = data["assignedLocation"];
                 var catchmentAreas = data["catchmentAreas"];
+                var catchmentAreaTable = data["catchmentAreaTable"];
+                console.log(catchmentAreaTable[0]);
                 $('#locationTree').jstree({
                     'core' : {
                         'data' : locationData
@@ -249,6 +262,20 @@
                     $('#locations').val(ids);
                     $('#locations').multiSelect('refresh');
                 }).jstree();
+                //create table
+
+                var content = "<table id='catchment-table' class='display'>";
+                content += '<thead><tr><th>Division</th><th>District</th><th>City Corporation/Upazila</th><th>Pourashabha</th>' +
+                    '<th>Union</th><th>Village</th><th>Action</th></tr></thead><tbody>';
+                for(var y = 0; y < catchmentAreaTable.length; y++){
+                    content += '<tr id="row'+y+'"><td>'+catchmentAreaTable[y][0]+'</td><td>'+catchmentAreaTable[y][1]+'</td>' +
+                        '<td>'+catchmentAreaTable[y][2]+'</td><td>'+catchmentAreaTable[y][3]+'</td>' +
+                        '<td>'+catchmentAreaTable[y][4]+'</td><td>'+catchmentAreaTable[y][5]+'</td>' +
+                        '<td><button class="btn btn-sm btn-danger" onclick="deleteLocation('+catchmentAreaTable[y][6]+','+y+','+skId+')">Delete</button></td></tr>';
+                }
+                content += "</tbody></table>";
+
+                $('#table-body').append(content);
             },
             error : function(e) {
                 console.log("ERROR OCCURRED");
@@ -260,6 +287,88 @@
             }
         });
     }
+
+    function deleteLocation(locationId, row, skId) {
+        ssWithUCAId = [];
+        currentSK = skId;
+        currentLocation = locationId;
+        console.log(locationId + " " + row);
+        $('#delete-ss-validation').html();
+        var url = "/opensrp-dashboard/rest/api/v1/user/ss-by-location?locationId="+locationId;
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            contentType : "application/json",
+            type: "GET",
+            url: url,
+            dataType : 'json',
+
+            timeout : 100000,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success : function(data) {
+                ssWithUCAId = data;
+                var ssInfos = data.map(function(ss) {
+                    return ss["ss_name"];
+                }).join(', ');
+                console.log(ssInfos);
+                $('#delete-ss-validation').html("If you release this location from this SK - <b>" +ssInfos+ "</b> also be released from those location..");
+            },
+            error : function(e) {
+                console.log(e);
+            },
+            done : function(e) {
+                console.log(e);
+            }
+        });
+        $('#delete-modal').modal({
+            escapeClose: false,
+            clickClose: false,
+            closeExisting: false,
+            show: true
+        });
+        // $('#row'+row).remove();
+    }
+
+    function deleteConfirm() {
+        console.log("in delete confirm");
+        var skWithLocation = {
+            sk_id: currentSK,
+            sk_location_id: currentLocation,
+            ss_of_sk: ssWithUCAId
+        };
+        console.log(skWithLocation);
+        var url = "/opensrp-dashboard/rest/api/v1/user/delete-sk-location";
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            contentType : "application/json",
+            type: "DELETE",
+            url: url,
+            dataType : 'json',
+            data: JSON.stringify(skWithLocation),
+            timeout : 100000,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success : function(data) {
+                ssWithUCAId = data;
+                var ssInfos = data.map(function(ss) {
+                    return ss["ss_name"];
+                }).join(', ');
+                console.log(ssInfos);
+                $('#delete-ss-validation').html("If you release this location from this SK - <b>" +ssInfos+ "</b> also be released from those location..");
+            },
+            error : function(e) {
+                console.log(e);
+            },
+            done : function(e) {
+                console.log(e);
+            }
+        });
+    }
+
     $('#locations').change(function(){
         if ($('#locations').val() != null) {
             $('#saveCatchmentArea').prop('disabled', false);
@@ -296,8 +405,6 @@
             userId: $('#userId').val()
         };
 
-        console.log("url: "+url);
-        console.log(formData);
         $.ajax({
             contentType : "application/json",
             type: "POST",

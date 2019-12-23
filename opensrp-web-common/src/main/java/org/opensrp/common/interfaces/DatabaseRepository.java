@@ -100,14 +100,14 @@ public interface DatabaseRepository {
 
 	public <T> List<T> findAllLocation(String tableClass);
 
-	public <T> T findByKeys(Map<String, Object> fielaValues, Class<?> className);
+	public <T> T findByKeys(Map<String, Object> fieldValues, Class<?> className);
 	
-	public <T> T findLastByKey(Map<String, Object> fielaValues, String orderByFieldName, Class<?> className);
+	public <T> T findLastByKey(Map<String, Object> fieldValues, String orderByFieldName, Class<?> className);
 	
 	public <T> T findLastByKeyLessThanDateConditionOneField(Map<String, Object> fielaValues, Date fieldvalue, String field,
 	                                                        String orderByFieldName, Class<?> className);
 	
-	public <T> List<T> findAllByKeys(Map<String, Object> fielaValues, Class<?> className);
+	public <T> List<T> findAllByKeys(Map<String, Object> fieldValues, Class<?> className);
 	
 	public <T> List<T> findAllByKeysWithALlMatches(boolean isProvider, Map<String, String> fielaValues, Class<?> className);
 	
@@ -153,6 +153,10 @@ public interface DatabaseRepository {
 	public List<ReportDTO> getMHVListFilterWise(String filterString);
 
 	public <T> List<T> getCatchmentArea(int userId);
+
+	public <T> List<T> getCatchmentAreaForUser(int userId);
+
+	public <T> List<T> getSSListByLocation(Integer locationId, Integer roleId);
 
 	public <T> List<T> getVillageIdByProvider(int memberId, int childRoleId, int locationTagId);
 

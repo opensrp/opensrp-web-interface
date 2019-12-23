@@ -6,9 +6,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.common.dto.ChangePasswordDTO;
-import org.opensrp.common.dto.UserAssignedLocationDTO;
-import org.opensrp.common.dto.UserDTO;
+import org.opensrp.common.dto.*;
 import org.opensrp.core.dto.UserLocationDTO;
 import org.opensrp.core.entity.*;
 import org.opensrp.core.service.*;
@@ -16,6 +14,7 @@ import org.opensrp.core.service.mapper.FacilityWorkerMapper;
 import org.opensrp.core.service.mapper.UserMapper;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.ui.Model;
@@ -25,9 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @RequestMapping("rest/api/v1/user")
 @RestController
@@ -238,6 +235,21 @@ public class UserRestController {
 		JSONArray locationTree = locationService.getLocationWithDisableFacility(session, parentIndication, parentKey,
 				userAssignedLocationDTOS, id, role, loggedInUser.getId(), SK_ROLE_ID);
 
+		List<Object[]> catchmentAreaTable = userServiceImpl.getCatchmentAreaTableForUser(id);
+
+		JSONArray catchmentAreaTableAsJson = new JSONArray();
+		for (Object[] o: catchmentAreaTable) {
+			JSONObject catchmentHierarchy = new JSONObject();
+			catchmentHierarchy.put("division", o[0]);
+			catchmentHierarchy.put("district", o[1]);
+			catchmentHierarchy.put("upazila", o[2]);
+			catchmentHierarchy.put("pourashabha", o[3]);
+			catchmentHierarchy.put("union", o[4]);
+			catchmentHierarchy.put("village", o[5]);
+			catchmentHierarchy.put("location_id", o[6]);
+			catchmentAreaTableAsJson.put(catchmentHierarchy);
+		}
+
 		JSONArray assignedLocations = new JSONArray();
 		for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
 			JSONObject jOb = new JSONObject();
@@ -257,9 +269,43 @@ public class UserRestController {
 		finalResponse.put("assignedLocation", assignedLocations);
 		finalResponse.put("catchmentAreas", catchmentAreas);
 		finalResponse.put("isTeamMember", isTeamMember);
+		finalResponse.put("catchmentAreaTable", catchmentAreaTable);
 
 		session.setAttribute("userId", id);
 
 		return new ResponseEntity<>(finalResponse.toString(), OK);
+	}
+
+	@RequestMapping(value = "/ss-by-location", method = RequestMethod.GET)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<SSWithUCAIdDTO> getSSListByLocation(@RequestParam("locationId") Integer locationId) {
+		List<SSWithUCAIdDTO> ssList = userServiceImpl.getSSListByLocation(locationId, SS_ROLE_ID);
+		return ssList;
+	}
+
+	@RequestMapping(value = "/delete-sk-location", method = RequestMethod.DELETE)
+	public ResponseEntity<String> deleteLocationFromSKAndRelatedSS(@RequestBody SKWithLocationDTO dto) {
+		String responseMessage = "DELETED";
+		try {
+			Map<String, Object> mp = new HashMap<>();
+			mp.put("locationId", dto.getSkLocationId());
+			mp.put("userId", dto.getSkId());
+			final List<Integer> catchmentAreaIds = new ArrayList<>();
+			if (dto.getSsWithUCAIdDTOList()!= null) {
+				for (SSWithUCAIdDTO ssWithUCAIdDTO: dto.getSsWithUCAIdDTOList()) {
+					catchmentAreaIds.add(ssWithUCAIdDTO.getUcaId());
+				}
+			}
+			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByKeys(mp);
+			for (UsersCatchmentArea area: usersCatchmentAreas) {
+				catchmentAreaIds.add(area.getId());
+			}
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			responseMessage = e.getMessage();
+		}
+		return new ResponseEntity<>(responseMessage, OK);
 	}
 }

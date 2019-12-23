@@ -22,10 +22,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.common.dto.ChangePasswordDTO;
-import org.opensrp.common.dto.LocationTreeDTO;
-import org.opensrp.common.dto.UserAssignedLocationDTO;
-import org.opensrp.common.dto.UserDTO;
+import org.opensrp.common.dto.*;
 import org.opensrp.common.exception.BadFormatException;
 import org.opensrp.common.exception.BranchNotFoundException;
 import org.opensrp.common.exception.LocationNotFoundException;
@@ -594,6 +591,11 @@ public class UserService {
 	}
 
 	@Transactional
+	public List<Object[]> getCatchmentAreaTableForUser(int userId) {
+		return usersCatchmentAreaService.getCatchmentAreaForUserAsJson(userId);
+	}
+
+	@Transactional
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId) {
 		return repository.getProviderLocationTreeByChildRole(memberId, childRoleId);
 	}
@@ -757,5 +759,9 @@ public class UserService {
 
 	public boolean checkImei(String imei) {
 		return repository.isExistsCustom(imei, Imei.class);
+	}
+
+	public List<SSWithUCAIdDTO> getSSListByLocation(Integer locationId, Integer roleId) {
+		return repository.getSSListByLocation(locationId, roleId);
 	}
 }
