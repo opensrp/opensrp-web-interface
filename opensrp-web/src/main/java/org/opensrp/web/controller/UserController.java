@@ -762,9 +762,11 @@ public class UserController {
 	                        HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
 		List<UserDTO> users = userServiceImpl.getChildUserFromParent(skId, "SS");
 		List<UserDTO> ssWithoutCatchment = userServiceImpl.getSSWithoutCatchmentArea(skId);
 		model.addAttribute("skUsername", skUsername);
+		model.addAttribute("branches", branches);
 		model.addAttribute("skId", skId);
 		session.setAttribute("allSS", users);
 		session.setAttribute("fromRole", "SS");

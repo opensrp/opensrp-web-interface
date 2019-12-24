@@ -170,6 +170,8 @@ public interface DatabaseRepository {
 
 	public List<Object[]> getSKByBranch(Integer branchId);
 
+	public Integer updateParentForSS(Integer ssId, Integer parentId);
+
 	public <T> List<T> getUniqueLocation(String village, String ward);
 
 	public List<Object[]> getClientInformation();
@@ -187,6 +189,8 @@ public interface DatabaseRepository {
 	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId);
 
 	public int updatePassword(ChangePasswordDTO dto);
+
+	public int deleteCatchmentAreas(List<Integer> ids);
 
 	public <T> List<T> getChildUserByParentUptoUnion(Integer userId, String roleName);
 

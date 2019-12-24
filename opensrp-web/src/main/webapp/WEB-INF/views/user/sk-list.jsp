@@ -17,7 +17,6 @@
 
 <%
     List<UserDTO> users = (List<UserDTO>) session.getAttribute("allSK");
-    Integer userId = (Integer) session.getAttribute("userId");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,6 +49,7 @@
                 </strong> </a> <%} %>
         </div>
 
+        <!--Modal start-->
         <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050"
              id="catchment-area" class="modal">
             <div id ="modal-body" class="row">
@@ -62,7 +62,7 @@
                     </select>
                 </div>
                 <div class="col-sm-1" style="height: 350px;">
-                    <input id="userId" value="<%=userId%>" type="hidden">
+                    <input id="userId" value="${skId}" type="hidden">
                     <div class="row">
                         <button id="saveCatchmentArea"
                                 disabled = true
@@ -77,7 +77,7 @@
             </div>
             <div id="table-body" class="row" style="overflow-x: auto; margin-bottom: 10px;">
             </div>
-            <a class="btn btn-sm btn-dark" href="#" rel="modal:close" style="float: right; bottom: 0px">Close</a>
+            <a class="btn btn-sm btn-dark" href="#" onclick="closeMainModal()" style="float: right; bottom: 0px">Close</a>
             <div class="modal" id="delete-modal" style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1150; max-width: 70%;">
                 <h4>Do you really want to delete this location from this SK?</h4>
                 <p id="delete-ss-validation"></p>
@@ -86,6 +86,8 @@
             </div>
 
         </div>
+        <!--Modal start-->
+
         <!-- Example DataTables Card-->
         <div class="card mb-3">
             <div class="card-header">
@@ -157,6 +159,7 @@
     var ssWithUCAId = [];
     var currentSK = -1;
     var currentLocation = -1;
+    var currentRow = -1;
     $(document).ready(function () {
         <%
             session.setAttribute("heading", "");
@@ -181,6 +184,7 @@
     });
 
     function catchmentLoad(skId) {
+        currentSK = skId;
         $('#locationTree').jstree(true).destroy();
         $('#table-body').html("");
         $('#locations option').remove();
@@ -204,12 +208,12 @@
             beforeSend: function(xhr) {
                 xhr.setRequestHeader(header, token);
             },
-            success : function(data) {
-                isTeamMember = data["isTeamMember"];
-                var locationData = data["locationTree"];
-                var assignedLocation = data["assignedLocation"];
-                var catchmentAreas = data["catchmentAreas"];
-                var catchmentAreaTable = data["catchmentAreaTable"];
+            success : function(e, data) {
+                isTeamMember = e["isTeamMember"];
+                var locationData = e["locationTree"];
+                var assignedLocation = e["assignedLocation"];
+                var catchmentAreas = e["catchmentAreas"];
+                var catchmentAreaTable = e["catchmentAreaTable"];
                 console.log(catchmentAreaTable[0]);
                 $('#locationTree').jstree({
                     'core' : {
@@ -253,6 +257,7 @@
                             index: i
                         });
                     }
+
                     for (i = 0; i < assignedLocation.length; i++) {
                         var locationId = assignedLocation[i]["locationId"];
                         if (assignedLocation[i]["userId"] != skId) {
@@ -262,8 +267,8 @@
                     $('#locations').val(ids);
                     $('#locations').multiSelect('refresh');
                 }).jstree();
-                //create table
 
+                //create catchment area table
                 var content = "<table id='catchment-table' class='display'>";
                 content += '<thead><tr><th>Division</th><th>District</th><th>City Corporation/Upazila</th><th>Pourashabha</th>' +
                     '<th>Union</th><th>Village</th><th>Action</th></tr></thead><tbody>';
@@ -292,6 +297,7 @@
         ssWithUCAId = [];
         currentSK = skId;
         currentLocation = locationId;
+        currentRow = row;
         console.log(locationId + " " + row);
         $('#delete-ss-validation').html();
         var url = "/opensrp-dashboard/rest/api/v1/user/ss-by-location?locationId="+locationId;
@@ -312,7 +318,6 @@
                 var ssInfos = data.map(function(ss) {
                     return ss["ss_name"];
                 }).join(', ');
-                console.log(ssInfos);
                 $('#delete-ss-validation').html("If you release this location from this SK - <b>" +ssInfos+ "</b> also be released from those location..");
             },
             error : function(e) {
@@ -328,7 +333,6 @@
             closeExisting: false,
             show: true
         });
-        // $('#row'+row).remove();
     }
 
     function deleteConfirm() {
@@ -352,19 +356,20 @@
             beforeSend: function(xhr) {
                 xhr.setRequestHeader(header, token);
             },
-            success : function(data) {
-                ssWithUCAId = data;
-                var ssInfos = data.map(function(ss) {
-                    return ss["ss_name"];
-                }).join(', ');
-                console.log(ssInfos);
-                $('#delete-ss-validation').html("If you release this location from this SK - <b>" +ssInfos+ "</b> also be released from those location..");
+            success : function(e, data) {
+                console.log(e);
+                console.log("in success delete confirm");
+                console.log(data);
+                $('#row'+currentRow).remove();
+                $.modal.getCurrent().close();
             },
             error : function(e) {
                 console.log(e);
+                console.log("In error");
             },
             done : function(e) {
                 console.log(e);
+                console.log("In done");
             }
         });
     }
@@ -373,7 +378,6 @@
         if ($('#locations').val() != null) {
             $('#saveCatchmentArea').prop('disabled', false);
         } else {
-            console.log(tempEdit);
             if (tempEdit == true) {
                 $('#saveCatchmentArea').prop('disabled', false);
             } else {
@@ -386,7 +390,6 @@
         $('#saveCatchmentArea').prop('disabled', true);
         $('#pleaseWait').show();
         var url = "";
-        console.log(isTeamMember);
         if (isTeamMember == true) {
             url = "/opensrp-dashboard/rest/api/v1/user/catchment-area/update";
         } else {
@@ -398,11 +401,11 @@
         $("#locations option").each(function() {
             allLocation.push($(this).val());
         });
-
+        var skId = currentSK;
         var formData = {
             allLocation: allLocation,
             locations: $('#locations').val(),
-            userId: $('#userId').val()
+            userId: skId
         };
 
         $.ajax({
@@ -416,24 +419,42 @@
             beforeSend: function(xhr) {
                 xhr.setRequestHeader(header, token);
             },
-            success : function(data) {
-                if(data == "") {
-                    $('#pleaseWait').hide();
-                    $('#catchment-area').modal('hide');
+            success : function(e, data) {
+                $('#table-body').html("");
+                var catchmentAreaTable = e["catchmentAreaTable"];
+                $('#locations option').remove();
+                $('#locations').multiSelect('refresh');
+                $('#pleaseWait').hide();
+                //create catchment area table
+                var content = "<table id='catchment-table' class='display'>";
+                content += '<thead><tr><th>Division</th><th>District</th><th>City Corporation/Upazila</th><th>Pourashabha</th>' +
+                    '<th>Union</th><th>Village</th><th>Action</th></tr></thead><tbody>';
+                for(var y = 0; y < catchmentAreaTable.length; y++){
+                    content += '<tr id="row'+y+'"><td>'+catchmentAreaTable[y][0]+'</td><td>'+catchmentAreaTable[y][1]+'</td>' +
+                        '<td>'+catchmentAreaTable[y][2]+'</td><td>'+catchmentAreaTable[y][3]+'</td>' +
+                        '<td>'+catchmentAreaTable[y][4]+'</td><td>'+catchmentAreaTable[y][5]+'</td>' +
+                        '<td><button class="btn btn-sm btn-danger" onclick="deleteLocation('+catchmentAreaTable[y][6]+','+y+','+skId+')">Delete</button></td></tr>';
                 }
+                content += "</tbody></table>";
+
+                $('#table-body').append(content);
             },
             error : function(e) {
-                console.log(data);
                 $('#saveCatchmentArea').prop('disabled', false);
                 $('#pleaseWait').hide();
             },
             done : function(e) {
-                console.log("DONE");
                 $('#saveCatchmentArea').prop('disabled', false);
                 $('#pleaseWait').hide();
             }
         });
     });
+
+    function closeMainModal() {
+        console.log("IN CLOSE");
+        window.location.reload();
+        $.modal.getCurrent.close();
+    }
 </script>
 
 </body>

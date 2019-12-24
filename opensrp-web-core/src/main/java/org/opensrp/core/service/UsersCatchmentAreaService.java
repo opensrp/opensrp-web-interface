@@ -104,6 +104,11 @@ public class UsersCatchmentAreaService {
     }
 
     @Transactional
+    public int deleteCatchmentAreas(List <Integer> ids) {
+        return repository.deleteCatchmentAreas(ids);
+    }
+
+    @Transactional
     public List<Object[]> getCatchmentAreaForUserAsJson(int userId) {
         return repository.getCatchmentAreaForUser(userId);
     }

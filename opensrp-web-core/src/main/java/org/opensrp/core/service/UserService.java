@@ -764,4 +764,8 @@ public class UserService {
 	public List<SSWithUCAIdDTO> getSSListByLocation(Integer locationId, Integer roleId) {
 		return repository.getSSListByLocation(locationId, roleId);
 	}
+
+	public Integer updateParentForSS(Integer ssId, Integer parentId) {
+		return repository.updateParentForSS(ssId, parentId);
+	}
 }

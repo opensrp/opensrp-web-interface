@@ -198,16 +198,21 @@ public class UserRestController {
 	@RequestMapping(value = "/catchment-area/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUsersCatchmentArea(HttpSession session, @RequestBody UserLocationDTO userLocationDTO) throws Exception {
 		String errorMessage = "";
-		System.out.println("ERROR 500");
 		userServiceImpl.saveTeamMemberAndCatchmentAreas(session, userLocationDTO);
-		return new ResponseEntity<>(new Gson().toJson(errorMessage), OK);
+		List<Object[]> catchmentAreaTable = userServiceImpl.getCatchmentAreaTableForUser(userLocationDTO.getUserId());
+		JSONObject response = new JSONObject();
+		response.put("catchmentAreaTable", catchmentAreaTable);
+		return new ResponseEntity<>(response.toString(), OK);
 	}
 
 	@RequestMapping(value = "/catchment-area/update", method = RequestMethod.POST)
 	public ResponseEntity<String> updateUsersCatchmentArea(HttpSession session, @RequestBody UserLocationDTO userLocationDTO) throws Exception {
 		String errorMessage = "";
 		userServiceImpl.updateTeamMemberAndCatchmentAreas(session, userLocationDTO);
-		return new ResponseEntity<>(new Gson().toJson(errorMessage), OK);
+		List<Object[]> catchmentAreaTable = userServiceImpl.getCatchmentAreaTableForUser(userLocationDTO.getUserId());
+		JSONObject response = new JSONObject();
+		response.put("catchmentAreaTable", catchmentAreaTable);
+		return new ResponseEntity<>(response.toString(), OK);
 	}
 
 	@RequestMapping(value = "/{id}/catchment-area", method = RequestMethod.GET)
@@ -233,22 +238,9 @@ public class UserRestController {
 
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		JSONArray locationTree = locationService.getLocationWithDisableFacility(session, parentIndication, parentKey,
-				userAssignedLocationDTOS, id, role, loggedInUser.getId(), SK_ROLE_ID);
+				userAssignedLocationDTOS, id, role, loggedInUser.getId(), roleId);
 
 		List<Object[]> catchmentAreaTable = userServiceImpl.getCatchmentAreaTableForUser(id);
-
-		JSONArray catchmentAreaTableAsJson = new JSONArray();
-		for (Object[] o: catchmentAreaTable) {
-			JSONObject catchmentHierarchy = new JSONObject();
-			catchmentHierarchy.put("division", o[0]);
-			catchmentHierarchy.put("district", o[1]);
-			catchmentHierarchy.put("upazila", o[2]);
-			catchmentHierarchy.put("pourashabha", o[3]);
-			catchmentHierarchy.put("union", o[4]);
-			catchmentHierarchy.put("village", o[5]);
-			catchmentHierarchy.put("location_id", o[6]);
-			catchmentAreaTableAsJson.put(catchmentHierarchy);
-		}
 
 		JSONArray assignedLocations = new JSONArray();
 		for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
@@ -271,8 +263,6 @@ public class UserRestController {
 		finalResponse.put("isTeamMember", isTeamMember);
 		finalResponse.put("catchmentAreaTable", catchmentAreaTable);
 
-		session.setAttribute("userId", id);
-
 		return new ResponseEntity<>(finalResponse.toString(), OK);
 	}
 
@@ -290,7 +280,7 @@ public class UserRestController {
 			Map<String, Object> mp = new HashMap<>();
 			mp.put("locationId", dto.getSkLocationId());
 			mp.put("userId", dto.getSkId());
-			final List<Integer> catchmentAreaIds = new ArrayList<>();
+			List<Integer> catchmentAreaIds = new ArrayList<>();
 			if (dto.getSsWithUCAIdDTOList()!= null) {
 				for (SSWithUCAIdDTO ssWithUCAIdDTO: dto.getSsWithUCAIdDTOList()) {
 					catchmentAreaIds.add(ssWithUCAIdDTO.getUcaId());
@@ -301,11 +291,46 @@ public class UserRestController {
 				catchmentAreaIds.add(area.getId());
 			}
 
-
+			int response = usersCatchmentAreaService.deleteCatchmentAreas(catchmentAreaIds);
+			System.out.println("is deleted: "+response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			responseMessage = e.getMessage();
 		}
-		return new ResponseEntity<>(responseMessage, OK);
+		return new ResponseEntity<>(new Gson().toJson(responseMessage), OK);
+	}
+
+	@RequestMapping(value = "/delete-ss-location", method = RequestMethod.DELETE)
+	public ResponseEntity<String> deleteLocationFromSKAndRelatedSS(@RequestBody SSWithLocationDTO dto) {
+		String responseMessage = "DELETED";
+		try {
+			Map<String, Object> mp = new HashMap<>();
+			mp.put("locationId", dto.getSsLocationId());
+			mp.put("userId", dto.getSsId());
+			List<Integer> catchmentAreaIds = new ArrayList<>();
+			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByKeys(mp);
+			for (UsersCatchmentArea area: usersCatchmentAreas) {
+				catchmentAreaIds.add(area.getId());
+			}
+
+			int response = usersCatchmentAreaService.deleteCatchmentAreas(catchmentAreaIds);
+			System.out.println("is deleted: "+response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			responseMessage = e.getMessage();
+		}
+		return new ResponseEntity<>(new Gson().toJson(responseMessage), OK);
+	}
+
+	@RequestMapping(value = "/update/ss-parent", method = RequestMethod.PUT)
+	public ResponseEntity<String> updateParentForSS(@RequestParam("ssId") Integer ssId, @RequestParam("parentId") Integer parentId) {
+		Integer response = userServiceImpl.updateParentForSS(ssId, parentId);
+		return new ResponseEntity<>(new Gson().toJson(response==1?"updated":"not updated"), OK);
+	}
+
+	@RequestMapping(value = "/branch/sk")
+	public ResponseEntity<String> getSKByBranch(@RequestParam("branchId") Integer branchId) {
+		JSONObject res = new JSONObject();
+		return new ResponseEntity<>(res.toString(), OK);
 	}
 }

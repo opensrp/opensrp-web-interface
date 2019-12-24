@@ -1376,6 +1376,23 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return skList;
 	}
 
+	public Integer updateParentForSS(Integer ssId, Integer parentId) {
+		Session session = sessionFactory.openSession();
+		int isUpdate = 0;
+		try {
+			String hql = "update core.users set parent_user_id = :parentId where id = :ssId";
+			isUpdate = session.createSQLQuery(hql)
+					.setInteger("parentId", parentId)
+					.setInteger("ssId", ssId)
+					.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return isUpdate;
+	}
+
 	@Override
 	public <T> List<T> getCatchmentArea(int userId) {
 		Session session = sessionFactory.openSession();
@@ -1866,6 +1883,22 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return result;
 	}
 
+	public int deleteCatchmentAreas(List<Integer> ids) {
+		Session session = sessionFactory.openSession();
+		int result = 0;
+		try {
+			String sql = "delete from core.users_catchment_area where id in (:ids)";
+			Query query = session.createSQLQuery(sql)
+					.setParameterList("ids", ids);
+			result = query.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return result;
+	}
+
 	@Override
 	public <T> List<T> getChildUserByParentUptoUnion(Integer userId, String roleName) {
 		Session session = sessionFactory.openSession();
@@ -1910,21 +1943,21 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		List<T> users = new ArrayList<T>();
 		try {
-//			String hql = "with recursive loc_tree as (select * from core.location loc1 "
-//					+ "where loc1.id in (select location_id from core.users_catchment_area where user_id = :userId) "
-//					+ "union all select loc2.* from core.location loc2 "
-//					+ "join loc_tree lt on lt.id = loc2.parent_location_id "
-//					+ ") select distinct u.id, u.username, u.first_name firstName, u.last_name lastName, u.mobile, "
-//					+ "(select string_agg(b.name, ', ') from core.user_branch ub join core.branch b on ub.branch_id = b.id "
-//					+ "where ub.user_id = u.id) branches, "
-//					+ "(select string_agg(distinct(split_part(loc_c.name, ':', 1)), ', ') from core.users_catchment_area uca1 "
-//					+ "join core.location loc_c on loc_c.id = uca1.location_id "
-//					+ "where uca1.user_id = u.id) locationList "
-//					+ "from loc_tree lt "
-//					+ "join core.users_catchment_area uca on lt.id = uca.location_id "
-//					+ "join core.users u on u.id = uca.user_id join core.user_role ur on u.id = ur.user_id "
-//					+ "join core.role r on r.id = ur.role_id where r.name = '"+roleName+"' order by firstName;";
-			String hql = "select * from core.get_ss_by_sk(:userId);";
+			String hql = "with recursive loc_tree as (select * from core.location loc1 "
+					+ "where loc1.id in (select location_id from core.users_catchment_area where user_id = :userId) "
+					+ "union all select loc2.* from core.location loc2 "
+					+ "join loc_tree lt on lt.id = loc2.parent_location_id "
+					+ ") select distinct u.id, u.username, u.first_name firstName, u.last_name lastName, u.mobile, "
+					+ "(select string_agg(b.name, ', ') from core.user_branch ub join core.branch b on ub.branch_id = b.id "
+					+ "where ub.user_id = u.id) branches, "
+					+ "(select string_agg(distinct(split_part(loc_c.name, ':', 1)), ', ') from core.users_catchment_area uca1 "
+					+ "join core.location loc_c on loc_c.id = uca1.location_id "
+					+ "where uca1.user_id = u.id) locationList "
+					+ "from loc_tree lt "
+					+ "join core.users_catchment_area uca on lt.id = uca.location_id "
+					+ "join core.users u on u.id = uca.user_id join core.user_role ur on u.id = ur.user_id "
+					+ "join core.role r on r.id = ur.role_id where r.name = '"+roleName+"' order by firstName;";
+//			String hql = "select * from core.get_ss_by_sk(:userId);";
 
 			Query query = session.createSQLQuery(hql)
 					.addScalar("id", StandardBasicTypes.INTEGER)
