@@ -80,7 +80,7 @@
             <a class="btn btn-sm btn-dark" href="#" onclick="closeMainModal()" style="float: right; bottom: 0px">Close</a>
             <div class="modal" id="delete-modal" style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1150; max-width: 70%;">
                 <h4>Do you really want to delete this location from this SK?</h4>
-                <p id="delete-ss-validation"></p>
+                <p style="display: none;" id="delete-ss-validation"></p>
                 <a class="btn btn-sm btn-danger" href="#" onclick="deleteConfirm()" style="float: right; bottom: 0px; margin-left: 5px;">Yes</a>
                 <a class="btn btn-sm btn-dark" href="#" rel="modal:close" style="float: right; bottom: 0px">Close</a>
             </div>
@@ -319,6 +319,7 @@
                     return ss["ss_name"];
                 }).join(', ');
                 $('#delete-ss-validation').html("If you release this location from this SK - <b>" +ssInfos+ "</b> also be released from those location..");
+                if (ssInfos.length > 0) $('#delete-ss-validation').show();
             },
             error : function(e) {
                 console.log(e);

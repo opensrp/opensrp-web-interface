@@ -508,6 +508,10 @@
         $.modal.getCurrent.close();
     }
 
+    $('#branches').select2({
+        dropdownParent: $('#change-sk')
+    });
+
     function changeSK(ssId) {
         currentSS = ssId;
         console.log("Present value");
