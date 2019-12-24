@@ -1760,52 +1760,45 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 
 	@Override
-	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId,String name) {
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId, String name) {
 		Session session = sessionFactory.openSession();
 		List<Object[]> userList = null;
-		
-		
-		String where = " where ";
-		if (branchId > 0) where += "b.id = "+branchId +" and ";
-		
-		if (roleId > 0) where += "  r.id = " + roleId +" and ";
-			//else where += "r.id = " + roleId;
-		//}
-		if(!org.apache.commons.lang3.StringUtils.isBlank(name)){
-			where += " u.username like '" + name.trim() + "%' and ";
-		}
-		where += " 1=1";
-		try {
-			String sql = "WITH recursive main_location_tree AS (SELECT * "
-					+ "FROM core.location WHERE  id IN ( WITH recursive location_tree AS "
-					+ "(SELECT * "
-					+ "FROM   core.location l "
-					+ "WHERE  l.id = :locationId UNION ALL "
-					+ "SELECT loc.* "
-					+ "FROM   core.location loc "
-					+ "JOIN   location_tree lt "
-					+ "ON lt.id = loc.parent_location_id ) "
-					+ "SELECT DISTINCT(lt.id) FROM location_tree lt "
-					+ "WHERE lt.location_tag_id = :locationTagId ) UNION ALL SELECT l.* "
-					+ "FROM core.location l JOIN   main_location_tree mlt "
-					+ "ON l.id = mlt.parent_location_id ) SELECT DISTINCT(u.username), "
-					+ "concat(u.first_name, ' ', u.last_name) as full_name, u.mobile, "
-					+ "r.NAME role_name, (select string_agg(b1.name, ', ') "
-					+ "from core.branch b1 join core.user_branch ub1 on b1.id = ub1.branch_id where ub1.user_id = u.id) branch_name, u.id "
-					+ "FROM main_location_tree mlt JOIN core.users_catchment_area uca "
-					+ "ON uca.location_id = mlt.id JOIN core.users u "
-					+ "ON u.id = uca.user_id JOIN core.user_branch ub "
-					+ "ON ub.user_id = u.id JOIN core.branch b "
-					+ "ON b.id = ub.branch_id JOIN core.user_role ur "
-					+ "ON u.id = ur.user_id JOIN core.role r "
-					+ "ON ur.role_id = r.id ";
 
-			Query query = session.createSQLQuery(sql+where+ " order by u.id desc ");
-			userList = query
+		String afterWhere = "";
+		if (branchId > 0) afterWhere += " and user_ucv_branch.branch_id = "+branchId;
+		
+		if (roleId > 0) afterWhere += " and vur.id = " + roleId;
+
+		if(!org.apache.commons.lang3.StringUtils.isBlank(name)){
+			afterWhere += " and user_ucv_branch.username like '" + name.trim() + "%'";
+		}
+		try {
+			String sql = "with recursive subordinates as (\n" + "select\n" + "\tid,\n" + "\tcode,\n" + "\t\"name\",\n"
+					+ "\tlocation_tag_id,\n" + "\tparent_location_id\n" + "from\n" + "\tcore.\"location\"\n" + "where\n"
+					+ "\tid = :locationId\n" + "union\n" + "select\n" + "\te.id,\n" + "\te.code,\n" + "\te.\"name\",\n"
+					+ "\te.location_tag_id,\n" + "\te.parent_location_id\n" + "from\n" + "\tcore.\"location\" e\n"
+					+ "inner join subordinates s on\n" + "\ts.id = e.parent_location_id) ,\n" + "vl as(\n" + "select\n"
+					+ "\tid\n" + "from\n" + "\tsubordinates\n" + "where\n" + "\tlocation_tag_id = any(\n" + "\tselect\n"
+					+ "\t\tid\n" + "\tfrom\n" + "\t\tcore.location_tag)),\n" + "ucv as(\n" + "select\n" + "\tuc.id,\n"
+					+ "\tuc.location_id,\n" + "\tuc.user_id\n" + "from\n" + "\tvl,\n" + "\tcore.users_catchment_area uc\n"
+					+ "where\n" + "\tvl.id = uc.location_id),\n" + "user_ucv as(\n" + "select\n"
+					+ "\tdistinct ucv.user_id,\n" + "\tu.first_name,\n" + "\tu.last_name,\n" + "\tu.username,\n"
+					+ "\tu.mobile\n" + "from\n" + "\tucv,\n" + "\tcore.users u\n" + "where\n" + "\tucv.user_id = u.id),\n"
+					+ "user_ucv_branch as(\n" + "select\n" + "\tuser_ucv.*,\n" + "\tvub.id branch_id,\n" + "\tbranch_name\n"
+					+ "from\n" + "\tuser_ucv,\n" + "\tcore.vw_user_branch vub\n" + "where\n"
+					+ "\tuser_ucv.user_id = vub.user_id)\n" + "select\n" + "\tuser_ucv_branch.username,\n"
+					+ "\t(user_ucv_branch.first_name || ' ' || user_ucv_branch.last_name) full_name,\n"
+					+ "\tuser_ucv_branch.mobile,\n" + "\tvur.role_name,\n"
+					+ "\tstring_agg(user_ucv_branch.branch_name, ', ') branch_name,\n" + "\tuser_ucv_branch.user_id,\n"
+					+ "\tvur.id role_id\n" + "from\n" + "\tuser_ucv_branch,\n" + "\tcore.vw_user_role vur\n" + "where\n"
+					+ "\tuser_ucv_branch.user_id = vur.user_id "+afterWhere+" group by\n" + "\tuser_ucv_branch.user_id,\n"
+					+ "\tuser_ucv_branch.first_name,\n" + "\tuser_ucv_branch.last_name,\n" + "\tuser_ucv_branch.username,\n"
+					+ "\tuser_ucv_branch.mobile,\n" + "\tvur.id,\n" + "\tvur.role_name order by user_ucv_branch.username ";
+
+			Query query = session.createSQLQuery(sql)
 					.setInteger("locationId", locationId)
-					.setInteger("locationTagId", locationTagId)
-					.setMaxResults(300)
-					.list();
+					.setMaxResults(300);
+			userList = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

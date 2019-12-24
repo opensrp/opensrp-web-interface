@@ -24,7 +24,7 @@
     <i class="fa fa-angle-up"></i>
 </a>
 <!-- Logout Modal-->
-<div class="modal fade" id="exampleModal" tabindex="-1">
+<div class="modal fade" id="exampleModal" tabindex="-1" style="overflow: unset; display: inline-table; position: relative; z-index: 1050">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
