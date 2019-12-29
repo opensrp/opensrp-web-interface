@@ -13,9 +13,8 @@
 <html lang="en">
 
 <%
-    Map<Integer, String> teams =  (Map<Integer, String>)session.getAttribute("teams");
-    Integer selectedTeamId = (Integer)session.getAttribute("selectedTeamId");
     Role ss = (Role) session.getAttribute("ss");
+    Integer skId = (Integer)session.getAttribute("skId");
 %>
 
 <head>
@@ -33,20 +32,14 @@
 </head>
 
 <c:url var="saveUrl" value="/user/add.html" />
-<c:url var="cancelUrl" value="/user.html" />
-
-
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
-
+<c:url var="cancelUrl" value="/user/${skId}/${skUsername}/my-ss.html?lang=en" />
+<body>
 <div class="content-wrapper">
     <div class="container-fluid">
-        <div class="form-group">
-            <jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />
-        </div>
+
         <div class="card mb-3">
             <div class="card-header" id="data">
-                <i class="fa fa-table"></i> <spring:message code="lbl.addUser"/>
+                <i class="fa fa-table"></i> Add New SS
             </div>
             <div class="card-body">
 
@@ -56,7 +49,7 @@
                     <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
 
             </div>
-            <form:form 	modelAttribute="account" id="UserInfo" class="form-inline" autocomplete="false">
+            <form:form 	modelAttribute="account" id="SSInfo" class="form-inline" autocomplete="false">
 
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
@@ -69,15 +62,7 @@
                 <div class="row col-12 tag-height">
                     <div class="form-group">
                         <label class="label-width" for="lastName"> <spring:message code="lbl.lastName"/> </label>
-                        <form:input path="lastName" class="form-control mx-sm-3"
-                                    />
-                    </div>
-                </div>
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group">
-                        <label class="label-width" for="email"> <spring:message code="lbl.email"/> </label>
-                        <form:input path="email" type="email" class="form-control mx-sm-3" name="email">
+                        <form:input path="lastName" class="form-control mx-sm-3"/>
                     </div>
                 </div>
 
@@ -88,28 +73,23 @@
                     </div>
                 </div>
 
+
+
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
-                        <label class="label-width"  for="role">
-                            <spring:message code="lbl.role"/>
-                        </label>
-                        <select onchange="isSS()"
-                                id="role"
-                                class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="role" required>
-                            <c:forEach items="${roles}" var="role">
-                                <option value="${role.id}">${role.name}</option>
-                            </c:forEach>
-                        </select>
+                        <label class="label-width" for="username">SK Username</label>
+                        <form:input path="username" type="text" class="form-control mx-sm-3"
+                                    required="required" value="${skUsername}" readonly="true"/>
+
                     </div>
                 </div>
 
-                <div class="row col-12 tag-height" id="ssOption" style="display: none;">
-                    <div class="form-group">
+                <div class="row col-12 tag-height" id="ssOption">
+                    <div class="form-group required">
                         <label class="label-width" for="ssNo"><spring:message code="lbl.ssNo"/></label>
                         <select id="ssNo"
                                 class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="ssNo">
+                                name="ssNo" required>
                             <option value="">Please Select SS No</option>
                             <option value="-SS-1">SS-1</option>
                             <option value="-SS-2">SS-2</option>
@@ -121,56 +101,13 @@
                             <option value="-SS-8">SS-8</option>
                             <option value="-SS-9">SS-9</option>
                             <option value="-SS-10">SS-10</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row col-12 tag-height" id="_enableSimprint">
-						<div class="form-group">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.enableSimprint"/></label>
-							<form:checkbox class="checkBoxClass form-check-input"
-										   path="enableSimPrint" />
-						</div>
-				</div>
 
-                <div class="row col-12 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width" for="username"><spring:message code="lbl.userName"/></label>
-                        <form:input path="username" class="form-control mx-sm-3"
-                                    required="required" />
-                        <small id="usernameHelpInline" class="text-muted text-para">
-                            <spring:message code="lbl.userMessage"/>
-                        </small>
+                        </select>
                     </div>
                 </div>
 
                 <form:hidden path="parentUser" id="parentUser"/>
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width" for="password"><spring:message code="lbl.password"/></label>
-                        <input type="password" class="form-control mx-sm-3" id="password" name="password"  required />
-                        <small id="passwordHelpInline" class="text-muted text-para">
-                                <%-- <spring:message code="lbl.passwordMEssage"/> --%>
-
-                        </small>
-                        <input type="checkbox" onclick="toggleVisibilityOfPassword()">Show Password
-                    </div>
-                </div>
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width"  for="retypePassword"><spring:message code="lbl.confirmedPassword"/></label>
-                        <form:password path="retypePassword" class="form-control mx-sm-3" id="retypePassword"
-                                       required="required" />
-                        <small id="confirmPasswordHelpInline" class="text-muted text-para">
-                            <span class="text-red" id="passwordNotmatchedMessage"></span> 
-                            <spring:message code="lbl.retypePasswordMessage"/>
-                        </small>
-                    </div>
-
-                </div>
-
-                <div class="row col-12 tag-height">
+                <div class="row col-12 tag-height" hidden>
                     <div class="form-group required">
                         <label class="label-width"  for="branches">
                             <spring:message code="lbl.branches"/>
@@ -179,35 +116,12 @@
                                 class="form-control mx-sm-3 js-example-basic-multiple"
                                 name="branches" multiple="multiple" required>
                             <c:forEach items="${branches}" var="branch">
-                                <option value="${branch.id}">${branch.name} (${branch.code})</option>
+                                <option value="${branch.id}" selected>${branch.name} (${branch.code})</option>
                             </c:forEach>
                         </select>
                     </div>
                 </div>
 
-                <%-- <div class="row col-12 tag-height" id="teamDiv" style="display:none">
-                    <div class="form-group">
-                        <label class="label-width" for="team"><spring:message code="lbl.cc"/></label>
-                        <select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
-                            <option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
-                            <%
-                                for (Map.Entry<Integer, String> entry : teams.entrySet())
-                                {
-                                    if(selectedTeamId==entry.getKey()){ %>
-                            <option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
-                            <% }else{
-                            %>
-                            <option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
-                            <%
-                                    }
-
-                                }
-                            %>
-                        </select>
-                    </div>
-
-                </div> --%>
-                <!--end: for team -->
 
 
                 <div class="row col-12 tag-height">
@@ -220,13 +134,13 @@
                     <div class="form-group">
                         <input
                                 type="submit"
-                                onclick="return Validate()"
+
                                 value="<spring:message code="lbl.save"/>"
                                 class="btn btn-primary btn-block btn-center" />
                     </div>
                     <div class="form-group">
-	                    	<a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
-	                 </div>
+                        <a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
+                    </div>
                 </div>
             </form:form>
         </div>
@@ -235,8 +149,6 @@
 </div>
 <!-- /.container-fluid-->
 <!-- /.content-wrapper-->
-
-<jsp:include page="/WEB-INF/views/footer.jsp" />
 <%-- <script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js'/>"></script> --%>
 
@@ -258,29 +170,6 @@
 
 
 <script type="text/javascript">
-$('#_enableSimprint').hide();
-    function isSS() {    	
-        var selectedRoleId = $('#role').val();
-        var selectedRoleName = $('#role option:selected').text();        
-        var ssId = <%=ss.getId()%>;       
-        if(selectedRoleName == "SK"){        	
-        	$('#_enableSimprint').show();        	 
-        }else{ 
-        	$('input[type="checkbox"][name="enableSimPrint"]').prop("checked", false).change();
-            $('#_enableSimprint').hide();
-        }
-        if (selectedRoleName != "SS") {
-            $('#ssNo').val("");
-            $('#ssNo').trigger('change');
-            $('#ssOption').hide();
-            $("#ssNo").prop('required',false);
-        } else {
-            $('#ssOption').show();
-            $("#ssNo").prop('required',true);
-        }
-        
-        
-    }
 
     function toggleVisibilityOfPassword() {
         var password = document.getElementById("password");
@@ -296,46 +185,36 @@ $('#_enableSimprint').hide();
 
     function getBranches() {
         var branches = $('#branches').val();
-        var selectedBranches = "";
-        branches.forEach(function(branch){
-            selectedBranches += parseInt(branch) + ",";
-        });
-        if (selectedBranches.length > 0) selectedBranches = selectedBranches.slice(0, -1);
-        return selectedBranches;
+        return branches;
     }
 
-    $("#UserInfo").submit(function(event) {
+    $("#SSInfo").submit(function(event) {
         $("#loading").show();
         var url = "/opensrp-dashboard/rest/api/v1/user/save";
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
         var formData;
         var enableSimPrint = false;
-        if ($('#enableSimPrint1').is(":checked"))
-        {
-        	enableSimPrint = true;
-        }
-		
+        var skId = <%=skId%>;
+
+        var ssRole = <%=ss.getId()%>;
+        var username = $('input[name=username]').val();
         formData = {
             'firstName': $('input[name=firstName]').val(),
             'lastName': $('input[name=lastName]').val(),
-            'email': $('input[name=email]').val(),
+            'email': '',
             'mobile': $('input[name=mobile]').val(),
-            'username': $('input[name=username]').val(),
-            'password': $('input[name=password]').val(),
-            'parentUser': $('input[name=parentUser]').val(),
+            'username': username,
+            'password': "###",
+            'parentUser': skId,
             'ssNo': $('#ssNo').val(),
-            'roles': $('#role').val(),
-            'team': $('#team').val(),
+            'roles': ssRole,
+            'team': "",
             'teamMember': false,
             'branches': getBranches(),
             'enableSimPrint': enableSimPrint
         };
-
         event.preventDefault();
-
-        console.log(formData);
-
         $.ajax({
             contentType : "application/json",
             type: "POST",
@@ -348,10 +227,13 @@ $('#_enableSimprint').hide();
                 xhr.setRequestHeader(header, token);
             },
             success : function(data) {
-                $("#usernameUniqueErrorMessage").html(data);
+                if(data!=""){
+                    $("#usernameUniqueErrorMessage").html("This SS already exists");
+                }
+
                 $("#loading").hide();
                 if(data == ""){
-                    window.location.replace("/opensrp-dashboard/user.html");
+                    window.location.replace("/opensrp-dashboard/user/"+skId+"/"+username+"/my-ss.html?lang=en");
                 }
 
             },
@@ -367,13 +249,13 @@ $('#_enableSimprint').hide();
     function Validate() {
         var password = document.getElementById("password").value;
         var confirmPassword = document.getElementById("retypePassword").value;
-        if (password != confirmPassword) {        	
+        if (password != confirmPassword) {
             $("#usernameUniqueErrorMessage").html("Your password is not similar with confirm password. Please enter same password in both");
-			return false;
+            return false;
         }else{
 
-        $("#passwordNotMatchedMessage").html("");
-        return true;
+            $("#passwordNotMatchedMessage").html("");
+            return true;
         }
     }
 

@@ -765,6 +765,7 @@ public class UserController {
 		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
 		List<UserDTO> users = userServiceImpl.getChildUserFromParent(skId, "SS");
 		List<UserDTO> ssWithoutCatchment = userServiceImpl.getSSWithoutCatchmentArea(skId);
+		System.err.println(skUsername);
 		model.addAttribute("skUsername", skUsername);
 		model.addAttribute("branches", branches);
 		model.addAttribute("skId", skId);
@@ -791,6 +792,8 @@ public class UserController {
 		//for adding location and team
 		model.addAttribute("teamMember", new TeamMember());
 		model.addAttribute("branches", branches);
+		model.addAttribute("skId", skId);
+		System.err.println(skUsername);
 		String personName = "";
 		model.addAttribute("locale", locale);
 		model.addAttribute("roles", roles);
@@ -806,7 +809,7 @@ public class UserController {
 		}
 		model.addAttribute("skUsername", skUsername);
 		//end: adding location and team
-		return new ModelAndView("user/add-ss", "command", account);
+		return new ModelAndView("user/add-ss-ajax", "command", account);
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
@@ -834,7 +837,7 @@ public class UserController {
 		
 		session.setAttribute("selectedBranches", account.getBranches());
 		
-		return new ModelAndView("user/edit-SS", "command", account);
+		return new ModelAndView("user/edit-ss-ajax", "command", account);
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")
