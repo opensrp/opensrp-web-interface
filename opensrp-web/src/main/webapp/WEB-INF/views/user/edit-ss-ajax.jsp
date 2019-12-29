@@ -15,8 +15,8 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title><spring:message code="lbl.editUserTitle"/></title>
+    <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -29,8 +29,8 @@
 
 <body>
 
-<div class="content-wrapper">
-    <div class="container-fluid">
+<div class="content-wrapper" style="min-height: auto !important;">
+    <div class="container-fluid" style="padding-bottom: 20px !important;">
 
         <div class="card mb-3">
             <div class="card-header">
@@ -95,5 +95,6 @@
 </body>
 
 <script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
+<script src="<c:url value='/resources/js/select2.js' />"></script>
 <script src="<c:url value='/resources/js/user-ss.js'/>"></script>
 </html>

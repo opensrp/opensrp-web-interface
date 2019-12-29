@@ -4,9 +4,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
-<%@page import="java.util.List"%>
-<%@page import="java.util.Map"%>
 <%@page import="org.opensrp.core.entity.Role"%>
 
 <!DOCTYPE html>
@@ -22,21 +19,15 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link type="text/css" href="<c:url value="/resources/css/magicsuggest-min.css"/>" rel="stylesheet">
-    <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <!-- default header name is X-CSRF-TOKEN -->
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
     <title><spring:message code="lbl.addUserTitle"/></title>
+    <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
-<c:url var="saveUrl" value="/user/add.html" />
 <c:url var="cancelUrl" value="/user/${skId}/${skUsername}/my-ss.html?lang=en" />
 <body>
-<div class="content-wrapper">
-    <div class="container-fluid">
-
+<div class="content-wrapper" style="min-height: auto !important;">
+    <div class="container-fluid" style="padding-bottom: 20px !important;">
         <div class="card mb-3">
             <div class="card-header" id="data">
                 <i class="fa fa-table"></i> Add New SS
@@ -46,7 +37,8 @@
                 <span class="text-red" id="usernameUniqueErrorMessage"></span>
 
                 <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
-                    <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
+                    <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+                </div>
 
             </div>
             <form:form 	modelAttribute="account" id="SSInfo" class="form-inline" autocomplete="false">
@@ -105,8 +97,7 @@
                         </select>
                     </div>
                 </div>
-
-                <form:hidden path="parentUser" id="parentUser"/>
+                <input id="parentUser" value="${skId}" hidden/>
                 <div class="row col-12 tag-height" hidden>
                     <div class="form-group required">
                         <label class="label-width"  for="branches">
@@ -121,7 +112,6 @@
                         </select>
                     </div>
                 </div>
-
 
 
                 <div class="row col-12 tag-height">
@@ -139,132 +129,16 @@
                                 class="btn btn-primary btn-block btn-center" />
                     </div>
                     <div class="form-group">
-                        <a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
+                        <a href="#" rel="modal:close" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
                     </div>
                 </div>
             </form:form>
         </div>
-
     </div>
 </div>
-<!-- /.container-fluid-->
-<!-- /.content-wrapper-->
-<%-- <script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
-<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script> --%>
-
-<!-- Bootstrap core JavaScript-->
-<script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.bundle.min.js'/>"></script>
-<script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.min.js'/>"></script>
-
-<!-- Core plugin JavaScript-->
-<%-- <script src="<c:url value='/resources/vendor/jquery-easing/jquery.easing.min.js'/>"></script>
- --%>
-
-<!-- Custom scripts for all pages-->
-<%-- <script src="<c:url value='/resources/js/sb-admin.min.js'/>"></script>
- --%><!-- Custom scripts for this page-->
-<%-- <script src="<c:url value='/resources/js/sb-admin-datatables.min.js'/>"></script> --%>
-<script src="<c:url value='/resources/js/location.js'/>"></script>
-<script src="<c:url value='/resources/js/checkbox.js'/>"></script>
-<script src="<c:url value='/resources/js/select2.js' />"></script>
-
-
-<script type="text/javascript">
-
-    function toggleVisibilityOfPassword() {
-        var password = document.getElementById("password");
-        var retypePassword = document.getElementById("retypePassword");
-        if (password.type === "password") {
-            password.type = "text";
-            retypePassword.type = "text";
-        } else {
-            password.type = "password";
-            retypePassword.type = "password";
-        }
-    }
-
-    function getBranches() {
-        var branches = $('#branches').val();
-        return branches;
-    }
-
-    $("#SSInfo").submit(function(event) {
-        $("#loading").show();
-        var url = "/opensrp-dashboard/rest/api/v1/user/save";
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
-        var formData;
-        var enableSimPrint = false;
-        var skId = <%=skId%>;
-
-        var ssRole = <%=ss.getId()%>;
-        var username = $('input[name=username]').val();
-        formData = {
-            'firstName': $('input[name=firstName]').val(),
-            'lastName': $('input[name=lastName]').val(),
-            'email': '',
-            'mobile': $('input[name=mobile]').val(),
-            'username': username,
-            'password': "###",
-            'parentUser': skId,
-            'ssNo': $('#ssNo').val(),
-            'roles': ssRole,
-            'team': "",
-            'teamMember': false,
-            'branches': getBranches(),
-            'enableSimPrint': enableSimPrint
-        };
-        event.preventDefault();
-        $.ajax({
-            contentType : "application/json",
-            type: "POST",
-            url: url,
-            data: JSON.stringify(formData),
-            dataType : 'json',
-
-            timeout : 100000,
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader(header, token);
-            },
-            success : function(data) {
-                if(data!=""){
-                    $("#usernameUniqueErrorMessage").html("This SS already exists");
-                }
-
-                $("#loading").hide();
-                if(data == ""){
-                    window.location.replace("/opensrp-dashboard/user/"+skId+"/"+username+"/my-ss.html?lang=en");
-                }
-
-            },
-            error : function(e) {
-
-            },
-            done : function(e) {
-                console.log("DONE");
-            }
-        });
-    });
-
-    function Validate() {
-        var password = document.getElementById("password").value;
-        var confirmPassword = document.getElementById("retypePassword").value;
-        if (password != confirmPassword) {
-            $("#usernameUniqueErrorMessage").html("Your password is not similar with confirm password. Please enter same password in both");
-            return false;
-        }else{
-
-            $("#passwordNotMatchedMessage").html("");
-            return true;
-        }
-    }
-
-</script>
-
-<script>
-    $(document).ready(function() {
-        $('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
-    });
-</script>
 </body>
+
+<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
+<script src="<c:url value='/resources/js/select2.js' />"></script>
+<script src="<c:url value='/resources/js/user-ss.js' />"></script>
 </html>

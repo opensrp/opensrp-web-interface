@@ -6,6 +6,13 @@ var currentRow = -1;
 $(document).ready(function () {
     $('#locationTree').jstree();
     $('#locations').multiSelect();
+
+    $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#ssTable tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
 });
 
 $('#locations').change(function(){
@@ -30,9 +37,9 @@ function catchmentLoad(ssId, term) {
         $('#catchment-area').modal({
             escapeClose: false,
             clickClose: false,
+            showClose: false,
             show: true
         });
-
     }
     var url = "/opensrp-dashboard/rest/api/v1/user/"+ssId+"/catchment-area";
     var token = $("meta[name='_csrf']").attr("content");
@@ -349,10 +356,7 @@ function ssForm(skId, skUsername) {
         showClose: false,
         show: true
     });
-    $('#add-ss-body').html("");
-
     var url = "/opensrp-dashboard/user/add-SS.html?skId=" + skId + "&skUsername=" + skUsername;
-
     $.ajax({
         type: "GET",
         contentType: "application/json",
@@ -385,8 +389,6 @@ function ssEditForm(skId, skUsername, ssId, locale) {
         showClose: false,
         show: true
     });
-    $('#edit-ss-body').html("");
-
     var url = "/opensrp-dashboard/user/"+skUsername+"/"+skId+"/"+ssId+"/edit-SS.html?lang="+locale;
 
     $.ajax({
@@ -413,22 +415,71 @@ function ssEditForm(skId, skUsername, ssId, locale) {
 }
 
 function getBranches() {
-    var branches = $('#branches-for-save').val();
+    var branches = $('#branches').val();
     return branches;
 }
 
-function Validate() {
-    var password = document.getElementById("password").value;
-    var confirmPassword = document.getElementById("retypePassword").value;
-    if (password != confirmPassword) {
-        $("#usernameUniqueErrorMessage").html("Your password is not similar with confirm password. Please enter same password in both");
-        return false;
-    }else{
+$("#SSInfo").submit(function(event) {
+    $("#loading").show();
+    var url = "/opensrp-dashboard/rest/api/v1/user/save";
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    var formData;
+    var enableSimPrint = false;
+    var skId = $('#parentUser').val();
+    console.log("SK ID: "+ skId);
 
-        $("#passwordNotMatchedMessage").html("");
-        return true;
-    }
-}
+    var ssRole = '29';
+    var username = $('input[name=username]').val();
+    formData = {
+        'firstName': $('input[name=firstName]').val(),
+        'lastName': $('input[name=lastName]').val(),
+        'email': '',
+        'mobile': $('input[name=mobile]').val(),
+        'username': username,
+        'password': "####",
+        'parentUser': skId,
+        'ssNo': $('#ssNo').val(),
+        'roles': ssRole,
+        'teamMember': false,
+        'branches': getBranches(),
+        'enableSimPrint': enableSimPrint
+    };
+    event.preventDefault();
+    $.ajax({
+        contentType : "application/json",
+        type: "POST",
+        url: url,
+        data: JSON.stringify(formData),
+        dataType : 'json',
+
+        timeout : 100000,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        success : function(data) {
+            if(data==""){
+                $("#usernameUniqueErrorMessage").html("This SS already exists");
+            }
+
+            $("#loading").hide();
+            if(data != ""){
+                var ssId = data;
+                $.modal.getCurrent().close();
+                catchmentLoad(ssId, 0);
+                // window.location.replace("/opensrp-dashboard/user/"+skId+"/"+username+"/my-ss.html?lang=en");
+            }
+
+        },
+        error : function(e) {
+
+        },
+        done : function(e) {
+            console.log("DONE");
+        }
+    });
+});
+
 
 $(document).ready(function() {
     $('.js-example-basic-multiple').select2({dropdownAutoWidth : true});

@@ -186,19 +186,21 @@ $("#AddSk").submit(function(event) {
             xhr.setRequestHeader(header, token);
         },
         success : function(data) {
-        	if(data!=""){
+        	if(data==""){
        		 $("#usernameUniqueErrorMessage").html("This SK already exists");
         	}
             $("#loading").hide();
-            if(data == ""){
+            if(data != ""){
+                var skId = data;
+                console.log(data);
             	 $('#add-sk-modal').modal({    	
             	        escapeClose: false,
             	        clickClose: false,
             	        showClose: false,
             	        show: false
             	    });
-            	catchmentLoad(0,0);
-                //window.location.replace("/opensrp-dashboard/user/sk-list.html");
+            	catchmentLoad(skId, 0);
+                // window.location.replace("/opensrp-dashboard/user/sk-list.html");
             }
 
         },

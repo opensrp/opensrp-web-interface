@@ -55,29 +55,25 @@
                     <spring:message code="lbl.ss"/>
                 </strong>
             </a> <%} %>
-<%--            <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>--%>
-<%--            <a  href="<c:url value="/user/add-SS.html?skId=${skId}&skUsername=${skUsername}&lang=${locale}"/>">--%>
-<%--                <strong>--%>
-<%--                    <spring:message code="lbl.addNew"/>--%>
-<%--                    <spring:message code="lbl.ss"/>--%>
-<%--                </strong> </a> <%} %>--%>
         </div>
 
         <!-- Modal for add new SS -->
-        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050;"
+        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050; min-height: 300px;"
              id="add-ss" class="modal">
             <div id="add-ss-body">
-                <div style="display: none;position: absolute; z-index: 1000;margin-left:45%">
-                    <img width="90px" height="90px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
+                <div style="position: absolute; margin-left:45%; margin-top: 105px;">
+                    <img width="90px" height="90px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+                </div>
             </div>
         </div>
 
         <!-- Modal for edit SS -->
-        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050;"
+        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050; min-height: 300px;"
              id="edit-ss" class="modal">
             <div id="edit-ss-body">
-                <div style="display: none;position: absolute; z-index: 1000;margin-left:45%">
-                    <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
+                <div style="position: absolute; margin-left:45%; margin-top: 105px;">
+                    <img width="90px" height="90px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+                </div>
             </div>
         </div>
 
@@ -154,7 +150,12 @@
         <!-- Example DataTables Card-->
         <div class="card mb-3">
             <div class="card-header">
-                SS List
+                <div style="float: left; padding: 3px;">
+                    <h5>SS List</h5>
+                </div>
+                <div style="float: right;">
+                    <input id="myInput" class="form-control input-sm" type="text" placeholder="Search..">
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -169,7 +170,7 @@
                             <th><spring:message code="lbl.action"></spring:message></th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="ssTable">
                         <%
                             if (users != null){
                                 for (UserDTO user: users) {
@@ -189,16 +190,10 @@
                             <td>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
                                 <a href="#" onclick="ssEditForm(${skId}, '${skUsername}', ${ssId}, '${locale}')"><spring:message code="lbl.edit"/></a> |  <%} %>
-<%--                                <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>--%>
-<%--                                <a href="<c:url value="/user/${skUsername}/${skId}/${ssId}/edit-SS.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>--%>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
                                 <a href="#" onclick="catchmentLoad(${ssId}, ${0})"><spring:message code="lbl.catchmentArea"/></a> | <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
                                 <a href="#" onclick="changeSK(${ssId})"><spring:message code="lbl.changeSK"/></a> <%} %>
-
-                            <%--                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>--%>
-<%--                                <a href="<c:url value="/user/${ssId}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>--%>
-                               
                             </td>
                         </tr>
                         <%
@@ -211,56 +206,6 @@
             </div>
             <div class="card-footer small text-muted"></div>
         </div>
-
-        <br>
-        <br>
-<%--        <!-- Example DataTables Card-->--%>
-<%--        <div class="card mb-3">--%>
-<%--            <div class="card-header">--%>
-<%--                <spring:message code="lbl.ssWithoutCatchment"/>--%>
-<%--            </div>--%>
-<%--            <div class="card-body">--%>
-<%--                <div class="table-responsive">--%>
-<%--                    <table class="display">--%>
-<%--                        <thead>--%>
-<%--                        <tr>--%>
-<%--                            <th><spring:message code="lbl.fullName"></spring:message></th>--%>
-<%--                            <th><spring:message code="lbl.userName"></spring:message></th>--%>
-<%--                            <th><spring:message code="lbl.phoneNumber"></spring:message></th>--%>
-<%--                            <th><spring:message code="lbl.branches"></spring:message></th>--%>
-<%--                            <th><spring:message code="lbl.action"></spring:message></th>--%>
-<%--                        </tr>--%>
-<%--                        </thead>--%>
-<%--                        <tbody>--%>
-<%--                        <%--%>
-<%--                            if (users != null){--%>
-<%--                                for (UserDTO user: ssWithoutCatchment) {--%>
-<%--                                    Integer id = user.getId();--%>
-<%--                                    session.setAttribute("ssId", id);--%>
-<%--                        %>--%>
-<%--                        <tr>--%>
-<%--                            <td><%=user.getFullName()%></td>--%>
-<%--                            <td><%=user.getUsername()%></td>--%>
-<%--                            <td><%=user.getMobile()%></td>--%>
-<%--                            <td><%=user.getBranches()%></td>--%>
-<%--                            <td>--%>
-<%--                                <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>--%>
-<%--                                <a href="<c:url value="/user/${skUsername}/${skId}/${ssId}/edit-SS.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>--%>
-<%--                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>--%>
-<%--                                <a href="<c:url value="/user/${ssId}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>--%>
-<%--                               --%>
-<%--                            </td>--%>
-<%--                        </tr>--%>
-<%--                        <%--%>
-<%--                                }--%>
-<%--                            }--%>
-<%--                        %>--%>
-<%--                        </tbody>--%>
-<%--                    </table>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--            <div class="card-footer small text-muted"></div>--%>
-<%--        </div>--%>
     </div>
 </div>
 <jsp:include page="/WEB-INF/views/footer.jsp" />

@@ -62,7 +62,11 @@
 
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle mr-lg-2" href="<c:url value="/?lang=${locale}"/>" >
+					<% if (AuthenticationManagerUtil.isAM()) {%>
+					<strong><spring:message code="lbl.skList"/></strong>
+					<%} else {%>
 					<strong><spring:message code="lbl.home"/></strong>
+					<%}%>
 				</a>
 			</li>
 
@@ -359,7 +363,7 @@
 				</div>
 			</li> --%>
 			<li class="nav-item"><a class="nav-link" data-toggle="modal"
-									data-target="#exampleModal">(<%=user.getUsername()%>) <i class="fa fa-fw fa-sign-out"></i><spring:message code="lbl.logout"/>
+									data-target="#exampleModal">(<%=user.getFullName()%>) <i class="fa fa-fw fa-sign-out"></i><spring:message code="lbl.logout"/>
 			</a></li>
 		</ul>
 	</div>

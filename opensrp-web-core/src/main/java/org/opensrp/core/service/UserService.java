@@ -14,6 +14,10 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +48,9 @@ public class UserService {
 
 	@Autowired
 	private TeamService teamService;
+
+	@Autowired
+	private SessionFactory sessionFactory;
 
 	@Autowired
 	private TeamMemberService teamMemberServiceImpl;
@@ -135,6 +142,77 @@ public class UserService {
 			user.setProvider(false);
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			createdUser = repository.save(user);
+		}
+
+		return createdUser;
+	}
+
+	public User save(User user) throws Exception {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			session.save(user);
+			logger.info("saved successfully: " + user.getClass().getName());
+			if (!tx.wasCommitted())
+				tx.commit();
+		}
+		catch (HibernateException e) {
+			tx.rollback();
+			logger.error(e);
+			throw new Exception(e.getMessage());
+		}
+		finally {
+			session.close();
+
+		}
+		return user;
+	}
+
+	@Transactional
+	public User save(User user, boolean isUpdate) throws Exception {
+		User createdUser = new User();
+		Set<Role> roles = user.getRoles();
+		boolean isAdminOrSS = roleServiceImpl.isOpenMRSRole(roles);
+		String query = "v=full&username=" + user.getUsername();
+		if (!isAdminOrSS) {
+			JSONArray existingOpenMRSUser = openMRSServiceFactory.getOpenMRSConnector("user").getByQuery(query);
+			if (existingOpenMRSUser.length() == 0) {
+				user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
+				if (!StringUtils.isBlank(user.getUuid())) {
+					user.setPassword(passwordEncoder.encode(user.getPassword()));
+					user.setProvider(true);
+					createdUser = save(user);
+				} else {
+					logger.error("No uuid found for user:" + user.getUsername());
+				}
+			} else {
+				JSONObject userOb = (JSONObject) existingOpenMRSUser.get(0);
+				String existingUserUUid = (String) userOb.get("uuid");
+				JSONObject person = (JSONObject) userOb.get("person");
+				String existingUserPersonUUid = (String) person.get("uuid");
+				user.setProvider(true);
+				user.setUuid(existingUserUUid);
+				user.setPersonUUid(existingUserPersonUUid);
+				if (StringUtils.isBlank(user.getUuid())) {
+					existingOpenMRSUser = openMRSServiceFactory.getOpenMRSConnector("user").getByQuery(query);
+					if (existingOpenMRSUser.length() == 0) {
+						user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
+					}
+				} else {
+					openMRSServiceFactory.getOpenMRSConnector("user").update(user, existingUserUUid, userOb);
+				}
+
+				if (!isUpdate) {
+					user.setPassword(passwordEncoder.encode(user.getPassword()));
+				}
+				createdUser = save(user);
+			}
+
+		} else {
+			user.setProvider(false);
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			createdUser = save(user);
 		}
 
 		return createdUser;
@@ -323,8 +401,8 @@ public class UserService {
 		// from user rest controller -- April 11, 2019
 		user.setChcp(facility.getId() + "");
 		logger.info(" \nUser : " + user.toString() + "\n");
-		int numberOfUserSaved = (int) save(user, false);
-		logger.info("\nNumUSER: " + numberOfUserSaved + " \nUser : " + user.toString() + "\n");
+//		int numberOfUserSaved = (int) save(user, false);
+//		logger.info("\nNumUSER: " + numberOfUserSaved + " \nUser : " + user.toString() + "\n");
 
 		// get facility by name from team table and then add it to team member
 		Team team = new Team();
@@ -356,11 +434,11 @@ public class UserService {
 		String mailBody = "Dear " + user.getFullName()
 		        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + user.getUsername()
 		        + "\npassword : " + password;
-		if (numberOfUserSaved > 0) {
-			logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
-			emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
-
-		}
+//		if (numberOfUserSaved > 0) {
+//			logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
+//			emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
+//
+//		}
 		return user;
 	}
 

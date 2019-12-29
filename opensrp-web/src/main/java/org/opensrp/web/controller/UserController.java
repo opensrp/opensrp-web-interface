@@ -802,6 +802,7 @@ public class UserController {
 		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
 		session.setAttribute("ss", ss);
 		session.setAttribute("skId", skId);
+		model.addAttribute("skId", skId);
 		System.err.println("skId:::::" + skId);
 		String redirectUrl = "redirect:/user/sk-list.html";
 		if (StringUtils.isBlank(skUsername)) {

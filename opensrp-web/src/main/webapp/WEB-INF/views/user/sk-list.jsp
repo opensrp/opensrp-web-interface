@@ -105,10 +105,15 @@
         <!-- Example DataTables Card-->
         <div class="card mb-3">
             <div class="card-header">
-                SK List
+                <div style="float: left; padding: 3px;">
+                    <h5>SK List</h5>
+                </div>
+                <div style="float: right;">
+                    <input id="myInput" class="form-control input-sm" type="text" placeholder="Search..">
+                </div>
             </div>
             <div class="card-body">
-                <div class="table-responsive" style="overflow-x: auto;">
+                <div class="table-responsive" style="overflow-x: auto;" id="myTableDIV">
                     <table class="display" id="userList">
                         <thead>
                         <tr>
@@ -120,7 +125,7 @@
                             <th><spring:message code="lbl.action"></spring:message></th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="skTable">
                         <%
                             if (users != null){
                                 for (UserDTO user: users) {
@@ -143,8 +148,6 @@
                                 <a href="#" onclick="userLoad(${skId})" ><spring:message code="lbl.edit"/></a> |  <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
                                 <a href="#" onclick="catchmentLoad(${skId}, ${0})" id = "catchment-modal"><spring:message code="lbl.catchmentArea"/></a> <%} %>
-<%--                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>--%>
-<%--                                | <a href="<c:url value="/user/${skId}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>--%>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
                                 | <a href="<c:url value="/user/${skId}/change-password.html?lang=${locale}"/>"><spring:message code="lbl.changePassword"/></a> <%} %>
                                 | <a href="<c:url value="/user/${skId}/${skUsername}/my-ss.html?lang=${locale}"/>"><spring:message code="lbl.ssList"/></a>
@@ -197,6 +200,13 @@
         }
         $('#locationTree').jstree();
         $('#locations').multiSelect();
+
+        $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#skTable tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
     });
 
     function userLoad(skId) {
@@ -216,8 +226,8 @@
             showClose: false,
             show: true
         });
-    }    
-    
+    }
+
     function catchmentLoad(skId, term) {
         currentSK = skId;
         $('#locationTree').jstree(true).destroy();

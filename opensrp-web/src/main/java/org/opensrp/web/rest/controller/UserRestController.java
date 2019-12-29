@@ -71,17 +71,14 @@ public class UserRestController {
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO,
 	                                       ModelMap model) throws Exception {
-		
-		//TeamMember teamMember = new TeamMember();
 		String userNameUniqueError = "";
-		//Team team = new Team();
 		try {
 			User user = userMapper.map(userDTO);
 			User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 			user.setCreator(loggedInUser);
 			boolean isExists = userServiceImpl.isUserExist(user.getUsername());
 			if (!isExists) {
-				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
+				User createdUser = userServiceImpl.save(user, false);
 				//				String mailBody = "Dear " + user.getFullName()
 				//						+ ",\n\nYour login credentials for HNPP are given below -\nusername : " + user.getUsername()
 				//						+ "\npassword : " + userDTO.getPassword();
@@ -89,14 +86,11 @@ public class UserRestController {
 				//					logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
 				//					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
 				//				}
-
-			} else {
-				userNameUniqueError = "User name already taken.";
+				userNameUniqueError = String.valueOf(createdUser.getId());
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			userNameUniqueError = "Some problem occurred please contact with Admin";
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}
@@ -135,7 +129,7 @@ public class UserRestController {
 				user.setChcp(facility.getId() + "");
 				firstName = user.getFirstName();
 				lastName = user.getLastName();
-				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
+//				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
 				String[] locations = userDTO.getLocationList().split(",");
 				int[] locationList = new int[locations.length];
 				for (int i = 0; i < locations.length; i++) {
@@ -158,10 +152,10 @@ public class UserRestController {
 				        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + user.getUsername()
 				        + "\npassword : " + userDTO.getPassword();
 
-				if (numberOfUserSaved > 0) {
-					logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
-					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
-				}
+//				if (numberOfUserSaved > 0) {
+//					logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
+//					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
+//				}
 				
 			} else {
 				userNameUniqueError = "User name already taken.";
@@ -241,8 +235,6 @@ public class UserRestController {
 		Integer userLocationId = 0;
 		if (user.getParentUser() != null) {
 			userLocationId = user.getParentUser().getId();
-		} else {
-			userLocationId = loggedInUser.getId();
 		}
 		JSONArray locationTree = locationService.getLocationWithDisableFacility(session, parentIndication, parentKey,
 				userAssignedLocationDTOS, id, role, userLocationId!=0?userLocationId:loggedInUser.getId(), roleId);

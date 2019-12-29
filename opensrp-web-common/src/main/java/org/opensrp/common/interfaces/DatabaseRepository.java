@@ -12,9 +12,7 @@ import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.dto.UserAssignedLocationDTO;
 import org.opensrp.common.util.SearchBuilder;
-
-
-
+import org.springframework.security.core.userdetails.User;
 
 import javax.servlet.http.HttpSession;
 import javax.xml.stream.Location;

@@ -106,12 +106,10 @@
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
                         <label class="label-width" for="password"><spring:message code="lbl.password"/></label>
-                        <input type="password" class="form-control mx-sm-3" id="password" name="password"  required />
+                        <input type="text" class="form-control mx-sm-3" id="password" name="password"  required />
                         <small id="passwordHelpInline" class="text-muted text-para">
-                                <%-- <spring:message code="lbl.passwordMEssage"/> --%>
-
                         </small>
-                        <input type="checkbox" onclick="toggleVisibilityOfPassword()">Show Password
+                        <input type="checkbox" checked onclick="toggleVisibilityOfPassword()">Show Password
                     </div>
                 </div>
                 <input type="hidden" name="skRole" value="<%=sk.getId()%>">
@@ -119,9 +117,9 @@
 
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
-                        <label class="label-width"  for="retypePassword"><spring:message code="lbl.confirmedPassword"/></label>
-                        <form:password path="retypePassword" class="form-control mx-sm-3" id="retypePassword"
-                                       required="required" />
+                        <label class="label-width" for="retypePassword"><spring:message code="lbl.confirmedPassword"/></label>
+                        <input type="text" class="form-control mx-sm-3" id="retypePassword" name="retypePassword"  required />
+
                         <small id="confirmPasswordHelpInline" class="text-muted text-para">
                             <span class="text-red" id="passwordNotmatchedMessage"></span> 
                             <spring:message code="lbl.retypePasswordMessage"/>
@@ -160,7 +158,7 @@
                                 class="btn btn-primary btn-block btn-center" />
                     </div>
                     <div class="form-group">
-                    <a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
+                    <a href="#" rel="modal:close" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
                     </div>
                 </div>
             </form:form>
