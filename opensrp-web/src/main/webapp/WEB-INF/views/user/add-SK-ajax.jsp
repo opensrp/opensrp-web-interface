@@ -17,7 +17,7 @@
     Role sk = (Role) session.getAttribute("sk");
 %>
 
-<head>
+<%-- <head>
     <meta charset="utf-8">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,13 +29,13 @@
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
     <title><spring:message code="lbl.addUserTitle"/></title>
     <jsp:include page="/WEB-INF/views/css.jsp" />
-</head>
+</head> --%>
 
 <c:url var="cancelUrl" value="/user/sk-list.html" />
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
-
+<%-- <jsp:include page="/WEB-INF/views/navbar.jsp" />
+ --%>
 <div class="content-wrapper">
     <div class="container-fluid">
         <div class="card mb-3">
@@ -50,7 +50,7 @@
                     <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
 
             </div>
-            <form:form 	modelAttribute="account" id="UserInfo" class="form-inline" autocomplete="false">
+            <form:form 	modelAttribute="account" id="AddSk" class="form-inline" autocomplete="false">
 
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
@@ -101,7 +101,7 @@
                     </div>
                 </div>
 
-                <form:hidden path="parentUser" id="parentUser"/>
+                <%-- <form:hidden path="parentUser" id="parentUser"/> --%>
 
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
@@ -114,6 +114,8 @@
                         <input type="checkbox" onclick="toggleVisibilityOfPassword()">Show Password
                     </div>
                 </div>
+                <input type="hidden" name="skRole" value="<%=sk.getId()%>">
+                <input type="hidden" name="amId" value="<%=amId%>">
 
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
@@ -134,8 +136,8 @@
                             <spring:message code="lbl.branches"/>
                         </label>
                         <select id="branches"
-                                class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="branches" multiple="multiple" required>
+                                class="form-control mx-sm-3"
+                                name="branches" required>
                             <c:forEach items="${branches}" var="branch">
                                 <option value="${branch.id}">${branch.name} (${branch.code})</option>
                             </c:forEach>
@@ -166,12 +168,7 @@
 
     </div>
 </div>
-
-<jsp:include page="/WEB-INF/views/footer.jsp" />
-<script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.bundle.min.js'/>"></script>
-<script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.min.js'/>"></script>
-<script src="<c:url value='/resources/js/location.js'/>"></script>
-<script src="<c:url value='/resources/js/checkbox.js'/>"></script>
+<script src="<c:url value='/resources/js/user.js'/>"></script>
 <script src="<c:url value='/resources/js/select2.js' />"></script>
 
 
@@ -199,7 +196,7 @@
         return selectedBranches;
     }
 
-    $("#UserInfo").submit(function(event) {
+   <%--  $("#UserInfo").submit(function(event) {
         $("#loading").show();
         var url = "/opensrp-dashboard/rest/api/v1/user/save";
         var token = $("meta[name='_csrf']").attr("content");
@@ -220,7 +217,7 @@
             'username': $('input[name=username]').val(),
             'password': $('input[name=password]').val(),
             'parentUser': amId,
-            'ssNo': $('#ssNo').val(),
+            'ssNo': "",
             'roles': skRole,
             'team': "",
             'teamMember': false,
@@ -261,7 +258,7 @@
             }
         });
     });
-
+  --%>
     function Validate() {
         var password = document.getElementById("password").value;
         var confirmPassword = document.getElementById("retypePassword").value;

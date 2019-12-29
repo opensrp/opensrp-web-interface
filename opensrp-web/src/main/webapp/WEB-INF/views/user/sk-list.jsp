@@ -94,8 +94,8 @@
         </div>
         
          <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050"
-             id="ad-sk" class="modal">
-            <div id="add-sk-modal"> </div>
+             id="add-sk-modal" class="modal">
+            <div id="add-sk-form"> </div>
         </div>
         
         
