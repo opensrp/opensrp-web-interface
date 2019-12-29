@@ -15,8 +15,6 @@
 								access="permitAll" />
 		<security:intercept-url pattern="/login*"
 								access="isAnonymous()" />
-		<security:intercept-url pattern="/user/check-imei"
-								access="isAnonymous()" />
 		<security:intercept-url pattern="/rest/api/v1/health-id/reserved/single"
 								access="isAnonymous()" />
 		<security:intercept-url pattern="/user/add*"

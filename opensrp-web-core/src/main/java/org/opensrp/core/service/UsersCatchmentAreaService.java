@@ -45,6 +45,12 @@ public class UsersCatchmentAreaService {
     }
 
     @Transactional
+    public <T> boolean deleteAllByKeys(List<Integer> locationIds, Integer userId) {
+        return repository.deleteAllByKeys(locationIds, userId);
+    }
+
+
+    @Transactional
     public <T> T findById(int id, String fieldName, Class<?> className) {
         return repository.findById(id, fieldName, className);
     }

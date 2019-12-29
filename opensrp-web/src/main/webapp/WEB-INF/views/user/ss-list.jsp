@@ -11,6 +11,7 @@
 <%@page import="java.util.List"%>
 <%@ page import="org.opensrp.core.entity.User" %>
 <%@ page import="org.opensrp.common.dto.UserDTO" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 
 <%
     List<UserDTO> users = (List<UserDTO>) session.getAttribute("allSS");
@@ -54,9 +55,9 @@
         </div>
 
         <!-- Modal for change SK - start -->
-        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050"
+        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050;"
              id="change-sk" class="modal">
-            <div id="modal-sk-body" class="row">
+            <div id="modal-sk-body" class="row" style="margin-top: 20px;">
                 <div class="col-6 tag-height">
                     <div class="form-group required">
                         <label class="label-width"  for="branches">
@@ -72,12 +73,14 @@
                     </div>
                 </div>
                 <div class="col-6 tag-height">
-                    <label><spring:message code="lbl.sk"/></label>
-                    <select class="custom-select custom-select-lg mb-3" id="skList" name="sk">
-                    </select>
+                    <div class="form-group required">
+                        <label class="label-width"  for="skList"><spring:message code="lbl.sk"/></label>
+                        <select class="form-control mx-sm-3 js-example-basic-multiple" id="skList" name="sk" required>
+                        </select>
+                    </div>
                 </div>
-
-                </div>
+            </div>
+            <a class="btn btn-sm btn-dark" href="#" onclick="changeParent()" style="margin-left: 10px; float: right; bottom: 0px">Change SK</a>
             <a class="btn btn-sm btn-dark" href="#" rel="modal:close" style="float: right; bottom: 0px">Close</a>
         </div>
         <!-- Modal End-->
@@ -145,18 +148,22 @@
                                 for (UserDTO user: users) {
                                     Integer id = user.getId();
                                     session.setAttribute("ssId", id);
+                                    String villages = user.getLocationList();
+                                    if (StringUtils.isBlank(villages)){
+                                    	villages = "Location not assigned";
+                                    }
                         %>
                         <tr>
                             <td><%=user.getFullName()%></td>
                             <td><%=user.getUsername()%></td>
                             <td><%=user.getMobile()%></td>
                             <td><%=user.getBranches()%></td>
-                            <td><%=user.getLocationList()%></td>
+                            <td><%=villages%></td>
                             <td>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
                                 <a href="<c:url value="/user/${skUsername}/${skId}/${ssId}/edit-SS.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-                                <a href="#" onclick="catchmentLoad(${ssId})"><spring:message code="lbl.catchmentArea"/></a> | <%} %>
+                                <a href="#" onclick="catchmentLoad(${ssId}, ${0})"><spring:message code="lbl.catchmentArea"/></a> | <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
                                 <a href="#" onclick="changeSK(${ssId})"><spring:message code="lbl.changeSK"/></a> <%} %>
 
@@ -277,18 +284,20 @@
         }
     });
 
-    function catchmentLoad(ssId) {
+    function catchmentLoad(ssId, term) {
         currentSS = ssId;
         $('#locationTree').jstree(true).destroy();
         $('#table-body').html("");
         $('#locations option').remove();
         $('#locations').multiSelect('refresh');
-        $('#catchment-area').modal({
-            escapeClose: false,
-            clickClose: false,
-            show: true
-        });
+        if (term == 0) {
+            $('#catchment-area').modal({
+                escapeClose: false,
+                clickClose: false,
+                show: true
+            });
 
+        }
         var url = "/opensrp-dashboard/rest/api/v1/user/"+ssId+"/catchment-area";
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
@@ -354,9 +363,7 @@
 
                     for (i = 0; i < assignedLocation.length; i++) {
                         var locationId = assignedLocation[i]["locationId"];
-                        if (assignedLocation[i]["userId"] != ssId) {
-                            $("#locations option[value="+locationId+"]").attr("disabled", 'disabled');
-                        }
+                        $("#locations option[value="+locationId+"]").attr("disabled", 'disabled');
                     }
                     $('#locations').val(ids);
                     $('#locations').multiSelect('refresh');
@@ -422,10 +429,7 @@
                 xhr.setRequestHeader(header, token);
             },
             success : function(e, data) {
-                console.log(e);
-                console.log("in success delete confirm");
-                console.log(data);
-                $('#row'+currentRow).remove();
+                catchmentLoad(currentSS, 1); // sending 1 as if modal does not close in catchment load method
                 $.modal.getCurrent().close();
             },
             error : function(e) {
@@ -473,24 +477,8 @@
                 xhr.setRequestHeader(header, token);
             },
             success : function(e, data) {
-                $('#table-body').html("");
-                var catchmentAreaTable = e["catchmentAreaTable"];
-                $('#locations option').remove();
-                $('#locations').multiSelect('refresh');
                 $('#pleaseWait').hide();
-                //create catchment area table
-                var content = "<table id='catchment-table' class='display'>";
-                content += '<thead><tr><th>Division</th><th>District</th><th>City Corporation/Upazila</th><th>Pourashabha</th>' +
-                    '<th>Union</th><th>Village</th><th>Action</th></tr></thead><tbody>';
-                for(var y = 0; y < catchmentAreaTable.length; y++){
-                    content += '<tr id="row'+y+'"><td>'+catchmentAreaTable[y][0]+'</td><td>'+catchmentAreaTable[y][1]+'</td>' +
-                        '<td>'+catchmentAreaTable[y][2]+'</td><td>'+catchmentAreaTable[y][3]+'</td>' +
-                        '<td>'+catchmentAreaTable[y][4]+'</td><td>'+catchmentAreaTable[y][5]+'</td>' +
-                        '<td><button class="btn btn-sm btn-danger" onclick="deleteLocation('+catchmentAreaTable[y][6]+','+y+','+ssId+')">Delete</button></td></tr>';
-                }
-                content += "</tbody></table>";
-
-                $('#table-body').append(content);
+                catchmentLoad(currentSS, 0);
             },
             error : function(e) {
                 $('#saveCatchmentArea').prop('disabled', false);
@@ -512,6 +500,10 @@
         dropdownParent: $('#change-sk')
     });
 
+    $('#skList').select2({
+        dropdownParent: $('#change-sk')
+    });
+
     function changeSK(ssId) {
         currentSS = ssId;
         console.log("Present value");
@@ -521,7 +513,7 @@
             show: true
         });
 
-        var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
+        var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branches").val();
         $("#skList").html("");
         $.ajax({
             type : "GET",
@@ -549,6 +541,65 @@
 
     $('#branches').change(function (e) {
        e.preventDefault();
+        var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branches").val();
+        $("#skList").html("");
+        $.ajax({
+            type : "GET",
+            contentType : "application/json",
+            url : url,
+            dataType : 'html',
+            timeout : 100000,
+            beforeSend: function() {},
+            success : function(e, data) {
+                console.log(e);
+                console.log(data);
+                $("#skList").html(e);
+            },
+            error : function(e) {
+                console.log("ERROR: ", e);
+                display(e);
+            },
+            done : function(e) {
 
+                console.log("DONE");
+                //enableSearchButton(true);
+            }
+        });
     });
+
+    function changeParent() {
+        var skUsername = $('#skList').val();
+        var branchId = $('#branches').val();
+        console.log("branch: "+ branchId + " skId: "+ skUsername + " ssId: "+ currentSS);
+
+        var url = "/opensrp-dashboard/rest/api/v1/user/update/ss-parent?ssId=" + currentSS + "&parentUsername=" + skUsername;
+        $.ajax({
+            type : "GET",
+            contentType : "application/json",
+            url : url,
+            dataType : 'html',
+            timeout : 100000,
+            beforeSend: function() {},
+            success : function(e, data) {
+                console.log(e);
+                console.log(data);
+                if (e == "updated") {
+                    console.log("Modal Close");
+                    window.location.reload();
+                } else {
+                    console.log(e.toString());
+                    console.log("MODAL OPEN");
+                }
+            },
+            error : function(e) {
+                console.log("ERROR: ", e);
+                display(e);
+            },
+            done : function(e) {
+
+                console.log("DONE");
+                //enableSearchButton(true);
+            }
+        });
+    }
 </script>

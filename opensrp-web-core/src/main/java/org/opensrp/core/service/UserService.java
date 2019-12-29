@@ -7,12 +7,7 @@ package org.opensrp.core.service;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -765,7 +760,50 @@ public class UserService {
 		return repository.getSSListByLocation(locationId, roleId);
 	}
 
-	public Integer updateParentForSS(Integer ssId, Integer parentId) {
-		return repository.updateParentForSS(ssId, parentId);
+	@Transactional
+	public Integer updateParentForSS(Integer ssId, String parentUsername) throws Exception {
+		Integer isUpdate = 0;
+		try {
+			User sk = findByKey(parentUsername, "username", User.class);
+			User ss = findById(ssId, "id", User.class);
+			List<UsersCatchmentArea> areas = usersCatchmentAreaService.findAllByForeignKey(ssId, "user_id", "UsersCatchmentArea");
+			if (areas != null) {
+				if (ss.getParentUser() != null) {
+					List<Integer> locationIds = new ArrayList<>();
+					for (UsersCatchmentArea area: areas) {
+						locationIds.add(area.getLocationId());
+					}
+					usersCatchmentAreaService.deleteAllByKeys(locationIds, ss.getParentUser().getId()); // delete ss location from previous sk (parent)
+				}
+				List<UsersCatchmentArea> newParentAreas = prepareCatchmentArea(areas, sk.getId());
+				usersCatchmentAreaService.saveAll(newParentAreas); // insert ss location to new sk (parent)
+			}
+			Set<Branch> branches = new HashSet<>();
+			for (Branch b: sk.getBranches()) {
+				branches.add(b);
+			}
+			if (branches != null) {
+				ss.setBranches(branches);
+				isUpdate = update(ss); //updating branch
+			}
+			repository.updateParentForSS(ssId, sk.getId());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return isUpdate;
+	}
+
+	List<UsersCatchmentArea> prepareCatchmentArea(List<UsersCatchmentArea> ssAreas, Integer parentId) {
+		List<UsersCatchmentArea> newAreas = new ArrayList<>();
+		for (UsersCatchmentArea area: ssAreas) {
+			UsersCatchmentArea newArea = new UsersCatchmentArea();
+			newArea.setUserId(parentId);
+			newArea.setLocationId(area.getLocationId());
+			newArea.setCreated(new Date());
+			newArea.setUpdated(new Date());
+			newArea.setParentLocationId(area.getParentLocationId());
+			newAreas.add(newArea);
+		}
+		return newAreas;
 	}
 }

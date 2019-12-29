@@ -784,16 +784,16 @@ public class UserController {
 		model.addAttribute("account", new User());
 		List<Role> roles = userServiceImpl.setRolesAttributes(selectedRoles, session);
 		//List<Branch> branches = branchService.findAll("Branch");
-		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		User skUser = userServiceImpl.findById(skId, "id", User.class);
+		List<Branch> branches = branchService.getBranchByUser(skUser.getId());
 		Role ss = roleServiceImpl.findByKey("SS", "name", Role.class);
-		model.addAttribute("locale", locale);
-		model.addAttribute("roles", roles);
 		
 		//for adding location and team
 		model.addAttribute("teamMember", new TeamMember());
 		model.addAttribute("branches", branches);
 		String personName = "";
+		model.addAttribute("locale", locale);
+		model.addAttribute("roles", roles);
 		session.setAttribute("locationList", locationServiceImpl.list().toString());
 		int[] locations = new int[0];
 		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
@@ -847,13 +847,15 @@ public class UserController {
 	                               HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
 		
 		Role ss = roleServiceImpl.findByKey("SS", "name", Role.class);
-		Set<Role> roles = new HashSet<Role>();
-		roles.add(ss);
-		account.setRoles(roles);
-		account.setBranches(userServiceImpl.setBranches(branches));
 		account.setId(id);
+		User user = userServiceImpl.findById(id, "id", User.class);
+		if (user.getParentUser() != null) account.setParentUser(user.getParentUser());
+		if (user.getCreator() != null) account.setCreator(user.getCreator());
+		if (user.getBranches() != null) account.setBranches(user.getBranches());
+		if (user.getRoles() != null) account.setRoles(user.getRoles());
 		//account.setPassword("");
 		String redirectUrl = "redirect:/user/" + skId + "/" + skUsername + "/my-ss.html";
+		System.out.println(account.toString());
 		userServiceImpl.update(account);
 		return new ModelAndView(redirectUrl + "?lang=" + locale);
 		//return new ModelAndView("redirect:/user.html?lang=" + locale);
@@ -937,6 +939,9 @@ public class UserController {
 		redirectAttributes.addAttribute("message", "Success");
 		account.setBranches(userServiceImpl.setBranches(branches));
 		account.setId(id);
+		User user = userServiceImpl.findById(id, "id", User.class);
+		if (user.getParentUser() != null) account.setParentUser(user.getParentUser());
+		if (user.getCreator() != null) account.setCreator(user.getCreator());
 		String redirectUrl = "redirect:/user/sk-list.html";
 		
 		userServiceImpl.update(account);

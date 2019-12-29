@@ -117,8 +117,7 @@
                 </div>
 
                 <form:hidden path="parentUser" id="parentUser"/>
-\
-                <div class="row col-12 tag-height">
+                <div class="row col-12 tag-height" hidden>
                     <div class="form-group required">
                         <label class="label-width"  for="branches">
                             <spring:message code="lbl.branches"/>
@@ -127,7 +126,7 @@
                                 class="form-control mx-sm-3 js-example-basic-multiple"
                                 name="branches" multiple="multiple" required>
                             <c:forEach items="${branches}" var="branch">
-                                <option value="${branch.id}">${branch.name} (${branch.code})</option>
+                                <option value="${branch.id}" selected>${branch.name} (${branch.code})</option>
                             </c:forEach>
                         </select>
                     </div>

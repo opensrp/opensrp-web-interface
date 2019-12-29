@@ -83,7 +83,9 @@ public interface DatabaseRepository {
 	public <T> int update(T t);
 	
 	public <T> boolean delete(T t);
-	
+
+	public <T> boolean deleteAllByKeys(List<Integer> locationIds, Integer userId);
+
 	public <T> T findById(int id, String fieldName, Class<?> className);
 
 	public <T> List<T> findAllById(List<Integer> ids, String fieldName, String className);

@@ -27,6 +27,7 @@ import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.SearchBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -159,7 +160,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		catch (HibernateException e) {
 			returnValue = -1;
 			tx.rollback();
-			logger.error(e);
+			logger.error(e.getMessage());
 		}
 		finally {
 			session.close();
@@ -199,7 +200,30 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		return returnValue;
 	}
-	
+
+
+	@Override
+	public <T> boolean deleteAllByKeys(List<Integer> locationIds, Integer userId) {
+		Session session = sessionFactory.openSession();
+		boolean returnValue = false;
+		try {
+			String hql = "delete from core.users_catchment_area where user_id = :userId and location_id in (:locationIds)";
+			Query query = session.createSQLQuery(hql)
+					.setInteger("userId", userId)
+					.setParameterList("locationIds", locationIds);
+			Integer flag = query.executeUpdate();
+			if (flag > 0) returnValue = true;
+		}
+		catch (HibernateException e) {
+			returnValue = false;
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		return returnValue;
+	}
+
 	/**
 	 * <p>
 	 * {@link #findById(int, String, Class)} fetch entity by {@link #sessionFactory}. This is a
@@ -1936,21 +1960,21 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		List<T> users = new ArrayList<T>();
 		try {
-			String hql = "with recursive loc_tree as (select * from core.location loc1 "
-					+ "where loc1.id in (select location_id from core.users_catchment_area where user_id = :userId) "
-					+ "union all select loc2.* from core.location loc2 "
-					+ "join loc_tree lt on lt.id = loc2.parent_location_id "
-					+ ") select distinct u.id, u.username, u.first_name firstName, u.last_name lastName, u.mobile, "
-					+ "(select string_agg(b.name, ', ') from core.user_branch ub join core.branch b on ub.branch_id = b.id "
-					+ "where ub.user_id = u.id) branches, "
-					+ "(select string_agg(distinct(split_part(loc_c.name, ':', 1)), ', ') from core.users_catchment_area uca1 "
-					+ "join core.location loc_c on loc_c.id = uca1.location_id "
-					+ "where uca1.user_id = u.id) locationList "
-					+ "from loc_tree lt "
-					+ "join core.users_catchment_area uca on lt.id = uca.location_id "
-					+ "join core.users u on u.id = uca.user_id join core.user_role ur on u.id = ur.user_id "
-					+ "join core.role r on r.id = ur.role_id where r.name = '"+roleName+"' order by firstName;";
-//			String hql = "select * from core.get_ss_by_sk(:userId);";
+//			String hql = "with recursive loc_tree as (select * from core.location loc1 "
+//					+ "where loc1.id in (select location_id from core.users_catchment_area where user_id = :userId) "
+//					+ "union all select loc2.* from core.location loc2 "
+//					+ "join loc_tree lt on lt.id = loc2.parent_location_id "
+//					+ ") select distinct u.id, u.username, u.first_name firstName, u.last_name lastName, u.mobile, "
+//					+ "(select string_agg(b.name, ', ') from core.user_branch ub join core.branch b on ub.branch_id = b.id "
+//					+ "where ub.user_id = u.id) branches, "
+//					+ "(select string_agg(distinct(split_part(loc_c.name, ':', 1)), ', ') from core.users_catchment_area uca1 "
+//					+ "join core.location loc_c on loc_c.id = uca1.location_id "
+//					+ "where uca1.user_id = u.id) locationList "
+//					+ "from loc_tree lt "
+//					+ "join core.users_catchment_area uca on lt.id = uca.location_id "
+//					+ "join core.users u on u.id = uca.user_id join core.user_role ur on u.id = ur.user_id "
+//					+ "join core.role r on r.id = ur.role_id where r.name = '"+roleName+"' order by firstName;";
+			String hql = "select * from core.get_ss_by_sk(:userId);";
 
 			Query query = session.createSQLQuery(hql)
 					.addScalar("id", StandardBasicTypes.INTEGER)

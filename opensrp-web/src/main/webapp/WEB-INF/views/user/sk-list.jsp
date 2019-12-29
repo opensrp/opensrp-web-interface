@@ -128,7 +128,7 @@
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
                                 <a href="<c:url value="/user/${skId}/edit-SK.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-                                <a href="#" onclick="catchmentLoad(${skId})" id = "catchment-modal"><spring:message code="lbl.catchmentArea"/></a> <%} %>
+                                <a href="#" onclick="catchmentLoad(${skId}, ${0})" id = "catchment-modal"><spring:message code="lbl.catchmentArea"/></a> <%} %>
 <%--                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>--%>
 <%--                                | <a href="<c:url value="/user/${skId}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>--%>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
@@ -183,17 +183,20 @@
         $('#locations').multiSelect();
     });
 
-    function catchmentLoad(skId) {
+    function catchmentLoad(skId, term) {
         currentSK = skId;
         $('#locationTree').jstree(true).destroy();
         $('#table-body').html("");
         $('#locations option').remove();
         $('#locations').multiSelect('refresh');
-        $('#catchment-area').modal({
-            escapeClose: false,
-            clickClose: false,
-            show: true
-        });
+        if (term == 0) {
+            $('#catchment-area').modal({
+                escapeClose: false,
+                clickClose: false,
+                showClose: false,
+                show: true
+            });
+        }
 
         var url = "/opensrp-dashboard/rest/api/v1/user/"+skId+"/catchment-area";
         var token = $("meta[name='_csrf']").attr("content");
@@ -361,7 +364,8 @@
                 console.log(e);
                 console.log("in success delete confirm");
                 console.log(data);
-                $('#row'+currentRow).remove();
+                catchmentLoad(currentSK, 1);  // sending 1 as if modal does not close in catchment load method
+                // $('#row'+currentRow).remove();
                 $.modal.getCurrent().close();
             },
             error : function(e) {

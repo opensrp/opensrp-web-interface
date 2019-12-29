@@ -237,8 +237,12 @@ public class UserRestController {
 		List<UserAssignedLocationDTO> userAssignedLocationDTOS = userServiceImpl.assignedLocationByRole(roleId);
 
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		Integer userLocationId = 0;
+		if (user.getParentUser() != null) {
+			userLocationId = user.getParentUser().getId();
+		}
 		JSONArray locationTree = locationService.getLocationWithDisableFacility(session, parentIndication, parentKey,
-				userAssignedLocationDTOS, id, role, loggedInUser.getId(), roleId);
+				userAssignedLocationDTOS, id, role, userLocationId!=0?userLocationId:loggedInUser.getId(), roleId);
 
 		List<Object[]> catchmentAreaTable = userServiceImpl.getCatchmentAreaTableForUser(id);
 
@@ -322,10 +326,11 @@ public class UserRestController {
 		return new ResponseEntity<>(new Gson().toJson(responseMessage), OK);
 	}
 
-	@RequestMapping(value = "/update/ss-parent", method = RequestMethod.PUT)
-	public ResponseEntity<String> updateParentForSS(@RequestParam("ssId") Integer ssId, @RequestParam("parentId") Integer parentId) {
-		Integer response = userServiceImpl.updateParentForSS(ssId, parentId);
-		return new ResponseEntity<>(new Gson().toJson(response==1?"updated":"not updated"), OK);
+	@RequestMapping(value = "/update/ss-parent", method = RequestMethod.GET)
+	public ResponseEntity<String> updateParentForSS(@RequestParam("ssId") Integer ssId, @RequestParam("parentUsername") String parentUsername)
+			throws Exception {
+		Integer response = userServiceImpl.updateParentForSS(ssId, parentUsername);
+		return new ResponseEntity<>(response==1?"updated":"not updated", OK);
 	}
 
 	@RequestMapping(value = "/branch/sk")
