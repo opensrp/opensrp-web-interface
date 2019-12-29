@@ -29,6 +29,7 @@
     <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/jtree.min.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/multi-select.css"/>" rel="stylesheet">
+    <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
     <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
@@ -42,7 +43,7 @@
     <div class="container-fluid">
         <div class="form-group">
             <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SK")){ %>
-            <a  href="<c:url value="/user/add-SK.html?lang=${locale}"/>">
+            <a  href="#" onclick="addSK()">
                 <strong>
                     <spring:message code="lbl.addNew"/>
                     <spring:message code="lbl.sk"/>
@@ -86,6 +87,19 @@
             </div>
 
         </div>
+        
+        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050"
+             id="update-user" class="modal">
+            <div id="userInfo"> </div>
+        </div>
+        
+         <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050"
+             id="ad-sk" class="modal">
+            <div id="add-sk-modal"> </div>
+        </div>
+        
+        
+        
         <!--Modal start-->
 
         <!-- Example DataTables Card-->
@@ -126,7 +140,7 @@
                             <td><%=user.getLocationList()%></td>
                             <td>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
-                                <a href="<c:url value="/user/${skId}/edit-SK.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
+                                <a href="#" onclick="userLoad(${skId})" ><spring:message code="lbl.edit"/></a> |  <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
                                 <a href="#" onclick="catchmentLoad(${skId}, ${0})" id = "catchment-modal"><spring:message code="lbl.catchmentArea"/></a> <%} %>
 <%--                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>--%>
@@ -150,6 +164,8 @@
 </div>
 <jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
+<script src="<c:url value='/resources/js/user.js'/>"></script>
+
 <script src="<c:url value='/resources/js/jquery.toast.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery.modal.min.js'/>"></script>
 <script src="<c:url value='/resources/js/jstree.min.js'/>"></script>
@@ -183,6 +199,25 @@
         $('#locations').multiSelect();
     });
 
+    function userLoad(skId) {
+    	userInfo(skId);    	
+    	$('#update-user').modal({
+            escapeClose: false,
+            clickClose: false,
+            showClose: false,
+            show: true
+        });
+    }
+    function addSK() {
+    	userForm();    	
+    	$('#add-sk-modal').modal({
+            escapeClose: false,
+            clickClose: false,
+            showClose: false,
+            show: true
+        });
+    }    
+    
     function catchmentLoad(skId, term) {
         currentSK = skId;
         $('#locationTree').jstree(true).destroy();
