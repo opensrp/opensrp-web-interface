@@ -433,3 +433,69 @@ function Validate() {
 $(document).ready(function() {
     $('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
 });
+
+var btn = "";
+$('#updateContinue').click(function() {
+    buttonpressed = $(this).attr('name');
+    btn = "UC";
+
+});
+$('#update').click(function() {
+    buttonpressed = $(this).attr('name');
+    btn = "U";
+});
+
+$("#update-ss-information").submit(function(event) {
+    $("#loading").show();
+    var ssId = $('input[name=id]').val();
+    var url = "/opensrp-dashboard/rest/api/v1/user/update-ss";
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    var formData = {
+        'firstName': $('input[name=firstName]').val(),
+        'lastName': $('input[name=lastName]').val(),
+        'mobile': $('input[name=mobile]').val(),
+        'id': ssId
+    };
+
+    event.preventDefault();
+    $.ajax({
+        contentType : "application/json",
+        type: "POST",
+        url: url,
+        data: JSON.stringify(formData),
+        dataType : 'json',
+
+        timeout : 100000,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        success : function(data) {
+            if(data!=""){
+                $("#error-msg").html(data);
+            }
+            $("#loading").hide();
+            if(data == ""){
+                if(btn == "UC"){
+                    $('#edit-ss').modal({
+                        escapeClose: false,
+                        clickClose: false,
+                        showClose: false,
+                        show: false
+                    });
+                    catchmentLoad(ssId, 0);
+                }else{
+                    window.location.reload();
+                }
+
+            }
+        },
+        error : function(e) {
+
+        },
+        done : function(e) {
+            console.log("DONE");
+        }
+    });
+});

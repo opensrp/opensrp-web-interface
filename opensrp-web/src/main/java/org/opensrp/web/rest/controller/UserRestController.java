@@ -241,6 +241,8 @@ public class UserRestController {
 		Integer userLocationId = 0;
 		if (user.getParentUser() != null) {
 			userLocationId = user.getParentUser().getId();
+		} else {
+			userLocationId = loggedInUser.getId();
 		}
 		JSONArray locationTree = locationService.getLocationWithDisableFacility(session, parentIndication, parentKey,
 				userAssignedLocationDTOS, id, role, userLocationId!=0?userLocationId:loggedInUser.getId(), roleId);
@@ -357,6 +359,23 @@ public class UserRestController {
 			account.setBranches(userServiceImpl.setBranch(userDTO.getBranches()));	
 			userServiceImpl.update(account);
 		}catch(Exception e){
+			msg = "Some problem occurred please contact with Admin";
+		}
+		return new ResponseEntity<>(new Gson().toJson(msg), OK);
+	}
+
+	@RequestMapping(value = "/update-ss", method = RequestMethod.POST)
+	public ResponseEntity<String> editSS(@RequestBody UserDTO userDTO,
+	                                     ModelMap model) throws Exception {
+
+		String msg = "";
+		try{
+			User account = userServiceImpl.findById(userDTO.getId(), "id", User.class);
+			account.setFirstName(userDTO.getFirstName());
+			account.setLastName(userDTO.getLastName());
+			account.setMobile(userDTO.getMobile());
+			userServiceImpl.update(account);
+		} catch(Exception e) {
 			msg = "Some problem occurred please contact with Admin";
 		}
 		return new ResponseEntity<>(new Gson().toJson(msg), OK);
