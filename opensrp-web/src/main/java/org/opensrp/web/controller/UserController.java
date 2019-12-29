@@ -957,4 +957,50 @@ public class UserController {
 		String isVerified = userServiceImpl.checkImei(imei)?"true":"false";
 		return new ResponseEntity<>(isVerified, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/sk/{id}/edit-SK-ajax.html", method = RequestMethod.GET)
+	public ModelAndView getSKAjax(HttpSession session, @PathVariable("id") int id, Locale locale, Model model)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
+		User account = userServiceImpl.findById(id, "id", User.class);
+		model.addAttribute("account", account);
+		model.addAttribute("id", id);	
+		
+		String parentUserName = "";
+		int parentUserId = 0;
+		
+		
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		int amId = loggedInUser.getId();
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		model.addAttribute("branches", branches);
+		session.setAttribute("parentUserName", parentUserName);
+		session.setAttribute("parentUserId", parentUserId);
+		model.addAttribute("amId",amId);
+		session.setAttribute("selectedBranches", account.getBranches());
+		
+		return new ModelAndView("user/edit-SK-ajax", "command", account);
+	}
+	
+	@RequestMapping(value = "/user/add-SK-ajax.html", method = RequestMethod.GET)
+	public ModelAndView addSKAjax(Model model, HttpSession session, Locale locale) throws JSONException {
+		
+		model.addAttribute("account", new User());		
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		/*if (AuthenticationManagerUtil.isAM()) {
+			session.setAttribute("amId", loggedInUser.getId());
+		} else {
+			session.setAttribute("amId", amId);
+		}*/
+		
+		session.setAttribute("amId", loggedInUser.getId());
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		Role sk = roleServiceImpl.findByKey("SK", "name", Role.class);
+		model.addAttribute("locale", locale);		
+		model.addAttribute("branches", branches);		
+		session.setAttribute("sk", sk);		
+		
+		return new ModelAndView("user/add-SK-ajax", "command", account);
+	}
+	
 }

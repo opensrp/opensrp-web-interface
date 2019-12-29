@@ -34,6 +34,15 @@ public class UserDTO {
 	private Boolean enableSimPrint;
 
 	private String ssNo;
+	private boolean status;
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 
 	public Integer getId() {
 		return id;

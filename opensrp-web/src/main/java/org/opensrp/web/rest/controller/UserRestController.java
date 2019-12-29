@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import com.google.gson.Gson;
 
 import javax.servlet.http.HttpSession;
+
 import java.util.*;
 
 @RequestMapping("rest/api/v1/user")
@@ -337,5 +338,27 @@ public class UserRestController {
 	public ResponseEntity<String> getSKByBranch(@RequestParam("branchId") Integer branchId) {
 		JSONObject res = new JSONObject();
 		return new ResponseEntity<>(res.toString(), OK);
+	}
+	
+	
+	@RequestMapping(value = "/update-sk", method = RequestMethod.POST)
+	public ResponseEntity<String> editSK(@RequestBody UserDTO userDTO,
+	                                       ModelMap model) throws Exception {		
+		
+		String msg = "";
+		try{						
+			User account = userServiceImpl.findById(userDTO.getId(), "id", User.class);
+			account.setFirstName(userDTO.getFirstName());
+			account.setLastName(userDTO.getLastName());
+			account.setMobile(userDTO.getMobile());
+			account.setEmail(userDTO.getEmail());
+			account.setEnableSimPrint(userDTO.getEnableSimPrint());
+			account.setEnabled(userDTO.isStatus());
+			account.setBranches(userServiceImpl.setBranch(userDTO.getBranches()));	
+			userServiceImpl.update(account);
+		}catch(Exception e){
+			msg = "Some problem occurred please contact with Admin";
+		}
+		return new ResponseEntity<>(new Gson().toJson(msg), OK);
 	}
 }

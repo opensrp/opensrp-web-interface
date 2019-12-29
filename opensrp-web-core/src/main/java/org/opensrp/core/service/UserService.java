@@ -237,6 +237,17 @@ public class UserService {
 		}
 		return branches;
 	}
+	@Transactional
+	public Set<Branch> setBranch(String selectedBranches) {
+		Set<Branch> branches = new HashSet<>();
+		if (selectedBranches != null) {
+			
+				Branch branch = repository.findById(Integer.parseInt(selectedBranches), "id", Branch.class);
+				branches.add(branch);
+			
+		}
+		return branches;
+	}
 
 	public boolean isPasswordMatched(User account) {
 		return passwordEncoder.matches(account.getRetypePassword(), passwordEncoder.encode(account.getPassword()));
