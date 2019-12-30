@@ -368,13 +368,14 @@ function changeParent() {
 }
 
 function ssForm(skId, skUsername) {
-    console.log("SK Username: " + skUsername);
+   
     $('#add-ss').modal({
         escapeClose: false,
         clickClose: false,
         showClose: false,
         show: true
     });
+    
     var url = "/opensrp-dashboard/user/add-SS.html?skId=" + skId + "&skUsername=" + skUsername;
     $.ajax({
         type: "GET",
@@ -385,7 +386,9 @@ function ssForm(skId, skUsername) {
         beforeSend: function () {
         },
         success: function (e, data) {
+        	
             $("#add-ss-body").html(e);
+            
         },
         error: function (e) {
             console.log("ERROR: ", e);

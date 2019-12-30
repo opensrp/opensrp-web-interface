@@ -14,7 +14,7 @@
     Integer skId = (Integer)session.getAttribute("skId");
 %>
 
-<head>
+<%-- <head>
     <meta charset="utf-8">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,7 +23,7 @@
     <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
-
+ --%>
 <c:url var="cancelUrl" value="/user/${skId}/${skUsername}/my-ss.html?lang=en" />
 <body>
 <div class="content-wrapper" style="min-height: auto !important;">

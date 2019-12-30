@@ -802,17 +802,17 @@ public class UserController {
 		model.addAttribute("teamMember", new TeamMember());
 		model.addAttribute("branches", branches);
 		model.addAttribute("skId", skId);
-		System.err.println(skUsername);
+		
 		String personName = "";
 		model.addAttribute("locale", locale);
 		model.addAttribute("roles", roles);
-		session.setAttribute("locationList", locationServiceImpl.list().toString());
-		int[] locations = new int[0];
-		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+		//session.setAttribute("locationList", locationServiceImpl.list().toString());
+		//int[] locations = new int[0];
+		//teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
 		session.setAttribute("ss", ss);
 		session.setAttribute("skId", skId);
 		model.addAttribute("skId", skId);
-		System.err.println("skId:::::" + skId);
+		
 		String redirectUrl = "redirect:/user/sk-list.html";
 		if (StringUtils.isBlank(skUsername)) {
 			return new ModelAndView(redirectUrl + "?lang=" + locale);
