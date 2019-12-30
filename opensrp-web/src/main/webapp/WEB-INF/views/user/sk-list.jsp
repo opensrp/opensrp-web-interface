@@ -26,7 +26,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><spring:message code="lbl.userList"/></title>
     <link type="text/css" href="<c:url value="/resources/css/jquery.toast.css"/>" rel="stylesheet">
-    <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/jtree.min.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/multi-select.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
@@ -48,6 +47,16 @@
                     <spring:message code="lbl.addNew"/>
                     <spring:message code="lbl.sk"/>
                 </strong> </a> <%} %>
+        </div>
+
+        <!-- Modal for change password -->
+        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050; min-height: 300px;"
+             id="change-password-modal" class="modal">
+            <div id="change-password-body">
+                <div style="position: absolute; margin-left:45%; margin-top: 105px;">
+                    <img width="90px" height="90px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+                </div>
+            </div>
         </div>
 
         <!--Modal start-->
@@ -149,7 +158,7 @@
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
                                 <a href="#" onclick="catchmentLoad(${skId}, ${0})" id = "catchment-modal"><spring:message code="lbl.catchmentArea"/></a> <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-                                | <a href="<c:url value="/user/${skId}/change-password.html?lang=${locale}"/>"><spring:message code="lbl.changePassword"/></a> <%} %>
+                                | <a href="#" onclick="changePassword(${skId}, '${locale}')"><spring:message code="lbl.changePassword"/></a> <%} %>
                                 | <a href="<c:url value="/user/${skId}/${skUsername}/my-ss.html?lang=${locale}"/>"><spring:message code="lbl.ssList"/></a>
                             </td>
                         </tr>
@@ -170,7 +179,6 @@
 <script src="<c:url value='/resources/js/user.js'/>"></script>
 
 <script src="<c:url value='/resources/js/jquery.toast.js'/>"></script>
-<script src="<c:url value='/resources/js/jquery.modal.min.js'/>"></script>
 <script src="<c:url value='/resources/js/jstree.min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery.multi-select.js'/>"></script>
 <script>
@@ -218,6 +226,33 @@
             show: true
         });
     }
+
+    function changePassword(skId, locale) {
+        var url = "/opensrp-dashboard/user/"+skId+"/change-password-ajax.html?lang="+locale;
+        $.ajax({
+            type: "GET",
+            contentType : "application/json",
+            url: url,
+            dataType : 'html',
+            timeout : 100000,
+            beforeSend: function(xhr) {
+            },
+            success : function(data) {
+                $("#change-password-body").html(data);
+            },
+            error : function(e) {
+            },
+            done : function(e) {
+            }
+        });
+        $('#change-password-modal').modal({
+            escapeClose: false,
+            clickClose: false,
+            showClose: false,
+            show: true
+        });
+    }
+
     function addSK() {
     	userForm();    	
     	$('#add-sk-modal').modal({

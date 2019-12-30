@@ -362,10 +362,42 @@
 					</a>
 				</div>
 			</li> --%>
-			<li class="nav-item"><a class="nav-link" data-toggle="modal"
-									data-target="#exampleModal">(<%=user.getFullName()%>) <i class="fa fa-fw fa-sign-out"></i><spring:message code="lbl.logout"/>
+			<li class="nav-item"><a href="#exampleModal" rel="modal:open" class="nav-link">(<%=user.getFullName()%>) <i class="fa fa-fw fa-sign-out"></i><spring:message code="lbl.logout"/>
 			</a></li>
 		</ul>
 	</div>
 </nav>
+
+<!-- Logout Modal-->
+<%--<div class="modal fade" id="exampleModal" tabindex="-1">--%>
+<%--	<div class="modal-dialog">--%>
+<%--		<div class="modal-content">--%>
+<%--			<div class="modal-header">--%>
+<%--				<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>--%>
+<%--				<button class="close" type="button" data-dismiss="modal">--%>
+<%--					<span>×</span>--%>
+<%--				</button>--%>
+<%--			</div>--%>
+<%--			<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>--%>
+<%--			<div class="modal-footer">--%>
+<%--				<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>--%>
+<%--				<a class="btn btn-primary" href="<c:url value="/logout"/>">Logout</a>--%>
+<%--			</div>--%>
+<%--		</div>--%>
+<%--	</div>--%>
+<%--</div>--%>
+
+<div style="overflow: visible; display: none; position: relative; z-index: 1050;"
+	 id="exampleModal" class="modal">
+	<div id="logout-body">
+		<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+		</div>
+		<div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+		<div class="modal-footer">
+			<a href="#" rel="modal:close" class="btn btn-secondary">Cancel</a>
+			<a class="btn btn-primary" href="<c:url value="/logout"/>">Logout</a>
+		</div>
+	</div>
+</div>
 

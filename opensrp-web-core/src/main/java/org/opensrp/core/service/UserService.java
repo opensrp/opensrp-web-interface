@@ -170,7 +170,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public User save(User user, boolean isUpdate) throws Exception {
+	public User saveNew(User user, boolean isUpdate) throws Exception {
 		User createdUser = new User();
 		Set<Role> roles = user.getRoles();
 		boolean isAdminOrSS = roleServiceImpl.isOpenMRSRole(roles);

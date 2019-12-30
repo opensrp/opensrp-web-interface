@@ -23,26 +23,10 @@
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fa fa-angle-up"></i>
 </a>
-<!-- Logout Modal-->
-<div class="modal fade" id="exampleModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                <button class="close" type="button" data-dismiss="modal">
-                    <span>×</span>
-                </button>
-            </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="<c:url value="/logout"/>">Logout</a>
-            </div>
-        </div>
-    </div>
-</div>
+
 <!-- Bootstrap core JavaScript-->
 <script src="<c:url value='/resources/js/jquery-1.10.2.js'/>"></script>
+<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
 <script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.bundle.min.js'/>"></script>
 
 <!-- Core plugin JavaScript-->
@@ -55,6 +39,7 @@
 <%-- <script src="<c:url value='/resources/js/sb-admin-datatables.min.js'/>"></script> --%>
 <script src="<c:url value='/resources/js/location.js'/>"></script>
 <script src="<c:url value='/resources/js/checkbox.js'/>"></script>
+<script src="<c:url value='/resources/js/jquery.modal.min.js'/>"></script>
 
 <script>
     function checkDate(field)

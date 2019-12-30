@@ -548,6 +548,15 @@ public class UserController {
 		session.setAttribute("username", account.getUsername());
 		return new ModelAndView("user/change-password");
 	}
+
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
+	@RequestMapping(value = "/user/{id}/change-password-ajax.html", method = RequestMethod.GET)
+	public ModelAndView editPasswordAM(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
+		model.addAttribute("locale", locale);
+		User account = userServiceImpl.findById(id, "id", User.class);
+		session.setAttribute("username", account.getUsername());
+		return new ModelAndView("user/change-password-ajax");
+	}
 	
 	/**
 	 * <p>

@@ -27,7 +27,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><spring:message code="lbl.userList"/></title>
     <link type="text/css" href="<c:url value="/resources/css/jquery.toast.css"/>" rel="stylesheet">
-    <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/jtree.min.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/multi-select.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
@@ -213,7 +212,6 @@
 </body>
 </html>
 <script src="<c:url value='/resources/js/jquery.toast.js'/>"></script>
-<script src="<c:url value='/resources/js/jquery.modal.min.js'/>"></script>
 <script src="<c:url value='/resources/js/jstree.min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery.multi-select.js'/>"></script>
 <script src="<c:url value='/resources/js/select2.js' />"></script>

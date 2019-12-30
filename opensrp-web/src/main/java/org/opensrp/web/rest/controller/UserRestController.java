@@ -78,7 +78,7 @@ public class UserRestController {
 			user.setCreator(loggedInUser);
 			boolean isExists = userServiceImpl.isUserExist(user.getUsername());
 			if (!isExists) {
-				User createdUser = userServiceImpl.save(user, false);
+				User createdUser = userServiceImpl.saveNew(user, false);
 				//				String mailBody = "Dear " + user.getFullName()
 				//						+ ",\n\nYour login credentials for HNPP are given below -\nusername : " + user.getUsername()
 				//						+ "\npassword : " + userDTO.getPassword();

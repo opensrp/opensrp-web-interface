@@ -49,7 +49,6 @@ function catchmentLoad(ssId, term) {
         type: "GET",
         url: url,
         dataType : 'json',
-
         timeout : 100000,
         beforeSend: function(xhr) {
             xhr.setRequestHeader(header, token);
