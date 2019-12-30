@@ -37,7 +37,7 @@
     Integer skId = (Integer) session.getAttribute("idFinal");
     String skUsername = (String) session.getAttribute("usernameFinal");
 %>
-
+<c:url var="cancelUrl" value="/" />
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 <jsp:include page="/WEB-INF/views/navbar.jsp" />
 
@@ -86,6 +86,9 @@
                                 value="<spring:message code="lbl.resetPassword"/>"
                                 class="btn btn-primary btn-block btn-center" />
                     </div>
+                    <div class="form-group">
+	                    	<a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
+	                 </div>
                 </div>
             </div>
         </div>

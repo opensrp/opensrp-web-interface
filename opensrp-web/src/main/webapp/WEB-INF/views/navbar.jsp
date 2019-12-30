@@ -22,6 +22,29 @@
 		    left: -110px !important;
 		}
 		
+	.card-header2 {
+	    padding: .75rem 1.25rem;
+	    /* margin-bottom: 0; */
+	    /* background-color: rgba(0,0,0,.03); */
+	    /* border-bottom: 1px solid rgba(0,0,0,.125); */
+	}
+	
+	.card1 {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
 </style>
 <%
 	boolean PERM_WRITE_FACILITY = AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY");
@@ -70,9 +93,9 @@
 			<li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle mr-lg-2" href="<c:url value="/?lang=${locale}"/>" >
 					<% if (AuthenticationManagerUtil.isAM()) {%>
-					<strong><spring:message code="lbl.skList"/></strong>
+					<spring:message code="lbl.skList"/>
 					<%} else {%>
-					<strong><spring:message code="lbl.home"/></strong>
+					<spring:message code="lbl.home"/>
 					<%}%>
 				</a>
 			</li>

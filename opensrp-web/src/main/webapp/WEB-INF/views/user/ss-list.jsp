@@ -43,8 +43,8 @@
     <div class="container-fluid">
 
       <c:url var="back" value="/user/sk-list.html" />
-		 <div class="card mb-3">
-    	 	<div class="card-header">
+		 <div class="card1 mb-3">
+    	 	<div class="card-header2">
 	    	 	 <div style="float: right;">
 	    	 	 <a href="${back }"><strong>My SK </strong></a>  |
 		            <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>

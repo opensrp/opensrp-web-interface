@@ -41,11 +41,11 @@
 <div class="content-wrapper">
     <div class="container-fluid">
     
-    <div class="card mb-3">
-    	 <div class="card-header">
+    <div class="card1 mb-3">
+    	 <div class="card-header2">
     	 	 <div style="float: right;">
     	 	  <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SK")){ %>
-            <a  href="#" onclick="addSK()">
+            	<a  href="#" onclick="addSK()">
                 <strong>
                     <spring:message code="lbl.addNew"/>
                     <spring:message code="lbl.sk"/>
