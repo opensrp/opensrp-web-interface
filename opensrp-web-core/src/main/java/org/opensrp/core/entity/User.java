@@ -126,7 +126,10 @@ public class User implements UserDetails {
 	
 	@Column(name = "ss_no")
 	private String ssNo;
-	
+
+	@Column(name = "app_version")
+	private String appVersion;
+
 	public User() {
 	}
 	
@@ -319,7 +322,15 @@ public class User implements UserDetails {
 	public void setSsNo(String ssNo) {
 		this.ssNo = ssNo;
 	}
-	
+
+	public String getAppVersion() {
+		return appVersion;
+	}
+
+	public void setAppVersion(String appVersion) {
+		this.appVersion = appVersion;
+	}
+
 	@Transient
 	public Set<Permission> getPermissions() {
 		Set<Permission> perms = new HashSet<Permission>();

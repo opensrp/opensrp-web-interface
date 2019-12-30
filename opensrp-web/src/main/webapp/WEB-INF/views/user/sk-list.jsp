@@ -29,6 +29,7 @@
     <link type="text/css" href="<c:url value="/resources/css/jtree.min.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/multi-select.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
+    <link type="text/css" href="<c:url value="/resources/css/bootstrap4-toggle.min.css"/>" rel="stylesheet">
     <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
@@ -131,6 +132,8 @@
                             <th><spring:message code="lbl.phoneNumber"></spring:message></th>
                             <th><spring:message code="lbl.branches"></spring:message></th>
                             <th><spring:message code="lbl.union"></spring:message></th>
+                            <th><spring:message code="lbl.status"></spring:message></th>
+                            <th><spring:message code="lbl.appVersion"></spring:message></th>
                             <th><spring:message code="lbl.action"></spring:message></th>
                         </tr>
                         </thead>
@@ -140,8 +143,18 @@
                                 for (UserDTO user: users) {
                                 	Integer id = user.getId();
                                 	String username = user.getUsername();
+                                	String appVersion = user.getAppVersion();
+                                	String activeStatus = "Inactive";
+                                	String textColor = "color: red;";
                                 	if (user.getLocationList() == null) {
                                 		user.setLocationList("Location not assigned");
+                                    }
+                                	if (user.getAppVersion() == null) {
+                                		appVersion = "NA";
+                                    }
+                                	if (user.isStatus() == true) {
+                                		activeStatus = "Active";
+                                        textColor = "color: green;";
                                     }
                                     session.setAttribute("skId", id);
                                     session.setAttribute("skUsername", username);
@@ -152,6 +165,8 @@
                             <td><%=user.getMobile()%></td>
                             <td><%=user.getBranches()%></td>
                             <td><%=user.getLocationList()%></td>
+                            <td style="<%=textColor%>"><%=activeStatus%></td>
+                            <td><%=appVersion%></td>
                             <td>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
                                 <a href="#" onclick="userLoad(${skId})" ><spring:message code="lbl.edit"/></a> |  <%} %>
@@ -181,6 +196,7 @@
 <script src="<c:url value='/resources/js/jquery.toast.js'/>"></script>
 <script src="<c:url value='/resources/js/jstree.min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery.multi-select.js'/>"></script>
+<script src="<c:url value='/resources/js/bootstrap4-toggle.min.js'/>"></script>
 <script>
     var isTeamMember = false;
     var ssWithUCAId = [];

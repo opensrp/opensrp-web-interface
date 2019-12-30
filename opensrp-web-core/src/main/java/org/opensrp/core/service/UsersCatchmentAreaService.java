@@ -104,6 +104,22 @@ public class UsersCatchmentAreaService {
         return usersCatchmentAreas;
     }
 
+    public Integer deleteByUser(Integer userId) {
+        Session session = sessionFactory.openSession();
+        Integer usersCatchmentAreas = 0;
+        try {
+            String hql = "delete from core.users_catchment_area where user_id = :userId";
+            usersCatchmentAreas = session.createSQLQuery(hql)
+                    .setInteger("userId", userId).executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return usersCatchmentAreas;
+    }
+
     @Transactional
     public List<Object[]> getUsersCatchmentAreaTableAsJson(int userId) {
         return repository.getCatchmentArea(userId);

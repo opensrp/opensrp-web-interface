@@ -34,7 +34,10 @@ public class UserDTO {
 	private Boolean enableSimPrint;
 
 	private String ssNo;
+
 	private boolean status;
+
+	private String appVersion;
 
 	public boolean isStatus() {
 		return status;
@@ -174,6 +177,14 @@ public class UserDTO {
 
 	public String getFullName() {
 		return this.firstName + " " + (this.lastName.equalsIgnoreCase(".") ? "" : this.lastName);
+	}
+
+	public String getAppVersion() {
+		return appVersion;
+	}
+
+	public void setAppVersion(String appVersion) {
+		this.appVersion = appVersion;
 	}
 
 	@Override

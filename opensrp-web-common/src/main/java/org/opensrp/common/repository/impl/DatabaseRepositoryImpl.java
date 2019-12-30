@@ -1932,7 +1932,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "(select string_agg(distinct(split_part(loc_p.name, ':', 1)), ', ') from core.users_catchment_area uca1 "
 					+ "join core.location loc_c on loc_c.id = uca1.location_id "
 					+ "join core.location loc_p on loc_p.id = loc_c.parent_location_id "
-					+ "where uca1.user_id = sk.id) locationList "
+					+ "where uca1.user_id = sk.id) locationList, sk.enabled status, sk.app_version appVersion "
 					+ "from sk join core.user_branch ub on ub.user_id = sk.id join core.branch b on b.id = ub.branch_id "
 					+ "order by locationList, firstName, lastName;";
 
@@ -1944,6 +1944,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					.addScalar("mobile", StandardBasicTypes.STRING)
 					.addScalar("branches", StandardBasicTypes.STRING)
 					.addScalar("locationList", StandardBasicTypes.STRING)
+					.addScalar("status", StandardBasicTypes.BOOLEAN)
+					.addScalar("appVersion", StandardBasicTypes.STRING)
 					.setInteger("userId", userId)
 					.setResultTransformer(new AliasToBeanResultTransformer(UserDTO.class));
 			users = query.list();

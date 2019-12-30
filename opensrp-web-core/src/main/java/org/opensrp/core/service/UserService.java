@@ -263,6 +263,7 @@ public class UserService {
 		} else {
 			user.setProvider(false);
 		}
+		if (user.isEnabled()==false) usersCatchmentAreaService.deleteByUser(user.getId());
 		return repository.update(user);
 	}
 
