@@ -150,7 +150,7 @@
                                 		user.setLocationList("Location not assigned");
                                     }
                                 	if (user.getAppVersion() == null) {
-                                		appVersion = "NA";
+                                		appVersion = "N/A";
                                     }
                                 	if (user.isStatus() == true) {
                                 		activeStatus = "Active";
