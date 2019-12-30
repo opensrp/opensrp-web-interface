@@ -581,8 +581,7 @@ public class UserService {
 		int parentId = 0;
 		String errorMessage = "";
 		TeamMember teamMember = teamMemberServiceImpl.findByForeignKey(userLocationDTO.getUserId(), "person_id",
-		    "TeamMember");
-
+				"TeamMember");
 		try {
 			Integer isDeleted = 0;
 			if (userLocationDTO.getAllLocation() != null && userLocationDTO.getAllLocation().length > 0) {
@@ -591,20 +590,35 @@ public class UserService {
 				if (location != null) {
 					parentId = location.getParentLocation().getId();
 
+					Map<String, Object> map = new HashMap<>();
+					map.put("userId", userLocationDTO.getUserId());
+					map.put("parentLocationId", parentId);
+					List<UsersCatchmentArea> currentAreas = usersCatchmentAreaService.findAllByKeys(map);
+					List<Integer> currentLocationIds = new ArrayList<>();
 					Set<Location> locationSet = new HashSet<>();
 
-					for (Location teamMemberLocation : teamMember.getLocations()) {
-						if (teamMemberLocation.getParentLocation().getId() != parentId) {
-							locationSet.add(teamMemberLocation);
+					if (currentAreas != null) {
+						for (UsersCatchmentArea area: currentAreas) {
+							currentLocationIds.add(area.getLocationId());
+						}
+						List<Location> currentLocations = locationServiceImpl.findAllById(currentLocationIds, "id", "Location");
+
+						for (Location l : currentLocations) {
+							if (l.getParentLocation().getId() != parentId) {
+								locationSet.add(l);
+							}
 						}
 					}
 
 					List<Integer> locationIds = new ArrayList<Integer>();
 					if (userLocationDTO.getLocations() != null) {
+						System.out.println("GET LOCATION: " + userLocationDTO.getLocations().length);
 						for (Integer id : userLocationDTO.getLocations()) {
 							locationIds.add(id);
 						}
 						List<Location> newLocations = locationServiceImpl.findAllById(locationIds, "id", "Location");
+
+						System.out.println("NEW LOCATIONS: "+ newLocations.size());
 
 						for (Location l : newLocations) {
 							locationSet.add(l);
@@ -619,9 +633,10 @@ public class UserService {
 			}
 
 			teamMemberServiceImpl.updateWithoutSendToOpenMRS(teamMember);
-			if (userLocationDTO.getLocations() != null) {
+			System.out.println("NEW SAVE ABLE AREA: "+ userLocationDTO.getLocations().length);
+			if (userLocationDTO.getLocations() != null && userLocationDTO.getLocations().length > 0) {
 				List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(userLocationDTO.getLocations(),
-				    userLocationDTO.getUserId());
+						userLocationDTO.getUserId());
 				usersCatchmentAreaService.saveAll(usersCatchmentAreas);
 			}
 			String message = "Location updated successfully!";

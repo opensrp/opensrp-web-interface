@@ -3,6 +3,7 @@ var currentSK = -1;
 var currentSS = -1;
 var currentLocation = -1;
 var currentRow = -1;
+var selectedLocation = [];
 $(document).ready(function () {
     $('#locationTree').jstree();
     $('#locations').multiSelect();
@@ -59,7 +60,6 @@ function catchmentLoad(ssId, term) {
             var assignedLocation = e["assignedLocation"];
             var catchmentAreas = e["catchmentAreas"];
             var catchmentAreaTable = e["catchmentAreaTable"];
-            console.log(catchmentAreaTable[0]);
             $('#locationTree').jstree({
                 'core' : {
                     'data' : locationData
@@ -109,6 +109,7 @@ function catchmentLoad(ssId, term) {
                 }
                 $('#locations').val(ids);
                 $('#locations').multiSelect('refresh');
+                selectedLocation = ids;
             }).jstree();
 
             //create catchment area table
@@ -202,9 +203,28 @@ $('#saveCatchmentArea').unbind().click(function () {
         allLocation.push($(this).val());
     });
     var ssId = currentSS;
+    var enabled = [];
+    if ($('#locations').val() != undefined && $('#locations').val() != null) {
+        var enableArray = [];
+        enableArray = $('#locations').val();
+        if (Array.isArray(enableArray)) {
+            enableArray.forEach(function (val) {
+                enabled.push(val);
+            });
+        } else {
+            enabled.push(enableArray);
+        }
+    }
+
+    if (selectedLocation.length > 0) {
+        selectedLocation.forEach(function (value) {
+            enabled.push(value);
+        });
+    }
+
     var formData = {
         allLocation: allLocation,
-        locations: $('#locations').val(),
+        locations: enabled,
         userId: ssId
     };
 

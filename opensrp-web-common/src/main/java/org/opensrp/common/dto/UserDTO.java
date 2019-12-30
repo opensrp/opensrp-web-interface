@@ -25,6 +25,8 @@ public class UserDTO {
 
 	private int parentUser;
 
+	private String upazilaList;
+
 	private String locationList;
 
 	private int team;
@@ -185,6 +187,14 @@ public class UserDTO {
 
 	public void setAppVersion(String appVersion) {
 		this.appVersion = appVersion;
+	}
+
+	public String getUpazilaList() {
+		return upazilaList;
+	}
+
+	public void setUpazilaList(String upazilaList) {
+		this.upazilaList = upazilaList;
 	}
 
 	@Override

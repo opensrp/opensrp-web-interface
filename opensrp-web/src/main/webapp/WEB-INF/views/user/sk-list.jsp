@@ -156,6 +156,7 @@
                             <th><spring:message code="lbl.userName"></spring:message></th>
                             <th><spring:message code="lbl.phoneNumber"></spring:message></th>
                             <th><spring:message code="lbl.branches"></spring:message></th>
+                            <th><spring:message code="lbl.upazila"></spring:message></th>
                             <th><spring:message code="lbl.union"></spring:message></th>
                             <th><spring:message code="lbl.status"></spring:message></th>
                             <th><spring:message code="lbl.appVersion"></spring:message></th>
@@ -174,6 +175,9 @@
                                 	if (user.getLocationList() == null) {
                                 		user.setLocationList("Location not assigned");
                                     }
+                                	if (user.getUpazilaList() == null) {
+                                		user.setUpazilaList("Location not assigned");
+                                    }
                                 	if (user.getAppVersion() == null) {
                                 		appVersion = "N/A";
                                     }
@@ -189,6 +193,7 @@
                             <td><%=user.getUsername()%></td>
                             <td><%=user.getMobile()%></td>
                             <td><%=user.getBranches()%></td>
+                            <td><%=user.getUpazilaList()%></td>
                             <td><%=user.getLocationList()%></td>
                             <td style="<%=textColor%>"><%=activeStatus%></td>
                             <td><%=appVersion%></td>
@@ -228,6 +233,7 @@
     var currentSK = -1;
     var currentLocation = -1;
     var currentRow = -1;
+    var selectedLocation = [];
     $(document).ready(function () {
         <%
             session.setAttribute("heading", "");
@@ -384,12 +390,11 @@
 
                     for (i = 0; i < assignedLocation.length; i++) {
                         var locationId = assignedLocation[i]["locationId"];
-                        if (assignedLocation[i]["userId"] != skId) {
-                            $("#locations option[value="+locationId+"]").attr("disabled", 'disabled');
-                        }
+                        $("#locations option[value="+locationId+"]").attr("disabled", 'disabled');
                     }
                     $('#locations').val(ids);
                     $('#locations').multiSelect('refresh');
+                    selectedLocation = ids;
                 }).jstree();
 
                 //create catchment area table
@@ -528,9 +533,29 @@
             allLocation.push($(this).val());
         });
         var skId = currentSK;
+
+        var enabled = [];
+        if ($('#locations').val() != undefined && $('#locations').val() != null) {
+            var enableArray = [];
+            enableArray = $('#locations').val();
+            if (Array.isArray(enableArray)) {
+                enableArray.forEach(function (val) {
+                    enabled.push(val);
+                });
+            } else {
+                enabled.push(enableArray);
+            }
+        }
+
+        if (selectedLocation.length > 0) {
+            selectedLocation.forEach(function (value) {
+                enabled.push(value);
+            });
+        }
+
         var formData = {
             allLocation: allLocation,
-            locations: $('#locations').val(),
+            locations: enabled,
             userId: skId
         };
 
@@ -546,24 +571,8 @@
                 xhr.setRequestHeader(header, token);
             },
             success : function(e, data) {
-                $('#table-body').html("");
-                var catchmentAreaTable = e["catchmentAreaTable"];
-                $('#locations option').remove();
-                $('#locations').multiSelect('refresh');
                 $('#pleaseWait').hide();
-                //create catchment area table
-                var content = "<table id='catchment-table' class='display'>";
-                content += '<thead><tr><th>Division</th><th>District</th><th>City Corporation/Upazila</th><th>Pourashabha</th>' +
-                    '<th>Union</th><th>Village</th><th>Action</th></tr></thead><tbody>';
-                for(var y = 0; y < catchmentAreaTable.length; y++){
-                    content += '<tr id="row'+y+'"><td>'+catchmentAreaTable[y][0]+'</td><td>'+catchmentAreaTable[y][1]+'</td>' +
-                        '<td>'+catchmentAreaTable[y][2]+'</td><td>'+catchmentAreaTable[y][3]+'</td>' +
-                        '<td>'+catchmentAreaTable[y][4]+'</td><td>'+catchmentAreaTable[y][5]+'</td>' +
-                        '<td><button class="btn btn-sm btn-danger" onclick="deleteLocation('+catchmentAreaTable[y][6]+','+y+','+skId+')">Delete</button></td></tr>';
-                }
-                content += "</tbody></table>";
-
-                $('#table-body').append(content);
+                catchmentLoad(currentSK, 0);
             },
             error : function(e) {
                 $('#saveCatchmentArea').prop('disabled', false);
