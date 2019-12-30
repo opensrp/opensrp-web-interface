@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 		 pageEncoding="ISO-8859-1"%>
 
@@ -15,6 +16,12 @@
 	li{
 		font-size: 13px;
 		font-family: ShonarBangla,Helvetica,Arial,sans-serif;}
+		
+		.navbar-expand-lg .navbar-nav .dropdown-menu {
+		    position: absolute;
+		    left: -110px !important;
+		}
+		
 </style>
 <%
 	boolean PERM_WRITE_FACILITY = AuthenticationManagerUtil.isPermitted("PERM_WRITE_FACILITY");
@@ -347,6 +354,23 @@
 				</div>
 			</li>
 			<% } %>
+			
+			<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle mr-lg-2" id="exportDropdown" href="#"
+					data-toggle="dropdown"><%=user.getFullName()%> </a>
+				<div class="dropdown-menu">
+					
+					<div class="dropdown-divider"></div>
+					
+					<a class="dropdown-item"
+					   href="/opensrp-dashboard/user/<%=user.getId()%>/change-password.html?lang=${locale}"><strong> Change Password </strong>
+					</a>
+					
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/logout"/>"><strong>Logout</strong></a>
+					
+				</div>
+			</li>
 			<%-- <li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle mr-lg-2" id="languageDropdown" href="#"
 				   data-toggle="dropdown"><spring:message code="lbl.language"/> </a>
@@ -362,8 +386,10 @@
 					</a>
 				</div>
 			</li> --%>
-			<li class="nav-item"><a href="#exampleModal" rel="modal:open" class="nav-link">(<%=user.getFullName()%>) <i class="fa fa-fw fa-sign-out"></i><spring:message code="lbl.logout"/>
-			</a></li>
+			<li class="nav-item">
+			<%-- <a href="#exampleModal" rel="modal:open" class="nav-link"><i class="fa fa-fw fa-sign-out"></i><spring:message code="lbl.logout"/>
+			</a> --%>
+			</li>
 		</ul>
 	</div>
 </nav>

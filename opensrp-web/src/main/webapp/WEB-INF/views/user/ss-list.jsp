@@ -43,9 +43,22 @@
     <div class="container-fluid">
 
       <c:url var="back" value="/user/sk-list.html" />
+		 <div class="card mb-3">
+    	 	<div class="card-header">
+	    	 	 <div style="float: right;">
+	    	 	 <a href="${back }"><strong>My SK </strong></a>  |
+		            <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>
+		            <a  href="#" onclick="ssForm(${skId}, '${skUsername}')">
+		                <strong>
+		                    <spring:message code="lbl.addNew"/>
+		                    <spring:message code="lbl.ss"/>
+		                </strong>
+		            </a> <%} %>
+	    	 	 </div>
+    	 	</div>
+    	</div>
 
-
-        <div class="form-group">
+        <%-- <div class="form-group">
            <a href="${back }"><strong>My SK </strong></a>  |
             <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>
             <a  href="#" onclick="ssForm(${skId}, '${skUsername}')">
@@ -54,7 +67,7 @@
                     <spring:message code="lbl.ss"/>
                 </strong>
             </a> <%} %>
-        </div>
+        </div> --%>
 
         <!-- Modal for add new SS -->
         <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050; min-height: 300px;"

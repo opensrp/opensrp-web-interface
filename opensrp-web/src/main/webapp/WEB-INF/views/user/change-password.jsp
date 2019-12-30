@@ -62,7 +62,7 @@
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
                         <label class="label-width" for="password"><spring:message code="lbl.password"/></label>
-                        <input type="password" class="form-control mx-sm-3" id="password" name="password"  required />
+                        <input type="text" class="form-control mx-sm-3" id="password" name="password"  required />
                         <input type="checkbox" onclick="toggleVisibilityOfPassword()">Show Password
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
                         <label class="label-width"  for="retypePassword"><spring:message code="lbl.confirmedPassword"/></label>
-                        <input type="password" class="form-control mx-sm-3" id="retypePassword"
+                        <input type="text" class="form-control mx-sm-3" id="retypePassword"
                                        required="required" />
                         <small id="confirmPasswordHelpInline" class="text-muted text-para">
                             <span class="text-red" id="passwordNotMatchedMessage"></span>
