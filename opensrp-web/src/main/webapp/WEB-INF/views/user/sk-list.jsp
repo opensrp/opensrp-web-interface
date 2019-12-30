@@ -41,14 +41,27 @@
 
 <div class="content-wrapper">
     <div class="container-fluid">
-        <div class="form-group">
+    
+    <div class="card1 mb-3">
+    	 <div class="card-header2">
+    	 	 <div style="float: right;">
+    	 	  <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SK")){ %>
+            	<a  href="#" onclick="addSK()">
+                <strong>
+                    <spring:message code="lbl.addNew"/>
+                    <spring:message code="lbl.sk"/>
+                </strong> </a> <%} %>
+    	 	 </div>
+    	 </div>
+    </div>
+        <%-- <div class="form-group " style="margin-left: 1169px;">
             <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SK")){ %>
             <a  href="#" onclick="addSK()">
                 <strong>
                     <spring:message code="lbl.addNew"/>
                     <spring:message code="lbl.sk"/>
                 </strong> </a> <%} %>
-        </div>
+        </div> --%>
 
         <!-- Modal for change password -->
         <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050; min-height: 300px;"
@@ -98,14 +111,22 @@
 
         </div>
         
-        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050"
-             id="update-user" class="modal">
-            <div id="userInfo"> </div>
+        <div style="overflow: unset;display: none; max-width: none; position: relative;min-height: 300px; z-index: 1050"
+             id="update-user" class="modal" >
+            <div id="userInfo"> <div style="position: absolute; margin-left:45%; margin-top: 105px;">
+                    <img width="90px" height="90px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+                </div> 
+            </div>
         </div>
         
-         <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050"
+         <div style="overflow: unset;display: none; max-width: none;min-height: 300px; position: relative; z-index: 1050"
              id="add-sk-modal" class="modal">
-            <div id="add-sk-form"> </div>
+            <div id="add-sk-form"> 
+            	 <div style="position: absolute; margin-left:45%; margin-top: 105px;">
+                    <img width="90px" height="90px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+                </div>
+            
+            </div>
         </div>
         
         
@@ -118,6 +139,10 @@
                 <div style="float: left; padding: 3px;">
                     <h5>SK List</h5>
                 </div>
+                
+                
+                 
+                
                 <div style="float: right;">
                     <input id="myInput" class="form-control input-sm" type="text" placeholder="Search..">
                 </div>
