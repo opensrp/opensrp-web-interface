@@ -94,6 +94,34 @@ public class UserRestController {
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}
+	
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public ResponseEntity<String> saveadd(@RequestBody UserDTO userDTO,
+	                                       ModelMap model) throws Exception {
+		String userNameUniqueError = "User already exists";
+		try {
+			User user = userMapper.map(userDTO);
+			User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+			user.setCreator(loggedInUser);
+			boolean isExists = userServiceImpl.isUserExist(user.getUsername());
+			if (!isExists) {
+				User createdUser = userServiceImpl.saveNew(user, false);
+				//				String mailBody = "Dear " + user.getFullName()
+				//						+ ",\n\nYour login credentials for HNPP are given below -\nusername : " + user.getUsername()
+				//						+ "\npassword : " + userDTO.getPassword();
+				//				if (numberOfUserSaved > 0) {
+				//					logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
+				//					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
+				//				}
+				userNameUniqueError = "";
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			userNameUniqueError = "Some problem occurred please contact with Admin";
+		}
+		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
+	}
 
 	@RequestMapping(value = "/change-password", method = RequestMethod.POST)
 	public ResponseEntity<String> changeUserPassword(HttpSession session, @RequestBody ChangePasswordDTO dto, ModelMap model) {

@@ -77,7 +77,7 @@
                 <div class="row col-12 tag-height">
                     <div class="form-group">
                         <label class="label-width" for="email"> <spring:message code="lbl.email"/> </label>
-                        <form:input path="email" type="email" class="form-control mx-sm-3" name="email">
+                        <input type="email" class="form-control mx-sm-3" name="email">
                     </div>
                 </div>
 
@@ -306,7 +306,7 @@ $('#_enableSimprint').hide();
 
     $("#UserInfo").submit(function(event) {
         $("#loading").show();
-        var url = "/opensrp-dashboard/rest/api/v1/user/save";
+        var url = "/opensrp-dashboard/rest/api/v1/user/add";
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
         var formData;
