@@ -174,7 +174,8 @@ $("#AddSk").submit(function(event) {
         'enableSimPrint': enableSimPrint
     };
     event.preventDefault(); 
-   
+
+
     $.ajax({
         contentType : "application/json",
         type: "POST",

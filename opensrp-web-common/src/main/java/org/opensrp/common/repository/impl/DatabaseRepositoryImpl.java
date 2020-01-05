@@ -110,7 +110,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		System.out.println("SAVE ALL");
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
-		long returnValue = -1;
+		long returnValue = 0;
 		try {
 			tx = session.beginTransaction();
 			System.out.println("Save.... "+ t.size());
@@ -119,12 +119,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 				session.saveOrUpdate(t.get(i));
 			}
 			logger.info("saved successfully: " + t.getClass().getName());
-			returnValue = 1;
-			if (!tx.wasCommitted())
-				tx.commit();
-		}
-		catch (HibernateException e) {
-			returnValue = -1;
+			if (!tx.wasCommitted()) tx.commit();
+			returnValue = t.size();
+		} catch (HibernateException e) {
+			returnValue = 0;
 			tx.rollback();
 			logger.error(e);
 			e.printStackTrace();
@@ -132,7 +130,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		finally {
 			session.close();
-
 		}
 		return returnValue;
 	}
@@ -2063,6 +2060,29 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			session.close();
 		}
 		return ssList;
+	}
+
+	@Override
+	public Integer updateSSParentBySKAndLocation(Integer skId, Integer ssRoleId, List<Integer> locationList) {
+		Session session = sessionFactory.openSession();
+		Integer totalUpdatedRow = 0;
+		try {
+			String hql = "update core.users set parent_user_id = :skId where "
+					+ "id = any(select distinct uca.user_id from "
+					+ "core.users_catchment_area uca join core.user_role ur on "
+					+ "ur.user_id = uca.user_id where uca.location_id in(:locationList) "
+					+ "and ur.role_id = :ssRoleId and uca.user_id != :skId );";
+			Query query = session.createSQLQuery(hql)
+					.setInteger("skId", skId)
+					.setInteger("ssRoleId", ssRoleId)
+					.setParameterList("locationList", locationList);
+			totalUpdatedRow = query.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return totalUpdatedRow;
 	}
 
 	public <T> List<T> getUniqueLocation(String village, String ward) {

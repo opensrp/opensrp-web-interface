@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Role;
+import org.opensrp.core.entity.User;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.mapper.BranchMapper;
+import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
@@ -68,5 +70,16 @@ public class BranchController {
         session.setAttribute("data", sks);
         String errorMessage = "";
         return "/make-select-option";
+    }
+
+    @RequestMapping(value = "/branches/sk-change", method = RequestMethod.GET)
+    public String skChange(HttpServletRequest request, HttpSession session, @RequestParam("ssId") Integer ssId, Model model) {
+        User am = AuthenticationManagerUtil.getLoggedInUser();
+        User ss = databaseServiceImpl.findById(ssId, "id", User.class);
+        List<Branch> branches = branchService.getBranchByUser(am.getId());
+        String errorMessage = "";
+        model.addAttribute("ssInfo", ss);
+        model.addAttribute("branches", branches);
+        return "user/sk-change-ajax";
     }
 }

@@ -5,7 +5,7 @@
 <ol class="breadcrumb">
 	<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_USER_LIST")){ %>
 	<li class="breadcrumb-item">
-		<a  href="<c:url value=""/>"> <strong> <spring:message code="lbl.manageUuser"/></strong> </a>    <% } %>
+		<a  href="<c:url value="/user.html?lang=${locale}"/>"> <strong> <spring:message code="lbl.manageUuser"/></strong> </a>    <% } %>
 	</li>
 	<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_ROLE_LIST")){ %>
 	<li class="breadcrumb-item">
@@ -22,6 +22,10 @@
 	<% if(AuthenticationManagerUtil.isPermitted("PERM_USER_UPLOAD")){ %>
 	<li class="breadcrumb-item">
 		<a  href="<c:url value="/user/upload.html?lang=${locale}"/>"> <strong><spring:message code="lbl.userUpload"/></strong></a> <% } %>
+	</li>
+	<% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_IMEI")){ %>
+	<li class="breadcrumb-item">
+		<a  href="<c:url value="/user/upload-imei.html?lang=${locale}"/>"> <strong><spring:message code="lbl.uploadImei"/></strong></a> <% } %>
 	</li>
 </ol>
 

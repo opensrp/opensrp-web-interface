@@ -10,6 +10,8 @@ public class UserLocationDTO {
 
     private int userId;
 
+    private String role;
+
     public int[] getLocations() {
         return locations;
     }
@@ -32,6 +34,14 @@ public class UserLocationDTO {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override

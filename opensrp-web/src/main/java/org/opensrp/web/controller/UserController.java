@@ -530,7 +530,7 @@ public class UserController {
 	 * <p>
 	 * This method render user html form for user password to edit, where login user can update user
 	 * password to save it in permanent storage.This is a get request method, there is a post
-	 * request method at {@link UserController#editPassword(model,session,id,locale)} which actually
+	 * request method at {@link UserController} which actually
 	 * update the user password in to permanent storage.
 	 * </p>
 	 * 
@@ -554,6 +554,7 @@ public class UserController {
 	public ModelAndView editPasswordAM(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
 		model.addAttribute("locale", locale);
 		User account = userServiceImpl.findById(id, "id", User.class);
+		model.addAttribute("account", account);
 		session.setAttribute("username", account.getUsername());
 		return new ModelAndView("user/change-password-ajax");
 	}
@@ -563,14 +564,7 @@ public class UserController {
 	 * This method is a post request of corresponding of get request method #editPassword which
 	 * actually update the user information in to permanent storage.
 	 * </p>
-	 * 
-	 * @param request is an argument to the servlet's service
-	 * @param session is an argument to the HttpSession's session
-	 * @param model defines a holder for model attributes.
-	 * @param locale is an argument to holds locale.
-	 * @param id is unique id of a user.
-	 * @param account is submitted user object.
-	 * @param binding Serves as result holder for a {@link DataBinder}.
+	 *
 	 */
 	//	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
 	//	@RequestMapping(value = "/user/{id}/password.html", method = RequestMethod.POST)
@@ -610,14 +604,21 @@ public class UserController {
 	@RequestMapping(value = "user/upload.html", method = RequestMethod.GET)
 	public String userUpload(Model model, HttpSession session, Locale locale) throws JSONException {
 		model.addAttribute("locale", locale);
-		String parentIndication = "#";
-		String parentKey = "parent";
-		JSONArray data = userServiceImpl.getUserDataAsJson(parentIndication, parentKey);
-		session.setAttribute("userTreeData", data);
+//		String parentIndication = "#";
+//		String parentKey = "parent";
+//		JSONArray data = userServiceImpl.getUserDataAsJson(parentIndication, parentKey);
+//		session.setAttribute("userTreeData", data);
 		
 		return "user/upload";
 	}
-	
+
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_IMEI')")
+	@RequestMapping(value = "user/upload-imei.html", method = RequestMethod.GET)
+	public String imeiUpload(Model model, HttpSession session, Locale locale) {
+		model.addAttribute("locale", locale);
+		return "user/upload-imei";
+	}
+
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logoutPage(HttpServletRequest request, HttpServletResponse response, Locale locale) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -754,6 +755,57 @@ public class UserController {
 			return new ModelAndView("/user/upload");
 		}
 		return new ModelAndView("redirect:/user.html?lang=" + locale);
+	}
+
+	@RequestMapping(value = "/upload/imei.html", method = RequestMethod.POST)
+	public ModelAndView uploadImei(HttpSession session, @RequestParam MultipartFile file, HttpServletRequest request, ModelMap model,
+	                               Locale locale) throws Exception {
+
+		if (file.isEmpty()) {
+			model.put("msg", "failed to upload user data because its empty");
+			model.addAttribute("msg", "failed to upload file because its empty");
+			return new ModelAndView("/user/upload-imei");
+		}
+		if (!"text/csv".equalsIgnoreCase(file.getContentType())
+				&& !"application/vnd.ms-excel".equalsIgnoreCase(file.getContentType())) {
+			model.addAttribute("msg", "file type should be '.csv'");
+			return new ModelAndView("/user/upload-imei");
+		}
+
+		String rootPath = request.getSession().getServletContext().getRealPath("/");
+		File dir = new File(rootPath + File.separator + "uploadedfile");
+		if (!dir.exists()) dir.mkdirs();
+
+		File csvFile = new File(dir.getAbsolutePath() + File.separator + file.getOriginalFilename());
+
+		try {
+			try (InputStream is = file.getInputStream();
+			     BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(csvFile))) {
+				int i;
+
+				while ((i = is.read()) != -1) {
+					stream.write(i);
+				}
+				stream.flush();
+			}
+		} catch (IOException e) {
+			model.put("msg", "failed to process file because : " + e.getMessage());
+			return new ModelAndView("/user/upload-imei");
+		}
+
+		String msg = "";
+		try {
+			msg = userServiceImpl.uploadImei(session, csvFile);
+		} catch (BadFormatException bf) {
+			msg = bf.getErrorMessage();
+		} catch (Exception e) {
+			msg = e.getMessage();
+		}
+
+		if (!msg.isEmpty()) {
+			model.put("msg", msg);
+		}
+		return new ModelAndView("/user/upload-imei");
 	}
 	
 	@RequestMapping(value = "/user/sk-list.html", method = RequestMethod.GET)

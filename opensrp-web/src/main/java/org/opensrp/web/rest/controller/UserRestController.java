@@ -203,6 +203,9 @@ public class UserRestController {
 	@RequestMapping(value = "/catchment-area/update", method = RequestMethod.POST)
 	public ResponseEntity<String> updateUsersCatchmentArea(HttpSession session, @RequestBody UserLocationDTO userLocationDTO) throws Exception {
 		String errorMessage = "";
+		User user = userServiceImpl.findById(userLocationDTO.getUserId(), "id", User.class);
+		String role = userServiceImpl.getRole(user.getRoles());
+		userLocationDTO.setRole(role);
 		userServiceImpl.updateTeamMemberAndCatchmentAreas(session, userLocationDTO);
 		List<Object[]> catchmentAreaTable = userServiceImpl.getCatchmentAreaTableForUser(userLocationDTO.getUserId());
 		JSONObject response = new JSONObject();
@@ -261,6 +264,7 @@ public class UserRestController {
 		finalResponse.put("catchmentAreas", catchmentAreas);
 		finalResponse.put("isTeamMember", isTeamMember);
 		finalResponse.put("catchmentAreaTable", catchmentAreaTable);
+		finalResponse.put("userFullName", user.getFullName());
 
 		return new ResponseEntity<>(finalResponse.toString(), OK);
 	}

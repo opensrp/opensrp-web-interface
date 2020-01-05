@@ -200,4 +200,6 @@ public interface DatabaseRepository {
 
 	public <T> List<T> getSSWithoutCatchmentAreaByAM(Integer userId);
 
+	public Integer updateSSParentBySKAndLocation(Integer skId, Integer ssRoleId, List<Integer> locationList);
+
 }

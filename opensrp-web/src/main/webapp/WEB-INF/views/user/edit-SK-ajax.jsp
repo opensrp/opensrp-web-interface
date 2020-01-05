@@ -50,9 +50,10 @@
 		<%-- <div class="form-group">
 			<jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />
 		</div> --%>
+		<h5><u>Edit SK</u></h5>
 		<div class="card mb-3">
 			<div class="card-header">
-				Edit SK Information				
+				<b>Edit ${account.fullName}'s Information</b>
 			</div>
 			<div class="card-body">
 				<form:form id="update-sk-information"   modelAttribute="account" class="form-inline">
@@ -145,13 +146,13 @@
 					<div class="row col-12 tag-height">
 						<div class="form-group">
 							<label class="label-width" for="inputPassword6"><spring:message code="lbl.activeUser"/></label>
-							<form:checkbox class="checkBoxClass form-check-input"
+							<form:checkbox class="checkBoxClass form-check-input" onclick="buttonUpdate()"
 										   path="enabled" value="${account.isEnabled()}"/>
 						</div>
 					</div>
 
 					<div class="row col-12 tag-height">
-						<div class="form-group">
+						<div class="form-group" id="update-continue" style="display: none;">
 							<input type="submit" id="updateContinue" name="updateContinue" value="Update & Continue To Edit Catchment Area"
 								   class="btn btn-primary btn-block btn-sm uc" />
 						</div>
@@ -178,9 +179,7 @@
 <script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
 <script src="<c:url value='/resources/js/select2.js' />"></script>
-<script>
 
-</script>
 <script>
 	var locationMagicSuggest;
 	var isCHCP= 0;
@@ -393,9 +392,21 @@
 		}%>
 		$('#branches').val(selectedBranchList);
 		$('#branches').trigger('change');
+		if ($('#enabled1').is(':checked') == true) {
+			$('#update-continue').show();
+		} else {
+			$('#update-continue').hide();
+		}
 	});
 	
-	
+	function buttonUpdate() {
+		if ($('#enabled1').is(':checked') == true) {
+			$('#update-continue').show();
+		} else {
+			$('#update-continue').hide();
+		}
+		console.log($('#enabled1').is(':checked'));
+	}
 </script>
 <%-- <script>
 	$(document).ready(function () {

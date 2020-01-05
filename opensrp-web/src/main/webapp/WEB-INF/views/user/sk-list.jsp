@@ -46,7 +46,7 @@
     	 <div class="card-header2">
     	 	 <div style="float: right;">
     	 	  <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SK")){ %>
-            	<a  href="#" onclick="addSK()">
+            	<a class="btn btn-outline-primary btn-xs" href="#" onclick="addSK()">
                 <strong>
                     <spring:message code="lbl.addNew"/>
                     <spring:message code="lbl.sk"/>
@@ -76,6 +76,7 @@
         <!--Modal start-->
         <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050"
              id="catchment-area" class="modal">
+            <div id="user-info-body" class="row"></div>
             <div id ="modal-body" class="row">
                 <div class="col-sm-5" style="overflow-y: auto; height: 350px;">
                     <div id="locationTree">
@@ -152,7 +153,7 @@
                     <table class="display" id="userList">
                         <thead>
                         <tr>
-                            <th><spring:message code="lbl.fullName"></spring:message></th>
+                            <th><spring:message code="lbl.name"></spring:message></th>
                             <th><spring:message code="lbl.userName"></spring:message></th>
                             <th><spring:message code="lbl.phoneNumber"></spring:message></th>
                             <th><spring:message code="lbl.branches"></spring:message></th>
@@ -199,10 +200,10 @@
                             <td><%=appVersion%></td>
                             <td>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
-                                <a href="#" onclick="userLoad(${skId})" ><spring:message code="lbl.edit"/></a> |  <%} %>
-                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-                                <a href="#" onclick="catchmentLoad(${skId}, ${0})" id = "catchment-modal"><spring:message code="lbl.catchmentArea"/></a> <%} %>
-                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
+                                <a href="#" onclick="userLoad(${skId})" ><spring:message code="lbl.edit"/></a> <%} %>
+                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER") && activeStatus.equalsIgnoreCase("Active")){ %>
+                                | <a href="#" onclick="catchmentLoad(${skId}, ${0})" id = "catchment-modal"><spring:message code="lbl.catchmentArea"/></a> <%} %>
+                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER") && activeStatus.equalsIgnoreCase("Active")){ %>
                                 | <a href="#" onclick="changePassword(${skId}, '${locale}')"><spring:message code="lbl.changePassword"/></a> <%} %>
                                 | <a href="<c:url value="/user/${skId}/${skUsername}/my-ss.html?lang=${locale}"/>"><spring:message code="lbl.ssList"/></a>
                             </td>
@@ -344,6 +345,9 @@
                 var assignedLocation = e["assignedLocation"];
                 var catchmentAreas = e["catchmentAreas"];
                 var catchmentAreaTable = e["catchmentAreaTable"];
+                var userFullName = e["userFullName"];
+                var userInfoHtml = '<h5><u>'+userFullName+'\'s Location Info</u></h5>';
+                $('#user-info-body').html(userInfoHtml);
                 console.log(catchmentAreaTable[0]);
                 $('#locationTree').jstree({
                     'core' : {

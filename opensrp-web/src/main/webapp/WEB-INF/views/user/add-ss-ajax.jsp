@@ -105,7 +105,7 @@
                         </label>
                         <select id="branches"
                                 class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="branches" multiple="multiple" required>
+                                name="branches" required>
                             <c:forEach items="${branches}" var="branch">
                                 <option value="${branch.id}" selected>${branch.name} (${branch.code})</option>
                             </c:forEach>

@@ -41,9 +41,10 @@
 <body>
 <div class="content-wrapper" style="min-height: auto !important;">
     <div class="container-fluid" style="padding-bottom: 20px !important;">
+        <h5><u>Change Password</u></h5>
         <div class="card mb-3">
-            <div class="card-header" id="data">
-                Change Password
+            <div class="card-header">
+                <b>${account.fullName}'s Password Change</b>
             </div>
             <div class="card-body">
 

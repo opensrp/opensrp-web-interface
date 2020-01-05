@@ -12,6 +12,7 @@ import java.util.*;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
+import javassist.NotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -303,6 +304,13 @@ public class UserService {
 			}
 		}
 		return roles;
+	}
+
+	@Transactional
+	public String getRole(Set<Role> roles) {
+		Iterator iter = roles.iterator();
+		Role role = (Role) iter.next();
+		return role.getName();
 	}
 
 	@Transactional
@@ -618,7 +626,10 @@ public class UserService {
 						}
 						List<Location> newLocations = locationServiceImpl.findAllById(locationIds, "id", "Location");
 
-						System.out.println("NEW LOCATIONS: "+ newLocations.size());
+						//updating parent of ss when update the location of sk
+						if (userLocationDTO.getRole().equalsIgnoreCase("SK")) {
+							repository.updateSSParentBySKAndLocation(userLocationDTO.getUserId(), 29, locationIds);
+						}
 
 						for (Location l : newLocations) {
 							locationSet.add(l);
@@ -738,101 +749,145 @@ public class UserService {
 				position++;
 				continue;
 			} else {
-				for (int i = 0; i < users.length; i++) {
-					UserDTO userDTO = new UserDTO();
-					if (users[0].length() > 0 && !users[0].equalsIgnoreCase("none")) {
-						users[0] = users[0].trim();
-						String fullName[] = users[0].split(" ");
-						userDTO.setFirstName(fullName[0]);
+				UserDTO userDTO = new UserDTO();
+				if (users[0].length() > 0 && !users[0].equalsIgnoreCase("none")) {
+					users[0] = users[0].trim();
+					String fullName[] = users[0].split(" ");
+					userDTO.setFirstName(fullName[0]);
 
-						if (fullName.length > 1)
-							userDTO.setLastName(fullName[1]);
-						else if (fullName.length > 2)
-							userDTO.setLastName(fullName[1] + " " + fullName[2]);
-						else
-							userDTO.setLastName(".");
+					if (fullName.length > 1)
+						userDTO.setLastName(fullName[1]);
+					else if (fullName.length > 2)
+						userDTO.setLastName(fullName[1] + " " + fullName[2]);
+					else
+						userDTO.setLastName(".");
 
-						if (users[1].equalsIgnoreCase("yes"))
-							userDTO.setEnableSimPrint(true);
-						else
-							userDTO.setEnableSimPrint(false);
+					if (users[1].equalsIgnoreCase("yes"))
+						userDTO.setEnableSimPrint(true);
+					else
+						userDTO.setEnableSimPrint(false);
 
-						userDTO.setMobile(users[2].trim());
-						Role role = repository.findByKey(users[3], "name", Role.class);
-						String roles = String.valueOf(role.getId());
-						userDTO.setRoles(roles);
+					userDTO.setMobile(users[2].trim());
+					Role role = repository.findByKey(users[3], "name", Role.class);
+					String roles = String.valueOf(role.getId());
+					userDTO.setRoles(roles);
 
-						if (users[3].trim().equalsIgnoreCase("SK")) {
-							userDTO.setPassword(userDTO.getMobile().substring(7));
-							userDTO.setUsername(users[7].trim());
-						} else if (users[3].trim().equalsIgnoreCase("SS")) {
-							userDTO.setPassword("brac123456");
-							userDTO.setUsername(users[7].trim());
-							userDTO.setSsNo(users[8].trim());
-						}
+					if (users[3].trim().equalsIgnoreCase("SK")) {
+						userDTO.setPassword(userDTO.getMobile().substring(7));
+						userDTO.setUsername(users[7].trim());
+					} else if (users[3].trim().equalsIgnoreCase("SS")) {
+						userDTO.setPassword("brac123456");
+						userDTO.setUsername(users[7].trim());
+						userDTO.setSsNo(users[8].trim());
+					}
 
-						userDTO.setEmail("");
-						Branch branch = repository.findByKey(users[4], "code", Branch.class);
-						String branches = "";
-						if (branch != null) {
-							branches = String.valueOf(branch.getId());
-						} else {
-							String errorMessage = "Branch: " + users[4].trim()
-							        + " not present in database. Please check line " + (position + 1) + " of the csv file ";
-							throw new BranchNotFoundException(errorMessage);
-						}
-						userDTO.setBranches(branches);
-						List<LocationTreeDTO> locations = repository.getUniqueLocation(users[5].toUpperCase(),
-						    users[6].toUpperCase());
-						User user = userMapper.map(userDTO);
-						User isExists = repository.findByKey(user.getUsername(), "username", User.class);
+					userDTO.setEmail("");
+					Branch branch = repository.findByKey(users[4], "code", Branch.class);
+					String branches = "";
+					if (branch != null) {
+						branches = String.valueOf(branch.getId());
+					} else {
+						String errorMessage = "Branch: " + users[4].trim()
+								+ " not present in database. Please check line " + (position + 1) + " of the csv file ";
+						throw new BranchNotFoundException(errorMessage);
+					}
+					userDTO.setBranches(branches);
+					List<LocationTreeDTO> locations = repository.getUniqueLocation(users[5].toUpperCase(),
+							users[6].toUpperCase());
+					User user = userMapper.map(userDTO);
+					User isExists = repository.findByKey(user.getUsername(), "username", User.class);
 
-						if (locations != null && locations.size() > 0) {
-							if (isExists == null) {
-								if (!users[3].trim().equalsIgnoreCase("SS")) {
-									user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
-								}
-								if ((user != null && !user.getUuid().isEmpty()) || users[3].trim().equalsIgnoreCase("SS")) {
-									user.setPassword(passwordEncoder.encode(user.getPassword()));
-									repository.save(user);
-									User newUser = repository.findByKey(user.getUsername(), "username", User.class);
-									logger.info("created new user:" + user.getUsername());
-									int[] locationsForSave = new int[1];
-									locationsForSave[0] = locations.get(0).getId();
-									UserLocationDTO userLocationDTO = new UserLocationDTO();
-									userLocationDTO.setUserId(newUser.getId());
-									userLocationDTO.setLocations(locationsForSave);
-									saveTeamMemberAndCatchmentAreas(session, userLocationDTO);
-								} else {
-									String errorMessage = "OpenMRS: Bad format found for this user. Please check line "
-									        + (position + 1) + " of the csv file ";
-									throw new BadFormatException(errorMessage);
-								}
+					if (locations != null && locations.size() > 0) {
+						if (isExists == null) {
+							if (!users[3].trim().equalsIgnoreCase("SS")) {
+								user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
+							}
+							if ((user != null && !user.getUuid().isEmpty()) || users[3].trim().equalsIgnoreCase("SS")) {
+								user.setPassword(passwordEncoder.encode(user.getPassword()));
+								repository.save(user);
+								User newUser = repository.findByKey(user.getUsername(), "username", User.class);
+								logger.info("created new user:" + user.getUsername());
+								int[] locationsForSave = new int[1];
+								locationsForSave[0] = locations.get(0).getId();
+								UserLocationDTO userLocationDTO = new UserLocationDTO();
+								userLocationDTO.setUserId(newUser.getId());
+								userLocationDTO.setLocations(locationsForSave);
+								saveTeamMemberAndCatchmentAreas(session, userLocationDTO);
 							} else {
-								try {
-									int[] locationsForSave = new int[1];
-									locationsForSave[0] = locations.get(0).getId();
-									UserLocationDTO userLocationDTO = new UserLocationDTO();
-									userLocationDTO.setUserId(isExists.getId());
-									userLocationDTO.setLocations(locationsForSave);
-									updateOfUploadedCatchmentArea(userLocationDTO);
-								}
-								catch (Exception e) {
-									e.printStackTrace();
-									logger.info(e.fillInStackTrace());
-								}
+								String errorMessage = "OpenMRS: Bad format found for this user. Please check line "
+										+ (position + 1) + " of the csv file ";
+								throw new BadFormatException(errorMessage);
 							}
 						} else {
-							String errorMessage = "Village: " + users[5].trim() + " and Union: " + users[6]
-							        + " pair not present in database. Please check line " + (position + 1)
-							        + " of the csv file ";
-							throw new LocationNotFoundException(errorMessage);
+							try {
+								int[] locationsForSave = new int[1];
+								locationsForSave[0] = locations.get(0).getId();
+								UserLocationDTO userLocationDTO = new UserLocationDTO();
+								userLocationDTO.setUserId(isExists.getId());
+								userLocationDTO.setLocations(locationsForSave);
+								updateOfUploadedCatchmentArea(userLocationDTO);
+							}
+							catch (Exception e) {
+								e.printStackTrace();
+								logger.info(e.fillInStackTrace());
+							}
 						}
+					} else {
+						String errorMessage = "Village: " + users[5].trim() + " and Union: " + users[6]
+								+ " pair not present in database. Please check line " + (position + 1)
+								+ " of the csv file ";
+						throw new LocationNotFoundException(errorMessage);
 					}
 				}
 			}
 			position++;
 		}
+		return msg;
+	}
+
+	public String uploadImei(HttpSession session, File csvFile) throws Exception {
+		BufferedReader br = null;
+		String cvsSplitBy = ",";
+		String msg = "";
+		int position = 0;
+		String line = "";
+
+		br = new BufferedReader(new FileReader(csvFile));
+
+		List<Imei> imeis = new ArrayList<>();
+
+		System.out.println("IN IMEI UPLOADING");
+
+		while ((line = br.readLine()) != null) {
+			System.out.println("LINE1: "+line);
+			String[] imeiRecord = line.split(cvsSplitBy);
+			if (position == 0) {
+				position++;
+				continue;
+			} else {
+				System.out.println("imei size: "+ imeiRecord.length);
+				String imei1 = (imeiRecord.length > 0 && !StringUtils.isBlank(imeiRecord[0]))?imeiRecord[0].trim():"";
+				String imei2 = (imeiRecord.length > 1 && !StringUtils.isBlank(imeiRecord[1]))?imeiRecord[1].trim():"";
+				System.out.println("imei1: "+ imei1 + " imei2: "+ imei2);
+				if (imei1 != null || imei2 != null) {
+					Imei imei = new Imei();
+					imei.setImei1(imei1);
+					imei.setImei2(imei2);
+					imei.setCreated(new Date());
+					imei.setUpdated(new Date());
+					imeis.add(imei);
+				} else {
+					throw new BadFormatException("Bad format found at line -"+(position+1));
+				}
+				System.out.println("LINE2: "+line);
+			}
+			position++;
+		}
+		System.out.println("POSITION: "+ position);
+		long result = repository.saveAll(imeis);
+		if (result > 0) msg = result +" record(s) saved successfully";
+		else msg = "Saving failed!!! Please try again later...";
+
 		return msg;
 	}
 

@@ -48,7 +48,8 @@
 	    	 	 <div style="float: right;">
 	    	 	 <a href="${back }"><strong>My SK </strong></a>  |
 		            <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>
-		            <a  href="#" onclick="ssForm(${skId}, '${skUsername}')">
+		            <a class="btn btn-outline-primary btn-xs"
+                       href="#" onclick="ssForm(${skId}, '${skUsername}')">
 		                <strong>
 		                    <spring:message code="lbl.addNew"/>
 		                    <spring:message code="lbl.ss"/>
@@ -90,29 +91,11 @@
         </div>
 
         <!-- Modal for change SK - start -->
-        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050;"
+        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050; min-height: 300px;"
              id="change-sk" class="modal">
-            <div id="modal-sk-body" class="row" style="margin-top: 20px;">
-                <div class="col-6 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width"  for="branches">
-                            <spring:message code="lbl.branches"/>
-                        </label>
-                        <select id="branches"
-                                class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="branches" required>
-                            <c:forEach items="${branches}" var="branch">
-                                <option value="${branch.id}">${branch.name} (${branch.code})</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-6 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width"  for="skList"><spring:message code="lbl.sk"/></label>
-                        <select class="form-control mx-sm-3 js-example-basic-multiple" id="skList" name="sk" required>
-                        </select>
-                    </div>
+            <div id="sk-change-body">
+                <div style="position: absolute; margin-left:45%; margin-top: 105px;">
+                    <img width="90px" height="90px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
                 </div>
             </div>
             <a class="btn btn-sm btn-dark" href="#" onclick="changeParent()" style="margin-left: 10px; float: right; bottom: 0px">Change SK</a>
@@ -124,6 +107,7 @@
         <!--Modal for catchment - start-->
         <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050"
              id="catchment-area" class="modal">
+            <div id="user-info-body" class="row"></div>
             <div id ="modal-body" class="row">
                 <div class="col-sm-5" style="overflow-y: auto; height: 350px;">
                     <div id="locationTree">
@@ -174,7 +158,7 @@
                     <table class="display" id="userList">
                         <thead>
                         <tr>
-                            <th><spring:message code="lbl.fullName"></spring:message></th>
+                            <th><spring:message code="lbl.name"></spring:message></th>
                             <th><spring:message code="lbl.userName"></spring:message></th>
                             <th><spring:message code="lbl.phoneNumber"></spring:message></th>
                             <th><spring:message code="lbl.branches"></spring:message></th>
@@ -222,10 +206,10 @@
 </div>
 <jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
-</body>
-</html>
 <script src="<c:url value='/resources/js/jquery.toast.js'/>"></script>
 <script src="<c:url value='/resources/js/jstree.min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery.multi-select.js'/>"></script>
 <script src="<c:url value='/resources/js/select2.js' />"></script>
 <script src="<c:url value='/resources/js/user-ss.js' />"></script>
+</body>
+</html>

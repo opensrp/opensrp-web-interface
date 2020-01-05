@@ -60,6 +60,9 @@ function catchmentLoad(ssId, term) {
             var assignedLocation = e["assignedLocation"];
             var catchmentAreas = e["catchmentAreas"];
             var catchmentAreaTable = e["catchmentAreaTable"];
+            var userFullName = e["userFullName"];
+            var userInfoHtml = '<h5><u>'+userFullName+'\'s Location Info</u></h5>';
+            $('#user-info-body').html(userInfoHtml);
             $('#locationTree').jstree({
                 'core' : {
                     'data' : locationData
@@ -270,6 +273,7 @@ $('#skList').select2({
 function changeSK(ssId) {
     currentSS = ssId;
     console.log("Present value");
+    console.log(ssId);
     $('#change-sk').modal({
         escapeClose: false,
         clickClose: false,
@@ -277,8 +281,7 @@ function changeSK(ssId) {
         show: true
     });
 
-    var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branches").val();
-    $("#skList").html("");
+    var url = "/opensrp-dashboard/branches/sk-change?ssId="+currentSS;
     $.ajax({
         type : "GET",
         contentType : "application/json",
@@ -287,9 +290,8 @@ function changeSK(ssId) {
         timeout : 100000,
         beforeSend: function() {},
         success : function(e, data) {
-            console.log(e);
-            console.log(data);
-            $("#skList").html(e);
+            $("#sk-change-body").html(e);
+            currentSS = ssId;
         },
         error : function(e) {
             console.log("ERROR: ", e);
@@ -438,7 +440,7 @@ function ssEditForm(skId, skUsername, ssId, locale) {
 
 function getBranches() {
     var branches = $('#branches').val();
-    return branches;
+    return branches.toString();
 }
 
 $("#SSInfo").submit(function(event) {
@@ -468,6 +470,7 @@ $("#SSInfo").submit(function(event) {
         'enableSimPrint': enableSimPrint
     };
     event.preventDefault();
+    console.log(formData);
     $.ajax({
         contentType : "application/json",
         type: "POST",
@@ -480,6 +483,7 @@ $("#SSInfo").submit(function(event) {
             xhr.setRequestHeader(header, token);
         },
         success : function(data) {
+            $("#loading").hide();
             if(data==""){
                 $("#usernameUniqueErrorMessage").html("This SS already exists");
             }
@@ -494,9 +498,10 @@ $("#SSInfo").submit(function(event) {
 
         },
         error : function(e) {
-
+            $("#loading").hide();
         },
         done : function(e) {
+            $("#loading").hide();
             console.log("DONE");
         }
     });

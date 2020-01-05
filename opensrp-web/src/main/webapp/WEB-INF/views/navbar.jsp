@@ -290,7 +290,7 @@
 				<div class="dropdown-menu">
 					<% if(PERM_READ_USER_LIST){ %>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value=""/>"> <strong>
+					<a class="dropdown-item" href="<c:url value="/user.html?lang=${locale}"/>"> <strong>
 						<spring:message code="lbl.manageUuser"/></strong> </a>
 					<% } %>
 					<% if(PERM_READ_ROLE_LIST){ %>

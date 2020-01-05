@@ -32,9 +32,11 @@
 <div class="content-wrapper" style="min-height: auto !important;">
     <div class="container-fluid" style="padding-bottom: 20px !important;">
 
+        <h5><u>Edit SS</u></h5>
         <div class="card mb-3">
             <div class="card-header">
-                Edit SS			</div>
+                <b>Edit ${account.fullName}'s Information</b>
+            </div>
             <div class="card-body">
                 <form:form modelAttribute="account" id="update-ss-information" class="form-inline">
 
