@@ -215,8 +215,8 @@ public class HealthIdService {
 				healthId.setStatus(true);
 				healthIds.add(healthId);
 			}
-			long isSaved = repository.saveAll(healthIds);
-			if (isSaved == 1) {
+			long isSaved = repository.saveAll(healthIds);			
+			if (isSaved > 0) {
 				JSONObject villageCode = new JSONObject();
 				villageCode.put("village_id", villageIds[i]);
 				JSONArray ids = new JSONArray();

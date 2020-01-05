@@ -124,8 +124,7 @@ public class HealthIdController {
 				villageIds[i++] = locationId;
 			}
 		}
-
-		JSONArray array = healthIdService.generateHouseholdId(villageIds);
+		JSONArray array = healthIdService.generateHouseholdId(villageIds);		
 		return new ResponseEntity<>(array.toString(), HttpStatus.OK);
 	}
 	
