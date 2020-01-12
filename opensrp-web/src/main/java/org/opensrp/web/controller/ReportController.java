@@ -203,9 +203,9 @@ public class ReportController {
                                           Locale locale){
 		model.addAttribute("formNameList", ModelConverter.mapLoad());
 		List<Object[]> allSKs = new ArrayList<>();
+		List<Object[]> branches = new ArrayList<>();
 		User user = userService.getLoggedInUser();
 		if (AuthenticationManagerUtil.isAM()) {
-			List<Object[]> branches = new ArrayList<>();
 			for (Branch branch: user.getBranches()) {
 				Object[] obj = new Object[10];
 				obj[0] = branch.getId();
@@ -220,7 +220,7 @@ public class ReportController {
 		session.setAttribute("skList",allSKs);
 		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
 
-        paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "ec_family");
+//        paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "ec_family");
         model.addAttribute("locale", locale);
 
 		return "report/client-data-report";

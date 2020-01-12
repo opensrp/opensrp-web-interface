@@ -107,7 +107,7 @@ public class LocationTagService {
 	public boolean locationTagExists(LocationTag locationTag) {
 		boolean exists = false;
 		if (locationTag != null) {
-			exists = repository.entityExistsNotEualThisId(locationTag.getId(), locationTag.getName(), "name",
+			exists = repository.entityExistsNotEqualThisId(locationTag.getId(), locationTag.getName(), "name",
 			    LocationTag.class);
 		}
 		return exists;

@@ -125,17 +125,19 @@
                                 <button name="export" id="bth-export" onclick="generateExportData()"
                                         class="btn btn-primary" value="export"><spring:message code="lbl.export"/></button>
                             </div>
-                            <div class="col-6" id="downloadingFile" style="margin-top: 5px">
+                            <div class="col-6" id="downloadingFile" style="margin-top: 5px; display: none;">
                                 <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Downloading..
                             </div>
-                            <div class="col-6" id="downloadFailedMsg" >
+                            <div class="col-6" id="downloadFailedMsg" style="display: none;">
                                 Failed to export data.
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
+            <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
+                <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+            </div>
             <div id="client-data-report-table"></div>
         </div>
     </div>
@@ -152,9 +154,6 @@
         $('#skList').val('${sk}');
         $('#branch').val('${branchId}');
         $("#msg").hide();
-        $("#downloadingFile").hide();
-        $("#downloadFailedMsg").hide();
-
     });
     function branchChange() {
         console.log("in branch change");
@@ -220,18 +219,22 @@
                 sk: $("#skList").val(),
                 pageNo: pageNo
             },
-            beforeSend: function() {},
+            beforeSend: function() {
+                $('#loading').show();
+            },
             success : function(data) {
+                $('#loading').hide();
                 $("#client-data-report-table").html(data);
                 $('#pagination-'+pageNo).addClass("active");
                 if (pageNo != 0) $('#pagination-'+0).removeClass("active");
             },
             error : function(e) {
+                $('#loading').hide();
                 console.log("ERROR: ", e);
                 display(e);
             },
             done : function(e) {
-
+                $('#loading').hide();
                 console.log("DONE");
                 //enableSearchButton(true);
             }

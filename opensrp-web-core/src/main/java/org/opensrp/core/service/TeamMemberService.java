@@ -169,11 +169,11 @@ public class TeamMemberService {
 		boolean isIdentifierExists = false;
 		boolean isLocationsExists = false;
 		if (teamMember != null) {
-			isPersonExists = repository.entityExistsNotEualThisId(teamMember.getId(), teamMember.getPerson(), "person",
+			isPersonExists = repository.entityExistsNotEqualThisId(teamMember.getId(), teamMember.getPerson(), "person",
 					TeamMember.class);
 		}
 		if (teamMember != null) {
-			isIdentifierExists = repository.entityExistsNotEualThisId(teamMember.getId(), teamMember.getIdentifier(),
+			isIdentifierExists = repository.entityExistsNotEqualThisId(teamMember.getId(), teamMember.getIdentifier(),
 					"identifier", TeamMember.class);
 		}
 		if (isPersonExists) {

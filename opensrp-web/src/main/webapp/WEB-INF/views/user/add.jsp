@@ -56,7 +56,7 @@
                     <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
 
             </div>
-            <form:form 	modelAttribute="account" id="UserInfo" class="form-inline" autocomplete="false">
+            <form:form 	modelAttribute="account" id="UserInfo" class="form-inline" autocomplete="off">
 
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
@@ -69,8 +69,7 @@
                 <div class="row col-12 tag-height">
                     <div class="form-group">
                         <label class="label-width" for="lastName"> <spring:message code="lbl.lastName"/> </label>
-                        <form:input path="lastName" class="form-control mx-sm-3"
-                                    />
+                        <form:input path="lastName" class="form-control mx-sm-3"/>
                     </div>
                 </div>
 
@@ -311,8 +310,7 @@ $('#_enableSimprint').hide();
         var header = $("meta[name='_csrf_header']").attr("content");
         var formData;
         var enableSimPrint = false;
-        if ($('#enableSimPrint1').is(":checked"))
-        {
+        if ($('#enableSimPrint1').is(":checked")) {
         	enableSimPrint = true;
         }
 		

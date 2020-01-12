@@ -14,16 +14,16 @@
 			.getAttribute("pageList");
 	String offSet = request.getParameter("pageNumber");
 
-	Map<String, String> paginationAtributes = (Map<String, String>) session
-			.getAttribute("paginationAtributes");
+//	Map<String, String> paginationAtributes = (Map<String, String>) session
+//			.getAttribute("paginationAtributes");
 
 	// String paginationLink = divisionLink+districtLink+upazilaLink+unionLink + subunitLink+mauzaparaLink+providerLink+nameLink+searchLink;
 	/* disabledLINK has been used to to make current page number nonhiperlink i.e unclickable
 	e.g if user is at page number 15 then page number 15 should not be clickable*/
-	String paginationLink = "";
-	if (paginationAtributes.containsKey("paginationLink")) {
-		paginationLink = paginationAtributes.get("paginationLink");
-	}
+//	String paginationLink = "";
+//	if (paginationAtributes.containsKey("paginationLink")) {
+//		paginationLink = paginationAtributes.get("paginationLink");
+//	}
 	int disabledLINK = 0;
 	if (offSet != null) {
 		disabledLINK = Integer.parseInt(offSet);

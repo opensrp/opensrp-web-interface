@@ -118,19 +118,19 @@ public class Location implements Serializable {
 	public Date getCreated() {
 		return created;
 	}
-	
-	public void setCreated() {
-		this.created = new Date();
+
+	public void setCreated(Date created) {
+		this.created = created;
 	}
-	
+
 	public Date getUpdated() {
 		return updated;
 	}
-	
-	public void setUpdated() {
-		this.updated = new Date();
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
 	}
-	
+
 	public String getDescription() {
 		return description;
 	}

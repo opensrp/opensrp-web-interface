@@ -24,7 +24,7 @@ Integer selectedParentLocation = (Integer)session.getAttribute("selectedParentLo
 String selectedParentLocationName = (String)session.getAttribute("parentLocationName");
 
 Map<Integer, String> tags =  (Map<Integer, String>)session.getAttribute("tags");
-Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
+Integer selectedTag = (Integer)session.getAttribute("selectedTag");
 	%>
 <c:url var="saveUrl" value="/location/${id}/edit.html" />
 
@@ -79,36 +79,34 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 										<div id="cm">
 											  <label><spring:message code="lbl.parentLocation"/> </label>
 											  <select id="combobox" class="form-control">
-											  
-											    </select>
+											  </select>
 											</div>
 									</div>									
 								</div>
 							</div>	
 						
 						<div class="form-group">							
-								<div class="row">									
-									<div class="col-5">
-									<label for="exampleInputName"> <spring:message code="lbl.tag"/></label>
-										<select class="custom-select custom-select-lg mb-3" id="locationTag" name="locationTag" required="required">
-									 		<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
-												<%
-												for (Map.Entry<Integer, String> entry : tags.entrySet())
-												{
-													if(selectedTtag==entry.getKey()){ %>
-														<option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
-													<% }else{
-														%>
-															<option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
-														<%
-													}
-													
+							<div class="row">
+								<div class="col-5">
+								<label for="exampleInputName"> <spring:message code="lbl.tag"/></label>
+									<select class="custom-select custom-select-lg mb-3" id="locationTag" name="locationTag" required="required">
+										<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
+											<%
+											for (Map.Entry<Integer, String> entry : tags.entrySet())
+											{
+												if(selectedTag==entry.getKey()){ %>
+													<option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
+												<% }else{
+													%>
+														<option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
+													<%
 												}
-												%>
-											</select>
-									</div>									
+
+											}
+											%>
+									</select>
 								</div>
-							
+							</div>
 						</div>
 						
 						<div class="form-group">
@@ -119,13 +117,11 @@ Integer selectedTtag = (Integer)session.getAttribute("selectedTtag");
 									
 									<label for="exampleInputName"><spring:message code="lbl.visitLocation"/>  </label> 
 									<form:checkbox path="visitLocation" class="chk" />
-										
 								</div>
 							</div>
 						</div>
 						<form:hidden path="id" />
 						<form:hidden path="uuid" />
-						<form:label path="uuid"> uuid:${location.getUuid()}</form:label>
 						<div class="form-group">
 							<div class="row">
 								<div class="col-3">

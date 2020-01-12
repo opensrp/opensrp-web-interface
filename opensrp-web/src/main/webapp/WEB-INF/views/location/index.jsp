@@ -45,7 +45,7 @@ if (paginationAtributes.containsKey("name")) {
 		<div class="form-group">
 			<h5><spring:message code="lbl.locationTitle"/></h5>
 			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_LOCATION")){ %>
-			<a  href="<c:url value="/location/add.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addNew"/></strong></a>
+			<a  href="<c:url value="/location/add-ajax.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addNew"/></strong></a>
 			<% } %>
 		</div>
 		<div class="card mb-3">
@@ -78,7 +78,7 @@ if (paginationAtributes.containsKey("name")) {
 									<th><spring:message code="lbl.name"/></th>
 									<th><spring:message code="lbl.description"/></th>									
 									<th> <spring:message code="lbl.tag"/></th>									
-									<th><spring:message code="lbl.action"/></th>
+<%--									<th><spring:message code="lbl.action"/></th>--%>
 								</tr>
 							</thead>
 							
@@ -105,10 +105,10 @@ if (paginationAtributes.containsKey("name")) {
 										<td><%=location.getName() %></td>										
 										<td><%=location.getDescription() %></td>
 										<td><%=tagName%></td>										
-										<td>
-										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_LOCATION")){ %>
-										<a href="<c:url value="/location/${id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a></td>
-										<%} %>
+<%--										<td>--%>
+<%--										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_LOCATION")){ %>--%>
+<%--										<a href="<c:url value="/location/${id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a></td>--%>
+<%--										<%} %>--%>
 
 									</tr>
 									<%

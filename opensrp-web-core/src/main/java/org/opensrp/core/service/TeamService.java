@@ -118,10 +118,10 @@ public class TeamService {
 		boolean isNameExists = false;
 		boolean isIdentifierExists = false;
 		if (team != null) {
-			isNameExists = repository.entityExistsNotEualThisId(team.getId(), team.getName(), "name", Team.class);
+			isNameExists = repository.entityExistsNotEqualThisId(team.getId(), team.getName(), "name", Team.class);
 		}
 		if (team != null) {
-			isIdentifierExists = repository.entityExistsNotEualThisId(team.getId(), team.getIdentifier(), "identifier",
+			isIdentifierExists = repository.entityExistsNotEqualThisId(team.getId(), team.getIdentifier(), "identifier",
 			    Team.class);
 		}
 		if (isNameExists) {

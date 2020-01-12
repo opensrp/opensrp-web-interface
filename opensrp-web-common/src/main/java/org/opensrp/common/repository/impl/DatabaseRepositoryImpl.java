@@ -486,12 +486,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> findAllByKeysWithALlMatches(boolean isProvider, Map<String, String> fielaValues, Class<?> className) {
+	public <T> List<T> findAllByKeysWithALlMatches(boolean isProvider, Map<String, String> fieldValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		List<T> result = null;
 		try {
 			Criteria criteria = session.createCriteria(className);
-			for (Map.Entry<String, String> entry : fielaValues.entrySet()) {
+			for (Map.Entry<String, String> entry : fieldValues.entrySet()) {
 				criteria.add(Restrictions.ilike(entry.getKey(), entry.getValue(), MatchMode.ANYWHERE));
 			}
 			if (isProvider) {
@@ -528,12 +528,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public boolean isExists(Map<String, Object> fielaValues, Class<?> className) {
+	public boolean isExists(Map<String, Object> fieldValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
 		List<Object> result = new ArrayList<Object>();
 		try {
 			Criteria criteria = session.createCriteria(className);
-			for (Map.Entry<String, Object> entry : fielaValues.entrySet()) {
+			for (Map.Entry<String, Object> entry : fieldValues.entrySet()) {
 				criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
 				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			}
@@ -586,16 +586,40 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> boolean entityExistsNotEualThisId(int id, T value, String fieldName, Class<?> className) {
+	public <T> boolean entityExistsNotEqualThisId(int id, T value, String fieldName, Class<?> className) {
 		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		criteria.add(Restrictions.eq(fieldName, value));
-		criteria.add(Restrictions.ne("id", id));
-		List<Object> result = criteria.list();
-		session.close();
+		List<Object> result = new ArrayList<Object>();
+		try {
+			Criteria criteria = session.createCriteria(className);
+			criteria.add(Restrictions.eq(fieldName, value));
+			criteria.add(Restrictions.ne("id", id));
+			result = criteria.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.clear();
+		}
 		return (result.size() > 0 ? true : false);
 	}
-	
+
+	@Override
+	public <T> boolean isLocationExists(int parentLocationId, String name, Class<?> className) {
+		List<Object> result = new ArrayList<Object>();
+		Session session = sessionFactory.openSession();
+		try {
+			String hql = "select * from core.location where (name = :name or name = :nameWithParentId) and parent_location_id = "+parentLocationId+";";
+			Query query = session.createSQLQuery(hql)
+					.setString("name", name)
+					.setString("nameWithParentId", name+":"+parentLocationId);
+			result = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.clear();
+		}
+		return (result.size() > 0 ? true : false);
+	}
+
 	/**
 	 * <p>
 	 * {@link #findAll(String)} fetch entity by {@link #sessionFactory}. This is a common method for

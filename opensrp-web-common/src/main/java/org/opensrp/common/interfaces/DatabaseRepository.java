@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.dom4j.Branch;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.opensrp.common.dto.ChangePasswordDTO;
@@ -12,10 +11,6 @@ import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.dto.UserAssignedLocationDTO;
 import org.opensrp.common.util.SearchBuilder;
-import org.springframework.security.core.userdetails.User;
-
-import javax.servlet.http.HttpSession;
-import javax.xml.stream.Location;
 
 /**
  * <p>
@@ -38,7 +33,7 @@ import javax.xml.stream.Location;
  * <li>{@link #findAllByKeys(Map, Class)}</li>
  * <li>{@link #findAllByKeysWithALlMatches(boolean, Map, Class)}</li>
  * <li>{@link #isExists(String, String, Class)}</li>
- * <li>{@link #entityExistsNotEualThisId(int, Object, String, Class)}</li>
+ * <li>{@link #entityExistsNotEqualThisId(int, Object, String, Class)}</li>
  * <li>{@link #findAllByKey(String, String, Class)}</li>
  * <li>{@link #search(SearchBuilder, int, int, Class)}</li>
  * <li>{@link #countBySearch(SearchBuilder, Class)}</li>
@@ -111,12 +106,14 @@ public interface DatabaseRepository {
 	
 	public <T> List<T> findAllByKeysWithALlMatches(boolean isProvider, Map<String, String> fielaValues, Class<?> className);
 	
-	public boolean isExists(Map<String, Object> fielaValues, Class<?> className);
+	public boolean isExists(Map<String, Object> fieldValues, Class<?> className);
 
 	public boolean isExistsCustom(String value, Class<?> className);
 
-	public <T> boolean entityExistsNotEualThisId(int id, T value, String fieldName, Class<?> className);
-	
+	public <T> boolean entityExistsNotEqualThisId(int id, T value, String fieldName, Class<?> className);
+
+	public <T> boolean isLocationExists(int parentId, String name, Class<?> className);
+
 	public <T> List<T> findAllByKey(String value, String fieldName, Class<?> className);
 	
 	public List<Object[]> executeSelectQuery(String sqlQuery, Map<String, Object> params);

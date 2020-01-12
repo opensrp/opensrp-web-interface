@@ -9,20 +9,23 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.common.dto.LocationDTO;
+import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.UserService;
+import org.opensrp.core.service.mapper.LocationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @RequestMapping("rest/api/v1/location")
 @RestController
@@ -33,6 +36,9 @@ public class LocationRestController {
 	
 	@Autowired
 	private UserService userServiceImpl;
+
+	@Autowired
+	private LocationMapper locationMapper;
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public String getLocationNameAndId(Model model, HttpSession session, @RequestParam String name) throws JSONException {
@@ -83,5 +89,30 @@ public class LocationRestController {
 		
 		return new ResponseEntity<>(response.toString(), HttpStatus.NO_CONTENT);
 		
+	}
+
+	@RequestMapping(value = "/save", method = RequestMethod.POST)
+	public ResponseEntity<String> saveLocation(HttpSession session, ModelMap model, @RequestBody LocationDTO locationDTO) throws Exception {
+		System.out.println(locationDTO.toString());
+		Location location = locationMapper.map(locationDTO);
+		try {
+			if (!locationServiceImpl.locationExists(location)) {
+				locationServiceImpl.saveToOpenSRP(location);
+				System.out.println("LOCATION NOT EXIST");
+			} else {
+				String errorMessage = "Specified location already exists, please specify another";
+				return new ResponseEntity<> (new Gson().toJson(errorMessage), OK);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("IN EXCEPTION");
+			return new ResponseEntity<> (new Gson().toJson(e.getMessage()), OK);
+		}
+		return new ResponseEntity<>(new Gson().toJson(""), OK);
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.PUT)
+	public ResponseEntity<String> editLocation(@RequestBody LocationDTO locationDTO) throws JSONException {
+		return null;
 	}
 }

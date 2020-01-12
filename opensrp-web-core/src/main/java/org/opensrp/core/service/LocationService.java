@@ -14,7 +14,11 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.AliasToBeanResultTransformer;
+import org.hibernate.type.StandardBasicTypes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +27,7 @@ import org.opensrp.common.dto.UserAssignedLocationDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.util.TreeNode;
 import org.opensrp.common.dto.LocationDTO;
+import org.opensrp.core.dto.LocationHierarchyDTO;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.LocationTag;
 import org.opensrp.core.entity.User;
@@ -56,7 +61,7 @@ public class LocationService {
 	
 	@Transactional
 	public List<Object[]> getLocationByTagId(int tagId) {
-		String sqlQuery = "SELECT location.name,location.id from core.location " + " WHERE location_tag_id=:location_tag_id";
+		String sqlQuery = "SELECT split_part(location.name, ':', 1), location.id from core.location " + " WHERE location_tag_id=:location_tag_id";
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("location_tag_id", tagId);
 		return repository.executeSelectQuery(sqlQuery, params);
@@ -64,7 +69,7 @@ public class LocationService {
 	
 	@Transactional
 	public List<Object[]> getChildData(int parentId) {
-		String sqlQuery = "SELECT split_part(location.name, ':', 1),location.id from core.location where parent_location_id=:parentId";
+		String sqlQuery = "SELECT split_part(location.name, ':', 1), location.id from core.location where parent_location_id=:parentId";
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("parentId", parentId);
 		return repository.executeSelectQuery(sqlQuery, params);
@@ -77,9 +82,7 @@ public class LocationService {
 	
 	@Transactional
 	public <T> long save(T t) throws Exception {
-		
 		Location location = (Location) t;
-		
 		location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
 		long createdLocation = 0;
 		if (!location.getUuid().isEmpty()) {
@@ -88,6 +91,13 @@ public class LocationService {
 			logger.error("No uuid found for location:" + location.getName());
 			// TODO
 		}
+		return createdLocation;
+	}
+
+	@Transactional
+	public <T> long saveToOpenSRP(T t) throws Exception {
+		Location location = (Location) t;
+		long createdLocation = repository.save(location);
 		return createdLocation;
 	}
 	
@@ -183,7 +193,7 @@ public class LocationService {
 		JSONArray existinglocation = new JSONArray();
 		String query = "";
 		if (location != null) {
-			exists = repository.entityExistsNotEualThisId(location.getId(), location.getName(), "name", Location.class);
+			exists = repository.entityExistsNotEqualThisId(location.getId(), location.getName(), "name", Location.class);
 			
 			if (isOpenMRSCheck) {
 				Location findLocation = findById(location.getId(), "id", Location.class);
@@ -204,6 +214,17 @@ public class LocationService {
 		
 		return exists;
 	}
+
+	public boolean locationExists(Location location) {
+		boolean exists = false;
+		if (location != null) {
+			int parentLocationId = location.getParentLocation().getId();
+			System.out.println("Location exist id: " + location.getId() + " parent id: "+ location.getParentLocation().getId());
+			exists = repository.isLocationExists(parentLocationId, location.getName(), Location.class);
+		}
+		System.out.println("Is Location Exist: "+ exists);
+		return exists;
+	}
 	
 	public void setSessionAttribute(HttpSession session, Location location, String parentLocationName) {
 		
@@ -218,9 +239,9 @@ public class LocationService {
 		}
 		session.setAttribute("tags", tags);
 		if (location.getLocationTag() != null) {
-			session.setAttribute("selectedTtag", location.getLocationTag().getId());
+			session.setAttribute("selectedTag", location.getLocationTag().getId());
 		} else {
-			session.setAttribute("selectedTtag", 0);
+			session.setAttribute("selectedTag", 0);
 		}
 		
 		session.setAttribute("parentLocationName", parentLocationName);
@@ -479,14 +500,13 @@ public class LocationService {
 							location.setLocationTag(locationTag);
 							location.setParentLocation(parentLocation);
 							location.setDescription(name);
-							location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
-							if (!location.getUuid().isEmpty()) {								
-								repository.save(location);
-								
-							} else {
-								logger.info("No uuid found for location:" + location.getName());
-								
-							}
+//							location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
+//							if (!location.getUuid().isEmpty()) {
+							repository.save(location);
+//							} else {
+//								logger.info("No uuid found for location:" + location.getName());
+//
+//							}
 							
 						}else{
 							logger.info("already exists location:" + location.getName());
@@ -673,5 +693,29 @@ public class LocationService {
 			}
 		}
 		return locationId;
+	}
+
+	@Transactional
+	public LocationHierarchyDTO getLocationHierarchy(Integer locationId) {
+		Session session = sessionFactory.openSession();
+		LocationHierarchyDTO dto = new LocationHierarchyDTO();
+		try {
+			String hql = "select * from core.single_location_tree(:locationId);";
+			Query query = session.createSQLQuery(hql)
+					.addScalar("villageId", StandardBasicTypes.INTEGER)
+					.addScalar("unionId", StandardBasicTypes.INTEGER)
+					.addScalar("pourasabhaId", StandardBasicTypes.INTEGER)
+					.addScalar("upazilaId", StandardBasicTypes.INTEGER)
+					.addScalar("districtId", StandardBasicTypes.INTEGER)
+					.addScalar("divisionId", StandardBasicTypes.INTEGER)
+					.setInteger("locationId", locationId)
+					.setResultTransformer(new AliasToBeanResultTransformer(LocationHierarchyDTO.class));
+			dto = (LocationHierarchyDTO) query.list().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.clear();
+		}
+		return dto;
 	}
 }
