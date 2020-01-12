@@ -65,7 +65,7 @@
 					<table class="display" id="userList">
 						<thead>
 							<tr>
-								<th><spring:message code="lbl.fullName"></spring:message></th>
+								<th><spring:message code="lbl.name"></spring:message></th>
 								<th><spring:message code="lbl.userName"></spring:message></th>
 								<th><spring:message code="lbl.role"></spring:message></th>
 								<th><spring:message code="lbl.phoneNumber"></spring:message></th>

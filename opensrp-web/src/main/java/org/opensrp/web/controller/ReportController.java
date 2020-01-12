@@ -341,19 +341,22 @@ public class ReportController {
         List allClientInfo =  ModelConverter.modelConverterForClientData(formName,tempClientInfo);
 
 
-        Integer size = databaseServiceImpl.getClientInfoFilterCount(startTime, endTime, formName.replaceAll("\\_"," ") , sk, allSKs);
-        if ((size % RESULT_SIZE) == 0) {
-            session.setAttribute("size", (size / RESULT_SIZE) - 1);
-        } else {
-            session.setAttribute("size", size / RESULT_SIZE);
-        }
+        Integer size = 0;
+        if (pageNumber == 0) {
+        	size = databaseServiceImpl.getClientInfoFilterCount(startTime, endTime, formName.replaceAll("\\_"," ") , sk, allSKs);
+			if ((size % RESULT_SIZE) == 0) {
+				session.setAttribute("size", (size / RESULT_SIZE) - 1);
+			} else {
+				session.setAttribute("size", size / RESULT_SIZE);
+			}
+			session.setAttribute("recordSize", size);
+		}
 
         new PaginationUtil().createPageList(session, pageNumber.toString());
 
         System.out.println("---> debug Size: "+ size);
 
         session.setAttribute("clientInfoList",allClientInfo);
-        session.setAttribute("recordSize", size);
         session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
         session.setAttribute("emptyFlag",1);
         session.setAttribute("pageNumber", pageNumber);
@@ -361,8 +364,6 @@ public class ReportController {
         session.setAttribute("endTime", endTime);
         session.setAttribute("formName", formName);
 
-
 	    return "report/client-data-report-table";
-
     }
 }

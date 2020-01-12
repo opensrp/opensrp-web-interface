@@ -18,6 +18,7 @@
     List<UserDTO> ssWithoutCatchment = (List<UserDTO>) session.getAttribute("ssWithoutCatchment");
     Integer skId = (Integer) session.getAttribute("skId");
     String skUsername = (String) session.getAttribute("skUsername");
+    String skName = (String) session.getAttribute("skName");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -147,7 +148,7 @@
         <div class="card mb-3">
             <div class="card-header">
                 <div style="float: left; padding: 3px;">
-                    <h5>SS List</h5>
+                    <h5><%=skName%>'s SS List</h5>
                 </div>
                 <div style="float: right;">
                     <input id="myInput" class="form-control input-sm" type="text" placeholder="Search..">

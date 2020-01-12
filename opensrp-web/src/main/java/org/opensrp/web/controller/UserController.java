@@ -826,7 +826,7 @@ public class UserController {
 		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
 		List<UserDTO> users = userServiceImpl.getChildUserFromParent(skId, "SS");
 		List<UserDTO> ssWithoutCatchment = userServiceImpl.getSSWithoutCatchmentArea(skId);
-		System.err.println(skUsername);
+		User skOfSS = userServiceImpl.findById(skId, "id", User.class);
 		model.addAttribute("skUsername", skUsername);
 		model.addAttribute("branches", branches);
 		model.addAttribute("skId", skId);
@@ -835,6 +835,7 @@ public class UserController {
 		session.setAttribute("idFinal", skId);
 		session.setAttribute("usernameFinal", skUsername);
 		session.setAttribute("ssWithoutCatchment", ssWithoutCatchment);
+		session.setAttribute("skName", skOfSS.getFullName());
 		return "user/ss-list";
 	}
 	

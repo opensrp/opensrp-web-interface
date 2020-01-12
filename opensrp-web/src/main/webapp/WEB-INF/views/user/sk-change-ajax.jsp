@@ -15,6 +15,13 @@
 <head>
     <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
     <jsp:include page="/WEB-INF/views/css.jsp" />
+    <style>
+        li { font-size: 18px !important; }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            left: 95% !important;
+        }
+        .select2-container--default .select2-selection--single { width: 100% !important; }
+    </style>
 </head>
 
 <body>
