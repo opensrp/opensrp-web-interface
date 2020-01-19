@@ -43,7 +43,7 @@ public interface DatabaseService {
 
 	public  List<Object[]> getAllSks(List<Object[]> branches);
 
-	public List<Object[]> getSKByBranch(Integer branchId);
+	public List<Object[]> getSKByBranch(String branchIds);
 
 	public List<Object[]> getClientInformation();
 

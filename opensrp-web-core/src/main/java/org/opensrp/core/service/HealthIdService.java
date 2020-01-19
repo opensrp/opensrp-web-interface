@@ -5,9 +5,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -189,39 +193,37 @@ public class HealthIdService {
 			session.close();
 		}
 		return healthIds;
-		
+	}
+
+	public static <T, U> List<U> convertIntListToStringList(List<T> listOfInteger, Function<T, U> function) {
+		return listOfInteger.stream()
+				.map(function)
+				.collect(Collectors.toList());
 	}
 
 	public JSONArray generateHouseholdId(int[] villageIds) throws Exception {
 		JSONArray villageCodes = new JSONArray();
 		for (int i = 0; i < villageIds.length; i++) {
 			if (villageIds[i] == 0)break;
-			BigInteger b = repository.countByField(villageIds[i], "location_id", "health_id");
-			int number = b.intValue();
-			List<HealthId> healthIds = new ArrayList<>();
-			for (int j = 0; j < HEALTH_ID_LIMIT; j++){
-				int villageId = villageIds[i];
-				number ++;
-				String forthDigit = String.valueOf(number%10);
-				String thirdDigit = String.valueOf((number/10)%10);
-				String secondDigit = String.valueOf((number/100)%10);
-				String firstDigit = String.valueOf((number/1000)%10);
-				String finalNumber = firstDigit+secondDigit+thirdDigit+forthDigit;
+			Integer number = repository.maxByHealthId(villageIds[i], "location_id", "health_id");
 
-				HealthId healthId = new HealthId();
-				healthId.setCreated(new Date());
-				healthId.sethId(finalNumber);
-				healthId.setLocationId(villageId);
-				healthId.setStatus(true);
-				healthIds.add(healthId);
-			}
-			long isSaved = repository.saveAll(healthIds);			
+			List<Integer> listOfInteger = IntStream.rangeClosed(number+1, number+HEALTH_ID_LIMIT).boxed().collect(Collectors.toList());
+			List<String> listOfString = convertIntListToStringList( listOfInteger, s ->  StringUtils.leftPad(String.valueOf(s), 4, "0"));
+
+			HealthId healthId = new HealthId();
+
+			healthId.setCreated(new Date());
+			healthId.sethId(String.valueOf(number+HEALTH_ID_LIMIT));
+			healthId.setLocationId(villageIds[i]);
+			healthId.setStatus(true);
+
+			long isSaved = repository.save(healthId);
 			if (isSaved > 0) {
 				JSONObject villageCode = new JSONObject();
 				villageCode.put("village_id", villageIds[i]);
 				JSONArray ids = new JSONArray();
-				for (HealthId healthId : healthIds) {
-					ids.put(healthId.gethId());
+				for (String healthId1 : listOfString) {
+					ids.put(healthId1);
 				}
 				villageCode.put("generated_code", ids);
 				villageCodes.put(villageCode);

@@ -26,8 +26,7 @@
 <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 <%
-Map<String, String> paginationAtributes = (Map<String, String>) session
-.getAttribute("paginationAtributes");
+Map<String, String> paginationAtributes = (Map<String, String>) session.getAttribute("paginationAtributes");
 String name = "";
 if (paginationAtributes.containsKey("name")) {
 	name = paginationAtributes.get("name");

@@ -110,7 +110,7 @@
 			dom: 'Bfrtip',
 			destroy: true,
 			buttons: [
-				'pageLength', 'csv', 'excel', 'pdf'
+				'pageLength'
 			],
 			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			language: {

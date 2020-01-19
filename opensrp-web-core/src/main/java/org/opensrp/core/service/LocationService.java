@@ -714,7 +714,7 @@ public class LocationService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			session.clear();
+			session.close();
 		}
 		return dto;
 	}

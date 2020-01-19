@@ -192,11 +192,11 @@ public class FacilityController {
 	public ModelAndView csvUpload(@RequestParam MultipartFile file, HttpServletRequest request, ModelMap model, Locale locale)
 	    throws Exception {
 		if (file.isEmpty()) {
-			model.put("msg", "failed to upload file because its empty");
-			model.addAttribute("msg", "failed to upload file because its empty");
+			model.put("msg", "Failed to upload the file because it is empty");
+			model.addAttribute("msg", "Failed to upload the file because it is empty");
 			return new ModelAndView("/facility/upload_csv");
 		} else if (!"text/csv".equalsIgnoreCase(file.getContentType())) {
-			model.addAttribute("msg", "file type should be '.csv'");
+			model.addAttribute("msg", "File type should be '.csv'");
 			return new ModelAndView("/facility/upload_csv");
 		}
 		

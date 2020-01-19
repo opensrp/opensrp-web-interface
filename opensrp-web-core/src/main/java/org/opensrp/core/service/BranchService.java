@@ -98,4 +98,16 @@ public class BranchService {
 		}
 		return lists;
 	}
+
+	public String commaSeparatedBranch(List<Branch> branches) {
+		String branchIds = "";
+		int size = branches.size(), iterate = 0;
+		for (Branch branch: branches) {
+			iterate++;
+			branchIds += branch.getId();
+			System.out.println(branchIds + " equality " + branch.getId());
+			if (size != iterate) branchIds += ", ";
+		}
+		return branchIds;
+	}
 }

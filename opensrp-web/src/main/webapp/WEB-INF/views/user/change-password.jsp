@@ -63,7 +63,7 @@
                     <div class="form-group required">
                         <label class="label-width" for="password"><spring:message code="lbl.password"/></label>
                         <input type="text" class="form-control mx-sm-3" id="password" name="password"  required />
-                        <input type="checkbox" onclick="toggleVisibilityOfPassword()">Show Password
+                        <input type="checkbox" checked onclick="toggleVisibilityOfPassword()">Show Password
                     </div>
                 </div>
 

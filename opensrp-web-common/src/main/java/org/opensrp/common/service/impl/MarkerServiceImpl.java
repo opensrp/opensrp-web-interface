@@ -126,7 +126,7 @@ public class MarkerServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public List<Object[]> getSKByBranch(Integer branchId) {
+	public List<Object[]> getSKByBranch(String branchIds) {
 		return null;
 	}
 

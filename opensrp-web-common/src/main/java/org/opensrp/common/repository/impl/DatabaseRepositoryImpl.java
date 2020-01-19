@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.castor.util.StringUtil;
+import org.dom4j.Branch;
 import org.exolab.castor.types.DateTime;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -100,7 +101,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		finally {
 			session.close();
-			
 		}
 		return returnValue;
 	}
@@ -336,7 +336,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * <b> How to invoke:</b> Map<String, Object> params = new HashMap<String, Object>();
 	 * params.put("parentId", parentId); findByKeys(params, User.class).
 	 * 
-	 * @param fielaValues is map of field and corresponding value.
+	 * @param fieldValues is map of field and corresponding value.
 	 * @param className is name of Entity class who is mapped with database table.
 	 * @return Entity object or null.
 	 */
@@ -369,7 +369,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * <b> How to invoke:</b> Map<String, Object> params = new HashMap<String, Object>();
 	 * params.put("parentId", parentId); findLastByKey(params,"id", User.class).
 	 * 
-	 * @param fielaValues is map of field and corresponding value.
+	 * @param fieldValues is map of field and corresponding value.
 	 * @param orderByFieldName is name of field where ordering is applied.
 	 * @param className is name of Entity class who is mapped with database table.
 	 * @return Entity object or null.
@@ -445,7 +445,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * <b> How to invoke:</b> Map<String, Object> params = new HashMap<String, Object>();
 	 * params.put("parentId", parentId); findAllByKeys(params, User.class).
 	 * 
-	 * @param fielaValues is map of field and corresponding value.
+	 * @param fieldValues is map of field and corresponding value.
 	 * @param className is name of Entity class who is mapped with database table.
 	 * @return List of Entity object or null.
 	 */
@@ -453,16 +453,21 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	@Override
 	public <T> List<T> findAllByKeys(Map<String, Object> fieldValues, Class<?> className) {
 		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(className);
-		for (Map.Entry<String, Object> entry : fieldValues.entrySet()) {
-			System.out.println(entry.getKey() + " in repo " + entry.getValue());
-			criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
-			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		List<T> result = new ArrayList<T>();
+		try {
+			Criteria criteria = session.createCriteria(className);
+			for (Map.Entry<String, Object> entry : fieldValues.entrySet()) {
+				System.out.println(entry.getKey() + " in repo " + entry.getValue());
+				criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			}
+//			@SuppressWarnings("unchecked")
+			result = criteria.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
-		
-		@SuppressWarnings("unchecked")
-		List<T> result = criteria.list();
-		session.close();
 		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
 	}
 	
@@ -478,7 +483,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * 
 	 * @param isProvider is a boolean value which only imposed for user Entity(if needs only
 	 *            provider list form User list then use true otherwise false always).
-	 * @param fielaValues is map of field and corresponding value.
+	 * @param fieldValues is map of field and corresponding value.
 	 * @param className is name of Entity class who is mapped with database table.
 	 * @return List of Entity object or null.
 	 */
@@ -522,7 +527,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * <b> How to invoke:</b> Map<String, Object> params = new HashMap<String, Object>();
 	 * params.put("parentId", parentId); isExists(params, User.class).
 	 * 
-	 * @param fielaValues is map of field and corresponding value.
+	 * @param fieldValues is map of field and corresponding value.
 	 * @param className is name of Entity class who is mapped with database table.
 	 * @return boolean value.
 	 */
@@ -579,7 +584,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * <b> How to invoke:</b> Map<String, Object> params = new HashMap<String, Object>();
 	 * params.put("parentId", parentId); isExists(params, User.class).
 	 * 
-	 * @param fielaValues is map of field and corresponding value.
+	 * @param fieldName is map of field and corresponding value.
 	 * @param className is name of Entity class who is mapped with database table.
 	 * @return boolean value.
 	 */
@@ -597,7 +602,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			session.clear();
+			session.close();
 		}
 		return (result.size() > 0 ? true : false);
 	}
@@ -615,7 +620,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			session.clear();
+			session.close();
 		}
 		return (result.size() > 0 ? true : false);
 	}
@@ -782,7 +787,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * @param searchBuilder is object of search option.
 	 * @param maxResult is total records returns
 	 * @param offsetreal is starting position of query.
-	 * @param className is name of Entity class who is mapped with database table.
+	 * @param entityClassName is name of Entity class who is mapped with database table.
 	 * @return List of object or null.
 	 */
 	
@@ -790,21 +795,21 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	@SuppressWarnings("unchecked")
 	public <T> List<T> search(SearchBuilder searchBuilder, int maxResult, int offsetreal, Class<?> entityClassName) {
 		Session session = sessionFactory.openSession();
-		Criteria criteria = session.createCriteria(entityClassName);
-		
-		criteria = DatabaseServiceImpl.createCriteriaCondition(searchBuilder, criteria);
-		
-		if (offsetreal != -1) {
-			criteria.setFirstResult(offsetreal);
-		}
-		if (maxResult != -1) {
-			criteria.setMaxResults(maxResult);
-		}
-		criteria.addOrder(Order.desc("created"));
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		
 		List<T> data = new ArrayList<T>();
 		try {
+			Criteria criteria = session.createCriteria(entityClassName);
+		
+			criteria = DatabaseServiceImpl.createCriteriaCondition(searchBuilder, criteria);
+
+			if (offsetreal != -1) {
+				criteria.setFirstResult(offsetreal);
+			}
+			if (maxResult != -1) {
+				criteria.setMaxResults(maxResult);
+			}
+			criteria.addOrder(Order.desc("created"));
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
 			data = (List<T>) criteria.list();
 		}
 		catch (Exception e) {
@@ -828,18 +833,18 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * search(searchBuilder, User.class).
 	 * 
 	 * @param searchBuilder is object of search option.
-	 * @param className is name of Entity class who is mapped with database table.
+	 * @param entityClassName is name of Entity class who is mapped with database table.
 	 * @return total count.
 	 */
 	@Override
 	public int countBySearch(SearchBuilder searchBuilder, Class<?> entityClassName) {
 		Session session = sessionFactory.openSession();
-		int count = 0;
-		Criteria criteria = session.createCriteria(entityClassName);
-		criteria = DatabaseServiceImpl.createCriteriaCondition(searchBuilder, criteria);
+		Long count = 0L;
 		try {
-			count = criteria.list().size();
-			
+			Criteria criteria = session.createCriteria(entityClassName);
+			criteria = DatabaseServiceImpl.createCriteriaCondition(searchBuilder, criteria);
+			criteria.setProjection(Projections.rowCount());
+			count = (Long) criteria.uniqueResult();
 		}
 		catch (Exception e) {
 			logger.error(e);
@@ -848,7 +853,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			session.close();
 		}
 		
-		return count;
+		return count.intValue();
 	}
 	
 	/**
@@ -899,7 +904,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	 * </p>
 	 * 
 	 * @param searchBuilder is search option list.
-	 * @param offset is number of offset.
+	 * @param offsetreal is number of offset.
 	 * @param maxRange is returned maximum number of data.
 	 * @param viewName is name of target view.
 	 * @param orderingBy is the order by condition of query.
@@ -1402,15 +1407,15 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public List<Object[]> getSKByBranch(Integer branchId) {
+	public List<Object[]> getSKByBranch(String branchIds) {
 		Session session = sessionFactory.openSession();
 		List<Object[]> skList = null;
+		System.out.println("branch ids: "+branchIds);
 		try {
 			String hql = "select u.id, u.username, concat(u.first_name, ' ', u.last_name) from core.users u join core.user_role ur on u.id = ur.user_id"
-					+ " join core.user_branch ub on u.id = ub.user_id where ur.role_id = :skId and ub.branch_id = :branchId";
+					+ " join core.user_branch ub on u.id = ub.user_id where ur.role_id = :skId and ub.branch_id = any(array["+branchIds+"])";
 			skList = session.createSQLQuery(hql)
 					.setInteger("skId", SK_ID)
-					.setInteger("branchId", branchId)
 					.list();
 
 		} catch (Exception e) {
@@ -1519,6 +1524,24 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		try {
 			String hql = "select count(*) from core."+className+ " where " + fieldName + " = :id";
 			Query query = session.createSQLQuery(hql).setInteger("id", id);
+			result = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return result.get(0);
+	}
+
+	@Override
+	public <T> T maxByHealthId(int id, String fieldName, String className) {
+		Session session = sessionFactory.openSession();
+		List<T> result = null;
+		try {
+			String hql = "select coalesce(max(cast(h_id as integer)), 0) maxHealthId from core."+className+ " where " + fieldName + " = :id";
+			Query query = session.createSQLQuery(hql)
+					.addScalar("maxHealthId", StandardBasicTypes.INTEGER)
+					.setInteger("id", id);
 			result = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1695,12 +1718,14 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		} else {
 			String providerIds = "";
 			int size = allSKs.size();
-			for (int i = 0; i < size; i++) {
-				providerIds += "'"+allSKs.get(i)[1].toString()+"'";
-				if (i != size-1) providerIds += ",";
+			if (size > 0) {
+				for (int i = 0; i < size; i++) {
+					providerIds += "'"+allSKs.get(i)[1].toString()+"'";
+					if (i != size-1) providerIds += ",";
+				}
+				skCond = " provider_id = any (array["+providerIds+"])";
+				conds.add(skCond);
 			}
-			skCond = " provider_id in ("+providerIds+")";
-			conds.add(skCond);
 		}
 		if(conds.size() == 0) wh = "";
 		else {
@@ -1718,7 +1743,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 			String hql = "SELECT * FROM core.\"viewJsonDataConversionOfClient\"";
 					hql += wh;
-					hql += "order by created_date desc limit 10 offset 10 * "+ pageNumber;
+					hql += "order by id desc limit 10 offset 10 * "+ pageNumber;
 					hql += ";";
 			clientInfoList = session.createSQLQuery(hql).list();
 		} catch (Exception e) {
@@ -1753,12 +1778,14 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		} else {
 			String providerIds = "";
 			int size = allSKs.size();
-			for (int i = 0; i < size; i++) {
-				providerIds += "'"+allSKs.get(i)[1].toString()+"'";
-				if (i != size-1) providerIds += ",";
+			if (size > 0) {
+				for (int i = 0; i < size; i++) {
+					providerIds += "'"+allSKs.get(i)[1].toString()+"'";
+					if (i != size-1) providerIds += ",";
+				}
+				skCond = " provider_id = any (array["+providerIds+"])";
+				conds.add(skCond);
 			}
-			skCond = " provider_id in ("+providerIds+")";
-			conds.add(skCond);
 		}
 		if(conds.size() == 0) wh = "";
 		else {
@@ -2068,7 +2095,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "select ub1.branch_id from core.user_branch ub1 join core.users u1 on u1.id = ub1.user_id where u1.id = :userId"
 					+ ") and uca.user_id is null;";
 
-			ssList = session.createSQLQuery(hql)
+			Query query = session.createSQLQuery(hql)
 					.addScalar("id", StandardBasicTypes.INTEGER)
 					.addScalar("username", StandardBasicTypes.STRING)
 					.addScalar("firstName", StandardBasicTypes.STRING)
@@ -2076,8 +2103,8 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					.addScalar("mobile", StandardBasicTypes.STRING)
 					.addScalar("branches", StandardBasicTypes.STRING)
 					.setInteger("userId", userId)
-					.setResultTransformer(new AliasToBeanResultTransformer(UserDTO.class)).list();
-
+					.setResultTransformer(new AliasToBeanResultTransformer(UserDTO.class));
+			ssList = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

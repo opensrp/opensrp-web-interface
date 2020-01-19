@@ -361,6 +361,7 @@
                     ]
                 });
                 $('#locationTree').on("changed.jstree", function (e, data) {
+                    console.log("CHANGES OCCURRED");
                     tempEdit = false;
                     $('#saveCatchmentArea').prop('disabled', true);
                     $('#locations option').remove();
@@ -378,10 +379,12 @@
                         z.push({
                             name: data.instance.get_node(r[i]).icon,
                             id: data.instance.get_node(r[i]).id,
+                            text: data.instance.get_node(r[i]).text.split("(")[1].replace(")", "")
                         });
                     }
 
                     for (i = 0; i < z.length; i++) {
+                        if (z[i].text != "Village") continue;
                         if (selectedAreas.indexOf(parseInt(z[i].id)) >= 0) {
                             ids.push(z[i].id);
                         }

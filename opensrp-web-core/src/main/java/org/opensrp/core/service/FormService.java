@@ -79,11 +79,11 @@ public class FormService {
 	public String saveForm(MultipartFile file, HttpServletRequest request) throws Exception {
 		String responseMessage = "";
 		if (file.isEmpty()) {
-			responseMessage = "failed to upload file because its empty";
+			responseMessage = "Failed to upload the file because it is empty";
 		} else if (!("text/csv".equalsIgnoreCase(file.getContentType())
 		        || "application/json".equalsIgnoreCase(file.getContentType()) || "text/xml".equalsIgnoreCase(file
 		        .getContentType()))) {
-			responseMessage = "file type should be '.csv/.xml/.json'";
+			responseMessage = "File type should be '.csv/.xml/.json'";
 		} else {
 			byte[] bytes = file.getBytes();
 			formUpload = new FormUpload();

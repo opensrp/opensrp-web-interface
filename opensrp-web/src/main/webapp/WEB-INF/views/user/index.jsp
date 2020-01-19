@@ -26,11 +26,15 @@
 	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
 	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
 	<link type="text/css" href="<c:url value="/resources/css/jquery.toast.css"/>" rel="stylesheet">
-
+	<link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
 	<style>
 		th, td {
 			text-align: center;
 		}
+		.select2-container--default .select2-results__option { font-size: 18px!important; }
+		.select2-container--default .select2-selection--single .select2-selection__arrow { left: 88% !important; }
+		.select2-container--default .select2-selection--single { width: 100% !important; }
+		.select2-container--open .select2-dropdown--below {width: 80% !important;}
 	</style>
 </head>
 
@@ -176,11 +180,13 @@
 <script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
 <script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
 <script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
+<script src="<c:url value='/resources/js/select2.js' />"></script>
 <%--<script src="<c:url value='/resources/js/jszip.js' />"></script>--%>
 <%--<script src="<c:url value='/resources/js/pdfmake.js' />"></script>--%>
 <%--<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>--%>
 <script>
 	$(document).ready(function() {
+		$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
 		var heading = "<%=(String) session.getAttribute("heading")%>";
 		var toastMessage = "<%=(String) session.getAttribute("toastMessage")%>";
 		var icon = "<%=(String) session.getAttribute("icon")%>";
@@ -200,7 +206,7 @@
             session.setAttribute("icon", "");
         %>
 		$('#userList').DataTable({
-			bFilter: true,
+			bFilter: false,
 			bInfo: true,
 			dom: 'Bfrtip',
 			destroy: true,
@@ -212,9 +218,6 @@
 				searchPlaceholder: "Username / Mobile"
 			}
 		});
-	});
-
-	$(document).ready(function() {
 		$('#userListWithoutCatchmentArea').DataTable({
 			bFilter: true,
 			bInfo: true,

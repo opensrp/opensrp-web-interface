@@ -104,8 +104,8 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public List<Object[]> getSKByBranch(Integer branchId) {
-		return databaseRepositoryImpl.getSKByBranch(branchId);
+	public List<Object[]> getSKByBranch(String branchIds) {
+		return databaseRepositoryImpl.getSKByBranch(branchIds);
 	}
 
 	@Override

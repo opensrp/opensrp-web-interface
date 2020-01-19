@@ -314,7 +314,8 @@ public class ReportController {
 		User user = userService.getLoggedInUser();
 		if (AuthenticationManagerUtil.isAM()) {
 			List<Object[]> branches = new ArrayList<>();
-			if(!branchId.isEmpty() ){
+			System.out.println("Branch SELEction: "+ branchId);
+			if(!branchId.isEmpty() && !branchId.equals("0")){
 				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
 				
 				Object[] obj = new Object[10];
@@ -331,8 +332,6 @@ public class ReportController {
 				}
 			}
 			allSKs = databaseServiceImpl.getAllSks(branches);
-		} else if (AuthenticationManagerUtil.isAdmin()){
-			allSKs = databaseServiceImpl.getAllSks(null);
 		}
 
 	    System.out.println("START TIME: "+ startTime);

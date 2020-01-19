@@ -299,17 +299,13 @@
                     xhr.setRequestHeader(header, token);
                 },
                 success : function(data) {
-                    if(data == "") {
-                        window.location.replace(redirectUrl);
-                    }
+                    window.location.replace(redirectUrl);
                 },
                 error : function(e) {
-                    console.log(data);
                     $('#saveCatchmentArea').prop('disabled', false);
                     $('#pleaseWait').hide();
                 },
                 done : function(e) {
-                    console.log("DONE");
                     $('#saveCatchmentArea').prop('disabled', false);
                     $('#pleaseWait').hide();
                 }

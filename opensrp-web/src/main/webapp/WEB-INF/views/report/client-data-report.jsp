@@ -29,6 +29,7 @@
           content="<%=session.getMaxInactiveInterval()%>;url=/login" />
 
     <title>Form Wise Client Data Report</title>
+    <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
     <style>
         #errorMsg{
             color: darkred;
@@ -42,9 +43,11 @@
     <jsp:include page="/WEB-INF/views/css.jsp" />
 
     <style>
-        th, td {
-            text-align: center;
-        }
+        th, td { text-align: center; }
+        .select2-container--default .select2-results__option { font-size: 18px!important; }
+        .select2-container--default .select2-selection--single .select2-selection__arrow { left: 88% !important; }
+        .select2-container--default .select2-selection--single { width: 100% !important; }
+        .select2-container--open .select2-dropdown--below {width: 80% !important;}
     </style>
 </head>
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -79,7 +82,7 @@
                                 <% if (AuthenticationManagerUtil.isAM()) {%>
                                 <div class="col-2">
                                     <label><spring:message code="lbl.branches"/></label>
-                                    <select class="custom-select custom-select-lg mb-3" id="branch" name="branch" onchange="branchChange()">
+                                    <select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="branch" name="branch" onchange="branchChange()">
                                         <option value="0">Select Branch</option>
                                         <%
                                             List<Branch> ret = (List<Branch>) session.getAttribute("branchList");
@@ -92,7 +95,7 @@
                                 <%}%>
                                 <div class="col-2">
                                     <label><spring:message code="lbl.sk"/></label>
-                                    <select class="custom-select custom-select-lg mb-3" id="skList" name="sk">
+                                    <select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="skList" name="sk">
                                         <option value="">Select SK</option>
                                         <%
                                             List<Object[]> ret = (List<Object[]>) session.getAttribute("skList");
@@ -104,7 +107,7 @@
                                 </div>
                                 <div class="col-2">
                                     <label><spring:message code="lbl.formName"/></label>
-                                    <select class="custom-select custom-select-lg mb-3" id="formName" name="formName">
+                                    <select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="formName" name="formName">
                                         <c:forEach var="map" items="${formNameList}">
                                             <option value="${map.key}"><c:out value="${map.value}"/></option>
                                         </c:forEach>
@@ -146,10 +149,12 @@
 <script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script src="<c:url value='/resources/js/datepicker.js' />"></script>
+<script src="<c:url value='/resources/js/select2.js' />"></script>
 <script>
 
     var downloadInterval = null;
     $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
         $('#formName').val('${formName}');
         $('#skList').val('${sk}');
         $('#branch').val('${branchId}');

@@ -104,7 +104,7 @@
 				</div>
 
 				<div class="col-2">
-					<select class="custom-select custom-select-lg mb-3" id="branch" name="branch">
+					<select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="branch" name="branch">
 						<option value=""><spring:message code="lbl.selectBranch"/></option>
 						<%
 							for(Branch branch: branches) {

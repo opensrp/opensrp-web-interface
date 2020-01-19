@@ -42,7 +42,7 @@ public class PaginationUtil {
 	
 	/**
 	 * <p>This method exactly make a decision where search criteria is involved or not.
-	 * Communicate with {@link #PaginationHelperUtil} to prepare pagination link and invoke {@link #pagination(HttpServletRequest, HttpSession, SearchBuilder, Class)}
+	 * Communicate with {@link #PaginationUtil()} to prepare pagination link and invoke {@link #pagination(HttpServletRequest, HttpSession, SearchBuilder, Class)}
 	 * </p>
 	 * @param request is an argument to the servlet's service.
 	 * @param session is an argument to the HttpSession's session.
@@ -116,7 +116,7 @@ public class PaginationUtil {
 	 * @param request is an argument to the servlet's service.
 	 * @param session is an argument to the HttpSession's session.
 	 * @param viewName name of materialized view.
-	 * @param searchBuilder is parameter builder class
+	 * @param entityType is class name
 	 * @return {@link Void}
 	 * */
 	

@@ -159,13 +159,15 @@ public interface DatabaseRepository {
 
 	public <T> T countByField(int id, String fieldName, String className);
 
+	public <T> T maxByHealthId(int id, String fieldName, String className);
+
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId);
 	
 	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String filterString,String searched_value,List<Object[]> allSKs, Integer searchedValueId);
 
 	public List<Object[]> getAllSK(List<Object[]> branches);
 
-	public List<Object[]> getSKByBranch(Integer branchId);
+	public List<Object[]> getSKByBranch(String branchIds);
 
 	public Integer updateParentForSS(Integer ssId, Integer parentId);
 

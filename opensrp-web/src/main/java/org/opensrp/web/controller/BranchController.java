@@ -6,6 +6,7 @@ import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.BranchService;
+import org.opensrp.core.service.UserService;
 import org.opensrp.core.service.mapper.BranchMapper;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,6 +36,9 @@ public class BranchController {
 
     @Autowired
     private DatabaseServiceImpl databaseServiceImpl;
+
+    @Autowired
+    private UserService userService;
 
     @PostAuthorize("hasPermission(returnObject, 'PERM_READ_BRANCH_LIST')")
     @RequestMapping(value = "/branch-list.html", method = RequestMethod.GET)
@@ -66,7 +71,14 @@ public class BranchController {
 
     @RequestMapping(value = "/branches/sk", method = RequestMethod.GET)
     public String getBranchList(HttpServletRequest request, HttpSession session, @RequestParam("branchId") Integer branchId) {
-        List<Object[]> sks = databaseServiceImpl.getSKByBranch(branchId);
+        List<Branch> branches = new ArrayList<>(userService.getLoggedInUser().getBranches());
+        String branchList = "";
+        if (branchId == 0) {
+            branchList = branchService.commaSeparatedBranch(branches);
+        } else {
+            branchList = branchId.toString();
+        }
+        List<Object[]> sks = databaseServiceImpl.getSKByBranch(branchList);
         session.setAttribute("data", sks);
         String errorMessage = "";
         return "/make-select-option";
