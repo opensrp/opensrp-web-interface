@@ -159,6 +159,7 @@
                     <table class="display" id="userList">
                         <thead>
                         <tr>
+                            <th><spring:message code="lbl.slNo"></spring:message></th>
                             <th><spring:message code="lbl.name"></spring:message></th>
                             <th><spring:message code="lbl.userName"></spring:message></th>
                             <th><spring:message code="lbl.phoneNumber"></spring:message></th>
@@ -170,7 +171,9 @@
                         <tbody id="ssTable">
                         <%
                             if (users != null){
+                                int idx = 0;
                                 for (UserDTO user: users) {
+                                    idx++;
                                     Integer id = user.getId();
                                     session.setAttribute("ssId", id);
                                     String villages = user.getLocationList();
@@ -179,6 +182,7 @@
                                     }
                         %>
                         <tr>
+                            <td><%=idx%></td>
                             <td><%=user.getFullName()%></td>
                             <td><%=user.getUsername()%></td>
                             <td><%=user.getMobile()%></td>

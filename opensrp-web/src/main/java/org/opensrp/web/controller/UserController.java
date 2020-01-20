@@ -2,22 +2,12 @@ package org.opensrp.web.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.io.*;
+import java.security.Principal;
+import java.util.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.*;
+import javax.servlet.http.*;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -172,10 +162,11 @@ public class UserController {
 	                       @RequestParam(value = "branch", required = false) Integer branchId,
 	                       @RequestParam(value = "name", required = false) String name, Locale locale) {
 		model.addAttribute("locale", locale);
-		
 		roleId = (roleId == null ? 0 : roleId);
 		branchId = (branchId == null ? 0 : branchId);
 		searchUtil.setDivisionAttribute(session);
+		System.out.println("REQUEST: "+ request.getParameter("division"));
+		System.out.println("REQUEST name: "+ request.getParameter("name"));
 		int locationId = locationServiceImpl.getLocationId(request);
 		List<Object[]> users = userServiceImpl.getUserListByFilterString(locationId, villageTagId, roleId, branchId, name);
 		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId, name);

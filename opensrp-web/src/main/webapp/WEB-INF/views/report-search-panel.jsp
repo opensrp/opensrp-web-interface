@@ -38,12 +38,10 @@
 				</div>
 				<% if (AuthenticationManagerUtil.isAM()){%>
 				<div class="col-2">
-					<label for="">Report Options</label>
+					<label for="locationoptions">Report Options</label>
 					<select  class="custom-select custom-select-lg mb-3" id="locationoptions"
 							 name="division">
-						<option value="">Select location</option>
-
-						<option value="catchmentArea">Own Area
+						<option value="catchmentArea" selected>Own Area
 						</option>
 						<option value="geolocation">Geo Location
 						</option>
@@ -106,7 +104,8 @@
 		<div class="row">
 
 			<div class="col-6">
-				<button onclick="onSearchClicked()"
+				<button id="search-button"
+						onclick="onSearchClicked()"
 						type="submit"
 						class="btn btn-primary">
 					<spring:message code="lbl.search"/>

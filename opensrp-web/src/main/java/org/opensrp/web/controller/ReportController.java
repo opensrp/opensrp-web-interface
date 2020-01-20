@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.opensrp.web.controller;
 
@@ -61,10 +61,10 @@ public class ReportController {
 	@Autowired
 	private FacilityService facilityService;
 
-    @Autowired
-    private PaginationUtil paginationUtil;
-    @Autowired
-    private BranchService branchService;
+	@Autowired
+	private PaginationUtil paginationUtil;
+	@Autowired
+	private BranchService branchService;
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_REPORT')")
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
 	public String childGrowthReport(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
@@ -108,12 +108,12 @@ public class ReportController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_AGGREGATED_REPORT')")
 	@RequestMapping(value = "/householdDataReport.html", method = RequestMethod.GET)
 	public String showFormWiseReport(HttpServletRequest request,
-	                                 HttpSession session,
-	                                 Model model,
-	                                 Locale locale,
-	                                 @RequestParam("address_field") String address_value,
-	                                 @RequestParam("searched_value") String searched_value,
-	                                 @RequestParam("searched_value_id") Integer searchedValueId) throws ParseException {
+									 HttpSession session,
+									 Model model,
+									 Locale locale,
+									 @RequestParam("address_field") String address_value,
+									 @RequestParam("searched_value") String searched_value,
+									 @RequestParam("searched_value_id") Integer searchedValueId) throws ParseException {
 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		model.addAttribute("locale", locale);
@@ -135,13 +135,13 @@ public class ReportController {
 			List<Object[]> branches = new ArrayList<>();
 			if(!branchId.isEmpty() ){
 				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
-				
+
 				Object[] obj = new Object[10];
 				obj[0] = branch.getId();
 				obj[1] = branch.getName();
 				branches.add(obj);
 			}else {
-				
+
 				for (Branch branch: user.getBranches()) {
 					Object[] obj = new Object[10];
 					obj[0] = branch.getId();
@@ -153,14 +153,14 @@ public class ReportController {
 		} else if (AuthenticationManagerUtil.isAdmin()){
 			allSKs =  new ArrayList<Object[]>();
 		}
-		
+
 		// List<Object[]> skLists = databaseServiceImpl.getAllSks();
 		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
 		String endDate = formatter.format(new Date());
-		System.err.println("address_value:"+address_value);
-		System.err.println("searched_value:"+searched_value);
+
 		String endDateValue = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
-		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(startDate, endDateValue, address_value, searched_value,allSKs, searchedValueId);
+		if (AuthenticationManagerUtil.isAM()) address_value = "sk_id"; // for AM role
+		List<Object[]> reports = databaseServiceImpl.getHouseHoldReports(startDate, endDateValue, address_value, searched_value, allSKs, searchedValueId);
 		session.setAttribute("formWiseAggregatedList", reports);
 		searchUtil.setDivisionAttribute(session);
 		session.setAttribute("startDate", startDate);
@@ -200,7 +200,7 @@ public class ReportController {
 	public String getClientDataReportPage(HttpServletRequest request,
 										  HttpSession session,
 										  Model model,
-                                          Locale locale){
+										  Locale locale){
 		model.addAttribute("formNameList", ModelConverter.mapLoad());
 		List<Object[]> allSKs = new ArrayList<>();
 		List<Object[]> branches = new ArrayList<>();
@@ -221,7 +221,7 @@ public class ReportController {
 		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
 
 //        paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "ec_family");
-        model.addAttribute("locale", locale);
+		model.addAttribute("locale", locale);
 
 		return "report/client-data-report";
 	}
@@ -229,16 +229,14 @@ public class ReportController {
 
 	@RequestMapping(value = "/aggregated", method = RequestMethod.GET)
 	public String generateAggregatedReportOnSearch(HttpServletRequest request,
-	                                               HttpSession session,
-	                                               @RequestParam(value = "address_field", required = false) String address_value,
-	                                               @RequestParam(value = "searched_value", required = false) String searched_value,
-	                                               @RequestParam(value = "searched_value_id", required = false) Integer searchedValueId,
-	                                               @RequestParam(value = "startDate", required = false) String startDate,
-	                                               @RequestParam(value = "endDate", required = false) String endDate)
+												   HttpSession session,
+												   @RequestParam(value = "address_field", required = false) String address_value,
+												   @RequestParam(value = "searched_value", required = false) String searched_value,
+												   @RequestParam(value = "searched_value_id", required = false) Integer searchedValueId,
+												   @RequestParam(value = "startDate", required = false) String startDate,
+												   @RequestParam(value = "endDate", required = false) String endDate)
 			throws ParseException {
-
-		System.out.println("HIGH CHECK: "+ searchedValueId);
-
+		if (searchedValueId == null) searchedValueId = 9265; //primary id of bangladesh
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
 		String locationType = request.getParameterMap().containsKey("locationValue")?request.getParameter("locationValue") : "";
@@ -264,7 +262,7 @@ public class ReportController {
 		} else if (AuthenticationManagerUtil.isAdmin()){
 			allSKs = new ArrayList<Object[]>();
 		}
-		
+
 		if (locationType.equalsIgnoreCase("catchmentArea")) {
 			address_value = "sk_id";
 			searched_value = "empty";
@@ -273,43 +271,39 @@ public class ReportController {
 			if (searched_value == null || searched_value.equals("")) searched_value = "empty";
 			if (address_value == null || address_value.equals("")) address_value = "division";
 		}
-		
-		System.err.println("searched_value:"+searched_value+" address_value:"+address_value);
 		endDate = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
-		System.out.println("END DATE: "+ endDate);
 		List<Object[]> aggregatedReport = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value, allSKs, searchedValueId);
-		System.out.println("SIZE: "+aggregatedReport.size());
 		session.setAttribute("aggregatedReport", aggregatedReport);
 		return "/report/aggregated-report";
 	}
 
-    @RequestMapping(value = "/clientDataReportTable", method = RequestMethod.GET)
-    public String getClientDataReportTable(HttpServletRequest request,
-                                          HttpSession session,
-                                          Model model,
-                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer RESULT_SIZE)
-		    throws ParseException {
+	@RequestMapping(value = "/clientDataReportTable", method = RequestMethod.GET)
+	public String getClientDataReportTable(HttpServletRequest request,
+										   HttpSession session,
+										   Model model,
+										   @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer RESULT_SIZE)
+			throws ParseException {
 
-	    // Request Parameters
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		// Request Parameters
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        String  startTime =
-                request.getParameterMap().containsKey("startDate")?
-                request.getParameter("startDate"): formatter.format(DateUtils.addMonths(new Date(), -3));
+		String  startTime =
+				request.getParameterMap().containsKey("startDate")?
+						request.getParameter("startDate"): formatter.format(DateUtils.addMonths(new Date(), -3));
 
-        String endTime = request.getParameterMap().containsKey("endDate")?
-                request.getParameter("endDate"):formatter.format(new Date());
-        endTime = formatter.format(DateUtils.addDays(formatter.parse(endTime), 1));
+		String endTime = request.getParameterMap().containsKey("endDate")?
+				request.getParameter("endDate"):formatter.format(new Date());
+		endTime = formatter.format(DateUtils.addDays(formatter.parse(endTime), 1));
 
-        String formName = request.getParameterMap().containsKey("formName")?
-                request.getParameter("formName"):"ec_family";
+		String formName = request.getParameterMap().containsKey("formName")?
+				request.getParameter("formName"):"ec_family";
 
-        String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
+		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
 
-        String sk = request.getParameterMap().containsKey("sk")?request.getParameter("sk"):"";
+		String sk = request.getParameterMap().containsKey("sk")?request.getParameter("sk"):"";
 
-        Integer pageNumber = Integer.parseInt(request.getParameter("pageNo"));
-        List<Object[]> allSKs = new ArrayList<>();
+		Integer pageNumber = Integer.parseInt(request.getParameter("pageNo"));
+		List<Object[]> allSKs = new ArrayList<>();
 
 		User user = userService.getLoggedInUser();
 		if (AuthenticationManagerUtil.isAM()) {
@@ -317,13 +311,13 @@ public class ReportController {
 			System.out.println("Branch SELEction: "+ branchId);
 			if(!branchId.isEmpty() && !branchId.equals("0")){
 				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
-				
+
 				Object[] obj = new Object[10];
 				obj[0] = branch.getId();
 				obj[1] = branch.getName();
 				branches.add(obj);
 			}else {
-				
+
 				for (Branch branch: user.getBranches()) {
 					Object[] obj = new Object[10];
 					obj[0] = branch.getId();
@@ -334,15 +328,15 @@ public class ReportController {
 			allSKs = databaseServiceImpl.getAllSks(branches);
 		}
 
-	    System.out.println("START TIME: "+ startTime);
+		System.out.println("START TIME: "+ startTime);
 
-	    List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime, endTime, formName.replaceAll("\\_"," ") , sk, allSKs, pageNumber);
-        List allClientInfo =  ModelConverter.modelConverterForClientData(formName,tempClientInfo);
+		List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime, endTime, formName.replaceAll("\\_"," ") , sk, allSKs, pageNumber);
+		List allClientInfo =  ModelConverter.modelConverterForClientData(formName, tempClientInfo);
 
 
-        Integer size = 0;
-        if (pageNumber == 0) {
-        	size = databaseServiceImpl.getClientInfoFilterCount(startTime, endTime, formName.replaceAll("\\_"," ") , sk, allSKs);
+		Integer size = 0;
+		if (pageNumber == 0) {
+			size = databaseServiceImpl.getClientInfoFilterCount(startTime, endTime, formName.replaceAll("\\_"," ") , sk, allSKs);
 			if ((size % RESULT_SIZE) == 0) {
 				session.setAttribute("size", (size / RESULT_SIZE) - 1);
 			} else {
@@ -351,18 +345,18 @@ public class ReportController {
 			session.setAttribute("recordSize", size);
 		}
 
-        new PaginationUtil().createPageList(session, pageNumber.toString());
+		new PaginationUtil().createPageList(session, pageNumber.toString());
 
-        System.out.println("---> debug Size: "+ size);
+		System.out.println("---> debug Size: "+ size);
 
-        session.setAttribute("clientInfoList",allClientInfo);
-        session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
-        session.setAttribute("emptyFlag",1);
-        session.setAttribute("pageNumber", pageNumber);
-        session.setAttribute("startTime", startTime);
-        session.setAttribute("endTime", endTime);
-        session.setAttribute("formName", formName);
+		session.setAttribute("clientInfoList",allClientInfo);
+		session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));
+		session.setAttribute("emptyFlag",1);
+		session.setAttribute("pageNumber", pageNumber);
+		session.setAttribute("startTime", startTime);
+		session.setAttribute("endTime", endTime);
+		session.setAttribute("formName", formName);
 
-	    return "report/client-data-report-table";
-    }
+		return "report/client-data-report-table";
+	}
 }

@@ -176,9 +176,9 @@
 				    
 				   
 				},
-				success : function(data) {	
+				success : function(data) {
 					$("#loading").hide();
-				   $("#tableBody").html(data);
+					$("#tableBody").html(data);
 				},
 				error : function(e) {
 				    console.log("ERROR: ", e);

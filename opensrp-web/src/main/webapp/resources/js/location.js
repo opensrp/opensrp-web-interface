@@ -32,7 +32,6 @@ jQuery(document).ready(function($) {
 		$('#divisionHide').hide();
 		$('#districtHide').hide();
 		$('#upazilaHide').hide();
-		$('#branchHide').hide();
 	}
 	
 	$("#division").change(function(event) {

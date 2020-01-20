@@ -632,17 +632,14 @@ public class LocationService {
 		Location country = repository.findByKey("BANGLADESH", "name", Location.class);
 		int locationId = country.getId();
 		if (request.getParameterMap().containsKey("division")) {
-			System.out.println("Division: "+ request.getParameter("division"));
 			String division = (String) request.getParameter("division");
 			if (division != null && division.length() > 0) {
-				System.out.println("Division: "+division +" "+division.length());
 				String[] location = division.split("\\?");
 				if (!location[0].trim().equalsIgnoreCase("0"))
 					locationId = Integer.parseInt(location[0].trim());
 			}
 		}
 		if (request.getParameterMap().containsKey("district")) {
-			System.out.println("District: "+ request.getParameter("district"));
 			String district = (String) request.getParameter("district");
 			if (district != null) {
 				String[] location = district.split("\\?");
@@ -651,7 +648,6 @@ public class LocationService {
 			}
 		}
 		if (request.getParameterMap().containsKey("upazila")) {
-			System.out.println("Upazila/City Corporation: "+ request.getParameter("upazila"));
 			String upazila = (String) request.getParameter("upazila");
 			if (upazila != null) {
 				String[] location = upazila.split("\\?");
@@ -660,7 +656,6 @@ public class LocationService {
 			}
 		}
 		if (request.getParameterMap().containsKey("pourasabha")) {
-			System.out.println("Pourasabha: "+ request.getParameter("pourasabha"));
 			String pourasabha = (String) request.getParameter("pourasabha");
 			if (pourasabha != null) {
 				String[] location = pourasabha.split("\\?");
@@ -669,7 +664,6 @@ public class LocationService {
 			}
 		}
 		if (request.getParameterMap().containsKey("union")) {
-			System.out.println("Union/Ward: "+ request.getParameter("union"));
 			String union = (String) request.getParameter("union");
 			if (union != null) {
 				String[] location = union.split("\\?");
@@ -678,7 +672,6 @@ public class LocationService {
 			}
 		}
 		if (request.getParameterMap().containsKey("village")) {
-			System.out.println("Village: "+ request.getParameter("village"));
 			String village = (String) request.getParameter("village");
 			if (village != null) {
 				String[] location = village.split("\\?");

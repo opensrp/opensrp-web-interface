@@ -14,9 +14,9 @@ public  class ModelConverter {
     private static String[] columnNamesOfChild={"Id","Member Number","Member Name","Relation with HOH",
             "Mother Name","Date of Birth","Gender","Blood Group", "Date Created"};
 
-    private static int[] rowForMember = {0,61,23,25,26,27,28,29,30,31,32,33,34,35,36, 5};
-    private static int[] rowForFamily = {0,61,18,43,17,19,23,20,24,21, 5};
-    private static int[] rowForChild = {0,61,23,25,26,32,34,36, 5};
+    private static int[] rowForMember = {0, 61, 23, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 5};
+    private static int[] rowForFamily = {0, 61, 18, 63, 17, 19, 23, 20, 24, 21, 5};
+    private static int[] rowForChild = {0, 61, 23, 25, 26, 32, 34, 36, 5};
     private static List<int[]> arrayOfRows = new ArrayList<>();
     public static Map<String,String> mapLoad(){
         Map<String,String> formNameListMap = new HashMap<>();
