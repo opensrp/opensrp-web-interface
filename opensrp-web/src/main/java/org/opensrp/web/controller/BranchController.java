@@ -61,7 +61,6 @@ public class BranchController {
     @PostAuthorize("hasPermission(returnObject, 'PERM_READ_BRANCH_LIST')")
     @RequestMapping(value = "/branch/edit.html", method = RequestMethod.GET)
     public String processUpdate(@RequestParam("id") int id, Model model, Locale locale) {
-        System.out.println("CALLING UPDATE");
         Branch branch = branchService.findById(id, "id", Branch.class);
         model.addAttribute("locale", locale);
         model.addAttribute("branch", new Branch());

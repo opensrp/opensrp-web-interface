@@ -41,8 +41,6 @@
 					<label for="locationoptions">Report Options</label>
 					<select  class="custom-select custom-select-lg mb-3" id="locationoptions"
 							 name="division">
-<%--						<option value="">Select location</option>--%>
-
 						<option value="catchmentArea" selected>Own Area
 						</option>
 						<option value="geolocation">Geo Location

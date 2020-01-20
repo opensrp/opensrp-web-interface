@@ -35,6 +35,10 @@
 			<div class="card-header">
 				<i class="fa fa-table"></i> <spring:message code="lbl.editBranchTitle"/>
 			</div>
+			<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
+				<img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+			</div>
+			<div id="errorMessage" style="color: red; font-size: small; display: none; margin-left: 20px; margin-top: 5px;"></div>
 			<div class="card-body">
 				<form:form modelAttribute="branch" id="BranchInfo" class="form-inline">
 					<form:input type="hidden" path="id" value="${branchDTO.id}"/>
@@ -93,12 +97,21 @@
 				xhr.setRequestHeader(header, token);
 			},
 			success : function(data) {
-				window.location.replace("/opensrp-dashboard/branch-list.html");
+				if (data == "") {
+					$('#loading').hide();
+					window.location.replace("/opensrp-dashboard/branch-list.html");
+				} else {
+					$('#errorMessage').html(data);
+					$('#errorMessage').show();
+					$('#loading').hide();
+				}
 			},
 			error : function(e) {
-
+				$('#loading').hide();
+				$('#errorMessage').html(data);
+				$('#errorMessage').show();
 			},
-			done : function(e) {
+			complete : function(e) {
 				$("#loading").hide();
 				console.log("DONE");
 			}

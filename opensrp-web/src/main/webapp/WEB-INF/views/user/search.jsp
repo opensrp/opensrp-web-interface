@@ -129,7 +129,7 @@
 			<div class="row">
 
 				<div class="col-6">
-					<button name="search" type="submit" id="bth-search"
+					<button type="submit" id="bth-search"
 							class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
 				</div>
 			</div>
