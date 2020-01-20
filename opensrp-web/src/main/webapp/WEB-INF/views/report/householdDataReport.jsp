@@ -47,6 +47,9 @@
 <div class="content-wrapper">
 	<div class="container-fluid">
 		<jsp:include page="/WEB-INF/views/report-search-panel.jsp" />
+		<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
+			<img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+		</div>
 		<div class="card mb-3">
 			<div class="card-header">
 				<i class="fa fa-table"></i>
@@ -221,17 +224,25 @@
 				branch: $("#branchaggregate").val(),
 				locationValue: $("#locationoptions").val()
 			},
-			beforeSend: function() {},
+			beforeSend: function() {
+				$('#loading').show();
+				$('#search-button').attr("disabled", true);
+			},
 			success : function(data) {
 				console.log(data);
+				$('#loading').hide();
 				$("#t-body").html(data);
+				$('#search-button').attr("disabled", false);
 			},
 			error : function(e) {
 				console.log("ERROR: ", e);
 				display(e);
+				$('#loading').hide();
+				$('#search-button').attr("disabled", false);
 			},
 			done : function(e) {
-
+				$('#loading').hide();
+				$('#search-button').attr("disabled", false);
 				console.log("DONE");
 				//enableSearchButton(true);
 			}
