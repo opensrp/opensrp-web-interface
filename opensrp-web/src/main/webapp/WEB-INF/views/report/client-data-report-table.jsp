@@ -40,9 +40,13 @@
                                         for(Object[] object: allClientInfo){
                                     %>
                                     <tr>
-                                        <% for(Object obj: object){ %>
+                                        <% for(Object obj: object){
+                                            if (obj == null) {
+                                        %>
+                                        <td>N/A</td>
+                                        <%} else { %>
                                         <td><%=obj%></td>
-                                        <% } %>
+                                        <% } } %>
                                     </tr>
                                     <%  } %>
 

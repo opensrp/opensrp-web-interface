@@ -108,6 +108,7 @@
                                 <div class="col-2">
                                     <label><spring:message code="lbl.formName"/></label>
                                     <select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="formName" name="formName">
+                                        <option value="" selected>Select Form Name</option>
                                         <c:forEach var="map" items="${formNameList}">
                                             <option value="${map.key}"><c:out value="${map.value}"/></option>
                                         </c:forEach>
