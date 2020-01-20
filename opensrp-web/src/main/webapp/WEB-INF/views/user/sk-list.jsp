@@ -161,6 +161,7 @@
                             <th><spring:message code="lbl.upazila"></spring:message></th>
                             <th><spring:message code="lbl.union"></spring:message></th>
                             <th><spring:message code="lbl.status"></spring:message></th>
+                            <th><spring:message code="lbl.simprintStatus"></spring:message></th>
                             <th><spring:message code="lbl.appVersion"></spring:message></th>
                             <th><spring:message code="lbl.action"></spring:message></th>
                         </tr>
@@ -175,6 +176,7 @@
                                 	String username = user.getUsername();
                                 	String appVersion = user.getAppVersion();
                                 	String activeStatus = "Inactive";
+                                	String enableSimprint = user.getEnableSimPrint()?"Yes":"No";
                                 	String textColor = "color: red;";
                                 	if (user.getLocationList() == null) {
                                 		user.setLocationList("Location not assigned");
@@ -201,6 +203,7 @@
                             <td><%=user.getUpazilaList()%></td>
                             <td><%=user.getLocationList()%></td>
                             <td style="<%=textColor%>"><%=activeStatus%></td>
+                            <td><%=enableSimprint%></td>
                             <td><%=appVersion%></td>
                             <td>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>

@@ -146,9 +146,10 @@
 					<div class="row col-12 tag-height">
 						<div class="form-group">
 							<label class="label-width" for="inputPassword6"><spring:message code="lbl.activeUser"/></label>
-							<form:checkbox class="checkBoxClass form-check-input" onclick="buttonUpdate()"
+							<form:checkbox class="checkBoxClass form-check-input" onclick="buttonUpdate(${account.isEnabled()})"
 										   path="enabled" value="${account.isEnabled()}"/>
 						</div>
+						<div id="inactivity-message" style="display: none; color: red; font-weight: bold;">Inactive the user will completely remove the catchment area of the user</div>
 					</div>
 
 					<div class="row col-12 tag-height">
@@ -399,13 +400,17 @@
 		}
 	});
 	
-	function buttonUpdate() {
+	function buttonUpdate(presentValue) {
 		if ($('#enabled1').is(':checked') == true) {
 			$('#update-continue').show();
 		} else {
 			$('#update-continue').hide();
 		}
-		console.log($('#enabled1').is(':checked'));
+		if ($('#enabled1').is(':checked') == false && presentValue == true) {
+			$('#inactivity-message').show();
+		} else {
+			$('#inactivity-message').hide();
+		}
 	}
 </script>
 <%-- <script>
