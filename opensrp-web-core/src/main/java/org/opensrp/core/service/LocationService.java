@@ -318,13 +318,7 @@ public class LocationService {
 		if (role.equalsIgnoreCase("AM")) {
 			locations = findAllLocationByAM(loggedInUserId, roleId);
 		} else {
-			if (session.getAttribute("allLocation") != null) {
-				locations = (List<LocationDTO>) session.getAttribute("allLocation");
-
-			} else {
-				locations = findAllLocationPartialProperty();
-				session.setAttribute("allLocation", locations);
-			}
+			locations = findAllLocationPartialProperty();
 		}
 
 		for (LocationDTO location : locations) {

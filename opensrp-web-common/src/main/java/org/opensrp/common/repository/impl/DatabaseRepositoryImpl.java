@@ -662,7 +662,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<T> result = null;
 		try {
 			String hql = "select l.id, split_part(l.name, ':', 1) locationName, l.parent_location_id parentLocationId, lt.name locationTagName"
-					+ " from core.location l join core.location_tag lt on lt.id = l.location_tag_id order by id asc;";
+					+ " from core.location l join core.location_tag lt on lt.id = l.location_tag_id where lt.id != 33 order by id asc;"; //village id = 33
 			Query query = session.createSQLQuery(hql)
 					.addScalar("id", StandardBasicTypes.INTEGER)
 					.addScalar("locationName", StandardBasicTypes.STRING)
