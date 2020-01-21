@@ -1880,9 +1880,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId, String name) {
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId, String name, Integer limit, Integer offset) {
 		List<Object[]> users = new ArrayList<Object[]>();
 		Session session = sessionFactory.openSession();
+		String andUsername = (name==null || name.equalsIgnoreCase(""))?"":" and u.username ilike '%"+name+"%'";
 		try {
 			String hql = "select distinct(u.username), concat(u.first_name, ' ', u.last_name) full_name, "
 					+ "u.mobile, r.name role_name, (select string_agg(b1.name, ', ') "
@@ -1891,7 +1892,31 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "join core.user_branch ub on ub.user_id = u.id "
 					+ "left join core.users_catchment_area uca on uca.user_id = u.id "
 					+ "join core.role r on r.id = ur.role_id join core.branch b on b.id = ub.branch_id "
-					+ "where uca.user_id is null";
+					+ "where uca.user_id is null"+andUsername;
+			if (branchId > 0) hql += " and ub.branch_id = "+branchId;
+			if (roleId > 0) hql += " and ur.role_id = "+roleId;
+			hql +=  " limit "+limit+ " offset "+offset;
+			Query query = session.createSQLQuery(hql);
+			users = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return users;
+	}
+
+	@Override
+	public <T> T getUserListWithoutCatchmentAreaCount(int roleId, int branchId, String name) {
+		List<T> users = new ArrayList<T>();
+		Session session = sessionFactory.openSession();
+		String andUsername = (name==null || name.equalsIgnoreCase(""))?"":" and u.username ilike '%"+name+"%'";
+		try {
+			String hql = "select count(distinct(*)) from core.users as u join core.user_role ur on ur.user_id = u.id "
+					+ "join core.user_branch ub on ub.user_id = u.id "
+					+ "left join core.users_catchment_area uca on uca.user_id = u.id "
+					+ "join core.role r on r.id = ur.role_id join core.branch b on b.id = ub.branch_id "
+					+ "where uca.user_id is null"+andUsername;
 			if (branchId > 0) hql += " and ub.branch_id = "+branchId;
 			if (roleId > 0) hql += " and ur.role_id = "+roleId;
 			Query query = session.createSQLQuery(hql);
@@ -1901,7 +1926,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		} finally {
 			session.close();
 		}
-		return users;
+		return users.get(0);
 	}
 
 	@Override

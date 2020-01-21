@@ -895,8 +895,8 @@ public class UserService {
 		return repository.getUserListByFilterString(locationId, locationTagId, roleId, branchId, name);
 	}
 
-	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId, String name) {
-		return repository.getUserListWithoutCatchmentArea(roleId, branchId, name);
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId, String name, Integer limit, Integer offset) {
+		return repository.getUserListWithoutCatchmentArea(roleId, branchId, name, limit, offset);
 	}
 
 	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId) {

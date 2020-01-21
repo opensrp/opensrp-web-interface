@@ -183,7 +183,9 @@ public interface DatabaseRepository {
 
 	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId,String name);
 
-	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId,String name);
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId, String name, Integer limit, Integer offset);
+
+	public <T> T getUserListWithoutCatchmentAreaCount(int roleId, int branchId, String name);
 
 	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId);
 

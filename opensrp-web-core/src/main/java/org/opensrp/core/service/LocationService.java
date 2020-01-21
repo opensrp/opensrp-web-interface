@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -635,7 +636,7 @@ public class LocationService {
 			String division = (String) request.getParameter("division");
 			if (division != null && division.length() > 0) {
 				String[] location = division.split("\\?");
-				if (!location[0].trim().equalsIgnoreCase("0"))
+				if (!location[0].trim().equalsIgnoreCase("0") && !StringUtils.isBlank(location[0].trim()))
 					locationId = Integer.parseInt(location[0].trim());
 			}
 		}
@@ -643,7 +644,7 @@ public class LocationService {
 			String district = (String) request.getParameter("district");
 			if (district != null) {
 				String[] location = district.split("\\?");
-				if (!location[0].trim().equalsIgnoreCase("0"))
+				if (!location[0].trim().equalsIgnoreCase("0") && !StringUtils.isBlank(location[0].trim()))
 					locationId = Integer.parseInt(location[0].trim());
 			}
 		}
@@ -651,7 +652,7 @@ public class LocationService {
 			String upazila = (String) request.getParameter("upazila");
 			if (upazila != null) {
 				String[] location = upazila.split("\\?");
-				if (!location[0].trim().equalsIgnoreCase("0"))
+				if (!location[0].trim().equalsIgnoreCase("0") && !StringUtils.isBlank(location[0].trim()))
 					locationId = Integer.parseInt(location[0].trim());
 			}
 		}
@@ -659,7 +660,7 @@ public class LocationService {
 			String pourasabha = (String) request.getParameter("pourasabha");
 			if (pourasabha != null) {
 				String[] location = pourasabha.split("\\?");
-				if (!location[0].trim().equalsIgnoreCase("0"))
+				if (!location[0].trim().equalsIgnoreCase("0") && !StringUtils.isBlank(location[0].trim()))
 					locationId = Integer.parseInt(location[0].trim());
 			}
 		}
@@ -667,7 +668,7 @@ public class LocationService {
 			String union = (String) request.getParameter("union");
 			if (union != null) {
 				String[] location = union.split("\\?");
-				if (!location[0].trim().equalsIgnoreCase("0"))
+				if (!location[0].trim().equalsIgnoreCase("0") && !StringUtils.isBlank(location[0].trim()))
 					locationId = Integer.parseInt(location[0].trim());
 			}
 		}
@@ -675,7 +676,7 @@ public class LocationService {
 			String village = (String) request.getParameter("village");
 			if (village != null) {
 				String[] location = village.split("\\?");
-				if (!location[0].trim().equalsIgnoreCase("0"))
+				if (!location[0].trim().equalsIgnoreCase("0") && !StringUtils.isBlank(location[0].trim()))
 					locationId = Integer.parseInt(location[0].trim());
 			}
 		}

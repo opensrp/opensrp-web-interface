@@ -2,6 +2,7 @@ package org.opensrp.web.rest.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.google.gson.Gson;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.util.*;
@@ -403,5 +405,50 @@ public class UserRestController {
 			msg = "Some problem occurred please contact with Admin";
 		}
 		return new ResponseEntity<>(new Gson().toJson(msg), OK);
+	}
+
+	@RequestMapping(value = "/user-without-catchment-area", method = RequestMethod.GET)
+	public ResponseEntity<String> userWithoutCatchmentArea(HttpServletRequest request) throws Exception {
+
+		int locationId = locationService.getLocationId(request);
+		String role = request.getParameter("role");
+		String branch = request.getParameter("branch");
+		Integer draw = Integer.valueOf(request.getParameter("draw"));
+		Integer roleId = StringUtils.isBlank(role)?0:Integer.valueOf(role);
+		Integer branchId = StringUtils.isBlank(branch)?0:Integer.valueOf(branch);
+		String name = request.getParameter("search[value]");
+		Integer start = Integer.valueOf(request.getParameter("start"));
+		Integer length = Integer.valueOf(request.getParameter("length"));
+		System.out.println("Name: "+name+" role: "+roleId+" branch: "+branchId);
+		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId, name, length, start);
+		System.out.println("Location Id: "+ locationId);
+		System.out.println("Size: "+ usersWithoutCatchmentArea.size());
+		JSONObject response = new JSONObject();
+		response.put("draw", draw+1);
+		response.put("recordsTotal", 1);
+		response.put("recordsFiltered", 1);
+		JSONArray array = new JSONArray();
+		int iter = 0;
+		for (Object[] objects: usersWithoutCatchmentArea) {
+			if (iter == 10) break;
+			iter++;
+			JSONArray person = new JSONArray();
+			person.put(String.valueOf(objects[1]).replaceAll("\\.$", ""));
+			person.put(objects[0]);
+			person.put(objects[3]); //role
+			person.put(objects[2]); //phone number
+			person.put(objects[4]);
+			String edit = AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")?
+					"<a href='/opensrp-dashboard/user/"+objects[5].toString()+"/edit.html?lang=en'>Edit</a> | ":"";
+			String catchmentArea = AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")?
+					"<a href='/opensrp-dashboard/user/"+objects[5].toString()+"/catchment-area.html?lang=en'>Catchment Area</a> | ":"";
+			String changePassword = AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")?
+					"<a href='/opensrp-dashboard/user/"+objects[5].toString()+"/change-password.html?lang=en'>Change Password</a>":"";
+			String actions = edit + catchmentArea + changePassword; //buttons
+			person.put(actions);
+			array.put(person);
+		}
+		response.put("data", array);
+		return new ResponseEntity<>(response.toString(), OK);
 	}
 }

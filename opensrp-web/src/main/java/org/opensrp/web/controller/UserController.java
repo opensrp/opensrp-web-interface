@@ -169,10 +169,10 @@ public class UserController {
 		System.out.println("REQUEST name: "+ request.getParameter("name"));
 		int locationId = locationServiceImpl.getLocationId(request);
 		List<Object[]> users = userServiceImpl.getUserListByFilterString(locationId, villageTagId, roleId, branchId, name);
-		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId, name);
+//		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId, name);
 		List<Branch> branches = branchService.findAll("Branch");
 		List<Role> roles = roleServiceImpl.findAll("Role");
-		session.setAttribute("usersWithoutCatchmentArea", usersWithoutCatchmentArea);
+//		session.setAttribute("usersWithoutCatchmentArea", usersWithoutCatchmentArea);
 		session.setAttribute("users", users);
 		session.setAttribute("branches", branches);
 		session.setAttribute("roles", roles);

@@ -57,7 +57,7 @@
 					<spring:message code="lbl.user"/>
 				</strong> </a> <%} %>
 		</div>
-		<jsp:include page="/WEB-INF/views/user/search.jsp" />
+		<jsp:include page="/WEB-INF/views/user/search-ajax.jsp" />
 
 		<!-- Example DataTables Card-->
 		<div class="card mb-3">
@@ -122,7 +122,7 @@
 					<table class="display" id="userListWithoutCatchmentArea">
 						<thead>
 						<tr>
-							<th><spring:message code="lbl.fullName"></spring:message></th>
+							<th><spring:message code="lbl.name"></spring:message></th>
 							<th><spring:message code="lbl.userName"></spring:message></th>
 							<th><spring:message code="lbl.role"></spring:message></th>
 							<th><spring:message code="lbl.phoneNumber"></spring:message></th>
@@ -130,35 +130,6 @@
 							<th><spring:message code="lbl.action"></spring:message></th>
 						</tr>
 						</thead>
-						<tbody>
-						<%
-							if (users != null) {
-								for (Object[] user: usersWithoutCatchmentArea) {
-									String stringId = user[5].toString();
-									String fullName = String.valueOf(user[1]).replaceAll("\\.$", "");
-									Integer id = Integer.parseInt(stringId);
-									session.setAttribute("id", id);
-						%>
-						<tr>
-							<td><%=fullName%></td>
-							<td><%=user[0]%></td>
-							<td><%=user[3]%></td>
-							<td><%=user[2]%></td>
-							<td><%=user[4]%></td>
-							<td>
-								<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
-								<a href="<c:url value="/user/${id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> |  <%} %>
-								<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-								<a href="<c:url value="/user/${id}/catchment-area.html?lang=${locale}"/>"><spring:message code="lbl.catchmentArea"/></a> <%} %>
-                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-                                | <a href="<c:url value="/user/${id}/change-password.html?lang=${locale}"/>"><spring:message code="lbl.changePassword"/></a> <%} %>
-                            </td>
-						</tr>
-						<%
-								}
-							}
-						%>
-						</tbody>
 					</table>
 				</div>
 			</div>
@@ -185,6 +156,7 @@
 <%--<script src="<c:url value='/resources/js/pdfmake.js' />"></script>--%>
 <%--<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>--%>
 <script>
+	var userListWithoutCatchmentArea;
 	$(document).ready(function() {
 		$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
 		var heading = "<%=(String) session.getAttribute("heading")%>";
@@ -205,6 +177,7 @@
             session.setAttribute("toastMessage", "");
             session.setAttribute("icon", "");
         %>
+
 		$('#userList').DataTable({
 			bFilter: false,
 			bInfo: true,
@@ -218,20 +191,45 @@
 				searchPlaceholder: "Username / Mobile"
 			}
 		});
-		$('#userListWithoutCatchmentArea').DataTable({
+
+		userListWithoutCatchmentArea = $('#userListWithoutCatchmentArea').DataTable({
 			bFilter: true,
+			serverSide: true,
+			processing: true,
+			ajax: {
+				url: "/opensrp-dashboard/rest/api/v1/user/user-without-catchment-area",
+				data: function(data){
+					data.division = $('#division').val();
+					data.district = $('#district').val();
+					data.upazila = $('#upazila').val();
+					data.pourasabha = $('#pourasabha').val();
+					data.union = $('#union').val();
+					data.village = $('#village').val();
+					data.role = $('#role').val();
+					data.branch = $('#branch').val();
+				},
+				dataSrc: function(json){
+					if(json.data){
+						return json.data;
+					}
+					else {
+						return [];
+					}
+				},
+				complete: function() {
+				},
+				type: 'GET'
+			},
 			bInfo: true,
-			dom: 'Bfrtip',
 			destroy: true,
-			buttons: [
-				'pageLength'
-			],
-			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			language: {
 				searchPlaceholder: "Username / Mobile"
 			}
 		});
 	});
+	function drawDataTables() {
+		userListWithoutCatchmentArea.ajax.reload();
+	}
 </script>
 </body>
 </html>
