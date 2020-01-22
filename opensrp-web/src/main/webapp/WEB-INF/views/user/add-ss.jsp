@@ -52,7 +52,7 @@
                     <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
 
             </div>
-            <form:form 	modelAttribute="account" id="UserInfo" class="form-inline" autocomplete="false">
+            <form:form 	modelAttribute="account" id="UserInfo" class="form-inline" autocomplete="off">
 
                 <div class="row col-12 tag-height">
                     <div class="form-group required">

@@ -891,12 +891,18 @@ public class UserService {
 		return msg;
 	}
 
-	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId, String name) {
-		return repository.getUserListByFilterString(locationId, locationTagId, roleId, branchId, name);
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId, String name, int limit, int offset, String orderColumn, String orderDirection) {
+		return repository.getUserListByFilterString(locationId, locationTagId, roleId, branchId, name, limit, offset, orderColumn, orderDirection);
 	}
 
-	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId, String name, Integer limit, Integer offset) {
-		return repository.getUserListWithoutCatchmentArea(roleId, branchId, name, limit, offset);
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId, String name, Integer limit, Integer offset, String orderColumn, String orderDirection) {
+		return repository.getUserListWithoutCatchmentArea(roleId, branchId, name, limit, offset, orderColumn, orderDirection);
+	}
+	public <T> T getUserListByFilterStringCount(int locationId, int locationTagId, int roleId, int branchId, String name, int limit, int offset) {
+		return repository.getUserListByFilterStringCount(locationId, locationTagId, roleId, branchId, name, limit, offset);
+	}
+	public <T> T getUserListWithoutCatchmentAreaCount(int roleId, int branchId, String name) {
+		return repository.getUserListWithoutCatchmentAreaCount(roleId, branchId, name);
 	}
 
 	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId) {
@@ -965,5 +971,30 @@ public class UserService {
 			newAreas.add(newArea);
 		}
 		return newAreas;
+	}
+
+	public JSONObject getUserDataOfDataTable(Integer draw, Integer totalUserWithoutCatchmentArea,
+											 List<Object[]> usersWithoutCatchmentArea, boolean editPermitted) throws JSONException {
+		JSONObject response = new JSONObject();
+		response.put("draw", draw+1);
+		response.put("recordsTotal", totalUserWithoutCatchmentArea);
+		response.put("recordsFiltered", totalUserWithoutCatchmentArea);
+		JSONArray array = new JSONArray();
+		for (Object[] objects: usersWithoutCatchmentArea) {
+			JSONArray person = new JSONArray();
+			person.put(String.valueOf(objects[1]).replaceAll("\\.$", ""));
+			person.put(objects[0]);
+			person.put(objects[3]); //role
+			person.put(objects[2]); //phone number
+			person.put(objects[4]);
+			String edit = editPermitted?"<a href='/opensrp-dashboard/user/"+objects[5].toString()+"/edit.html?lang=en'>Edit</a> | ":"";
+			String catchmentArea = editPermitted?"<a href='/opensrp-dashboard/user/"+objects[5].toString()+"/catchment-area.html?lang=en'>Catchment Area</a> | ":"";
+			String changePassword = editPermitted?"<a href='/opensrp-dashboard/user/"+objects[5].toString()+"/change-password.html?lang=en'>Change Password</a>":"";
+			String actions = edit + catchmentArea + changePassword; //buttons
+			person.put(actions);
+			array.put(person);
+		}
+		response.put("data", array);
+		return response;
 	}
 }

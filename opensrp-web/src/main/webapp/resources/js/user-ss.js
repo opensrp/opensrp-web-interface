@@ -61,7 +61,7 @@ function catchmentLoad(ssId, term) {
             var catchmentAreas = e["catchmentAreas"];
             var catchmentAreaTable = e["catchmentAreaTable"];
             var userFullName = e["userFullName"];
-            var userInfoHtml = '<h5><u>'+userFullName+'\'s Location Info</u></h5>';
+            var userInfoHtml = '<h5>'+userFullName+'\'s Location Info</h5>';
             $('#user-info-body').html(userInfoHtml);
             $('#locationTree').jstree({
                 'core' : {
@@ -309,7 +309,7 @@ function changeSK(ssId) {
 
 $('#branches').change(function (e) {
     e.preventDefault();
-    var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branches").val();
+    var url = "/opensrp-dashboard/branches/change-sk?branchId="+$("#branches").val();
     $("#skList").html("");
     $.ajax({
         type : "GET",
@@ -339,7 +339,11 @@ function changeParent() {
     var skUsername = $('#skList').val();
     var branchId = $('#branches').val();
     console.log("branch: "+ branchId + " skId: "+ skUsername + " ssId: "+ currentSS);
-
+    if (skUsername == null || skUsername == "") {
+        $('#select-sk').show();
+        return false;
+    }
+    $('#select-sk').hide();
     var url = "/opensrp-dashboard/rest/api/v1/user/update/ss-parent?ssId=" + currentSS + "&parentUsername=" + skUsername;
     $.ajax({
         type : "GET",

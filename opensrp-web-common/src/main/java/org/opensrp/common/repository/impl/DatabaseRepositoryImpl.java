@@ -1832,10 +1832,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 
 	@Override
-	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId, String name) {
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId, String name, int limit, int offset, String orderColumn, String orderDirection) {
 		Session session = sessionFactory.openSession();
 		List<Object[]> userList = null;
-
+		String andUsername = (name==null || name.equalsIgnoreCase(""))?"":" and user_ucv_branch.username ilike '%"+name+"%' ";
 		String afterWhere = "";
 		if (branchId > 0) afterWhere += " and user_ucv_branch.branch_id = "+branchId;
 		
@@ -1845,31 +1845,31 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			afterWhere += " and user_ucv_branch.username like '" + name.trim() + "%'";
 		}
 		try {
-			String sql = "with recursive subordinates as (\n" + "select\n" + "\tid,\n" + "\tcode,\n" + "\t\"name\",\n"
-					+ "\tlocation_tag_id,\n" + "\tparent_location_id\n" + "from\n" + "\tcore.\"location\"\n" + "where\n"
-					+ "\tid = :locationId\n" + "union\n" + "select\n" + "\te.id,\n" + "\te.code,\n" + "\te.\"name\",\n"
-					+ "\te.location_tag_id,\n" + "\te.parent_location_id\n" + "from\n" + "\tcore.\"location\" e\n"
-					+ "inner join subordinates s on\n" + "\ts.id = e.parent_location_id) ,\n" + "vl as(\n" + "select\n"
-					+ "\tid\n" + "from\n" + "\tsubordinates\n" + "where\n" + "\tlocation_tag_id = any(\n" + "\tselect\n"
-					+ "\t\tid\n" + "\tfrom\n" + "\t\tcore.location_tag)),\n" + "ucv as(\n" + "select\n" + "\tuc.id,\n"
-					+ "\tuc.location_id,\n" + "\tuc.user_id\n" + "from\n" + "\tvl,\n" + "\tcore.users_catchment_area uc\n"
-					+ "where\n" + "\tvl.id = uc.location_id),\n" + "user_ucv as(\n" + "select\n"
-					+ "\tdistinct ucv.user_id,\n" + "\tu.first_name,\n" + "\tu.last_name,\n" + "\tu.username,\n"
-					+ "\tu.mobile\n" + "from\n" + "\tucv,\n" + "\tcore.users u\n" + "where\n" + "\tucv.user_id = u.id),\n"
-					+ "user_ucv_branch as(\n" + "select\n" + "\tuser_ucv.*,\n" + "\tvub.id branch_id,\n" + "\tbranch_name\n"
-					+ "from\n" + "\tuser_ucv,\n" + "\tcore.vw_user_branch vub\n" + "where\n"
-					+ "\tuser_ucv.user_id = vub.user_id)\n" + "select\n" + "\tuser_ucv_branch.username,\n"
-					+ "\t(user_ucv_branch.first_name || ' ' || user_ucv_branch.last_name) full_name,\n"
-					+ "\tuser_ucv_branch.mobile,\n" + "\tvur.role_name,\n"
-					+ "\tstring_agg(user_ucv_branch.branch_name, ', ') branch_name,\n" + "\tuser_ucv_branch.user_id,\n"
-					+ "\tvur.id role_id\n" + "from\n" + "\tuser_ucv_branch,\n" + "\tcore.vw_user_role vur\n" + "where\n"
-					+ "\tuser_ucv_branch.user_id = vur.user_id "+afterWhere+" group by\n" + "\tuser_ucv_branch.user_id,\n"
-					+ "\tuser_ucv_branch.first_name,\n" + "\tuser_ucv_branch.last_name,\n" + "\tuser_ucv_branch.username,\n"
-					+ "\tuser_ucv_branch.mobile,\n" + "\tvur.id,\n" + "\tvur.role_name order by user_ucv_branch.username ";
+			String sql = "with recursive subordinates as (select id, code, name, "
+					+ "location_tag_id, parent_location_id from core.location where "
+					+ "id = :locationId union select e.id, e.code, e.name, "
+					+ "e.location_tag_id, e.parent_location_id from core.location e "
+					+ "inner join subordinates s on s.id = e.parent_location_id) , vl as(select "
+					+ "id from subordinates where location_tag_id = any(select "
+					+ "id from core.location_tag)), ucv as(select uc.id, "
+					+ "uc.location_id, uc.user_id from vl, core.users_catchment_area uc "
+					+ "where vl.id = uc.location_id), user_ucv as(select "
+					+ "distinct ucv.user_id, u.first_name, u.last_name, u.username, "
+					+ "u.mobile from ucv, core.users u where ucv.user_id = u.id), "
+					+ "user_ucv_branch as(select user_ucv.*, vub.id branch_id, branch_name "
+					+ "from user_ucv, core.vw_user_branch vub where "
+					+ "user_ucv.user_id = vub.user_id) "
+					+ "select user_ucv_branch.username username, "
+					+ "(user_ucv_branch.first_name || ' ' || user_ucv_branch.last_name) full_name, "
+					+ "user_ucv_branch.mobile mobile, vur.role_name role_name, "
+					+ "string_agg(user_ucv_branch.branch_name, ', ') branch, user_ucv_branch.user_id, "
+					+ "vur.id role_id from user_ucv_branch, core.vw_user_role vur where "
+					+ "user_ucv_branch.user_id = vur.user_id "+andUsername+afterWhere+" group by user_ucv_branch.user_id, "
+					+ "user_ucv_branch.first_name, user_ucv_branch.last_name, user_ucv_branch.username, "
+					+ "user_ucv_branch.mobile, vur.id, vur.role_name ";
 
-			Query query = session.createSQLQuery(sql)
-					.setInteger("locationId", locationId)
-					.setMaxResults(300);
+			Query query = session.createSQLQuery(sql + " order by "+ orderColumn+ " " + orderDirection +" limit "+limit+" offset "+offset)
+					.setInteger("locationId", locationId);
 			userList = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1880,14 +1880,54 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId, String name, Integer limit, Integer offset) {
+	public <T> T getUserListByFilterStringCount(int locationId, int locationTagId, int roleId, int branchId, String name, int limit, int offset) {
+		Session session = sessionFactory.openSession();
+		List<T> userList = new ArrayList<T>();
+		String andUsername = (name==null || name.equalsIgnoreCase(""))?"":" and user_ucv_branch.username ilike '%"+name+"%' ";
+		String afterWhere = "";
+		if(!org.apache.commons.lang3.StringUtils.isBlank(name)){
+			afterWhere += " and user_ucv_branch.username like '" + name.trim() + "%'";
+		}
+		if (roleId > 0) afterWhere += " and vur.id = " + roleId;
+		if (branchId > 0) afterWhere += " and user_ucv_branch.branch_id = "+branchId;
+		try {
+			String sql = "with recursive subordinates as (select id, code, name, "
+					+ "location_tag_id, parent_location_id from core.location where "
+					+ "id = :locationId union select e.id, e.code, e.name, "
+					+ "e.location_tag_id, e.parent_location_id from core.location e "
+					+ "inner join subordinates s on s.id = e.parent_location_id) , vl as(select "
+					+ "id from subordinates where location_tag_id = any(select "
+					+ "id from core.location_tag)), ucv as(select uc.id, "
+					+ "uc.location_id, uc.user_id from vl, core.users_catchment_area uc "
+					+ "where vl.id = uc.location_id), user_ucv as(select "
+					+ "distinct ucv.user_id, u.first_name, u.last_name, u.username, "
+					+ "u.mobile from ucv, core.users u where ucv.user_id = u.id), "
+					+ "user_ucv_branch as(select user_ucv.*, vub.id branch_id, branch_name "
+					+ "from user_ucv, core.vw_user_branch vub where user_ucv.user_id = vub.user_id) "
+					+ "select count(distinct(user_ucv_branch.user_id)) totalUser from user_ucv_branch, core.vw_user_role vur where "
+					+ "user_ucv_branch.user_id = vur.user_id "+andUsername+afterWhere+" ";
+
+			Query query = session.createSQLQuery(sql)
+					.addScalar("totalUser", StandardBasicTypes.INTEGER)
+					.setInteger("locationId", locationId);
+			userList = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return userList.get(0);
+	}
+
+	@Override
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId, String name, Integer limit, Integer offset, String orderColumn, String orderDirection) {
 		List<Object[]> users = new ArrayList<Object[]>();
 		Session session = sessionFactory.openSession();
 		String andUsername = (name==null || name.equalsIgnoreCase(""))?"":" and u.username ilike '%"+name+"%'";
 		try {
-			String hql = "select distinct(u.username), concat(u.first_name, ' ', u.last_name) full_name, "
-					+ "u.mobile, r.name role_name, (select string_agg(b1.name, ', ') "
-					+ "from core.branch b1 join core.user_branch ub1 on b1.id = ub1.branch_id where ub1.user_id = u.id) branch_name, "
+			String hql = "select distinct(u.username) username, concat(u.first_name, ' ', u.last_name) full_name, "
+					+ "u.mobile mobile, r.name role_name, (select string_agg(b1.name, ', ') "
+					+ "from core.branch b1 join core.user_branch ub1 on b1.id = ub1.branch_id where ub1.user_id = u.id) branch, "
 					+ "u.id from core.users as u join core.user_role ur on ur.user_id = u.id "
 					+ "join core.user_branch ub on ub.user_id = u.id "
 					+ "left join core.users_catchment_area uca on uca.user_id = u.id "
@@ -1895,7 +1935,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					+ "where uca.user_id is null"+andUsername;
 			if (branchId > 0) hql += " and ub.branch_id = "+branchId;
 			if (roleId > 0) hql += " and ur.role_id = "+roleId;
-			hql +=  " limit "+limit+ " offset "+offset;
+			hql +=  " order by "+orderColumn+" "+orderDirection+" limit "+limit+ " offset "+offset;
 			Query query = session.createSQLQuery(hql);
 			users = query.list();
 		} catch (Exception e) {
@@ -1912,14 +1952,14 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		String andUsername = (name==null || name.equalsIgnoreCase(""))?"":" and u.username ilike '%"+name+"%'";
 		try {
-			String hql = "select count(distinct(*)) from core.users as u join core.user_role ur on ur.user_id = u.id "
+			String hql = "select count(distinct(u.id)) totalUser from core.users as u join core.user_role ur on ur.user_id = u.id "
 					+ "join core.user_branch ub on ub.user_id = u.id "
 					+ "left join core.users_catchment_area uca on uca.user_id = u.id "
 					+ "join core.role r on r.id = ur.role_id join core.branch b on b.id = ub.branch_id "
 					+ "where uca.user_id is null"+andUsername;
 			if (branchId > 0) hql += " and ub.branch_id = "+branchId;
 			if (roleId > 0) hql += " and ur.role_id = "+roleId;
-			Query query = session.createSQLQuery(hql);
+			Query query = session.createSQLQuery(hql).addScalar("totalUser", StandardBasicTypes.INTEGER);
 			users = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2069,6 +2109,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					.addScalar("mobile", StandardBasicTypes.STRING)
 					.addScalar("branches", StandardBasicTypes.STRING)
 					.addScalar("locationList", StandardBasicTypes.STRING)
+					.addScalar("unionList", StandardBasicTypes.STRING)
 					.setInteger("userId", userId)
 					.setResultTransformer(new AliasToBeanResultTransformer(UserDTO.class));
 			users = query.list();

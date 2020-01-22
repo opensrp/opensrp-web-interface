@@ -16,10 +16,8 @@
     <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
     <jsp:include page="/WEB-INF/views/css.jsp" />
     <style>
-        li { font-size: 18px !important; }
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            left: 95% !important;
-        }
+        .select2-container--default .select2-results__option { font-size: 18px!important; }
+        .select2-container--default .select2-selection--single .select2-selection__arrow { left: 95% !important; }
         .select2-container--default .select2-selection--single { width: 100% !important; }
     </style>
 </head>
@@ -31,28 +29,46 @@
             <div class="card-header"><b>${ssInfo.fullName}'s SK Change</b></div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-6 tag-height">
-                        <div class="form-group required">
-                            <label class="label-width"  for="branches">
-                                <spring:message code="lbl.branches"/>
-                            </label>
-                            <select id="branches"
-                                    class="form-control mx-sm-3 js-example-basic-multiple"
-                                    name="branches" required>
-                                <c:forEach items="${branches}" var="branch">
-                                    <option value="${branch.id}">${branch.name} (${branch.code})</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-6 tag-height">
-                        <div class="form-group required">
-                            <label class="label-width"  for="skList"><spring:message code="lbl.sk"/></label>
-                            <select class="form-control mx-sm-3 js-example-basic-multiple" id="skList" name="sk" required>
-                            </select>
-                        </div>
-                    </div>
+                   <div class="col-12 tag-height">
+                       <span>CURRENT SK: <b>&nbsp;${skFullName}(${skUsername})</b></span>
+                   </div>
                 </div>
+                <form autocomplete="off">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group required">
+                                <label class="label-width"  for="branches">
+                                    <spring:message code="lbl.branches"/>
+                                </label>
+                                <select id="branches"
+                                        class="form-control mx-sm-3 js-example-basic-multiple"
+                                        name="branches" required="required">
+                                    <c:forEach items="${branches}" var="branch">
+                                        <option value="${branch.id}">${branch.name} (${branch.code})</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group required">
+                                <label class="label-width"  for="skList"><spring:message code="lbl.sk"/></label>
+                                <select class="form-control mx-sm-3 js-example-basic-multipl
+                                e" id="skList" name="sk" required="required">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 tag-height"></div>
+                        <div class="col-6 tag-height">
+                            <div><span id="select-sk" style="font-size: small; color: red;display: none;">Please Select an SK...</span></div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 220px;">
+                        <a class="btn btn-sm btn-dark" href="#" onclick="changeParent()" style="margin-left: 10px; float: right; bottom: 0px">Change SK</a>
+                        <a class="btn btn-sm btn-dark" href="#" rel="modal:close" style="float: right; bottom: 0px">Close</a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -70,7 +86,7 @@
     });
     function loadSKList() {
         $("#skList").html("");
-        var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branches").val();
+        var url = "/opensrp-dashboard/branches/change-sk?branchId="+$("#branches").val();
         $.ajax({
             type : "GET",
             contentType : "application/json",

@@ -21,6 +21,7 @@ import org.opensrp.common.exception.BadFormatException;
 import org.opensrp.common.exception.BranchNotFoundException;
 import org.opensrp.common.exception.LocationNotFoundException;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.common.util.PermissionName;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.FacilityWorker;
@@ -165,15 +166,8 @@ public class UserController {
 		roleId = (roleId == null ? 0 : roleId);
 		branchId = (branchId == null ? 0 : branchId);
 		searchUtil.setDivisionAttribute(session);
-		System.out.println("REQUEST: "+ request.getParameter("division"));
-		System.out.println("REQUEST name: "+ request.getParameter("name"));
-		int locationId = locationServiceImpl.getLocationId(request);
-		List<Object[]> users = userServiceImpl.getUserListByFilterString(locationId, villageTagId, roleId, branchId, name);
-//		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId, name);
 		List<Branch> branches = branchService.findAll("Branch");
 		List<Role> roles = roleServiceImpl.findAll("Role");
-//		session.setAttribute("usersWithoutCatchmentArea", usersWithoutCatchmentArea);
-		session.setAttribute("users", users);
 		session.setAttribute("branches", branches);
 		session.setAttribute("roles", roles);
 		session.setAttribute("selectedRole", roleId);
@@ -211,9 +205,9 @@ public class UserController {
 		model.addAttribute("teamMember", new TeamMember());
 		model.addAttribute("branches", branches);
 		String personName = "";
-		session.setAttribute("locationList", locationServiceImpl.list().toString());
+//		session.setAttribute("locationList", locationServiceImpl.list().toString());
 		int[] locations = new int[0];
-		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+//		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
 		session.setAttribute("ss", ss);
 		//end: adding location and team
 		return new ModelAndView("user/add", "command", account);
@@ -819,6 +813,7 @@ public class UserController {
 		List<UserDTO> ssWithoutCatchment = userServiceImpl.getSSWithoutCatchmentArea(skId);
 		User skOfSS = userServiceImpl.findById(skId, "id", User.class);
 		model.addAttribute("skUsername", skUsername);
+		model.addAttribute("skFullName", skOfSS.getFullName());
 		model.addAttribute("branches", branches);
 		model.addAttribute("skId", skId);
 		session.setAttribute("allSS", users);
@@ -839,6 +834,7 @@ public class UserController {
 		List<Role> roles = userServiceImpl.setRolesAttributes(selectedRoles, session);
 		//List<Branch> branches = branchService.findAll("Branch");
 		User skUser = userServiceImpl.findById(skId, "id", User.class);
+		String skFullName = skUser.getFullName();
 		List<Branch> branches = branchService.getBranchByUser(skUser.getId());
 		Role ss = roleServiceImpl.findByKey("SS", "name", Role.class);
 		
@@ -862,6 +858,7 @@ public class UserController {
 			return new ModelAndView(redirectUrl + "?lang=" + locale);
 		}
 		model.addAttribute("skUsername", skUsername);
+		model.addAttribute("skFullName", skFullName);
 		//end: adding location and team
 		return new ModelAndView("user/add-ss-ajax", "command", account);
 	}

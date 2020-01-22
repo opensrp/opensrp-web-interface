@@ -50,7 +50,7 @@
 		<%-- <div class="form-group">
 			<jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />
 		</div> --%>
-		<h5><u>Edit SK</u></h5>
+		<h5>Edit SK</h5>
 		<div class="card mb-3">
 			<div class="card-header">
 				<b>Edit ${account.fullName}'s Information</b>
@@ -91,7 +91,7 @@
 
 					<div class="row col-12 tag-height">
 						<div class="form-group required">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.userName"/></label>
+							<label class="label-width" for="inputPassword6"><spring:message code="lbl.username"/></label>
 							<form:input path="username" class="form-control mx-sm-3"
 										readonly="true"	required="required"/>
 							<small id="passwordHelpInline" class="text-muted text-para">
@@ -149,7 +149,7 @@
 							<form:checkbox class="checkBoxClass form-check-input" onclick="buttonUpdate(${account.isEnabled()})"
 										   path="enabled" value="${account.isEnabled()}"/>
 						</div>
-						<div id="inactivity-message" style="display: none; color: red; font-weight: bold;">Inactive the user will completely remove the catchment area of the user</div>
+						<div id="inactivity-message" style="margin-left: 150px;display: none; color: red; font-weight: bold;">Inactivating the user will completely remove the catchment area assigned to the user</div>
 					</div>
 
 					<div class="row col-12 tag-height">

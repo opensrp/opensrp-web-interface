@@ -272,6 +272,7 @@ public class ReportController {
 			if (address_value == null || address_value.equals("")) address_value = "division";
 		}
 		endDate = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
+		System.err.println("address value: "+address_value + " searched value: " + searched_value + " searched value id: " + searchedValueId);
 		List<Object[]> aggregatedReport = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value, allSKs, searchedValueId);
 		session.setAttribute("aggregatedReport", aggregatedReport);
 		return "/report/aggregated-report";
@@ -308,7 +309,7 @@ public class ReportController {
 		User user = userService.getLoggedInUser();
 		if (AuthenticationManagerUtil.isAM()) {
 			List<Object[]> branches = new ArrayList<>();
-			System.out.println("Branch SELEction: "+ branchId);
+			System.out.println("Branch Selection: "+ branchId);
 			if(!branchId.isEmpty() && !branchId.equals("0")){
 				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
 

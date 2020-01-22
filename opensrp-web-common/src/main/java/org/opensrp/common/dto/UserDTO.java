@@ -27,6 +27,8 @@ public class UserDTO {
 
 	private String upazilaList;
 
+	private String unionList;
+
 	private String locationList;
 
 	private int team;
@@ -195,6 +197,14 @@ public class UserDTO {
 
 	public void setUpazilaList(String upazilaList) {
 		this.upazilaList = upazilaList;
+	}
+
+	public String getUnionList() {
+		return unionList;
+	}
+
+	public void setUnionList(String unionList) {
+		this.unionList = unionList;
 	}
 
 	@Override

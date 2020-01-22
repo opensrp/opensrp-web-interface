@@ -92,15 +92,12 @@
         </div>
 
         <!-- Modal for change SK - start -->
-        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050; min-height: 300px;"
-             id="change-sk" class="modal">
+        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050; min-height: 300px;" id="change-sk" class="modal">
             <div id="sk-change-body">
                 <div style="position: absolute; margin-left:45%; margin-top: 105px;">
                     <img width="90px" height="90px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
                 </div>
             </div>
-            <a class="btn btn-sm btn-dark" href="#" onclick="changeParent()" style="margin-left: 10px; float: right; bottom: 0px">Change SK</a>
-            <a class="btn btn-sm btn-dark" href="#" rel="modal:close" style="float: right; bottom: 0px">Close</a>
         </div>
         <!-- Modal End-->
 
@@ -161,9 +158,10 @@
                         <tr>
                             <th><spring:message code="lbl.slNo"></spring:message></th>
                             <th><spring:message code="lbl.name"></spring:message></th>
-                            <th><spring:message code="lbl.userName"></spring:message></th>
+                            <th><spring:message code="lbl.username"></spring:message></th>
                             <th><spring:message code="lbl.phoneNumber"></spring:message></th>
                             <th><spring:message code="lbl.branches"></spring:message></th>
+                            <th><spring:message code="lbl.union"></spring:message></th>
                             <th><spring:message code="lbl.village"></spring:message></th>
                             <th><spring:message code="lbl.action"></spring:message></th>
                         </tr>
@@ -180,6 +178,10 @@
                                     if (StringUtils.isBlank(villages)){
                                     	villages = "Location not assigned";
                                     }
+                                    String unionWards = user.getUnionList();
+                                    if (StringUtils.isBlank(unionWards)){
+                                        unionWards = "Location not assigned";
+                                    }
                         %>
                         <tr>
                             <td><%=idx%></td>
@@ -187,6 +189,7 @@
                             <td><%=user.getUsername()%></td>
                             <td><%=user.getMobile()%></td>
                             <td><%=user.getBranches()%></td>
+                            <td><%=unionWards%></td>
                             <td><%=villages%></td>
                             <td>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>

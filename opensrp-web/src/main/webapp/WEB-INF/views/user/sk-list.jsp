@@ -155,7 +155,7 @@
                         <tr>
                             <th><spring:message code="lbl.slNo"></spring:message></th>
                             <th><spring:message code="lbl.name"></spring:message></th>
-                            <th><spring:message code="lbl.userName"></spring:message></th>
+                            <th><spring:message code="lbl.username"></spring:message></th>
                             <th><spring:message code="lbl.phoneNumber"></spring:message></th>
                             <th><spring:message code="lbl.branches"></spring:message></th>
                             <th><spring:message code="lbl.upazila"></spring:message></th>
@@ -353,7 +353,7 @@
                 var catchmentAreas = e["catchmentAreas"];
                 var catchmentAreaTable = e["catchmentAreaTable"];
                 var userFullName = e["userFullName"];
-                var userInfoHtml = '<h5><u>'+userFullName+'\'s Location Info</u></h5>';
+                var userInfoHtml = '<h5>'+userFullName+'\'s Location Info</h5>';
                 $('#user-info-body').html(userInfoHtml);
                 console.log(catchmentAreaTable[0]);
                 $('#locationTree').jstree({

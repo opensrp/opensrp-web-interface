@@ -36,7 +36,7 @@
 			</div>
 			<div id="errorMessage" style="color: red; font-size: small; display: none; margin-left: 20px; margin-top: 5px;"></div>
 			<div class="card-body">
-				<form:form modelAttribute="branch" id="BranchInfo" class="form-inline" autocomplete="false">
+				<form:form modelAttribute="branch" id="BranchInfo" class="form-inline" autocomplete="off">
 					<div class="row col-12 tag-height">
 						<div class="form-group required">
 							<label class="label-width" for="name"> <spring:message code="lbl.branchName"/> </label>

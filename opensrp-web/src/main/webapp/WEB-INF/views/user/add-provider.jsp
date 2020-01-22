@@ -148,7 +148,7 @@ List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
 						 
 						 <div class="row col-12 tag-height">						
 							<div class="form-group required">														
-								<label class="label-width" for="inputPassword6"><spring:message code="lbl.userName"/></label>										 
+								<label class="label-width" for="inputPassword6"><spring:message code="lbl.username"/></label>
 								<form:input path="username" class="form-control mx-sm-3"
 										required="required" />
 								<small id="passwordHelpInline" class="text-muted text-para">

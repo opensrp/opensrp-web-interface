@@ -42,16 +42,16 @@ jQuery(document).ready(function($) {
 			$("#district").html("");
 			$("#district").append("<option value='0?'>Select District</option>");
 		}
-		$("#upazila").html("");
-		$("#upazila").append("<option value='0?'>Select Upazila/City Corporation</option>");
-		$("#pourasabha").html("");
 		var division = $("#division").val().split("?")[1];
 		var divisionId = $("#division").val().split("?")[0];
 		$("#address_field").val(division == undefined?"division":"district");
 		$("#searched_value").val(division == undefined?"empty":"division = " + "'"+ division +"'");
 		$("#searched_value_id").val(division == undefined?9265:divisionId);
-		$("#union").html("");
-		$("#village").html("");
+
+		$("#upazila").html("<option value='0?'>Select Upazila/City Corporation</option>");
+		$("#pourasabha").html("<option value='0?'>Select Pourasabha</option>");
+		$("#union").html("<option value='0?'>Select Union/Ward</option>");
+		$("#village").html("<option value='0?'>Select Village</option>");
 	});
 
 	$("#district").change(function(event) {
@@ -61,9 +61,10 @@ jQuery(document).ready(function($) {
 		$("#address_field").val(district == ''?"district":"upazila");
 		$("#searched_value").val(district == ''?"empty":"district = " + "'"+ district +"'");
 		$("#searched_value_id").val(district == ''?0:districtId);
-		$("#pourasabha").html("");
-		$("#union").html("");
-		$("#village").html("");
+
+		$("#pourasabha").html("<option value='0?'>Select Pourasabha</option>");
+		$("#union").html("<option value='0?'>Select Union/Ward</option>");
+		$("#village").html("<option value='0?'>Select Village</option>");
 	});
 	$("#upazila").change(function(event) {
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#upazila").val().split("?")[0]+"&title=","pourasabha") ;
@@ -72,14 +73,17 @@ jQuery(document).ready(function($) {
 		$("#address_field").val(upazila == ''?"upazila":"sk_id");
 		$("#searched_value").val(upazila == ''?"empty":"upazila = " + "'"+ upazila +"'");
 		$("#searched_value_id").val(upazila == ''?0:upazilaId);
-		$("#ward").html("");
+
+		$("#union").html("<option value='0?'>Select Union/Ward</option>");
+		$("#village").html("<option value='0?'>Select Village</option>");
 	});
 	$("#pourasabha").change(function(event) {
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#pourasabha").val().split("?")[0]+"&title=","union") ;
 		$("#address_field").val("sk_id");
 		var concatingString = "pourasabha = " + "'"+$("#pourasabha").val().split("?")[1]+"'";
 		$("#searched_value").val(concatingString);
-		$("#village").html("");
+
+		$("#village").html("<option value='0?'>Select Village</option>");
 	});
 	$("#union").change(function(event) {
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#union").val().split("?")[0]+"&title=","village") ;

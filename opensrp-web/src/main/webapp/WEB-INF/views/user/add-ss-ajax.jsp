@@ -39,15 +39,14 @@
                 <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
                     <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
                 </div>
-
+                <div style="margin-left: 10px;">SK NAME:<b>&nbsp;${skFullName}</b></div>
             </div>
-            <form:form 	modelAttribute="account" id="SSInfo" class="form-inline" autocomplete="false">
 
+            <form:form 	modelAttribute="account" id="SSInfo" class="form-inline" autocomplete="off">
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
                         <label class="label-width" for="firstName"> <spring:message code="lbl.firstName"/> </label>
-                        <form:input path="firstName" class="form-control mx-sm-3"
-                                    required="required" />
+                        <form:input path="firstName" class="form-control mx-sm-3" required="required" />
                     </div>
                 </div>
 

@@ -133,7 +133,7 @@
 
                 <div class="row col-12 tag-height">
                     <div class="form-group required">
-                        <label class="label-width" for="username"><spring:message code="lbl.userName"/></label>
+                        <label class="label-width" for="username"><spring:message code="lbl.username"/></label>
                         <form:input path="username" class="form-control mx-sm-3"
                                     required="required" />
                         <small id="usernameHelpInline" class="text-muted text-para">

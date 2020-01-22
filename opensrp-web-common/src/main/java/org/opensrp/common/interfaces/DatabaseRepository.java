@@ -181,9 +181,11 @@ public interface DatabaseRepository {
 
 	List<Object[]> getExportByCreator(String username);
 
-	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId,String name);
+	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId, String name, int limit, int offset, String orderColumn, String orderDirection);
 
-	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId, String name, Integer limit, Integer offset);
+	public <T> T getUserListByFilterStringCount(int locationId, int locationTagId, int roleId, int branchId, String name, int limit, int offset);
+
+	public List<Object[]> getUserListWithoutCatchmentArea(int roleId, int branchId, String name, Integer limit, Integer offset, String orderColumn, String orderDirection);
 
 	public <T> T getUserListWithoutCatchmentAreaCount(int roleId, int branchId, String name);
 

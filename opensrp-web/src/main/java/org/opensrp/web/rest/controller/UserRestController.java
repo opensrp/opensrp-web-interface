@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.*;
+import org.opensrp.common.util.UserColumn;
 import org.opensrp.core.dto.UserLocationDTO;
 import org.opensrp.core.entity.*;
 import org.opensrp.core.service.*;
@@ -69,6 +70,7 @@ public class UserRestController {
 	private static final Logger logger = Logger.getLogger(UserRestController.class);
 	private static final Integer SK_ROLE_ID = 28;
 	private static final Integer SS_ROLE_ID = 29;
+	private static final int villageTagId = 33;
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO,
@@ -409,46 +411,44 @@ public class UserRestController {
 
 	@RequestMapping(value = "/user-without-catchment-area", method = RequestMethod.GET)
 	public ResponseEntity<String> userWithoutCatchmentArea(HttpServletRequest request) throws Exception {
-
-		int locationId = locationService.getLocationId(request);
+		Integer draw = Integer.valueOf(request.getParameter("draw"));
+		String name = request.getParameter("search[value]");
 		String role = request.getParameter("role");
 		String branch = request.getParameter("branch");
-		Integer draw = Integer.valueOf(request.getParameter("draw"));
 		Integer roleId = StringUtils.isBlank(role)?0:Integer.valueOf(role);
 		Integer branchId = StringUtils.isBlank(branch)?0:Integer.valueOf(branch);
-		String name = request.getParameter("search[value]");
+		String orderColumn = request.getParameter("order[0][column]");
+		String orderDirection = request.getParameter("order[0][dir]");
+		orderColumn = UserColumn.valueOf("_"+orderColumn).getValue();
 		Integer start = Integer.valueOf(request.getParameter("start"));
 		Integer length = Integer.valueOf(request.getParameter("length"));
-		System.out.println("Name: "+name+" role: "+roleId+" branch: "+branchId);
-		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId, name, length, start);
-		System.out.println("Location Id: "+ locationId);
-		System.out.println("Size: "+ usersWithoutCatchmentArea.size());
-		JSONObject response = new JSONObject();
-		response.put("draw", draw+1);
-		response.put("recordsTotal", 1);
-		response.put("recordsFiltered", 1);
-		JSONArray array = new JSONArray();
-		int iter = 0;
-		for (Object[] objects: usersWithoutCatchmentArea) {
-			if (iter == 10) break;
-			iter++;
-			JSONArray person = new JSONArray();
-			person.put(String.valueOf(objects[1]).replaceAll("\\.$", ""));
-			person.put(objects[0]);
-			person.put(objects[3]); //role
-			person.put(objects[2]); //phone number
-			person.put(objects[4]);
-			String edit = AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")?
-					"<a href='/opensrp-dashboard/user/"+objects[5].toString()+"/edit.html?lang=en'>Edit</a> | ":"";
-			String catchmentArea = AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")?
-					"<a href='/opensrp-dashboard/user/"+objects[5].toString()+"/catchment-area.html?lang=en'>Catchment Area</a> | ":"";
-			String changePassword = AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")?
-					"<a href='/opensrp-dashboard/user/"+objects[5].toString()+"/change-password.html?lang=en'>Change Password</a>":"";
-			String actions = edit + catchmentArea + changePassword; //buttons
-			person.put(actions);
-			array.put(person);
-		}
-		response.put("data", array);
+		boolean editPermitted = AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER");
+
+		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId, name, length, start, orderColumn, orderDirection);
+		Integer totalUserWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentAreaCount(roleId, branchId, name);
+		JSONObject response = userServiceImpl.getUserDataOfDataTable(draw, totalUserWithoutCatchmentArea, usersWithoutCatchmentArea, editPermitted);
+		return new ResponseEntity<>(response.toString(), OK);
+	}
+
+	@RequestMapping(value = "/user-with-catchment-area", method = RequestMethod.GET)
+	public ResponseEntity<String> userWithCatchmentArea(HttpServletRequest request) throws Exception {
+		String branch = request.getParameter("branch");
+		String role = request.getParameter("role");
+		String name = request.getParameter("search[value]");
+		String orderColumn = request.getParameter("order[0][column]");
+		String orderDirection = request.getParameter("order[0][dir]");
+		orderColumn = UserColumn.valueOf("_"+orderColumn).getValue();
+		int locationId = locationService.getLocationId(request);
+		Integer branchId = StringUtils.isBlank(branch)?0:Integer.valueOf(branch);
+		Integer draw = Integer.valueOf(request.getParameter("draw"));
+		Integer roleId = StringUtils.isBlank(role)?0:Integer.valueOf(role);
+		Integer start = Integer.valueOf(request.getParameter("start"));
+		Integer length = Integer.valueOf(request.getParameter("length"));
+		boolean editPermitted = AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER");
+
+		List<Object[]> usersWithCatchmentArea = userServiceImpl.getUserListByFilterString(locationId, villageTagId, roleId, branchId, name, length, start, orderColumn, orderDirection);
+		Integer totalUserWithCatchmentArea = userServiceImpl.getUserListByFilterStringCount(locationId, villageTagId, roleId, branchId, name, length, start);
+		JSONObject response = userServiceImpl.getUserDataOfDataTable(draw, totalUserWithCatchmentArea, usersWithCatchmentArea, editPermitted);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 }

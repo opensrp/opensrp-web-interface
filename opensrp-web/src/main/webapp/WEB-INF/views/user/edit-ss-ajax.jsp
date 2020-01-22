@@ -32,7 +32,7 @@
 <div class="content-wrapper" style="min-height: auto !important;">
     <div class="container-fluid" style="padding-bottom: 20px !important;">
 
-        <h5><u>Edit SS</u></h5>
+        <h5>Edit SS</h5>
         <div class="card mb-3">
             <div class="card-header">
                 <b>Edit ${account.fullName}'s Information</b>
@@ -64,7 +64,7 @@
 
                     <div class="row col-12 tag-height">
                         <div class="form-group required">
-                            <label class="label-width" for="username"><spring:message code="lbl.userName"/></label>
+                            <label class="label-width" for="username"><spring:message code="lbl.username"/></label>
                             <form:input path="username" class="form-control mx-sm-3"
                                         readonly="true"	required="required"/>
 
