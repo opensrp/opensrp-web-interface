@@ -212,6 +212,20 @@ public class UserController {
 		//end: adding location and team
 		return new ModelAndView("user/add", "command", account);
 	}
+
+	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_USER')")
+	@RequestMapping(value = "/user/add-ajax.html", method = RequestMethod.GET)
+	public ModelAndView addAjaxUser(Model model, HttpSession session, Locale locale) throws JSONException {
+		int[] selectedRoles = null;
+		List<Role> roles = userServiceImpl.setRolesAttributes(selectedRoles, session);
+		List<Branch> branches = branchService.findAll("Branch");
+		Role ss = roleServiceImpl.findByKey("SS", "name", Role.class);
+		model.addAttribute("locale", locale);
+		model.addAttribute("roles", roles);
+		model.addAttribute("branches", branches);
+		session.setAttribute("ss", ss);
+		return new ModelAndView("user/add-ajax", "command", account);
+	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'CREATE_MULTIPURPOSE_VOLUNTEER')")
 	@RequestMapping(value = "/facility/mhv/{id}/add.html", method = RequestMethod.GET)
@@ -637,11 +651,8 @@ public class UserController {
 		String parentKey = "parent";
 		List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByForeignKey(id, "user_id",
 		    "UsersCatchmentArea");
-		TeamMember member = teamMemberServiceImpl.findByForeignKey(id, "person_id", "TeamMember");
-		boolean isTeamMember = member != null ? true : false;
-		List<Object[]> catchmentAreas = userServiceImpl.getUsersCatchmentAreaTableAsJson(id);
 		User user = userServiceImpl.findById(id, "id", User.class);
-		
+
 		List<Role> roles = new ArrayList<>(user.getRoles());
 		Integer roleId = roles.get(0).getId();
 		List<UserAssignedLocationDTO> userAssignedLocationDTOS = userServiceImpl.assignedLocationByRole(roleId);
@@ -651,11 +662,9 @@ public class UserController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		JSONArray data = locationServiceImpl.getLocationWithDisableFacility(session, parentIndication, parentKey,
 		    userAssignedLocationDTOS, user.getId(), role, loggedInUser.getId(), role.equalsIgnoreCase("SS")?29:28);
-		
+
 		session.setAttribute("usersCatchmentAreas", usersCatchmentAreas);
-		session.setAttribute("catchmentAreaTable", catchmentAreas);
 		session.setAttribute("locationTreeData", data);
-		session.setAttribute("isTeamMember", isTeamMember);
 		session.setAttribute("userId", id);
 		session.setAttribute("user", user);
 		session.setAttribute("assignedLocation", userAssignedLocationDTOS);
@@ -1053,5 +1062,19 @@ public class UserController {
 		
 		return new ModelAndView("user/add-SK-ajax", "command", account);
 	}
-	
+
+	@RequestMapping(value = "/user/sk-list", method = RequestMethod.GET)
+	public String generateSKListByBranch(HttpSession session, @RequestParam("branchId") Integer branchId) {
+		List<UserDTO> skList = userServiceImpl.findSKByBranch(branchId);
+		session.setAttribute("skList", skList);
+		return "user/make-options";
+	}
+
+	@RequestMapping(value = "/{id}/catchment-area-table", method = RequestMethod.GET)
+	public String catchmentAreaByUser(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
+		List<Object[]> catchmentAreaTable = userServiceImpl.getCatchmentAreaTableForUser(id);
+		session.setAttribute("catchmentAreaTable", catchmentAreaTable);
+		session.setAttribute("userIdFromCatchment", id);
+		return "location/assigned-location-table";
+	}
 }

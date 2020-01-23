@@ -997,4 +997,12 @@ public class UserService {
 		response.put("data", array);
 		return response;
 	}
+
+	public UserDTO findAMByBranchId(Integer branchId) {
+		return repository.findAMByBranchId(branchId);
+	}
+
+	public List<UserDTO> findSKByBranch(Integer branchId) {
+		return repository.findSKByBranch(branchId);
+	}
 }

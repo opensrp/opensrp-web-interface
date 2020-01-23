@@ -35,8 +35,6 @@
     JSONArray locationTreeData = (JSONArray)session.getAttribute("locationTreeData");
     Integer userId = (Integer) session.getAttribute("userId");
     User user = (User) session.getAttribute("user");
-    Boolean isTeamMember = (Boolean) session.getAttribute("isTeamMember");
-    List<Object[]> catchmentAreas = (List<Object[]>) session.getAttribute("catchmentAreaTable");
     List<UsersCatchmentArea> usersCatchmentAreas = (List<UsersCatchmentArea>) session.getAttribute("usersCatchmentAreas");
     List<UserAssignedLocationDTO> userAssignedLocationDTOS = (List<UserAssignedLocationDTO>) session.getAttribute("assignedLocation");
     String fromRole = (String) session.getAttribute("fromRole");
@@ -98,74 +96,17 @@
                         </div>
                     </div>
                 </div>
-                <%if (catchmentAreas != null && catchmentAreas.size() > 0) {%>
-                <div class="row" style="margin-top: 60px; overflow-x: auto;">
-                    <table class="display">
-                        <thead>
-                        <tr>
-                            <th><spring:message code="lbl.division"/></th>
-                            <th><spring:message code="lbl.district"/></th>
-                            <th><spring:message code="lbl.upazila"/></th>
-                            <th><spring:message code="lbl.pourasabha"/></th>
-                            <th><spring:message code="lbl.union"/></th>
-                            <th><spring:message code="lbl.village"/></th>
-                            <th><spring:message code="lbl.action"/></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <% for(int i = 0; i < catchmentAreas.size(); i++) { %>
-                        <tr>
-                            <td>
-                                <%if (catchmentAreas.get(i)[0] == null) {%>
-                                All
-                                <% } else { %>
-                                <%=catchmentAreas.get(i)[0]%>
-                                <% } %>
-                            </td>
-                            <td>
-                                <%if (catchmentAreas.get(i)[1] == null) {%>
-                                All
-                                <% } else { %>
-                                <%=catchmentAreas.get(i)[1]%>
-                                <% } %>
-                            </td>
-                            <td>
-                                <%if (catchmentAreas.get(i)[2] == null) {%>
-                                All
-                                <% } else { %>
-                                <%=catchmentAreas.get(i)[2]%>
-                                <% } %>
-                            </td>
-                            <td>
-                                <%if (catchmentAreas.get(i)[3] == null) {%>
-                                All
-                                <% } else { %>
-                                <%=catchmentAreas.get(i)[3]%>
-                                <% } %>
-                            </td>
-                            <td>
-                                <%if (catchmentAreas.get(i)[4] == null) {%>
-                                All
-                                <% } else { %>
-                                <%=catchmentAreas.get(i)[4]%>
-                                <% } %>
-                            </td>
-                            <td>
-                                <%if (catchmentAreas.get(i)[5] == null) {%>
-                                All
-                                <% } else { %>
-                                <%=catchmentAreas.get(i)[5]%>
-                                <% } %>
-                            </td>
-                            <td>
-                                <a href="#top" id="edit" onclick="editLocation(<%=catchmentAreas.get(i)[6]%>)">Edit</a>
-                            </td>
-                        </tr>
-                        <% } %>
-                        </tbody>
-                    </table>
+            </div>
+            <div class="card-footer small text-muted"></div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">
+                <spring:message code="lbl.catchmentArea"/>
+            </div>
+            <div class="card-body">
+                <div class="row">
                 </div>
-                <% } %>
             </div>
             <div class="card-footer small text-muted"></div>
         </div>
@@ -312,49 +253,49 @@
             });
         });
     });
-    function editLocation(parentId) {
-        tempEdit = true;
-        $('#saveCatchmentArea').prop('disabled', false);
-        $('#locations option').remove();
-        $('#locations').multiSelect('refresh');
-        var i, selectedAreas = [], z = [], locations = [], ids = [];
+    <%--function editLocation(parentId) {--%>
+    <%--    tempEdit = true;--%>
+    <%--    $('#saveCatchmentArea').prop('disabled', false);--%>
+    <%--    $('#locations option').remove();--%>
+    <%--    $('#locations').multiSelect('refresh');--%>
+    <%--    var i, selectedAreas = [], z = [], locations = [], ids = [];--%>
 
-        <%if (usersCatchmentAreas != null) {
-            for (int i = 0; i < usersCatchmentAreas.size(); i++) {%>
-                selectedAreas[<%=i%>] = <%=usersCatchmentAreas.get(i).getLocationId()%>
-            <%}
-        }%>
+    <%--    <%if (usersCatchmentAreas != null) {--%>
+    <%--        for (int i = 0; i < usersCatchmentAreas.size(); i++) {%>--%>
+    <%--            selectedAreas[<%=i%>] = <%=usersCatchmentAreas.get(i).getLocationId()%>--%>
+    <%--        <%}--%>
+    <%--    }%>--%>
 
-        locations = $('#locationTree').jstree(true).get_node(parentId).children;
-        console.log(locations);
-        for (i = 0; i < locations.length; i++) {
-            z.push({
-                name: $('#locationTree').jstree(true).get_node(locations[i]).text,
-                id: $('#locationTree').jstree(true).get_node(locations[i]).id
-            });
-        }
+    <%--    locations = $('#locationTree').jstree(true).get_node(parentId).children;--%>
+    <%--    console.log(locations);--%>
+    <%--    for (i = 0; i < locations.length; i++) {--%>
+    <%--        z.push({--%>
+    <%--            name: $('#locationTree').jstree(true).get_node(locations[i]).text,--%>
+    <%--            id: $('#locationTree').jstree(true).get_node(locations[i]).id--%>
+    <%--        });--%>
+    <%--    }--%>
 
-        for (i = 0; i < z.length; i++) {
-            if (selectedAreas.indexOf(parseInt(z[i].id)) >= 0) {
-                ids.push(z[i].id);
-            }
-            $('#locations').multiSelect('addOption',{
-                value: z[i].id,
-                text: z[i].name,
-                index: i
-            });
-        }
+    <%--    for (i = 0; i < z.length; i++) {--%>
+    <%--        if (selectedAreas.indexOf(parseInt(z[i].id)) >= 0) {--%>
+    <%--            ids.push(z[i].id);--%>
+    <%--        }--%>
+    <%--        $('#locations').multiSelect('addOption',{--%>
+    <%--            value: z[i].id,--%>
+    <%--            text: z[i].name,--%>
+    <%--            index: i--%>
+    <%--        });--%>
+    <%--    }--%>
 
-        $('#locations').val(ids);
-        <% for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
-            if(user.getId() != dto.getId()) {%>
-                $('#locations option[value=<%=dto.getLocationId()%>]').attr("disabled", 'disabled');
-            <%}
-        }%>
+    <%--    $('#locations').val(ids);--%>
+    <%--    <% for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {--%>
+    <%--        if(user.getId() != dto.getId()) {%>--%>
+    <%--            $('#locations option[value=<%=dto.getLocationId()%>]').attr("disabled", 'disabled');--%>
+    <%--        <%}--%>
+    <%--    }%>--%>
 
-        $('#locations').multiSelect('refresh');
-        console.log($('#locations').val());
-    }
+    <%--    $('#locations').multiSelect('refresh');--%>
+    <%--    console.log($('#locations').val());--%>
+    <%--}--%>
     $("a[href='#top']").click(function() {
         $("html, body").animate({ scrollTop: 0 }, "slow");
         return false;

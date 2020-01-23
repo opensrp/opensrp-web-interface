@@ -186,7 +186,6 @@
                         </div>
                     </div>
                 </form>
-                </form>
             </div>
         </div>
         <!-- /.container-fluid-->

@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.*;
+import org.opensrp.common.util.LocationTags;
+import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.UserColumn;
 import org.opensrp.core.dto.UserLocationDTO;
 import org.opensrp.core.entity.*;
@@ -33,28 +35,28 @@ import java.util.*;
 @RequestMapping("rest/api/v1/user")
 @RestController
 public class UserRestController {
-	
+
 	@Autowired
 	private UserService userServiceImpl;
-	
+
 	@Autowired
 	private TeamMemberService teamMemberServiceImpl;
-	
+
 	@Autowired
 	private TeamService teamService;
 
 	@Autowired
 	private FacilityService facilityService;
-	
+
 	@Autowired
 	private RoleService roleService;
 
 	@Autowired
 	private FacilityWorkerTypeService facilityWorkerTypeService;
-	
+
 	@Autowired
 	private LocationService locationService;
-	
+
 	@Autowired
 	private EmailService emailService;
 
@@ -68,9 +70,10 @@ public class UserRestController {
 	private UsersCatchmentAreaService usersCatchmentAreaService;
 
 	private static final Logger logger = Logger.getLogger(UserRestController.class);
-	private static final Integer SK_ROLE_ID = 28;
-	private static final Integer SS_ROLE_ID = 29;
-	private static final int villageTagId = 33;
+	private static final Integer SK_ROLE_ID = Roles.SK.getId();
+	private static final Integer SS_ROLE_ID = Roles.SS.getId();
+	private static final int villageTagId = LocationTags.VILLAGE.getId();
+
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO,
@@ -98,25 +101,34 @@ public class UserRestController {
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}
-	
+
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public ResponseEntity<String> saveadd(@RequestBody UserDTO userDTO,
+	public ResponseEntity<String> saveAdd(@RequestBody UserDTO userDTO,
 	                                       ModelMap model) throws Exception {
 		String userNameUniqueError = "User already exists";
 		try {
 			User user = userMapper.map(userDTO);
 			User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 			user.setCreator(loggedInUser);
+			user.setParentUser(loggedInUser);
+			if (Integer.valueOf(userDTO.getRoles()) == Roles.SK.getId() && AuthenticationManagerUtil.isAdmin()) {
+				Integer branchId = user.getBranches().iterator().next().getId();
+				UserDTO amDTO = userServiceImpl.findAMByBranchId(branchId);
+				User am = userServiceImpl.findById(amDTO.getId(), "id", User.class);
+				user.setParentUser(am);
+			}
+			if (Integer.valueOf(userDTO.getRoles()) == Roles.SS.getId() && AuthenticationManagerUtil.isAdmin()) {
+				User sk = userServiceImpl.findById(userDTO.getParentUserId(), "id", User.class);
+				user.setPassword("brac12345");
+				user.setUsername(sk.getUsername()+userDTO.getSsNo());
+				user.setParentUser(sk);
+			}
 			boolean isExists = userServiceImpl.isUserExist(user.getUsername());
 			if (!isExists) {
+				System.out.println("BEFORE SAVE:");
+				System.out.println(user);
+				System.out.println(userDTO);
 				User createdUser = userServiceImpl.saveNew(user, false);
-				//				String mailBody = "Dear " + user.getFullName()
-				//						+ ",\n\nYour login credentials for HNPP are given below -\nusername : " + user.getUsername()
-				//						+ "\npassword : " + userDTO.getPassword();
-				//				if (numberOfUserSaved > 0) {
-				//					logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
-				//					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
-				//				}
 				userNameUniqueError = "";
 			}
 		}
@@ -356,6 +368,29 @@ public class UserRestController {
 		}
 		return new ResponseEntity<>(new Gson().toJson(responseMessage), OK);
 	}
+
+	@RequestMapping(value = "/delete-users-location", method = RequestMethod.DELETE)
+	public ResponseEntity<String> deleteLocationFromUsers(@RequestBody SSWithLocationDTO dto) {
+		String responseMessage = "DELETED";
+		try {
+			Map<String, Object> mp = new HashMap<>();
+			mp.put("locationId", dto.getSsLocationId());
+			mp.put("userId", dto.getSsId());
+			List<Integer> catchmentAreaIds = new ArrayList<>();
+			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByKeys(mp);
+			for (UsersCatchmentArea area: usersCatchmentAreas) {
+				catchmentAreaIds.add(area.getId());
+			}
+
+			int response = usersCatchmentAreaService.deleteCatchmentAreas(catchmentAreaIds);
+			System.out.println("is deleted: "+response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			responseMessage = e.getMessage();
+		}
+		return new ResponseEntity<>(new Gson().toJson(responseMessage), OK);
+	}
+
 
 	@RequestMapping(value = "/update/ss-parent", method = RequestMethod.GET)
 	public ResponseEntity<String> updateParentForSS(@RequestParam("ssId") Integer ssId, @RequestParam("parentUsername") String parentUsername)

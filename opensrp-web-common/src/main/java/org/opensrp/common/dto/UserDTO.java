@@ -43,6 +43,8 @@ public class UserDTO {
 
 	private String appVersion;
 
+	private Integer parentUserId;
+
 	public boolean isStatus() {
 		return status;
 	}
@@ -205,6 +207,14 @@ public class UserDTO {
 
 	public void setUnionList(String unionList) {
 		this.unionList = unionList;
+	}
+
+	public Integer getParentUserId() {
+		return parentUserId;
+	}
+
+	public void setParentUserId(Integer parentUserId) {
+		this.parentUserId = parentUserId;
 	}
 
 	@Override

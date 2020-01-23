@@ -51,7 +51,7 @@
 		<div class="form-group">
 			<h5><spring:message code="lbl.userList"/></h5>
 			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-			<a  href="<c:url value="/user/add.html?lang=${locale}"/>">
+			<a  href="<c:url value="/user/add-ajax.html?lang=${locale}"/>">
 				<strong>
 					<spring:message code="lbl.addNew"/>
 					<spring:message code="lbl.user"/>

@@ -111,4 +111,38 @@ jQuery(document).ready(function($) {
 			$('#upazilaHide').hide();
 		}
 	});
+
+	$("#branches").change(function (event) {
+		let branchId = $('#branches').val();
+		let roleId = $('#role').val();
+		console.log("branch id: " + branchId);
+		if (roleId == 29) {
+			let url = "/opensrp-dashboard/user/sk-list?branchId="+branchId;
+			$.ajax({
+				type : "GET",
+				contentType : "application/json",
+				url : url,
+
+				dataType : 'html',
+				timeout : 100000,
+				beforeSend: function() {},
+				success : function(data) {
+					$("#parent-user").html(data);
+				},
+				error : function(e) {
+					console.log("ERROR: ", e);
+					display(e);
+				},
+				done : function(e) {
+
+					console.log("DONE");
+					//enableSearchButton(true);
+				}
+			});
+		}
+	});
+
+	$('#role').change(function (event) {
+		forRoleSelection();
+	});
 });

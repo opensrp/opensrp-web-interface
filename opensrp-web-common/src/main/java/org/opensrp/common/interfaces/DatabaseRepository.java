@@ -6,11 +6,9 @@ import java.util.Map;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.opensrp.common.dto.ChangePasswordDTO;
-import org.opensrp.common.dto.LocationTreeDTO;
-import org.opensrp.common.dto.ReportDTO;
-import org.opensrp.common.dto.UserAssignedLocationDTO;
+import org.opensrp.common.dto.*;
 import org.opensrp.common.util.SearchBuilder;
+import org.springframework.security.core.userdetails.User;
 
 /**
  * <p>
@@ -60,7 +58,7 @@ import org.opensrp.common.util.SearchBuilder;
  * <li>{@link #getDataFromSQLFunction(SearchBuilder, Query, Session)}</li>
  * </ul>
  * </p>
- * 
+ *
  * @author proshanto
  * @author nursat
  * @author prince
@@ -68,13 +66,13 @@ import org.opensrp.common.util.SearchBuilder;
  * @since 2018-05-30
  */
 public interface DatabaseRepository {
-	
+
 	public <T> long save(T t) throws Exception;
 
 	public <T> long saveAll(List<T> t) throws Exception;
 
 	public <T> int update(T t);
-	
+
 	public <T> boolean delete(T t);
 
 	public <T> boolean deleteAllByKeys(List<Integer> locationIds, Integer userId);
@@ -88,7 +86,7 @@ public interface DatabaseRepository {
 	public <T> List<T> findAllByForeignKey(int id, String fieldName, String className);
 
 	public <T> T findByKey(String value, String fieldName, Class<?> className);
-	
+
 	public <T> List<T> findAll(String tableClass);
 
 	public <T> List<T> findAllLocationPartialProperty();
@@ -96,16 +94,16 @@ public interface DatabaseRepository {
 	public <T> List<T> findAllLocation(String tableClass);
 
 	public <T> T findByKeys(Map<String, Object> fieldValues, Class<?> className);
-	
+
 	public <T> T findLastByKey(Map<String, Object> fieldValues, String orderByFieldName, Class<?> className);
-	
+
 	public <T> T findLastByKeyLessThanDateConditionOneField(Map<String, Object> fielaValues, Date fieldvalue, String field,
 	                                                        String orderByFieldName, Class<?> className);
-	
+
 	public <T> List<T> findAllByKeys(Map<String, Object> fieldValues, Class<?> className);
-	
+
 	public <T> List<T> findAllByKeysWithALlMatches(boolean isProvider, Map<String, String> fielaValues, Class<?> className);
-	
+
 	public boolean isExists(Map<String, Object> fieldValues, Class<?> className);
 
 	public boolean isExistsCustom(String value, Class<?> className);
@@ -115,22 +113,22 @@ public interface DatabaseRepository {
 	public <T> boolean isLocationExists(int parentId, String name, Class<?> className);
 
 	public <T> List<T> findAllByKey(String value, String fieldName, Class<?> className);
-	
+
 	public List<Object[]> executeSelectQuery(String sqlQuery, Map<String, Object> params);
-	
+
 	public <T> List<T> executeSelectQuery(String sqlQuery);
-	
+
 	public <T> List<T> search(SearchBuilder searchBuilder, int result, int offsetreal, Class<?> entityClassName);;
-	
+
 	public int countBySearch(SearchBuilder searchBuilder, Class<?> entityClassName);
-	
+
 	public <T> List<T> getDataFromViewByBEId(String viewName, String entityType, String baseEntityId);
-	
+
 	public <T> List<T> getDataFromView(SearchBuilder searchBuilder, int maxRange, int offsetreal, String viewName,
 	                                   String entityType, String orderingBy);
-	
+
 	public int getViewDataSize(SearchBuilder searchBuilder, String viewName, String entityType);
-	
+
 	public <T> List<T> getDataFromSQLFunction(Query query, Session session);
 
 	public <T> List<T> getDataByMHV(String username);
@@ -162,12 +160,14 @@ public interface DatabaseRepository {
 	public <T> T maxByHealthId(int id, String fieldName, String className);
 
 	public List<LocationTreeDTO> getProviderLocationTreeByChildRole(int memberId, int childRoleId);
-	
+
 	public List<Object[]> getHouseHoldReports(String startDate, String endDate, String filterString,String searched_value,List<Object[]> allSKs, Integer searchedValueId);
 
 	public List<Object[]> getAllSK(List<Object[]> branches);
 
 	public List<Object[]> getSKByBranch(String branchIds);
+
+	public List<UserDTO> findSKByBranch(Integer branchId);
 
 	public Integer updateParentForSS(Integer ssId, Integer parentId);
 
@@ -204,5 +204,7 @@ public interface DatabaseRepository {
 	public <T> List<T> getSSWithoutCatchmentAreaByAM(Integer userId);
 
 	public Integer updateSSParentBySKAndLocation(Integer skId, Integer ssRoleId, List<Integer> locationList);
+
+	public <T> T findAMByBranchId(Integer branchId);
 
 }

@@ -49,7 +49,6 @@ public class UserMapper {
         }
         user.setUsername(userDTO.getUsername()+ssNo);
 
-
         return user;
     }
 
