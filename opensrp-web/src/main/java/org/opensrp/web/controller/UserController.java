@@ -22,6 +22,7 @@ import org.opensrp.common.exception.BranchNotFoundException;
 import org.opensrp.common.exception.LocationNotFoundException;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.PermissionName;
+import org.opensrp.common.util.Roles;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.FacilityWorker;
@@ -653,21 +654,41 @@ public class UserController {
 		    "UsersCatchmentArea");
 		User user = userServiceImpl.findById(id, "id", User.class);
 
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Role> roles = new ArrayList<>(user.getRoles());
 		Integer roleId = roles.get(0).getId();
 		List<UserAssignedLocationDTO> userAssignedLocationDTOS = userServiceImpl.assignedLocationByRole(roleId);
 		String role = "Admin";
 		if (AuthenticationManagerUtil.isAM())
 			role = "AM";
-		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		JSONArray data = locationServiceImpl.getLocationWithDisableFacility(session, parentIndication, parentKey,
-		    userAssignedLocationDTOS, user.getId(), role, loggedInUser.getId(), role.equalsIgnoreCase("SS")?29:28);
 
+		Integer parentUserId;
+		if (roleId == Roles.SK.getId() || roleId == Roles.SS.getId()) {
+			if (user.getParentUser() == null) {
+				if (roleId == Roles.SK.getId()) {
+					List<Branch> branches = new ArrayList<>(user.getBranches());
+					Integer branchId = 0;
+					if (branches != null && branches.size() > 0) branchId = branches.get(0).getId();
+					UserDTO parentUser = userServiceImpl.findAMByBranchId(branchId);
+					if (parentUser != null) parentUserId = parentUser.getId();
+					else  parentUserId = 0;
+				}
+				else  parentUserId = 0;
+			}
+			else parentUserId = user.getParentUser().getId();
+		} else parentUserId = loggedInUser.getId();
+		JSONArray data = locationServiceImpl.getLocationWithDisableFacility(session, parentIndication, parentKey,
+		    userAssignedLocationDTOS, user.getId(), role, parentUserId, roleId);
+
+		TeamMember member = teamMemberServiceImpl.findByForeignKey(id, "person_id", "TeamMember");
+		boolean isTeamMember = member != null ? true : false;
 		session.setAttribute("usersCatchmentAreas", usersCatchmentAreas);
 		session.setAttribute("locationTreeData", data);
+		session.setAttribute("isTeamMember", isTeamMember);
 		session.setAttribute("userId", id);
 		session.setAttribute("user", user);
 		session.setAttribute("assignedLocation", userAssignedLocationDTOS);
+		session.setAttribute("roleId", roleId);
 		System.out.println("EVERYTHING IS OKAY");
 		return "user/catchment-area";
 	}
@@ -1070,7 +1091,7 @@ public class UserController {
 		return "user/make-options";
 	}
 
-	@RequestMapping(value = "/{id}/catchment-area-table", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}/catchment-area-table.html", method = RequestMethod.GET)
 	public String catchmentAreaByUser(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
 		List<Object[]> catchmentAreaTable = userServiceImpl.getCatchmentAreaTableForUser(id);
 		session.setAttribute("catchmentAreaTable", catchmentAreaTable);

@@ -36,7 +36,7 @@
             margin-bottom: 10px;
         }
         #downloadFailedMsg {
-            color: darkred;
+            color: red;
         }
     </style>
 
@@ -108,7 +108,7 @@
                                 <div class="col-2">
                                     <label><spring:message code="lbl.formName"/></label>
                                     <select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="formName" name="formName">
-                                        <option value="" selected>Select Form Name</option>
+                                        <option value="">Select Form Name</option>
                                         <c:forEach var="map" items="${formNameList}">
                                             <option value="${map.key}"><c:out value="${map.value}"/></option>
                                         </c:forEach>
@@ -153,17 +153,17 @@
 <script src="<c:url value='/resources/js/select2.js' />"></script>
 <script>
 
-    var downloadInterval = null;
+    let downloadInterval = null;
     $(document).ready(function() {
         $('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
-        $('#formName').val('${formName}');
-        $('#skList').val('${sk}');
-        $('#branch').val('${branchId}');
         $("#msg").hide();
+        console.log("Form Name: "+ $('#formName').val());
+        console.log("SK Name: "+ $('#skList').val());
+        console.log("Branch Name: "+ $('#branch').val());
     });
     function branchChange() {
         console.log("in branch change");
-        var url = "/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
+        let url = "/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
         $("#skList").html("");
         $.ajax({
             type : "GET",
@@ -190,8 +190,8 @@
 
     function getClientDataReportTable(pageNo = 0) {
 
-        var flagS = true;
-        var flagE = true;
+        let flagS = true;
+        let flagE = true;
         if (!checkDate($('#start').val())) {
             $('#startDateValidation').show();
             flagS = false;

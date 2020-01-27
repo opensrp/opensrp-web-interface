@@ -89,10 +89,13 @@ function catchmentLoad(ssId, term) {
                 r = data.instance.get_node(id).children;
 
                 for (i = 0; i < r.length; i++) {
+                    let splitted = data.instance.get_node(r[i]).text.split("(");
+                    let size = splitted.length-1;
+                    let splittedText = splitted[size].replace(")", "");
                     z.push({
                         name: data.instance.get_node(r[i]).icon,
                         id: data.instance.get_node(r[i]).id,
-                        text: data.instance.get_node(r[i]).text.split("(")[1].replace(")", "")
+                        text: splittedText
                     });
                 }
 

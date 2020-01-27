@@ -183,9 +183,11 @@ public class User implements UserDetails {
 	
 	@Transient
 	public String getFullName() {
-		if (lastName != null)
-			return firstName + " " + lastName.replaceAll("\\.$", "");
-		return firstName;
+		String fullName = "";
+		if (lastName != null) {
+			fullName = firstName + " " + lastName.replaceAll("\\.$", "");
+		} else fullName = firstName;
+		return fullName.trim();
 	}
 	
 	public String getEmail() {

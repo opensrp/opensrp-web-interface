@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.UserAssignedLocationDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
+import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.TreeNode;
 import org.opensrp.common.dto.LocationDTO;
 import org.opensrp.core.dto.LocationHierarchyDTO;
@@ -148,8 +149,8 @@ public class LocationService {
 	}
 
 	@Transactional
-	public <T> List<T> findAllLocationPartialProperty() {
-		return repository.findAllLocationPartialProperty();
+	public <T> List<T> findAllLocationPartialProperty(Integer roleId) {
+		return repository.findAllLocationPartialProperty(roleId);
 	}
 
 	@Transactional
@@ -316,17 +317,22 @@ public class LocationService {
 		}
 		List<LocationDTO> locations = new ArrayList<>();
 
-		if (role.equalsIgnoreCase("AM")) {
+		if (role.equalsIgnoreCase("AM") || (roleId == Roles.SS.getId() || roleId == Roles.SK.getId())) {
 			locations = findAllLocationByAM(loggedInUserId, roleId);
 		} else {
-			locations = findAllLocationPartialProperty();
+			locations = findAllLocationPartialProperty(roleId);
 		}
 
 		for (LocationDTO location : locations) {
 			JSONObject dataObject = new JSONObject();
+			if (location.getLocationName().equalsIgnoreCase("BANGLADESH")) {
+//				System.out.println(loca);
+				System.out.println("ASE BD");
+			}
 			if (location.getParentLocationId() != null) {
 				dataObject.put(parentKey, location.getParentLocationId());
 			} else {
+				System.out.println("PARENT SET HOISE");
 				dataObject.put(parentKey, parentIndication);
 			}
 			JSONObject state = new JSONObject();
@@ -358,6 +364,7 @@ public class LocationService {
 			dataArray.put(dataObject);
 		}
 
+		System.out.println(dataArray);
 		return dataArray;
 
 	}

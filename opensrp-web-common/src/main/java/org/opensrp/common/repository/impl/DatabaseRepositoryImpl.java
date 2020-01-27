@@ -27,6 +27,7 @@ import org.opensrp.common.dto.*;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
+import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.SearchBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -659,17 +660,24 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public <T> List<T> findAllLocationPartialProperty() {
+	public <T> List<T> findAllLocationPartialProperty(Integer roleId) {
 		Session session = sessionFactory.openSession();
 		List<T> result = null;
 		try {
-			String hql = "select l.id, split_part(l.name, ':', 1) locationName, l.parent_location_id parentLocationId, lt.name locationTagName"
-					+ " from core.location l join core.location_tag lt on lt.id = l.location_tag_id where lt.id != 33 order by id asc;"; //village id = 33
+			String hql = "select l.id, split_part(l.name, ':', 1) locationName, l.parent_location_id parentLocationId, "
+					+ "lt.name locationTagName, string_agg(case when ur.role_id != :roleId then null "
+					+ "else u.first_name || ' - ' || u.username end, ', ') users from core.location l join "
+					+ "core.location_tag lt on lt.id = l.location_tag_id left join core.users_catchment_area uca on uca.location_id = l.id "
+					+ "left join core.users u on u.id = uca.user_id left join core.user_role ur on ur.user_id = u.id where lt.id != :villageId "
+					+ "group by l.id, lt.name order by id asc;"; //village id = 33
 			Query query = session.createSQLQuery(hql)
 					.addScalar("id", StandardBasicTypes.INTEGER)
 					.addScalar("locationName", StandardBasicTypes.STRING)
 					.addScalar("parentLocationId", StandardBasicTypes.INTEGER)
 					.addScalar("locationTagName", StandardBasicTypes.STRING)
+					.addScalar("users", StandardBasicTypes.STRING)
+					.setInteger("villageId", LocationTags.VILLAGE.getId())
+					.setInteger("roleId", roleId)
 					.setResultTransformer(new AliasToBeanResultTransformer(LocationDTO.class));
 			result = (List<T>) query.list();
 		}
@@ -2252,7 +2260,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		} finally {
 			session.close();
 		}
-		return users!=null?users.get(0):null;
+		return users!=null && users.size() > 0?users.get(0):null;
 	}
 
 	public <T> List<T> getUniqueLocation(String village, String ward) {

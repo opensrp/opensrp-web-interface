@@ -29,6 +29,7 @@
     <%@ page import="org.opensrp.core.entity.User" %>
     <%@ page import="org.opensrp.common.dto.UserAssignedLocationDTO" %>
     <%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
+    <%@ page import="org.opensrp.common.util.Roles" %>
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 <%
@@ -37,10 +38,8 @@
     User user = (User) session.getAttribute("user");
     List<UsersCatchmentArea> usersCatchmentAreas = (List<UsersCatchmentArea>) session.getAttribute("usersCatchmentAreas");
     List<UserAssignedLocationDTO> userAssignedLocationDTOS = (List<UserAssignedLocationDTO>) session.getAttribute("assignedLocation");
-    String fromRole = (String) session.getAttribute("fromRole");
-    String role = AuthenticationManagerUtil.isAM()?"AM":"";
-    Integer skId = (Integer) session.getAttribute("idFinal");
-    String skUsername = (String) session.getAttribute("usernameFinal");
+    Boolean isTeamMember = (Boolean) session.getAttribute("isTeamMember");
+    Integer roleId = (Integer) session.getAttribute("roleId");
 %>
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 <jsp:include page="/WEB-INF/views/navbar.jsp" />
@@ -73,6 +72,11 @@
                 <spring:message code="lbl.viewLocationsHierarchy"/>
             </div>
             <div class="card-body">
+                <div class="row" id="no-data" style="display: none;">
+                    <div class="col-sm-12">
+                        <p>This user doesn't have parent user or user's branch is't assigned to a higher rank user.</p>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-sm-5" style="overflow-y: auto; max-height: 350px;">
                         <div id="locationTree">
@@ -106,6 +110,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    <div class="col-12" id="assigned-areas"></div>
                 </div>
             </div>
             <div class="card-footer small text-muted"></div>
@@ -119,10 +124,15 @@
 <script src="<c:url value='/resources/js/jquery.multi-select.js'/>"></script>
 <script type="text/javascript">
     var tempEdit = false;
+    var selectedLocation = [];
     $(document).ready(function () {
+        let locationTreeData = <%=locationTreeData%>;
+        if (locationTreeData.length == 0) $('#no-data').show();
+        else $('#no-data').hide();
+        console.log("length: "+ locationTreeData.length);
         $('#locationTree').jstree({
             'core' : {
-                'data' : <%=locationTreeData %>
+                'data' : locationTreeData
             },
             'checkbox' : {
                 'keep_selected_style' : false
@@ -164,13 +174,24 @@
             r = data.instance.get_node(id).children;
 
             for (i = 0; i < r.length; i++) {
+                let splitted = data.instance.get_node(r[i]).text.split("(");
+                let size = splitted.length-1;
+                let splittedText = splitted[size].replace(")", "");
                 z.push({
-                    name: data.instance.get_node(r[i]).text,
+                    name: data.instance.get_node(r[i]).icon,
                     id: data.instance.get_node(r[i]).id,
+                    text: splittedText
                 });
             }
 
             for (i = 0; i < z.length; i++) {
+                console.log("text: "+ z[i].text);
+                console.log("name: "+ z[i].name);
+                if (z[i].text != "Village") {
+                    <%if ( (roleId == Roles.SK.getId() || roleId == Roles.SS.getId())) { %>
+                    continue;
+                    <%}%>
+                }
                 if (selectedAreas.indexOf(parseInt(z[i].id)) >= 0) {
                     ids.push(z[i].id);
                 }
@@ -181,53 +202,74 @@
                 });
             }
 
-            <% for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
-                if(user.getId() != dto.getId()) {%>
-            	    $('#locations option[value=<%=dto.getLocationId()%>]').attr("disabled", 'disabled');
-                <%}
-            }%>
+            <%for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {%>
+            $('#locations option[value=<%=dto.getLocationId()%>]').attr("disabled", 'disabled');
+            <%}%>
             $('#locations').val(ids);
             $('#locations').multiSelect('refresh');
+
+            selectedLocation = ids;
         }).jstree();
 
         $('#saveCatchmentArea').unbind().click(function () {
             $('#saveCatchmentArea').prop('disabled', true);
             $('#pleaseWait').show();
-            var url = "";
+            let url = "";
             <% if (isTeamMember) {%>
             url = "/opensrp-dashboard/rest/api/v1/user/catchment-area/update";
             <%} else {%>
             url = "/opensrp-dashboard/rest/api/v1/user/catchment-area/save";
             <% } %>
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
-            var allLocation = [];
+            let token = $("meta[name='_csrf']").attr("content");
+            let header = $("meta[name='_csrf_header']").attr("content");
+            let allLocation = [];
             $("#locations option").each(function() {
                 allLocation.push($(this).val());
             });
 
-            var redirectUrl = "/opensrp-dashboard/user.html";
-            var role = "<%=role%>";
-            var fromRole = "<%=fromRole%>";
-            var skId = "<%=skId%>";
-            var skUsername = "<%=skUsername%>";
+            <%--var redirectUrl = "/opensrp-dashboard/user.html";--%>
+            <%--var role = "<%=role%>";--%>
+            <%--var fromRole = "<%=fromRole%>";--%>
+            <%--var skId = "<%=skId%>";--%>
+            <%--var skUsername = "<%=skUsername%>";--%>
 
-            console.log(role);
-            if (role == 'AM') {
-                if (fromRole == 'SK') {
-                    redirectUrl = "/opensrp-dashboard/user/sk-list.html";
-                } else if (fromRole == 'SS') {
-                    redirectUrl = "/opensrp-dashboard/user/"+skId+"/"+skUsername+"/my-ss.html?lang=en"
+            <%--console.log(role);--%>
+            <%--if (role == 'AM') {--%>
+            <%--    if (fromRole == 'SK') {--%>
+            <%--        redirectUrl = "/opensrp-dashboard/user/sk-list.html";--%>
+            <%--    } else if (fromRole == 'SS') {--%>
+            <%--        redirectUrl = "/opensrp-dashboard/user/"+skId+"/"+skUsername+"/my-ss.html?lang=en"--%>
+            <%--    }--%>
+            <%--}--%>
+
+            let enabled = [];
+            if ($('#locations').val() != undefined && $('#locations').val() != null) {
+                let enableArray = [];
+                enableArray = $('#locations').val();
+                if (Array.isArray(enableArray)) {
+                    enableArray.forEach(function (val) {
+                        enabled.push(val);
+                    });
+                } else {
+                    enabled.push(enableArray);
                 }
             }
 
-            console.log("redirect url: "+ redirectUrl);
+            if (selectedLocation.length > 0) {
+                selectedLocation.forEach(function (value) {
+                    enabled.push(value);
+                });
+            }
 
-            var formData = {
+            let formData = {
                 allLocation: allLocation,
-                locations: $('#locations').val(),
+                locations: enabled,
                 userId: $('#userId').val()
             };
+
+            console.log("In Save: ");
+            console.log(formData);
+
             $.ajax({
                 contentType : "application/json",
                 type: "POST",
@@ -240,7 +282,8 @@
                     xhr.setRequestHeader(header, token);
                 },
                 success : function(data) {
-                    window.location.replace(redirectUrl);
+                    window.location.reload();
+                    // window.location.replace(redirectUrl);
                 },
                 error : function(e) {
                     $('#saveCatchmentArea').prop('disabled', false);
@@ -252,7 +295,28 @@
                 }
             });
         });
+        loadCatchmentTable();
     });
+
+    function loadCatchmentTable() {
+        let url = "/opensrp-dashboard/"+$('#userId').val()+"/catchment-area-table.html";
+        $.ajax({
+            type: "GET",
+            contentType : "application/json",
+            url: url,
+            dataType : 'html',
+            timeout : 100000,
+            beforeSend: function(xhr) {
+            },
+            success : function(data) {
+                $("#assigned-areas").html(data);
+            },
+            error : function(e) {
+            },
+            done : function(e) {
+            }
+        });
+    }
     <%--function editLocation(parentId) {--%>
     <%--    tempEdit = true;--%>
     <%--    $('#saveCatchmentArea').prop('disabled', false);--%>
@@ -296,10 +360,10 @@
     <%--    $('#locations').multiSelect('refresh');--%>
     <%--    console.log($('#locations').val());--%>
     <%--}--%>
-    $("a[href='#top']").click(function() {
-        $("html, body").animate({ scrollTop: 0 }, "slow");
-        return false;
-    });
+    // $("a[href='#top']").click(function() {
+    //     $("html, body").animate({ scrollTop: 0 }, "slow");
+    //     return false;
+    // });
 </script>
 </body>
 </html>

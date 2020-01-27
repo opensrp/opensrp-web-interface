@@ -109,7 +109,6 @@
                 <a class="btn btn-sm btn-danger" href="#" onclick="deleteConfirm()" style="float: right; bottom: 0px; margin-left: 5px;">Yes</a>
                 <a class="btn btn-sm btn-dark" href="#" rel="modal:close" style="float: right; bottom: 0px">Close</a>
             </div>
-
         </div>
         
         <div style="overflow: unset;display: none; max-width: none; position: relative;min-height: 300px; z-index: 1050"
@@ -230,7 +229,6 @@
 <jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
 <script src="<c:url value='/resources/js/user.js'/>"></script>
-
 <script src="<c:url value='/resources/js/jquery.toast.js'/>"></script>
 <script src="<c:url value='/resources/js/jstree.min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery.multi-select.js'/>"></script>
@@ -352,7 +350,7 @@
                 var assignedLocation = e["assignedLocation"];
                 var catchmentAreas = e["catchmentAreas"];
                 var catchmentAreaTable = e["catchmentAreaTable"];
-                var userFullName = e["userFullName"];
+                var userFullName = e["userFullName"].trim();
                 var userInfoHtml = '<h5>'+userFullName+'\'s Location Info</h5>';
                 $('#user-info-body').html(userInfoHtml);
                 console.log(catchmentAreaTable[0]);
@@ -383,10 +381,13 @@
                     r = data.instance.get_node(id).children;
 
                     for (i = 0; i < r.length; i++) {
+                        let splitted = data.instance.get_node(r[i]).text.split("(");
+                        let size = splitted.length-1;
+                        let splittedText = splitted[size].replace(")", "");
                         z.push({
                             name: data.instance.get_node(r[i]).icon,
                             id: data.instance.get_node(r[i]).id,
-                            text: data.instance.get_node(r[i]).text.split("(")[1].replace(")", "")
+                            text: splittedText
                         });
                     }
 

@@ -209,6 +209,30 @@
 
 		var url = "/opensrp-dashboard/report/aggregated";
 		$("#t-body").html("");
+		let searchedValueId = $('#searched_value_id').val();
+		if (searchedValueId == 0) {
+			if ($('#division').val() != null && $('#division').val() != undefined && $('#division').val() != '') {
+				let divInfo = $('#division').val().split("?");
+				if (divInfo[0] != null && divInfo[0] != undefined && divInfo != '' && divInfo != 0 && divInfo[0] != '0') {
+					$('#searched_value_id').val(divInfo[0]);
+					$('#searched_value').val("division = '"+divInfo[1]+"'");
+				}
+			}
+			if ($('#district').val() != null && $('#district').val() != undefined && $('#district').val() != '') {
+				let disInfo = $('#district').val().split("?");
+				if (disInfo[0] != null && disInfo[0] != undefined && disInfo != '' && disInfo != 0 && disInfo[0] != '0') {
+					$('#searched_value_id').val(disInfo[0]);
+					$('#searched_value').val("district = '"+disInfo[1]+"'");
+				}
+			}
+			if ($('#upazila').val() != null && $('#upazila').val() != undefined && $('#upazila').val() != '') {
+				let upaInfo = $('#upazila').val().split("?");
+				if (upaInfo[0] != null && upaInfo[0] != undefined && upaInfo != '' && upaInfo != 0 && upaInfo[0] != '0') {
+					$('#searched_value_id').val(upaInfo[0]);
+					$('#searched_value').val("upazila = '"+upaInfo[1]+"'");
+				}
+			}
+		}
 		$.ajax({
 			type : "GET",
 			contentType : "application/json",
@@ -229,13 +253,11 @@
 				$('#search-button').attr("disabled", true);
 			},
 			success : function(data) {
-				console.log(data);
 				$('#loading').hide();
 				$("#t-body").html(data);
 				$('#search-button').attr("disabled", false);
 			},
 			error : function(e) {
-				console.log("ERROR: ", e);
 				display(e);
 				$('#loading').hide();
 				$('#search-button').attr("disabled", false);
@@ -243,7 +265,6 @@
 			done : function(e) {
 				$('#loading').hide();
 				$('#search-button').attr("disabled", false);
-				console.log("DONE");
 				//enableSearchButton(true);
 			}
 		});

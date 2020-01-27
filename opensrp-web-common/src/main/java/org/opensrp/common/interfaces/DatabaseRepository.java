@@ -89,7 +89,7 @@ public interface DatabaseRepository {
 
 	public <T> List<T> findAll(String tableClass);
 
-	public <T> List<T> findAllLocationPartialProperty();
+	public <T> List<T> findAllLocationPartialProperty(Integer roleId);
 
 	public <T> List<T> findAllLocation(String tableClass);
 
