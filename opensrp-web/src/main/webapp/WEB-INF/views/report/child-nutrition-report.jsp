@@ -74,125 +74,19 @@
                         <table class="display" id="formWiseAggregatedListTable"
                                style="width: 100%;">
                             <thead>
-                            <tr> <!--1st-->
-                                <th rowspan="3" colspan="3">Number of ELCOs</th>
-                                <th colspan="20">Family Planning methods user (including adolescent ELCOs)</th>
-                                <th colspan="20">Family Planning methods user (Only adolescents ELCOs)</th>
-                                <th rowspan="2" colspan="9">Family Planning methods user (including adolescent ELCOs)</th>
+                            <tr> <!--1st row-->
+                                <th rowspan="2">Total number of children visited aged 19-36 months</th>
+                                <th rowspan="2">No. Of fully immunized children (18-36 months)</th>
+                                <th rowspan="2">No. Of  NCD services by SK</th>
+                                <th rowspan="2">No. Of  Adolescent services by SK</th>
+                                <th rowspan="2">No. Of  IYCF services by SK t services by SK</th>
+                                <th colspan="4">Child Nutrition Information</th>
                             </tr>
-                            <tr> <!--2nd-->
-                                <!--including adolescent-->
-                                <th colspan="5">User</th>
-                                <th colspan="5">New</th>
-                                <th colspan="5">Change</th>
-                                <th colspan="5">Re-initiated</th>
-
-                                <!--only adolescent-->
-                                <th colspan="5">User</th>
-                                <th colspan="5">New</th>
-                                <th colspan="5">Change</th>
-                                <th colspan="5">Re-initiated</th>
-                            </tr>
-                            <tr> <!--3rd-->
-                                <!--user(including adolescent)-->
-                                <th rowspan="2">Total</th>
-                                <th colspan="2">BRAC</th>
-                                <th rowspan="2">Provided by Government</th>
-                                <th rowspan="2">Provided by Other</th>
-
-                                <!--new(including adolescent)-->
-                                <th rowspan="2">Total</th>
-                                <th colspan="2">BRAC</th>
-                                <th rowspan="2">Provided by Government</th>
-                                <th rowspan="2">Provided by Other</th>
-
-                                <!--change(including adolescent)-->
-                                <th rowspan="2">Total</th>
-                                <th colspan="2">BRAC</th>
-                                <th rowspan="2">Provided by Government</th>
-                                <th rowspan="2">Provided by Other</th>
-
-                                <!--re-initiated(including adolescent)-->
-                                <th rowspan="2">Total</th>
-                                <th colspan="2">BRAC</th>
-                                <th rowspan="2">Provided by Government</th>
-                                <th rowspan="2">Provided by Other</th>
-
-                                <!--user(only adolescent)-->
-                                <th rowspan="2">Total</th>
-                                <th colspan="2">BRAC</th>
-                                <th rowspan="2">Provided by Government</th>
-                                <th rowspan="2">Provided by Other</th>
-
-                                <!--new(only adolescent)-->
-                                <th rowspan="2">Total</th>
-                                <th colspan="2">BRAC</th>
-                                <th rowspan="2">Provided by Government</th>
-                                <th rowspan="2">Provided by Other</th>
-
-                                <!--change(only adolescent)-->
-                                <th rowspan="2">Total</th>
-                                <th colspan="2">BRAC</th>
-                                <th rowspan="2">Provided by Government</th>
-                                <th rowspan="2">Provided by Other</th>
-
-                                <!--re-initiated(only adolescent)-->
-                                <th rowspan="2">Total</th>
-                                <th colspan="2">BRAC</th>
-                                <th rowspan="2">Provided by Government</th>
-                                <th rowspan="2">Provided by Other</th>
-
-                                <th colspan="3">Permanent</th>
-                                <th colspan="6">Temporary</th>
-                            </tr>
-                            <tr> <!--4th-->
-                                <th class="elco-number">Total ELCOs visited</th>
-                                <th class="elco-number">Adolescent ELCOs (10-19)</th>
-                                <th class="elco-number">ELCOs (non adolescent)</th>
-
-                                <!--user(including adolescent)-->
-                                <th>Products delivered by BRAC</th>
-                                <th>Refer</th>
-
-                                <!--new(including adolescent)-->
-                                <th>Products delivered by BRAC</th>
-                                <th>Refer</th>
-
-                                <!--change(including adolescent)-->
-                                <th>Products delivered by BRAC</th>
-                                <th>Refer</th>
-
-                                <!--re-initiated(including adolescent)-->
-                                <th>Products delivered by BRAC</th>
-                                <th>Refer</th>
-
-                                <!--user(only adolescent)-->
-                                <th>Products delivered by BRAC</th>
-                                <th>Refer</th>
-
-                                <!--new(only adolescent)-->
-                                <th>Products delivered by BRAC</th>
-                                <th>Refer</th>
-
-                                <!--change(only adolescent)-->
-                                <th>Products delivered by BRAC</th>
-                                <th>Refer</th>
-
-                                <!--re-initiated(only adolescent)-->
-                                <th>Products delivered by BRAC</th>
-                                <th>Refer</th>
-
-
-                                <th>NSV</th>
-                                <th>Tubectomy</th>
-                                <th>Total</th>
-
-                                <th>IUD</th>
-                                <th>Implant</th>
-                                <th>Injection</th>
-                                <th>Pill</th>
-                                <th>Condom</th>
-                                <th>Total</th>
+                            <tr> <!--2nd row-->
+                                <th>No. Of neonates started breast feed within 1 hour of birth</th>
+                                <th>No. Of children breastfeed (24 hours recall)</th>
+                                <th>No. Of children initiated complementary feeding (at 7 months)</th>
+                                <th>No. Of children took pustikona in the last 7 days (7 - 59 month)</th>
                             </tr>
                             </thead>
                             <tbody id="t-body">

@@ -94,8 +94,8 @@
                                 <th rowspan="2">Within 1st three month (Ist trimester)</th>
                                 <th rowspan="2">After 1st three month</th>
 
-                                <th>Institutionalized</th>
-                                <th>Delivery at Home</th>
+                                <th colspan="2">Institutionalized</th>
+                                <th colspan="3">Delivery at Home</th>
                                 <th rowspan="2">Total no.of deliveries</th>
 
                                 <th rowspan="2">1-3</th>
@@ -133,8 +133,8 @@
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script>
     function onSearchClicked() {
-        var flagS = true;
-        var flagE = true;
+        let flagS = true;
+        let flagE = true;
         if (!checkDate($('#start').val())) {
             $('#startDateValidation').show();
             flagS = false;
