@@ -226,6 +226,190 @@ public class ReportController {
 		return "report/client-data-report";
 	}
 
+	@RequestMapping(value = "/familyPlanningReport.html", method = RequestMethod.GET)
+	public String getFamilyPlanningReportPage(HttpServletRequest request,
+											  HttpSession session,
+											  Model model,
+											  Locale locale,
+											  @RequestParam("address_field") String address_value,
+											  @RequestParam("searched_value") String searched_value,
+											  @RequestParam("searched_value_id") Integer searchedValueId) throws ParseException {
+
+		model.addAttribute("locale", locale);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
+		System.err.println("branchId"+branchId);
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = new ArrayList<>();
+			for (Branch branch: user.getBranches()) {
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}
+		}
+		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
+		List<Object[]> allSKs = new ArrayList<>();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = new ArrayList<>();
+			if(!branchId.isEmpty() ){
+				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
+
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}else {
+
+				for (Branch branch: user.getBranches()) {
+					Object[] obj = new Object[10];
+					obj[0] = branch.getId();
+					obj[1] = branch.getName();
+					branches.add(obj);
+				}
+			}
+			allSKs = databaseServiceImpl.getAllSks(branches);
+		} else if (AuthenticationManagerUtil.isAdmin()){
+			allSKs =  new ArrayList<Object[]>();
+		}
+
+		// List<Object[]> skLists = databaseServiceImpl.getAllSks();
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String endDate = formatter.format(new Date());
+
+		String endDateValue = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
+		if (AuthenticationManagerUtil.isAM()) address_value = "sk_id"; // for AM role
+		searchUtil.setDivisionAttribute(session);
+		session.setAttribute("startDate", startDate);
+		session.setAttribute("endDate", endDate);
+		session.setAttribute("startDate", startDate);
+		return "report/family-planning-report";
+	}
+
+	@RequestMapping(value = "/pregnancyReport.html", method = RequestMethod.GET)
+	public String getPregnancyReportPage(HttpServletRequest request,
+											  HttpSession session,
+											  Model model,
+											  Locale locale,
+											  @RequestParam("address_field") String address_value,
+											  @RequestParam("searched_value") String searched_value,
+											  @RequestParam("searched_value_id") Integer searchedValueId) throws ParseException {
+
+		model.addAttribute("locale", locale);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
+		System.err.println("branchId"+branchId);
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = new ArrayList<>();
+			for (Branch branch: user.getBranches()) {
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}
+		}
+		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
+		List<Object[]> allSKs = new ArrayList<>();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = new ArrayList<>();
+			if(!branchId.isEmpty() ){
+				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
+
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}else {
+
+				for (Branch branch: user.getBranches()) {
+					Object[] obj = new Object[10];
+					obj[0] = branch.getId();
+					obj[1] = branch.getName();
+					branches.add(obj);
+				}
+			}
+			allSKs = databaseServiceImpl.getAllSks(branches);
+		} else if (AuthenticationManagerUtil.isAdmin()){
+			allSKs =  new ArrayList<Object[]>();
+		}
+
+		// List<Object[]> skLists = databaseServiceImpl.getAllSks();
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String endDate = formatter.format(new Date());
+
+		String endDateValue = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
+		if (AuthenticationManagerUtil.isAM()) address_value = "sk_id"; // for AM role
+		searchUtil.setDivisionAttribute(session);
+		session.setAttribute("startDate", startDate);
+		session.setAttribute("endDate", endDate);
+		session.setAttribute("startDate", startDate);
+		return "report/pregnancy-report";
+	}
+
+
+	@RequestMapping(value = "/childNutritionReport.html", method = RequestMethod.GET)
+	public String getChildNutritionReportPage(HttpServletRequest request,
+										 HttpSession session,
+										 Model model,
+										 Locale locale,
+										 @RequestParam("address_field") String address_value,
+										 @RequestParam("searched_value") String searched_value,
+										 @RequestParam("searched_value_id") Integer searchedValueId) throws ParseException {
+
+		model.addAttribute("locale", locale);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
+		System.err.println("branchId"+branchId);
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = new ArrayList<>();
+			for (Branch branch: user.getBranches()) {
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}
+		}
+		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
+		List<Object[]> allSKs = new ArrayList<>();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = new ArrayList<>();
+			if(!branchId.isEmpty() ){
+				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
+
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}else {
+
+				for (Branch branch: user.getBranches()) {
+					Object[] obj = new Object[10];
+					obj[0] = branch.getId();
+					obj[1] = branch.getName();
+					branches.add(obj);
+				}
+			}
+			allSKs = databaseServiceImpl.getAllSks(branches);
+		} else if (AuthenticationManagerUtil.isAdmin()){
+			allSKs =  new ArrayList<Object[]>();
+		}
+
+		// List<Object[]> skLists = databaseServiceImpl.getAllSks();
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String endDate = formatter.format(new Date());
+
+		String endDateValue = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
+		if (AuthenticationManagerUtil.isAM()) address_value = "sk_id"; // for AM role
+		searchUtil.setDivisionAttribute(session);
+		session.setAttribute("startDate", startDate);
+		session.setAttribute("endDate", endDate);
+		session.setAttribute("startDate", startDate);
+		return "report/child-nutrition-report";
+	}
+
 
 	@RequestMapping(value = "/aggregated", method = RequestMethod.GET)
 	public String generateAggregatedReportOnSearch(HttpServletRequest request,
