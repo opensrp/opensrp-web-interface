@@ -142,7 +142,7 @@ public class Role implements GrantedAuthority {
 		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((permissions == null) ? 0 : permissions.hashCode());
+//		result = prime * result + ((permissions == null) ? 0 : permissions.hashCode());
 		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
 		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
 		return result;

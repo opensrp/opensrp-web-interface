@@ -165,7 +165,7 @@ public class TeamMember implements Serializable {
 		result = prime * result + ((isDataProvider == null) ? 0 : isDataProvider.hashCode());
 		result = prime * result + ((locations == null) ? 0 : locations.hashCode());
 		result = prime * result + ((person == null) ? 0 : person.hashCode());
-		result = prime * result + ((team == null) ? 0 : team.hashCode());
+//		result = prime * result + ((team == null) ? 0 : team.hashCode());
 		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
 		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
 		return result;

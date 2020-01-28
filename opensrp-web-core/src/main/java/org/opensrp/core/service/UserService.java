@@ -987,7 +987,7 @@ public class UserService {
 			person.put(objects[3]); //role
 			person.put(objects[2]); //phone number
 			person.put(objects[4]);
-			String edit = editPermitted?"<a href='/opensrp-dashboard/user/"+objects[5].toString()+"/edit.html?lang=en'>Edit</a> | ":"";
+			String edit = editPermitted && !objects[3].toString().equalsIgnoreCase("SK")&& !objects[3].toString().equalsIgnoreCase("SS")?"<a href='/opensrp-dashboard/user/"+objects[5].toString()+"/edit.html?lang=en'>Edit</a> | ":"";
 			String catchmentArea = editPermitted?"<a href='/opensrp-dashboard/user/"+objects[5].toString()+"/catchment-area.html?lang=en'>Catchment Area</a> | ":"";
 			String changePassword = editPermitted?"<a href='/opensrp-dashboard/user/"+objects[5].toString()+"/change-password.html?lang=en'>Change Password</a>":"";
 			String actions = edit + catchmentArea + changePassword; //buttons

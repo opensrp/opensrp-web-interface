@@ -372,7 +372,7 @@ public class User implements UserDetails {
 		result = prime * result + ((personUUid == null) ? 0 : personUUid.hashCode());
 		result = prime * result + (provider ? 1231 : 1237);
 		result = prime * result + ((retypePassword == null) ? 0 : retypePassword.hashCode());
-		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
+//		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
 		result = prime * result + ((ssNo == null) ? 0 : ssNo.hashCode());
 		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
