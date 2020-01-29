@@ -309,54 +309,54 @@ function isSS() {
 		return false;
 	}
 
-	function forRoleSelection() {
-		let roleId = $('#role').val();
-		if (roleId == 29 || roleId == 28) {
-			$('#branches').removeAttr("multiple");
-			$("#branches option:selected").prop("selected", false);
-			$('#branches').trigger('change');
-		} else {
-			$('#branches').attr('multiple', 'multiple');
-			$("#branches option:selected").prop("selected", false);
-			$('#branches').trigger('change');
-		}
-		if (roleId == 29) { //role for ss
-			$('#parentUserForSS').show();
-			$('#parentUserForSS').prop('required', true);
-
-			$('#username-div').hide();
-			$('#password-div').hide();
-			$('#retypePassword-div').hide();
-
-			$('#username').val('');
-			$('#password').val('');
-			$('#retypePassword').val('');
-
-			$('#username').prop('required', false);
-			$('#password').prop('required', false);
-			$('#retypePassword').prop('required', false);
-
-			$('#ssNo').prop('required', true);
-		} else {
-			$('#ssNo').val('').trigger('change');
-			$('#parentUserForSS').hide();
-			$('#parent-user').html("");
-			$('#parentUserForSS').prop('required', false);
-
-			$('#username-div').show();
-			$('#password-div').show();
-			$('#retypePassword-div').show();
-
-			$('#username').val('');
-			$('#password').val('');
-			$('#retypePassword').val('');
-
-			$('#username').prop('required', true);
-			$('#password').prop('required', true);
-			$('#retypePassword').prop('required', true);
-			$('#ssNo').prop('required', false);
-		}
-	}
+	// function forRoleSelection() {
+	// 	let roleId = $('#role').val();
+	// 	if (roleId == 29 || roleId == 28) {
+	// 		$('#branches').removeAttr("multiple");
+	// 		$("#branches option:selected").prop("selected", false);
+	// 		$('#branches').trigger('change');
+	// 	} else {
+	// 		$('#branches').attr('multiple', 'multiple');
+	// 		$("#branches option:selected").prop("selected", false);
+	// 		$('#branches').trigger('change');
+	// 	}
+	// 	if (roleId == 29) { //role for ss
+	// 		$('#parentUserForSS').show();
+	// 		$('#parentUserForSS').prop('required', true);
+	//
+	// 		$('#username-div').hide();
+	// 		$('#password-div').hide();
+	// 		$('#retypePassword-div').hide();
+	//
+	// 		$('#username').val('');
+	// 		$('#password').val('');
+	// 		$('#retypePassword').val('');
+	//
+	// 		$('#username').prop('required', false);
+	// 		$('#password').prop('required', false);
+	// 		$('#retypePassword').prop('required', false);
+	//
+	// 		$('#ssNo').prop('required', true);
+	// 	} else {
+	// 		$('#ssNo').val('').trigger('change');
+	// 		$('#parentUserForSS').hide();
+	// 		$('#parent-user').html("");
+	// 		$('#parentUserForSS').prop('required', false);
+	//
+	// 		$('#username-div').show();
+	// 		$('#password-div').show();
+	// 		$('#retypePassword-div').show();
+	//
+	// 		$('#username').val('');
+	// 		$('#password').val('');
+	// 		$('#retypePassword').val('');
+	//
+	// 		$('#username').prop('required', true);
+	// 		$('#password').prop('required', true);
+	// 		$('#retypePassword').prop('required', true);
+	// 		$('#ssNo').prop('required', false);
+	// 	}
+	// }
 
 	$( function() {
 		$.widget( "custom.combobox", {

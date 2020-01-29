@@ -141,8 +141,4 @@ jQuery(document).ready(function($) {
 			});
 		}
 	});
-
-	$('#role').change(function (event) {
-		forRoleSelection();
-	});
 });
