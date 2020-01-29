@@ -58,9 +58,9 @@ public class LocationController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION_LIST')")
 	@RequestMapping(value = "location/location.html", method = RequestMethod.GET)
 	public String locationList(HttpServletRequest request, HttpSession session, ModelMap model, Locale locale) {
-		Class<Location> entityClassName = Location.class;
+//		Class<Location> entityClassName = Location.class;
 		model.addAttribute("locale", locale);
-		paginationUtil.createPagination(request, session, entityClassName);
+//		paginationUtil.createPagination(request, session, entityClassName);
 		return "location/index";
 	}
 	

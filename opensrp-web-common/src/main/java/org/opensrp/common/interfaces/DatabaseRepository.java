@@ -207,4 +207,7 @@ public interface DatabaseRepository {
 
 	public <T> T findAMByBranchId(Integer branchId);
 
+	public <T> List<T> getLocations(String name, Integer length, Integer start, String orderColumn, String orderDirection);
+
+	public <T> T getLocationCount(String name);
 }

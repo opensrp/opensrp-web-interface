@@ -7,18 +7,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.LocationDTO;
+import org.opensrp.common.util.LocationColumn;
+import org.opensrp.common.util.UserColumn;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.core.service.mapper.LocationMapper;
+import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -114,5 +119,20 @@ public class LocationRestController {
 	@RequestMapping(value = "/edit", method = RequestMethod.PUT)
 	public ResponseEntity<String> editLocation(@RequestBody LocationDTO locationDTO) throws JSONException {
 		return null;
+	}
+
+	@RequestMapping(value = "/list-ajax")
+	public ResponseEntity<String> getLocationPagination(HttpServletRequest request) throws JSONException {
+		Integer draw = Integer.valueOf(request.getParameter("draw"));
+		String name = request.getParameter("search[value]");
+		String orderColumn = request.getParameter("order[0][column]");
+		String orderDirection = request.getParameter("order[0][dir]");
+		orderColumn = LocationColumn.valueOf("_"+orderColumn).getValue();
+		Integer start = Integer.valueOf(request.getParameter("start"));
+		Integer length = Integer.valueOf(request.getParameter("length"));
+		List<LocationDTO> locations = locationServiceImpl.getLocations(name, length, start, orderColumn, orderDirection);
+		Integer totalLocation = locationServiceImpl.getLocationCount(name);
+		JSONObject response = locationServiceImpl.getLocationDataOfDataTable(draw, totalLocation, locations);
+		return new ResponseEntity<>(response.toString(), OK);
 	}
 }

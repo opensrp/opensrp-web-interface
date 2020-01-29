@@ -2263,6 +2263,45 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return users!=null && users.size() > 0?users.get(0):null;
 	}
 
+	@Override
+	public <T> List<T> getLocations(String name, Integer length, Integer start, String orderColumn, String orderDirection) {
+		Session session = sessionFactory.openSession();
+		List<T> locations = new ArrayList<T>();
+		String andName = (name==null || name.equalsIgnoreCase(""))?"":" and l.name ilike '%"+name+"%'";
+		try {
+			String sql = "select split_part(l.name, ':', 1) as name, split_part(l.description, ':', 1) as description, "
+					+ "lt.name locationTagName from core.location l, core.location_tag lt where lt.id = l.location_tag_id "
+					+ andName + " order by "+orderColumn+" "+orderDirection+" limit "+length+" offset "+start+";";
+			Query query = session.createSQLQuery(sql)
+					.addScalar("name", StandardBasicTypes.STRING)
+					.addScalar("description", StandardBasicTypes.STRING)
+					.addScalar("locationTagName", StandardBasicTypes.STRING)
+					.setResultTransformer(new AliasToBeanResultTransformer(LocationDTO.class));
+			locations = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return locations;
+	}
+
+	@Override
+	public <T> T getLocationCount(String name) {
+		Session session = sessionFactory.openSession();
+		List<T> locationSize = new ArrayList<T>();
+		String andName = (name==null || name.equalsIgnoreCase(""))?"":" where name ilike '%"+name+"%'";
+		try {
+			String sql = "select count(*) totalLocation from core.location" + andName +";";
+			locationSize = session.createSQLQuery(sql).addScalar("totalLocation", StandardBasicTypes.INTEGER).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return locationSize.get(0);
+	}
+
 	public <T> List<T> getUniqueLocation(String village, String ward) {
 		List<T> locations = null;
 		Session session = sessionFactory.openSession();

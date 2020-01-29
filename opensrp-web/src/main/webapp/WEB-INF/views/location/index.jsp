@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="ISO-8859-1"%>
+		 pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
-	uri="http://www.springframework.org/security/tags"%>
+		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <%@page import="org.opensrp.core.entity.Location"%>
@@ -15,30 +15,24 @@
 <html lang="en">
 
 <head>
-<meta charset="utf-8">
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<%@page import="java.util.List"%>
-<%@page import="java.util.Map"%>
-<title><spring:message code="lbl.locationTitle"/></title>
-
-<jsp:include page="/WEB-INF/views/css.jsp" />
+	<meta charset="utf-8">
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<%@page import="java.util.List"%>
+	<%@page import="java.util.Map"%>
+	<title><spring:message code="lbl.locationTitle"/></title>
+	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
+	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
+	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
+	<jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
-<%
-Map<String, String> paginationAtributes = (Map<String, String>) session.getAttribute("paginationAtributes");
-String name = "";
-if (paginationAtributes.containsKey("name")) {
-	name = paginationAtributes.get("name");
-}
-%>
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
-	<jsp:include page="/WEB-INF/views/navbar.jsp" />
-
-	<div class="content-wrapper">
-		<div class="container-fluid">
-			<!-- Example DataTables Card-->
-		<div class="form-group">				
+<jsp:include page="/WEB-INF/views/navbar.jsp" />
+<div class="content-wrapper">
+	<div class="container-fluid">
+		<!-- Example DataTables Card-->
+		<div class="form-group">
 			<jsp:include page="/WEB-INF/views/location/location-tag-link.jsp" />
 		</div>
 		<div class="form-group">
@@ -48,85 +42,69 @@ if (paginationAtributes.containsKey("name")) {
 			<% } %>
 		</div>
 		<div class="card mb-3">
-				
-				<div class="card-body">
-					<form id="search-form">
-						<div class="row">
-							<div class="col-3">					
-							<input name="name" type="search" class="form-control"
-							value="<%=name%>" placeholder="">					
-							</div>
-							<div class="col-6">
-								<button name="search" type="submit" id="bth-search"
-									class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
-							</div>
-						</div>			
-					</form>
-				</div>
-				<div class="card-footer small text-muted"></div>
+			<div class="card-header">
+				<spring:message code="lbl.locationTitle"/>
 			</div>
-			<div class="card mb-3">
-				<div class="card-header">
-					 <spring:message code="lbl.locationTitle"/>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="display" id="locationListWithPagination">
+						<thead>
+							<tr>
+								<th><spring:message code="lbl.name"></spring:message></th>
+								<th><spring:message code="lbl.description"></spring:message></th>
+								<th><spring:message code="lbl.locationTag"></spring:message></th>
+							</tr>
+						</thead>
+					</table>
 				</div>
-				<div class="card-body">
-					<div class="table-responsive">
-						<table class="table table-bordered" id="dataTable">
-							<thead>
-								<tr>
-									<th><spring:message code="lbl.name"/></th>
-									<th><spring:message code="lbl.description"/></th>									
-									<th> <spring:message code="lbl.tag"/></th>									
-<%--									<th><spring:message code="lbl.action"/></th>--%>
-								</tr>
-							</thead>
-							
-							<tbody>
-							
-							<%
-								List<Location> locations = (List<Location>) session.getAttribute("dataList");
-								String tagName = "";
-								String creator = "";
-								for (Location location : locations) 
-									{
-									pageContext.setAttribute("id", location.getId());
-									
-									if(location.getLocationTag() != null){
-										tagName = location.getLocationTag().getName();
-									}
-									
-									if(location.getCreator()!= null){
-										creator = location.getCreator().getUsername();
-									}
-							%>
-								
-									<tr>
-										<td><%=location.getName() %></td>										
-										<td><%=location.getDescription() %></td>
-										<td><%=tagName%></td>										
-<%--										<td>--%>
-<%--										<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_LOCATION")){ %>--%>
-<%--										<a href="<c:url value="/location/${id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a></td>--%>
-<%--										<%} %>--%>
-
-									</tr>
-									<%
-									}
-									%>
-								
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<jsp:include page="/WEB-INF/views/pager-server.jsp" />
-				<div class="card-footer small text-muted"></div>
 			</div>
+			<div class="card-footer small text-muted"></div>
 		</div>
-		<!-- /.container-fluid-->
-		<!-- /.content-wrapper-->
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 	</div>
-
+</div>
+<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
+<script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
+<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
+<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
+<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
+<script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
+<script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
+<script>
+	let locations;
+	$(document).ready(function() {
+		locations = $('#locationListWithPagination').DataTable({
+			bFilter: true,
+			serverSide: true,
+			processing: true,
+			columnDefs: [
+				{ targets: [2], orderable: false },
+				{ width: "35%", targets: 0 },
+				{ width: "35%", targets: 1 },
+				{ width: "30%", targets: 2 }
+			],
+			ajax: {
+				url: "/opensrp-dashboard/rest/api/v1/location/list-ajax",
+				dataSrc: function(json){
+					if(json.data){
+						return json.data;
+					}
+					else {
+						return [];
+					}
+				},
+				complete: function() {
+				},
+				type: 'GET'
+			},
+			bInfo: true,
+			destroy: true,
+			language: {
+				searchPlaceholder: "Name"
+			}
+		});
+	});
+</script>
 </body>
 </html>
 
