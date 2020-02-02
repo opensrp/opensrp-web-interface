@@ -36,13 +36,16 @@ public class HomeController extends OpensrpProperties {
 		for (Role role : roles) {
 			roleName.add(role.getName());
 		}
-		User acc = userService.findById(user.getId(), "id", User.class);
+		System.err.println("start home: "+user.getUsername()+":  "+System.currentTimeMillis() );
+		
 		String targetUrl = dashboardUrl;
 		if (roleName.contains("admin")) {
 			targetUrl = dashboardUrl;
 		} else if (roleName.contains("AM")) {
 			targetUrl = "/user/sk-list.html";
 		}
+		
+		System.err.println("end home: "+user.getUsername()+":  "+System.currentTimeMillis() );
 		model.addAttribute("locale", locale);
 		return new ModelAndView("redirect:" + targetUrl);
 		
