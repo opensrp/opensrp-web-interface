@@ -390,6 +390,10 @@
         forRoleSelection();
     });
 
+    $('#role').change(function (event) {
+        forRoleSelection();
+    });
+
     function forRoleSelection() {
         let roleId = $('#role').val();
         if (roleId == 29 || roleId == 28) {

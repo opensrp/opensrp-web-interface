@@ -844,6 +844,8 @@ public class UserController {
 		List<UserDTO> users = userServiceImpl.getChildUserFromParent(skId, "SS");
 		List<UserDTO> ssWithoutCatchment = userServiceImpl.getSSWithoutCatchmentArea(skId);
 		User skOfSS = userServiceImpl.findById(skId, "id", User.class);
+		System.out.println("sk first name: "+skOfSS.getFirstName());
+		System.out.println("sk last name: "+skOfSS.getLastName());
 		model.addAttribute("skUsername", skUsername);
 		model.addAttribute("skFullName", skOfSS.getFullName());
 		model.addAttribute("branches", branches);
