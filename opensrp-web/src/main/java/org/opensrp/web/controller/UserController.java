@@ -638,7 +638,9 @@ public class UserController {
 	
 	@RequestMapping(value = "user/user.html", method = RequestMethod.GET)
 	public String userSearch(Model model, HttpSession session, @RequestParam String name) throws JSONException {
-		List<User> users = userServiceImpl.findAllByKeysWithALlMatches(name, false);
+//		List<User> users = userServiceImpl.findAllByKeysWithALlMatches(name, false);
+		List<User> users = new ArrayList<>();
+		System.out.println("UserController ashchhe");
 		session.setAttribute("searchedUsers", users);
 		return "user/search";
 	}
