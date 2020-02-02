@@ -9,7 +9,6 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<%@page import="org.opensrp.core.entity.Location"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -19,8 +18,6 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<%@page import="java.util.List"%>
-	<%@page import="java.util.Map"%>
 	<title><spring:message code="lbl.locationTitle"/></title>
 	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
 	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
