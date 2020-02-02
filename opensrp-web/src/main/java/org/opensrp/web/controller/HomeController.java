@@ -29,26 +29,25 @@ public class HomeController extends OpensrpProperties {
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView home(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		User user = (User) auth.getPrincipal();
-//		List<String> roleName = new ArrayList<String>();
-//		Set<Role> roles = (Set<Role>) user.getRoles();
-//		for (Role role : roles) {
-//			roleName.add(role.getName());
-//		}
-//		System.err.println("start home: "+user.getUsername()+":  "+System.currentTimeMillis() );
-//
-//		String targetUrl = dashboardUrl;
-//		if (roleName.contains("admin")) {
-//			targetUrl = dashboardUrl;
-//		} else if (roleName.contains("AM")) {
-//			targetUrl = "/user/sk-list.html";
-//		}
-//
-//		System.err.println("end home: "+user.getUsername()+":  "+System.currentTimeMillis() );
-		System.out.println("HomeController a ashchhe");
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+		List<String> roleName = new ArrayList<String>();
+		Set<Role> roles = (Set<Role>) user.getRoles();
+		for (Role role : roles) {
+			roleName.add(role.getName());
+		}
+		System.err.println("start home: "+user.getUsername()+":  "+System.currentTimeMillis() );
+
+		String targetUrl = dashboardUrl;
+		if (roleName.contains("admin")) {
+			targetUrl = dashboardUrl;
+		} else if (roleName.contains("AM")) {
+			targetUrl = "/user/sk-list.html";
+		}
+
+		System.err.println("end home: "+user.getUsername()+":  "+System.currentTimeMillis() );
 		model.addAttribute("locale", locale);
-		return new ModelAndView("redirect:" + dashboardUrl);
+		return new ModelAndView("redirect:" + targetUrl);
 		
 	}
 }
