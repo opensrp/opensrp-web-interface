@@ -4,16 +4,12 @@
 
 package org.opensrp.core.dao;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,15 +28,21 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 	
 	private static final Logger logger = Logger.getLogger(AclAccountDao.class);
 	
-	@Autowired
-	private FacilityHelperUtil facilityHelperUtil;
 	
 	@Autowired
-	private UserService userServiceImpl;
-	
+	private SessionFactory sessionFactory;
 	@Override
-	public User getByUsername(String username) {
-		return (User) getSession().getNamedQuery("account.byUsername").setParameter("username", username).uniqueResult();
+	public synchronized User getByUsername(String username) {
+		Session session = sessionFactory.openSession();
+		try{
+		return (User) session.getNamedQuery("account.byUsername").setParameter("username", username).uniqueResult();
+		}catch(Exception e){
+			e.printStackTrace();
+			
+		}finally{
+			session.close();
+		}
+		return null;
 	}
 	
 	@Override

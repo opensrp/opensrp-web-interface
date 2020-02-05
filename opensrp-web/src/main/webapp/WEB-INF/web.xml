@@ -15,6 +15,52 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
+	<display-name>opensrp-dashboard</display-name>
+
+    <description>OpenSRP Web Interface</description>
+	
+	<!-- Enable escaping of form submission contents -->
+    <context-param>
+        <param-name>defaultHtmlEscape</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    
+    <context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+		/WEB-INF/spring-security.xml
+		/WEB-INF/applicationContext.xml
+		</param-value>
+	</context-param>
+    
+    <filter>
+		<filter-name>monitoring</filter-name>
+		<filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>monitoring</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
+   <filter>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>HttpMethodFilter</filter-name>
+        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+    </filter>
+	
+	
 	<!-- Spring Security -->
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -26,27 +72,27 @@
 	</filter-mapping>
 	<!-- Spring Security -->
 
-	<filter>
-		<filter-name>monitoring</filter-name>
-		<filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>monitoring</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+	
+	
+    <filter-mapping>
+        <filter-name>CharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>
-		/WEB-INF/spring-security.xml
-		/WEB-INF/applicationContext.xml
-		</param-value>
-	</context-param>
+    <filter-mapping>
+        <filter-name>HttpMethodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 
 
 	<!-- Spring MVC -->
 	<servlet>
-		<servlet-name>opensrp</servlet-name>
+		<servlet-name>opensrp-dashboard</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
@@ -56,18 +102,16 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>opensrp</servlet-name>
+		<servlet-name>opensrp-dashboard</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
 
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
 	
-	<session-config>
+	
+	<!-- <session-config>
         <session-timeout>1440</session-timeout>
-    </session-config>
+    </session-config> -->
 
 </web-app>
         

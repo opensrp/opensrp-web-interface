@@ -584,7 +584,7 @@ public class UserController {
 	//	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String loginPage() {
+	public synchronized String loginPage() {
 		return "user/login";
 	}
 	
@@ -638,8 +638,10 @@ public class UserController {
 	
 	@RequestMapping(value = "user/user.html", method = RequestMethod.GET)
 	public String userSearch(Model model, HttpSession session, @RequestParam String name) throws JSONException {
+		System.err.println("user home start:"+System.currentTimeMillis());
 		List<User> users = userServiceImpl.findAllByKeysWithALlMatches(name, false);
 		session.setAttribute("searchedUsers", users);
+		System.err.println("user home end:"+System.currentTimeMillis());
 		return "user/search";
 	}
 	

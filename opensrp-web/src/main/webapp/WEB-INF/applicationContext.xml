@@ -24,7 +24,9 @@
 		 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	
-	
+	<mvc:default-servlet-handler/>    
+    <context:annotation-config/>
+    <mvc:annotation-driven/>
 	<!-- <import resource="classpath:thyme-leaf-context.xml"/> -->
 	<import resource="classpath:mvc-context.xml" />
 	<import resource="classpath:hibernate-cfg.xml" />
