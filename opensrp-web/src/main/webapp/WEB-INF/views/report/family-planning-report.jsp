@@ -2,6 +2,7 @@
 <%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
 <%@ page import="org.opensrp.common.dto.ReportDTO" %>
 <%@ page import="org.opensrp.web.util.SearchUtil" %>
+<%@ page import="org.opensrp.common.dto.ElcoReportDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
 
@@ -15,6 +16,7 @@
 <%
     String startDate = (String) session.getAttribute("startDate");
     String endDate = (String) session.getAttribute("endDate");
+    List<ElcoReportDTO> elcoReports = (List<ElcoReportDTO>) session.getAttribute("elcoReport");
 %>
 
 <!DOCTYPE html>
@@ -75,6 +77,7 @@
                                style="width: 100%;">
                             <thead>
                             <tr> <!--1st-->
+                                <th rowspan="4">Location/Provider Name</th>
                                 <th rowspan="3" colspan="3">Number of ELCOs</th>
                                 <th colspan="20">Family Planning methods user (including adolescent ELCOs)</th>
                                 <th colspan="20">Family Planning methods user (Only adolescents ELCOs)</th>
@@ -196,6 +199,63 @@
                             </tr>
                             </thead>
                             <tbody id="t-body">
+                                <% for (ElcoReportDTO report: elcoReports) { %>
+                                <tr>
+                                    <td><%=report.getLocationOrProviderName()%></td>
+                                    <td><%=report.getTotalElcoVisited()%></td>
+                                    <td><%=report.getAdolescent()%></td>
+                                    <td><%=report.getNonAdolescent()%></td>
+                                    <td><%=report.getUserTotalFpMethodUserIncludingAdolescent()%></td>
+                                    <td><%=report.getBracUserIncludingAdolescent()%></td>
+                                    <td><%=report.getReferUserIncludingAdolescent()%></td>
+                                    <td><%=report.getGovtUserIncludingAdolescent()%></td>
+                                    <td><%=report.getOtherUserIncludingAdolescent()%></td>
+                                    <td><%=report.getNewTotalFpMethodUserIncludingAdolescent()%></td>
+                                    <td><%=report.getBracNewIncludingAdolescent()%></td>
+                                    <td><%=report.getReferNewIncludingAdolescent()%></td>
+                                    <td><%=report.getGovtNewIncludingAdolescent()%></td>
+                                    <td><%=report.getOtherNewIncludingAdolescent()%></td>
+                                    <td><%=report.getChangeTotalFpMethodUserIncludingAdolescent()%></td>
+                                    <td><%=report.getBracChangeIncludingAdolescent()%></td>
+                                    <td><%=report.getReferChangeIncludingAdolescent()%></td>
+                                    <td><%=report.getGovtChangeIncludingAdolescent()%></td>
+                                    <td><%=report.getOtherChangeIncludingAdolescent()%></td>
+                                    <td><%=report.getReInitiatedTotalFpMethodUserIncludingAdolescent()%></td>
+                                    <td><%=report.getBracReInitiatedIncludingAdolescent()%></td>
+                                    <td><%=report.getReferReInitiatedIncludingAdolescent()%></td>
+                                    <td><%=report.getGovtReInitiatedIncludingAdolescent()%></td>
+                                    <td><%=report.getOtherReInitiatedIncludingAdolescent()%></td>
+                                    <td><%=report.getUserTotalFpMethodUserOnlyAdolescent()%></td>
+                                    <td><%=report.getBracUserOnlyAdolescent()%></td>
+                                    <td><%=report.getReferUserOnlyAdolescent()%></td>
+                                    <td><%=report.getGovtUserOnlyAdolescent()%></td>
+                                    <td><%=report.getOtherUserOnlyAdolescent()%></td>
+                                    <td><%=report.getNewTotalFpMethodUserOnlyAdolescent()%></td>
+                                    <td><%=report.getBracNewOnlyAdolescent()%></td>
+                                    <td><%=report.getReferNewOnlyAdolescent()%></td>
+                                    <td><%=report.getGovtNewOnlyAdolescent()%></td>
+                                    <td><%=report.getOtherNewOnlyAdolescent()%></td>
+                                    <td><%=report.getChangeTotalFpMethodUserOnlyAdolescent()%></td>
+                                    <td><%=report.getBracChangeOnlyAdolescent()%></td>
+                                    <td><%=report.getReferChangeOnlyAdolescent()%></td>
+                                    <td><%=report.getGovtChangeOnlyAdolescent()%></td>
+                                    <td><%=report.getOtherChangeOnlyAdolescent()%></td>
+                                    <td><%=report.getReInitiatedTotalFpMethodUserOnlyAdolescent()%></td>
+                                    <td><%=report.getBracReInitiatedOnlyAdolescent()%></td>
+                                    <td><%=report.getReferReInitiatedOnlyAdolescent()%></td>
+                                    <td><%=report.getGovtReInitiatedOnlyAdolescent()%></td>
+                                    <td><%=report.getOtherReInitiatedOnlyAdolescent()%></td>
+                                    <td><%=report.getNsv()%></td>
+                                    <td><%=report.getTubectomy()%></td>
+                                    <td><%=report.getTotalPermanentFpUser()%></td>
+                                    <td><%=report.getIud()%></td>
+                                    <td><%=report.getImplant()%></td>
+                                    <td><%=report.getInjection()%></td>
+                                    <td><%=report.getPill()%></td>
+                                    <td><%=report.getCondom()%></td>
+                                    <td><%=report.getTotalTemporaryFpUser()%></td>
+                                </tr>
+                                <% } %>
                             </tbody>
                         </table>
                     </div>

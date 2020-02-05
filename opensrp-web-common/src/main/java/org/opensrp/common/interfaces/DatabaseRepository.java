@@ -210,4 +210,6 @@ public interface DatabaseRepository {
 	public <T> List<T> getLocations(String name, Integer length, Integer start, String orderColumn, String orderDirection);
 
 	public <T> T getLocationCount(String name);
+
+	public <T> List<T> getElcoReport();
 }

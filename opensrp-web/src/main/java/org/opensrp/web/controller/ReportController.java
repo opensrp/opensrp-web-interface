@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.opensrp.common.dto.ElcoReportDTO;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
@@ -22,6 +23,7 @@ import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.FacilityService;
+import org.opensrp.core.service.ReportService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
 import org.opensrp.web.util.*;
@@ -60,6 +62,9 @@ public class ReportController {
 
 	@Autowired
 	private FacilityService facilityService;
+
+	@Autowired
+	private ReportService reportService;
 
 	@Autowired
 	private PaginationUtil paginationUtil;
@@ -277,13 +282,14 @@ public class ReportController {
 		// List<Object[]> skLists = databaseServiceImpl.getAllSks();
 		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
 		String endDate = formatter.format(new Date());
-
 		String endDateValue = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
 		if (AuthenticationManagerUtil.isAM()) address_value = "sk_id"; // for AM role
 		searchUtil.setDivisionAttribute(session);
+		List<ElcoReportDTO> elcoReports = reportService.getElcoReport();
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
 		session.setAttribute("startDate", startDate);
+		session.setAttribute("elcoReport", elcoReports);
 		return "report/family-planning-report";
 	}
 

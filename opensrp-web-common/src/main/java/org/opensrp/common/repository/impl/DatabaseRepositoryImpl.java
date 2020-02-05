@@ -2302,6 +2302,84 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return locationSize.get(0);
 	}
 
+	@Override
+	public <T> List<T> getElcoReport() {
+		Session session = sessionFactory.openSession();
+		String startDate = "2020-01-01";
+		String endDate = "2020-02-06";
+		String locationTag = "division";
+		Integer parentLocationId = 9265;
+		List<T> report = new ArrayList<T>();
+		try {
+			String sql = "select * from report.get_elco_report(:startDate, :endDate, :parentLocationId, :locationTag);";
+			Query query = session.createSQLQuery(sql)
+					.addScalar("locationOrProviderName", StandardBasicTypes.STRING)
+					.addScalar("totalElcoVisited", StandardBasicTypes.INTEGER)
+					.addScalar("adolescent", StandardBasicTypes.INTEGER)
+					.addScalar("nonAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("userTotalFpMethodUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("userTotalFpMethodUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("newTotalFpMethodUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracNewIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtNewIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherNewIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referNewIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("newTotalFpMethodUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracNewOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtNewOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherNewOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referNewOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("changeTotalFpMethodUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracChangeIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtChangeIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherChangeIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referChangeIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("changeTotalFpMethodUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracChangeOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtChangeOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherChangeOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referChangeOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("reInitiatedTotalFpMethodUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracReInitiatedIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtReInitiatedIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherReInitiatedIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referReInitiatedIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("reInitiatedTotalFpMethodUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracReInitiatedOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtReInitiatedOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherReInitiatedOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referReInitiatedOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("nsv", StandardBasicTypes.INTEGER)
+					.addScalar("tubectomy", StandardBasicTypes.INTEGER)
+					.addScalar("condom", StandardBasicTypes.INTEGER)
+					.addScalar("pill", StandardBasicTypes.INTEGER)
+					.addScalar("implant", StandardBasicTypes.INTEGER)
+					.addScalar("iud", StandardBasicTypes.INTEGER)
+					.addScalar("injection", StandardBasicTypes.INTEGER)
+					.addScalar("totalPermanentFpUser", StandardBasicTypes.INTEGER)
+					.addScalar("totalTemporaryFpUser", StandardBasicTypes.INTEGER)
+					.setString("startDate", startDate)
+					.setString("endDate", endDate)
+					.setInteger("parentLocationId", parentLocationId)
+					.setString("locationTag", locationTag)
+					.setResultTransformer(new AliasToBeanResultTransformer(ElcoReportDTO.class));
+			report = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return report;
+	}
+
 	public <T> List<T> getUniqueLocation(String village, String ward) {
 		List<T> locations = null;
 		Session session = sessionFactory.openSession();
