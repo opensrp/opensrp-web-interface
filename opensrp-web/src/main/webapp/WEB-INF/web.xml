@@ -88,7 +88,9 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-
+<listener>
+    <listener-class>org.opensrp.web.listener.MyHttpSessionListener</listener-class>
+</listener>
 
 	<!-- Spring MVC -->
 	<servlet>
@@ -112,6 +114,11 @@
 	<!-- <session-config>
         <session-timeout>1440</session-timeout>
     </session-config> -->
+    <session-config>
+    <session-timeout>5</session-timeout> 
+    
+	</session-config>
+	
 
 </web-app>
         
