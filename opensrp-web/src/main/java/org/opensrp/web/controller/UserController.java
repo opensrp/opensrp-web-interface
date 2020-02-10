@@ -827,9 +827,11 @@ public class UserController {
 	public String getSKByPM(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		System.err.println("sk start: "+loggedInUser.getUsername()+":  "+System.currentTimeMillis() );
 		List<UserDTO> users = userServiceImpl.getChildUserFromParent(loggedInUser.getId(), "SK");
 		session.setAttribute("allSK", users);
 		session.setAttribute("fromRole", "SK");
+		System.err.println("sk end: "+loggedInUser.getUsername()+":  "+System.currentTimeMillis() );
 		return "user/sk-list";
 	}
 	
