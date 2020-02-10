@@ -280,6 +280,12 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 
 	@Transactional
+	public List<Object[]> actionParser(SearchBuilder searchBuilder) {
+		String funcQuery = "SELECT * FROM report.action_parser()";
+		return databaseRepositoryImpl.executeSelectQuery(funcQuery);
+	}
+
+	@Transactional
 	public <T> List<T> getReportData(SearchBuilder searchBuilder) {
 		return databaseRepositoryImpl.getReportData(searchBuilder, "test2_report");
 	}

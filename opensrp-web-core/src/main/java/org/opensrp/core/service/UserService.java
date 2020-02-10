@@ -1005,4 +1005,11 @@ public class UserService {
 	public List<UserDTO> findSKByBranch(Integer branchId) {
 		return repository.findSKByBranch(branchId);
 	}
+	public String findSKByBranchSeparatedByComma(String branchIds) {
+		return repository.findSKByBranchSeparatedByComma(branchIds);
+	}
+
+	public String findSKByLocationSeparatedByComma(Integer locationId, Integer roleId) {
+		return repository.findSKByLocationSeparatedByComma(locationId, roleId);
+	}
 }

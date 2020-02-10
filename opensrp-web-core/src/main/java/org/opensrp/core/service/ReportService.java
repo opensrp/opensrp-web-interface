@@ -14,7 +14,13 @@ public class ReportService {
     @Autowired
     private DatabaseRepository repository;
 
-    public List<ElcoReportDTO> getElcoReport() {
-        return repository.getElcoReport();
+    public List<ElcoReportDTO> getElcoReportBySK(String startDate, String endDate, String skIds) {
+        String sql = "select * from report.get_elco_report_by_sk(:startDate, :endDate, '{"+skIds+"}');";
+        return repository.getElcoReport(startDate, endDate, sql);
+    }
+
+    public List<ElcoReportDTO> getElcoReportByLocation(String startDate, String endDate, Integer parentLocationId, String locationTag, String parentLocationTag, String parentLocationName) {
+        String sql = "select  * from report.get_elco_report_by_location(:startDate, :endDate, "+parentLocationId+", '"+locationTag+"', '"+parentLocationTag+"', '"+parentLocationName+"');";
+        return repository.getElcoReport(startDate, endDate, sql);
     }
 }

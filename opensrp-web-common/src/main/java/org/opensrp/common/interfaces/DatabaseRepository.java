@@ -169,6 +169,10 @@ public interface DatabaseRepository {
 
 	public List<UserDTO> findSKByBranch(Integer branchId);
 
+	public <T> T findSKByLocationSeparatedByComma(Integer locationId, Integer roleId);
+
+	public <T> T findSKByBranchSeparatedByComma(String branchIds);
+
 	public Integer updateParentForSS(Integer ssId, Integer parentId);
 
 	public <T> List<T> getUniqueLocation(String village, String ward);
@@ -211,5 +215,5 @@ public interface DatabaseRepository {
 
 	public <T> T getLocationCount(String name);
 
-	public <T> List<T> getElcoReport();
+	public <T> List<T> getElcoReport(String startDate, String endDate, String query);
 }

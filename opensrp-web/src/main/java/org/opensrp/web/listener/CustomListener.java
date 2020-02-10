@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.exolab.castor.types.DateTime;
 import org.opensrp.common.entity.Marker;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.service.impl.MarkerServiceImpl;
@@ -43,5 +44,11 @@ public class CustomListener {
 		}
 		logger.info("refreshCount:" + refreshCount);
 		//childGrowthServiceImpl.startCalculateChildGrowth();
+	}
+
+	public void updatingActionParser() throws Exception {
+		System.out.println("UPDATING ACTION PARSER AT: "+new DateTime());
+		searchBuilder.clear();
+		databaseServiceImpl.actionParser(searchBuilder);
 	}
 }

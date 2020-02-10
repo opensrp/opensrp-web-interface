@@ -1461,6 +1461,42 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return skList;
 	}
 
+	@Override
+	public <T> T findSKByLocationSeparatedByComma(Integer locationId, Integer roleId) {
+		Session session = sessionFactory.openSession();
+		List<T> skIds = null;
+		try {
+			String hql = "select * from core.get_sk_by_location(:locationId, :roleId)";
+			Query query = session.createSQLQuery(hql)
+					.setInteger("locationId", locationId)
+					.setInteger("roleId", roleId);
+			skIds = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return skIds.get(0);
+	}
+
+	@Override
+	public <T> T findSKByBranchSeparatedByComma(String branchIds) {
+		Session session = sessionFactory.openSession();
+		List<T> skIds = null;
+		try {
+			String hql = "select string_agg(u.username, ', ') skIds from core.users u join core.user_branch ub " +
+					"on u.id = ub.user_id join core.user_role ur on ur.user_id = u.id where ub.branch_id = any("+branchIds+") " +
+					"and ur.role_id = "+ Roles.SK.getId()+";";
+			Query query = session.createSQLQuery(hql).addScalar("skIds", StandardBasicTypes.STRING);
+			skIds = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return skIds.get(0);
+	}
+
 	public Integer updateParentForSS(Integer ssId, Integer parentId) {
 		Session session = sessionFactory.openSession();
 		int isUpdate = 0;
@@ -2303,15 +2339,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public <T> List<T> getElcoReport() {
+	public <T> List<T> getElcoReport(String startDate, String endDate, String sql) {
 		Session session = sessionFactory.openSession();
-		String startDate = "2020-01-01";
-		String endDate = "2020-02-06";
-		String locationTag = "division";
-		Integer parentLocationId = 9265;
 		List<T> report = new ArrayList<T>();
 		try {
-			String sql = "select * from report.get_elco_report(:startDate, :endDate, :parentLocationId, :locationTag);";
 			Query query = session.createSQLQuery(sql)
 					.addScalar("locationOrProviderName", StandardBasicTypes.STRING)
 					.addScalar("totalElcoVisited", StandardBasicTypes.INTEGER)
@@ -2368,8 +2399,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					.addScalar("totalTemporaryFpUser", StandardBasicTypes.INTEGER)
 					.setString("startDate", startDate)
 					.setString("endDate", endDate)
-					.setInteger("parentLocationId", parentLocationId)
-					.setString("locationTag", locationTag)
 					.setResultTransformer(new AliasToBeanResultTransformer(ElcoReportDTO.class));
 			report = query.list();
 		} catch (Exception e) {

@@ -279,7 +279,7 @@
 					<a class="dropdown-item" href="<c:url value="/report/clientDataReport.html?lang=${locale}"/>">
 						<strong><spring:message code="lbl.clientDataReport"/></strong></a>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/report/familyPlanningReport.html?lang=${locale}&address_field=division&searched_value=empty&searched_value_id=9265"/>">
+					<a class="dropdown-item" href="<c:url value="/report/familyPlanningReport.html?lang=${locale}"/>">
 						<strong><spring:message code="lbl.familyPlanningReport"/></strong></a>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="<c:url value="/report/pregnancyReport.html?lang=${locale}&address_field=division&searched_value=empty&searched_value_id=9265"/>">
