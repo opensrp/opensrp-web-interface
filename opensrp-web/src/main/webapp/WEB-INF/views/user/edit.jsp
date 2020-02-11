@@ -115,32 +115,32 @@
 					<form:hidden path="ssNo" />
 					<form:hidden path="id"/>
 					<form:hidden path="password" />
-					
 
-					 <div class="row col-12 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width"  for="role">
-                            <spring:message code="lbl.role"/>
-                        </label>
-                        <select onchange="isSS()"
-                                id="role"
-                                class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="roles" required>
-                            <c:forEach items="${roles}" var="role">
-                                <option value="${role.id}">${role.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div>
-					
-				
-                <div class="row col-12 tag-height" id="_enableSimprint">
+
+					<div class="row col-12 tag-height">
+						<div class="form-group required">
+							<label class="label-width"  for="role">
+								<spring:message code="lbl.role"/>
+							</label>
+							<select onchange="isSS()"
+									id="role"
+									class="form-control mx-sm-3 js-example-basic-multiple"
+									name="roles" required>
+								<c:forEach items="${roles}" var="role">
+									<option value="${role.id}">${role.name}</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+
+
+					<div class="row col-12 tag-height" id="_enableSimprint">
 						<div class="form-group">
 							<label class="label-width" for="inputPassword6"><spring:message code="lbl.enableSimprint"/></label>
 							<form:checkbox class="checkBoxClass form-check-input"
 										   path="enableSimPrint" value="${account.getEnableSimPrint()}" />
 						</div>
-				</div>
+					</div>
 
 					<!-- for location -->
 					<div class="row col-12 tag-height" id="locationDiv" style="display:none">
@@ -173,28 +173,28 @@
 
 					<!-- end: for location -->
 					<!-- for team -->
-					 <%-- <div class="row col-12 tag-height" id="teamDiv" style="display:none">
-							<div class="form-group">
-								<label class="label-width" for="inputPassword6"><spring:message code="lbl.team"/></label>
-									<select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
-										<option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
-											<%
-											for (Map.Entry<Integer, String> entry : teams.entrySet())
-											{
-												if(selectedTeamId==entry.getKey()){ %>
-													<option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
-												<% }else{
-													%>
-														<option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
-													<%
-												}
+					<%-- <div class="row col-12 tag-height" id="teamDiv" style="display:none">
+                           <div class="form-group">
+                               <label class="label-width" for="inputPassword6"><spring:message code="lbl.team"/></label>
+                                   <select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
+                                       <option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
+                                           <%
+                                           for (Map.Entry<Integer, String> entry : teams.entrySet())
+                                           {
+                                               if(selectedTeamId==entry.getKey()){ %>
+                                                   <option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
+                                               <% }else{
+                                                   %>
+                                                       <option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
+                                                   <%
+                                               }
 
-											}
-											%>
-										</select>
-							</div>
+                                           }
+                                           %>
+                                       </select>
+                           </div>
 
-					</div> --%>
+                   </div> --%>
 					<!--end: for team -->
 
 
@@ -213,8 +213,8 @@
 								   class="btn btn-primary btn-block btn-sm" />
 						</div>
 						<div class="form-group">
-	                    	<a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
-	                 </div>
+							<a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
+						</div>
 					</div>
 				</form:form>
 
@@ -232,33 +232,33 @@
 <script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
 <script src="<c:url value='/resources/js/select2.js' />"></script>
 <script>
-var ssId = "-<%=ssPrefix%>";       
+	var ssId = "-<%=ssPrefix%>";
 
-//alert(ssId); 
-function isSS() {    
-	
-    var selectedRoleId = $('#role').val();
-    var selectedRoleName = $('#role option:selected').text();        
-           
-    if(selectedRoleName == "SK"){        	
-    	$('#_enableSimprint').show();        	 
-    }else{ 
-    	$('input[type="checkbox"][name="enableSimPrint"]').prop("checked", false).change();
-        $('#_enableSimprint').hide();
-    }
-    if (selectedRoleName != "SS") {
-    	
-        $('#ssNo').val("");
-        $('#ssNo').trigger('change');
-        $('#ssOption').hide();
-    } else {    	
-    	//$('#ssNo').val(ssId);
-		$('#ssNo').trigger('change');    	
-        $('#ssOption').show();
-    }
-    
-    
-}
+	//alert(ssId);
+	function isSS() {
+
+		var selectedRoleId = $('#role').val();
+		var selectedRoleName = $('#role option:selected').text();
+
+		if(selectedRoleName == "SK"){
+			$('#_enableSimprint').show();
+		}else{
+			$('input[type="checkbox"][name="enableSimPrint"]').prop("checked", false).change();
+			$('#_enableSimprint').hide();
+		}
+		if (selectedRoleName != "SS") {
+
+			$('#ssNo').val("");
+			$('#ssNo').trigger('change');
+			$('#ssOption').hide();
+		} else {
+			//$('#ssNo').val(ssId);
+			$('#ssNo').trigger('change');
+			$('#ssOption').show();
+		}
+
+
+	}
 </script>
 <script>
 	var locationMagicSuggest;
@@ -508,9 +508,9 @@ function isSS() {
 		var selectedBranchList = [];
 		<%if (selectedBranches != null) {
 			for (Branch branch: selectedBranches) {%>
-				selectedBranchList.push(<%=branch.getId()%>);
-			<%}
-		}%>
+		selectedBranchList.push(<%=branch.getId()%>);
+		<%}
+    }%>
 		$('#branches').val(selectedBranchList);
 		$('#branches').trigger('change');
 	});

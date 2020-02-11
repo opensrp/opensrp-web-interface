@@ -63,7 +63,7 @@
 				</div>
 				<%}%>
 				<div class="col-2" id="divisionHide">
-					<label><spring:message code="lbl.selectDivision"/></label>
+					<label><spring:message code="lbl.division"/></label>
 					<select required class="custom-select custom-select-lg mb-3" id="division"
 							name="division">
 						<option value=""><spring:message code="lbl.selectDivision"/>
@@ -79,7 +79,7 @@
 				</div>
 
 				<div class="col-2" id="districtHide">
-					<label><spring:message code="lbl.selectDistrict"/></label>
+					<label><spring:message code="lbl.district"/></label>
 					<select class="custom-select custom-select-lg mb-3" id="district"
 							name="district">
 						<option value="0?"><spring:message code="lbl.selectDistrict"/></option>
@@ -87,7 +87,7 @@
 					</select>
 				</div>
 				<div class="col-2" id="upazilaHide">
-					<label><spring:message code="lbl.selectUpazila"/></label>
+					<label><spring:message code="lbl.upazila"/></label>
 					<select class="custom-select custom-select-lg mb-3" id="upazila"
 							name="upazila">
 						<option value="0?"><spring:message code="lbl.selectUpazila"/></option>

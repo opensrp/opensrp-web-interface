@@ -399,12 +399,17 @@ public class UserRestController {
 		return new ResponseEntity<>(response==1?"updated":"not updated", OK);
 	}
 
-	@RequestMapping(value = "/branch/sk")
+	@RequestMapping(value = "/branch/sk", method = RequestMethod.GET)
 	public ResponseEntity<String> getSKByBranch(@RequestParam("branchId") Integer branchId) {
 		JSONObject res = new JSONObject();
 		return new ResponseEntity<>(res.toString(), OK);
 	}
-	
+
+	@RequestMapping(value = "/database/activity-status", method = RequestMethod.GET)
+	public ResponseEntity<String> databaseActivityStatus() {
+		Location location = locationService.findByKey("BANGLADESH", "name", Location.class);
+		return new ResponseEntity<>(location.getName(), OK);
+	}
 	
 	@RequestMapping(value = "/update-sk", method = RequestMethod.POST)
 	public ResponseEntity<String> editSK(@RequestBody UserDTO userDTO,

@@ -713,4 +713,31 @@ public class LocationService {
 		}
 		return dto;
 	}
+
+	public List<LocationDTO> getLocations(String name, Integer length, Integer start, String orderColumn, String orderDirection) {
+		return repository.getLocations(name, length, start, orderColumn, orderDirection);
+	}
+
+	public Integer getLocationCount(String name) {
+		return repository.getLocationCount(name);
+	}
+
+	public JSONObject getLocationDataOfDataTable(Integer draw, Integer totalLocation,
+											 List<LocationDTO> locations) throws JSONException {
+		JSONObject response = new JSONObject();
+		response.put("draw", draw+1);
+		response.put("recordsTotal", totalLocation);
+		response.put("recordsFiltered", totalLocation);
+		JSONArray array = new JSONArray();
+		for (LocationDTO dto: locations) {
+			JSONArray location = new JSONArray();
+			location.put(dto.getName());
+			location.put(dto.getDescription());
+			location.put(dto.getLocationTagName());
+			array.put(location);
+		}
+		response.put("data", array);
+		return response;
+	}
+
 }

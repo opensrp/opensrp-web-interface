@@ -10,10 +10,6 @@
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <%@page import="java.util.List"%>
 
-<%
-	List<Object[]> users = (List<Object[]>) session.getAttribute("users");
-	List<Object[]> usersWithoutCatchmentArea = (List<Object[]>) session.getAttribute("usersWithoutCatchmentArea");
-%>
 <!DOCTYPE html>
 <html lang="en">
 

@@ -90,7 +90,7 @@ jQuery(document).ready(function($) {
 	});
 	
 	$("#locationoptions").change(function(event) {
-		var location = $("#locationoptions").val();
+		let location = $("#locationoptions").val();
 		if (location == 'catchmentArea') {
 			$('#divisionHide').hide();
 			$('#districtHide').hide();

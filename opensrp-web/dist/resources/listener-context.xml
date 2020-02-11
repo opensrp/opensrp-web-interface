@@ -12,11 +12,20 @@
 	<context:component-scan base-package="org.opensrp.web.listener"></context:component-scan>
 	<context:annotation-config></context:annotation-config>
 	 <bean id="customListener" class="org.opensrp.web.listener.CustomListener"></bean>
-	 
-	 <task:scheduled-tasks scheduler="childGrowthCalculate">
-        <task:scheduled ref="customListener" method="startCalculateChildGrowth" cron="0 0 0/1 * * ?" />
-    </task:scheduled-tasks>
-    
-   <task:scheduler pool-size="1" id="childGrowthCalculate"/>
+
+	<task:scheduled-tasks scheduler="childGrowthCalculate">
+		<!--        <task:scheduled ref="customListener" method="startCalculateChildGrowth" cron="0 0 0/1 * * ?" />-->
+		<task:scheduled ref="customListener" method="startCalculateChildGrowth" cron="0 0 23 * * ?" />
+	</task:scheduled-tasks>
+
+<!--	<task:scheduled-tasks scheduler="actionParser">-->
+<!--		<task:scheduled ref="customListener" method="updatingActionParser" cron="0 0 0/1 * * ?" />-->
+<!--		&lt;!&ndash;		<task:scheduled ref="customListener" method="updatingActionParser" cron="0 0 23 * * ?" />&ndash;&gt;-->
+<!--	</task:scheduled-tasks>-->
+
+	<task:scheduler pool-size="1" id="childGrowthCalculate"/>
 	<task:annotation-driven />
+
+<!--	<task:scheduler pool-size="1" id="actionParser"/>-->
+<!--	<task:annotation-driven />-->
 </beans>

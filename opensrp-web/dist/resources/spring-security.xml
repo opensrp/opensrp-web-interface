@@ -12,6 +12,8 @@
 			access="permitAll" />
 		<security:intercept-url pattern="/login*"
 			access="isAnonymous()" />
+		<security:intercept-url pattern="/rest/api/v1/user/database/activity-status"
+			access="isAnonymous()" />
 		<security:intercept-url pattern="/user/add*"
 			access="permitAll" />
 		<security:intercept-url pattern="/**"

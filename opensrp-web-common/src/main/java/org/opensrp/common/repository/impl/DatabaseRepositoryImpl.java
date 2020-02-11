@@ -1461,6 +1461,42 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return skList;
 	}
 
+	@Override
+	public <T> T findSKByLocationSeparatedByComma(Integer locationId, Integer roleId) {
+		Session session = sessionFactory.openSession();
+		List<T> skIds = null;
+		try {
+			String hql = "select * from core.get_sk_by_location(:locationId, :roleId)";
+			Query query = session.createSQLQuery(hql)
+					.setInteger("locationId", locationId)
+					.setInteger("roleId", roleId);
+			skIds = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return skIds.get(0);
+	}
+
+	@Override
+	public <T> T findSKByBranchSeparatedByComma(String branchIds) {
+		Session session = sessionFactory.openSession();
+		List<T> skIds = null;
+		try {
+			String hql = "select string_agg(u.username, ', ') skIds from core.users u join core.user_branch ub " +
+					"on u.id = ub.user_id join core.user_role ur on ur.user_id = u.id where ub.branch_id = any("+branchIds+") " +
+					"and ur.role_id = "+ Roles.SK.getId()+";";
+			Query query = session.createSQLQuery(hql).addScalar("skIds", StandardBasicTypes.STRING);
+			skIds = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return skIds.get(0);
+	}
+
 	public Integer updateParentForSS(Integer ssId, Integer parentId) {
 		Session session = sessionFactory.openSession();
 		int isUpdate = 0;
@@ -2261,6 +2297,116 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			session.close();
 		}
 		return users!=null && users.size() > 0?users.get(0):null;
+	}
+
+	@Override
+	public <T> List<T> getLocations(String name, Integer length, Integer start, String orderColumn, String orderDirection) {
+		Session session = sessionFactory.openSession();
+		List<T> locations = new ArrayList<T>();
+		String andName = (name==null || name.equalsIgnoreCase(""))?"":" and l.name ilike '%"+name+"%'";
+		try {
+			String sql = "select split_part(l.name, ':', 1) as name, split_part(l.description, ':', 1) as description, "
+					+ "lt.name locationTagName from core.location l, core.location_tag lt where lt.id = l.location_tag_id "
+					+ andName + " order by "+orderColumn+" "+orderDirection+" limit "+length+" offset "+start+";";
+			Query query = session.createSQLQuery(sql)
+					.addScalar("name", StandardBasicTypes.STRING)
+					.addScalar("description", StandardBasicTypes.STRING)
+					.addScalar("locationTagName", StandardBasicTypes.STRING)
+					.setResultTransformer(new AliasToBeanResultTransformer(LocationDTO.class));
+			locations = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return locations;
+	}
+
+	@Override
+	public <T> T getLocationCount(String name) {
+		Session session = sessionFactory.openSession();
+		List<T> locationSize = new ArrayList<T>();
+		String andName = (name==null || name.equalsIgnoreCase(""))?"":" where name ilike '%"+name+"%'";
+		try {
+			String sql = "select count(*) totalLocation from core.location" + andName +";";
+			locationSize = session.createSQLQuery(sql).addScalar("totalLocation", StandardBasicTypes.INTEGER).list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return locationSize.get(0);
+	}
+
+	@Override
+	public <T> List<T> getElcoReport(String startDate, String endDate, String sql) {
+		Session session = sessionFactory.openSession();
+		List<T> report = new ArrayList<T>();
+		try {
+			Query query = session.createSQLQuery(sql)
+					.addScalar("locationOrProviderName", StandardBasicTypes.STRING)
+					.addScalar("totalElcoVisited", StandardBasicTypes.INTEGER)
+					.addScalar("adolescent", StandardBasicTypes.INTEGER)
+					.addScalar("nonAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("userTotalFpMethodUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("userTotalFpMethodUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("newTotalFpMethodUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracNewIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtNewIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherNewIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referNewIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("newTotalFpMethodUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracNewOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtNewOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherNewOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referNewOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("changeTotalFpMethodUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracChangeIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtChangeIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherChangeIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referChangeIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("changeTotalFpMethodUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracChangeOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtChangeOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherChangeOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referChangeOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("reInitiatedTotalFpMethodUserIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracReInitiatedIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtReInitiatedIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherReInitiatedIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referReInitiatedIncludingAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("reInitiatedTotalFpMethodUserOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("bracReInitiatedOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("govtReInitiatedOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("otherReInitiatedOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("referReInitiatedOnlyAdolescent", StandardBasicTypes.INTEGER)
+					.addScalar("nsv", StandardBasicTypes.INTEGER)
+					.addScalar("tubectomy", StandardBasicTypes.INTEGER)
+					.addScalar("condom", StandardBasicTypes.INTEGER)
+					.addScalar("pill", StandardBasicTypes.INTEGER)
+					.addScalar("implant", StandardBasicTypes.INTEGER)
+					.addScalar("iud", StandardBasicTypes.INTEGER)
+					.addScalar("injection", StandardBasicTypes.INTEGER)
+					.addScalar("totalPermanentFpUser", StandardBasicTypes.INTEGER)
+					.addScalar("totalTemporaryFpUser", StandardBasicTypes.INTEGER)
+					.setString("startDate", startDate)
+					.setString("endDate", endDate)
+					.setResultTransformer(new AliasToBeanResultTransformer(ElcoReportDTO.class));
+			report = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return report;
 	}
 
 	public <T> List<T> getUniqueLocation(String village, String ward) {
