@@ -1,0 +1,46 @@
+<b:beans xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:b="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	     http://www.springframework.org/schema/beans
+	     http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.springframework.org/schema/security
+		 http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<security:http auto-config="true">
+		<security:intercept-url pattern="/resources/**"
+			access="permitAll" />
+		<security:intercept-url pattern="/login*"
+			access="isAnonymous()" />
+		<security:intercept-url pattern="/rest/api/v1/user/database/activity-status"
+			access="isAnonymous()" />
+		<security:intercept-url pattern="/user/add*"
+			access="permitAll" />
+		<security:intercept-url pattern="/**"
+			access="isAuthenticated()" />
+		<security:form-login login-page="/login"
+			username-parameter="username" password-parameter="password"
+			authentication-failure-url="/Access_Denied" />
+		<security:csrf />
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider user-service-ref="accountDao">
+			<security:password-encoder ref="passwordEncoder" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<security:global-method-security
+		pre-post-annotations="enabled">
+		<security:expression-handler ref="expressionHandler" />
+	</security:global-method-security>
+
+	<b:bean id="passwordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+	</b:bean>
+
+	<b:bean id="expressionHandler"
+		class="org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler">
+		<b:property name="permissionEvaluator" ref="customPermissionEvaluator" />
+	</b:bean>
+</b:beans>
