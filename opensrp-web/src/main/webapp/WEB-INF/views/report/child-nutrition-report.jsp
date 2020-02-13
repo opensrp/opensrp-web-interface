@@ -69,31 +69,13 @@
                     <div class="col-sm-2" id="districtS"></div>
                     <div class="col-sm-4" id="upazilaS"></div>
                 </div>
+
                 <div class="row">
                     <div class="col-sm-12" id="content" style="overflow-x: auto;">
-                        <table class="display" id="formWiseAggregatedListTable"
-                               style="width: 100%;">
-                            <thead>
-                            <tr> <!--1st row-->
-                                <th rowspan="2">Total number of children visited aged 19-36 months</th>
-                                <th rowspan="2">No. Of fully immunized children (18-36 months)</th>
-                                <th rowspan="2">No. Of  NCD services by SK</th>
-                                <th rowspan="2">No. Of  Adolescent services by SK</th>
-                                <th rowspan="2">No. Of  IYCF services by SK t services by SK</th>
-                                <th colspan="4">Child Nutrition Information</th>
-                            </tr>
-                            <tr> <!--2nd row-->
-                                <th>No. Of neonates started breast feed within 1 hour of birth</th>
-                                <th>No. Of children breastfeed (24 hours recall)</th>
-                                <th>No. Of children initiated complementary feeding (at 7 months)</th>
-                                <th>No. Of children took pustikona in the last 7 days (7 - 59 month)</th>
-                            </tr>
-                            </thead>
-                            <tbody id="t-body">
-                            </tbody>
-                        </table>
+                        <div id="child-nutrition-report"></div>
                     </div>
                 </div>
+
             </div>
             <div class="card-footer small text-muted"></div>
         </div>
@@ -105,6 +87,12 @@
 <script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script>
+
+    $(document).ready(function() {
+        $("#searched_value").val('BANGLADESH');
+        generateChildNutritionReport();
+    });
+
     function onSearchClicked() {
         var flagS = true;
         var flagE = true;
@@ -129,15 +117,15 @@
         $("#divisionS").html("");
         $("#districtS").html("");
         $("#upazilaS").html("");
-        var branch = $("#branchaggregate").val();
-        var division = $("#division").val();
-        var district = $("#district").val();
-        var upazila = $("#upazila").val();
-        var location = $("#locationoptions").val();
+        let branch = $("#branchaggregate").val();
+        let division = $("#division").val();
+        let district = $("#district").val();
+        let upazila = $("#upazila").val();
+        let location = $("#locationoptions").val();
 
-        var divisionA = division == null?division:division.split("?")[1];
-        var districtA = district == null?district:district.split("?")[1];
-        var upazilaA = upazila == null?upazila:upazila.split("?")[1];
+        let divisionA = division == null?division:division.split("?")[1];
+        let districtA = district == null?district:district.split("?")[1];
+        let upazilaA = upazila == null?upazila:upazila.split("?")[1];
 
         $("#startDate").append("<b>START DATE: </b> <span>"+ $("#start").val()+"</span>");
         $("#endDate").append("<b>END DATE: </b> <span>"+ $("#end").val()+"</span>");
@@ -153,9 +141,10 @@
             }
         }
 
-        var url = "/opensrp-dashboard/report/aggregated";
-        $("#t-body").html("");
+        $("#family-planning-report").html("");
+
         let searchedValueId = $('#searched_value_id').val();
+
         if (searchedValueId == 0) {
             if ($('#division').val() != null && $('#division').val() != undefined && $('#division').val() != '') {
                 let divInfo = $('#division').val().split("?");
@@ -179,6 +168,11 @@
                 }
             }
         }
+        generateChildNutritionReport();
+    }
+
+    function generateChildNutritionReport() {
+        let url = "/opensrp-dashboard/report/child-nutrition-report";
         $.ajax({
             type : "GET",
             contentType : "application/json",
@@ -200,18 +194,16 @@
             },
             success : function(data) {
                 $('#loading').hide();
-                $("#t-body").html(data);
+                $("#child-nutrition-report").html(data);
                 $('#search-button').attr("disabled", false);
             },
             error : function(e) {
-                display(e);
                 $('#loading').hide();
                 $('#search-button').attr("disabled", false);
             },
-            done : function(e) {
+            complete : function(e) {
                 $('#loading').hide();
                 $('#search-button').attr("disabled", false);
-                //enableSearchButton(true);
             }
         });
     }

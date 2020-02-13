@@ -2409,6 +2409,73 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return report;
 	}
 
+	@Override
+	public <T> List<T> getPregnancyReport(String startDate, String endDate, String sql) {
+		Session session = sessionFactory.openSession();
+		List<T> report = new ArrayList<T>();
+		try {
+			Query query = session.createSQLQuery(sql)
+					.addScalar("locationOrProvider", StandardBasicTypes.STRING)
+					.addScalar("totalPregnant", StandardBasicTypes.INTEGER)
+					.addScalar("adolescentPregnant", StandardBasicTypes.INTEGER)
+					.addScalar("firstTrimesterPregnant", StandardBasicTypes.INTEGER)
+					.addScalar("secondTrimesterPregnant", StandardBasicTypes.INTEGER)
+					.addScalar("pregnantOldAndNew", StandardBasicTypes.INTEGER)
+					.addScalar("normal", StandardBasicTypes.INTEGER)
+					.addScalar("cesarean", StandardBasicTypes.INTEGER)
+					.addScalar("bracCsba", StandardBasicTypes.INTEGER)
+					.addScalar("dnfcs", StandardBasicTypes.INTEGER)
+					.addScalar("tbaAndOthers", StandardBasicTypes.INTEGER)
+					.addScalar("totalDeliveries", StandardBasicTypes.INTEGER)
+					.addScalar("anc1To3", StandardBasicTypes.INTEGER)
+					.addScalar("anc4And4Plus", StandardBasicTypes.INTEGER)
+					.addScalar("ttProtectedMothers", StandardBasicTypes.INTEGER)
+					.addScalar("pnc48SK", StandardBasicTypes.INTEGER)
+					.addScalar("pnc48Others", StandardBasicTypes.INTEGER)
+					.addScalar("completed42Days", StandardBasicTypes.INTEGER)
+					.addScalar("pnc1And2", StandardBasicTypes.INTEGER)
+					.addScalar("pnc3And3Plus", StandardBasicTypes.INTEGER)
+					.addScalar("pregnancyComplicationReferred", StandardBasicTypes.INTEGER)
+					.setString("startDate", startDate)
+					.setString("endDate", endDate)
+					.setResultTransformer(new AliasToBeanResultTransformer(PregnancyReportDTO.class));
+			report = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return report;
+	}
+
+	@Override
+	public <T> List<T> getChildNutritionReport(String startDate, String endDate, String sql) {
+		Session session = sessionFactory.openSession();
+		List<T> report = new ArrayList<T>();
+		try {
+			Query query = session.createSQLQuery(sql)
+					.addScalar("locationOrProvider", StandardBasicTypes.STRING)
+					.addScalar("childrenVisited19To36", StandardBasicTypes.INTEGER)
+					.addScalar("immunizedChildren18To36", StandardBasicTypes.INTEGER)
+					.addScalar("ncdPackage", StandardBasicTypes.INTEGER)
+					.addScalar("adolescentPackage", StandardBasicTypes.INTEGER)
+					.addScalar("iycfPackage", StandardBasicTypes.INTEGER)
+					.addScalar("breastFeedIn1Hour", StandardBasicTypes.INTEGER)
+					.addScalar("breastFeedIn24Hour", StandardBasicTypes.INTEGER)
+					.addScalar("complementaryFoodAt7Months", StandardBasicTypes.INTEGER)
+					.addScalar("pushtikonaInLast24Hour", StandardBasicTypes.INTEGER)
+					.setString("startDate", startDate)
+					.setString("endDate", endDate)
+					.setResultTransformer(new AliasToBeanResultTransformer(ChildNutritionReportDTO.class));
+			report = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return report;
+	}
+
 	public <T> List<T> getUniqueLocation(String village, String ward) {
 		List<T> locations = null;
 		Session session = sessionFactory.openSession();

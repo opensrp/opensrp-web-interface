@@ -47,7 +47,7 @@ public class HealthIdRestController {
 	}
 	
 	@RequestMapping(value = "/reserved/single/migration", method = RequestMethod.GET)
-	public ResponseEntity<String> getSingleResearvedHealthIdForMigration() throws Exception {
+	public ResponseEntity<String> getSingleReservedHealthIdForMigration() throws Exception {
 		JSONObject noContent = new JSONObject();
 		noContent.put("identifiers", "");
 		try {

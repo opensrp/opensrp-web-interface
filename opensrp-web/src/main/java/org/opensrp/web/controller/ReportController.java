@@ -14,7 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
+import org.opensrp.common.dto.ChildNutritionReportDTO;
 import org.opensrp.common.dto.ElcoReportDTO;
+import org.opensrp.common.dto.PregnancyReportDTO;
 import org.opensrp.common.dto.ReportDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
@@ -284,85 +286,31 @@ public class ReportController {
 	}
 
 	@RequestMapping(value = "/pregnancyReport.html", method = RequestMethod.GET)
-	public String getPregnancyReportPage(HttpServletRequest request,
-											  HttpSession session,
-											  Model model,
-											  Locale locale,
-											  @RequestParam("address_field") String addressValue,
-											  @RequestParam("searched_value") String searchedValue,
-											  @RequestParam("searched_value_id") Integer searchedValueId) throws ParseException {
-
+	public String getPregnancyReportPage(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
-		System.err.println("branchId"+branchId);
-		User user = AuthenticationManagerUtil.getLoggedInUser();
-		if (AuthenticationManagerUtil.isAM()) {
-			List<Object[]> branches = new ArrayList<>();
-			for (Branch branch: user.getBranches()) {
-				Object[] obj = new Object[10];
-				obj[0] = branch.getId();
-				obj[1] = branch.getName();
-				branches.add(obj);
-			}
-		}
-		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
-		List<Object[]> allSKs = new ArrayList<>();
-		if (AuthenticationManagerUtil.isAM()) {
-			List<Object[]> branches = new ArrayList<>();
-			if(!branchId.isEmpty() ){
-				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
-
-				Object[] obj = new Object[10];
-				obj[0] = branch.getId();
-				obj[1] = branch.getName();
-				branches.add(obj);
-			}else {
-
-				for (Branch branch: user.getBranches()) {
-					Object[] obj = new Object[10];
-					obj[0] = branch.getId();
-					obj[1] = branch.getName();
-					branches.add(obj);
-				}
-			}
-			allSKs = databaseServiceImpl.getAllSks(branches);
-		} else if (AuthenticationManagerUtil.isAdmin()){
-			allSKs =  new ArrayList<Object[]>();
-		}
-
-		// List<Object[]> skLists = databaseServiceImpl.getAllSks();
 		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
 		String endDate = formatter.format(new Date());
-
-		String endDateValue = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
-		if (AuthenticationManagerUtil.isAM()) addressValue = "sk_id"; // for AM role
+		User user = AuthenticationManagerUtil.getLoggedInUser();
 		searchUtil.setDivisionAttribute(session);
-		System.err.println("startDate: "+startDate);
-		System.err.println("endDate: "+endDate);
-		System.err.println("address_value: "+addressValue);
-		System.err.println("searched_value: "+searchedValue);
-		System.err.println("searched_value_id: "+searchedValueId);
-		System.err.println("location_value: "+request.getParameter("locationValue"));
-		System.err.println("branch: "+request.getParameter("branch"));
+		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
-		session.setAttribute("startDate", startDate);
 		return "report/pregnancy-report";
 	}
 
 	@RequestMapping(value = "/pregnancy-report", method = RequestMethod.GET)
 	public String generatePregnancyReport(HttpServletRequest request,
-											   HttpSession session,
-											   @RequestParam(value = "address_field", required = false, defaultValue = "division") String addressValue,
-											   @RequestParam(value = "searched_value", required = false) String searchedValue,
-											   @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
-											   @RequestParam(value = "startDate", required = false) String startDate,
-											   @RequestParam(value = "endDate", required = false) String endDate) {
-		String locationValue = request.getParameter("locationValue");
-		String skIds = "";
-		List<ElcoReportDTO> elcoReports = new ArrayList<>();
+										  HttpSession session,
+										  @RequestParam(value = "address_field", required = false, defaultValue = "division") String addressValue,
+										  @RequestParam(value = "searched_value", required = false) String searchedValue,
+										  @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+										  @RequestParam(value = "startDate", required = false) String startDate,
+										  @RequestParam(value = "endDate", required = false) String endDate) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<PregnancyReportDTO> pregnancyReports = new ArrayList<>();
+		String skIds = "";
+		String locationValue = request.getParameter("locationValue");
 		if (AuthenticationManagerUtil.isAM() && locationValue.equalsIgnoreCase("catchmentArea")) {
 			String branchId = request.getParameter("branch");
 			if (StringUtils.isBlank(branchId)) {
@@ -371,83 +319,72 @@ public class ReportController {
 			} else {
 				skIds = userService.findSKByBranchSeparatedByComma("'{" + branchId + "}'");
 			}
-			elcoReports = reportService.getElcoReportBySK(startDate, endDate, skIds);
+			pregnancyReports = reportService.getPregnancyReportBySK(startDate, endDate, skIds);
 		} else {
 			Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
 			String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
 			String parentLocationName = parentLocation.getName().split(":")[0];
 			if (addressValue.equalsIgnoreCase("sk_id")) {
 				skIds = userService.findSKByLocationSeparatedByComma(searchedValueId, Roles.SK.getId());
-				elcoReports = reportService.getElcoReportBySK(startDate, endDate, skIds);
+				pregnancyReports = reportService.getPregnancyReportBySK(startDate, endDate, skIds);
 			} else {
-				elcoReports = reportService.getElcoReportByLocation(startDate, endDate, searchedValueId, addressValue, parentLocationTag, parentLocationName);
+				pregnancyReports = reportService.getPregnancyReportByLocation(startDate, endDate, searchedValueId, addressValue, parentLocationTag, parentLocationName);
 			}
 		}
-		session.setAttribute("elcoReports", elcoReports);
-		return "report/family-planning-report-table";
+		session.setAttribute("pregnancyReports", pregnancyReports);
+		return "report/pregnancy-report-table";
 	}
 
 	@RequestMapping(value = "/childNutritionReport.html", method = RequestMethod.GET)
-	public String getChildNutritionReportPage(HttpServletRequest request,
-										 HttpSession session,
-										 Model model,
-										 Locale locale,
-										 @RequestParam("address_field") String address_value,
-										 @RequestParam("searched_value") String searched_value,
-										 @RequestParam("searched_value_id") Integer searchedValueId) throws ParseException {
-
+	public String getChildNutritionReportPage(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
-		System.err.println("branchId"+branchId);
-		User user = AuthenticationManagerUtil.getLoggedInUser();
-		if (AuthenticationManagerUtil.isAM()) {
-			List<Object[]> branches = new ArrayList<>();
-			for (Branch branch: user.getBranches()) {
-				Object[] obj = new Object[10];
-				obj[0] = branch.getId();
-				obj[1] = branch.getName();
-				branches.add(obj);
-			}
-		}
-		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
-		List<Object[]> allSKs = new ArrayList<>();
-		if (AuthenticationManagerUtil.isAM()) {
-			List<Object[]> branches = new ArrayList<>();
-			if(!branchId.isEmpty() ){
-				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
-
-				Object[] obj = new Object[10];
-				obj[0] = branch.getId();
-				obj[1] = branch.getName();
-				branches.add(obj);
-			}else {
-
-				for (Branch branch: user.getBranches()) {
-					Object[] obj = new Object[10];
-					obj[0] = branch.getId();
-					obj[1] = branch.getName();
-					branches.add(obj);
-				}
-			}
-			allSKs = databaseServiceImpl.getAllSks(branches);
-		} else if (AuthenticationManagerUtil.isAdmin()){
-			allSKs =  new ArrayList<Object[]>();
-		}
-
-		// List<Object[]> skLists = databaseServiceImpl.getAllSks();
 		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
 		String endDate = formatter.format(new Date());
-
-		String endDateValue = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
-		if (AuthenticationManagerUtil.isAM()) address_value = "sk_id"; // for AM role
+		User user = AuthenticationManagerUtil.getLoggedInUser();
 		searchUtil.setDivisionAttribute(session);
+		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
-		session.setAttribute("startDate", startDate);
 		return "report/child-nutrition-report";
 	}
 
+	@RequestMapping(value = "/child-nutrition-report", method = RequestMethod.GET)
+	public String generateChildNutritionReport(HttpServletRequest request,
+										  HttpSession session,
+										  @RequestParam(value = "address_field", required = false, defaultValue = "division") String addressValue,
+										  @RequestParam(value = "searched_value", required = false) String searchedValue,
+										  @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+										  @RequestParam(value = "startDate", required = false) String startDate,
+										  @RequestParam(value = "endDate", required = false) String endDate) {
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<ChildNutritionReportDTO> childNutritionReports = new ArrayList<>();
+		String skIds = "";
+		String locationValue = request.getParameter("locationValue");
+		if (AuthenticationManagerUtil.isAM() && locationValue.equalsIgnoreCase("catchmentArea")) {
+			String branchId = request.getParameter("branch");
+			if (StringUtils.isBlank(branchId)) {
+				String branches = branchService.commaSeparatedBranch(new ArrayList<>(loggedInUser.getBranches()));
+				skIds = userService.findSKByBranchSeparatedByComma("'{" + branches + "}'");
+			} else {
+				skIds = userService.findSKByBranchSeparatedByComma("'{" + branchId + "}'");
+			}
+			childNutritionReports = reportService.getChildNutritionReportBySK(startDate, endDate, skIds);
+		} else {
+			Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
+			String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
+			String parentLocationName = parentLocation.getName().split(":")[0];
+			System.out.println("Address Value: "+ addressValue);
+			if (addressValue.equalsIgnoreCase("sk_id")) {
+				skIds = userService.findSKByLocationSeparatedByComma(searchedValueId, Roles.SK.getId());
+				childNutritionReports = reportService.getChildNutritionReportBySK(startDate, endDate, skIds);
+			} else {
+				childNutritionReports = reportService.getChildNutritionReportByLocation(startDate, endDate, searchedValueId, addressValue, parentLocationTag, parentLocationName);
+			}
+		}
+		session.setAttribute("childNutritionReports", childNutritionReports);
+		return "report/child-nutrition-report-table";
+	}
 
 	@RequestMapping(value = "/aggregated", method = RequestMethod.GET)
 	public String generateAggregatedReportOnSearch(HttpServletRequest request,

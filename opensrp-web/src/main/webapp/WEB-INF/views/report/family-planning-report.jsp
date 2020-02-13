@@ -59,11 +59,13 @@
                     <div class="col-sm-2" id="districtS"></div>
                     <div class="col-sm-4" id="upazilaS"></div>
                 </div>
+
                 <div class="row">
                     <div class="col-sm-12" id="content" style="overflow-x: auto;">
                         <div id="family-planning-report"></div>
                     </div>
                 </div>
+
             </div>
             <div class="card-footer small text-muted"></div>
         </div>
