@@ -29,7 +29,7 @@
     <meta http-equiv="refresh"
           content="<%=session.getMaxInactiveInterval()%>;url=/login" />
 
-    <title>Pregnancy Report</title>
+    <title><spring:message code="lbl.pregnancyReport"/></title>
 
     <jsp:include page="/WEB-INF/views/css.jsp" />
 
@@ -55,7 +55,7 @@
         <div class="card mb-3">
             <div class="card-header">
                 <i class="fa fa-table"></i>
-                <spring:message code="lbl.summaryStatus"/>
+                <spring:message code="lbl.pregnancyReport"/>
             </div>
             <div class="card-body">
                 <div class="row" style="margin-bottom: 10px;">

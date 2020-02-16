@@ -29,7 +29,7 @@
 
     <meta http-equiv="refresh"
           content="<%=session.getMaxInactiveInterval()%>;url=/login" />
-    <title>Family Planning Report</title>
+    <title><spring:message code="lbl.familyPlanningReport"/></title>
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>
 
@@ -45,7 +45,7 @@
         <div class="card mb-3">
             <div class="card-header">
                 <i class="fa fa-table"></i>
-                <spring:message code="lbl.summaryStatus"/>
+                <spring:message code="lbl.familyPlanningReport"/>
             </div>
             <div class="card-body">
                 <div class="row" style="margin-bottom: 10px;">
