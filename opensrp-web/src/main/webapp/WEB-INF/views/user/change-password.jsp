@@ -134,24 +134,22 @@
         }
         $("#passwordNotMatchedMessage").html("");
 
-        $("#loading").show();
         console.log("first chance");
-        var url = "/opensrp-dashboard/rest/api/v1/user/change-password";
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
+        let url = "/opensrp-dashboard/rest/api/v1/user/change-password";
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
         console.log("last chance <%=username%>");
-        var formData = {
+        let formData = {
             'username': "<%=username%>",
             'password': $('input[name=password]').val()
         };
 
-        var redirectUrl = "/opensrp-dashboard/user.html";
-        var role = "<%=role%>";
-        var fromRole = "<%=fromRole%>";
-        var skId = "<%=skId%>";
-        var skUsername = "<%=skUsername%>";
+        let redirectUrl = "/opensrp-dashboard/user.html";
+        let role = "<%=role%>";
+        let fromRole = "<%=fromRole%>";
+        let skId = "<%=skId%>";
+        let skUsername = "<%=skUsername%>";
 
-        console.log(role);
         if (role == 'AM') {
             if (fromRole == 'SK') {
                 redirectUrl = "/opensrp-dashboard/user/sk-list.html";
@@ -169,6 +167,7 @@
 
             timeout : 100000,
             beforeSend: function(xhr) {
+                $("#loading").show();
                 xhr.setRequestHeader(header, token);
             },
             success : function(data) {
@@ -191,8 +190,8 @@
     }
 
     function Validate() {
-        var password = document.getElementById("password").value;
-        var confirmPassword = document.getElementById("retypePassword").value;
+        let password = document.getElementById("password").value;
+        let confirmPassword = document.getElementById("retypePassword").value;
         if (password != confirmPassword) {
             $("#passwordNotMatchedMessage").html("Your password doesn't match. Please enter same.");
             return false;

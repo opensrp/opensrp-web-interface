@@ -453,7 +453,7 @@ public class ReportController {
 
 		String endTime = request.getParameterMap().containsKey("endDate")?
 				request.getParameter("endDate"):formatter.format(new Date());
-		endTime = formatter.format(DateUtils.addDays(formatter.parse(endTime), 1));
+//		endTime = formatter.format(DateUtils.addDays(formatter.parse(endTime), 1));
 
 		String formName = request.getParameterMap().containsKey("formName")?
 				request.getParameter("formName"):"ec_family";
