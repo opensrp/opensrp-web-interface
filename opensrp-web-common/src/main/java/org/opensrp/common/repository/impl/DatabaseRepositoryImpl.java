@@ -611,14 +611,15 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public <T> boolean isLocationExists(int parentLocationId, String name, Class<?> className) {
+	public <T> boolean isLocationExists(int parentLocationId, String name, String code, Class<?> className) {
 		List<Object> result = new ArrayList<Object>();
 		Session session = sessionFactory.openSession();
 		try {
-			String hql = "select * from core.location where (name = :name or name = :nameWithParentId) and parent_location_id = "+parentLocationId+";";
+			String hql = "select * from core.location where (name = :name or name = :nameWithParentId or code = :code) and parent_location_id = "+parentLocationId+";";
 			Query query = session.createSQLQuery(hql)
 					.setString("name", name)
-					.setString("nameWithParentId", name+":"+parentLocationId);
+					.setString("nameWithParentId", name+":"+parentLocationId)
+					.setString("code", code);
 			result = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2306,11 +2307,13 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		String andName = (name==null || name.equalsIgnoreCase(""))?"":" and l.name ilike '%"+name+"%'";
 		try {
 			String sql = "select split_part(l.name, ':', 1) as name, split_part(l.description, ':', 1) as description, "
-					+ "lt.name locationTagName from core.location l, core.location_tag lt where lt.id = l.location_tag_id "
-					+ andName + " order by "+orderColumn+" "+orderDirection+" limit "+length+" offset "+start+";";
+					+ "l.code as code, lt.name locationTagName from core.location l, core.location_tag lt where "
+					+ "lt.id = l.location_tag_id" + andName + " order by "+orderColumn+" "+orderDirection + " "
+					+ "limit "+length+" offset "+start+";";
 			Query query = session.createSQLQuery(sql)
 					.addScalar("name", StandardBasicTypes.STRING)
 					.addScalar("description", StandardBasicTypes.STRING)
+					.addScalar("code", StandardBasicTypes.STRING)
 					.addScalar("locationTagName", StandardBasicTypes.STRING)
 					.setResultTransformer(new AliasToBeanResultTransformer(LocationDTO.class));
 			locations = query.list();

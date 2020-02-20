@@ -44,11 +44,12 @@
 			</div>
 			<div class="card-body">
 				<div class="table-responsive">
-					<table class="display" id="locationListWithPagination">
+					<table class="display" id="locationListWithPagination" style="width: 100%;">
 						<thead>
 							<tr>
 								<th><spring:message code="lbl.name"></spring:message></th>
 								<th><spring:message code="lbl.description"></spring:message></th>
+								<th><spring:message code="lbl.code"></spring:message></th>
 								<th><spring:message code="lbl.locationTag"></spring:message></th>
 							</tr>
 						</thead>
@@ -75,10 +76,11 @@
 			serverSide: true,
 			processing: true,
 			columnDefs: [
-				{ targets: [2], orderable: false },
-				{ width: "35%", targets: 0 },
-				{ width: "35%", targets: 1 },
-				{ width: "30%", targets: 2 }
+				{ targets: [3], orderable: false },
+				{ width: "28%", targets: 0 },
+				{ width: "27%", targets: 1 },
+				{ width: "20%", targets: 2 },
+				{ width: "25%", targets: 2 }
 			],
 			ajax: {
 				url: "/opensrp-dashboard/rest/api/v1/location/list-ajax",

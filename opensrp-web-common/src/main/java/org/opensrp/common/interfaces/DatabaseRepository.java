@@ -110,7 +110,7 @@ public interface DatabaseRepository {
 
 	public <T> boolean entityExistsNotEqualThisId(int id, T value, String fieldName, Class<?> className);
 
-	public <T> boolean isLocationExists(int parentId, String name, Class<?> className);
+	public <T> boolean isLocationExists(int parentId, String name, String code, Class<?> className);
 
 	public <T> List<T> findAllByKey(String value, String fieldName, Class<?> className);
 

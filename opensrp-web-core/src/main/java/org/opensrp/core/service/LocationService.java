@@ -222,7 +222,7 @@ public class LocationService {
 		if (location != null) {
 			int parentLocationId = location.getParentLocation().getId();
 			System.out.println("Location exist id: " + location.getId() + " parent id: "+ location.getParentLocation().getId());
-			exists = repository.isLocationExists(parentLocationId, location.getName(), Location.class);
+			exists = repository.isLocationExists(parentLocationId, location.getName(), location.getCode(), Location.class);
 		}
 		System.out.println("Is Location Exist: "+ exists);
 		return exists;
@@ -733,6 +733,7 @@ public class LocationService {
 			JSONArray location = new JSONArray();
 			location.put(dto.getName());
 			location.put(dto.getDescription());
+			location.put(dto.getCode());
 			location.put(dto.getLocationTagName());
 			array.put(location);
 		}

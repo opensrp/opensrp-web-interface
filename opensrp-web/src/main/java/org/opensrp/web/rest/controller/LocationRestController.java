@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.LocationDTO;
@@ -121,7 +122,7 @@ public class LocationRestController {
 		return null;
 	}
 
-	@RequestMapping(value = "/list-ajax")
+	@RequestMapping(value = "/list-ajax", method = RequestMethod.GET)
 	public ResponseEntity<String> getLocationPagination(HttpServletRequest request) throws JSONException {
 		Integer draw = Integer.valueOf(request.getParameter("draw"));
 		String name = request.getParameter("search[value]");
