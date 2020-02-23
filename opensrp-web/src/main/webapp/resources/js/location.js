@@ -35,15 +35,15 @@ jQuery(document).ready(function($) {
 	}
 	
 	$("#division").change(function(event) {
-		var division = $("#division").val();
+		let division = $("#division").val();
 		if (division != '' && division != null && division != -1 && division != undefined && division != "0?") {
 			getLocationHierarchy("/opensrp-dashboard/location?id="+$("#division").val().split("?")[0]+"&title=","district") ;
 		} else {
 			$("#district").html("");
 			$("#district").append("<option value='0?'>Select District</option>");
 		}
-		var division = $("#division").val().split("?")[1];
-		var divisionId = $("#division").val().split("?")[0];
+		division = $("#division").val().split("?")[1];
+		let divisionId = $("#division").val().split("?")[0];
 		$("#address_field").val(division == undefined?"division":"district");
 		$("#searched_value").val(division == undefined?"empty":"division = " + "'"+ division +"'");
 		$("#searched_value_id").val(division == undefined?9265:divisionId);
@@ -56,8 +56,8 @@ jQuery(document).ready(function($) {
 
 	$("#district").change(function(event) {
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#district").val().split("?")[0]+"&title=","upazila") ;
-		var district = $("#district").val().split("?")[1];
-		var districtId = $("#district").val().split("?")[0];
+		let district = $("#district").val().split("?")[1];
+		let districtId = $("#district").val().split("?")[0];
 		$("#address_field").val(district == ''?"district":"upazila");
 		$("#searched_value").val(district == ''?"empty":"district = " + "'"+ district +"'");
 		$("#searched_value_id").val(district == ''?0:districtId);
@@ -68,8 +68,8 @@ jQuery(document).ready(function($) {
 	});
 	$("#upazila").change(function(event) {
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#upazila").val().split("?")[0]+"&title=","pourasabha") ;
-		var upazila = $("#upazila").val().split("?")[1];
-		var upazilaId = $("#upazila").val().split("?")[0];
+		let upazila = $("#upazila").val().split("?")[1];
+		let upazilaId = $("#upazila").val().split("?")[0];
 		$("#address_field").val(upazila == ''?"upazila":"sk_id");
 		$("#searched_value").val(upazila == ''?"empty":"upazila = " + "'"+ upazila +"'");
 		$("#searched_value_id").val(upazila == ''?0:upazilaId);
@@ -80,7 +80,7 @@ jQuery(document).ready(function($) {
 	$("#pourasabha").change(function(event) {
 		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#pourasabha").val().split("?")[0]+"&title=","union") ;
 		$("#address_field").val("sk_id");
-		var concatingString = "pourasabha = " + "'"+$("#pourasabha").val().split("?")[1]+"'";
+		let concatingString = "pourasabha = " + "'"+$("#pourasabha").val().split("?")[1]+"'";
 		$("#searched_value").val(concatingString);
 
 		$("#village").html("<option value='0?'>Select Village</option>");

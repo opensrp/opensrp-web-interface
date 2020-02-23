@@ -11,6 +11,7 @@
 
 	<security:http auto-config="true">
 		<security:access-denied-handler error-page="/403" />
+
 		<security:intercept-url pattern="/resources/**"
 								access="permitAll" />
 		<security:intercept-url pattern="/login*"
@@ -23,11 +24,13 @@
 								access="permitAll" />
 		<security:intercept-url pattern="/**"
 								access="isAuthenticated()" />
-
 		<security:form-login login-page="/login"
 							 username-parameter="username" password-parameter="password"
 							 authentication-failure-url="/login?error" />
 		<security:csrf />
+		<security:session-management invalid-session-url="/login">
+			<security:concurrency-control expired-url="/login" />
+		</security:session-management>
 	</security:http>
 
 

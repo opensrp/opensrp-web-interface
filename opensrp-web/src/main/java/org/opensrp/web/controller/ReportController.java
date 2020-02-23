@@ -257,6 +257,10 @@ public class ReportController {
 												   @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
 												   @RequestParam(value = "startDate", required = false) String startDate,
 												   @RequestParam(value = "endDate", required = false) String endDate) {
+		System.out.println("Address Field: "+ addressValue);
+		System.out.println("Searched Value: "+ searchedValue);
+		System.out.println("Searched Value Id: "+ searchedValueId);
+
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<ElcoReportDTO> elcoReports = new ArrayList<>();
 		String skIds = "";
@@ -335,7 +339,7 @@ public class ReportController {
 		return "report/pregnancy-report-table";
 	}
 
-	@RequestMapping(value = "/childNutritionReport.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/miscellaneousReport.html", method = RequestMethod.GET)
 	public String getChildNutritionReportPage(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");

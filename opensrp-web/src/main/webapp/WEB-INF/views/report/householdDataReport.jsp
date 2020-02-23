@@ -160,8 +160,8 @@
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script>
 	function onSearchClicked() {
-		var flagS = true;
-		var flagE = true;
+		let flagS = true;
+		let flagE = true;
 		if (!checkDate($('#start').val())) {
 			$('#startDateValidation').show();
 			flagS = false;
@@ -183,15 +183,15 @@
 		$("#divisionS").html("");
 		$("#districtS").html("");
 		$("#upazilaS").html("");
-		var branch = $("#branchaggregate").val();
-		var division = $("#division").val();
-		var district = $("#district").val();
-		var upazila = $("#upazila").val();
-		var location = $("#locationoptions").val();
+		let branch = $("#branchaggregate").val();
+		let division = $("#division").val();
+		let district = $("#district").val();
+		let upazila = $("#upazila").val();
+		let location = $("#locationoptions").val();
 		
-		var divisionA = division == null?division:division.split("?")[1];
-		var districtA = district == null?district:district.split("?")[1];
-		var upazilaA = upazila == null?upazila:upazila.split("?")[1];
+		let divisionA = division == null?division:division.split("?")[1];
+		let districtA = district == null?district:district.split("?")[1];
+		let upazilaA = upazila == null?upazila:upazila.split("?")[1];
 
 		$("#startDate").append("<b>START DATE: </b> <span>"+ $("#start").val()+"</span>");
 		$("#endDate").append("<b>END DATE: </b> <span>"+ $("#end").val()+"</span>");
@@ -207,7 +207,7 @@
 			}
 		}
 
-		var url = "/opensrp-dashboard/report/aggregated";
+		let url = "/opensrp-dashboard/report/aggregated";
 		$("#t-body").html("");
 		let searchedValueId = $('#searched_value_id').val();
 		if (searchedValueId == 0) {

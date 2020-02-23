@@ -285,7 +285,7 @@
 					<a class="dropdown-item" href="<c:url value="/report/pregnancyReport.html?lang=${locale}"/>">
 						<strong><spring:message code="lbl.pregnancyReport"/></strong></a>
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="<c:url value="/report/childNutritionReport.html?lang=${locale}"/>">
+					<a class="dropdown-item" href="<c:url value="/report/miscellaneousReport.html?lang=${locale}"/>">
 						<strong><spring:message code="lbl.childNutritionReport"/></strong></a>
 					<% } %>
 				</div>

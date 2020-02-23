@@ -94,8 +94,8 @@
     });
 
     function onSearchClicked() {
-        var flagS = true;
-        var flagE = true;
+        let flagS = true;
+        let flagE = true;
         if (!checkDate($('#start').val())) {
             $('#startDateValidation').show();
             flagS = false;
