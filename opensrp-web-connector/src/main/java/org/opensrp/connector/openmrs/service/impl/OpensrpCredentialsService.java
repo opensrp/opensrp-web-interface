@@ -32,7 +32,6 @@ public abstract class OpensrpCredentialsService {
 	 * @return
 	 */
 	public String getURL() {
-		System.out.println("Base url: " + OPENSRP_BASE_URL);
 		return HttpUtil.removeEndingSlash(OPENSRP_BASE_URL);
 	}
 

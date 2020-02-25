@@ -83,15 +83,9 @@ public class HttpUtil {
 			HttpPost request = (HttpPost) makeConnection(url, payload, RequestMethod.POST, authType, authString);
 			request.setHeader(HTTP.CONTENT_TYPE, contentType);
 			StringEntity entity = new StringEntity(data == null ? "" : data);
-			System.out.println("data: " + data);
-			System.out.println("entity: " + entity.getContent());
 			entity.setContentEncoding(contentType);
 			request.setEntity(entity);
-			
-			System.out.println("request: " + request);
-			
 			org.apache.http.HttpResponse response = httpClient.execute(request);
-			System.out.println("response: " + response);
 			return createCustomResponseFrom(response);
 		}
 		catch (Exception e) {
@@ -140,11 +134,9 @@ public class HttpUtil {
 
 	static HttpResponse createCustomResponseFrom(org.apache.http.HttpResponse response) throws IOException {
 		int statusCode = response.getStatusLine().getStatusCode();
-		System.out.println("status code: " + statusCode);
 		String entity = "";
 		if (response.getEntity() != null) {
 			entity = IOUtils.toString(response.getEntity().getContent());
-			System.out.println("entity: " + entity);
 		}
 
 		return new HttpResponse(checkSuccessBasedOnHttpCode(statusCode), statusCode, entity);
@@ -154,7 +146,6 @@ public class HttpUtil {
 		if (httpCode >= 400 && httpCode <= 599) {
 			return false;
 		} else {
-			System.out.println("successful");
 			return true;
 		}
 	}
@@ -190,8 +181,6 @@ public class HttpUtil {
 		} else if (authType.name().equalsIgnoreCase("token")) {
 			requestBase.addHeader("Authorization", "Token " + authString);
 		}
-
-		System.out.println("url: " + urlo);
 		return requestBase;
 	}
 

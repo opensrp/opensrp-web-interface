@@ -374,7 +374,6 @@ public class UserController {
 		TeamMember teamMember = teamMemberServiceImpl.findByKeys(fieldValues, TeamMember.class);
 		if (teamMember != null) {
 			
-			//System.out.println(teamMember.toString());
 			//model.addAttribute("id", id);
 			teamMember.setPerson(account);
 			model.addAttribute("teamMember", teamMember);
@@ -691,7 +690,6 @@ public class UserController {
 		session.setAttribute("user", user);
 		session.setAttribute("assignedLocation", userAssignedLocationDTOS);
 		session.setAttribute("roleId", roleId);
-		System.out.println("EVERYTHING IS OKAY");
 		return "user/catchment-area";
 	}
 	
@@ -705,7 +703,6 @@ public class UserController {
 		JSONArray array = new JSONArray();
 		try {
 			array = locationServiceImpl.convertLocationTreeToJSON(treeDTOS, user.getEnableSimPrint());
-			System.out.println(array);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -730,7 +727,6 @@ public class UserController {
 		
 		String rootPath = request.getSession().getServletContext().getRealPath("/");
 		
-		System.out.println("Root Path:-> " + rootPath);
 		File dir = new File(rootPath + File.separator + "uploadedfile");
 		if (!dir.exists()) {
 			dir.mkdirs();
@@ -846,8 +842,7 @@ public class UserController {
 		List<UserDTO> users = userServiceImpl.getChildUserFromParent(skId, "SS");
 		List<UserDTO> ssWithoutCatchment = userServiceImpl.getSSWithoutCatchmentArea(skId);
 		User skOfSS = userServiceImpl.findById(skId, "id", User.class);
-		System.out.println("sk first name: "+skOfSS.getFirstName());
-		System.out.println("sk last name: "+skOfSS.getLastName());
+
 		model.addAttribute("skUsername", skUsername);
 		model.addAttribute("skFullName", skOfSS.getFullName());
 		model.addAttribute("branches", branches);
@@ -945,7 +940,6 @@ public class UserController {
 		if (user.getRoles() != null) account.setRoles(user.getRoles());
 		//account.setPassword("");
 		String redirectUrl = "redirect:/user/" + skId + "/" + skUsername + "/my-ss.html";
-		System.out.println(account.toString());
 		userServiceImpl.update(account);
 		return new ModelAndView(redirectUrl + "?lang=" + locale);
 		//return new ModelAndView("redirect:/user.html?lang=" + locale);

@@ -125,9 +125,6 @@ public class UserRestController {
 			}
 			boolean isExists = userServiceImpl.isUserExist(user.getUsername());
 			if (!isExists) {
-				System.out.println("BEFORE SAVE:");
-				System.out.println(user);
-				System.out.println(userDTO);
 				User createdUser = userServiceImpl.saveNew(user, false);
 				userNameUniqueError = "";
 			}
@@ -339,7 +336,6 @@ public class UserRestController {
 			}
 
 			int response = usersCatchmentAreaService.deleteCatchmentAreas(catchmentAreaIds);
-			System.out.println("is deleted: "+response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			responseMessage = e.getMessage();
@@ -361,7 +357,6 @@ public class UserRestController {
 			}
 
 			int response = usersCatchmentAreaService.deleteCatchmentAreas(catchmentAreaIds);
-			System.out.println("is deleted: "+response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			responseMessage = e.getMessage();
@@ -383,7 +378,6 @@ public class UserRestController {
 			}
 
 			int response = usersCatchmentAreaService.deleteCatchmentAreas(catchmentAreaIds);
-			System.out.println("is deleted: "+response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			responseMessage = e.getMessage();

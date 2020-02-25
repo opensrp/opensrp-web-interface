@@ -109,15 +109,12 @@ public class FormService {
 			if (!new File(realPathtoUploads).exists()) {
 				new File(realPathtoUploads).mkdir();
 			}
-			System.out.println(realPathtoUploads);
 			String orgName = file.getOriginalFilename();
 			String filePath = realPathtoUploads + "/" + orgName;
-			System.out.println(filePath);
 			File dest = new File(filePath);
 			file.transferTo(dest);
 		}
 		catch (Exception e) {
-			System.out.println("Error while saving in file-system");
 			e.printStackTrace();
 		}
 	}
@@ -130,8 +127,6 @@ public class FormService {
 			Path tmpPath = Paths.get(realPathtoUploads); //valid directory
 			Path filePath = tmpPath.resolve(fileName); //add fileName to path
 			Path fileParent = filePath.getParent(); //get parent directory
-			System.out.println(fileParent);
-			System.out.println(tmpPath.equals(fileParent));
 			
 			if (tmpPath.equals(fileParent)) {
 				data = Files.readAllBytes(filePath);

@@ -28,7 +28,6 @@ public class ClientRestController {
     public ResponseEntity<String> dataApprove(@RequestBody String requestData) throws Exception {
         JSONObject jsonObject = new JSONObject(requestData);
         JSONObject jo = clientService.memberApproval(jsonObject);
-        System.out.println(jo);
         String status = jo.getString("msg");
 
         if (status.equals("201")) {

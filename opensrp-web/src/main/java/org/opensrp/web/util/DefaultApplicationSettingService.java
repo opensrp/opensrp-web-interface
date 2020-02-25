@@ -172,7 +172,6 @@ public class DefaultApplicationSettingService {
 		String rootPath = "";
 		try {
 			rootPath = new File(".").getCanonicalPath();
-			System.out.println("rootPath: " + rootPath);
 		}
 		catch (IOException e) {
 			logger.error("error getting rootPath: " + e);

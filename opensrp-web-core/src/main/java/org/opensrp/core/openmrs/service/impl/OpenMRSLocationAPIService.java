@@ -40,8 +40,6 @@ public class OpenMRSLocationAPIService extends OpensrpProperties implements Open
 		query = "q=" + location.getName();
 		existinglocation = getByQuery(query);
 		if (existinglocation.length() == 0) {
-			System.out.println("BEFORE OPENMRS:->");
-			System.out.println(makeLocationObject(location));
 			JSONObject createdLocation = apiServiceFactory.getApiService("openmrs").add(PAYLOAD,
 			    makeLocationObject(location), LOCATION_URL);
 			if (createdLocation.has("uuid")) {

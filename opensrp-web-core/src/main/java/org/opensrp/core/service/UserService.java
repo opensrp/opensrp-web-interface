@@ -620,7 +620,6 @@ public class UserService {
 
 					List<Integer> locationIds = new ArrayList<Integer>();
 					if (userLocationDTO.getLocations() != null) {
-						System.out.println("GET LOCATION: " + userLocationDTO.getLocations().length);
 						for (Integer id : userLocationDTO.getLocations()) {
 							locationIds.add(id);
 						}
@@ -639,12 +638,10 @@ public class UserService {
 					teamMember.setLocations(locationSet);
 
 					isDeleted = usersCatchmentAreaService.deleteAllByParentAndUser(parentId, userLocationDTO.getUserId());
-					System.out.println("IS DELETED: " + isDeleted);
 				}
 			}
 
 			teamMemberServiceImpl.updateWithoutSendToOpenMRS(teamMember);
-			System.out.println("NEW SAVE ABLE AREA: "+ userLocationDTO.getLocations().length);
 			if (userLocationDTO.getLocations() != null && userLocationDTO.getLocations().length > 0) {
 				List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaMapper.map(userLocationDTO.getLocations(),
 						userLocationDTO.getUserId());
@@ -856,19 +853,14 @@ public class UserService {
 
 		List<Imei> imeis = new ArrayList<>();
 
-		System.out.println("IN IMEI UPLOADING");
-
 		while ((line = br.readLine()) != null) {
-			System.out.println("LINE1: "+line);
 			String[] imeiRecord = line.split(cvsSplitBy);
 			if (position == 0) {
 				position++;
 				continue;
 			} else {
-				System.out.println("imei size: "+ imeiRecord.length);
 				String imei1 = (imeiRecord.length > 0 && !StringUtils.isBlank(imeiRecord[0]))?imeiRecord[0].trim():"";
 				String imei2 = (imeiRecord.length > 1 && !StringUtils.isBlank(imeiRecord[1]))?imeiRecord[1].trim():"";
-				System.out.println("imei1: "+ imei1 + " imei2: "+ imei2);
 				if (imei1 != null || imei2 != null) {
 					Imei imei = new Imei();
 					imei.setImei1(imei1);
@@ -879,11 +871,9 @@ public class UserService {
 				} else {
 					throw new BadFormatException("Bad format found at line -"+(position+1));
 				}
-				System.out.println("LINE2: "+line);
 			}
 			position++;
 		}
-		System.out.println("POSITION: "+ position);
 		long result = repository.saveAll(imeis);
 		if (result > 0) msg = result +" record(s) saved successfully";
 		else msg = "Saving failed!!! Please try again later...";

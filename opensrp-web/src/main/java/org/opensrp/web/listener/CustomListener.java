@@ -47,7 +47,6 @@ public class CustomListener {
 	}
 
 	public void updatingActionParser() throws Exception {
-		System.out.println("UPDATING ACTION PARSER AT: "+new DateTime());
 		searchBuilder.clear();
 		databaseServiceImpl.actionParser(searchBuilder);
 	}

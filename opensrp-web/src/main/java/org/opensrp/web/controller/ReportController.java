@@ -257,9 +257,6 @@ public class ReportController {
 												   @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
 												   @RequestParam(value = "startDate", required = false) String startDate,
 												   @RequestParam(value = "endDate", required = false) String endDate) {
-		System.out.println("Address Field: "+ addressValue);
-		System.out.println("Searched Value: "+ searchedValue);
-		System.out.println("Searched Value Id: "+ searchedValueId);
 
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<ElcoReportDTO> elcoReports = new ArrayList<>();
@@ -378,7 +375,6 @@ public class ReportController {
 			Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
 			String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
 			String parentLocationName = parentLocation.getName().split(":")[0];
-			System.out.println("Address Value: "+ addressValue);
 			if (addressValue.equalsIgnoreCase("sk_id")) {
 				skIds = userService.findSKByLocationSeparatedByComma(searchedValueId, Roles.SK.getId());
 				childNutritionReports = reportService.getChildNutritionReportBySK(startDate, endDate, skIds);
@@ -472,7 +468,6 @@ public class ReportController {
 		User user = userService.getLoggedInUser();
 		if (AuthenticationManagerUtil.isAM()) {
 			List<Object[]> branches = new ArrayList<>();
-			System.out.println("Branch Selection: "+ branchId);
 			if(!branchId.isEmpty() && !branchId.equals("0")){
 				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
 
@@ -492,8 +487,6 @@ public class ReportController {
 			allSKs = databaseServiceImpl.getAllSks(branches);
 		}
 
-		System.out.println("START TIME: "+ startTime);
-
 		List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime, endTime, formName.replaceAll("\\_"," ") , sk, allSKs, pageNumber);
 		List allClientInfo =  ModelConverter.modelConverterForClientData(formName, tempClientInfo);
 
@@ -510,8 +503,6 @@ public class ReportController {
 		}
 
 		new PaginationUtil().createPageList(session, pageNumber.toString());
-
-		System.out.println("---> debug Size: "+ size);
 
 		session.setAttribute("clientInfoList",allClientInfo);
 		session.setAttribute("headerList", ModelConverter.headerListForClientData(formName));

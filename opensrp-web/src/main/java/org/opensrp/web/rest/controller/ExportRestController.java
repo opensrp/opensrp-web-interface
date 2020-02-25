@@ -59,9 +59,6 @@ public class ExportRestController {
 
         if(params.equals(session.getAttribute("params"))) return new ResponseEntity<String>("", HttpStatus.OK);
 
-        System.out.println(" ### params: --> "+params);
-        System.out.println(" ### sesstion:-> "+session.getAttribute("params"));
-        System.out.println(" #### --------->> New request ");
         StringBuffer content = new StringBuffer();
         try {
             URL url = new URL(

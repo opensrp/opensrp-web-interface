@@ -110,15 +110,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 	@Override
 	public <T> long saveAll(List<T> t) throws Exception {
-		System.out.println("SAVE ALL");
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
 		long returnValue = 0;
 		try {
 			tx = session.beginTransaction();
-			System.out.println("Save.... "+ t.size());
 			for (int i = 0; i < t.size(); i++) {
-				System.out.println(""+t.toString());
 				session.saveOrUpdate(t.get(i));
 			}
 			logger.info("saved successfully: " + t.getClass().getName());
@@ -180,7 +177,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	public <T> boolean delete(T t) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
-		System.out.println("DELETE METHOD A ASHCHHE");
 		boolean returnValue = false;
 		try {
 			tx = session.beginTransaction();
@@ -460,7 +456,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		try {
 			Criteria criteria = session.createCriteria(className);
 			for (Map.Entry<String, Object> entry : fieldValues.entrySet()) {
-				System.out.println(entry.getKey() + " in repo " + entry.getValue());
 				criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
 				criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			}
@@ -1226,8 +1221,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		if(!"empty".equalsIgnoreCase(searched_value)) {
 			conditionString += " and "+searched_value;
 		}
-		System.out.println("Size:"+ allSKs.size());
-		System.out.println(filterString + " " + searched_value);
 		if (allSKs.size() != 0) {
 			String providerIds = "";
 			int size = allSKs.size();
@@ -1242,7 +1235,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			}
 		}
 
-		System.out.println("conditionstring"+ conditionString);
 		System.err.println("Location Id: "+ searchedValueId);
 
 		List<Object[]> mhvList = null;
@@ -1351,7 +1343,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			Query query = session.createSQLQuery(hql)
 					.setString("startDate", startDate)
 					.setString("endDate", endDate);
-			System.out.println("Query"+ hql);
 			mhvList = query.list();
 		} catch (Exception e) {
 			logger.error(e);
@@ -1421,7 +1412,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	public List<Object[]> getSKByBranch(String branchIds) {
 		Session session = sessionFactory.openSession();
 		List<Object[]> skList = null;
-		System.out.println("branch ids: "+branchIds);
 		try {
 			String hql = "select u.id, u.username, concat(u.first_name, ' ', u.last_name) from core.users u join core.user_role ur on u.id = ur.user_id"
 					+ " join core.user_branch ub on u.id = ub.user_id where ur.role_id = :skId and ub.branch_id = any(array["+branchIds+"])";
@@ -2043,7 +2033,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 	@Override
 	public List<UserAssignedLocationDTO> assignedLocationByRole(Integer roleId) {
-		System.out.println("ROLE ID INSIDE:-> "+ roleId);
 		Session session = sessionFactory.openSession();
 		List<UserAssignedLocationDTO> userAssignedLocationDTOS = new ArrayList<UserAssignedLocationDTO>();
 		try {
@@ -2500,8 +2489,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		} finally {
 			session.close();
 		}
-
-		System.out.println("location size::-> "+ locations.size());
 
 		return locations.size()>0?locations:null;
 	}

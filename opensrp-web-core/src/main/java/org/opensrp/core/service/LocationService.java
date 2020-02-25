@@ -221,10 +221,8 @@ public class LocationService {
 		boolean exists = false;
 		if (location != null) {
 			int parentLocationId = location.getParentLocation().getId();
-			System.out.println("Location exist id: " + location.getId() + " parent id: "+ location.getParentLocation().getId());
 			exists = repository.isLocationExists(parentLocationId, location.getName(), location.getCode(), Location.class);
 		}
-		System.out.println("Is Location Exist: "+ exists);
 		return exists;
 	}
 	
@@ -312,12 +310,14 @@ public class LocationService {
 		JSONArray dataArray = new JSONArray();
 
 		Map<Integer, Integer> locationMap = new HashMap<>();
-		for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
-			locationMap.put(dto.getLocationId(), dto.getId());
+		if (roleId != Roles.AM.getId()) {
+			for (UserAssignedLocationDTO dto : userAssignedLocationDTOS) {
+				locationMap.put(dto.getLocationId(), dto.getId());
+			}
 		}
 		List<LocationDTO> locations = new ArrayList<>();
 
-		if (role.equalsIgnoreCase("AM") || (roleId == Roles.SS.getId() || roleId == Roles.SK.getId())) {
+		if (role.equalsIgnoreCase(Roles.AM.getName()) || (roleId == Roles.SS.getId() || roleId == Roles.SK.getId())) {
 			locations = findAllLocationByAM(loggedInUserId, roleId);
 		} else {
 			locations = findAllLocationPartialProperty(roleId);
@@ -325,14 +325,9 @@ public class LocationService {
 
 		for (LocationDTO location : locations) {
 			JSONObject dataObject = new JSONObject();
-			if (location.getLocationName().equalsIgnoreCase("BANGLADESH")) {
-//				System.out.println(loca);
-				System.out.println("ASE BD");
-			}
 			if (location.getParentLocationId() != null) {
 				dataObject.put(parentKey, location.getParentLocationId());
 			} else {
-				System.out.println("PARENT SET HOISE");
 				dataObject.put(parentKey, parentIndication);
 			}
 			JSONObject state = new JSONObject();
@@ -364,17 +359,16 @@ public class LocationService {
 			dataArray.put(dataObject);
 		}
 
-		System.out.println(dataArray);
 		return dataArray;
 
 	}
 	
 	@Transactional
 	public List<Location> getAllByKeysWithALlMatches(String name) {
-		Map<String, String> fielaValues = new HashMap<String, String>();
-		fielaValues.put("name", name);
+		Map<String, String> fieldValues = new HashMap<String, String>();
+		fieldValues.put("name", name);
 		boolean isProvider = false;
-		return repository.findAllByKeysWithALlMatches(isProvider, fielaValues, Location.class);
+		return repository.findAllByKeysWithALlMatches(isProvider, fieldValues, Location.class);
 	}
 	
 	public String makeParentLocationName(Location location) {
@@ -513,11 +507,7 @@ public class LocationService {
 						}else{
 							logger.info("already exists location:" + location.getName());
 						}
-						
-						System.out.println("LOCATION CREATED OPENMRS:::");
-						System.out.println(location);
 
-						
 						Long end = System.currentTimeMillis();
 						Long dif = end-start;
 						System.err.println("End timestamp:"+end+" time difference.>>>>>>>>>>>>>>>>>>>>>>>>>>>:"+dif);

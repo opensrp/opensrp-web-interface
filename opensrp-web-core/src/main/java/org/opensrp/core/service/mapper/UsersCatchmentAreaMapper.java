@@ -40,7 +40,6 @@ public class UsersCatchmentAreaMapper {
     public List<UsersCatchmentArea> map(int[] locations, int userId) {
         List<UsersCatchmentArea> list = new ArrayList<>();
         for (int i = 0; i < locations.length; i++) {
-            System.out.println("LOCATION ID: "+ locations[i]);
             list.add(this.map((Location) locationService.findById(locations[i], "id", Location.class), userId));
         }
         return list;

@@ -105,7 +105,6 @@ public class BranchService {
 		for (Branch branch: branches) {
 			iterate++;
 			branchIds += branch.getId();
-			System.out.println(branchIds + " equality " + branch.getId());
 			if (size != iterate) branchIds += ", ";
 		}
 		return branchIds;

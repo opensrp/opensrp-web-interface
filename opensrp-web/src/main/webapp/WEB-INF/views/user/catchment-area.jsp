@@ -202,8 +202,11 @@
                 });
             }
 
-            <%for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {%>
-            $('#locations option[value=<%=dto.getLocationId()%>]').attr("disabled", 'disabled');
+            <%for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
+                if (roleId == Roles.AM.getId()) {
+                    continue;
+                }%>
+                $('#locations option[value=<%=dto.getLocationId()%>]').attr("disabled", 'disabled');
             <%}%>
             $('#locations').val(ids);
             $('#locations').multiSelect('refresh');
@@ -226,21 +229,6 @@
             $("#locations option").each(function() {
                 allLocation.push($(this).val());
             });
-
-            <%--var redirectUrl = "/opensrp-dashboard/user.html";--%>
-            <%--var role = "<%=role%>";--%>
-            <%--var fromRole = "<%=fromRole%>";--%>
-            <%--var skId = "<%=skId%>";--%>
-            <%--var skUsername = "<%=skUsername%>";--%>
-
-            <%--console.log(role);--%>
-            <%--if (role == 'AM') {--%>
-            <%--    if (fromRole == 'SK') {--%>
-            <%--        redirectUrl = "/opensrp-dashboard/user/sk-list.html";--%>
-            <%--    } else if (fromRole == 'SS') {--%>
-            <%--        redirectUrl = "/opensrp-dashboard/user/"+skId+"/"+skUsername+"/my-ss.html?lang=en"--%>
-            <%--    }--%>
-            <%--}--%>
 
             let enabled = [];
             if ($('#locations').val() != undefined && $('#locations').val() != null) {
@@ -266,9 +254,6 @@
                 locations: enabled,
                 userId: $('#userId').val()
             };
-
-            console.log("In Save: ");
-            console.log(formData);
 
             $.ajax({
                 contentType : "application/json",
@@ -317,53 +302,6 @@
             }
         });
     }
-    <%--function editLocation(parentId) {--%>
-    <%--    tempEdit = true;--%>
-    <%--    $('#saveCatchmentArea').prop('disabled', false);--%>
-    <%--    $('#locations option').remove();--%>
-    <%--    $('#locations').multiSelect('refresh');--%>
-    <%--    var i, selectedAreas = [], z = [], locations = [], ids = [];--%>
-
-    <%--    <%if (usersCatchmentAreas != null) {--%>
-    <%--        for (int i = 0; i < usersCatchmentAreas.size(); i++) {%>--%>
-    <%--            selectedAreas[<%=i%>] = <%=usersCatchmentAreas.get(i).getLocationId()%>--%>
-    <%--        <%}--%>
-    <%--    }%>--%>
-
-    <%--    locations = $('#locationTree').jstree(true).get_node(parentId).children;--%>
-    <%--    console.log(locations);--%>
-    <%--    for (i = 0; i < locations.length; i++) {--%>
-    <%--        z.push({--%>
-    <%--            name: $('#locationTree').jstree(true).get_node(locations[i]).text,--%>
-    <%--            id: $('#locationTree').jstree(true).get_node(locations[i]).id--%>
-    <%--        });--%>
-    <%--    }--%>
-
-    <%--    for (i = 0; i < z.length; i++) {--%>
-    <%--        if (selectedAreas.indexOf(parseInt(z[i].id)) >= 0) {--%>
-    <%--            ids.push(z[i].id);--%>
-    <%--        }--%>
-    <%--        $('#locations').multiSelect('addOption',{--%>
-    <%--            value: z[i].id,--%>
-    <%--            text: z[i].name,--%>
-    <%--            index: i--%>
-    <%--        });--%>
-    <%--    }--%>
-
-    <%--    $('#locations').val(ids);--%>
-    <%--    <% for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {--%>
-    <%--        if(user.getId() != dto.getId()) {%>--%>
-    <%--            $('#locations option[value=<%=dto.getLocationId()%>]').attr("disabled", 'disabled');--%>
-    <%--        <%}--%>
-    <%--    }%>--%>
-
-    <%--    $('#locations').multiSelect('refresh');--%>
-    <%--    console.log($('#locations').val());--%>
-    <%--}--%>
-    // $("a[href='#top']").click(function() {
-    //     $("html, body").animate({ scrollTop: 0 }, "slow");
-    //     return false;
-    // });
 </script>
 </body>
 </html>
