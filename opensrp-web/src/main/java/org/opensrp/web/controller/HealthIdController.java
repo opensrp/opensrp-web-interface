@@ -121,7 +121,6 @@ public class HealthIdController {
 
 		if (villageIds[0] == 0)  {
 			User user = userService.findByKey(username, "username", User.class);
-//			TeamMember member = teamMemberService.findByForeignKey(user.getId(), "person_id", "TeamMember");
 			List<Integer> locationIds = locationService.getVillageIdByProvider(user.getId(), CHILD_ROLE_ID, LOCATION_TAG_ID);
 			int i = 0;
 			for (Integer locationId : locationIds) {

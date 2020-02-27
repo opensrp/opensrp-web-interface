@@ -2452,6 +2452,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					.addScalar("ncdPackage", StandardBasicTypes.INTEGER)
 					.addScalar("adolescentPackage", StandardBasicTypes.INTEGER)
 					.addScalar("iycfPackage", StandardBasicTypes.INTEGER)
+					.addScalar("womenPackage", StandardBasicTypes.INTEGER)
 					.addScalar("breastFeedIn1Hour", StandardBasicTypes.INTEGER)
 					.addScalar("breastFeedIn24Hour", StandardBasicTypes.INTEGER)
 					.addScalar("complementaryFoodAt7Months", StandardBasicTypes.INTEGER)

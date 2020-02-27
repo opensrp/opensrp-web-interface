@@ -14,6 +14,8 @@ public class ChildNutritionReportDTO {
 
     private Integer iycfPackage;
 
+    private Integer womenPackage;
+
     private Integer breastFeedIn1Hour;
 
     private Integer breastFeedIn24Hour;
@@ -68,6 +70,14 @@ public class ChildNutritionReportDTO {
 
     public void setIycfPackage(Integer iycfPackage) {
         this.iycfPackage = iycfPackage;
+    }
+
+    public Integer getWomenPackage() {
+        return womenPackage;
+    }
+
+    public void setWomenPackage(Integer womenPackage) {
+        this.womenPackage = womenPackage;
     }
 
     public Integer getBreastFeedIn1Hour() {

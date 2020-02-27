@@ -35,6 +35,7 @@
         <th rowspan="2">No. Of  NCD services by SK</th>
         <th rowspan="2">No. Of  Adolescent services by SK</th>
         <th rowspan="2">No. Of  IYCF services by SK</th>
+        <th rowspan="2">No. Of  Women services by SK</th>
         <th colspan="4">Child Nutrition Information</th>
     </tr>
     <tr> <!--2nd row-->
@@ -53,6 +54,7 @@
         <td><%=report.getNcdPackage()%></td>
         <td><%=report.getAdolescentPackage()%></td>
         <td><%=report.getIycfPackage()%></td>
+        <td><%=report.getWomenPackage()%></td>
         <td><%=report.getBreastFeedIn1Hour()%></td>
         <td><%=report.getBreastFeedIn24Hour()%></td>
         <td><%=report.getComplementaryFoodAt7Months()%></td>
