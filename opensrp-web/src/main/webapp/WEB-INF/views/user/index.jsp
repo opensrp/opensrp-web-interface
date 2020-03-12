@@ -126,6 +126,7 @@
 <script>
 	let userListWithoutCatchmentArea, userList;
 	$(document).ready(function() {
+		clearRegionSelection();
 		$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
 		var heading = "<%=(String) session.getAttribute("heading")%>";
 		var toastMessage = "<%=(String) session.getAttribute("toastMessage")%>";
@@ -237,6 +238,14 @@
 	function drawDataTables() {
 		userList.ajax.reload();
 		userListWithoutCatchmentArea.ajax.reload();
+	}
+	function clearRegionSelection() {
+		$("#division").val("");
+		$("#district").html("<option value='0?'>Select District</option>");
+		$("#upazila").html("<option value='0?'>Select Upazila/City Corporation</option>");
+		$("#pourasabha").html("<option value='0?'>Select Pourasabha</option>");
+		$("#union").html("<option value='0?'>Select Union/Ward</option>");
+		$("#village").html("<option value='0?'>Select Village</option>");
 	}
 </script>
 </body>

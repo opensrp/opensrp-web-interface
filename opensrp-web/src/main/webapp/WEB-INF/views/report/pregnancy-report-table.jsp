@@ -30,7 +30,7 @@
        style="width: 100%;">
     <thead>
     <tr> <!--1st row-->
-        <th colspan="20">Pregnancy Related Information</th>
+        <th colspan="21">Pregnancy Related Information</th>
     </tr>
     <tr> <!--2nd row-->
         <th rowspan="3">Location/SK</th>

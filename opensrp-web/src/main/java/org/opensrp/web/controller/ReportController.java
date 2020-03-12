@@ -14,10 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.opensrp.common.dto.ChildNutritionReportDTO;
-import org.opensrp.common.dto.ElcoReportDTO;
-import org.opensrp.common.dto.PregnancyReportDTO;
-import org.opensrp.common.dto.ReportDTO;
+import org.opensrp.common.dto.*;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.Roles;
@@ -235,6 +232,57 @@ public class ReportController {
 		return "report/client-data-report";
 	}
 
+	@RequestMapping(value = "/aggregatedReport.html", method = RequestMethod.GET)
+	public String getAggregatedReportPage(HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String endDate = formatter.format(new Date());
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		searchUtil.setDivisionAttribute(session);
+		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
+		session.setAttribute("startDate", startDate);
+		session.setAttribute("endDate", endDate);
+		return "report/aggregated-report";
+	}
+
+	@RequestMapping(value = "/aggregated-report", method = RequestMethod.GET)
+	public String generateAggregatedReport(HttpServletRequest request,
+										   HttpSession session,
+										   @RequestParam(value = "address_field", required = false, defaultValue = "division") String addressValue,
+										   @RequestParam(value = "searched_value", required = false) String searchedValue,
+										   @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+										   @RequestParam(value = "startDate", required = false) String startDate,
+										   @RequestParam(value = "endDate", required = false) String endDate) {
+
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<AggregatedReportDTO> aggregatedReports = new ArrayList<>();
+		String skIds = "";
+		String locationValue = request.getParameter("locationValue");
+		if (AuthenticationManagerUtil.isAM() && locationValue.equalsIgnoreCase("catchmentArea")) {
+			String branchId = request.getParameter("branch");
+			if (StringUtils.isBlank(branchId)) {
+				String branches = branchService.commaSeparatedBranch(new ArrayList<>(loggedInUser.getBranches()));
+				skIds = userService.findSKByBranchSeparatedByComma("'{" + branches + "}'");
+			} else {
+				skIds = userService.findSKByBranchSeparatedByComma("'{" + branchId + "}'");
+			}
+			aggregatedReports = reportService.getAggregatedReportBySK(startDate, endDate, skIds);
+		} else {
+			Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
+			String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
+			String parentLocationName = parentLocation.getName().split(":")[0];
+			if (addressValue.equalsIgnoreCase("sk_id")) {
+				skIds = userService.findSKByLocationSeparatedByComma(searchedValueId, Roles.SK.getId());
+				aggregatedReports = reportService.getAggregatedReportBySK(startDate, endDate, skIds);
+			} else {
+				aggregatedReports = reportService.getAggregatedReportByLocation(startDate, endDate, searchedValueId, addressValue, parentLocationTag, parentLocationName);
+			}
+		}
+		session.setAttribute("aggregatedReports", aggregatedReports);
+		return "report/aggregated-report-table";
+	}
+
 	@RequestMapping(value = "/familyPlanningReport.html", method = RequestMethod.GET)
 	public String getFamilyPlanningReportPage(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
@@ -251,12 +299,12 @@ public class ReportController {
 
 	@RequestMapping(value = "/family-planning-report", method = RequestMethod.GET)
 	public String generateFamilyPlanningReport(HttpServletRequest request,
-												   HttpSession session,
-												   @RequestParam(value = "address_field", required = false, defaultValue = "division") String addressValue,
-												   @RequestParam(value = "searched_value", required = false) String searchedValue,
-												   @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
-												   @RequestParam(value = "startDate", required = false) String startDate,
-												   @RequestParam(value = "endDate", required = false) String endDate) {
+											   HttpSession session,
+											   @RequestParam(value = "address_field", required = false, defaultValue = "division") String addressValue,
+											   @RequestParam(value = "searched_value", required = false) String searchedValue,
+											   @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+											   @RequestParam(value = "startDate", required = false) String startDate,
+											   @RequestParam(value = "endDate", required = false) String endDate) {
 
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<ElcoReportDTO> elcoReports = new ArrayList<>();
@@ -386,56 +434,56 @@ public class ReportController {
 		return "report/child-nutrition-report-table";
 	}
 
-	@RequestMapping(value = "/aggregated", method = RequestMethod.GET)
-	public String generateAggregatedReportOnSearch(HttpServletRequest request,
-												   HttpSession session,
-												   @RequestParam(value = "address_field", required = false) String address_value,
-												   @RequestParam(value = "searched_value", required = false) String searched_value,
-												   @RequestParam(value = "searched_value_id", required = false) Integer searchedValueId,
-												   @RequestParam(value = "startDate", required = false) String startDate,
-												   @RequestParam(value = "endDate", required = false) String endDate)
-			throws ParseException {
-		if (searchedValueId == null) searchedValueId = 9265; //primary id of bangladesh
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
-		String locationType = request.getParameterMap().containsKey("locationValue")?request.getParameter("locationValue") : "";
-		User user = userService.getLoggedInUser();
-		List<Object[]> allSKs = new ArrayList<>();
-		if (AuthenticationManagerUtil.isAM()) {
-			List<Object[]> branches = new ArrayList<>();
-			if(!branchId.isEmpty() ){
-				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
-				Object[] obj = new Object[10];
-				obj[0] = branch.getId();
-				obj[1] = branch.getName();
-				branches.add(obj);
-			}else {
-				for (Branch branch: user.getBranches()) {
-					Object[] obj = new Object[10];
-					obj[0] = branch.getId();
-					obj[1] = branch.getName();
-					branches.add(obj);
-				}
-			}
-			allSKs = databaseServiceImpl.getAllSks(branches);
-		} else if (AuthenticationManagerUtil.isAdmin()){
-			allSKs = new ArrayList<Object[]>();
-		}
-
-		if (locationType.equalsIgnoreCase("catchmentArea")) {
-			address_value = "sk_id";
-			searched_value = "empty";
-		}
-		else{
-			if (searched_value == null || searched_value.equals("")) searched_value = "empty";
-			if (address_value == null || address_value.equals("")) address_value = "division";
-		}
-		endDate = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
-		System.err.println("address value: "+address_value + " searched value: " + searched_value + " searched value id: " + searchedValueId);
-		List<Object[]> aggregatedReport = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value, allSKs, searchedValueId);
-		session.setAttribute("aggregatedReport", aggregatedReport);
-		return "/report/aggregated-report";
-	}
+//	@RequestMapping(value = "/aggregated", method = RequestMethod.GET)
+//	public String generateAggregatedReportOnSearch(HttpServletRequest request,
+//												   HttpSession session,
+//												   @RequestParam(value = "address_field", required = false) String address_value,
+//												   @RequestParam(value = "searched_value", required = false) String searched_value,
+//												   @RequestParam(value = "searched_value_id", required = false) Integer searchedValueId,
+//												   @RequestParam(value = "startDate", required = false) String startDate,
+//												   @RequestParam(value = "endDate", required = false) String endDate)
+//			throws ParseException {
+//		if (searchedValueId == null) searchedValueId = 9265; //primary id of bangladesh
+//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+//		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
+//		String locationType = request.getParameterMap().containsKey("locationValue")?request.getParameter("locationValue") : "";
+//		User user = userService.getLoggedInUser();
+//		List<Object[]> allSKs = new ArrayList<>();
+//		if (AuthenticationManagerUtil.isAM()) {
+//			List<Object[]> branches = new ArrayList<>();
+//			if(!branchId.isEmpty() ){
+//				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
+//				Object[] obj = new Object[10];
+//				obj[0] = branch.getId();
+//				obj[1] = branch.getName();
+//				branches.add(obj);
+//			}else {
+//				for (Branch branch: user.getBranches()) {
+//					Object[] obj = new Object[10];
+//					obj[0] = branch.getId();
+//					obj[1] = branch.getName();
+//					branches.add(obj);
+//				}
+//			}
+//			allSKs = databaseServiceImpl.getAllSks(branches);
+//		} else if (AuthenticationManagerUtil.isAdmin()){
+//			allSKs = new ArrayList<Object[]>();
+//		}
+//
+//		if (locationType.equalsIgnoreCase("catchmentArea")) {
+//			address_value = "sk_id";
+//			searched_value = "empty";
+//		}
+//		else{
+//			if (searched_value == null || searched_value.equals("")) searched_value = "empty";
+//			if (address_value == null || address_value.equals("")) address_value = "division";
+//		}
+////		endDate = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
+//		System.err.println("address value: "+address_value + " searched value: " + searched_value + " searched value id: " + searchedValueId);
+//		List<Object[]> aggregatedReport = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value, allSKs, searchedValueId);
+//		session.setAttribute("aggregatedReport", aggregatedReport);
+//		return "/report/aggregated-report";
+//	}
 
 	@RequestMapping(value = "/clientDataReportTable", method = RequestMethod.GET)
 	public String getClientDataReportTable(HttpServletRequest request,

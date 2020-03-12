@@ -35,58 +35,19 @@ jQuery(document).ready(function($) {
 	}
 	
 	$("#division").change(function(event) {
-		let division = $("#division").val();
-		if (division != '' && division != null && division != -1 && division != undefined && division != "0?") {
-			getLocationHierarchy("/opensrp-dashboard/location?id="+$("#division").val().split("?")[0]+"&title=","district") ;
-		} else {
-			$("#district").html("");
-			$("#district").append("<option value='0?'>Select District</option>");
-		}
-		division = $("#division").val().split("?")[1];
-		let divisionId = $("#division").val().split("?")[0];
-		$("#address_field").val(division == undefined?"division":"district");
-		$("#searched_value").val(division == undefined?"empty":"division = " + "'"+ division +"'");
-		$("#searched_value_id").val(division == undefined?9265:divisionId);
-
-		$("#upazila").html("<option value='0?'>Select Upazila/City Corporation</option>");
-		$("#pourasabha").html("<option value='0?'>Select Pourasabha</option>");
-		$("#union").html("<option value='0?'>Select Union/Ward</option>");
-		$("#village").html("<option value='0?'>Select Village</option>");
+		__onDivisionSelection();
 	});
-
 	$("#district").change(function(event) {
-		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#district").val().split("?")[0]+"&title=","upazila") ;
-		let district = $("#district").val().split("?")[1];
-		let districtId = $("#district").val().split("?")[0];
-		$("#address_field").val(district == ''?"district":"upazila");
-		$("#searched_value").val(district == ''?"empty":"district = " + "'"+ district +"'");
-		$("#searched_value_id").val(district == ''?0:districtId);
-
-		$("#pourasabha").html("<option value='0?'>Select Pourasabha</option>");
-		$("#union").html("<option value='0?'>Select Union/Ward</option>");
-		$("#village").html("<option value='0?'>Select Village</option>");
+		__onDistrictSelection();
 	});
 	$("#upazila").change(function(event) {
-		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#upazila").val().split("?")[0]+"&title=","pourasabha") ;
-		let upazila = $("#upazila").val().split("?")[1];
-		let upazilaId = $("#upazila").val().split("?")[0];
-		$("#address_field").val(upazila == ''?"upazila":"sk_id");
-		$("#searched_value").val(upazila == ''?"empty":"upazila = " + "'"+ upazila +"'");
-		$("#searched_value_id").val(upazila == ''?0:upazilaId);
-
-		$("#union").html("<option value='0?'>Select Union/Ward</option>");
-		$("#village").html("<option value='0?'>Select Village</option>");
+		__onUpazilaSelection();
 	});
 	$("#pourasabha").change(function(event) {
-		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#pourasabha").val().split("?")[0]+"&title=","union") ;
-		$("#address_field").val("sk_id");
-		let concatingString = "pourasabha = " + "'"+$("#pourasabha").val().split("?")[1]+"'";
-		$("#searched_value").val(concatingString);
-
-		$("#village").html("<option value='0?'>Select Village</option>");
+		__onPourasabhaSelection();
 	});
 	$("#union").change(function(event) {
-		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#union").val().split("?")[0]+"&title=","village") ;
+		__onUnionSelection();
 	});
 	
 	$("#locationoptions").change(function(event) {
@@ -141,4 +102,62 @@ jQuery(document).ready(function($) {
 			});
 		}
 	});
+
+	function __onDivisionSelection () {
+		let division = $("#division").val();
+		if (division != '' && division != null && division != -1 && division != undefined && division != "0?") {
+			getLocationHierarchy("/opensrp-dashboard/location?id="+$("#division").val().split("?")[0]+"&title=","district") ;
+		} else {
+			$("#district").html("");
+			$("#district").append("<option value='0?'>Select District</option>");
+		}
+		division = $("#division").val().split("?")[1];
+		let divisionId = $("#division").val().split("?")[0];
+		$("#address_field").val(division == undefined?"division":"district");
+		$("#searched_value").val(division == undefined?"empty":"division = " + "'"+ division +"'");
+		$("#searched_value_id").val(division == undefined?9265:divisionId);
+
+		$("#upazila").html("<option value='0?'>Select Upazila/City Corporation</option>");
+		$("#pourasabha").html("<option value='0?'>Select Pourasabha</option>");
+		$("#union").html("<option value='0?'>Select Union/Ward</option>");
+		$("#village").html("<option value='0?'>Select Village</option>");
+	}
+
+	function __onDistrictSelection() {
+		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#district").val().split("?")[0]+"&title=","upazila") ;
+		let district = $("#district").val().split("?")[1];
+		let districtId = $("#district").val().split("?")[0];
+		$("#address_field").val(district == ''?"district":"upazila");
+		$("#searched_value").val(district == ''?"empty":"district = " + "'"+ district +"'");
+		$("#searched_value_id").val(district == ''?0:districtId);
+
+		$("#pourasabha").html("<option value='0?'>Select Pourasabha</option>");
+		$("#union").html("<option value='0?'>Select Union/Ward</option>");
+		$("#village").html("<option value='0?'>Select Village</option>");
+	}
+
+	function __onUpazilaSelection() {
+		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#upazila").val().split("?")[0]+"&title=","pourasabha") ;
+		let upazila = $("#upazila").val().split("?")[1];
+		let upazilaId = $("#upazila").val().split("?")[0];
+		$("#address_field").val(upazila == ''?"upazila":"sk_id");
+		$("#searched_value").val(upazila == ''?"empty":"upazila = " + "'"+ upazila +"'");
+		$("#searched_value_id").val(upazila == ''?0:upazilaId);
+
+		$("#union").html("<option value='0?'>Select Union/Ward</option>");
+		$("#village").html("<option value='0?'>Select Village</option>");
+	}
+
+	function __onPourasabhaSelection() {
+		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#pourasabha").val().split("?")[0]+"&title=","union") ;
+		$("#address_field").val("sk_id");
+		let concatenatingString = "pourasabha = " + "'"+$("#pourasabha").val().split("?")[1]+"'";
+		$("#searched_value").val(concatenatingString);
+
+		$("#village").html("<option value='0?'>Select Village</option>");
+	}
+
+	function __onUnionSelection() {
+		getLocationHierarchy("/opensrp-dashboard/location?id="+$("#union").val().split("?")[0]+"&title=","village") ;
+	}
 });

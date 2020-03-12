@@ -2402,6 +2402,50 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
+	public <T> List<T> getAggregatedReport(String startDate, String endDate, String sql) {
+		Session session = sessionFactory.openSession();
+		List<T> report = new ArrayList<T>();
+		try {
+			Query query = session.createSQLQuery(sql)
+					.addScalar("locationOrProvider", StandardBasicTypes.STRING)
+					.addScalar("householdCount", StandardBasicTypes.INTEGER)
+					.addScalar("bracVo", StandardBasicTypes.INTEGER)
+					.addScalar("nvo", StandardBasicTypes.INTEGER)
+					.addScalar("householdTotal", StandardBasicTypes.INTEGER)
+					.addScalar("latrineCount", StandardBasicTypes.INTEGER)
+					.addScalar("populationCount", StandardBasicTypes.INTEGER)
+					.addScalar("from0To6", StandardBasicTypes.INTEGER)
+					.addScalar("from6to11", StandardBasicTypes.INTEGER)
+					.addScalar("from12To17", StandardBasicTypes.INTEGER)
+					.addScalar("from18To23", StandardBasicTypes.INTEGER)
+					.addScalar("from24To35", StandardBasicTypes.INTEGER)
+					.addScalar("from36To59", StandardBasicTypes.INTEGER)
+					.addScalar("from0To59", StandardBasicTypes.INTEGER)
+					.addScalar("from60To119", StandardBasicTypes.INTEGER)
+					.addScalar("from120To227Male", StandardBasicTypes.INTEGER)
+					.addScalar("from120To227Female", StandardBasicTypes.INTEGER)
+					.addScalar("from120To227Total", StandardBasicTypes.INTEGER)
+					.addScalar("from240To419Male", StandardBasicTypes.INTEGER)
+					.addScalar("from240To419Female", StandardBasicTypes.INTEGER)
+					.addScalar("from240To419Total", StandardBasicTypes.INTEGER)
+					.addScalar("from420AndPlusMale", StandardBasicTypes.INTEGER)
+					.addScalar("from420AndPlusFemale", StandardBasicTypes.INTEGER)
+					.addScalar("from420AndPlusTotal", StandardBasicTypes.INTEGER)
+					.addScalar("fingerPrintTaken", StandardBasicTypes.INTEGER)
+					.addScalar("reproductiveAgeGroup", StandardBasicTypes.INTEGER)
+					.setString("startDate", startDate)
+					.setString("endDate", endDate)
+					.setResultTransformer(new AliasToBeanResultTransformer(AggregatedReportDTO.class));
+			report = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return report;
+	}
+
+	@Override
 	public <T> List<T> getPregnancyReport(String startDate, String endDate, String sql) {
 		Session session = sessionFactory.openSession();
 		List<T> report = new ArrayList<T>();
