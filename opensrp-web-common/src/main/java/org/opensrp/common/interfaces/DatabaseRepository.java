@@ -183,7 +183,7 @@ public interface DatabaseRepository {
 
 	public Integer getClientInfoFilterCount(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs);
 
-	List<Object[]> getExportByCreator(String username);
+	List<Object[]> getExportByCreator(String username, String formName);
 
 	public List<Object[]> getUserListByFilterString(int locationId, int locationTagId, int roleId, int branchId, String name, int limit, int offset, String orderColumn, String orderDirection);
 
@@ -214,6 +214,8 @@ public interface DatabaseRepository {
 	public <T> List<T> getLocations(String name, Integer length, Integer start, String orderColumn, String orderDirection);
 
 	public <T> T getLocationCount(String name);
+
+	public <T> List<T> getCOVID19Report(String startDate, String endDate, String query, Integer offset, Integer limit);
 
 	public <T> List<T> getElcoReport(String startDate, String endDate, String query);
 

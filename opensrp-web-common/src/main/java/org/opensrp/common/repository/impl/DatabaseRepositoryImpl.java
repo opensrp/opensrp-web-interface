@@ -1385,7 +1385,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		List<Object[]> allSK = null;
 		String additionalQuery = "";
-		if (branches != null) {
+		if (branches != null && branches.size() > 0) {
 			additionalQuery = " and ub.branch_id in (";
 			int size = branches.size();
 			for (int i = 0; i < size; i++) {
@@ -1876,12 +1876,14 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
-	public List<Object[]> getExportByCreator(String username) {
+	public List<Object[]> getExportByCreator(String username, String formName) {
 		Session session = sessionFactory.openSession();
 		List<Object[]> exportData = new ArrayList<Object[]>();
 		try	{
-			exportData = session.createSQLQuery("select file_name, status from export where creator = :username order by id desc limit 1")
-					.setParameter("username", username).list();
+			exportData = session.createSQLQuery("select file_name, status from export where creator = :username and form_name = :formName order by id desc limit 1")
+					.setParameter("username", username)
+					.setString("formName", formName)
+					.list();
 
 
 		}  catch (Exception e) {
@@ -2328,6 +2330,37 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			session.close();
 		}
 		return locationSize.get(0);
+	}
+
+	@Override
+	public <T> List<T> getCOVID19Report(String startDate, String endDate, String sql, Integer offset, Integer limit) {
+		Session session = sessionFactory.openSession();
+		List<T> report = new ArrayList<T>();
+		try {
+			Query query = session.createSQLQuery(sql)
+					.addScalar("skId", StandardBasicTypes.STRING)
+					.addScalar("ssName", StandardBasicTypes.STRING)
+					.addScalar("visitNumberToday", StandardBasicTypes.INTEGER)
+					.addScalar("numberOfSymptomsFound", StandardBasicTypes.INTEGER)
+					.addScalar("numberOfContactPersonFromAbroad", StandardBasicTypes.INTEGER)
+					.addScalar("numberOfPersonContactedWithSymptoms", StandardBasicTypes.INTEGER)
+					.addScalar("firstName", StandardBasicTypes.STRING)
+					.addScalar("contactPhone", StandardBasicTypes.STRING)
+					.addScalar("genderCode", StandardBasicTypes.STRING)
+					.addScalar("symptomsFound", StandardBasicTypes.STRING)
+					.addScalar("submittedDate", StandardBasicTypes.DATE)
+					.setString("startDate", startDate)
+					.setString("endDate", endDate)
+					.setInteger("offset", offset)
+					.setInteger("limit", limit)
+					.setResultTransformer(new AliasToBeanResultTransformer(COVID19ReportDTO.class));
+			report = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return report;
 	}
 
 	@Override

@@ -12,7 +12,8 @@
            uri="http://www.springframework.org/security/tags"%>
 
 <%@ page import = "java.util.ResourceBundle" %>
-<% ResourceBundle resource = ResourceBundle.getBundle("project");
+<%
+    ResourceBundle resource = ResourceBundle.getBundle("project");
     String downloadUrl = resource.getString("download.url");
 %>
 
@@ -25,10 +26,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh"
-          content="<%=session.getMaxInactiveInterval()%>;url=/login" />
-
-    <title>Form Wise Client Data Report</title>
+    <meta http-equiv="refresh" content="<%=session.getMaxInactiveInterval()%>;url=/login" />
+    <title><spring:message code="lbl.covid19"/></title>
     <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
     <style>
         #errorMsg{
@@ -60,9 +59,10 @@
                 <i class="fa fa-table"></i> ${title.toString()} <spring:message code="lbl.searchArea"/>
             </div>
             <div class="card-body">
-                <div class="row">
 
+                <div class="row">
                 </div>
+
                 <div id="search_form">
                     <div class="form-group">
                         <form autocomplete="off">
@@ -70,17 +70,17 @@
                                 <div class="col-2">
                                     <label><spring:message code="lbl.startDate"/></label>
                                     <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                           name="start" id="start">
+                                           name="start" id="start" value="${startDate}">
                                     <label style="display: none;" class="text-danger" id="startDateValidation"><small>Input is not valid for date</small></label>
                                 </div>
                                 <div class="col-2">
                                     <label><spring:message code="lbl.endDate"/></label>
                                     <input class="form-control custom-select custom-select-lg mb-3" type=text
-                                           name="end" id="end">
+                                           name="end" id="end" value="${endDate}">
                                     <label style="display: none;" class="text-danger" id="endDateValidation"><small>Input is not valid for date</small></label>
                                 </div>
                                 <% if (AuthenticationManagerUtil.isAM()) {%>
-                                <div class="col-2">
+                                <div class="col-2" style="display: none;">
                                     <label><spring:message code="lbl.branches"/></label>
                                     <select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="branch" name="branch" onchange="branchChange()">
                                         <option value="0">Select Branch</option>
@@ -93,7 +93,7 @@
                                     </select>
                                 </div>
                                 <%}%>
-                                <div class="col-2">
+                                <div class="col-2" style="display: none;">
                                     <label><spring:message code="lbl.sk"/></label>
                                     <select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="skList" name="sk">
                                         <option value="">Select SK</option>
@@ -105,33 +105,29 @@
                                         <% } %>
                                     </select>
                                 </div>
-                                <div class="col-2">
-                                    <label><spring:message code="lbl.formName"/></label>
-                                    <select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="formName" name="formName">
-                                        <option value="">Select Form Name</option>
-                                        <c:forEach var="map" items="${formNameList}">
-                                            <option value="${map.key}"><c:out value="${map.value}"/></option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
                             </div>
                         </form>
+
                         <div class="row" id="msg">
                             <div class="col-6" id="errorMsg"> </div>
                         </div>
+
                         <div class="row">
 
                             <div class="col-1">
-                                <button name="search" id="bth-search" onclick="getClientDataReportTable()"
+                                <button name="search" id="bth-search" onclick="getCOVID19ReportTable()"
                                         class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
                             </div>
+
                             <div class="col-1">
-                                <button name="export" id="bth-export" onclick="generateExportData()"
+                                <button name="export" id="bth-export" onclick="generateCOVID19ExportData()"
                                         class="btn btn-primary" value="export"><spring:message code="lbl.export"/></button>
                             </div>
+
                             <div class="col-6" id="downloadingFile" style="margin-top: 5px; display: none;">
                                 <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Downloading..
                             </div>
+
                             <div class="col-6" id="downloadFailedMsg" style="display: none;">
                                 Failed to export data.
                             </div>
@@ -139,10 +135,24 @@
                     </div>
                 </div>
             </div>
-            <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
-                <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+        </div>
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fa fa-table"></i>
+                <spring:message code="lbl.covid19"/>
             </div>
-            <div id="client-data-report-table"></div>
+            <div class="card-body">
+                <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
+                    <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
+                        <div id="covid-19-report-table"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer small text-muted"></div>
         </div>
     </div>
     <jsp:include page="/WEB-INF/views/footer.jsp" />
@@ -157,12 +167,9 @@
     $(document).ready(function() {
         $('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
         $("#msg").hide();
-        console.log("Form Name: "+ $('#formName').val());
-        console.log("SK Name: "+ $('#skList').val());
-        console.log("Branch Name: "+ $('#branch').val());
+        getCOVID19ReportTable();
     });
     function branchChange() {
-        console.log("in branch change");
         let url = "/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
         $("#skList").html("");
         $.ajax({
@@ -188,7 +195,65 @@
         });
     }
 
-    function getClientDataReportTable(pageNo = 0) {
+    function getCOVID19ReportTable() {
+        let flagS = true;
+        let flagE = true;
+        if (!checkDate($('#start').val())) {
+            $('#startDateValidation').show();
+            flagS = false;
+        } else {
+            $('#startDateValidation').hide();
+            flagS = true;
+        }
+        if (!checkDate($('#end').val())) {
+            $('#endDateValidation').show();
+            flagE = false;
+        } else {
+            $('#endDateValidation').hide();
+            flagE = true;
+        }
+        if (!flagE || !flagS) return false;
+
+        if(!getValidationMsg())return false;
+
+        let url = "/opensrp-dashboard/report/covid-19-report";
+        $.ajax({
+            type : "GET",
+            contentType : "application/json",
+            url : url,
+            dataType : 'html',
+            timeout : 100000,
+            data: {
+                startDate: $("#start").val(),
+                endDate: $("#end").val(),
+                branch: $("#branch").val(),
+                sk: $("#skList").val()
+            },
+            beforeSend: function() {
+                $('#loading').show();
+            },
+            success : function(data) {
+                $('#loading').hide();
+                $("#covid-19-report-table").html(data);
+            },
+            error : function(e) {
+                $('#loading').hide();
+                console.log("ERROR: ", e);
+                display(e);
+            },
+            complete : function(e) {
+                $('#loading').hide();
+                console.log("DONE");
+                //enableSearchButton(true);
+            }
+        });
+    }
+
+    function goTo(pageNo){
+        getCOVID19ReportTable(pageNo);
+    }
+
+    function generateCOVID19ExportData() {
 
         let flagS = true;
         let flagE = true;
@@ -210,71 +275,10 @@
 
         if(!getValidationMsg())return false;
 
-        var url = "/opensrp-dashboard/report/clientDataReportTable";
-        $.ajax({
-            type : "GET",
-            contentType : "application/json",
-            url : url,
-            dataType : 'html',
-            timeout : 100000,
-            data: {
-                startDate: $("#start").val(),
-                endDate: $("#end").val(),
-                formName: $("#formName").val(),
-                branch: $("#branch").val(),
-                sk: $("#skList").val(),
-                pageNo: pageNo
-            },
-            beforeSend: function() {
-                $('#loading').show();
-            },
-            success : function(data) {
-                $('#loading').hide();
-                $("#client-data-report-table").html(data);
-                $('#pagination-'+pageNo).addClass("active");
-                if (pageNo != 0) $('#pagination-'+0).removeClass("active");
-            },
-            error : function(e) {
-                $('#loading').hide();
-                console.log("ERROR: ", e);
-                display(e);
-            },
-            done : function(e) {
-                $('#loading').hide();
-                console.log("DONE");
-                //enableSearchButton(true);
-            }
-        });
-    }
-
-    function goTo(pageNo){
-        getClientDataReportTable(pageNo);
-    }
-
-    function generateExportData() {
-
-        var flagS = true;
-        var flagE = true;
-        if (!checkDate($('#start').val())) {
-            $('#startDateValidation').show();
-            flagS = false;
-        } else {
-            $('#startDateValidation').hide();
-            flagS = true;
-        }
-        if (!checkDate($('#end').val())) {
-            $('#endDateValidation').show();
-            flagE = false;
-        } else {
-            $('#endDateValidation').hide();
-            flagE = true;
-        }
-        if (!flagE || !flagS) return false;
-
-        if(!getValidationMsg())return false;
-
         var url = "/opensrp-dashboard/rest/api/v1/export/data";
         $("#msg").hide();
+        console.log("BRANCH: "+$("#branch").val());
+        console.log("SK: "+ $("#skList").val());
         $.ajax({
             type : "GET",
             contentType : "application/json",
@@ -284,7 +288,7 @@
             data: {
                 startDate: $("#start").val(),
                 endDate: $("#end").val(),
-                formName: $("#formName").val(),
+                formName: 'covid19',
                 branch: $("#branch").val(),
                 sk: $("#skList").val()
             },
@@ -293,21 +297,20 @@
                 $("#downloadFailedMsg").hide();
                 $("#downloadingFile").show();
                 $('#bth-export').attr("disabled", true);
-                downloadInterval = setInterval(getExportTable, 3000);
+                downloadInterval = setInterval(getCOVID19ExportTable, 3000);
             },
             error : function(e) {
                 console.log("ERROR: ", e);
                 display(e);
             },
-            done : function(e) {
-
+            complete : function(e) {
                 console.log("DONE");
                 //enableSearchButton(true);
             }
         });
     }
 
-    function getExportTable(){
+    function getCOVID19ExportTable(){
 
         var url = "/opensrp-dashboard/rest/api/v1/export/download-data";
         $.ajax({
@@ -317,7 +320,7 @@
             dataType : 'html',
             timeout : 100000,
             data: {
-                formName: $("#formName").val(),
+                formName: 'covid19'
             },
             beforeSend: function() {},
             success : function(data) {
@@ -347,9 +350,7 @@
     }
 
     function downloadFile(url) {
-
-        console.log("File to download ", url);
-        var a = document.createElement('a');
+        let a = document.createElement('a');
         a.href = url;
         a.download = url.split('/').pop();
         document.body.appendChild(a);
@@ -362,15 +363,6 @@
             $("#msg").show();
             $("#errorMsg").html("Date can not be empty");
             return false;
-        }
-
-        if($("#formName").val() == "" || $("#formName").val() == null) {
-            $("#msg").show();
-            $("#errorMsg").html("Form Name can not be empty");
-            return false;
-        } else {
-            $("#msg").hide();
-            $("#errorMsg").html("");
         }
         return true;
     }

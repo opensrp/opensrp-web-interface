@@ -125,8 +125,8 @@ public class DatabaseServiceImpl implements DatabaseService {
 	}
 
 	@Override
-	public List<Object[]> getByCreator(String username) {
-		return databaseRepositoryImpl.getExportByCreator(username);
+	public List<Object[]> getByCreator(String username, String formName) {
+		return databaseRepositoryImpl.getExportByCreator(username, formName);
 	}
 
 

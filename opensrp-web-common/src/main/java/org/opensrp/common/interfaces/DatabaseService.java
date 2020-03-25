@@ -51,6 +51,6 @@ public interface DatabaseService {
 
 	public Integer getClientInfoFilterCount(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs);
 
-	List<Object[]> getByCreator(String username);
+	List<Object[]> getByCreator(String username, String formName);
 
 }

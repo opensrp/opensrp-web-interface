@@ -434,56 +434,40 @@ public class ReportController {
 		return "report/child-nutrition-report-table";
 	}
 
-//	@RequestMapping(value = "/aggregated", method = RequestMethod.GET)
-//	public String generateAggregatedReportOnSearch(HttpServletRequest request,
-//												   HttpSession session,
-//												   @RequestParam(value = "address_field", required = false) String address_value,
-//												   @RequestParam(value = "searched_value", required = false) String searched_value,
-//												   @RequestParam(value = "searched_value_id", required = false) Integer searchedValueId,
-//												   @RequestParam(value = "startDate", required = false) String startDate,
-//												   @RequestParam(value = "endDate", required = false) String endDate)
-//			throws ParseException {
-//		if (searchedValueId == null) searchedValueId = 9265; //primary id of bangladesh
-//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-//		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
-//		String locationType = request.getParameterMap().containsKey("locationValue")?request.getParameter("locationValue") : "";
-//		User user = userService.getLoggedInUser();
-//		List<Object[]> allSKs = new ArrayList<>();
-//		if (AuthenticationManagerUtil.isAM()) {
-//			List<Object[]> branches = new ArrayList<>();
-//			if(!branchId.isEmpty() ){
-//				Branch branch = branchService.findById(Integer.parseInt(branchId), "id", Branch.class);
-//				Object[] obj = new Object[10];
-//				obj[0] = branch.getId();
-//				obj[1] = branch.getName();
-//				branches.add(obj);
-//			}else {
-//				for (Branch branch: user.getBranches()) {
-//					Object[] obj = new Object[10];
-//					obj[0] = branch.getId();
-//					obj[1] = branch.getName();
-//					branches.add(obj);
-//				}
-//			}
-//			allSKs = databaseServiceImpl.getAllSks(branches);
-//		} else if (AuthenticationManagerUtil.isAdmin()){
-//			allSKs = new ArrayList<Object[]>();
-//		}
-//
-//		if (locationType.equalsIgnoreCase("catchmentArea")) {
-//			address_value = "sk_id";
-//			searched_value = "empty";
-//		}
-//		else{
-//			if (searched_value == null || searched_value.equals("")) searched_value = "empty";
-//			if (address_value == null || address_value.equals("")) address_value = "division";
-//		}
-////		endDate = formatter.format(DateUtils.addDays(formatter.parse(endDate), 1));
-//		System.err.println("address value: "+address_value + " searched value: " + searched_value + " searched value id: " + searchedValueId);
-//		List<Object[]> aggregatedReport = databaseServiceImpl.getHouseHoldReports(startDate, endDate, address_value, searched_value, allSKs, searchedValueId);
-//		session.setAttribute("aggregatedReport", aggregatedReport);
-//		return "/report/aggregated-report";
-//	}
+	@RequestMapping(value = "/covid-19.html", method = RequestMethod.GET)
+	public String getCOVID19ReportPage(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String endDate = formatter.format(new Date());
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		List<Object[]> skList = new ArrayList<>();
+		if (AuthenticationManagerUtil.isAM()) {
+			List<Object[]> branches = branchService.getBranchByUser(branchId, user);
+			skList = databaseServiceImpl.getAllSks(branches);
+		}
+		else {
+			skList = databaseServiceImpl.getAllSks(new ArrayList<Object[]>());
+		}
+		searchUtil.setDivisionAttribute(session);
+		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
+		session.setAttribute("skList", skList);
+		model.addAttribute("startDate", startDate);
+		model.addAttribute("endDate", endDate);
+		return "report/covid-19-report";
+	}
+
+	@RequestMapping(value = "/covid-19-report", method = RequestMethod.GET)
+	public String generateCOVID19Report(HttpServletRequest request,
+										   HttpSession session,
+										   @RequestParam(value = "startDate", required = false) String startDate,
+										   @RequestParam(value = "endDate", required = false) String endDate) {
+		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
+		List<COVID19ReportDTO> covid19Reports = reportService.getCOVID19Report(startDate, endDate, 0, 10);
+		session.setAttribute("covid19Reports", covid19Reports);
+		return "report/covid-19-report-table";
+	}
 
 	@RequestMapping(value = "/clientDataReportTable", method = RequestMethod.GET)
 	public String getClientDataReportTable(HttpServletRequest request,

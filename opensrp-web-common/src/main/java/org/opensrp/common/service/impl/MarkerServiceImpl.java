@@ -144,6 +144,11 @@ public class MarkerServiceImpl implements DatabaseService {
 		return null;
 	}
 
+	@Override
+	public List<Object[]> getByCreator(String username, String formName) {
+		return null;
+	}
+
 	@Transactional
 	public Marker findByName(String name) {
 		// TODO Auto-generated method stub

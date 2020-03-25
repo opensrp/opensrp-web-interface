@@ -287,6 +287,9 @@
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="<c:url value="/report/miscellaneousReport.html?lang=${locale}"/>">
 						<strong><spring:message code="lbl.childNutritionReport"/></strong></a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="<c:url value="/report/covid-19.html?lang=${locale}"/>">
+						<strong><spring:message code="lbl.covid19"/></strong></a>
 					<% } %>
 				</div>
 			</li>

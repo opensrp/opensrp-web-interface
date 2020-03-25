@@ -1,10 +1,7 @@
 package org.opensrp.core.service;
 
 import org.apache.log4j.Logger;
-import org.opensrp.common.dto.AggregatedReportDTO;
-import org.opensrp.common.dto.ChildNutritionReportDTO;
-import org.opensrp.common.dto.ElcoReportDTO;
-import org.opensrp.common.dto.PregnancyReportDTO;
+import org.opensrp.common.dto.*;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +22,11 @@ public class ReportService {
     public List<AggregatedReportDTO> getAggregatedReportByLocation(String startDate, String endDate, Integer parentLocationId, String locationTag, String parentLocationTag, String parentLocationName) {
         String sql = "select  * from report.get_aggregated_report_by_location(:startDate, :endDate, "+parentLocationId+", '"+locationTag+"', '"+parentLocationTag+"', '"+parentLocationName+"');";
         return repository.getAggregatedReport(startDate, endDate, sql);
+    }
+
+    public List<COVID19ReportDTO> getCOVID19Report(String startDate, String endDate, Integer offset, Integer limit) {
+        String sql = "select * from report.get_covid_19_report(:startDate, :endDate, :offset, :limit);";
+        return repository.getCOVID19Report(startDate, endDate, sql, offset, limit);
     }
 
     public List<ElcoReportDTO> getElcoReportBySK(String startDate, String endDate, String skIds) {

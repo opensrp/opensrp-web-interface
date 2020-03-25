@@ -13,6 +13,7 @@ import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.core.entity.Branch;
+import org.opensrp.core.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -108,5 +109,24 @@ public class BranchService {
 			if (size != iterate) branchIds += ", ";
 		}
 		return branchIds;
+	}
+
+	public List<Object[]> getBranchByUser(String branchId, User user) {
+		List<Object[]> branches = new ArrayList<>();
+		if(!branchId.isEmpty() ){
+			Branch branch = findById(Integer.parseInt(branchId), "id", Branch.class);
+			Object[] obj = new Object[10];
+			obj[0] = branch.getId();
+			obj[1] = branch.getName();
+			branches.add(obj);
+		}else {
+			for (Branch branch: user.getBranches()) {
+				Object[] obj = new Object[10];
+				obj[0] = branch.getId();
+				obj[1] = branch.getName();
+				branches.add(obj);
+			}
+		}
+		return branches;
 	}
 }

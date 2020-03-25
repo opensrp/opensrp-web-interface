@@ -140,7 +140,7 @@
             }
         }
 
-        $("#family-planning-report").html("");
+        $("#pregnancy-report").html("");
 
         let searchedValueId = $('#searched_value_id').val();
 

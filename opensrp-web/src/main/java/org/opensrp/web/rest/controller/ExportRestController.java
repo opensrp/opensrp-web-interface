@@ -1,5 +1,6 @@
 package org.opensrp.web.rest.controller;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.core.entity.Role;
@@ -56,13 +57,11 @@ public class ExportRestController {
         String userType = roleName.get(0);
         String sk = request.getParameter("sk");
         String params = "branch="+branch+"&form_name="+formName+"&start="+startDate+"&end="+endDate+"&sk="+sk+"&user="+userName+"&user_type="+userType;
-
-        if(params.equals(session.getAttribute("params"))) return new ResponseEntity<String>("", HttpStatus.OK);
-
+        if(!formName.equalsIgnoreCase("covid19") & params.equals(session.getAttribute("params"))) return new ResponseEntity<String>("", HttpStatus.OK);
         StringBuffer content = new StringBuffer();
         try {
-            URL url = new URL(
-                    "http://localhost:9070/data-export?"+params);
+            URL url = new URL("http://localhost:9070/data-export?"+params);
+            if (formName.equalsIgnoreCase("covid19")) url = new URL("http://localhost:9070/data-export/covid-19?"+params);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
@@ -91,7 +90,7 @@ public class ExportRestController {
     }
 
     @RequestMapping(value = "/download-data", method = RequestMethod.GET)
-    public List<Object[]>  getExportTable(HttpSession session) {
+    public List<Object[]>  getExportTable(HttpSession session, @RequestParam(value = "formName", required = true) String formName) {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -100,6 +99,6 @@ public class ExportRestController {
         for (Role role : roles) {
             roleName.add(role.getName());
         }
-        return  databaseServiceImpl.getByCreator(user.getUsername());
+        return  databaseServiceImpl.getByCreator(user.getUsername(), formName);
     }
 }
