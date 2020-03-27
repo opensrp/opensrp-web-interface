@@ -2364,6 +2364,52 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
+	public <T> T getCOVID19ReportCount(String sql) {
+		Session session = sessionFactory.openSession();
+		List<T> report = new ArrayList<T>();
+		try {
+			Query query = session.createSQLQuery(sql).addScalar("totalRows", StandardBasicTypes.INTEGER);
+			report = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return report.get(0);
+	}
+
+	@Override
+	public <T> List<T> getCOVID19ReportBySK(String startDate, String endDate, String sql, Integer offset, Integer limit) {
+		Session session = sessionFactory.openSession();
+		List<T> report = new ArrayList<T>();
+		try {
+			Query query = session.createSQLQuery(sql)
+					.addScalar("skId", StandardBasicTypes.STRING)
+					.addScalar("ssName", StandardBasicTypes.STRING)
+					.addScalar("visitNumberToday", StandardBasicTypes.INTEGER)
+					.addScalar("numberOfSymptomsFound", StandardBasicTypes.INTEGER)
+					.addScalar("numberOfContactPersonFromAbroad", StandardBasicTypes.INTEGER)
+					.addScalar("numberOfPersonContactedWithSymptoms", StandardBasicTypes.INTEGER)
+					.addScalar("firstName", StandardBasicTypes.STRING)
+					.addScalar("contactPhone", StandardBasicTypes.STRING)
+					.addScalar("genderCode", StandardBasicTypes.STRING)
+					.addScalar("symptomsFound", StandardBasicTypes.STRING)
+					.addScalar("submittedDate", StandardBasicTypes.DATE)
+					.setString("startDate", startDate)
+					.setString("endDate", endDate)
+					.setInteger("offset", offset)
+					.setInteger("limit", limit)
+					.setResultTransformer(new AliasToBeanResultTransformer(COVID19ReportDTO.class));
+			report = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return report;
+	}
+
+	@Override
 	public <T> List<T> getElcoReport(String startDate, String endDate, String sql) {
 		Session session = sessionFactory.openSession();
 		List<T> report = new ArrayList<T>();

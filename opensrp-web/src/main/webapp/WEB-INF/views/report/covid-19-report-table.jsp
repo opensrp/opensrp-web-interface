@@ -14,6 +14,9 @@
 %>
 
 <head>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
     <style>
         th, td {
             text-align: center;
@@ -25,10 +28,10 @@
 </head>
 <body>
 
-<table class="display" id="formWiseAggregatedListTable"
+<table class="display" id="covidReports"
        style="width: 100%;">
     <thead>
-    <tr> <!--1st-->
+    <tr>
         <th>SK</th>
         <th>SS</th>
         <th>Total Visit</th>
@@ -60,4 +63,5 @@
     <% } %>
     </tbody>
 </table>
+
 </body>

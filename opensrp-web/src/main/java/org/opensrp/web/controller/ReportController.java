@@ -443,15 +443,18 @@ public class ReportController {
 		String endDate = formatter.format(new Date());
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		List<Object[]> skList = new ArrayList<>();
+		List<Branch> branchList = new ArrayList<>();
 		if (AuthenticationManagerUtil.isAM()) {
+			branchList = new ArrayList<>(user.getBranches());
 			List<Object[]> branches = branchService.getBranchByUser(branchId, user);
 			skList = databaseServiceImpl.getAllSks(branches);
 		}
 		else {
+			branchList = branchService.findAll("Branch");
 			skList = databaseServiceImpl.getAllSks(new ArrayList<Object[]>());
 		}
 		searchUtil.setDivisionAttribute(session);
-		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
+		session.setAttribute("branchList", branchList);
 		session.setAttribute("skList", skList);
 		model.addAttribute("startDate", startDate);
 		model.addAttribute("endDate", endDate);
@@ -464,7 +467,28 @@ public class ReportController {
 										   @RequestParam(value = "startDate", required = false) String startDate,
 										   @RequestParam(value = "endDate", required = false) String endDate) {
 		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
-		List<COVID19ReportDTO> covid19Reports = reportService.getCOVID19Report(startDate, endDate, 0, 10);
+		String skIds = request.getParameterMap().containsKey("sk")?request.getParameter("sk") : "";
+		System.out.println("branch id: "+branchId);
+		List<COVID19ReportDTO> covid19Reports = new ArrayList<>();
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		if (!StringUtils.isBlank(skIds) && !skIds.equals("0")) {
+			covid19Reports = reportService.getCOVID19ReportBySK(startDate, endDate, skIds, 0, 10);
+		} else {
+			if (StringUtils.isBlank(branchId) || branchId.equals("0")) {
+				if (AuthenticationManagerUtil.isAdmin()) {
+					covid19Reports = reportService.getCOVID19Report(startDate, endDate, 0, 10);
+				} else {
+					String branches = branchService.commaSeparatedBranch(new ArrayList<>(user.getBranches()));
+					skIds = userService.findSKByBranchSeparatedByComma("'{" + branches + "}'");
+					covid19Reports = reportService.getCOVID19ReportBySK(startDate, endDate, skIds, 0, 10);
+				}
+			} else {
+				Branch branch = branchService.findById(Integer.valueOf(branchId), "id", Branch.class);
+				String branches = branchService.commaSeparatedBranch(Arrays.asList(branch));
+				skIds = userService.findSKByBranchSeparatedByComma("'{" + branches + "}'");
+				covid19Reports = reportService.getCOVID19ReportBySK(startDate, endDate, skIds, 0, 10);
+			}
+		}
 		session.setAttribute("covid19Reports", covid19Reports);
 		return "report/covid-19-report-table";
 	}

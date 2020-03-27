@@ -217,6 +217,10 @@ public interface DatabaseRepository {
 
 	public <T> List<T> getCOVID19Report(String startDate, String endDate, String query, Integer offset, Integer limit);
 
+	public <T> T getCOVID19ReportCount(String query);
+
+	public <T> List<T> getCOVID19ReportBySK(String startDate, String endDate, String query, Integer offset, Integer limit);
+
 	public <T> List<T> getElcoReport(String startDate, String endDate, String query);
 
 	public <T> List<T> getAggregatedReport(String startDate, String endDate, String query);

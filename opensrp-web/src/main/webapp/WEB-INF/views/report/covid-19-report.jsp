@@ -14,7 +14,6 @@
 <%@ page import = "java.util.ResourceBundle" %>
 <%
     ResourceBundle resource = ResourceBundle.getBundle("project");
-    String downloadUrl = resource.getString("download.url");
 %>
 
 <!DOCTYPE html>
@@ -29,6 +28,9 @@
     <meta http-equiv="refresh" content="<%=session.getMaxInactiveInterval()%>;url=/login" />
     <title><spring:message code="lbl.covid19"/></title>
     <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
     <style>
         #errorMsg{
             color: darkred;
@@ -79,27 +81,27 @@
                                            name="end" id="end" value="${endDate}">
                                     <label style="display: none;" class="text-danger" id="endDateValidation"><small>Input is not valid for date</small></label>
                                 </div>
-                                <% if (AuthenticationManagerUtil.isAM()) {%>
-                                <div class="col-2" style="display: none;">
+
+                                <div class="col-2">
                                     <label><spring:message code="lbl.branches"/></label>
                                     <select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="branch" name="branch" onchange="branchChange()">
                                         <option value="0">Select Branch</option>
                                         <%
-                                            List<Branch> ret = (List<Branch>) session.getAttribute("branchList");
-                                            for (Branch str : ret) {
+                                            List<Branch> ret1 = (List<Branch>) session.getAttribute("branchList");
+                                            for (Branch str : ret1) {
                                         %>
                                         <option value="<%=str.getId()%>"><%=str.getName()%></option>
                                         <%}%>
                                     </select>
                                 </div>
-                                <%}%>
-                                <div class="col-2" style="display: none;">
+
+                                <div class="col-2">
                                     <label><spring:message code="lbl.sk"/></label>
                                     <select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="skList" name="sk">
                                         <option value="">Select SK</option>
                                         <%
-                                            List<Object[]> ret = (List<Object[]>) session.getAttribute("skList");
-                                            for (Object[] str : ret) {
+                                            List<Object[]> ret2 = (List<Object[]>) session.getAttribute("skList");
+                                            for (Object[] str : ret2) {
                                         %>
                                         <option value="<%=str[1]%>"><%=str[2]%>(<%=str[1]%>)</option>
                                         <% } %>
@@ -115,7 +117,7 @@
                         <div class="row">
 
                             <div class="col-1">
-                                <button name="search" id="bth-search" onclick="getCOVID19ReportTable()"
+                                <button name="search" id="bth-search" onclick="drawDataTables()"
                                         class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
                             </div>
 
@@ -145,10 +147,25 @@
                 <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
                     <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
                 </div>
-                <div class="row">
-                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
-                        <div id="covid-19-report-table"></div>
-                    </div>
+
+                <div class="table-responsive">
+                    <table class="display" id="covidReports">
+                        <thead>
+                        <tr>
+                            <th><spring:message code="lbl.sk"/></th>
+                            <th><spring:message code="lbl.ss"/></th>
+                            <th><spring:message code="lbl.totalVisit"/></th>
+                            <th><spring:message code="lbl.numberOfSymptoms"/></th>
+                            <th><spring:message code="lbl.contactedPersonFromAbroad"/></th>
+                            <th><spring:message code="lbl.personContactedWithSymptoms"/></th>
+                            <th><spring:message code="lbl.name"/></th>
+                            <th><spring:message code="lbl.mobile"/></th>
+                            <th><spring:message code="lbl.gender"/></th>
+                            <th><spring:message code="lbl.symptoms"/></th>
+                            <th><spring:message code="lbl.date"/></th>
+                        </tr>
+                        </thead>
+                    </table>
                 </div>
 
             </div>
@@ -161,13 +178,59 @@
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script src="<c:url value='/resources/js/datepicker.js' />"></script>
 <script src="<c:url value='/resources/js/select2.js' />"></script>
+<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
+<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
+<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
+<script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
+<script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
+
 <script>
 
-    let downloadInterval = null;
+    let downloadInterval = null, covidReports;
     $(document).ready(function() {
         $('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
         $("#msg").hide();
-        getCOVID19ReportTable();
+        // getCOVID19ReportTable();
+        covidReports = $('#covidReports').DataTable({
+            bFilter: false,
+            serverSide: true,
+            processing: true,
+            columnDefs: [
+                {targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], orderable: false},
+                {width: "12%", targets: 0},
+                {width: "12%", targets: 1},
+                {width: "7%", targets: 2},
+                {width: "7%", targets: 3},
+                {width: "7%", targets: 4},
+                {width: "7%", targets: 5},
+                {width: "10%", targets: 6},
+                {width: "10%", targets: 7},
+                {width: "10%", targets: 8},
+                {width: "8%", targets: 9},
+                {width: "10%", targets: 10}
+            ],
+            ajax: {
+                url: "/opensrp-dashboard/rest/api/v1/report/covid-19",
+                data: function (data) {
+                    data.startDate = $("#start").val();
+                    data.endDate = $("#end").val();
+                    data.branch = $("#branch").val();
+                    data.sk = $("#skList").val();
+                },
+                dataSrc: function (json) {
+                    if (json.data) {
+                        return json.data;
+                    } else {
+                        return [];
+                    }
+                },
+                complete: function () {
+                },
+                type: 'GET'
+            },
+            bInfo: true,
+            destroy: true,
+        });
     });
     function branchChange() {
         let url = "/opensrp-dashboard/branches/sk?branchId="+$("#branch").val();
@@ -365,6 +428,10 @@
             return false;
         }
         return true;
+    }
+
+    function drawDataTables() {
+        covidReports.ajax.reload();
     }
 </script>
 </body>
