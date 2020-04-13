@@ -35,7 +35,7 @@
         <th rowspan="2"><spring:message code="lbl.provider"/></th>
         <th rowspan="2"><spring:message code="lbl.householdCount"/></th>
         <th colspan="3"><spring:message code="lbl.householdVisited"/></th>
-        <th rowspan="2"><spring:message code="lbl.population"/></th>
+        <th colspan="2"><spring:message code="lbl.population"/></th>
         <th colspan="6"><spring:message code="lbl.childInformation"/></th>
         <th rowspan="2"><spring:message code="lbl.childrenUnderFive"/></th>
         <th rowspan="2"><spring:message code="lbl.childrenFiveToTenYears"/></th>
@@ -52,6 +52,8 @@
     <tr>
         <th><spring:message code="lbl.vo"/></th>
         <th><spring:message code="lbl.nvo"/></th>
+        <th><spring:message code="lbl.total"/></th>
+        <th><spring:message code="lbl.registered"/></th>
         <th><spring:message code="lbl.total"/></th>
         <th><spring:message code="lbl.zeroToSix"/></th>
         <th><spring:message code="lbl.sevenToTwelve"/></th>
@@ -80,6 +82,7 @@
         <td><%=report.getNvo()%></td>
         <td><%=report.getHouseholdTotal()%></td>
         <td><%=report.getPopulationCount()%></td>
+        <td><%=report.getTotalPopulation()%></td>
         <td><%=report.getFrom0To6()%></td>
         <td><%=report.getFrom6to11()%></td>
         <td><%=report.getFrom12To17()%></td>

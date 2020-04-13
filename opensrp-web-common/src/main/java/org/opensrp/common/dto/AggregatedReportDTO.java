@@ -56,6 +56,8 @@ public class AggregatedReportDTO {
 
     private Integer activeSk;
 
+    private Integer totalPopulation;
+
     public String getLocationOrProvider() {
         return locationOrProvider;
     }
@@ -270,5 +272,13 @@ public class AggregatedReportDTO {
 
     public void setActiveSk(Integer activeSk) {
         this.activeSk = activeSk;
+    }
+
+    public Integer getTotalPopulation() {
+        return totalPopulation;
+    }
+
+    public void setTotalPopulation(Integer totalPopulation) {
+        this.totalPopulation = totalPopulation;
     }
 }

@@ -2513,6 +2513,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					.addScalar("fingerPrintTaken", StandardBasicTypes.INTEGER)
 					.addScalar("reproductiveAgeGroup", StandardBasicTypes.INTEGER)
 					.addScalar("activeSk", StandardBasicTypes.INTEGER)
+					.addScalar("totalPopulation", StandardBasicTypes.INTEGER)
 					.setString("startDate", startDate)
 					.setString("endDate", endDate)
 					.setResultTransformer(new AliasToBeanResultTransformer(AggregatedReportDTO.class));
