@@ -30,6 +30,8 @@ public class PregnancyReportDTO {
 
     private Integer anc4And4Plus;
 
+    private Integer totalAnc;
+
     private Integer ttProtectedMothers;
 
     private Integer pnc48SK;
@@ -41,6 +43,8 @@ public class PregnancyReportDTO {
     private Integer pnc1And2;
 
     private Integer pnc3And3Plus;
+
+    private Integer totalPnc;
 
     private Integer pregnancyComplicationReferred;
 
@@ -210,5 +214,21 @@ public class PregnancyReportDTO {
 
     public void setPregnancyComplicationReferred(Integer pregnancyComplicationReferred) {
         this.pregnancyComplicationReferred = pregnancyComplicationReferred;
+    }
+
+    public Integer getTotalAnc() {
+        return totalAnc;
+    }
+
+    public void setTotalAnc(Integer totalAnc) {
+        this.totalAnc = totalAnc;
+    }
+
+    public Integer getTotalPnc() {
+        return totalPnc;
+    }
+
+    public void setTotalPnc(Integer totalPnc) {
+        this.totalPnc = totalPnc;
     }
 }

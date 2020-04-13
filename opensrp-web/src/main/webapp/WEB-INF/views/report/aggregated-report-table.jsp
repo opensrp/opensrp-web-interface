@@ -12,6 +12,7 @@
            uri="http://www.springframework.org/security/tags"%>
 <%
     List<AggregatedReportDTO> aggregatedReports = (List<AggregatedReportDTO>) session.getAttribute("aggregatedReports");
+    Boolean isSKList = (Boolean) session.getAttribute("isSKList");
 %>
 
 <head>
@@ -44,6 +45,9 @@
         <th rowspan="2"><spring:message code="lbl.numberOfHHWithSanitaryLatrine"/></th>
         <th rowspan="2"><spring:message code="lbl.memberWithFingerprint"/></th>
         <th rowspan="2"><spring:message code="lbl.reproductiveAgeGroup"/></th>
+        <% if (isSKList == null || isSKList == false) {%>
+        <th rowspan="2"><spring:message code="lbl.activeSK"/></th>
+        <%}%>
     </tr>
     <tr>
         <th><spring:message code="lbl.vo"/></th>
@@ -96,6 +100,9 @@
         <td><%=report.getLatrineCount()%></td>
         <td><%=report.getFingerPrintTaken()%></td>
         <td><%=report.getReproductiveAgeGroup()%></td>
+        <% if (isSKList == null || isSKList == false) {%>
+        <td><%=report.getActiveSk()%></td>
+        <%}%>
     </tr>
     <% } %>
     </tbody>

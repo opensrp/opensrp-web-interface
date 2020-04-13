@@ -1,32 +1,60 @@
 package org.opensrp.common.dto;
 
 public class AggregatedReportDTO {
+
     private String locationOrProvider;
+
     private Integer householdCount;
+
     private Integer bracVo;
+
     private Integer nvo;
+
     private Integer householdTotal;
+
     private Integer latrineCount;
+
     private Integer populationCount;
+
     private Integer from0To6;
+
     private Integer from6to11;
+
     private Integer from12To17;
+
     private Integer from18To23;
+
     private Integer from24To35;
+
     private Integer from36To59;
+
     private Integer from0To59;
+
     private Integer from60To119;
+
     private Integer from120To227Male;
+
     private Integer from120To227Female;
+
     private Integer from120To227Total;
+
     private Integer from240To419Male;
+
     private Integer from240To419Female;
+
     private Integer from240To419Total;
+
     private Integer from420AndPlusMale;
+
     private Integer from420AndPlusFemale;
+
     private Integer from420AndPlusTotal;
+
     private Integer fingerPrintTaken;
+
     private Integer reproductiveAgeGroup;
+
+    private Integer activeSk;
 
     public String getLocationOrProvider() {
         return locationOrProvider;
@@ -234,5 +262,13 @@ public class AggregatedReportDTO {
 
     public void setReproductiveAgeGroup(Integer reproductiveAgeGroup) {
         this.reproductiveAgeGroup = reproductiveAgeGroup;
+    }
+
+    public Integer getActiveSk() {
+        return activeSk;
+    }
+
+    public void setActiveSk(Integer activeSk) {
+        this.activeSk = activeSk;
     }
 }

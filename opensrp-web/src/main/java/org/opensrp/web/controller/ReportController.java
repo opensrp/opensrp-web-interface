@@ -268,15 +268,19 @@ public class ReportController {
 				skIds = userService.findSKByBranchSeparatedByComma("'{" + branchId + "}'");
 			}
 			aggregatedReports = reportService.getAggregatedReportBySK(startDate, endDate, skIds);
+			session.setAttribute("isSKList", true);
 		} else {
 			Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
 			String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
 			String parentLocationName = parentLocation.getName().split(":")[0];
+			System.out.println("");
 			if (addressValue.equalsIgnoreCase("sk_id")) {
 				skIds = userService.findSKByLocationSeparatedByComma(searchedValueId, Roles.SK.getId());
 				aggregatedReports = reportService.getAggregatedReportBySK(startDate, endDate, skIds);
+				session.setAttribute("isSKList", true);
 			} else {
 				aggregatedReports = reportService.getAggregatedReportByLocation(startDate, endDate, searchedValueId, addressValue, parentLocationTag, parentLocationName);
+				session.setAttribute("isSKList", false);
 			}
 		}
 		session.setAttribute("aggregatedReports", aggregatedReports);
