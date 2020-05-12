@@ -427,7 +427,35 @@ public class UserController {
 	                             @RequestParam(value = "locationList[]", required = false) int[] locations,
 	                             @Valid @ModelAttribute("account") User account, BindingResult binding, ModelMap model,
 	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
-		
+		String errorMessage = "";
+		session.setAttribute("errorMessageForSK", errorMessage);
+		if (roles[0].equals(Roles.AM.getId().toString())){
+			User updateAbleUser = userServiceImpl.findById(id, "id", User.class);
+			List<Branch> existingBranch = new ArrayList<>(updateAbleUser.getBranches());
+			for (Branch b: existingBranch) {
+				Integer branchId = b.getId();
+				boolean flag = false;
+				for (int i = 0; i < branches.length; i++) {
+					System.out.println(branchId + " : " +branches[i]);
+					if (branchId.equals(Integer.valueOf(branches[i]))) {
+						flag = true;
+						break;
+					}
+				}
+				if (flag == false) {
+					List<Object[]> branchesCheck = databaseServiceImpl.getSKByBranch(branchId.toString());
+					if (branchesCheck.size() > 0) {
+						errorMessage = "You have to remove SK from "+ b.getName() + " Branch to continue";
+						session.setAttribute("errorMessageForSK", errorMessage);
+						System.out.println("ID: "+ id);
+						return new ModelAndView("redirect:/user/"+id+"/edit.html?lang=" + locale);
+					}
+				} else {
+					errorMessage = "";
+					session.setAttribute("errorMessageForSK", errorMessage);
+				}
+			}
+		}
 		account.setRoles(userServiceImpl.setRoles(roles));
 		account.setBranches(userServiceImpl.setBranches(branches));
 		String ssPrefix = "";

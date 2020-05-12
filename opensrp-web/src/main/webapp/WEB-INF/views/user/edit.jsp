@@ -36,6 +36,7 @@
 	Set<Branch> selectedBranches = (Set<Branch>)session.getAttribute("selectedBranches");
 	String selectedParentUser = (String)session.getAttribute("parentUserName");
 	Integer selectedParentId = (Integer)session.getAttribute("parentUserId");
+	String errorMessage = (String)session.getAttribute("errorMessageForSK");
 
 //for teamMember
 	Integer selectedPersonId = (Integer)session.getAttribute("selectedPersonId");
@@ -216,6 +217,7 @@
 							<a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
 						</div>
 					</div>
+					<div style="color: red;"><%=errorMessage%></div>
 				</form:form>
 
 			</div>
