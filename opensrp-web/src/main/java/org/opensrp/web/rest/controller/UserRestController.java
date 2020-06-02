@@ -258,6 +258,8 @@ public class UserRestController {
 	public ResponseEntity<String> catchmentArea(Model model, HttpSession session, @PathVariable("id") int id, Locale locale)
 			throws JSONException {
 
+		System.out.println("::LOAD CATCHMENT AREA::");
+
 		String role = "Admin";
 		if (AuthenticationManagerUtil.isAM())
 			role = "AM";
@@ -278,7 +280,8 @@ public class UserRestController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		Integer userLocationId = 0;
 		if (user.getParentUser() != null) {
-			userLocationId = user.getParentUser().getId();
+			if (role.equals(Roles.AM.getName()) && roleId.equals(Roles.SS.getId())) userLocationId = user.getParentUser().getId();
+			if (!role.equals(Roles.AM.getName())) userLocationId = user.getParentUser().getId();
 		}
 		JSONArray locationTree = locationService.getLocationWithDisableFacility(session, parentIndication, parentKey,
 				userAssignedLocationDTOS, id, role, userLocationId!=0?userLocationId:loggedInUser.getId(), roleId);
