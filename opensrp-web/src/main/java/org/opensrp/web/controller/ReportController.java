@@ -545,11 +545,13 @@ public class ReportController {
 				}
 			}
 			allSKs = databaseServiceImpl.getAllSks(branches);
+			sk = userService.commaSeparatedSK(allSKs);
 		}
 
 		List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime, endTime, formName.replaceAll("\\_"," ") , sk, allSKs, pageNumber);
 		List allClientInfo =  ModelConverter.modelConverterForClientData(formName, tempClientInfo);
 
+		System.out.println("SIZE:: "+tempClientInfo.size());
 
 		Integer size = 0;
 		if (pageNumber == 0) {

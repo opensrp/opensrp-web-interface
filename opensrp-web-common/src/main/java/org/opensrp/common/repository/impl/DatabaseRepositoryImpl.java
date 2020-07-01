@@ -26,10 +26,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.opensrp.common.dto.*;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
-import org.opensrp.common.util.DateUtil;
-import org.opensrp.common.util.LocationTags;
-import org.opensrp.common.util.Roles;
-import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.common.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
@@ -1760,53 +1757,32 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 	@Override
 	public List<Object[]> getClientInfoFilter(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs, Integer pageNumber) {
-		String wh = "";
-		List<String> conds = new ArrayList<String>();
-		String stCond,edCond,formCond,skCond;
-
-
-
-		stCond = "Date(created_date) BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
-		conds.add(stCond);
-
-
-
-		formCond = "  entity_type =\'" + formName.replaceAll(" ", "_") +"\'";
-		conds.add(formCond);
-
-		if(!sk.isEmpty()){
-			skCond = " provider_id =\'" + sk+"\'";
-			conds.add(skCond);
-		} else {
-			String providerIds = "";
-			int size = allSKs.size();
-			if (size > 0) {
-				for (int i = 0; i < size; i++) {
-					providerIds += "'"+allSKs.get(i)[1].toString()+"'";
-					if (i != size-1) providerIds += ",";
-				}
-				skCond = " provider_id = any (array["+providerIds+"])";
-				conds.add(skCond);
+		String hql = "";
+		if (formName.equalsIgnoreCase("ec family member")) {
+			if (!StringUtils.isBlank(sk)) {
+				hql = "select * from report.get_member_and_child_report_by_sk('"+startTime+"', '"+endTime+"', 'Family Member Registration', '{"+sk+"}', 10, "+ pageNumber*10+");";
+			} else {
+				hql = "select * from report.get_member_and_child_report('"+startTime+"', '"+endTime+"', 'Family Member Registration', 10, "+ pageNumber*10+");";
 			}
-		}
-		if(conds.size() == 0) wh = "";
-		else {
-			wh = " WHERE ";
-			wh += conds.get(0);
-			for(int i = 1; i < conds.size();i++){
-				wh += " AND ";
-				wh += conds.get(i);
+		} else if (formName.equalsIgnoreCase("ec child")) {
+			if (!StringUtils.isBlank(sk)) {
+				hql = "select * from report.get_member_and_child_report_by_sk('"+startTime+"', '"+endTime+"', 'Child Registration', '{"+sk+"}', 10, "+ pageNumber*10+");";
+			} else {
+				hql = "select * from report.get_member_and_child_report('"+startTime+"', '"+endTime+"', 'Child Registration', 10, "+ pageNumber*10+");";
+			}
+		} else if (formName.equalsIgnoreCase("ec family")) {
+			if (!StringUtils.isBlank(sk)) {
+				hql = "select * from report.get_household_report_by_sk('"+startTime+"', '"+endTime+"', '{"+sk+"}', 10, "+ pageNumber*10+");";
+			} else {
+				hql = "select * from report.get_household_report('"+startTime+"', '"+endTime+"', 10, "+ pageNumber*10+");";
 			}
 		}
 
+		System.out.println("::HQL::");
+		System.out.println(hql);
 		Session session = sessionFactory.openSession();
 		List<Object[]> clientInfoList = new ArrayList<Object[]>();
 		try {
-
-			String hql = "SELECT * FROM core.\"viewJsonDataConversionOfClient\"";
-					hql += wh;
-					hql += "order by id desc limit 10 offset 10 * "+ pageNumber;
-					hql += ";";
 			clientInfoList = session.createSQLQuery(hql).list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1819,53 +1795,29 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 
 	@Override
 	public Integer getClientInfoFilterCount(String startTime, String endTime, String formName, String sk, List<Object[]> allSKs) {
-		String wh = "";
-		List<String> conds = new ArrayList<String>();
-		String stCond,edCond,formCond,skCond;
-
-
-
-		stCond = "Date(created_date) BETWEEN \'" + startTime+"\' AND \'"+endTime+"\'";
-		conds.add(stCond);
-
-
-		if(formName.contains("-1") == false){
-			formCond = "  entity_type =\'" + formName.replaceAll(" ", "_") +"\'";
-
-			conds.add(formCond);
-		}
-		if(!sk.isEmpty()){
-			skCond = " provider_id =\'" + sk+"\'";
-			conds.add(skCond);
-		} else {
-			String providerIds = "";
-			int size = allSKs.size();
-			if (size > 0) {
-				for (int i = 0; i < size; i++) {
-					providerIds += "'"+allSKs.get(i)[1].toString()+"'";
-					if (i != size-1) providerIds += ",";
-				}
-				skCond = " provider_id = any (array["+providerIds+"])";
-				conds.add(skCond);
+		String hql = "";
+		if (formName.equalsIgnoreCase("ec family member")) {
+			if (!StringUtils.isBlank(sk)) {
+				hql = "select * from report.get_member_and_child_report_by_sk_count('"+startTime+"', '"+endTime+"', 'Family Member Registration', '{"+sk+"}');";
+			} else {
+				hql = "select * from report.get_member_and_child_report_count('"+startTime+"', '"+endTime+"', 'Family Member Registration');";
+			}
+		} else if (formName.equalsIgnoreCase("ec child")) {
+			if (!StringUtils.isBlank(sk)) {
+				hql = "select * from report.get_member_and_child_report_by_sk_count('"+startTime+"', '"+endTime+"', 'Child Registration', '{"+sk+"}');";
+			} else {
+				hql = "select * from report.get_member_and_child_report_count('"+startTime+"', '"+endTime+"', 'Child Registration');";
+			}
+		} else if (formName.equalsIgnoreCase("ec family")) {
+			if (!StringUtils.isBlank(sk)) {
+				hql = "select * from report.get_household_report_by_sk_count('"+startTime+"', '"+endTime+"', '{"+sk+"}');";
+			} else {
+				hql = "select * from report.get_household_report_count('"+startTime+"', '"+endTime+"');";
 			}
 		}
-		if(conds.size() == 0) wh = "";
-		else {
-			wh = " WHERE ";
-			wh += conds.get(0);
-			for(int i = 1; i < conds.size();i++){
-				wh += " AND ";
-				wh += conds.get(i);
-			}
-		}
-
 		Session session = sessionFactory.openSession();
 		Integer clientInfoCount = 0;
 		try {
-
-			String hql = "SELECT COUNT(*) FROM core.\"viewJsonDataConversionOfClient\"";
-			hql += wh;
-			hql += ";";
 			clientInfoCount = ((BigInteger)session.createSQLQuery(hql).uniqueResult()).intValue();
 		} catch (Exception e) {
 			e.printStackTrace();

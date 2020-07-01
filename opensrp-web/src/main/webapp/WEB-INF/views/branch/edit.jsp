@@ -53,7 +53,7 @@
 						<div class="form-group required">
 							<label class="label-width" for="code"> <spring:message code="lbl.branchCode"/> </label>
 							<form:input value="${branchDTO.code}" path="code" class="form-control mx-sm-3"
-										required="required" />
+										required="required" disabled="true"/>
 						</div>
 					</div>
 					<div class="row col-12 tag-height">
@@ -72,7 +72,7 @@
 <script>
 	$("#BranchInfo").submit(function (event) {
 		$("#loading").show();
-		var url = "/opensrp-dashboard/rest/api/v1/branch/save";
+		var url = "/opensrp-dashboard/rest/api/v1/branch/update";
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		var formData = {
@@ -87,7 +87,7 @@
 		console.log("Token: ", token);
 		$.ajax({
 			contentType : "application/json",
-			type: "POST",
+			type: "PUT",
 			url: url,
 			data: JSON.stringify(formData),
 			dataType : 'json',

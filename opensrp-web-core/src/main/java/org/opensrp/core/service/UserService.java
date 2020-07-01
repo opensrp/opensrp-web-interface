@@ -1002,4 +1002,15 @@ public class UserService {
 	public String findSKByLocationSeparatedByComma(Integer locationId, Integer roleId) {
 		return repository.findSKByLocationSeparatedByComma(locationId, roleId);
 	}
+
+	public String commaSeparatedSK(List<Object[]> sks) {
+		String skIds = "";
+		int size = sks.size(), iterate = 0;
+		for (Object[] sk: sks) {
+			iterate++;
+			skIds += sk[1];
+			if (size != iterate) skIds += ", ";
+		}
+		return skIds;
+	}
 }
