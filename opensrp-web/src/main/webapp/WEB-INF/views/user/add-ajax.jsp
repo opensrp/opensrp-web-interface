@@ -8,263 +8,229 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="org.opensrp.core.entity.Role"%>
+<title><spring:message code="lbl.addUserTitle"/></title>
 
-<!DOCTYPE html>
-<html lang="en">
+<jsp:include page="/WEB-INF/views/header.jsp" />
+
+<meta name="_csrf" content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+<c:url var="saveUrl" value="/user/add.html" />
+<c:url var="saveRestUrl" value="/rest/api/v1/user/add" />
+<c:url var="cancelUrl" value="/user.html" />
+<c:url var="userList" value="/user.html" />
 
 <%
     Map<Integer, String> teams =  (Map<Integer, String>)session.getAttribute("teams");
     Integer selectedTeamId = (Integer)session.getAttribute("selectedTeamId");
     Role ss = (Role) session.getAttribute("ss");
 %>
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link type="text/css" href="<c:url value="/resources/css/magicsuggest-min.css"/>" rel="stylesheet">
-    <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <!-- default header name is X-CSRF-TOKEN -->
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <title><spring:message code="lbl.addUserTitle"/></title>
-    <jsp:include page="/WEB-INF/views/css.jsp" />
-    <style>
-        .select2-container--default .select2-results__option { font-size: 18px !important; }
-        .select2-container--default .select2-results > .select2-results__options { width: 219px !important; }
-        .select2-container--default .select2-selection--multiple { width: 221px !important; }
-        .select2-selection--multiple:before { right: 64px !important; }
-        .select2-container--open .select2-dropdown--above { width: 221px !important; min-width: 221px !important; }
-    </style>
-</head>
-
-<c:url var="saveUrl" value="/user/add.html" />
-<c:url var="cancelUrl" value="/user.html" />
+<div class="page-content-wrapper">
+    <div class="page-content">
 
 
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <a href="<c:url value="/user.html"/>">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="<c:url value="/user.html"/>">User list</a>
+                <i class="fa fa-circle"></i>
+            </li>
 
-<div class="content-wrapper">
-    <div class="container-fluid">
-        <div class="form-group">
-            <jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />
-        </div>
-        <div class="card mb-3">
-            <div class="card-header" id="data">
-                <i class="fa fa-table"></i> <spring:message code="lbl.addUser"/>
-            </div>
-            <div class="card-body">
+        </ul>
+        <!-- END PAGE BREADCRUMB -->
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
 
-                <span class="text-red" id="usernameUniqueErrorMessage"></span>
 
-                <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
-                    <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
+        <div class="row">
+            <div class="col-md-12">
 
-            </div>
-            <form id="UserInfo" class="form-inline" autocomplete="off">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box blue-madison">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-edit"></i>Add new user
+                        </div>
 
-                <div class="row col-12 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width" for="firstName"> <spring:message code="lbl.firstName"/> </label>
-                        <input id="firstName" name="firstName" class="form-control mx-sm-3"
+
+                    </div>
+                    <span class="text-red" id="usernameUniqueErrorMessage"></span>
+                    <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
+                        <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+                    </div>
+                    <div class="portlet-body">
+                        <form id="UserInfo"  autocomplete="off">
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                   <label class="control-label" for="firstName"> <spring:message code="lbl.firstName"/>  <span class="required">* </span></label>
+                        			<input id="firstName" name="firstName" class="form-control mx-sm-3"
                                     required="required" />
+                                </div>
+
+                                <div class="col-sm-6">
+                                	 
+                                    <label class="control-label" for="lastName"> <spring:message code="lbl.lastName"/></label>
+                                     <input id="lastName" name="lastName" class="form-control mx-sm-3"/>
+                                    
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <label class="control-label" for="email"> <spring:message code="lbl.email"/> </label>
+                                    <input id="email" class="form-control mx-sm-3" name="email" type="email"/>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <label class="control-label" for="email"> <spring:message code="lbl.mobile"/>	</label>
+                                    <input id="mobile" name="mobile" class="form-control mx-sm-3" />
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                               <div class="col-sm-6">
+                                    <label class="control-label" for="birthDate"> <spring:message code="lbl.role"/> <span class="required">* </span>	</label>
+                                     <select onchange="isSS()"
+			                                id="role"
+			                                class="form-control mx-sm-3 js-example-basic-multiple"
+			                                name="role" required>
+			                            <c:forEach items="${roles}" var="role">
+			                                <option value="${role.id}">${role.name}</option>
+			                            </c:forEach>
+			                        </select>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <label class="control-label" for="username"> <spring:message code="lbl.branches"/> <span class="required">* </span>	</label>
+                                    <select id="branches"
+			                                class="form-control mx-sm-3 js-example-basic-multiple"
+			                                name="branches" multiple="multiple" required>
+			                            <c:forEach items="${branches}" var="branch">
+			                                <option value="${branch.id}">${branch.name} (${branch.code})</option>
+			                            </c:forEach>
+			                        </select>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <label class="control-label" for="nId"> <spring:message code="lbl.username"/> <span class="required">* </span>	</label>
+                                    <input autocomplete="none" id="username" name="username" class="form-control mx-sm-3" required="required"/>
+			                        <small id="usernameHelpInline" class="text-muted text-para">
+			                            <spring:message code="lbl.userMessage"/>
+			                        </small>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <label class="control-label"><spring:message code="lbl.password"/> <span class="required">* </span>
+                                       
+                                    </label>
+                                    <input  type="text" class="form-control mx-sm-3" id="password" name="password"  required />
+			                        <small id="passwordHelpInline" class="text-muted text-para">
+			                                <%-- <spring:message code="lbl.passwordMEssage"/> --%>
+			                        </small>
+			                        <input type="checkbox" checked onclick="toggleVisibilityOfPassword()">Show Password
+                                </div>
+                            </div>
+
+                            
+
+                            
+
+
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <label class="label-width"> <spring:message code="lbl.confirmedPassword"/><span class="required">* </span>	</label>
+                                    <input type="text" id="retypePassword" name="retypePassword" class="form-control mx-sm-3" required="required" />
+			                        <small id="confirmPasswordHelpInline" class="text-muted text-para">
+			                            <span class="text-red" id="passwordNotmatchedMessage"></span>
+			                            <spring:message code="lbl.retypePasswordMessage"/>
+			                        </small>
+                                </div>
+
+                                
+                            </div>
+                            <div class="row col-12 tag-height" id="ssOption" style="display: none;">
+			                    <div class="form-group required">
+			                        <label class="label-width" for="ssNo"><spring:message code="lbl.ssNo"/></label>
+			                        <select id="ssNo"
+			                                class="form-control mx-sm-3 js-example-basic-multiple"
+			                                name="ssNo">
+			                            <option value="">Please Select SS No</option>
+			                            <option value="-SS-1">SS-1</option>
+			                            <option value="-SS-2">SS-2</option>
+			                            <option value="-SS-3">SS-3</option>
+			                            <option value="-SS-4">SS-4</option>
+			                            <option value="-SS-5">SS-5</option>
+			                            <option value="-SS-6">SS-6</option>
+			                            <option value="-SS-7">SS-7</option>
+			                            <option value="-SS-8">SS-8</option>
+			                            <option value="-SS-9">SS-9</option>
+			                            <option value="-SS-10">SS-10</option>
+			                        </select>
+			                    </div>
+			                </div>
+			                <div class="row col-12 tag-height" id="_enableSimprint">
+			                    <div class="form-group">
+			                        <label class="label-width" for="enableSimPrint"><spring:message code="lbl.enableSimprint"/></label>
+			                        <input type="checkbox" id="enableSimPrint" name="enableSimPrint"  class="checkBoxClass form-check-input"/>
+			                    </div>
+			                </div>
+			              
+						
+                            
+                            
+
+                            <div class="form-group error"  style="display:none; color:red;">
+
+                            </div>
+
+                            <hr class="dotted">
+                            <div class="form-group">
+                                <button type="submit" id="submit-form"  class="btn btn-primary" name="signup" value="Validate">Submit</button>
+                                <a class="btn btn-info" href="${cancelUrl}">Cancel</a>
+                            </div>
+                            <div id="errorMessage" style="display:none">
+                                <div class="alert-message warning">
+                                    <div id="errormessageContent" class="alert alert-danger" role="alert"> </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+
+
                     </div>
                 </div>
 
-                <div class="row col-12 tag-height">
-                    <div class="form-group">
-                        <label class="label-width" for="lastName"> <spring:message code="lbl.lastName"/> </label>
-                        <input id="lastName" name="lastName" class="form-control mx-sm-3"/>
-                    </div>
-                </div>
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group">
-                        <label class="label-width" for="email"> <spring:message code="lbl.email"/> </label>
-                        <input id="email" name="email" type="email" class="form-control mx-sm-3">
-                    </div>
-                </div>
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group">
-                        <label class="label-width" for="mobile"><spring:message code="lbl.mobile"/></label>
-                        <input id="mobile" name="mobile" class="form-control mx-sm-3" />
-                    </div>
-                </div>
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width"  for="role">
-                            <spring:message code="lbl.role"/>
-                        </label>
-                        <select onchange="isSS()"
-                                id="role"
-                                class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="role" required>
-                            <c:forEach items="${roles}" var="role">
-                                <option value="${role.id}">${role.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row col-12 tag-height" id="ssOption" style="display: none;">
-                    <div class="form-group required">
-                        <label class="label-width" for="ssNo"><spring:message code="lbl.ssNo"/></label>
-                        <select id="ssNo"
-                                class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="ssNo">
-                            <option value="">Please Select SS No</option>
-                            <option value="-SS-1">SS-1</option>
-                            <option value="-SS-2">SS-2</option>
-                            <option value="-SS-3">SS-3</option>
-                            <option value="-SS-4">SS-4</option>
-                            <option value="-SS-5">SS-5</option>
-                            <option value="-SS-6">SS-6</option>
-                            <option value="-SS-7">SS-7</option>
-                            <option value="-SS-8">SS-8</option>
-                            <option value="-SS-9">SS-9</option>
-                            <option value="-SS-10">SS-10</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row col-12 tag-height" id="_enableSimprint">
-                    <div class="form-group">
-                        <label class="label-width" for="enableSimPrint"><spring:message code="lbl.enableSimprint"/></label>
-                        <input type="checkbox" id="enableSimPrint" name="enableSimPrint"  class="checkBoxClass form-check-input"/>
-                    </div>
-                </div>
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width"  for="branches">
-                            <spring:message code="lbl.branches"/>
-                        </label>
-                        <select id="branches"
-                                class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="branches" multiple="multiple" required>
-                            <c:forEach items="${branches}" var="branch">
-                                <option value="${branch.id}">${branch.name} (${branch.code})</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row col-12 tag-height" style="display: none;" id="parentUserForSS">
-                    <div class="form-group required">
-                        <label class="label-width"  for="parentUserForSS">
-                            <spring:message code="lbl.parentUser"/>
-                        </label>
-                        <select id="parent-user"
-                                class="form-control mx-sm-3 js-example-basic-multiple"
-                                name="parentUserId">
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row col-12 tag-height" id="username-div">
-                    <div class="form-group required">
-                        <label class="label-width" for="username"><spring:message code="lbl.username"/></label>
-                        <input autocomplete="none" id="username" name="username" class="form-control mx-sm-3" required="required"/>
-                        <small id="usernameHelpInline" class="text-muted text-para">
-                            <spring:message code="lbl.userMessage"/>
-                        </small>
-                    </div>
-                </div>
-                <div class="row col-12 tag-height" id="password-div">
-                    <div class="form-group required">
-                        <label class="label-width" for="password"><spring:message code="lbl.password"/></label>
-                        <input autocomplete="new-password" type="text" class="form-control mx-sm-3" id="password" name="password"  required />
-                        <small id="passwordHelpInline" class="text-muted text-para">
-                                <%-- <spring:message code="lbl.passwordMEssage"/> --%>
-                        </small>
-                        <input type="checkbox" checked onclick="toggleVisibilityOfPassword()">Show Password
-                    </div>
-                </div>
-
-                <div class="row col-12 tag-height" id="retypePassword-div">
-                    <div class="form-group required">
-                        <label class="label-width"  for="retypePassword"><spring:message code="lbl.confirmedPassword"/></label>
-                        <input type="text" id="retypePassword" name="retypePassword" class="form-control mx-sm-3" required="required" />
-                        <small id="confirmPasswordHelpInline" class="text-muted text-para">
-                            <span class="text-red" id="passwordNotmatchedMessage"></span>
-                            <spring:message code="lbl.retypePasswordMessage"/>
-                        </small>
-                    </div>
-
-                </div>
-
-                <%-- <div class="row col-12 tag-height" id="teamDiv" style="display:none">
-                    <div class="form-group">
-                        <label class="label-width" for="team"><spring:message code="lbl.cc"/></label>
-                        <select class="form-control mx-sm-3" id="team" name="team" required="required" disabled>
-                            <option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
-                            <%
-                                for (Map.Entry<Integer, String> entry : teams.entrySet())
-                                {
-                                    if(selectedTeamId==entry.getKey()){ %>
-                            <option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
-                            <% }else{
-                            %>
-                            <option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
-                            <%
-                                    }
-
-                                }
-                            %>
-                        </select>
-                    </div>
-
-                </div> --%>
-                <!--end: for team -->
 
 
-                <div class="row col-12 tag-height">
-                    <div class="form-group">
-                        <label class="label-width"></label>
-                        <div class="text-red" id="roleSelectmessage"></div>
-                    </div>
-                </div>
-                <div class="row col-12 tag-height">
-                    <div class="form-group">
-                        <input
-                                type="submit"
-                                value="<spring:message code="lbl.save"/>"
-                                class="btn btn-primary btn-block btn-center" />
-                    </div>
-                    <div class="form-group">
-                        <a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
-                    </div>
-                </div>
-            </form>
+
+
+            </div>
         </div>
-
+        <!-- END PAGE CONTENT-->
     </div>
 </div>
-<!-- /.container-fluid-->
-<!-- /.content-wrapper-->
-
-<jsp:include page="/WEB-INF/views/footer.jsp" />
-<%-- <script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
-<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script> --%>
-
-<!-- Bootstrap core JavaScript-->
-<script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.bundle.min.js'/>"></script>
-<script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.min.js'/>"></script>
-
-<!-- Core plugin JavaScript-->
-<%-- <script src="<c:url value='/resources/vendor/jquery-easing/jquery.easing.min.js'/>"></script>
- --%>
-
-<!-- Custom scripts for all pages-->
-<%-- <script src="<c:url value='/resources/js/sb-admin.min.js'/>"></script>
- --%><!-- Custom scripts for this page-->
-<%-- <script src="<c:url value='/resources/js/sb-admin-datatables.min.js'/>"></script> --%>
+<!-- END CONTENT -->
+</div>
+<script>
+    jQuery(document).ready(function() {
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        //TableAdvanced.init();
+    });
+</script>
 <script src="<c:url value='/resources/js/location.js'/>"></script>
 <script src="<c:url value='/resources/js/checkbox.js'/>"></script>
 <script src="<c:url value='/resources/js/select2.js' />"></script>
+<jsp:include page="/WEB-INF/views/footer.jsp" />
+
+
 
 
 <script type="text/javascript">
@@ -316,6 +282,7 @@
     }
 
     $('#UserInfo').submit(function(event) {
+    	
         event.preventDefault();
         let validation = Validate();
         if (validation == false) return false;
@@ -327,6 +294,7 @@
         if ($('#enableSimPrint').is(":checked")) {
             enableSimPrint = true;
         }
+       
         formData = {
             'firstName': $('input[name=firstName]').val(),
             'lastName': $('input[name=lastName]').val(),
@@ -371,6 +339,7 @@
     });
 
     function Validate() {
+    	
         var password = document.getElementById("password").value;
         var confirmPassword = document.getElementById("retypePassword").value;
         if (password != confirmPassword) {
@@ -443,5 +412,4 @@
         }
     }
 </script>
-</body>
-</html>
+
