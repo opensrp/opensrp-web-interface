@@ -544,8 +544,10 @@ public class ReportController {
 					branches.add(obj);
 				}
 			}
-			allSKs = databaseServiceImpl.getAllSks(branches);
-			sk = userService.commaSeparatedSK(allSKs);
+			if(StringUtils.isBlank(sk)) {
+				allSKs = databaseServiceImpl.getAllSks(branches);
+				sk = userService.commaSeparatedSK(allSKs);
+			}
 		}
 
 		List<Object[]> tempClientInfo = databaseServiceImpl.getClientInfoFilter(startTime, endTime, formName.replaceAll("\\_"," ") , sk, allSKs, pageNumber);
