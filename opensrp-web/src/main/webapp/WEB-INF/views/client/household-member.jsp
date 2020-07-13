@@ -27,7 +27,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="refresh"
-              content="<%=session.getMaxInactiveInterval()%>;url=/login" />
+              content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/logout" />
         <meta name="_csrf" content="${_csrf.token}"/>
         <!-- default header name is X-CSRF-TOKEN -->
         <meta name="_csrf_header" content="${_csrf.headerName}"/>
