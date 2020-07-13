@@ -135,7 +135,10 @@ public class ReportController {
 				branches.add(obj);
 			}
 		}
-		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
+		session.setAttribute("branchList", branchService.getBranchByUser(user.getId()));
+		for (Branch b: branchService.getBranchByUser(user.getId())) {
+			System.out.println(" branch-name: "+ b.getName());
+		}
 		List<Object[]> allSKs = new ArrayList<>();
 		if (AuthenticationManagerUtil.isAM()) {
 			List<Object[]> branches = new ArrayList<>();
@@ -240,7 +243,7 @@ public class ReportController {
 		String endDate = formatter.format(new Date());
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		searchUtil.setDivisionAttribute(session);
-		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
+		session.setAttribute("branchList",branchService.getBranchByUser(user.getId()));
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
 		return "report/aggregated-report";
