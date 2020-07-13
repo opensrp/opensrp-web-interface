@@ -12,6 +12,7 @@
 <fmt:formatDate var="year" value="${now}" pattern="yyyy" />
 <div class="page-footer">
 	<div class="page-footer-inner">
+	
 		 Copyright © ${year } mPower Social Enterprises Ltd.. All Rights Reserved
 	</div>
 	<div class="scroll-to-top">

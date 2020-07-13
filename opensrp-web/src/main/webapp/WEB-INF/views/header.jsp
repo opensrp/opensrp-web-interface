@@ -39,7 +39,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <link rel="shortcut icon" href="<c:url value="/resources/assets/img/favicon.ico"/>" />
 <title>${title}</title>	
 <meta http-equiv="Cache-control" content="public">
-<meta http-equiv="refresh" content="<%=session.getMaxInactiveInterval()%>;url=login"/>
+<meta http-equiv="refresh" content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/login"/>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 <c:url var="sendPrescriptionMessage" value="/rest/api/v1/message/prescription" />
 <c:url var="sendBookingMessage" value="/rest/api/v1/message/booking" />

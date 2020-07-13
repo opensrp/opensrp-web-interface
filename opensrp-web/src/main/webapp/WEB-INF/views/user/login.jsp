@@ -30,7 +30,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 <head>
 <meta charset="utf-8"/>
-<title>Chattogram Hill Tracts (CHT) </title>
+<title>BRAC HNPP - Login </title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -38,7 +38,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <meta content="" name="author"/>
 
 <jsp:include page="/WEB-INF/views/css.jsp" />
-<link rel="shortcut icon" href="favicon.ico"/>
+<link rel="shortcut icon" href="<c:url value="/resources/assets/img/favicon.ico"/>" />
 </head>
 <c:url var="saveUrl" value="/user/add" />
 <c:url var="loginUrl" value="/login" />
@@ -124,9 +124,11 @@ License: You must have a valid license purchased only from themeforest(the above
 
 
 
-
 <div class="copyright">
-	 Copyright © ${year } mPower Social Enterprises Ltd.. All Rights Reserved
+ <div class="col-12" style="text-align:center; margin-top:20px;">
+	   <img alt="" src="<c:url value="/resources/img/opensrp-footer.png"/>">
+	</div>
+	 
 </div>
 <%-- <jsp:include page="/WEB-INF/views/js.jsp" />
  --%>

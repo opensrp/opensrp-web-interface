@@ -1,27 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
-
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="security"
-           uri="http://www.springframework.org/security/tags"%>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <!-- default header name is X-CSRF-TOKEN -->
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <link type="text/css" href="<c:url value="/resources/css/jtree.min.css"/>" rel="stylesheet">
+<%@page import="java.util.List"%>
+<%@page import="java.util.Map"%>
+<%@page import="org.opensrp.core.entity.Role"%>
+<title>Catchment Area </title>
+  <link type="text/css" href="<c:url value="/resources/css/jtree.min.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/multi-select.css"/>" rel="stylesheet">
-    <title><spring:message code="lbl.catchmentArea"/> </title>
+   <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
     <%@page import="org.json.JSONObject" %>
     <%@page import="org.json.JSONArray" %>
     <%@ page import="org.opensrp.core.entity.UsersCatchmentArea" %>
@@ -30,8 +20,18 @@
     <%@ page import="org.opensrp.common.dto.UserAssignedLocationDTO" %>
     <%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
     <%@ page import="org.opensrp.common.util.Roles" %>
-    <jsp:include page="/WEB-INF/views/css.jsp" />
-</head>
+<jsp:include page="/WEB-INF/views/header.jsp" />
+<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
+
+
+<meta name="_csrf" content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+<c:url var="saveUrl" value="/user/add.html" />
+<c:url var="saveRestUrl" value="/rest/api/v1/user/add" />
+<c:url var="cancelUrl" value="/user.html" />
+<c:url var="userList" value="/user.html" />
+
 <%
     JSONArray locationTreeData = (JSONArray)session.getAttribute("locationTreeData");
     Integer userId = (Integer) session.getAttribute("userId");
@@ -41,85 +41,103 @@
     Boolean isTeamMember = (Boolean) session.getAttribute("isTeamMember");
     Integer roleId = (Integer) session.getAttribute("roleId");
 %>
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
+<div class="page-content-wrapper">
+    <div class="page-content">
 
-<div class="content-wrapper">
-    <div class="container-fluid">
-        <!-- Example DataTables Card-->
-        <div class="form-group">
-            <jsp:include page="/WEB-INF/views/location/location-tag-link.jsp" />
-        </div>
 
-        <div class="card mb-3">
-            <div class="card-header">
-                <spring:message code="lbl.userInfo"/>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h4><%=user.getFullName()%></h4>
-                    </div>
-                    <div class="col-sm-6">
-                        <h5><%=user.getUsername()%></h5>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <a href="<c:url value="/user.html"/>">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="<c:url value="/user.html"/>">User list</a>
+                <i class="fa fa-circle"></i>
+            </li>
 
-        <div class="card mb-3">
-            <div class="card-header">
-                <spring:message code="lbl.viewLocationsHierarchy"/>
-            </div>
-            <div class="card-body">
-                <div class="row" id="no-data" style="display: none;">
-                    <div class="col-sm-12">
-                        <p>This user doesn't have parent user or user's branch is't assigned to a higher rank user.</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-5" style="overflow-y: auto; max-height: 350px;">
-                        <div id="locationTree">
+        </ul>
+        <!-- END PAGE BREADCRUMB -->
+        <!-- END PAGE HEADER-->
+        <!-- BEGIN PAGE CONTENT-->
+
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box blue-madison">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <%=user.getFullName()%> (<%=user.getUsername()%> )
                         </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <select id='locations' multiple='multiple'>
-                        </select>
-                    </div>
-                    <div class="col-sm-1">
-                        <input id="userId" value="<%=userId%>" type="hidden">
-                        <div class="row">
-                            <button id="saveCatchmentArea"
-                                    disabled = true
-                                    class="btn btn-primary btn-sm"
-                                    style="position: absolute; top: 50%;
-                                transform: translateY(-50%);">
-                                Save
-                            </button>
-                            <p id="pleaseWait" style="display: none; color: red;">Please wait...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-footer small text-muted"></div>
-        </div>
 
-        <div class="card mb-3">
-            <div class="card-header">
-                <spring:message code="lbl.catchmentArea"/>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12" id="assigned-areas"></div>
+
+                    </div>
+                    
+                    <div class="portlet-body">
+                        	<div class="form-group row" id="no-data" style="display: none;">
+			                    <div class="col-sm-12">
+			                        <p>This user doesn't have parent user or user's branch is't assigned to a higher rank user.</p>
+			                    </div>
+			                </div>
+                            <div class="form-group row">
+                                
+	                                <div class="col-sm-5">
+					                    <div id="locationTree">
+                        				</div>
+					                 </div>
+				                    <div class="col-sm-5">
+				                        <select id='locations' multiple='multiple'>
+				                        </select>
+				                    </div>
+				                    <div class="col-sm-2">
+				                        <input id="userId" value="<%=userId%>" type="hidden">
+				                       
+				                            <button id="saveCatchmentArea"
+				                                    disabled = true
+				                                    class="btn btn-primary btn-lg"
+				                                    >
+				                                Save
+				                            </button>
+				                            <p id="pleaseWait" style="display: none; color: red;">Please wait...</p>
+				                        
+				                    </div>                               
+                                   
+                                                          
+                            </div> 
+                                                         
+                    </div>
                 </div>
+                
+                
+                <div class="portlet box blue-madison">
+					<div class="portlet-title">
+						<div class="caption">
+							 <spring:message code="lbl.catchmentArea"/>
+						</div>
+
+
+					</div>
+					 
+					<div class="portlet-body" id="assigned-areas">
+						
+						
+					</div>
+					
+				</div>
+                
+                
+                
+                
+                
             </div>
-            <div class="card-footer small text-muted"></div>
         </div>
+        <!-- END PAGE CONTENT-->
     </div>
-    <!-- /.container-fluid-->
-    <!-- /.content-wrapper-->
-    <jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
+<!-- END CONTENT -->
+</div>
+
 <script src="<c:url value='/resources/js/jstree.min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery.multi-select.js'/>"></script>
 <script type="text/javascript">
@@ -303,6 +321,3 @@
         });
     }
 </script>
-</body>
-</html>
-
