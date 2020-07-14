@@ -6,7 +6,7 @@ import java.util.*;
 
 public  class ModelConverter {
     private static String[] columnNamesOfMember = {"Id","Member Number","Member Name","Relation with HOH","Mother Name", "Mobile Number",
-            "Id Type","NID Number","Birth Id Number","DOB Known","Date of Birth","Age", "Gender"
+            "NID Number","Birth Id Number","DOB Known","Date of Birth","Age", "Gender"
             ,"Marital Status", "Blood Group", "Date Created"};
     private static String[] columnNamesOfFamily = {"Id","Household Number","SS Name","Village Name","Cluster","Household Type",
              "Household Name","Household Phone Number", "Number of Household Member"
@@ -14,7 +14,7 @@ public  class ModelConverter {
     private static String[] columnNamesOfChild={"Id","Member Number","Member Name","Relation with HOH",
             "Mother Name","Date of Birth","Gender","Blood Group", "Date Created"};
 
-    private static int[] rowForMember = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    private static int[] rowForMember = {0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15};
     private static int[] rowForFamily = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     private static int[] rowForChild = {0, 1, 2, 3, 4, 10, 12, 14, 15};
     private static List<int[]> arrayOfRows = new ArrayList<>();
