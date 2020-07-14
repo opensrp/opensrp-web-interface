@@ -57,7 +57,7 @@ public class ExportRestController {
         String userType = roleName.get(0);
         String sk = request.getParameter("sk");
         String params = "branch="+branch+"&form_name="+formName+"&start="+startDate+"&end="+endDate+"&sk="+sk+"&user="+userName+"&user_type="+userType;
-        if(!formName.equalsIgnoreCase("covid19") & params.equals(session.getAttribute("params"))) return new ResponseEntity<String>("", HttpStatus.OK);
+//        if(!formName.equalsIgnoreCase("covid19") & params.equals(session.getAttribute("params"))) return new ResponseEntity<String>("", HttpStatus.OK);
         StringBuffer content = new StringBuffer();
         try {
             URL url = new URL("http://localhost:9070/data-export?"+params);
