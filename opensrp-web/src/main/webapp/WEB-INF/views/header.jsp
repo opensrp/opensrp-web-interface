@@ -35,14 +35,15 @@ License: You must have a valid license purchased only from themeforest(the above
 <meta name="_csrf" content="${_csrf.token}"/>
 <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
-
+<c:url var="login" value="/login" />
 <link rel="shortcut icon" href="<c:url value="/resources/assets/img/favicon.ico"/>" />
 <title>${title}</title>	
 <meta http-equiv="Cache-control" content="public">
-<meta http-equiv="refresh" content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/login"/>
+<meta http-equiv="refresh" content="<%=session.getMaxInactiveInterval()%>;url=${login}"/>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 <c:url var="sendPrescriptionMessage" value="/rest/api/v1/message/prescription" />
 <c:url var="sendBookingMessage" value="/rest/api/v1/message/booking" />
+
 
 <jsp:include page="/WEB-INF/views/js.jsp" />
 

@@ -33,7 +33,6 @@
 
 <script src="<c:url value='/resources/assets/global/plugins/js/jquery.cokie.min.js'/>"></script>
 <script src="<c:url value='/resources/assets/global/plugins/js/jquery.uniform.min.js'/>"></script>
-<script src="<c:url value='/resources/assets/global/plugins/js/jquery.uniform.min.js'/>"></script>
 
 
 <script src="<c:url value='/resources/assets/global/js/select2.min.js'/>"></script>
