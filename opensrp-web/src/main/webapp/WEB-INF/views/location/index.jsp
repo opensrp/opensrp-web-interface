@@ -8,66 +8,89 @@
 <%@ taglib prefix="security"
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
-
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+<%@page import="java.util.List"%>
+<%@page import="org.opensrp.core.service.UserService"%>
+ 
+	
 	<title><spring:message code="lbl.locationTitle"/></title>
-	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
-	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
-	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
-	<jsp:include page="/WEB-INF/views/css.jsp" />
-</head>
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
-<div class="content-wrapper">
-	<div class="container-fluid">
-		<!-- Example DataTables Card-->
-		<div class="form-group">
-			<jsp:include page="/WEB-INF/views/location/location-tag-link.jsp" />
-		</div>
-		<div class="form-group">
-			<h5><spring:message code="lbl.locationTitle"/></h5>
-			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_LOCATION")){ %>
-			<a  href="<c:url value="/location/add-ajax.html?lang=${locale}"/>"> <strong><spring:message code="lbl.addNew"/></strong></a>
-			<% } %>
-		</div>
-		<div class="card mb-3">
-			<div class="card-header">
-				<spring:message code="lbl.locationTitle"/>
-			</div>
-			<div class="card-body">
-				<div class="table-responsive">
-					<table class="display" id="locationListWithPagination" style="width: 100%;">
-						<thead>
-							<tr>
-								<th><spring:message code="lbl.name"></spring:message></th>
-								<th><spring:message code="lbl.description"></spring:message></th>
-								<th><spring:message code="lbl.code"></spring:message></th>
-								<th><spring:message code="lbl.locationTag"></spring:message></th>
-							</tr>
-						</thead>
-					</table>
+<jsp:include page="/WEB-INF/views/header.jsp" />
+
+<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
+<div class="page-content-wrapper">
+		<div class="page-content">
+			
+			
+			<ul class="page-breadcrumb breadcrumb text-right">
+				<li>
+					<%-- <a href="<c:url value="/user.html"/>">Home</a> --%>
+					
+				
+				
+				
+				<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_LOCATION")){ %>
+									
+					<a class="btn btn-default" id="add" href="<c:url value="/location/add-ajax.html?lang=${locale}"/>">Add new location</a> 
+					<%} %>
+				</li>
+			</ul>
+			<!-- END PAGE BREADCRUMB -->
+			<!-- END PAGE HEADER-->
+			<!-- BEGIN PAGE CONTENT-->
+			
+	
+			<div class="row">
+				<div class="col-md-12">
+					
+					<!-- BEGIN EXAMPLE TABLE PORTLET-->
+					<div class="portlet box blue-madison">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-list"></i><spring:message code="lbl.locationTitle"/>
+							</div>
+							
+							
+						</div>
+						
+						<div class="portlet-body">
+							<table class="table table-striped table-bordered " id="locationListWithPagination">
+								<thead>
+									<tr>
+										<th><spring:message code="lbl.name"></spring:message></th>
+										<th><spring:message code="lbl.description"></spring:message></th>
+										<th><spring:message code="lbl.code"></spring:message></th>
+										<th><spring:message code="lbl.locationTag"></spring:message></th>
+									</tr>
+								</thead>
+
+							</table>
+						</div>
+						
+					</div>
+					
+					
+					
 				</div>
 			</div>
-			<div class="card-footer small text-muted"></div>
+			<!-- END PAGE CONTENT-->
 		</div>
-		<jsp:include page="/WEB-INF/views/footer.jsp" />
 	</div>
+	<!-- END CONTENT -->
 </div>
-<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
-<script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
-<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
+<jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
+
+<script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
+
+<script>
+jQuery(document).ready(function() {       
+	Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
+   //TableAdvanced.init();
+});
+</script>
+<jsp:include page="/WEB-INF/views/footer.jsp" />
+<jsp:include page="/WEB-INF/views/rawDataTablejs.jsp" />
+
+
 <script>
 	let locations;
 	$(document).ready(function() {
@@ -104,6 +127,3 @@
 		});
 	});
 </script>
-</body>
-</html>
-
