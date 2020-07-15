@@ -127,7 +127,7 @@
 			                </div>
 
                             <hr class="dotted">
-                            <div class="form-group">
+                            <div class="form-group text-right">
                                 <button type="submit" id="submit-form"  class="btn btn-primary" name="signup" value="Validate">Submit</button>
                                 <a class="btn btn-info" href="${cancelUrl}">Cancel</a>
                             </div>

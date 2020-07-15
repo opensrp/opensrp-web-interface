@@ -17,19 +17,7 @@
     String username = (String) session.getAttribute("username");
 %>
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link type="text/css" href="<c:url value="/resources/css/magicsuggest-min.css"/>" rel="stylesheet">
-    <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <!-- default header name is X-CSRF-TOKEN -->
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <title><spring:message code="lbl.changePassword"/></title>
-    <jsp:include page="/WEB-INF/views/css.jsp" />
-</head>
+
 
 <%
     String fromRole = (String) session.getAttribute("fromRole");
@@ -41,10 +29,10 @@
 <body>
 <div class="content-wrapper" style="min-height: auto !important;">
     <div class="container-fluid" style="padding-bottom: 20px !important;">
-        <h5>Change Password</h5>
+       
         <div class="card mb-3">
             <div class="card-header">
-                <b>${account.fullName}'s Password Change</b>
+                <b>Password Change of ${account.fullName}'s </b>
             </div>
             <div class="card-body">
 
@@ -53,18 +41,17 @@
                 </div>
 
             </div>
-            <div id="changePassword" class="form-inline" autocomplete="off">
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group required">
+            <hr />
+            <div id="changePassword">
+				<div class="form-group row">
+                
+                    <div class="col-sm-6">
                         <label class="label-width" for="password"><spring:message code="lbl.password"/></label>
                         <input type="text" class="form-control mx-sm-3" id="password" name="password"  required />
                         <input type="checkbox" checked onclick="toggleVisibilityOfPassword()">Show Password
                     </div>
-                </div>
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group required">
+                
+                    <div class="col-sm-6">
                         <label class="label-width"  for="retypePassword"><spring:message code="lbl.confirmedPassword"/></label>
                         <input type="text" class="form-control mx-sm-3" id="retypePassword"
                                required="required" />
@@ -73,31 +60,27 @@
                         </small>
                     </div>
                 </div>
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group">
-                        <input
+                
+                <div class="form-group text-right">
+                             <input
                                 type="submit"
                                 onclick="submitted()"
                                 value="<spring:message code="lbl.resetPassword"/>"
-                                class="btn btn-primary btn-block btn-center" />
-                    </div>
-                    <div class="form-group">
-                        <a href="#" rel="modal:close" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
-                    </div>
-                </div>
+                                class="btn btn-primary" />
+                                
+                               <a href="#" rel="modal:close"  class="btn btn-primary">Cancel</a>
+            	</div>
             </div>
         </div>
+        
+        
+        
 
     </div>
 </div>
 <!-- /.container-fluid-->
 <!-- /.content-wrapper-->
-<script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
-<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="<c:url value='/resources/js/sb-admin.min.js'/>"></script>
 
 
 <script type="text/javascript">

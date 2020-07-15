@@ -14,24 +14,12 @@
     Integer skId = (Integer)session.getAttribute("skId");
 %>
 
-<%-- <head>
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><spring:message code="lbl.addUserTitle"/></title>
-    <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
-    <jsp:include page="/WEB-INF/views/css.jsp" />
-</head>
- --%>
+
 <c:url var="cancelUrl" value="/user/${skId}/${skUsername}/my-ss.html?lang=en" />
 <body>
-<div class="content-wrapper" style="min-height: auto !important;">
-    <div class="container-fluid" style="padding-bottom: 20px !important;">
+
         <div class="card mb-3">
-            <div class="card-header" id="data">
-                <i class="fa fa-table"></i> Add New SS
-            </div>
+            
             <div class="card-body">
 
                 <span class="text-red" id="usernameUniqueErrorMessage"></span>
@@ -39,45 +27,44 @@
                 <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
                     <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
                 </div>
-                <div style="margin-left: 10px;">SK NAME:<b>&nbsp;${skFullName}</b></div>
+                <h3> <b> Add new SS of SK (${skFullName})</b></h3>
             </div>
 
-            <form:form 	modelAttribute="account" id="SSInfo" class="form-inline" autocomplete="off">
-                <div class="row col-12 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width" for="firstName"> <spring:message code="lbl.firstName"/> </label>
+            <form:form 	modelAttribute="account" id="SSInfo"  autocomplete="off">
+                
+                 <div class="form-group row" >
+                
+                    <div class="col-sm-6">
+                        <label class="control-label" for="firstName"> <spring:message code="lbl.firstName"/>  <span class="required">* </span></label>
                         <form:input path="firstName" class="form-control mx-sm-3" required="required" />
                     </div>
-                </div>
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group">
-                        <label class="label-width" for="lastName"> <spring:message code="lbl.lastName"/> </label>
+                    <div class="col-sm-6">
+                        <label class="control-label" for="lastName"> <spring:message code="lbl.lastName"/> </label>
                         <form:input path="lastName" class="form-control mx-sm-3"/>
                     </div>
-                </div>
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group">
-                        <label class="label-width" for="mobile"><spring:message code="lbl.mobile"/></label>
+               
+				</div>
+				
+				 <div class="form-group row" >
+               
+                    <div class="col-sm-6">
+                        <label class="control-label" for="mobile"><spring:message code="lbl.mobile"/></label>
                         <form:input path="mobile" class="form-control mx-sm-3" />
                     </div>
-                </div>
-
-
-
-                <div class="row col-12 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width" for="username">SK Username</label>
+                
+                    <div class="col-sm-6">
+                        <label class="control-label" for="username">SK Username  <span class="required">* </span></label>
                         <form:input path="username" type="text" class="form-control mx-sm-3"
                                     required="required" value="${skUsername}" readonly="true"/>
 
                     </div>
-                </div>
-
-                <div class="row col-12 tag-height" id="ssOption">
-                    <div class="form-group required">
-                        <label class="label-width" for="ssNo"><spring:message code="lbl.ssNo"/></label>
+                
+				</div>
+				
+				
+                <div class="form-group row" id="ssOption">
+                    <div class="col-sm-6">
+                        <label class="control-label" for="ssNo"><spring:message code="lbl.ssNo"/><span class="required">* </span></label>
                         <select id="ssNo"
                                 class="form-control mx-sm-3 js-example-basic-multiple"
                                 name="ssNo" required>
@@ -119,22 +106,21 @@
                         <div class="text-red" id="roleSelectmessage"></div>
                     </div>
                 </div>
-                <div class="row col-12 tag-height">
-                    <div class="form-group">
-                        <input
-                                type="submit"
-
-                                value="<spring:message code="lbl.save"/>"
-                                class="btn btn-primary btn-block btn-center" />
-                    </div>
-                    <div class="form-group">
-                        <a href="#" rel="modal:close" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
-                    </div>
+                
+                <div class="form-group text-right">
+                   <input type="submit" id="update" name="update"  value="Save" class="btn btn-primary" />
+                  
+                   <a href="#" rel="modal:close" style="margin-left: 20px;" class="btn btn-primary">Cancel</a>
                 </div>
+                
+                
+                
             </form:form>
         </div>
-    </div>
-</div>
+        
+        
+        
+    
 </body>
 
 <script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>

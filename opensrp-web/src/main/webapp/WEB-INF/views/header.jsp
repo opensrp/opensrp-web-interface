@@ -182,7 +182,12 @@ License: You must have a valid license purchased only from themeforest(the above
 				<li class="start ">
 					<a href="<c:url value="/" />">
 					<i class="fa fa-home"></i>
-					<span class="title"> Home</span>
+					<% if (AuthenticationManagerUtil.isAM()) {%>
+					<span class="title"> <spring:message code="lbl.skList"/></span>
+					<%} else {%>
+					<span class="title"> <spring:message code="lbl.home"/></span>
+					<%}%>
+					
 					</a>
 				</li>
 				

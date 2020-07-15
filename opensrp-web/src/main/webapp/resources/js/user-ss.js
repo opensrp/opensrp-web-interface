@@ -121,7 +121,7 @@ function catchmentLoad(ssId, term) {
             }).jstree();
 
             //create catchment area table
-            var content = "<table id='catchment-table' class='display'>";
+            var content = "<table id='catchment-table' class='table table-striped table-bordered'>";
             content += '<thead><tr><th>Division</th><th>District</th><th>City Corporation/Upazila</th><th>Pourashabha</th>' +
                 '<th>Union</th><th>Village</th><th>Action</th></tr></thead><tbody>';
             for(var y = 0; y < catchmentAreaTable.length; y++){

@@ -35,7 +35,7 @@
 	<div class="page-content">
 
 
-		<ul class="page-breadcrumb breadcrumb">
+		<ul class="page-breadcrumb breadcrumb text-right">
 			<li>
 				<% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SK")){ %>
 				<a class="btn btn-primary" href="#" onclick="addSK()">
@@ -59,32 +59,35 @@
         </div>
 
         <!--Modal start-->
-        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050"
+        <div style="overflow: unset;display: none;top:30px; max-width: none; position: relative; z-index: 1050"
              id="catchment-area" class="modal">
             <div id="user-info-body" class="row"></div>
-            <div id ="modal-body" class="row">
-                <div class="col-sm-5" style="overflow-y: auto; height: 350px;">
-                    <div id="locationTree">
-                    </div>
+            
+                 <div class="form-group row" id ="modal-body">
+	                <div class="col-sm-5">
+	                    <div id="locationTree">
+	                    </div>
+	                </div>
+	                <div class="col-sm-5">
+	                    <select id='locations' multiple='multiple'>
+	                    </select>
+	                </div>
+	                <div class="col-sm-2">
+	                    <input id="userId" value="${skId}" type="hidden">
+	                    <br />
+	                   
+	                        <button id="saveCatchmentArea"
+	                                disabled = true
+	                                class="btn btn-primary btn-lg"
+	                                >
+	                            Save
+	                        </button>
+	                        <p id="pleaseWait" style="display: none; color: red;">Please wait...</p>
+	                   
+	                </div>
                 </div>
-                <div class="col-sm-6" style="height: 350px;">
-                    <select id='locations' multiple='multiple'>
-                    </select>
-                </div>
-                <div class="col-sm-1" style="height: 350px;">
-                    <input id="userId" value="${skId}" type="hidden">
-                    <div class="row">
-                        <button id="saveCatchmentArea"
-                                disabled = true
-                                class="btn btn-primary btn-sm"
-                                style="position: absolute; top: 50%;
-                                transform: translateY(-50%);">
-                            Save
-                        </button>
-                        <p id="pleaseWait" style="display: none; color: red;">Please wait...</p>
-                    </div>
-                </div>
-            </div>
+                
+           
             <div id="table-body" class="row" style="overflow-x: auto; margin-bottom: 10px;">
             </div>
             <a class="btn btn-sm btn-dark" href="#" onclick="closeMainModal()" style="float: right; bottom: 0px">Close</a>
@@ -410,7 +413,7 @@
                 }).jstree();
 
                 //create catchment area table
-                var content = "<table id='catchment-table' class='display'>";
+                var content = "<table id='catchment-table' class='table table-striped table-bordered'>";
                 content += '<thead><tr><th>Division</th><th>District</th><th>City Corporation/Upazila</th><th>Pourashabha</th>' +
                     '<th>Union</th><th>Village</th><th>Action</th></tr></thead><tbody>';
                 for(var y = 0; y < catchmentAreaTable.length; y++){
@@ -609,5 +612,6 @@
 		Layout.init(); // init current layout
 		//TableAdvanced.init();
 		$('#sample_1').DataTable();
+		$('#catchment-table').DataTable();
 	});
 </script>

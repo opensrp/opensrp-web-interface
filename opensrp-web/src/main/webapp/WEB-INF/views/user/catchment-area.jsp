@@ -95,8 +95,7 @@
 				                       
 				                            <button id="saveCatchmentArea"
 				                                    disabled = true
-				                                    class="btn btn-primary btn-lg"
-				                                    >
+				                                    class="btn btn-primary btn-lg">
 				                                Save
 				                            </button>
 				                            <p id="pleaseWait" style="display: none; color: red;">Please wait...</p>
