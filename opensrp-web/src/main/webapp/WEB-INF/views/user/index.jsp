@@ -24,7 +24,7 @@
 	<div class="page-content">
 
 
-		<ul class="page-breadcrumb breadcrumb">
+		<ul class="page-breadcrumb breadcrumb text-right">
 			<li>
 				<%-- <a href="<c:url value="/user.html"/>">Home</a> --%>
 

@@ -241,14 +241,25 @@ License: You must have a valid license purchased only from themeforest(the above
 					</a>
 				</li>
 				<%} %>
-				<% if(PERM_READ_USER_LIST){ %>
+				
+				<% if(AuthenticationManagerUtil.isPermitted("PERM_USER_UPLOAD")){ %>
 				<li>
-					<a href="<c:url value="/user.html"/>">
+					<a href="<c:url value="/user/upload.html"/>">
 						<i class="fa fa-user"></i>
-						<span class="title"> User</span>
+						<span class="title"> Upload user</span>
 					</a>
 				</li>
 				<%} %>
+				
+				<% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_IMEI")){ %>
+				<li>
+					<a href="<c:url value="/user/upload-imei.html"/>">
+						<i class="fa fa-user"></i>
+						<span class="title">  Upload IMEI</span>
+					</a>
+				</li>
+				<%} %>
+				
 				
 				<% if(PERM_READ_BRANCH_LIST){ %>
 				<li>
