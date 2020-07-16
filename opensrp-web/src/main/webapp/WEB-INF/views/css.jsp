@@ -91,6 +91,11 @@
 	href="<c:url value="/resources/css/project.css"/>"
 	rel="stylesheet"
 	http-equiv="Cache-control" content="public">
+
+	<link type="text/css"
+	  href="<c:url value="/resources/css/jquery-ui.css"/>"
+	  rel="stylesheet"
+	  http-equiv="Cache-control" content="public">
 	
 	
 	

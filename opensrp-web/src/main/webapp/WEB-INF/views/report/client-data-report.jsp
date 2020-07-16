@@ -42,7 +42,7 @@
     <div class="page-content">
 
     <div class="row">
-        <di class="col-md-12">
+        <div class="col-md-12">
             <div class="portlet box blue-madison">
                 <div class="portlet-title">
                     <div class="caption">
@@ -103,7 +103,7 @@
                                 </div>
                             </div>
                         </form>
-                        <div class="row" id="msg">
+                        <div id="msg">
                             <div class="col-6" id="errorMsg"> </div>
                         </div>
                         <div class="row">
@@ -130,11 +130,10 @@
                     </div>
                 </div>
             </div>
-        </di>
+        </div>
     </div>
-    <div class="row">
+
         <div id="client-data-report-table"></div>
-    </div>
         <jsp:include page="/WEB-INF/views/footer.jsp" />
     </div>
 
