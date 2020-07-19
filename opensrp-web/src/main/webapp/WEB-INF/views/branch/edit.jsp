@@ -9,67 +9,67 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="_csrf" content="${_csrf.token}"/>
-	<!-- default header name is X-CSRF-TOKEN -->
-	<meta name="_csrf_header" content="${_csrf.headerName}"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><spring:message code="lbl.editBranchTitle"/></title>
+<jsp:include page="/WEB-INF/views/css.jsp" />
+<jsp:include page="/WEB-INF/views/header.jsp" />
 
-	<title><spring:message code="lbl.editBranchTitle"/></title>
-	<jsp:include page="/WEB-INF/views/css.jsp" />
-</head>
 
 <%--<c:url var="saveUrl" value="/role/${id}/edit.html" />--%>
 
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
-<div class="content-wrapper">
-	<div class="container-fluid">
-		<div class="form-group">
-			<jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />
-		</div>
-		<div class="card mb-3">
-			<div class="card-header">
-				<i class="fa fa-table"></i> <spring:message code="lbl.editBranchTitle"/>
+<div class="page-content-wrapper">
+	<div class="page-content">
+
+		<div class="portlet box blue-madison">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-list"></i><spring:message code="lbl.editBranchTitle"/>
+				</div>
 			</div>
-			<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
-				<img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
-			</div>
-			<div id="errorMessage" style="color: red; font-size: small; display: none; margin-left: 20px; margin-top: 5px;"></div>
-			<div class="card-body">
+			<div class="portlet-body">
+				<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
+					<img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+				</div>
+				<div id="errorMessage" style="color: red; font-size: small; display: none; margin-left: 20px; margin-top: 5px;"></div>
+
 				<form:form modelAttribute="branch" id="BranchInfo" class="form-inline">
 					<form:input type="hidden" path="id" value="${branchDTO.id}"/>
-					<div class="row col-12 tag-height">
+					<div class="">
 						<div class="form-group required">
 							<label class="label-width" for="name"> <spring:message code="lbl.branchName"/> </label>
 							<form:input value="${branchDTO.name}" path="name" class="form-control mx-sm-3"
 										required="required" />
 						</div>
 					</div>
-					<div class="row col-12 tag-height">
+					<br/>
+
+					<div>
 						<div class="form-group required">
 							<label class="label-width" for="code"> <spring:message code="lbl.branchCode"/> </label>
 							<form:input value="${branchDTO.code}" path="code" class="form-control mx-sm-3"
 										required="required" disabled="true"/>
 						</div>
 					</div>
-					<div class="row col-12 tag-height">
+					<br/>
+
+					<div class="col-md-offset-1">
 						<div class="form-group">
-							<input type="submit" value="<spring:message code="lbl.saveChanges"/>" class="btn btn-primary btn-block btn-center" />
+							<input type="submit" style="padding:5px" value="<spring:message code="lbl.saveChanges"/>" class="btn btn-primary btn-block btn-center" />
 						</div>
 					</div>
 				</form:form>
+
 			</div>
 		</div>
-	</div>
-	<!-- /.container-fluid-->
-	<!-- /.content-wrapper-->
 	<jsp:include page="/WEB-INF/views/footer.jsp" />
+	</div>
 </div>
 <script>
+	jQuery(document).ready(function() {
+		Metronic.init(); // init metronic core components
+		Layout.init(); // init current layout
+		//TableAdvanced.init();
+	});
+
 	$("#BranchInfo").submit(function (event) {
 		$("#loading").show();
 		var url = "/opensrp-dashboard/rest/api/v1/branch/update";
@@ -118,5 +118,4 @@
 		});
 	});
 </script>
-</body>
 </html>
