@@ -150,6 +150,7 @@
         </div>
     <jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
+</div>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script src="<c:url value='/resources/js/datepicker.js' />"></script>
 
