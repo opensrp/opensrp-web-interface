@@ -106,7 +106,7 @@
 						<option value=""></option>
 					</select>
 				</div>
-				<div class="col-md-2" id="upazilaHide">
+				<div class="col-md-3" id="upazilaHide">
 					<label><spring:message code="lbl.upazila"/></label>
 					<select class="custom-select custom-select-lg mb-3" id="upazila"
 							name="upazila">
