@@ -60,36 +60,6 @@
                 </div>
             </div>
         </div>
-
-
-
-<%--        <div class="card mb-3">--%>
-<%--            <div class="card-header">--%>
-<%--                <i class="fa fa-table"></i>--%>
-<%--                <spring:message code="lbl.aggregatedReport"/>--%>
-<%--            </div>--%>
-<%--            <div class="card-body">--%>
-<%--                <div class="row" style="margin-bottom: 10px;">--%>
-<%--                    <div class="col-sm-2" id="startDate">--%>
-<%--                        <b>START DATE: </b> <span><%=startDate%></span>--%>
-<%--                    </div>--%>
-<%--                    <div class="col-sm-2" id="endDate">--%>
-<%--                        <b>END DATE: </b> <span><%=endDate%></span>--%>
-<%--                    </div>--%>
-<%--                    <div class="col-sm-2" id="divisionS"></div>--%>
-<%--                    <div class="col-sm-2" id="districtS"></div>--%>
-<%--                    <div class="col-sm-4" id="upazilaS"></div>--%>
-<%--                </div>--%>
-
-<%--                <div class="row">--%>
-<%--                    <div class="col-sm-12" id="content" style="overflow-x: auto;">--%>
-<%--                        <div id="aggregated-report"></div>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-
-<%--            </div>--%>
-<%--            <div class="card-footer small text-muted"></div>--%>
-<%--        </div>--%>
         <jsp:include page="/WEB-INF/views/footer.jsp" />
     </div>
 </div>
