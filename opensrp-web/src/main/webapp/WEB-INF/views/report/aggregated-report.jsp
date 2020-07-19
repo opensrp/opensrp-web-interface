@@ -63,10 +63,14 @@
         <jsp:include page="/WEB-INF/views/footer.jsp" />
     </div>
 </div>
-<script src="<c:url value='/resources/js/datepicker.js' />"></script>
-<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
+<script src="<c:url value='/resources/js/datepicker.js' />"></script>
 <script>
+    jQuery(document).ready(function() {
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        //TableAdvanced.init();
+    });
 
     $(document).ready(function() {
         $("#searched_value").val('BANGLADESH');
