@@ -7,10 +7,10 @@ General reset
 /* Set default body */
 body {
   color: #333333;
-  font-family:"Times New Roman", Times, serif;
+  font-family: sans-serif;
   padding: 0px !important;
   margin: 0px !important;
-  font-size: 13px;
+  font-size: 12px;
   direction: ltr;
 }
 
@@ -5726,7 +5726,7 @@ Custom tables
 }
 
 .table thead tr th {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
 }
 

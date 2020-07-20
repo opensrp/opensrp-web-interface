@@ -100,6 +100,7 @@ div.dataTables_scrollFoot table {
  */
 table.table-bordered.dataTable {
 	border-collapse: separate !important;
+	font-size: 1.2rem;
 }
 table.table-bordered thead th,
 table.table-bordered thead td {

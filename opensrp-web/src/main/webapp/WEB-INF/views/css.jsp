@@ -9,9 +9,9 @@
 
 	
 	
-	
-	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
-	
+<%--	--%>
+<%--	<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">--%>
+<%--	--%>
 	<link type="text/css"
 	href="<c:url value="/resources/assets/admin/css/profile.css"/>"
 	rel="stylesheet"
@@ -96,6 +96,8 @@
 	  href="<c:url value="/resources/css/jquery-ui.css"/>"
 	  rel="stylesheet"
 	  http-equiv="Cache-control" content="public">
+
+	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
 	
 	
 	
