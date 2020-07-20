@@ -30,6 +30,7 @@
 		border: 1px solid #ced4da;
 		border-radius: .25rem;
 		-webkit-appearance: none;
+		background: #fff;
 	}
 </style>
 
