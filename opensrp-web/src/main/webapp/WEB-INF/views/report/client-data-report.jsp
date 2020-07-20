@@ -28,7 +28,6 @@
         color: red;
     }
 </style>
-<jsp:include page="/WEB-INF/views/css.jsp" />
 <%--<style>--%>
 <%--    th, td { text-align: center; }--%>
 <%--    .select2-container--default .select2-results__option { font-size: 18px!important; }--%>

@@ -21,7 +21,6 @@
 <html lang="en">
 
 <title><spring:message code="lbl.childNutritionReport"/></title>
-<jsp:include page="/WEB-INF/views/css.jsp" />
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <style>
     th, td {
@@ -60,7 +59,7 @@
                     <div class="col-sm-4" id="upazilaS"></div>
                 </div>
 
-                <div class="row">
+                <div class="row" style="margin: 0px">
                     <div class="col-sm-12" id="content" style="overflow-x: auto;">
                         <div id="child-nutrition-report"></div>
                     </div>

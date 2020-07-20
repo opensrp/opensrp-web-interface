@@ -30,7 +30,6 @@
     th, td { text-align: center; }
 </style>
 <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
-<jsp:include page="/WEB-INF/views/css.jsp" />
 <jsp:include page="/WEB-INF/views/header.jsp" />
 
 <div class="page-content-wrapper">
@@ -127,7 +126,7 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="display" id="covidReports">
+                    <table class="display table table-bordered table-striped" id="covidReports">
                         <thead>
                         <tr>
                             <th><spring:message code="lbl.sk"/></th>
