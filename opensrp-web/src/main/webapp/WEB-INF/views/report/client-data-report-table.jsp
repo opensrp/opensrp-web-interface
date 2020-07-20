@@ -25,7 +25,7 @@
                          class="dataTables_wrapper container-fluid dt-bootstrap4">
                         <div class="row">
                             <div class="col-sm-12">
-                                <table class="table table-bordered dataTable" id="dataTable"
+                                <table class="table table-bordered table-striped dataTable" id="dataTable"
                                        style="width: 100%;">
                                     <thead>
                                     <tr>

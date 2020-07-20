@@ -28,7 +28,7 @@
 </head>
 <body>
 
-<table class="display" id="covidReports"
+<table class="display table table-bordered table-striped" id="covidReports"
        style="width: 100%;">
     <thead>
     <tr>
