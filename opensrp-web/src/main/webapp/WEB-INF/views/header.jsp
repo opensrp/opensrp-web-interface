@@ -265,7 +265,8 @@ License: You must have a valid license purchased only from themeforest(the above
 				<li>
 					<a href="<c:url value="/branch-list.html?lang=${locale}"/>">
 						<i class="fa fa-user"></i>
-						<spring:message code="lbl.manageBranch"/></strong>
+
+						<span class="title"> <spring:message code="lbl.manageBranch"/> </span>
 					</a>
 				</li>
 				<%} %>
