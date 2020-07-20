@@ -72,11 +72,12 @@
 				</div>
 			</div>
 			<!-- END PAGE CONTENT-->
+			<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>
 	</div>
 	<!-- END CONTENT -->
 </div>
-<jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
+
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
@@ -87,7 +88,6 @@ jQuery(document).ready(function() {
    //TableAdvanced.init();
 });
 </script>
-<jsp:include page="/WEB-INF/views/footer.jsp" />
 <jsp:include page="/WEB-INF/views/rawDataTablejs.jsp" />
 
 

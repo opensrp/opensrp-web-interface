@@ -107,6 +107,7 @@
 				</div>
 			</div>
 			<!-- END PAGE CONTENT-->
+			<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>
 	</div>
 	<!-- END CONTENT -->
@@ -123,7 +124,7 @@ jQuery(document).ready(function() {
 		$('#sample_1').DataTable();
 });
 </script>
-<jsp:include page="/WEB-INF/views/footer.jsp" />
+
 
 
 

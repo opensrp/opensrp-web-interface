@@ -83,6 +83,7 @@
 				</div>
 			</div>
 			<!-- END PAGE CONTENT-->
+			<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>
 	</div>
 	<!-- END CONTENT -->
@@ -94,8 +95,6 @@ jQuery(document).ready(function() {
    //TableAdvanced.init();
 });
 </script>
-
-<jsp:include page="/WEB-INF/views/footer.jsp" />
 
 
 
