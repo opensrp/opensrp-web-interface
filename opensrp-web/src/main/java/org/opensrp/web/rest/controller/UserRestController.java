@@ -462,7 +462,12 @@ public class UserRestController {
 		boolean editPermitted = AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER");
 
 		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId, name, length, start, orderColumn, orderDirection);
-		Integer totalUserWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentAreaCount(roleId, branchId, name);
+		Integer totalUserWithoutCatchmentArea = 0;
+		if(start > 0) {
+			totalUserWithoutCatchmentArea = Integer.valueOf(request.getParameter("userCountWithoutCatchmentArea"));
+		} else {
+			totalUserWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentAreaCount(roleId, branchId, name);
+		}
 		JSONObject response = userServiceImpl.getUserDataOfDataTable(draw, totalUserWithoutCatchmentArea, usersWithoutCatchmentArea, editPermitted);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
@@ -484,7 +489,12 @@ public class UserRestController {
 		boolean editPermitted = AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER");
 
 		List<Object[]> usersWithCatchmentArea = userServiceImpl.getUserListByFilterString(locationId, villageTagId, roleId, branchId, name, length, start, orderColumn, orderDirection);
-		Integer totalUserWithCatchmentArea = userServiceImpl.getUserListByFilterStringCount(locationId, villageTagId, roleId, branchId, name, length, start);
+		Integer totalUserWithCatchmentArea = 0;
+		if(start > 0 ) {
+			totalUserWithCatchmentArea = Integer.valueOf(request.getParameter("userCount"));
+		} else {
+			totalUserWithCatchmentArea = userServiceImpl.getUserListByFilterStringCount(locationId, villageTagId, roleId, branchId, name, length, start);
+		}
 		JSONObject response = userServiceImpl.getUserDataOfDataTable(draw, totalUserWithCatchmentArea, usersWithCatchmentArea, editPermitted);
 		return new ResponseEntity<>(response.toString(), OK);
 	}

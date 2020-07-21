@@ -10,7 +10,11 @@
 <%
     Integer recordSize = (Integer) session.getAttribute("recordSize");
 %>
-
+<style>
+    .table-bordered>tbody>tr>td {
+        font-size: 13px;
+    }
+</style>
 <div class="row">
     <div class="col-md-12">
         <div class="portlet box blue-madison">

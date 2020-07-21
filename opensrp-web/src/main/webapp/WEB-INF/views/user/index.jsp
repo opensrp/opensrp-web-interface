@@ -124,6 +124,7 @@
 
 <script>
 	let userListWithoutCatchmentArea, userList;
+	var userCount = 0, userCountWithoutCatchmentArea = 0;
 	$(document).ready(function() {
 		clearRegionSelection();
 		$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
@@ -170,9 +171,11 @@
 					data.village = $('#village').val();
 					data.role = $('#role').val();
 					data.branch = $('#branch').val();
+					data.userCount = userCount;
 				},
 				dataSrc: function(json){
 					if(json.data){
+						userCount = json.recordsTotal;
 						return json.data;
 					}
 					else {
@@ -214,9 +217,11 @@
 					data.village = $('#village').val();
 					data.role = $('#role').val();
 					data.branch = $('#branch').val();
+					data.userCountWithoutCatchmentArea = userCountWithoutCatchmentArea;
 				},
 				dataSrc: function(json){
 					if(json.data){
+						userCountWithoutCatchmentArea = json.recordsTotal;
 						return json.data;
 					}
 					else {
