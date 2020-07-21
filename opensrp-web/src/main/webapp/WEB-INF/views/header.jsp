@@ -194,20 +194,20 @@ License: You must have a valid license purchased only from themeforest(the above
 				
 				
 				
-				<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_LOCATION_TAG_LIST")){ %>
-				<li>
-					<a  href="<c:url value="/location/tag/list.html?lang=${locale}"/>">
-					<i class="fa fa-cogs"></i>
-					<span class="title"> Location Tag</span></a>
-					
-				</li>
-				<%} %>
+<%--				<% if(AuthenticationManagerUtil.isPermitted("PERM_READ_LOCATION_TAG_LIST")){ %>--%>
+<%--				<li>--%>
+<%--					<a  href="<c:url value="/location/tag/list.html?lang=${locale}"/>">--%>
+<%--					<i class="fa fa-cogs"></i>--%>
+<%--					<span class="title"> Location Tag</span></a>--%>
+<%--					--%>
+<%--				</li>--%>
+<%--				<%} %>--%>
 				
 				
 				<% if(PERM_READ_LOCATION_LIST || PERM_UPLOAD_LOCATION){ %>
 				<li>
 					<a href="javascript:;">
-					<i class="fa fa-cogs"></i>
+					<i class="fa fa-map-marker"></i>
 					<span class="title"> Location</span>
 					<span class="arrow "></span>
 					</a>
@@ -236,7 +236,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<% if(PERM_READ_ROLE_LIST){ %>
 				<li>
 					<a href="<c:url value="/role.html"/>">
-						<i class="fa fa-cogs"></i>
+						<i class="fa fa-group"></i>
 						<span class="title"> Role</span>
 					</a>
 				</li>
@@ -254,7 +254,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<% if(AuthenticationManagerUtil.isPermitted("PERM_UPLOAD_IMEI")){ %>
 				<li>
 					<a href="<c:url value="/user/upload-imei.html"/>">
-						<i class="fa fa-user"></i>
+						<i class="fa fa-upload"></i>
 						<span class="title">  Upload IMEI</span>
 					</a>
 				</li>
@@ -264,7 +264,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<% if(PERM_READ_BRANCH_LIST){ %>
 				<li>
 					<a href="<c:url value="/branch-list.html?lang=${locale}"/>">
-						<i class="fa fa-user"></i>
+						<i class="fa fa-cubes"></i>
 
 						<span class="title"> <spring:message code="lbl.manageBranch"/> </span>
 					</a>
@@ -274,7 +274,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<% if(PERM_READ_AGGREGATED_REPORT){ %>
 				<li>
 					<a href="javascript:;">
-					<i class="fa fa-cogs"></i>
+					<i class="fa fa-bar-chart"></i>
 					<span class="title"><spring:message code="lbl.report"/></span>
 					<span class="arrow "></span>
 					</a>
