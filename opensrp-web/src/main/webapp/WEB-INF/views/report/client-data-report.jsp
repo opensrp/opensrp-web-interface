@@ -101,7 +101,7 @@
                                             List<Object[]> ret = (List<Object[]>) session.getAttribute("skList");
                                             for (Object[] str : ret) {
                                         %>
-                                        <option value="<%=str[1]%>"><%=str[2]%>(<%=str[1]%>)</option>
+                                        <option value="<%=str[1]+"-"+str[3]%>" ><%=str[2]%>(<%=str[1]%>)</option>
                                         <% } %>
                                     </select>
                                 </div>
@@ -221,8 +221,8 @@
                 startDate: $("#start").val(),
                 endDate: $("#end").val(),
                 formName: $("#formName").val(),
-                branch: $("#branch").val(),
-                sk: $("#skList").val(),
+                branch: getBranchId($("#branch").val(), $("#skList").val().split('-')[1]),
+                sk: $("#skList").val().split('-')[0],
                 pageNo: pageNo
             },
             beforeSend: function() {
@@ -285,8 +285,8 @@
                 startDate: $("#start").val(),
                 endDate: $("#end").val(),
                 formName: $("#formName").val(),
-                branch: $("#branch").val(),
-                sk: $("#skList").val()
+                branch: getBranchId($("#branch").val(), $("#skList").val().split('-')[1]),
+                sk: $("#skList").val().split('-')[0]
             },
             beforeSend: function() {},
             success : function(data) {
@@ -373,6 +373,11 @@
             $("#errorMsg").html("");
         }
         return true;
+    }
+
+    function getBranchId(branchId, branchWithSk) {
+        if(branchId == 0) return branchWithSk;
+        else return branchId;
     }
 </script>
 </body>

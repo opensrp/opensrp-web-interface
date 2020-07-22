@@ -1392,7 +1392,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 			additionalQuery += ");";
 		}
 		try {
-			String hql = "select u.id, u.username, concat(u.first_name, ' ', u.last_name) from core.users u"
+			String hql = "select u.id, u.username, concat(u.first_name, ' ', u.last_name), ub.branch_id from core.users u"
 					+ " join core.user_role ur on u.id = ur.user_id join core.user_branch ub on u.id = ub.user_id"
 					+ " where ur.role_id = :skId" + additionalQuery;
 			allSK = session.createSQLQuery(hql).setInteger("skId", SK_ID).list();
@@ -1410,7 +1410,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Session session = sessionFactory.openSession();
 		List<Object[]> skList = null;
 		try {
-			String hql = "select u.id, u.username, concat(u.first_name, ' ', u.last_name) from core.users u join core.user_role ur on u.id = ur.user_id"
+			String hql = "select u.id, u.username, concat(u.first_name, ' ', u.last_name), ub.branch_id from core.users u join core.user_role ur on u.id = ur.user_id"
 					+ " join core.user_branch ub on u.id = ub.user_id where ur.role_id = :skId and ub.branch_id = any(array["+branchIds+"])";
 			skList = session.createSQLQuery(hql)
 					.setInteger("skId", SK_ID)

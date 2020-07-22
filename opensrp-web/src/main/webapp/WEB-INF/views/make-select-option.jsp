@@ -8,6 +8,6 @@
 %>
 <option value=""><spring:message code="lbl.pleaseSelect"/></option>
 <%   for (Object[] objects : dataList) {%>
-<option value="<%=objects[1]%>"><%=objects[2]%>(<%=objects[1]%>)</option>    <%
+<option value="<%=objects[1]+"-"+objects[3]%>"><%=objects[2]%>(<%=objects[1]%>)</option>    <%
     }
 %>
