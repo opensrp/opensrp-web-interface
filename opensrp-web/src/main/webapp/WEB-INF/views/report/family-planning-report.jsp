@@ -28,7 +28,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta http-equiv="refresh"
-          content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/logout" />
+          content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/session-expired" />
     <title><spring:message code="lbl.familyPlanningReport"/></title>
     <jsp:include page="/WEB-INF/views/css.jsp" />
 </head>

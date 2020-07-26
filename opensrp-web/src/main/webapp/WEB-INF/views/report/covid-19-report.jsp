@@ -25,7 +25,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="refresh" content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/logout" />
+    <meta http-equiv="refresh" content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/session-expired" />
     <title><spring:message code="lbl.covid19"/></title>
     <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">

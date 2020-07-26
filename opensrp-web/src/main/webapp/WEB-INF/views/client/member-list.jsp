@@ -28,7 +28,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta http-equiv="refresh"
-          content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/logout" />
+          content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/session-expired" />
 
     <title>Form Wise Report Status</title>
 

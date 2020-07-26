@@ -614,6 +614,14 @@ public class UserController {
 	public synchronized String loginPage() {
 		return "user/login";
 	}
+
+	@RequestMapping(value = "/session-expired", method = RequestMethod.GET)
+	public ModelAndView sessionExpired(ModelAndView modelAndView) {
+
+		modelAndView.setViewName("user/login");
+		modelAndView.addObject("sessionExpiredMsg", "Your session has expired, please login again to continue");
+		return modelAndView;
+	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_USER_HIERARCHY')")
 	@RequestMapping(value = "user/hierarchy.html", method = RequestMethod.GET)

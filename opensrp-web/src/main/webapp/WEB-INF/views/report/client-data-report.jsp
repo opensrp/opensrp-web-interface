@@ -26,7 +26,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta http-equiv="refresh"
-          content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/logout" />
+          content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/session-expired" />
 
     <title>Form Wise Client Data Report</title>
     <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">

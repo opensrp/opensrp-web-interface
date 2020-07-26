@@ -17,5 +17,5 @@
 
 	<jsp:include page="/WEB-INF/views/css.jsp" />
 	<meta http-equiv="Cache-control" content="public">
-	<meta http-equiv="refresh" content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/logout"/>
+	<meta http-equiv="refresh" content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/session-expired"/>
 </head>

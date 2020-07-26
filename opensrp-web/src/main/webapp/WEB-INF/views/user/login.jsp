@@ -54,6 +54,7 @@
             <label>Password</label>
             <input type="password" class="form-control"id="password" name="password" placeholder="Password" >
           </div>
+          <div style="color: darkred"> ${sessionExpiredMsg} </div>
           <!--<div class="form-group">
             <div class="form-check">
               <label class="form-check-label">
