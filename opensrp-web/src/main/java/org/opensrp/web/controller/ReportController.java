@@ -30,6 +30,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author proshanto
@@ -576,4 +577,19 @@ public class ReportController {
 
 		return "report/client-data-report-table";
 	}
+
+
+    @RequestMapping(value = "/forum-report.html", method = RequestMethod.GET)
+    public ModelAndView getForumReport(ModelAndView modelAndView) {
+
+	    modelAndView.setViewName("report/forum-report");
+	    modelAndView.addObject("startDate", "");
+	    modelAndView.addObject("endDate", "");
+	    return modelAndView;
+    }
+
+    @RequestMapping(value = "/forum-report", method = RequestMethod.GET)
+    public String getForumReportTable() {
+        return "report/forum-report-table";
+    }
 }

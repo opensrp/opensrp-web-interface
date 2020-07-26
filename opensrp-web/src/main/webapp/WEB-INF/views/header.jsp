@@ -223,7 +223,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						<li>
 							<a  href="<c:url value="/location/upload_csv.html?lang=${locale}"/>">
 							
-							<spring:message code="lbl.uploadLocation"/></strong>
+							<spring:message code="lbl.uploadLocation"/>
 							</a>
 						</li>
 						<%} %>
@@ -304,7 +304,10 @@ License: You must have a valid license purchased only from themeforest(the above
 							<spring:message code="lbl.covid19"/>
 							</a>
 						</li>
-						
+						<li><a href="<c:url value="/report/forum-report.html?lang=${locale}"/>">
+							<spring:message code="lbl.forumReport"/>
+						</a>
+						</li>
 						
 					</ul>
 				</li>
