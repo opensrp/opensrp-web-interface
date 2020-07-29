@@ -308,6 +308,14 @@ License: You must have a valid license purchased only from themeforest(the above
 							<spring:message code="lbl.forumReport"/>
 						</a>
 						</li>
+						<li><a href="<c:url value="/report/aggregated-biometric-report.html?lang=${locale}"/>">
+							<spring:message code="lbl.aggregatedBiometricReport"/>
+						</a>
+						</li>
+						<li><a href="<c:url value="/report/individual-biometric-report.html?lang=${locale}"/>">
+							<spring:message code="lbl.individualBiometricReport"/>
+						</a>
+						</li>
 						
 					</ul>
 				</li>

@@ -592,4 +592,48 @@ public class ReportController {
     public String getForumReportTable() {
         return "report/forum-report-table";
     }
+
+	@RequestMapping(value = "/aggregated-biometric-report.html", method = RequestMethod.GET)
+	public String getAggregatedBiometricReport() {
+		return "report/aggregated-biometric-report";
+	}
+
+	@RequestMapping(value = "/aggregated-biometric-table", method = RequestMethod.GET)
+	public String getAggregatedBiometricTable() {
+
+
+		return "report/aggregated-biometric-table";
+	}
+
+	@RequestMapping(value = "/individual-biometric-report.html", method = RequestMethod.GET)
+	public String getIndividualBiometricReport() {
+		return "report/individual-biometric-report";
+	}
+
+	@RequestMapping(value = "/individual-biometric-table", method = RequestMethod.GET)
+	public String getIndividualBiometricTable(@RequestParam(value = "searched_value", required = false) String searchedValue,
+											  @RequestParam(value = "startDate", required = false) String startDate,
+											  @RequestParam(value = "endDate", required = false) String endDate,
+											  @RequestParam(value = "branch", required = false, defaultValue = "-1") Integer branch,
+											  @RequestParam(value = "serviceName", required = false, defaultValue = "") String serviceName,
+											  @RequestParam(value = "locationValue", required = false, defaultValue = "catchmentArea") String locationValue) {
+
+		List<IndividualBiometricReportDTO>  report = reportService.getIndividualBiometricReport("1999-01-01", "2021-01-01", "ANC", "branch", "4");
+
+		for(IndividualBiometricReportDTO r: report) {
+			System.out.println("====> " + r.getProviderName()+ " " +r.getServiceName());
+		}
+
+		if (AuthenticationManagerUtil.isAM() && locationValue.equalsIgnoreCase("catchmentArea")) {
+
+
+		}
+		else {
+
+		}
+
+		return "report/individual-biometric-table";
+	}
+
+
 }
