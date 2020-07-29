@@ -27,6 +27,11 @@ public class ReportService {
         return repository.getAggregatedReport(startDate, endDate, sql);
     }
 
+    public List<AggregatedBiometricDTO> getAggregatedBiometricReport(String startDate, String endDate, String parentLocationTag, Integer parentLocationId, String parentLocationName, String locationTag)  {
+        String sql = "select  * from report.get_aggregated_biometric_report(:startDate, :endDate, '"+parentLocationTag+"', "+parentLocationId+", '"+parentLocationName+"', '"+locationTag+"');";
+        return repository.getAggregatedBiometricReport(startDate, endDate, sql);
+    }
+
     public List<IndividualBiometricReportDTO> getIndividualBiometricReport(String startDate, String endDate, String serviceName, String searchTag, String searchValue) {
         String sql = "select * from report.get_individual_biometric('"+ startDate + "', '"+endDate+"', '"+serviceName+"', '"+searchTag+"', '"+searchValue+"');";
         return repository.getIndividualBiometricReport(startDate, endDate, sql);

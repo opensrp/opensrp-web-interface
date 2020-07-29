@@ -2466,6 +2466,42 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 	}
 
 	@Override
+	public <T> List<T> getAggregatedBiometricReport(String startDate, String endDate, String sql) {
+		Session session = sessionFactory.openSession();
+		List<T> report = new ArrayList<T>();
+		try {
+			Query query = session.createSQLQuery(sql)
+					.addScalar("locationOrProvider", StandardBasicTypes.STRING)
+					.addScalar("registeredWithBio", StandardBasicTypes.INTEGER)
+					.addScalar("eligibleForRegistration", StandardBasicTypes.INTEGER)
+					.addScalar("allIdentified", StandardBasicTypes.INTEGER)
+					.addScalar("allVerified", StandardBasicTypes.INTEGER)
+					.addScalar("allBypass", StandardBasicTypes.INTEGER)
+					.addScalar("ancTotalIdentified", StandardBasicTypes.INTEGER)
+					.addScalar("ancTotalVerified", StandardBasicTypes.INTEGER)
+					.addScalar("ancTotalBypass", StandardBasicTypes.INTEGER)
+					.addScalar("pncTotalIdentified", StandardBasicTypes.INTEGER)
+					.addScalar("pncTotalVerified", StandardBasicTypes.INTEGER)
+					.addScalar("pncTotalBypass", StandardBasicTypes.INTEGER)
+					.addScalar("elcoTotalIdentified", StandardBasicTypes.INTEGER)
+					.addScalar("elcoTotalVerified", StandardBasicTypes.INTEGER)
+					.addScalar("elcoTotalBypass", StandardBasicTypes.INTEGER)
+					.addScalar("otherTotalIdentified", StandardBasicTypes.INTEGER)
+					.addScalar("otherTotalVerified", StandardBasicTypes.INTEGER)
+					.addScalar("otherTotalBypass", StandardBasicTypes.INTEGER)
+					.setString("startDate", startDate)
+					.setString("endDate", endDate)
+					.setResultTransformer(new AliasToBeanResultTransformer(AggregatedBiometricDTO.class));
+			report = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return report;
+	}
+
+	@Override
 	public <T> List<T> getIndividualBiometricReport(String startDate, String endDate, String sql){
 		Session session = sessionFactory.openSession();
 		List<T> report = new ArrayList<T>();
@@ -2478,6 +2514,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					.addScalar("identified", StandardBasicTypes.STRING)
 					.addScalar("verifiedOrBypass", StandardBasicTypes.STRING)
 					.addScalar("memberName", StandardBasicTypes.STRING)
+					.addScalar("memberId", StandardBasicTypes.STRING)
 					.addScalar("branchName", StandardBasicTypes.STRING)
 					.setResultTransformer(new AliasToBeanResultTransformer(IndividualBiometricReportDTO.class));
 			report = query.list();

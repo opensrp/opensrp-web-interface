@@ -10,6 +10,7 @@ public class IndividualBiometricReportDTO {
     private String identified;
     private String verifiedOrBypass;
     private String memberName;
+    private String memberId;
     private String branchName;
 
     public String getLocationOrProvider() {
@@ -66,6 +67,14 @@ public class IndividualBiometricReportDTO {
 
     public void setMemberName(String memberName) {
         this.memberName = memberName;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public String getBranchName() {

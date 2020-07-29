@@ -1,6 +1,5 @@
 <%@page import="java.util.List"%>
-<%@ page import="org.opensrp.common.dto.ElcoReportDTO" %>
-<%@ page import="org.opensrp.common.dto.AggregatedReportDTO" %>
+<%@ page import="org.opensrp.common.dto.AggregatedBiometricDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
 
@@ -11,8 +10,7 @@
 <%@ taglib prefix="security"
            uri="http://www.springframework.org/security/tags"%>
 <%
-    List<AggregatedReportDTO> aggregatedReports = (List<AggregatedReportDTO>) session.getAttribute("aggregatedReports");
-    Boolean isSKList = (Boolean) session.getAttribute("isSKList");
+    List<AggregatedBiometricDTO> aggregateBiometricdReports = (List<AggregatedBiometricDTO>) session.getAttribute("aggregatedBiometricReport");
 %>
 
 <head>
@@ -32,13 +30,10 @@
     <thead>
     <thead>
     <tr>
-        <th rowspan="2"><spring:message code="lbl.slNo"/></th>
-        <th rowspan="2"><spring:message code="lbl.name"/></th>
-        <th rowspan="2"><spring:message code="lbl.idNo"/></th>
+<%--        <th rowspan="2"><spring:message code="lbl.slNo"/></th>--%>
+        <th rowspan="2"><spring:message code="lbl.provider"/></th>
         <th rowspan="2"><spring:message code="lbl.peopleEligibleForBioReg"/></th>
         <th rowspan="2"><spring:message code="lbl.RegWithBio"/></th>
-        <th rowspan="2"><spring:message code="lbl.adolescentRegWithBio"/></th>
-        <th rowspan="2"><spring:message code="lbl.peopleIdThroughBio"/></th>
         <th rowspan="2"><spring:message code="lbl.servicesProvidedWithBio"/></th>
         <th rowspan="2"><spring:message code="lbl.servicesValidateWithBio"/></th>
         <th rowspan="2"><spring:message code="lbl.servicesByPassingValidation"/></th>
@@ -64,7 +59,28 @@
     </thead>
     </thead>
     <tbody id="t-body">
-
+    <% for (AggregatedBiometricDTO report: aggregateBiometricdReports) { %>
+        <tr>
+            <td><%=report.getLocationOrProvider()%></td>
+            <td><%=report.getRegisteredWithBio()%></td>
+            <td><%=report.getEligibleForRegistration()%></td>
+            <td><%=report.getAllIdentified()%></td>
+            <td><%=report.getAllVerified()%></td>
+            <td><%=report.getAllBypass()%></td>
+            <td><%=report.getAncTotalIdentified()%></td>
+            <td><%=report.getAncTotalVerified()%></td>
+            <td><%=report.getAncTotalBypass()%></td>
+            <td><%=report.getPncTotalIdentified()%></td>
+            <td><%=report.getPncTotalVerified()%></td>
+            <td><%=report.getPncTotalBypass()%></td>
+            <td><%=report.getElcoTotalIdentified()%></td>
+            <td><%=report.getElcoTotalVerified()%></td>
+            <td><%=report.getElcoTotalBypass()%></td>
+            <td><%=report.getOtherTotalIdentified()%></td>
+            <td><%=report.getOtherTotalVerified()%></td>
+            <td><%=report.getOtherTotalBypass()%></td>
+        </tr>
+    <% } %>
     </tbody>
 </table>
 </body>

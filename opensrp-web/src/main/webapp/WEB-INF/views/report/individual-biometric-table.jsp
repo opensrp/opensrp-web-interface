@@ -1,6 +1,5 @@
 <%@page import="java.util.List"%>
-<%@ page import="org.opensrp.common.dto.ElcoReportDTO" %>
-<%@ page import="org.opensrp.common.dto.AggregatedReportDTO" %>
+<%@ page import="org.opensrp.common.dto.IndividualBiometricReportDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
 
@@ -11,8 +10,7 @@
 <%@ taglib prefix="security"
            uri="http://www.springframework.org/security/tags"%>
 <%
-    List<AggregatedReportDTO> aggregatedReports = (List<AggregatedReportDTO>) session.getAttribute("aggregatedReports");
-    Boolean isSKList = (Boolean) session.getAttribute("isSKList");
+    List<IndividualBiometricReportDTO> individualBiometricReport = (List<IndividualBiometricReportDTO>) session.getAttribute("individualBiometricReport");
 %>
 
 <head>
@@ -32,21 +30,30 @@
     <thead>
     <thead>
     <tr>
-        <th><spring:message code="lbl.slNo"/></th>
+<%--        <th><spring:message code="lbl.slNo"/></th>--%>
         <th><spring:message code="lbl.date"/></th>
-        <th><spring:message code="lbl.biometricProcess"/></th>
+        <th><spring:message code="lbl.identified"/></th>
         <th><spring:message code="lbl.memberName"/></th>
         <th><spring:message code="lbl.memberId"/></th>
         <th><spring:message code="lbl.serviceTaken"/></th>
         <th><spring:message code="lbl.serviceProvider"/></th>
-        <th><spring:message code="lbl.serviceProviderId"/></th>
         <th><spring:message code="lbl.branch"/></th>
 
     </tr>
     </thead>
     </thead>
     <tbody id="t-body">
-
+        <% for(IndividualBiometricReportDTO report: individualBiometricReport) { %>
+        <tr>
+            <td><%= report.getEventDate() %></td>
+            <td><%= report.getIdentifiedStr() %></td>
+            <td><%= report.getMemberName() %></td>
+            <td><%= report.getMemberId()%></td>
+            <td><%= report.getServiceName() %></td>
+            <td><%= report.getProviderName() %></td>
+            <td><%= report.getBranchName() %></td>
+        </tr>
+        <% } %>
     </tbody>
 </table>
 </body>
