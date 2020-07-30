@@ -27,7 +27,7 @@
 
 <div class="page-content-wrapper">
     <div class="page-content">
-        <jsp:include page="/WEB-INF/views/report-search-panel.jsp" />
+        <jsp:include page="/WEB-INF/views/individual-biometric-search-panel.jsp" />
         <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
             <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
         </div>
@@ -170,7 +170,8 @@
                 startDate: $("#start").val(),
                 endDate: $("#end").val(),
                 branch: $("#branchaggregate").val(),
-                locationValue: $("#locationoptions").val()
+                locationValue: $("#locationoptions").val(),
+                serviceName: $("#serviceName").val()
             },
             beforeSend: function() {
                 $('#loading').show();
