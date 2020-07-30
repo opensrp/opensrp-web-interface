@@ -615,19 +615,47 @@ public class ReportController {
 			@RequestParam(value = "startDate", required = false) String startDate,
 		    @RequestParam(value = "endDate", required = false) String endDate,
 		  	@RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
-		  	@RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId) {
+		  	@RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+		  	@RequestParam(value = "branch", required = false, defaultValue = "") String branchId,
+		  	@RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
 
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<AggregatedBiometricDTO> report;
+		String skIds = "";
 
-		Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
-		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
-		String parentLocationName = parentLocation.getName().split(":")[0];
+		if (AuthenticationManagerUtil.isAM() && locationValue.equalsIgnoreCase("catchmentArea")) {
 
-		// '1991-01-01', '2021-12-01', 'division', 9266 , 'DHAKA' , 'district');
-		List<AggregatedBiometricDTO> report =  reportService.getAggregatedBiometricReport(startDate, endDate, parentLocationTag, searchedValueId , parentLocationName , locationTag);
+			if (StringUtils.isBlank(branchId)) {
+				String branches = branchService.commaSeparatedBranch(new ArrayList<>(loggedInUser.getBranches()));
+				skIds = userService.findSKByBranchSeparatedByComma("'{" + branches + "}'");
+			} else {
+				skIds = userService.findSKByBranchSeparatedByComma("'{" + branchId + "}'");
+			}
 
-		for(AggregatedBiometricDTO r: report) {
-			System.out.println("=======>"+ r.getLocationOrProvider() +", "+ r.getAllBypass());
+			report = reportService.getAggregatedBiometricReportBySK(startDate, endDate, skIds);
+
 		}
+		else {
+			Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
+			String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
+			String parentLocationName = parentLocation.getName().split(":")[0];
+
+			if (locationTag.equalsIgnoreCase("sk_id")) {
+				skIds = userService.findSKByLocationSeparatedByComma(searchedValueId, Roles.SK.getId());
+				report = reportService.getAggregatedBiometricReportBySK(startDate, endDate, skIds);
+			}
+			else {
+				// '1991-01-01', '2021-12-01', 'division', 9266 , 'DHAKA' , 'district');
+				report = reportService.getAggregatedBiometricReport(
+						startDate,
+						endDate,
+						parentLocationTag,
+						searchedValueId,
+						parentLocationName,
+						locationTag);
+			}
+		}
+
 		session.setAttribute("aggregatedBiometricReport", report);
 		return "report/aggregated-biometric-table";
 	}
