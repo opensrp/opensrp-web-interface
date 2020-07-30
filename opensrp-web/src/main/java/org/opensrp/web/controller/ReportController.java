@@ -687,11 +687,21 @@ public class ReportController {
 			@RequestParam(value = "serviceName", required = false, defaultValue = "") String serviceName,
 			@RequestParam(value = "locationValue", required = false, defaultValue = "catchmentArea") String locationValue) {
 
-
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<IndividualBiometricReportDTO> report;
 
 		if (AuthenticationManagerUtil.isAM() && locationValue.equalsIgnoreCase("catchmentArea")) {
-			report = reportService.getIndividualBiometricReport(startDate, endDate, serviceName, locationTag, branch.toString());
+			String branchIds;
+			branchIds = (branch == -1)
+					? branchService.commaSeparatedBranch(new ArrayList<>(loggedInUser.getBranches()))
+					: branch.toString();
+			report = reportService.getIndividualBiometricReport(
+					startDate,
+					endDate,
+					serviceName,
+					"branch",
+					"",
+					branchIds);
 		}
 		else {
 
@@ -700,7 +710,7 @@ public class ReportController {
 
 			String searchValue = searchedValue.equalsIgnoreCase("bangladesh") ? "" : searchedValue.split("=")[1].replace("'","").trim();
 			System.out.println("==========>>"+ searchValue);
-			report = reportService.getIndividualBiometricReport(startDate, endDate, serviceName, parentLocationTag, searchValue);
+			report = reportService.getIndividualBiometricReport(startDate, endDate, serviceName, parentLocationTag, searchValue, "");
 		}
 
 		session.setAttribute("individualBiometricReport", report);

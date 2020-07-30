@@ -37,8 +37,8 @@ public class ReportService {
         return repository.getAggregatedBiometricReport(startDate, endDate, sql);
     }
 
-    public List<IndividualBiometricReportDTO> getIndividualBiometricReport(String startDate, String endDate, String serviceName, String searchTag, String searchValue) {
-        String sql = "select * from report.get_individual_biometric('"+ startDate + "', '"+endDate+"', '"+serviceName+"', '"+searchTag+"', '"+searchValue+"');";
+    public List<IndividualBiometricReportDTO> getIndividualBiometricReport(String startDate, String endDate, String serviceName, String searchTag, String searchValue, String branchIds) {
+        String sql = "select * from report.get_individual_biometric('"+ startDate + "', '"+endDate+"', '"+serviceName+"', '"+searchTag+"', '"+searchValue+"', '{"+branchIds+"}');";
         return repository.getIndividualBiometricReport(startDate, endDate, sql);
     }
 
