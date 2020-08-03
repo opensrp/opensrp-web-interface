@@ -8,6 +8,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,14 +43,14 @@ public class Team implements Serializable {
 	@Column(name = "uuid")
 	private String uuid;
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "location_id", referencedColumnName = "id")
 	private Location location;
 	
 	@Column(name = "location_uuid")
 	private String locationUuid;
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "supervisor_id", referencedColumnName = "id")
 	private User superVisor;
 	
@@ -66,7 +67,7 @@ public class Team implements Serializable {
 	@UpdateTimestamp
 	private Date updated = new Date();
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "creator_id", referencedColumnName = "id")
 	private User creator;
 	

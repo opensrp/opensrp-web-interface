@@ -98,7 +98,7 @@ public class User implements UserDetails {
 	@JoinTable(name = "user_branch", schema = "core", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "branch_id") })
 	private Set<Branch> branches = new HashSet<>();
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
@@ -114,7 +114,7 @@ public class User implements UserDetails {
 	@Column(name = "person_uuid")
 	public String personUUid;
 	
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
 	@JoinColumn(name = "parent_user_id", referencedColumnName = "id")
 	private User parentUser;
 	
@@ -350,165 +350,6 @@ public class User implements UserDetails {
 		return authorities;
 	}
 	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((branches == null) ? 0 : branches.hashCode());
-		result = prime * result + ((chcp == null) ? 0 : chcp.hashCode());
-		result = prime * result + ((created == null) ? 0 : created.hashCode());
-		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((enableSimPrint == null) ? 0 : enableSimPrint.hashCode());
-		result = prime * result + (enabled ? 1231 : 1237);
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((idetifier == null) ? 0 : idetifier.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((mobile == null) ? 0 : mobile.hashCode());
-		result = prime * result + ((parentUser == null) ? 0 : parentUser.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((personUUid == null) ? 0 : personUUid.hashCode());
-		result = prime * result + (provider ? 1231 : 1237);
-		result = prime * result + ((retypePassword == null) ? 0 : retypePassword.hashCode());
-//		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
-		result = prime * result + ((ssNo == null) ? 0 : ssNo.hashCode());
-		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
-		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
-		return result;
-	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (branches == null) {
-			if (other.branches != null)
-				return false;
-		} else if (!branches.equals(other.branches))
-			return false;
-		if (chcp == null) {
-			if (other.chcp != null)
-				return false;
-		} else if (!chcp.equals(other.chcp))
-			return false;
-		if (created == null) {
-			if (other.created != null)
-				return false;
-		} else if (!created.equals(other.created))
-			return false;
-		if (creator == null) {
-			if (other.creator != null)
-				return false;
-		} else if (!creator.equals(other.creator))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (enableSimPrint == null) {
-			if (other.enableSimPrint != null)
-				return false;
-		} else if (!enableSimPrint.equals(other.enableSimPrint))
-			return false;
-		if (enabled != other.enabled)
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (gender == null) {
-			if (other.gender != null)
-				return false;
-		} else if (!gender.equals(other.gender))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (idetifier == null) {
-			if (other.idetifier != null)
-				return false;
-		} else if (!idetifier.equals(other.idetifier))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (mobile == null) {
-			if (other.mobile != null)
-				return false;
-		} else if (!mobile.equals(other.mobile))
-			return false;
-		if (parentUser == null) {
-			if (other.parentUser != null)
-				return false;
-		} else if (!parentUser.equals(other.parentUser))
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (personUUid == null) {
-			if (other.personUUid != null)
-				return false;
-		} else if (!personUUid.equals(other.personUUid))
-			return false;
-		if (provider != other.provider)
-			return false;
-		if (retypePassword == null) {
-			if (other.retypePassword != null)
-				return false;
-		} else if (!retypePassword.equals(other.retypePassword))
-			return false;
-		if (roles == null) {
-			if (other.roles != null)
-				return false;
-		} else if (!roles.equals(other.roles))
-			return false;
-		if (ssNo == null) {
-			if (other.ssNo != null)
-				return false;
-		} else if (!ssNo.equals(other.ssNo))
-			return false;
-		if (updated == null) {
-			if (other.updated != null)
-				return false;
-		} else if (!updated.equals(other.updated))
-			return false;
-		if (username == null) {
-			if (other.username != null)
-				return false;
-		} else if (!username.equals(other.username))
-			return false;
-		if (uuid == null) {
-			if (other.uuid != null)
-				return false;
-		} else if (!uuid.equals(other.uuid))
-			return false;
-		return true;
-	}
-	
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", uuid=" + uuid + ", firstName=" + firstName + ", lastName="
-		        + lastName + ", email=" + email + ", password=" + password + ", retypePassword=" + retypePassword
-		        + ", enabled=" + enabled + ", created=" + created + ", updated=" + updated + ", roles=" + roles
-		        + ", branches=" + branches + ", creator=" + creator + ", gender=" + gender + ", mobile=" + mobile
-		        + ", idetifier=" + idetifier + ", provider=" + provider + ", personUUid=" + personUUid + ", parentUser="
-		        + parentUser + ", chcp=" + chcp + ", enableSimPrint=" + enableSimPrint + ", ssNo=" + ssNo + "]";
-	}
 	
 }

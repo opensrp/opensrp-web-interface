@@ -63,7 +63,7 @@ public class Role implements GrantedAuthority {
 	@UpdateTimestamp
 	private Date updated = new Date();
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
@@ -133,74 +133,6 @@ public class Role implements GrantedAuthority {
 		this.active = active;
 	}
 	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (active ? 1231 : 1237);
-		result = prime * result + ((created == null) ? 0 : created.hashCode());
-		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
-		result = prime * result + id;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-//		result = prime * result + ((permissions == null) ? 0 : permissions.hashCode());
-		result = prime * result + ((updated == null) ? 0 : updated.hashCode());
-		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
-		return result;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Role other = (Role) obj;
-		if (active != other.active)
-			return false;
-		if (created == null) {
-			if (other.created != null)
-				return false;
-		} else if (!created.equals(other.created))
-			return false;
-		if (creator == null) {
-			if (other.creator != null)
-				return false;
-		} else if (!creator.equals(other.creator))
-			return false;
-		if (id != other.id)
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (permissions == null) {
-			if (other.permissions != null)
-				return false;
-		} else if (!permissions.equals(other.permissions))
-			return false;
-		if (updated == null) {
-			if (other.updated != null)
-				return false;
-		} else if (!updated.equals(other.updated))
-			return false;
-		if (uuid == null) {
-			if (other.uuid != null)
-				return false;
-		} else if (!uuid.equals(other.uuid))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Role [id=" + id + ", name=" + name + ", uuid=" + uuid
-				+ ", permissions=" + permissions + ", created=" + created
-				+ ", updated=" + updated + ", creator=" + creator + ", active="
-				+ active + "]";
-	}
 	
 	
 }
