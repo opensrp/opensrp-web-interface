@@ -20,6 +20,13 @@ public class BranchMapper {
         if (branchDTO.getId() != 0) branch.setId(branchDTO.getId());
         branch.setCode(branchDTO.getCode());
         branch.setName(branchDTO.getName());
+        branch.setDivision(branchDTO.getDivision());
+        branch.setDistrict(branchDTO.getDistrict());
+        branch.setUpazila(branchDTO.getUpazila());
+        branch.setSsPosition(branchDTO.getSsPosition());
+        branch.setSkPosition(branchDTO.getSkPosition());
+        branch.setPaPosition(branchDTO.getPaPosition());
+        branch.setPkPosition(branchDTO.getPkPosition());
         return branch;
     }
 
@@ -48,6 +55,10 @@ public class BranchMapper {
         branchDTO.setId(branch.getId());
         branchDTO.setCode(branch.getCode());
         branchDTO.setName(branch.getName());
+        branchDTO.setSsPosition(branch.getSsPosition());
+        branchDTO.setSkPosition(branch.getSkPosition());
+        branchDTO.setPaPosition(branch.getPaPosition());
+        branchDTO.setPkPosition(branch.getPkPosition());
         return branchDTO;
     }
 }

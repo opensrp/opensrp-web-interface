@@ -18,6 +18,12 @@
 	List<Object[]> divisions = (List<Object[]>) session.getAttribute("divisions");
 %>
 
+<style>
+	.row {
+		padding-bottom: 8px;
+	}
+</style>
+
 <div class="page-content-wrapper">
 	<div class="page-content">
 		<div class="portlet box blue-madison">
@@ -30,87 +36,80 @@
 				<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
 					<img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
 				</div>
-				<div id="errorMessage" style="color: red; font-size: small; display: none; margin-left: 20px; margin-top: 5px;"></div>
 				<form:form modelAttribute="branch" id="BranchInfo" class="form-inline" autocomplete="off">
 
-					<div class="form-group required">
-						<label class="label-width" for="name"> <spring:message code="lbl.branchName"/> </label>
-						<form:input path="name" class="form-control mx-sm-3"
-									required="required" />
+					<div class="row">
+						<div class="col-md-2" align="right"><label class="label-width" for="name"> <spring:message code="lbl.branchName"/> </label></div>
+						<div class="col-md-3"><form:input path="name" class="form-control mx-sm-3" required="required" /></div>
 					</div>
-					<br>
-					<div class="form-group required">
-						<label class="label-width" for="code"> <spring:message code="lbl.branchCode"/> </label>
-						<form:input path="code" class="form-control mx-sm-3"
-									required="required" />
+
+					<div class="row">
+						<div class="col-md-2" align="right"><label class="label-width" for="code"> <spring:message code="lbl.branchCode"/> </label></div>
+						<div class="col-md-3"><form:input path="code" class="form-control mx-sm-3" required="required" /></div>
 					</div>
-					<br>
-					<div>
-						<label><spring:message code="lbl.division"/></label>
-						<select required class="custom-select custom-select-lg mb-3" id="division"
-								name="division">
-							<option value=""><spring:message code="lbl.selectDivision"/>
-							</option>
-							<%
-								for (Object[] objects : divisions) {
-							%>
-							<option value="<%=objects[1]%>?<%=objects[0]%>"><%=objects[0]%></option>
-							<%
-								}
-							%>
-						</select>
+					<div class="row">
+						<div class="col-md-2" align="right"><label><spring:message code="lbl.division"/></label></div>
+						<div class="col-md-3">
+							<select required class="form-control" id="division"
+									name="division">
+								<option value=""><spring:message code="lbl.selectDivision"/>
+								</option>
+								<%
+									for (Object[] objects : divisions) {
+								%>
+								<option value="<%=objects[1]%>?<%=objects[0]%>"><%=objects[0]%></option>
+								<%
+									}
+								%>
+							</select>
+						</div>
 					</div>
-					<br>
-					<div>
-						<div class="col-md-2" id="districtHide">
-							<label><spring:message code="lbl.district"/></label>
-							<select class="custom-select custom-select-lg mb-3" id="district"
+					<div class="row">
+						<div class="col-md-2" align="right"><label><spring:message code="lbl.district"/></label></div>
+						<div class="col-md-3" id="districtHide">
+
+							<select required class="form-control" id="district"
 									name="district">
 								<option value="0?"><spring:message code="lbl.selectDistrict"/></option>
 								<option value=""></option>
 							</select>
 						</div>
 					</div>
-					<br>
-					<div>
+					<div class="row" >
+						<div class="col-md-2" align="right"><label><spring:message code="lbl.upazila"/></label></div>
+
 						<div class="col-md-3" id="upazilaHide">
-							<label><spring:message code="lbl.upazila"/></label>
-							<select class="custom-select custom-select-lg mb-3" id="upazila"
+							<select required class="form-control" id="upazila"
 									name="upazila">
 								<option value="0?"><spring:message code="lbl.selectUpazila"/></option>
 								<option value=""></option>
 
 							</select>
 						</div>
+
 					</div>
-					<br>
-					<div class="form-group required">
-						<label class="label-width" for="skPosition"> <spring:message code="lbl.skPosition"/> </label>
-						<form:input path="skPosition" class="form-control mx-sm-3"
-									required="required" />
+					<div class="row">
+						<div class="col-md-2" align="right"><label class="label-width" for="skPosition"> <spring:message code="lbl.skPosition"/> </label></div>
+						<div class="col-md-3"><form:input path="skPosition" class="form-control mx-sm-3"/></div>
 					</div>
-					<br>
-					<div class="form-group required">
-						<label class="label-width" for="ssPosition"> <spring:message code="lbl.ssPosition"/> </label>
-						<form:input path="ssPosition" class="form-control mx-sm-3"
-									required="required" />
+					<div class="row">
+						<div class="col-md-2" align="right"><label class="label-width" for="ssPosition"> <spring:message code="lbl.ssPosition"/> </label></div>
+						<div class="col-md-3"><form:input path="ssPosition" class="form-control mx-sm-3"/></div>
 					</div>
-					<br>
-					<div class="form-group required">
-						<label class="label-width" for="paPosition"> <spring:message code="lbl.paPosition"/> </label>
-						<form:input path="paPosition" class="form-control mx-sm-3"
-									required="required" />
+					<div class="row">
+						<div class="col-md-2" align="right"><label class="label-width" for="paPosition"> <spring:message code="lbl.paPosition"/> </label></div>
+						<div class="col-md-3"><form:input path="paPosition" class="form-control mx-sm-3"/></div>
 					</div>
-					<br>
-					<div class="form-group required">
-						<label class="label-width" for="pkPosition"> <spring:message code="lbl.pkPosition"/> </label>
-						<form:input path="pkPosition" class="form-control mx-sm-3"
-									required="required" />
+					<div class="row">
+						<div class="col-md-2" align="right"><label class="label-width" for="pkPosition"> <spring:message code="lbl.pkPosition"/> </label></div>
+						<div class="col-md-3"><form:input path="pkPosition" class="form-control mx-sm-3"/></div>
 					</div>
-					<br>
-					<div class="col-md-offset-1">
-						<div class="form-group">
-							<input type="submit" style="padding:5px" value="<spring:message code="lbl.save"/>" class="btn btn-primary btn-block btn-center" />
+					<div class="row">
+						<div class="col-md-offset-2" style="padding-left: 15px">
+							<div id="errorMessage" style="color: red; font-size: small; display: none; margin-left: 20px; margin-top: 5px;"></div>
+							<div class="form-group">
+								<input type="submit" style="padding:5px" value="<spring:message code="lbl.save"/>" class="btn btn-primary btn-block btn-center" />
+							</div>
 						</div>
 					</div>
 				</form:form>
@@ -134,7 +133,14 @@
 		var header = $("meta[name='_csrf_header']").attr("content");
 		var formData = {
 			'name': $('input[name=name]').val(),
-			'code': $('input[name=code]').val()
+			'code': $('input[name=code]').val(),
+			'division': $('#division').val().split("?")[0],
+			'district': $('#district').val().split("?")[0],
+			'upazila': $('#upazila').val().split("?")[0],
+			'skPosition': parseInt($('input[name=skPosition]').val()),
+			'ssPosition': parseInt($('input[name=ssPosition]').val()),
+			'paPosition': parseInt($('input[name=paPosition]').val()),
+			'pkPosition': parseInt($('input[name=pkPosition]').val())
 		};
 
 		event.preventDefault();
