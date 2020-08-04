@@ -32,15 +32,15 @@ public class Branch implements Serializable {
 
     @NotNull(message = "division can't be empty")
     @Column(name = "division", nullable = false)
-    private String division;
+    private Integer division;
 
     @NotNull(message = "district can't be empty")
     @Column(name = "district", nullable = false)
-    private String district;
+    private Integer district;
 
     @NotNull(message = "upazila can't be empty")
     @Column(name = "upazila", nullable = false)
-    private String upazila;
+    private Integer upazila;
 
     @Column(name = "sk_position")
     private Integer skPosition;
@@ -140,27 +140,27 @@ public class Branch implements Serializable {
         this.pkPosition = pkPosition;
     }
 
-    public String getDivision() {
+    public Integer getDivision() {
         return division;
     }
 
-    public void setDivision(String division) {
+    public void setDivision(Integer division) {
         this.division = division;
     }
 
-    public String getDistrict() {
+    public Integer getDistrict() {
         return district;
     }
 
-    public void setDistrict(String district) {
+    public void setDistrict(Integer district) {
         this.district = district;
     }
 
-    public String getUpazila() {
+    public Integer getUpazila() {
         return upazila;
     }
 
-    public void setUpazila(String upazila) {
+    public void setUpazila(Integer upazila) {
         this.upazila = upazila;
     }
 
