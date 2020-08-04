@@ -57,7 +57,7 @@ public class Location implements Serializable {
 	@JoinColumn(name = "parent_location_id", referencedColumnName = "id")
 	private Location parentLocation;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "location_tag_id", referencedColumnName = "id")
 	private LocationTag locationTag;
 	
