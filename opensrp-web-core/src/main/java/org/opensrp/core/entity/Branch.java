@@ -30,6 +30,30 @@ public class Branch implements Serializable {
     @Column(name = "code", unique = true, nullable = false)
     private String code;
 
+    @NotNull(message = "division can't be empty")
+    @Column(name = "division", nullable = false)
+    private String division;
+
+    @NotNull(message = "district can't be empty")
+    @Column(name = "district", nullable = false)
+    private String district;
+
+    @NotNull(message = "upazila can't be empty")
+    @Column(name = "upazila", nullable = false)
+    private String upazila;
+
+    @Column(name = "sk_position")
+    private String skPosition;
+
+    @Column(name = "ss_position")
+    private String ssPosition;
+
+    @Column(name = "pa_position")
+    private String paPosition;
+
+    @Column(name = "pk_position")
+    private String pkPosition;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE", updatable = false)
     @CreationTimestamp
@@ -82,6 +106,62 @@ public class Branch implements Serializable {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public String getSkPosition() {
+        return skPosition;
+    }
+
+    public void setSkPosition(String skPosition) {
+        this.skPosition = skPosition;
+    }
+
+    public String getSsPosition() {
+        return ssPosition;
+    }
+
+    public void setSsPosition(String ssPosition) {
+        this.ssPosition = ssPosition;
+    }
+
+    public String getPaPosition() {
+        return paPosition;
+    }
+
+    public void setPaPosition(String paPosition) {
+        this.paPosition = paPosition;
+    }
+
+    public String getPkPosition() {
+        return pkPosition;
+    }
+
+    public void setPkPosition(String pkPosition) {
+        this.pkPosition = pkPosition;
+    }
+
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getUpazila() {
+        return upazila;
+    }
+
+    public void setUpazila(String upazila) {
+        this.upazila = upazila;
     }
 
     @Override

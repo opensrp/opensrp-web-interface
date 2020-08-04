@@ -1,3 +1,4 @@
+<%@ page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 		 pageEncoding="ISO-8859-1"%>
 
@@ -13,6 +14,10 @@
 <jsp:include page="/WEB-INF/views/css.jsp" />
 <jsp:include page="/WEB-INF/views/header.jsp" />
 
+<%
+	List<Object[]> divisions = (List<Object[]>) session.getAttribute("divisions");
+%>
+
 <div class="page-content-wrapper">
 	<div class="page-content">
 		<div class="portlet box blue-madison">
@@ -27,20 +32,80 @@
 				</div>
 				<div id="errorMessage" style="color: red; font-size: small; display: none; margin-left: 20px; margin-top: 5px;"></div>
 				<form:form modelAttribute="branch" id="BranchInfo" class="form-inline" autocomplete="off">
-					<div class="">
-						<div class="form-group required">
-							<label class="label-width" for="name"> <spring:message code="lbl.branchName"/> </label>
-							<form:input path="name" class="form-control mx-sm-3"
-										required="required" />
+
+					<div class="form-group required">
+						<label class="label-width" for="name"> <spring:message code="lbl.branchName"/> </label>
+						<form:input path="name" class="form-control mx-sm-3"
+									required="required" />
+					</div>
+					<br>
+					<div class="form-group required">
+						<label class="label-width" for="code"> <spring:message code="lbl.branchCode"/> </label>
+						<form:input path="code" class="form-control mx-sm-3"
+									required="required" />
+					</div>
+					<br>
+					<div>
+						<label><spring:message code="lbl.division"/></label>
+						<select required class="custom-select custom-select-lg mb-3" id="division"
+								name="division">
+							<option value=""><spring:message code="lbl.selectDivision"/>
+							</option>
+							<%
+								for (Object[] objects : divisions) {
+							%>
+							<option value="<%=objects[1]%>?<%=objects[0]%>"><%=objects[0]%></option>
+							<%
+								}
+							%>
+						</select>
+					</div>
+					<br>
+					<div>
+						<div class="col-md-2" id="districtHide">
+							<label><spring:message code="lbl.district"/></label>
+							<select class="custom-select custom-select-lg mb-3" id="district"
+									name="district">
+								<option value="0?"><spring:message code="lbl.selectDistrict"/></option>
+								<option value=""></option>
+							</select>
 						</div>
 					</div>
 					<br>
-					<div class="">
-						<div class="form-group required">
-							<label class="label-width" for="code"> <spring:message code="lbl.branchCode"/> </label>
-							<form:input path="code" class="form-control mx-sm-3"
-										required="required" />
+					<div>
+						<div class="col-md-3" id="upazilaHide">
+							<label><spring:message code="lbl.upazila"/></label>
+							<select class="custom-select custom-select-lg mb-3" id="upazila"
+									name="upazila">
+								<option value="0?"><spring:message code="lbl.selectUpazila"/></option>
+								<option value=""></option>
+
+							</select>
 						</div>
+					</div>
+					<br>
+					<div class="form-group required">
+						<label class="label-width" for="skPosition"> <spring:message code="lbl.skPosition"/> </label>
+						<form:input path="skPosition" class="form-control mx-sm-3"
+									required="required" />
+					</div>
+					<br>
+					<div class="form-group required">
+						<label class="label-width" for="ssPosition"> <spring:message code="lbl.ssPosition"/> </label>
+						<form:input path="ssPosition" class="form-control mx-sm-3"
+									required="required" />
+					</div>
+					<br>
+					<div class="form-group required">
+						<label class="label-width" for="paPosition"> <spring:message code="lbl.paPosition"/> </label>
+						<form:input path="paPosition" class="form-control mx-sm-3"
+									required="required" />
+					</div>
+					<br>
+					<div class="form-group required">
+						<label class="label-width" for="pkPosition"> <spring:message code="lbl.pkPosition"/> </label>
+						<form:input path="pkPosition" class="form-control mx-sm-3"
+									required="required" />
 					</div>
 					<br>
 					<div class="col-md-offset-1">

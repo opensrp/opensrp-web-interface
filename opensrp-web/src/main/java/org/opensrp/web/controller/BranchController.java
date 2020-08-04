@@ -9,6 +9,7 @@ import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.core.service.mapper.BranchMapper;
 import org.opensrp.web.util.AuthenticationManagerUtil;
+import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
@@ -40,6 +41,9 @@ public class BranchController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SearchUtil searchUtil;
+
     @PostAuthorize("hasPermission(returnObject, 'PERM_READ_BRANCH_LIST')")
     @RequestMapping(value = "/branch-list.html", method = RequestMethod.GET)
     public String branchList(Model model, Locale locale) {
@@ -52,9 +56,10 @@ public class BranchController {
 
     @PostAuthorize("hasPermission(returnObject, 'PERM_READ_BRANCH_LIST')")
     @RequestMapping(value = "/branch/add.html", method = RequestMethod.GET)
-    public String addBranch(Model model, Locale locale) {
+    public String addBranch(Model model, Locale locale, HttpSession session) {
         model.addAttribute("locale", locale);
         model.addAttribute("branch", new Branch());
+        searchUtil.setDivisionAttribute(session);
         return "branch/add";
     }
 
