@@ -34,7 +34,7 @@ public class Requisition implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "requisition_id_seq")
 	@SequenceGenerator(name = "requisition_id_seq", sequenceName = "requisition_id_seq", allocationSize = 1)
-	private int id;
+	private Long id;
 	
 	@Column(name = "product_id")
 	private int productId;
@@ -80,7 +80,7 @@ public class Requisition implements Serializable {
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 		
 	}
@@ -93,7 +93,7 @@ public class Requisition implements Serializable {
 		this.uuid = uuid;
 	}
 	
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
