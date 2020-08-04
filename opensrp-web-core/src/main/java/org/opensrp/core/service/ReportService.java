@@ -27,6 +27,21 @@ public class ReportService {
         return repository.getAggregatedReport(startDate, endDate, sql);
     }
 
+    public List<AggregatedBiometricDTO> getAggregatedBiometricReport(String startDate, String endDate, String parentLocationTag, Integer parentLocationId, String parentLocationName, String locationTag)  {
+        String sql = "select  * from report.get_aggregated_biometric_report(:startDate, :endDate, '"+parentLocationTag+"', "+parentLocationId+", '"+parentLocationName+"', '"+locationTag+"');";
+        return repository.getAggregatedBiometricReport(startDate, endDate, sql);
+    }
+
+    public List<AggregatedBiometricDTO> getAggregatedBiometricReportBySK(String startDate, String endDate, String skIds)  {
+        String sql = "select  * from report.get_aggregated_biometric_report_by_sk(:startDate, :endDate, '{"+skIds+"}');";
+        return repository.getAggregatedBiometricReport(startDate, endDate, sql);
+    }
+
+    public List<IndividualBiometricReportDTO> getIndividualBiometricReport(String startDate, String endDate, String serviceName, String searchTag, String searchValue, String branchIds) {
+        String sql = "select * from report.get_individual_biometric('"+ startDate + "', '"+endDate+"', '"+serviceName+"', '"+searchTag+"', '"+searchValue+"', '{"+branchIds+"}');";
+        return repository.getIndividualBiometricReport(startDate, endDate, sql);
+    }
+
     public List<COVID19ReportDTO> getCOVID19Report(String startDate, String endDate, Integer offset, Integer limit) {
         String sql = "select * from report.get_covid_19_report(:startDate, :endDate, :offset, :limit);";
         return repository.getCOVID19Report(startDate, endDate, sql, offset, limit);

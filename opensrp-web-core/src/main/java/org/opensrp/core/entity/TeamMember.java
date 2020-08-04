@@ -45,18 +45,18 @@ public class TeamMember implements Serializable {
 	@Column(name = "identifier")
 	private String identifier;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "team_member_location", schema = "core", joinColumns = { @JoinColumn(name = "team_member_id") }, inverseJoinColumns = { @JoinColumn(name = "location_id") })
 	private Set<Location> locations = new HashSet<Location>();
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "person_id", referencedColumnName = "id")
 	private User person;
 	
 	@Column(name = "is_data_provider")
 	private String isDataProvider;
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "team_id", referencedColumnName = "id")
 	private Team team;
 	
@@ -70,7 +70,7 @@ public class TeamMember implements Serializable {
 	@UpdateTimestamp
 	private Date updated = new Date();
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "creator_id", referencedColumnName = "id")
 	private User creator;
 	

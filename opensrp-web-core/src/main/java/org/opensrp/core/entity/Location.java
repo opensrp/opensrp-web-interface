@@ -49,15 +49,15 @@ public class Location implements Serializable {
 	@UpdateTimestamp
 	private Date updated = new Date();
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "parent_location_id", referencedColumnName = "id")
 	private Location parentLocation;
 	
-	@ManyToOne()
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "location_tag_id", referencedColumnName = "id")
 	private LocationTag locationTag;
 	

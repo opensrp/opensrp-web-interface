@@ -225,6 +225,10 @@ public interface DatabaseRepository {
 
 	public <T> List<T> getAggregatedReport(String startDate, String endDate, String query);
 
+	public <T> List<T> getAggregatedBiometricReport(String startDate, String endDate, String query);
+
+	public <T> List<T> getIndividualBiometricReport(String startDate, String endDate, String query);
+
 	public <T> List<T> getPregnancyReport(String startDate, String endDate, String query);
 
 	public <T> List<T> getChildNutritionReport(String startDate, String endDate, String query);

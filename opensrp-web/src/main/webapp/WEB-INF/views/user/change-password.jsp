@@ -11,25 +11,12 @@
 <%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
 
 <!DOCTYPE html>
-<html lang="en">
 
 <%
     String username = (String) session.getAttribute("username");
 %>
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link type="text/css" href="<c:url value="/resources/css/magicsuggest-min.css"/>" rel="stylesheet">
-    <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <!-- default header name is X-CSRF-TOKEN -->
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <title><spring:message code="lbl.changePassword"/></title>
-    <jsp:include page="/WEB-INF/views/css.jsp" />
-</head>
+<title><spring:message code="lbl.changePassword"/></title>
 
 <%
     String fromRole = (String) session.getAttribute("fromRole");
@@ -37,76 +24,86 @@
     Integer skId = (Integer) session.getAttribute("idFinal");
     String skUsername = (String) session.getAttribute("usernameFinal");
 %>
+
 <c:url var="cancelUrl" value="/" />
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
+<jsp:include page="/WEB-INF/views/header.jsp" />
 
-<div class="content-wrapper">
-    <div class="container-fluid">
-        <div class="form-group">
-            <jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />
-        </div>
-        <div class="card mb-3">
-            <div class="card-header" id="data">
-                Change Password
+<style>
+    .row {
+        margin: 0px;
+    }
+</style>
+
+<div class="page-content-wrapper">
+    <div class="page-content">
+        <div class="portlet box blue-madison">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-list"></i><spring:message code="lbl.password"/>
+                </div>
             </div>
-            <div class="card-body">
-
+            <div class="portlet-body">
                 <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
                     <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
                 </div>
+                <div id="changePassword" class="form-inline" autocomplete="off">
 
-            </div>
-            <div id="changePassword" class="form-inline" autocomplete="off">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <label class="label-width" for="password"><spring:message code="lbl.password"/></label>
+                        </div>
 
-                <div class="row col-12 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width" for="password"><spring:message code="lbl.password"/></label>
-                        <input type="text" class="form-control mx-sm-3" id="password" name="password"  required />
-                        <input type="checkbox" checked onclick="toggleVisibilityOfPassword()">Show Password
+                        <div class="col-md-3">
+                            <input type="text" class="form-control mx-sm-3" id="password" name="password"  required />
+                        </div>
+
+                        <div class="col-md-3">
+                            <input type="checkbox" checked onclick="toggleVisibilityOfPassword()">Show Password
+                        </div>
                     </div>
-                </div>
+                    <br>
+                    <div class="row ">
 
-                <div class="row col-12 tag-height">
-                    <div class="form-group required">
-                        <label class="label-width"  for="retypePassword"><spring:message code="lbl.confirmedPassword"/></label>
-                        <input type="text" class="form-control mx-sm-3" id="retypePassword"
-                                       required="required" />
-                        <small id="confirmPasswordHelpInline" class="text-muted text-para">
-                            <span class="text-red" id="passwordNotMatchedMessage"></span>
-                        </small>
-                    </div>
-                </div>
+                        <div class="col-md-1">
+                            <label class="label-width"  for="retypePassword"><spring:message code="lbl.confirmedPassword"/></label>
+                        </div>
 
-                <div class="row col-12 tag-height">
-                    <div class="form-group">
-                        <input
-                                type="submit"
-                                onclick="submitted()"
-                                value="<spring:message code="lbl.resetPassword"/>"
-                                class="btn btn-primary btn-block btn-center" />
+                        <div class="col-md-3">
+                            <input type="text" class="form-control mx-sm-3" id="retypePassword"
+                                   required="required" />
+                            <small id="confirmPasswordHelpInline" class="text-muted text-para">
+                                <span class="text-red" id="passwordNotMatchedMessage"></span>
+                            </small>
+                        </div>
                     </div>
-                    <div class="form-group">
-	                    	<a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
-	                 </div>
+
+                    <div class="row ">
+
+                        <div class="col-md-offset-1 col-md-2">
+                            <input
+                                    type="submit"
+                                    onclick="submitted()"
+                                    value="<spring:message code="lbl.resetPassword"/>"
+                                    class="btn btn-primary btn-block btn-center" />
+                        </div>
+                        <div class="col-md-2" style="margin-left: -20px; padding: 0px">
+                            <a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
+        <jsp:include page="/WEB-INF/views/footer.jsp" />
     </div>
 </div>
-<!-- /.container-fluid-->
-<!-- /.content-wrapper-->
-
-<jsp:include page="/WEB-INF/views/footer.jsp" />
-<script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
-<script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
-
-<!-- Custom scripts for all pages-->
-<script src="<c:url value='/resources/js/sb-admin.min.js'/>"></script>
-
 
 <script type="text/javascript">
+
+    jQuery(document).ready(function() {
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        //TableAdvanced.init();
+    });
 
     function toggleVisibilityOfPassword() {
         var password = document.getElementById("password");
@@ -203,5 +200,3 @@
 
 </script>
 
-</body>
-</html>

@@ -15,19 +15,9 @@
 <%@ page import="java.util.Set" %>
 
 <!DOCTYPE html>
-<html lang="en">
 
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link type="text/css" href="<c:url value="/resources/css/magicsuggest-min.css"/>" rel="stylesheet">
 
-	<title><spring:message code="lbl.editUserTitle"/></title>
-	<link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
-	<jsp:include page="/WEB-INF/views/css.jsp" />
-</head>
+<title><spring:message code="lbl.editUserTitle"/></title>
 
 <c:url var="saveUrl" value="/user/${id}/edit.html" />
 <c:url var="cancelUrl" value="/user.html" />
@@ -53,56 +43,76 @@
 	List<Role> selectedRole = (List<Role>) session.getAttribute("selectedRoles");
 	String ssPrefix = (String)session.getAttribute("ssPrefix");
 %>
+<jsp:include page="/WEB-INF/views/header.jsp" />
+<style>
+	.row {
+		margin: 0px;
+		margin-bottom: 8px;
+	}
+</style>
 
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
+<div class="page-content-wrapper">
+	<div class="page-content">
 
-<div class="content-wrapper">
-	<div class="container-fluid">
-		<div class="form-group">
-			<jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />
-		</div>
-		<div class="card mb-3">
-			<div class="card-header">
-				<spring:message code="lbl.editUserTitle"/>				</div>
-			<div class="card-body">
+		<div class="portlet box blue-madison">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-list"></i><spring:message code="lbl.editUserTitle"/>
+				</div>
+			</div>
+			<div class="portlet-body">
 				<form:form method="POST" action="${saveUrl}"
 						   modelAttribute="account" class="form-inline">
 
 
-					<div class="row col-12 tag-height">
-						<div class="form-group required">
+					<div class="row tag-height">
+
+						<div class="col-md-2" style="width:10%">
 							<label class="label-width" for="inputPassword6"> <spring:message code="lbl.firstName"/> </label>
-							<form:input path="firstName" class="form-control mx-sm-3"
+						</div>
+						<div class="col-md-3">
+							<form:input path="firstName" class="form-control"
 										required="required"/>
 						</div>
 					</div>
 
+
+
 					<div class="row col-12 tag-height">
-						<div class="form-group">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.lastName"/> </label>
+						<div class="col-md-2" style="width:10%">
+							<label class="label-width" ><spring:message code="lbl.lastName"/> </label>
+						</div>
+						<div class="col-md-3">
 							<form:input path="lastName" class="form-control mx-sm-3"/>
 						</div>
 					</div>
 
-					<div class="row col-12 tag-height">
-						<div class="form-group">
-							<label class="label-width"  for="inputPassword6"> <spring:message code="lbl.email"/> </label>
+					<div class="row ">
+						<div class="col-md-2" style="width:10%">
+							<label class="label-width"  > <spring:message code="lbl.email"/> </label>
+						</div>
+						<div class="col-md-3">
 							<input type="email" class="form-control mx-sm-3" name="email" value="${account.getEmail()}">
 						</div>
 					</div>
 
-					<div class="row col-12 tag-height">
-						<div class="form-group">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.mobile"/></label>
+					<div class="row">
+						<div class="col-md-2" style="width:10%">
+							<label class="label-width" ><spring:message code="lbl.mobile"/></label>
+
+						</div>
+						<div class="col-md-3">
 							<form:input path="mobile" class="form-control mx-sm-3" />
 						</div>
 					</div>
 
-					<div class="row col-12 tag-height">
-						<div class="form-group required">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.username"/></label>
-							<form:input path="username" class="form-control mx-sm-3"
+					<div class="row ">
+						<div class="col-md-2" style="width:10%">
+							<label class="label-width" ><spring:message code="lbl.username"/></label>
+
+						</div>
+						<div class="col-md-5">
+							<form:input path="username" class="form-control"
 										readonly="true"	required="required"/>
 							<small id="passwordHelpInline" class="text-muted text-para">
 								<span class="text-red" id="usernameUniqueErrorMessage"></span> <spring:message code="lbl.userMessage"/>
@@ -118,11 +128,14 @@
 					<form:hidden path="password" />
 
 
-					<div class="row col-12 tag-height">
-						<div class="form-group required">
+					<div class="row ">
+						<div class="col-md-2" style="width:10%">
 							<label class="label-width"  for="role">
 								<spring:message code="lbl.role"/>
 							</label>
+
+						</div>
+						<div class="col-md-3">
 							<select onchange="isSS()"
 									id="role"
 									class="form-control mx-sm-3 js-example-basic-multiple"
@@ -135,18 +148,22 @@
 					</div>
 
 
-					<div class="row col-12 tag-height" id="_enableSimprint">
-						<div class="form-group">
+					<div class="row " id="_enableSimprint">
+						<div class="col-md-2" style="width:10%">
 							<label class="label-width" for="inputPassword6"><spring:message code="lbl.enableSimprint"/></label>
+						</div>
+						<div class="col-md-3">
 							<form:checkbox class="checkBoxClass form-check-input"
 										   path="enableSimPrint" value="${account.getEnableSimPrint()}" />
 						</div>
 					</div>
 
 					<!-- for location -->
-					<div class="row col-12 tag-height" id="locationDiv" style="display:none">
-						<div class="form-group">
+					<div class="row" id="locationDiv" style="display:none">
+						<div class="col-md-2" style="width:10%">
 							<label class="label-width" for="inputPassword6"><spring:message code="lbl.location"/></label>
+						</div>
+						<div class="col-md-3">
 							<div id="cm" class="ui-widget ">
 								<div id="locationsTag" ></div>
 								<span class="text-red">${locationSelectErrorMessage}</span>
@@ -154,11 +171,14 @@
 						</div>
 					</div>
 
-					<div class="row col-12 tag-height">
-						<div class="form-group required">
+					<div class="row">
+						<div class="col-md-2" style="width:10%">
 							<label class="label-width"  for="branches">
 								<spring:message code="lbl.branches"/>
 							</label>
+
+						</div>
+						<div class="col-md-3">
 							<select
 									required
 									name="branches"
@@ -200,35 +220,36 @@
 
 
 
-					<div class="row col-12 tag-height">
-						<div class="form-group">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.activeUser"/></label>
+					<div class="row">
+						<div class="col-md-2" style="width:10%">
+							<label class="label-width" ><spring:message code="lbl.activeUser"/></label>
+						</div>
+						<div class="col-md-3">
 							<form:checkbox class="checkBoxClass form-check-input"
 										   path="enabled" value="${account.isEnabled()}"/>
 						</div>
 					</div>
 
-					<div class="row col-12 tag-height">
-						<div class="form-group">
+					<div class="row ">
+						<div class="col-md-offset-1 col-md-2">
 							<input type="submit" value="<spring:message code="lbl.saveChanges"/>"
-								   class="btn btn-primary btn-block btn-sm" />
+								   class="btn btn-primary btn-block btn-sm" style="padding: 7px"/>
 						</div>
-						<div class="form-group">
+						<div class="col-md-2">
 							<a href="${cancelUrl}" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Cancel</a>
 						</div>
 					</div>
-					<div style="color: red;"><%=errorMessage%></div>
-				</form:form>
 
+				</form:form>
+				<div class="card-footer small text-muted"></div>
 			</div>
-			<div class="card-footer small text-muted"></div>
 		</div>
+		<jsp:include page="/WEB-INF/views/footer.jsp" />
 	</div>
 	<!-- /.container-fluid-->
 	<!-- /.content-wrapper-->
-	<jsp:include page="/WEB-INF/views/footer.jsp" />
+
 </div>
-</body>
 
 <script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
@@ -527,4 +548,3 @@
 		$('#role').trigger('change');
 	});
 </script>
-</html>

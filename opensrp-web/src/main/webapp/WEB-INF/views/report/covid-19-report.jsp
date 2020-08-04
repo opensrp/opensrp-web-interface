@@ -19,72 +19,50 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    #errorMsg{
+        color: darkred;
+        margin-bottom: 10px;
+    }
+    #downloadFailedMsg {
+        color: red;
+    }
+    th, td { text-align: center; }
+</style>
+<link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
+<jsp:include page="/WEB-INF/views/header.jsp" />
 
-    <meta http-equiv="refresh" content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/session-expired" />
-    <title><spring:message code="lbl.covid19"/></title>
-    <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
-    <style>
-        #errorMsg{
-            color: darkred;
-            margin-bottom: 10px;
-        }
-        #downloadFailedMsg {
-            color: red;
-        }
-    </style>
+<div class="page-content-wrapper">
+    <div class="page-content">
 
-    <jsp:include page="/WEB-INF/views/css.jsp" />
-
-    <style>
-        th, td { text-align: center; }
-        .select2-container--default .select2-results__option { font-size: 18px!important; }
-        .select2-container--default .select2-selection--single .select2-selection__arrow { left: 88% !important; }
-        .select2-container--default .select2-selection--single { width: 100% !important; }
-        .select2-container--open .select2-dropdown--below {width: 80% !important;}
-    </style>
-</head>
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
-<div class="content-wrapper">
-    <div class="container-fluid">
-
-        <div class="card mb-3">
-            <div class="card-header">
-                <i class="fa fa-table"></i> ${title.toString()} <spring:message code="lbl.searchArea"/>
-            </div>
-            <div class="card-body">
-
-                <div class="row">
+<%--        Filter section--%>
+        <div class="portlet box blue-madison">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-list"></i><spring:message code="lbl.searchArea"/>
                 </div>
-
+            </div>
+            <div class="portlet-body">
                 <div id="search_form">
                     <div class="form-group">
                         <form autocomplete="off">
                             <div class="row">
-                                <div class="col-2">
+                                <div class="col-md-2">
                                     <label><spring:message code="lbl.startDate"/></label>
                                     <input class="form-control custom-select custom-select-lg mb-3" type=text
                                            name="start" id="start" value="${startDate}">
                                     <label style="display: none;" class="text-danger" id="startDateValidation"><small>Input is not valid for date</small></label>
                                 </div>
-                                <div class="col-2">
+                                <div class="col-md-2">
                                     <label><spring:message code="lbl.endDate"/></label>
                                     <input class="form-control custom-select custom-select-lg mb-3" type=text
                                            name="end" id="end" value="${endDate}">
                                     <label style="display: none;" class="text-danger" id="endDateValidation"><small>Input is not valid for date</small></label>
                                 </div>
 
-                                <div class="col-2">
-                                    <label><spring:message code="lbl.branches"/></label>
-                                    <select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="branch" name="branch" onchange="branchChange()">
+                                <div class="col-md-3">
+                                    <label><spring:message code="lbl.branches"/></label> <br/>
+                                    <select class="js-example-basic-multiple" id="branch" name="branch" onchange="branchChange()">
                                         <option value="0">Select Branch</option>
                                         <%
                                             List<Branch> ret1 = (List<Branch>) session.getAttribute("branchList");
@@ -95,9 +73,9 @@
                                     </select>
                                 </div>
 
-                                <div class="col-2">
+                                <div class="col-md-3">
                                     <label><spring:message code="lbl.sk"/></label>
-                                    <select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="skList" name="sk">
+                                    <select class="js-example-basic-multiple" id="skList" name="sk">
                                         <option value="">Select SK</option>
                                         <%
                                             List<Object[]> ret2 = (List<Object[]>) session.getAttribute("skList");
@@ -111,26 +89,23 @@
                         </form>
 
                         <div class="row" id="msg">
-                            <div class="col-6" id="errorMsg"> </div>
+                            <div class="col-md-6" id="errorMsg"> </div>
                         </div>
+                        <br/>
 
                         <div class="row">
-
-                            <div class="col-1">
+                            <div class="col-md-1">
                                 <button name="search" id="bth-search" onclick="drawDataTables()"
                                         class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
                             </div>
-
-                            <div class="col-1">
+                            <div class="col-md-1">
                                 <button name="export" id="bth-export" onclick="generateCOVID19ExportData()"
                                         class="btn btn-primary" value="export"><spring:message code="lbl.export"/></button>
                             </div>
-
-                            <div class="col-6" id="downloadingFile" style="margin-top: 5px; display: none;">
+                            <div class="col-md-6" id="downloadingFile" style="margin-top: 5px; display: none;">
                                 <i class="fa fa-spinner fa-spin" style="font-size:24px"></i> Downloading..
                             </div>
-
-                            <div class="col-6" id="downloadFailedMsg" style="display: none;">
+                            <div class="col-md-6" id="downloadFailedMsg" style="display: none;">
                                 Failed to export data.
                             </div>
                         </div>
@@ -138,18 +113,20 @@
                 </div>
             </div>
         </div>
-        <div class="card mb-3">
-            <div class="card-header">
-                <i class="fa fa-table"></i>
-                <spring:message code="lbl.covid19"/>
+
+        <div class="portlet box blue-madison">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-list"></i><spring:message code="lbl.searchArea"/>
+                </div>
             </div>
-            <div class="card-body">
+            <div class="portlet-body">
                 <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
                     <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
                 </div>
 
                 <div class="table-responsive">
-                    <table class="display" id="covidReports">
+                    <table class="display table table-bordered table-striped" id="covidReports">
                         <thead>
                         <tr>
                             <th><spring:message code="lbl.sk"/></th>
@@ -167,25 +144,21 @@
                         </thead>
                     </table>
                 </div>
-
+                <div class="card-footer small text-muted"></div>
             </div>
-            <div class="card-footer small text-muted"></div>
         </div>
-    </div>
     <jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
-<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
+</div>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script src="<c:url value='/resources/js/datepicker.js' />"></script>
-<script src="<c:url value='/resources/js/select2.js' />"></script>
-<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
 
 <script>
-
+    jQuery(document).ready(function() {
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        //TableAdvanced.init();
+    });
     let downloadInterval = null, covidReports;
     $(document).ready(function() {
         $('.js-example-basic-multiple').select2({dropdownAutoWidth : true});

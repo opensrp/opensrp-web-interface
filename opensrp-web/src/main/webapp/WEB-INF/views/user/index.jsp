@@ -9,122 +9,122 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <%@page import="java.util.List"%>
+<%@page import="org.opensrp.core.service.UserService"%>
+<title><spring:message code="lbl.userList"/></title>
+<%
+	Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
+%>
 
-<!DOCTYPE html>
-<html lang="en">
+<jsp:include page="/WEB-INF/views/header.jsp" />
+<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 
-<head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title><spring:message code="lbl.userList"/></title>
-	<jsp:include page="/WEB-INF/views/css.jsp" />
-	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
-	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
-	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
-	<link type="text/css" href="<c:url value="/resources/css/jquery.toast.css"/>" rel="stylesheet">
-	<link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
-	<style>
-		th, td {
-			text-align: center;
-		}
-		.select2-container--default .select2-results__option { font-size: 18px!important; }
-		.select2-container--default .select2-selection--single .select2-selection__arrow { left: 88% !important; }
-		.select2-container--default .select2-selection--single { width: 100% !important; }
-		.select2-container--open .select2-dropdown--below {width: 80% !important;}
-	</style>
-</head>
+<link type="text/css" href="<c:url value="/resources/css/jquery.toast.css"/>" rel="stylesheet">
 
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
+<div class="page-content-wrapper">
+	<div class="page-content">
 
-<div class="content-wrapper">
-	<div class="container-fluid">
 
-		<div class="form-group">
-			<jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />
-		</div>
+		<ul class="page-breadcrumb breadcrumb text-right">
+			<li>
+				<%-- <a href="<c:url value="/user.html"/>">Home</a> --%>
 
-		<div class="form-group">
-			<h5><spring:message code="lbl.userList"/></h5>
-			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-			<a  href="<c:url value="/user/add-ajax.html?lang=${locale}"/>">
-				<strong>
+
+
+				<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
+				<a class="btn btn-default" id="add" href="<c:url value="/user/add-ajax.html?lang=${locale}"/>">
+					<strong>
 					<spring:message code="lbl.addNew"/>
 					<spring:message code="lbl.user"/>
-				</strong> </a> <%} %>
-		</div>
-		<jsp:include page="/WEB-INF/views/user/search-ajax.jsp" />
+				</strong></a>
+				<%} %>
+			</li>
+		</ul>
+		<!-- END PAGE BREADCRUMB -->
+		<!-- END PAGE HEADER-->
+		<!-- BEGIN PAGE CONTENT-->
 
-		<!-- Example DataTables Card-->
-		<div class="card mb-3">
-			<div class="card-header">
-				<spring:message code="lbl.userList"/>
-			</div>
-			<div class="card-body">
-				<div class="table-responsive">
-					<table class="display" id="userList">
-						<thead>
-							<tr>
-								<th><spring:message code="lbl.name"></spring:message></th>
-								<th><spring:message code="lbl.username"></spring:message></th>
-								<th><spring:message code="lbl.role"></spring:message></th>
-								<th><spring:message code="lbl.phoneNumber"></spring:message></th>
-								<th><spring:message code="lbl.branch"></spring:message></th>
-								<th><spring:message code="lbl.action"></spring:message></th>
-							</tr>
-						</thead>
 
-					</table>
+		<div class="row">
+			<div class="col-md-12">
+
+				<!-- BEGIN EXAMPLE TABLE PORTLET-->
+				<div class="portlet box blue-madison">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="fa fa-list"></i><spring:message code="lbl.userList"/>
+						</div>
+
+
+					</div>
+					
+					<div class="portlet-body">
+						<jsp:include page="/WEB-INF/views/user/search-ajax.jsp" />
+						<hr />
+						<table class="table table-striped table-bordered " id="userList">
+							<thead>
+								<tr>
+									<th><spring:message code="lbl.name"></spring:message></th>
+									<th><spring:message code="lbl.username"></spring:message></th>
+									<th><spring:message code="lbl.role"></spring:message></th>
+									<th><spring:message code="lbl.phoneNumber"></spring:message></th>
+									<th><spring:message code="lbl.branch"></spring:message></th>
+									<th><spring:message code="lbl.action"></spring:message></th>
+								</tr>
+							</thead>
+
+						</table>
+					</div>
+					
 				</div>
-			</div>
-			<div class="card-footer small text-muted"></div>
-		</div>
+				<div class="portlet box blue-madison">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="fa fa-list"></i><spring:message code="lbl.usersWithoutCatchmentArea"/>
+						</div>
 
-		<!-- Example DataTables Card-->
-		<div class="card mb-3">
-			<div class="card-header">
-				<spring:message code="lbl.usersWithoutCatchmentArea"/>
-			</div>
-			<div class="card-body">
-				<div class="table-responsive">
-					<table class="display" id="userListWithoutCatchmentArea">
-						<thead>
-						<tr>
-							<th><spring:message code="lbl.name"></spring:message></th>
-							<th><spring:message code="lbl.username"></spring:message></th>
-							<th><spring:message code="lbl.role"></spring:message></th>
-							<th><spring:message code="lbl.phoneNumber"></spring:message></th>
-							<th><spring:message code="lbl.branch"></spring:message></th>
-							<th><spring:message code="lbl.action"></spring:message></th>
-						</tr>
-						</thead>
-					</table>
+
+					</div>
+					<div class="portlet-body">
+						<table class="table table-striped table-bordered" id="userListWithoutCatchmentArea">
+							<thead>
+								<tr>
+									<th><spring:message code="lbl.name"></spring:message></th>
+									<th><spring:message code="lbl.username"></spring:message></th>
+									<th><spring:message code="lbl.role"></spring:message></th>
+									<th><spring:message code="lbl.phoneNumber"></spring:message></th>
+									<th><spring:message code="lbl.branch"></spring:message></th>
+									<th><spring:message code="lbl.action"></spring:message></th>
+								</tr>
+							</thead>
+
+						</table>
+					</div>
 				</div>
+
+
 			</div>
-			<div class="card-footer small text-muted"></div>
 		</div>
+		<!-- END PAGE CONTENT-->
+		<jsp:include page="/WEB-INF/views/footer.jsp" />
 	</div>
 </div>
-	<!-- /.container-fluid-->
-	<!-- /.content-wrapper-->
-	<jsp:include page="/WEB-INF/views/footer.jsp" />
+<!-- END CONTENT -->
 </div>
-<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
-<script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
-<%--<script src="<c:url value='/resources/js/datepicker.js' />"></script>--%>
-<%--<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>--%>
-<script src="<c:url value='/resources/js/jquery.toast.js'/>"></script>
-<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
-<script src="<c:url value='/resources/js/select2.js' />"></script>
-<%--<script src="<c:url value='/resources/js/jszip.js' />"></script>--%>
-<%--<script src="<c:url value='/resources/js/pdfmake.js' />"></script>--%>
-<%--<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>--%>
+
+
+<script>
+	jQuery(document).ready(function() {
+		Metronic.init(); // init metronic core components
+		Layout.init(); // init current layout
+		//TableAdvanced.init();
+	});
+</script>
+<jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
+<script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
+
 <script>
 	let userListWithoutCatchmentArea, userList;
+	var userCount = 0, userCountWithoutCatchmentArea = 0;
 	$(document).ready(function() {
 		clearRegionSelection();
 		$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
@@ -171,9 +171,11 @@
 					data.village = $('#village').val();
 					data.role = $('#role').val();
 					data.branch = $('#branch').val();
+					data.userCount = userCount;
 				},
 				dataSrc: function(json){
 					if(json.data){
+						userCount = json.recordsTotal;
 						return json.data;
 					}
 					else {
@@ -215,9 +217,11 @@
 					data.village = $('#village').val();
 					data.role = $('#role').val();
 					data.branch = $('#branch').val();
+					data.userCountWithoutCatchmentArea = userCountWithoutCatchmentArea;
 				},
 				dataSrc: function(json){
 					if(json.data){
+						userCountWithoutCatchmentArea = json.recordsTotal;
 						return json.data;
 					}
 					else {
@@ -248,5 +252,3 @@
 		$("#village").html("<option value='0?'>Select Village</option>");
 	}
 </script>
-</body>
-</html>

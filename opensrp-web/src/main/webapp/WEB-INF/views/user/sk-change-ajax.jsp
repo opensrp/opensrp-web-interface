@@ -9,8 +9,6 @@
            uri="http://www.springframework.org/security/tags"%>
 <%@page import="java.util.List"%>
 
-<!DOCTYPE html>
-<html lang="en">
 
 <head>
     <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
@@ -22,22 +20,20 @@
     </style>
 </head>
 
-<body>
-<div class="content-wrapper" style="min-height: auto !important;">
-    <div class="container-fluid" style="padding-bottom: 20px !important;">
-        <div class="card mb-3">
-            <div class="card-header"><b>${ssInfo.fullName}'s SK Change</b></div>
-            <div class="card-body">
-                <div class="row">
-                   <div class="col-12 tag-height">
-                       <span>CURRENT SK: <b>&nbsp;${skFullName}(${skUsername})</b></span>
+
+        
+           
+                <div class="form-group row">
+                
+                   <div class="col-sm-12">
+                    <h3><strong>SK Change of  ${ssInfo.fullName}</strong></h3>
+                    <h3>CURRENT SK: <b>&nbsp;${skFullName}(${skUsername})</b></h3>
                    </div>
                 </div>
                 <form autocomplete="off">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group required">
-                                <label class="label-width"  for="branches">
+                    <div class="form-group row" >
+                        <div class="col-sm-6">
+                                <label class="control-label"  for="branches">
                                     <spring:message code="lbl.branches"/>
                                 </label>
                                 <select id="branches"
@@ -47,32 +43,32 @@
                                         <option value="${branch.id}">${branch.name} (${branch.code})</option>
                                     </c:forEach>
                                 </select>
-                            </div>
                         </div>
-                        <div class="col-6">
-                            <div class="form-group required">
-                                <label class="label-width"  for="skList"><spring:message code="lbl.sk"/></label>
+                        <div class="col-sm-6">
+                           
+                                <label class="control-label"  for="skList"><spring:message code="lbl.sk"/></label>
                                 <select class="form-control mx-sm-3 js-example-basic-multipl
                                 e" id="skList" name="sk" required="required">
                                 </select>
-                            </div>
+                           
                         </div>
                     </div>
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-6 tag-height"></div>
                         <div class="col-6 tag-height">
                             <div><span id="select-sk" style="font-size: small; color: red;display: none;">Please Select an SK...</span></div>
                         </div>
-                    </div>
-                    <div style="margin-top: 220px;">
-                        <a class="btn btn-sm btn-dark" href="#" onclick="changeParent()" style="margin-left: 10px; float: right; bottom: 0px">Change SK</a>
-                        <a class="btn btn-sm btn-dark" href="#" rel="modal:close" style="float: right; bottom: 0px">Close</a>
-                    </div>
+                    </div> -->
+                    
+                    <div class="form-group text-right">
+	                    <a class="btn btn-primary" href="#" onclick="changeParent()">Change SK</a>
+                        <a class="btn btn-primary" href="#" rel="modal:close">Close</a>
+                	</div>
+                    
                 </form>
-            </div>
-        </div>
-    </div>
-</div>
+            
+
+   
 <script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
 <script src="<c:url value='/resources/js/select2.js' />"></script>
 <script src="<c:url value='/resources/js/user-ss.js' />"></script>
@@ -109,5 +105,4 @@
         });
     }
 </script>
-</body>
-</html>
+

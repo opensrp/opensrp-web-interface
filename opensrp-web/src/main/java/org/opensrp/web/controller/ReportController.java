@@ -30,6 +30,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author proshanto
@@ -581,4 +582,145 @@ public class ReportController {
 
 		return "report/client-data-report-table";
 	}
+
+
+    @RequestMapping(value = "/forum-report.html", method = RequestMethod.GET)
+    public ModelAndView getForumReport(ModelAndView modelAndView) {
+
+	    modelAndView.setViewName("report/forum-report");
+	    modelAndView.addObject("startDate", "");
+	    modelAndView.addObject("endDate", "");
+	    return modelAndView;
+    }
+
+    @RequestMapping(value = "/forum-report", method = RequestMethod.GET)
+    public String getForumReportTable() {
+        return "report/forum-report-table";
+    }
+
+	@RequestMapping(value = "/aggregated-biometric-report.html", method = RequestMethod.GET)
+	public String getAggregatedBiometricReport(
+			HttpSession session
+	) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String endDate = formatter.format(new Date());
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		searchUtil.setDivisionAttribute(session);
+		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
+		session.setAttribute("startDate", startDate);
+		session.setAttribute("endDate", endDate);
+
+		return "report/aggregated-biometric-report";
+	}
+
+	@RequestMapping(value = "/aggregated-biometric-table", method = RequestMethod.GET)
+	public String getAggregatedBiometricTable(
+			HttpSession session,
+			@RequestParam(value = "startDate", required = false) String startDate,
+		    @RequestParam(value = "endDate", required = false) String endDate,
+		  	@RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
+		  	@RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+		  	@RequestParam(value = "branch", required = false, defaultValue = "") String branchId,
+		  	@RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
+
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<AggregatedBiometricDTO> report;
+		String skIds = "";
+
+		if (AuthenticationManagerUtil.isAM() && locationValue.equalsIgnoreCase("catchmentArea")) {
+
+			if (StringUtils.isBlank(branchId)) {
+				String branches = branchService.commaSeparatedBranch(new ArrayList<>(loggedInUser.getBranches()));
+				skIds = userService.findSKByBranchSeparatedByComma("'{" + branches + "}'");
+			} else {
+				skIds = userService.findSKByBranchSeparatedByComma("'{" + branchId + "}'");
+			}
+
+			report = reportService.getAggregatedBiometricReportBySK(startDate, endDate, skIds);
+
+		}
+		else {
+			Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
+			String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
+			String parentLocationName = parentLocation.getName().split(":")[0];
+
+			if (locationTag.equalsIgnoreCase("sk_id")) {
+				skIds = userService.findSKByLocationSeparatedByComma(searchedValueId, Roles.SK.getId());
+				report = reportService.getAggregatedBiometricReportBySK(startDate, endDate, skIds);
+			}
+			else {
+				// '1991-01-01', '2021-12-01', 'division', 9266 , 'DHAKA' , 'district');
+				report = reportService.getAggregatedBiometricReport(
+						startDate,
+						endDate,
+						parentLocationTag,
+						searchedValueId,
+						parentLocationName,
+						locationTag);
+			}
+		}
+
+		session.setAttribute("aggregatedBiometricReport", report);
+		return "report/aggregated-biometric-table";
+	}
+
+	@RequestMapping(value = "/individual-biometric-report.html", method = RequestMethod.GET)
+	public String getIndividualBiometricReport(
+			HttpSession session
+	) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String endDate = formatter.format(new Date());
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		searchUtil.setDivisionAttribute(session);
+		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
+		session.setAttribute("startDate", startDate);
+		session.setAttribute("endDate", endDate);
+		return "report/individual-biometric-report";
+	}
+
+	@RequestMapping(value = "/individual-biometric-table", method = RequestMethod.GET)
+	public String getIndividualBiometricTable(
+			HttpSession session,
+			@RequestParam(value = "address_field", required = false, defaultValue = "") String locationTag,
+			@RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+			@RequestParam(value = "startDate", required = false) String startDate,
+			@RequestParam(value = "endDate", required = false) String endDate,
+			@RequestParam(value = "searched_value", required = false) String searchedValue,
+			@RequestParam(value = "branch", required = false, defaultValue = "-1") Integer branch,
+			@RequestParam(value = "serviceName", required = false, defaultValue = "") String serviceName,
+			@RequestParam(value = "locationValue", required = false, defaultValue = "catchmentArea") String locationValue) {
+
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<IndividualBiometricReportDTO> report;
+
+		if (AuthenticationManagerUtil.isAM() && locationValue.equalsIgnoreCase("catchmentArea")) {
+			String branchIds;
+			branchIds = (branch == -1)
+					? branchService.commaSeparatedBranch(new ArrayList<>(loggedInUser.getBranches()))
+					: branch.toString();
+			report = reportService.getIndividualBiometricReport(
+					startDate,
+					endDate,
+					serviceName,
+					"branch",
+					"",
+					branchIds);
+		}
+		else {
+
+			Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
+			String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
+
+			String searchValue = searchedValue.equalsIgnoreCase("bangladesh") ? "" : searchedValue.split("=")[1].replace("'","").trim();
+			System.out.println("==========>>"+ searchValue);
+			report = reportService.getIndividualBiometricReport(startDate, endDate, serviceName, parentLocationTag, searchValue, "");
+		}
+
+		session.setAttribute("individualBiometricReport", report);
+		return "report/individual-biometric-table";
+	}
+
+
 }

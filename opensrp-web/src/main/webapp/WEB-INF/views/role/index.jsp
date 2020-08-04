@@ -9,113 +9,137 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<!DOCTYPE html>
-<html lang="en">
+<title>Role list</title>
+	
+	
 
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title><spring:message code="lbl.roleTitle"/></title>
-	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/jquery.dataTables.css"/> ">
-	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/buttons.dataTables.css"/> ">
-	<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/dataTables.jqueryui.min.css"/> ">
-	<style>td {font-size: 13px;}</style>
-	<jsp:include page="/WEB-INF/views/css.jsp" />
-</head>
+<jsp:include page="/WEB-INF/views/header.jsp" />
+<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
+	
 
-<%--<c:url var="saveUrl" value="/role/add" />--%>
-
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
-
-<div class="content-wrapper">
-	<div class="container-fluid">
-		<div class="form-group">
-			<jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />
-		</div>
-
-		<div class="form-group">
-			<h5><spring:message code="lbl.roleManagement"/></h5>
-			<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_ROLE")){ %>
-			<a  href="<c:url value="/role/add.html?lang=${locale}"/>">
-				<strong>
-					<spring:message code="lbl.addNew"/>
-					<spring:message code="lbl.role"/>
-				</strong>
-			</a> <%} %>
-		</div>
-		<!-- Example DataTables Card-->
-		<div class="card mb-3">
-			<div class="card-header">
-				<spring:message code="lbl.roleTitle"/>
+<div class="page-content-wrapper">
+		<div class="page-content">
+			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+			<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							<h4 class="modal-title">Modal title</h4>
+						</div>
+						<div class="modal-body">
+							 Widget settings form goes here
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn blue">Save changes</button>
+							<button type="button" class="btn default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
 			</div>
-			<div class="card-body">
-				<div class="table-responsive">
-					<table class="display" id="roleList">
-						<thead>
-						<tr>
-							<th><spring:message code="lbl.name"/></th>
-							<th><spring:message code="lbl.permissions"/></th>
-							<th><spring:message code="lbl.action"/></th>
-						</tr>
-						</thead>
-
-						<tbody>
-						<c:forEach var="role" items="${roles}" varStatus="loop">
-							<tr>
-								<td>${role.getName()}</td>
-								<td><c:forEach var="permission"
+			
+			<ul class="page-breadcrumb breadcrumb text-right">
+				<li>
+					<%-- <a href="<c:url value="/user.html"/>">Home</a> --%>
+					
+				</li>
+				<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_ROLE")){ %>
+				<span id="actions" style="float: right;margin-bottom: 6px;">					
+					<a class="btn btn-default" id="add" href="<c:url value="/role/add.html?lang=${locale}"/>">Add
+					a new Role</a> 
+					
+				<%} %>
+			</ul>
+			<!-- END PAGE BREADCRUMB -->
+			<!-- END PAGE HEADER-->
+			<!-- BEGIN PAGE CONTENT-->
+			
+	
+			<div class="row">
+				<div class="col-md-12">
+					
+					<!-- BEGIN EXAMPLE TABLE PORTLET-->
+					<div class="portlet box blue-madison">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-list"></i>Role list
+							</div>
+							
+							
+						</div>
+						
+						<div class="portlet-body">
+							<table class="table table-striped table-bordered " id="sample_1">
+							<!-- <table class="display" id="roleList" style="width:100%"> -->
+									<thead>
+										<tr>
+											<th><spring:message code="lbl.name"/></th>
+											<th><spring:message code="lbl.permissions"/></th>										
+											<th><spring:message code="lbl.action"/></th>
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach var="role" items="${roles}" varStatus="loop">
+											<tr>
+												<td>${role.getName()}</td>
+												<td><c:forEach var="permission"
 											   items="${role.getPermissions()}" varStatus="loop">
-									<b> ${permission.getName()} , </b>
-								</c:forEach></td>
-								<td>
-									<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_ROLE")){ %>
-									<a href="<c:url value="/role/${role.id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> <%} %>
-								</td>
+													<b> ${permission.getName()} , </b>
+												</c:forEach></td>											
+												<td>
+													<% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_ROLE")){ %>
+													<a href="<c:url value="/role/${role.id}/edit.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a> <%} %>
+												</td>
+				
+											</tr>
+										</c:forEach>
+									</tbody>
 
-							</tr>
-						</c:forEach>
-						</tbody>
-					</table>
+								</table>
+						</div>
+					</div>
+					
+					
+					
 				</div>
 			</div>
-			<div class="card-footer small text-muted"></div>
+			<!-- END PAGE CONTENT-->
+			<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>
 	</div>
-	<!-- /.container-fluid-->
-	<!-- /.content-wrapper-->
-	<jsp:include page="/WEB-INF/views/footer.jsp" />
+	<!-- END CONTENT -->
 </div>
-<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
-<script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
-<script src="<c:url value='/resources/js/jspdf.debug.js' />"></script>
-<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.flash.js' />"></script>
-<script src="<c:url value='/resources/js/buttons.html5.js' />"></script>
-<script src="<c:url value='/resources/js/jszip.js' />"></script>
-<script src="<c:url value='/resources/js/pdfmake.js' />"></script>
-<script src="<c:url value='/resources/js/vfs_fonts.js' />"></script>
+<jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
+
+<script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
+
 <script>
-	$(document).ready(function() {
-		$('#roleList').DataTable({
-			bFilter: true,
-			bInfo: true,
-			dom: 'Bfrtip',
-			destroy: true,
-			buttons: [
-				'pageLength'
-			],
-			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-			language: {
-				searchPlaceholder: "Role Name / Permissions"
-			}
-		});
-	});
+jQuery(document).ready(function() {       
+	 Metronic.init(); // init metronic core components
+		Layout.init(); // init current layout
+   //TableAdvanced.init();
+		$('#sample_1').DataTable();
+});
 </script>
-</body>
-</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,44 @@
+
+
+.navi {
+  background: #485a6a;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  top: 121px;
+}
+
+.navi.sticky {
+  position: fixed;
+}
+
+.navi ul {
+  list-style: none;
+  text-align: center;
+  overflow: hidden;
+}
+
+.navi ul li {
+  display: inline-block;
+  margin: 0 -4px;
+  padding: 2px 0;
+}
+
+.navi ul li a {
+ 
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.navi ul li a.active {
+  background: #ff6e6f;
+}
+
+section {
+  padding: 20px;
+  height:500px;
+  
+}
+

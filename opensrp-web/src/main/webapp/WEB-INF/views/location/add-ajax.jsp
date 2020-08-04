@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -17,183 +17,210 @@
     Integer selectedTag = (Integer)session.getAttribute("selectedTag");
 
 %>
-<!DOCTYPE html>
-<html lang="en">
+<title> Add new location</title>
+<jsp:include page="/WEB-INF/views/header.jsp" />
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="_csrf" content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <link type="text/css" href="<c:url value="/resources/css/jqx.base.css"/>" rel="stylesheet">
-    <title><spring:message code="lbl.addLocation"/></title>
-    <jsp:include page="/WEB-INF/views/css.jsp" />
-</head>
+    
 
 <c:url var="saveUrl" value="/location/add-new.html" />
 
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
-<div class="content-wrapper">
-    <div class="container-fluid">
-        <div class="form-group">
-            <jsp:include page="/WEB-INF/views/location/location-tag-link.jsp" />
 
-        </div>
-        <div class="card mb-3">
-            <div class="card-header">
-                </i><spring:message code="lbl.addLocation"/>
-            </div>
-            <div class="card-body">
 
-                <span class="text-red" id="locationErrorMessage"></span>
-
-                <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
-                    <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>"></div>
-
-                <form autocomplete="off" id="locationInfo">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-5">
-                                <label for="name"><spring:message code="lbl.name"/><span style="color: red;">*</span></label>
-                                <input id="name" class="form-control" name="name" required="required"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-5">
-                                <label for="code"><spring:message code="lbl.code"/><span style="color: red;">*</span></label>
-                                <input id="code" class="form-control" name="code" required="required"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-5">
-                                <label for="description"><spring:message code="lbl.description"/><span style="color: red;">*</span></label>
-                                <input id="description" class="form-control" name="description" required="required" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-5">
-                                <label for="locationTag"> <spring:message code="lbl.tag"/><span style="color: red;">*</span></label>
-                                <select class="custom-select custom-select-lg mb-3" id="locationTag" name="locationTag" required="required">
-                                    <option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
-                                    <%
-                                        for (Map.Entry<Integer, String> entry : tags.entrySet()) {
-                                            if(selectedTag==entry.getKey()){
-                                    %>
-                                    <option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
-                                    <%
-                                    } else{
-                                    %>
-                                    <option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
-                                    <%
-                                            }
-                                        }
-                                    %>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="division" class="form-group" style="display: none;">
-                        <div class="row">
-                            <div class="col-5">
-                                <div class="ui-widget">
-                                    <label><spring:message code="lbl.division"/><span style="color: red;">*</span></label>
-                                    <select id="division-option" class="form-control" name="divisionId">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="district" class="form-group" style="display: none;">
-                        <div class="row">
-                            <div class="col-5">
-                                <div class="ui-widget">
-                                    <label><spring:message code="lbl.district"/><span style="color: red;">*</span></label>
-                                    <select id="district-option" class="form-control" name="districtId">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="upazila" class="form-group" style="display: none;">
-                        <div class="row">
-                            <div class="col-5">
-                                <div class="ui-widget">
-                                    <label><spring:message code="lbl.upazila"/><span style="color: red;">*</span></label>
-                                    <select id="upazila-option" class="form-control" name="upazilaId">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="pourasabha" class="form-group" style="display: none;">
-                        <div class="row">
-                            <div class="col-5">
-                                <div class="ui-widget">
-                                    <label><spring:message code="lbl.pourasabha"/><span style="color: red;">*</span></label>
-                                    <select id="pourasabha-option" class="form-control" name="pourasabhaId">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="union" class="form-group" style="display: none;">
-                        <div class="row">
-                            <div class="col-5">
-                                <div class="ui-widget">
-                                    <label><spring:message code="lbl.union"/><span style="color: red;">*</span></label>
-                                    <select id="union-option" class="form-control" name="unionId">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <input id="parentLocation" name="parentLocation" hidden/>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-5">
-                                <label for="loginLocation"><spring:message code="lbl.loginLocation"/></label>
-                                <input type="checkbox" id="loginLocation" class="chk" name="loginLocation"/>
-
-                                <label for="visitLocation"><spring:message code="lbl.visitLocation"/></label>
-                                <input id="visitLocation" type="checkbox" class="chk" name="visitLocation"/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-3">
-                                <input type="submit" value="<spring:message code="lbl.save"/>" class="btn btn-primary btn-block" />
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <!-- /.container-fluid-->
-        <!-- /.content-wrapper-->
-    </div>
+<div class="page-content-wrapper">
+		<div class="page-content">
+			
+			<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-circle"></i>
+				</li>
+				<li>
+					<a href="<c:url value="/location/location.html"/>">Location list</a>
+					
+				</li>
+			
+			</ul>
+			<!-- END PAGE BREADCRUMB -->
+			<!-- END PAGE HEADER-->
+			<!-- BEGIN PAGE CONTENT-->
+			
+	
+			<div class="row">
+				<div class="col-md-12">
+					
+					<!-- BEGIN EXAMPLE TABLE PORTLET-->
+					<div class="portlet box blue-madison">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-edit"></i>Add new location
+							</div>
+							
+							
+						</div>
+						
+						<div class="portlet-body">
+							<form autocomplete="off" id="locationInfo">
+			                    <div class="form-group">
+			                        <div class="row">
+			                            <div class="col-lg-6">
+			                                <label for="name"><spring:message code="lbl.name"/><span style="color: red;">*</span></label>
+			                                <input id="name" class="form-control" name="name" required="required"/>
+			                            </div>
+			                        </div>
+			                    </div>
+			                    <div class="form-group">
+			                        <div class="row">
+			                            <div class="col-lg-6">
+			                                <label for="code"><spring:message code="lbl.code"/><span style="color: red;">*</span></label>
+			                                <input id="code" class="form-control" name="code" required="required"/>
+			                            </div>
+			                        </div>
+			                    </div>
+			                    <div class="form-group">
+			                        <div class="row">
+			                            <div class="col-lg-6">
+			                                <label for="description"><spring:message code="lbl.description"/><span style="color: red;">*</span></label>
+			                                <input id="description" class="form-control" name="description" required="required" />
+			                            </div>
+			                        </div>
+			                    </div>
+			
+			                    <div class="form-group">
+			                        <div class="row">
+			                            <div class="col-lg-6">
+			                                <label for="locationTag"> <spring:message code="lbl.tag"/><span style="color: red;">*</span></label>
+			                                <select class="custom-select custom-select-lg mb-3" id="locationTag" name="locationTag" required="required">
+			                                    <option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
+			                                    <%
+			                                        for (Map.Entry<Integer, String> entry : tags.entrySet()) {
+			                                            if(selectedTag==entry.getKey()){
+			                                    %>
+			                                    <option value="<%=entry.getKey()%>" selected><%=entry.getValue() %></option>
+			                                    <%
+			                                    } else{
+			                                    %>
+			                                    <option value="<%=entry.getKey()%>"><%=entry.getValue() %></option>
+			                                    <%
+			                                            }
+			                                        }
+			                                    %>
+			                                </select>
+			                            </div>
+			                        </div>
+			                    </div>
+			
+			                    <div id="division" class="form-group" style="display: none;">
+			                        <div class="row">
+			                            <div class="col-lg-6">
+			                                <div class="ui-widget">
+			                                    <label><spring:message code="lbl.division"/><span style="color: red;">*</span></label>
+			                                    <select id="division-option" class="form-control" name="divisionId">
+			                                    </select>
+			                                </div>
+			                            </div>
+			                        </div>
+			                    </div>
+			
+			                    <div id="district" class="form-group" style="display: none;">
+			                        <div class="row">
+			                            <div class="col-lg-6">
+			                                <div class="ui-widget">
+			                                    <label><spring:message code="lbl.district"/><span style="color: red;">*</span></label>
+			                                    <select id="district-option" class="form-control" name="districtId">
+			                                    </select>
+			                                </div>
+			                            </div>
+			                        </div>
+			                    </div>
+			
+			                    <div id="upazila" class="form-group" style="display: none;">
+			                        <div class="row">
+			                            <div class="col-lg-6">
+			                                <div class="ui-widget">
+			                                    <label><spring:message code="lbl.upazila"/><span style="color: red;">*</span></label>
+			                                    <select id="upazila-option" class="form-control" name="upazilaId">
+			                                    </select>
+			                                </div>
+			                            </div>
+			                        </div>
+			                    </div>
+			
+			                    <div id="pourasabha" class="form-group" style="display: none;">
+			                        <div class="row">
+			                            <div class="col-lg-6">
+			                                <div class="ui-widget">
+			                                    <label><spring:message code="lbl.pourasabha"/><span style="color: red;">*</span></label>
+			                                    <select id="pourasabha-option" class="form-control" name="pourasabhaId">
+			                                    </select>
+			                                </div>
+			                            </div>
+			                        </div>
+			                    </div>
+			
+			                    <div id="union" class="form-group" style="display: none;">
+			                        <div class="row">
+			                            <div class="col-lg-6">
+			                                <div class="ui-widget">
+			                                    <label><spring:message code="lbl.union"/><span style="color: red;">*</span></label>
+			                                    <select id="union-option" class="form-control" name="unionId">
+			                                    </select>
+			                                </div>
+			                            </div>
+			                        </div>
+			                    </div>
+			
+			                    <input id="parentLocation" name="parentLocation" hidden/>
+			
+			                    <%-- <div class="form-group">
+			                        <div class="row">
+			                            <div class="col-lg-6">
+			                                <label for="loginLocation"><spring:message code="lbl.loginLocation"/></label>
+			                                <input type="checkbox" id="loginLocation" class="chk" name="loginLocation"/>
+			
+			                                <label for="visitLocation"><spring:message code="lbl.visitLocation"/></label>
+			                                <input id="visitLocation" type="checkbox" class="chk" name="visitLocation"/>
+			                            </div>
+			                        </div>
+			                    </div> --%>
+			
+			                    <div class="form-group text-right">
+			                        <div class="row">
+			                            <div class="col-lg-6">
+			                                <input type="submit" value="<spring:message code="lbl.save"/>" class="btn btn-primary btn-block" />
+			                            </div>
+			                        </div>
+			                    </div>
+			                </form>
+							
+							
+							
+							
+						</div>
+					</div>
+					
+					
+					
+					
+					
+				</div>
+			</div>
+			<!-- END PAGE CONTENT-->
+		</div>
+	</div>
+	<!-- END CONTENT -->
 </div>
-    <!-- Bootstrap core JavaScript-->
-    <script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
+<script>
+jQuery(document).ready(function() {       
+	 Metronic.init(); // init metronic core components
+		Layout.init(); // init current layout
+   //TableAdvanced.init();
+});
+</script>
+
+<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
     <script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.bundle.min.js'/>"></script>
 
     <script src="<c:url value='/resources/js/checkbox.js'/>"></script>
@@ -404,5 +431,3 @@
             $('#parentLocation').val(parentLocationId);
         });
     </script>
-</body>
-</html>

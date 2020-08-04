@@ -1,23 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-		 pageEncoding="ISO-8859-1"%>
+         pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@page import="org.opensrp.common.util.CheckboxHelperUtil"%>
-<%@ taglib prefix="sec"
-		   uri="http://www.springframework.org/security/tags"%>
 
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="org.opensrp.core.entity.Role"%>
 <%@ page import="org.opensrp.core.entity.Branch" %>
 <%@ page import="java.util.Set" %>
-
-<!DOCTYPE html>
-<html lang="en">
+<title><spring:message code="lbl.addUserTitle"/></title>
 
 
+
+<meta name="_csrf" content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+<c:url var="cancelUrl" value="/user/sk-list.html" />
+<style>
+.page-content-wrapper .page-content {
+    margin-left: 0px; 
+    margin-top: 0px;
+    /* min-height: 600px; */
+    padding: 0 /* 10px */ 0 0 20px;
+}
+</style>
 <c:url var="cancelUrl" value="/user/sk-list.html" />
 
 <c:url var="saveUrl" value="/user/${id}/edit-SK.html" />
@@ -41,142 +49,134 @@
 	List<Role> selectedRole = (List<Role>) session.getAttribute("selectedRoles");
 	String ssPrefix = (String)session.getAttribute("ssPrefix");
 %>
+<div class="page-content-wrapper">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-md-12">
 
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<%-- <jsp:include page="/WEB-INF/views/navbar.jsp" /> --%>
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box blue-madison">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-add"></i><b>Edit ${account.fullName}'s Information</b>
+                        </div>
 
-<div class="content-wrapper">
-	<div class="container-fluid">
-		<%-- <div class="form-group">
-			<jsp:include page="/WEB-INF/views/user/user-role-link.jsp" />
-		</div> --%>
-		<h5>Edit SK</h5>
-		<div class="card mb-3">
-			<div class="card-header">
-				<b>Edit ${account.fullName}'s Information</b>
-			</div>
-			<div class="card-body">
-				<form:form id="update-sk-information"   modelAttribute="account" class="form-inline">
 
-					<span class="text-red" id="error-msg"></span>
-					<div class="row col-12 tag-height">
-						<div class="form-group required">
-							<label class="label-width" for="inputPassword6"> <spring:message code="lbl.firstName"/> </label>
-							<form:input path="firstName" class="form-control mx-sm-3"
+                    </div>
+                    <span class="text-red" id="usernameUniqueErrorMessage"></span>
+                    <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
+                        <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+                    </div>
+                    <div class="portlet-body">
+                        <form:form id="update-sk-information"   modelAttribute="account" autocomplete="off">
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                   <label class="control-label" for="firstName"> <spring:message code="lbl.firstName"/>  <span class="required">* </span></label>
+                        			<form:input path="firstName" class="form-control mx-sm-3"
 										required="required"/>
-						</div>
-					</div>
+                                </div>
 
-					<div class="row col-12 tag-height">
-						<div class="form-group">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.lastName"/> </label>
-							<form:input path="lastName" class="form-control mx-sm-3"
-										/>
-						</div>
-					</div>
+                                <div class="col-sm-6"> 
+                                    <label class="control-label" for="lastName"> <spring:message code="lbl.lastName"/></label>
+                                     <form:input path="lastName" class="form-control mx-sm-3"/>
+                                    
+                                </div>
+                            </div>
+							
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <label class="control-label" for="email"> <spring:message code="lbl.email"/> </label>
+                                    <input type="email" class="form-control mx-sm-3" name="email" value="${account.getEmail()}">
+                                </div>
 
-					<div class="row col-12 tag-height">
-						<div class="form-group">
-							<label class="label-width"  for="inputPassword6"> <spring:message code="lbl.email"/> </label>
-							<input type="email" class="form-control mx-sm-3" name="email" value="${account.getEmail()}">
-						</div>
-					</div>
+                                <div class="col-sm-6">
+                                    <label class="control-label" for="mobile"> <spring:message code="lbl.mobile"/>	</label>
+                                    <form:input path="mobile" class="form-control mx-sm-3" />
+                                </div>
+                            </div>
 
-					<div class="row col-12 tag-height">
-						<div class="form-group">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.mobile"/></label>
-							<form:input path="mobile" class="form-control mx-sm-3" />
-						</div>
-					</div>
+                           <form:hidden path="uuid" />
+							<form:hidden path="personUUid" />
+							<form:hidden path="provider" />
+							<form:hidden path="ssNo" />
+							<form:hidden path="id"/>
+							<form:hidden path="password" />
+							<input type="hidden" name="am" id="am" value="${amId }">
 
-					<div class="row col-12 tag-height">
-						<div class="form-group required">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.username"/></label>
-							<form:input path="username" class="form-control mx-sm-3"
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <label class="control-label" for="nId"> <spring:message code="lbl.username"/> <span class="required">* </span>	</label>
+                                   <form:input path="username" class="form-control mx-sm-3"
 										readonly="true"	required="required"/>
-							<small id="passwordHelpInline" class="text-muted text-para">
-								<span class="text-red" id="usernameUniqueErrorMessage"></span> <spring:message code="lbl.userMessage"/>
-							</small>
-						</div>
-					</div>
-
-					<form:hidden path="uuid" />
-					<form:hidden path="personUUid" />
-					<form:hidden path="provider" />
-					<form:hidden path="ssNo" />
-					<form:hidden path="id"/>
-					<form:hidden path="password" />
-					<input type="hidden" name="am" id="am" value="${amId }">           
-                <div class="row col-12 tag-height" id="_enableSimprint">
-						<div class="form-group">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.enableSimprint"/></label>
-							<form:checkbox class="checkBoxClass form-check-input"
-										   path="enableSimPrint" value="${account.getEnableSimPrint()}" />
-						</div>
-				</div>
-
-					<!-- for location -->
-					<div class="row col-12 tag-height" id="locationDiv" style="display:none">
-						<div class="form-group">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.location"/></label>
-							<div id="cm" class="ui-widget ">
-								<div id="locationsTag" ></div>
-								<span class="text-red">${locationSelectErrorMessage}</span>
-							</div>
-						</div>
-					</div>
-
-					<div class="row col-12 tag-height">
-						<div class="form-group required">
-							<label class="label-width"  for="branches">
-								<spring:message code="lbl.branches"/>
-							</label>
-							<select
+									<small id="passwordHelpInline" class="text-muted text-para">
+										<span class="text-red" id="usernameUniqueErrorMessage"></span> <spring:message code="lbl.userMessage"/>
+									</small>
+                                </div>
+							 <div class="col-sm-6">
+                                    <label class="control-label" for="username"> <spring:message code="lbl.branches"/> <span class="required">* </span>	</label>
+                                   <select
 									required
 									name="branches"
 									id="branches"
 									class="form-control mx-sm-3 ">
-								<c:forEach items="${branches}" var="branch">
-									<option value="${branch.id}">${branch.name} (${branch.code})</option>
-								</c:forEach>
-							</select>
-						</div>
-					</div>
+									<c:forEach items="${branches}" var="branch">
+										<option value="${branch.id}">${branch.name} (${branch.code})</option>
+									</c:forEach>
+									</select>
+                                </div>
+                                
+                            </div>
+                            
+                            <div class="form-group row" id="_enableSimprint">
+			                     <div class="col-sm-6">
+			                        <label class="control-label" for="enableSimPrint"><spring:message code="lbl.enableSimprint"/></label>
+			                        <input type="checkbox" id="enableSimPrint" name="enableSimPrint"  class="checkBoxClass form-check-input"/>
+			                   </div>
+			                </div>
+			                
+			                <div class="form-group row" >
+								<div class="col-sm-6">
+									<label class="label-width" for="inputPassword6"><spring:message code="lbl.activeUser"/></label>
+									<form:checkbox class="checkBoxClass form-check-input" onclick="buttonUpdate(${account.isEnabled()})"
+												   path="enabled" value="${account.isEnabled()}"/>
+								</div>
+								<div id="inactivity-message" style="margin-left: 150px;display: none; color: red; font-weight: bold;">Inactivating the user will completely remove the catchment area assigned to the user</div>
+							</div>
 
-					<div class="row col-12 tag-height">
-						<div class="form-group">
-							<label class="label-width" for="inputPassword6"><spring:message code="lbl.activeUser"/></label>
-							<form:checkbox class="checkBoxClass form-check-input" onclick="buttonUpdate(${account.isEnabled()})"
-										   path="enabled" value="${account.isEnabled()}"/>
-						</div>
-						<div id="inactivity-message" style="margin-left: 150px;display: none; color: red; font-weight: bold;">Inactivating the user will completely remove the catchment area assigned to the user</div>
-					</div>
+                            <hr class="dotted">
+                            <div class="form-group text-right">
+                            <input type="submit" id="updateContinue" name="updateContinue" value="Update & Continue To Edit Catchment Area"
+								  class="btn btn-primary" />
+                               <input type="submit" id="update" name="update"  value="Update"
+								  class="btn btn-primary" />
+                               
+                                
+                                <a class="btn btn-primary" href="${cancelUrl}">Cancel</a>
+                            </div>
+                            <div id="errorMessage" style="display:none">
+                                <div class="alert-message warning">
+                                    <div id="errormessageContent" class="alert alert-danger" role="alert"> </div>
+                                </div>
+                            </div>
+                       </form:form>
 
-					<div class="row col-12 tag-height">
-						<div class="form-group" id="update-continue" style="display: none;">
-							<input type="submit" id="updateContinue" name="updateContinue" value="Update & Continue To Edit Catchment Area"
-								   class="btn btn-primary btn-block btn-sm uc" />
-						</div>
-						<div class="form-group">
-							<input type="submit" id="update" name="update" style="margin-left: 10px;" value="Update"
-								   class="btn btn-primary btn-block btn-sm u" />
-						</div>
-						<div class="form-group">
-                    	<a href="#"  rel="modal:close" style="margin-left: 20px;" class="btn btn-primary btn-block btn-center">Close</a>
-                    	</div>
-					</div>
-				</form:form>
 
-			</div>
-			<div class="card-footer small text-muted"></div>
-		</div>
-	</div>
-	<!-- /.container-fluid-->
-	<!-- /.content-wrapper-->
-	<%-- <jsp:include page="/WEB-INF/views/footer.jsp" /> --%>
+
+
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+    </div>
 </div>
-</body>
-
+<!-- END CONTENT -->
+</div>
 <script src="<c:url value='/resources/js/magicsuggest-min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js'/>"></script>
 <script src="<c:url value='/resources/js/select2.js' />"></script>
@@ -423,4 +423,4 @@
 		$('#role').trigger('change');
 	});
 </script> --%>
-</html>
+

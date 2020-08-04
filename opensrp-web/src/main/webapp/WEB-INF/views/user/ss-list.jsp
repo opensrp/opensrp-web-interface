@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="ISO-8859-1"%>
+		 pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
-           uri="http://www.springframework.org/security/tags"%>
+		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 <%@page import="java.util.List"%>
 <%@ page import="org.opensrp.core.entity.User" %>
@@ -20,56 +20,49 @@
     String skUsername = (String) session.getAttribute("skUsername");
     String skName = (String) session.getAttribute("skName");
 %>
-<!DOCTYPE html>
-<html lang="en">
+<title>SS List</title>
+<link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
 
-<head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><spring:message code="lbl.userList"/></title>
-    <link type="text/css" href="<c:url value="/resources/css/jquery.toast.css"/>" rel="stylesheet">
+<link type="text/css" href="<c:url value="/resources/css/jquery.toast.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/jtree.min.css"/>" rel="stylesheet">
     <link type="text/css" href="<c:url value="/resources/css/multi-select.css"/>" rel="stylesheet">
-    <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <!-- default header name is X-CSRF-TOKEN -->
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <jsp:include page="/WEB-INF/views/css.jsp" />
-</head>
+    <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">s
+<jsp:include page="/WEB-INF/views/header.jsp" />
+<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
+<c:url var="back" value="/user/sk-list.html" />
 
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
+<div class="page-content-wrapper">
+	<div class="page-content">
 
-<div class="content-wrapper">
-    <div class="container-fluid">
 
-      <c:url var="back" value="/user/sk-list.html" />
-		 <div class="card1 mb-3">
-    	 	<div class="card-header2">
-	    	 	 <div style="float: right;">
-	    	 	 <a href="${back }"><strong>My SK </strong></a>  |
-		            <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>
-		            <a class="btn btn-outline-primary btn-xs"
+		<ul class="page-breadcrumb breadcrumb text-right">
+			<li>
+			<a href="${back }"><strong>My SK </strong></a> | 
+				<% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>
+				<a class="btn btn-primary"
                        href="#" onclick="ssForm(${skId}, '${skUsername}')">
 		                <strong>
 		                    <spring:message code="lbl.addNew"/>
 		                    <spring:message code="lbl.ss"/>
 		                </strong>
-		            </a> <%} %>
-	    	 	 </div>
-    	 	</div>
-    	</div>
-
-        <%-- <div class="form-group">
-           <a href="${back }"><strong>My SK </strong></a>  |
-            <% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>
-            <a  href="#" onclick="ssForm(${skId}, '${skUsername}')">
-                <strong>
-                    <spring:message code="lbl.addNew"/>
-                    <spring:message code="lbl.ss"/>
-                </strong>
-            </a> <%} %>
-        </div> --%>
+		            </a>
+				
+				
+				
+				<%} %>
+			</li>
+		</ul>
+		<!-- END PAGE BREADCRUMB -->
+		<!-- END PAGE HEADER-->
+		<!-- BEGIN PAGE CONTENT-->
+		<div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050; min-height: 300px;"
+             id="change-password-modal" class="modal">
+            <div id="change-password-body">
+                <div style="position: absolute; margin-left:45%; margin-top: 105px;">
+                    <img width="90px" height="90px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+                </div>
+            </div>
+        </div>
 
         <!-- Modal for add new SS -->
         <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050; min-height: 300px;"
@@ -103,29 +96,27 @@
 
 
         <!--Modal for catchment - start-->
-        <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050"
+        <div style="overflow: unset;display: none;top:30px; max-width: none; position: relative;z-index: 1050"
              id="catchment-area" class="modal">
             <div id="user-info-body" class="row"></div>
-            <div id ="modal-body" class="row">
-                <div class="col-sm-5" style="overflow-y: auto; height: 350px;">
+            <div id ="modal-body" class="form-group row">
+                <div class="col-sm-5">
                     <div id="locationTree">
                     </div>
                 </div>
-                <div class="col-sm-6" style="height: 350px;">
+                <div class="col-sm-5">
                     <select id='locations' multiple='multiple'>
                     </select>
                 </div>
-                <div class="col-sm-1" style="height: 350px;">
-                    <div class="row">
+                <div class="col-sm-2">
+                   <br />
                         <button id="saveCatchmentArea"
                                 disabled = true
-                                class="btn btn-primary btn-sm"
-                                style="position: absolute; top: 50%;
-                                transform: translateY(-50%);">
+                                class="btn btn-primary btn-sm">
                             Save
                         </button>
                         <p id="pleaseWait" style="display: none; color: red;">Please wait...</p>
-                    </div>
+                    
                 </div>
             </div>
             <div id="table-body" class="row" style="overflow-x: auto; margin-bottom: 10px;">
@@ -140,23 +131,29 @@
         </div>
         <!--Modal start-->
 
+		<div class="row">
+			<div class="col-md-12">
 
-        <!-- Example DataTables Card-->
-        <div class="card mb-3">
-            <div class="card-header">
-                <div style="float: left; padding: 3px;">
-                    <h5><%=skName%>'s SS List</h5>
-                </div>
-                <div style="float: right;">
-                    <input id="myInput" class="form-control input-sm" type="text" placeholder="Search..">
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="display" id="userList">
+				<!-- BEGIN EXAMPLE TABLE PORTLET-->
+				<div class="portlet box blue-madison">
+					<div class="portlet-title">
+						<div class="caption">
+							<i class="fa fa-list"></i><%=skName%>'s SS List
+						</div>
+						<!-- <div style="float: right;">
+	                    <input id="myInput" class="form-control caption" type="text" placeholder="Search..">
+	                	</div>
+ -->
+
+					</div>
+					
+					<div class="portlet-body">
+						
+					
+						<table class="table table-striped table-bordered" id="sample_1">
                         <thead>
                         <tr>
-                            <th><spring:message code="lbl.slNo"></spring:message></th>
+                           <%--  <th><spring:message code="lbl.slNo"></spring:message></th> --%>
                             <th><spring:message code="lbl.name"></spring:message></th>
                             <th><spring:message code="lbl.username"></spring:message></th>
                             <th><spring:message code="lbl.phoneNumber"></spring:message></th>
@@ -184,7 +181,7 @@
                                     }
                         %>
                         <tr>
-                            <td><%=idx%></td>
+                            <%-- <td><%=idx%></td> --%>
                             <td><%=user.getFullName()%></td>
                             <td><%=user.getUsername()%></td>
                             <td><%=user.getMobile()%></td>
@@ -206,18 +203,39 @@
                         %>
                         </tbody>
                     </table>
-                </div>
-            </div>
-            <div class="card-footer small text-muted"></div>
-        </div>
-    </div>
+					</div>
+					
+				</div>
+				
+
+
+			</div>
+		</div>
+		<!-- END PAGE CONTENT-->
+        <jsp:include page="/WEB-INF/views/footer.jsp" />
+	</div>
 </div>
-<jsp:include page="/WEB-INF/views/footer.jsp" />
+<!-- END CONTENT -->
 </div>
+
+
+<jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
+
 <script src="<c:url value='/resources/js/jquery.toast.js'/>"></script>
 <script src="<c:url value='/resources/js/jstree.min.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery.multi-select.js'/>"></script>
 <script src="<c:url value='/resources/js/select2.js' />"></script>
 <script src="<c:url value='/resources/js/user-ss.js' />"></script>
-</body>
-</html>
+
+
+
+
+<script>
+	jQuery(document).ready(function() {
+		Metronic.init(); // init metronic core components
+		Layout.init(); // init current layout
+		//TableAdvanced.init();
+		$('#sample_1').DataTable();
+		$('#catchment-table').DataTable();
+	});
+</script>

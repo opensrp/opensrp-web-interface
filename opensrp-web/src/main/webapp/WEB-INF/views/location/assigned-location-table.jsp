@@ -9,22 +9,8 @@
     List<Object[]> catchmentAreaTable = (List<Object[]>) session.getAttribute("catchmentAreaTable");
     Integer userId = (Integer) session.getAttribute("userIdFromCatchment");
 %>
-<head>
-<%--    <link type="text/css"--%>
-<%--          href="<c:url value="/resources/vendor/bootstrap/css/bootstrap.min.css"/>"--%>
-<%--          rel="stylesheet"--%>
-<%--          http-equiv="Cache-control" content="public">--%>
-<%--    <link type="text/css"--%>
-<%--          href="<c:url value="/resources/css/style.css"/>"--%>
-<%--          rel="stylesheet">--%>
-<%--    <link type="text/css"--%>
-<%--          href="<c:url value="/resources/vendor/font-awesome/css/font-awesome.min.css"/>"--%>
-<%--          rel="stylesheet">--%>
-<%--    <link type="text/css"--%>
-<%--          href="<c:url value="/resources/css/jquery-ui.css"/>" rel="stylesheet">--%>
-    <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
-</head>
-<div>
+<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
+
 
     <div class="modal" id="delete-modal" style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1150; max-width: 70%;">
         <h4>Do you really want to delete this location from this user?</h4>
@@ -33,7 +19,7 @@
         <a class="btn btn-sm btn-danger" href="#" onclick="deleteConfirm()" style="float: right; bottom: 0px; margin-left: 5px;">Yes</a>
         <a class="btn btn-sm btn-dark" href="#" onclick="window.location.reload()" style="float: right; bottom: 0px">Close</a>
     </div>
-    <table id='catchment-table' class='display'>
+    <table id='sample_1' class='table table-striped table-bordered'>
         <thead>
         <tr>
             <th>Division</th>
@@ -51,7 +37,7 @@
             for(Object[] c: catchmentAreaTable){
                 for (int i = 0; i < 6; i++) {
                     if (org.apache.commons.lang3.StringUtils.isBlank((CharSequence) c[i])) c[i] = "All";
-                }
+            }
         %>
         <tr id="row"<%=idx%>>
             <td><%=c[0]%></td>
@@ -63,12 +49,14 @@
             <td>
                 <button class="btn btn-sm btn-danger" onclick="deleteLocation(<%=c[6]%>,<%=idx%>,<%=userId%>)">Delete</button>
             </td>
-        </tr>;
+        </tr>
         <% idx++; } %>
         </tbody>
     </table>
+<jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
-</div>
+
+
 <%--<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>--%>
 <%--<script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.bundle.min.js'/>"></script>--%>
 <script src="<c:url value='/resources/js/jquery.modal.min.js'/>"></script>
@@ -120,4 +108,13 @@
             }
         });
     }
+</script>
+
+<script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
+<script>
+    jQuery(document).ready(function() {
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        TableAdvanced.init();
+    });
 </script>

@@ -6,37 +6,30 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<footer class="sticky-footer">
-    <div class="container">
-        <div class="text-center">
-            <small>
-                <%--              <img src="<c:url value="/resources/img/community.png"/>" style = "height: 46px">--%>
-                Copyright © mPower Social Enterprises Ltd. 2019</small>
-        </div>
-    </div>
-</footer>
-<!-- got to previous page -->
-<a class="scroll-to-left rounded" href="#" onclick="history.back()" style="display: inline;">
-    <i class="fa fa-angle-left"></i>
-</a>
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fa fa-angle-up"></i>
-</a>
+<!-- END CONTAINER -->
+<!-- BEGIN FOOTER -->
+<jsp:useBean id="now" class="java.util.Date" />
+<fmt:formatDate var="year" value="${now}" pattern="yyyy" />
+<div class="page-footer">
+	<div class="page-footer-inner">
+	
+		 Copyright © ${year } mPower Social Enterprises Ltd.. All Rights Reserved
+	</div>
+	<div class="scroll-to-top">
+		<i class="icon-arrow-up"></i>
+	</div>
+</div>
+<!-- END FOOTER -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+<script src="../../assets/global/plugins/respond.min.js"></script>
+<script src="../../assets/global/plugins/excanvas.min.js"></script> 
+<![endif]-->
+</body>
+<!-- END BODY -->
+</html>
 
-<!-- Bootstrap core JavaScript-->
-<script src="<c:url value='/resources/js/jquery-1.10.2.js'/>"></script>
-<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
-<script src="<c:url value='/resources/vendor/bootstrap/js/bootstrap.bundle.min.js'/>"></script>
-
-<!-- Core plugin JavaScript-->
-<%-- <script src="<c:url value='/resources/vendor/jquery-easing/jquery.easing.min.js'/>"></script>
- --%>
-
-<!-- Custom scripts for all pages-->
-<%-- <script src="<c:url value='/resources/js/sb-admin.min.js'/>"></script>
- --%><!-- Custom scripts for this page-->
-<%-- <script src="<c:url value='/resources/js/sb-admin-datatables.min.js'/>"></script> --%>
 <script src="<c:url value='/resources/js/location.js'/>"></script>
 <script src="<c:url value='/resources/js/checkbox.js'/>"></script>
 <script src="<c:url value='/resources/js/jquery.modal.min.js'/>"></script>

@@ -25,7 +25,7 @@
 </head>
 <body>
 
-<table class="display" id="formWiseAggregatedListTable"
+<table class="display table table-bordered table-striped" id="formWiseAggregatedListTable"
        style="width: 100%;">
     <thead>
     <tr> <!--1st-->

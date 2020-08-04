@@ -21,33 +21,25 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <meta http-equiv="refresh"
-          content="<%=session.getMaxInactiveInterval()%>;url=/opensrp-dashboard/session-expired" />
-    <title><spring:message code="lbl.aggregatedReport"/></title>
-    <jsp:include page="/WEB-INF/views/css.jsp" />
-</head>
+<title><spring:message code="lbl.aggregatedReport"/></title>
+<jsp:include page="/WEB-INF/views/header.jsp" />
 
 
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-<jsp:include page="/WEB-INF/views/navbar.jsp" />
-<div class="content-wrapper">
-    <div class="container-fluid">
+<div class="page-content-wrapper">
+    <div class="page-content">
         <jsp:include page="/WEB-INF/views/report-search-panel.jsp" />
         <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
             <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
         </div>
-        <div class="card mb-3">
-            <div class="card-header">
-                <i class="fa fa-table"></i>
-                <spring:message code="lbl.aggregatedReport"/>
+
+
+        <div class="portlet box blue-madison">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-list"></i><spring:message code="lbl.aggregatedReport"/>
+                </div>
             </div>
-            <div class="card-body">
+            <div class="portlet-body">
                 <div class="row" style="margin-bottom: 10px;">
                     <div class="col-sm-2" id="startDate">
                         <b>START DATE: </b> <span><%=startDate%></span>
@@ -60,23 +52,24 @@
                     <div class="col-sm-4" id="upazilaS"></div>
                 </div>
 
-                <div class="row">
+                <div class="row" style="margin: 0px">
                     <div class="col-sm-12" id="content" style="overflow-x: auto;">
                         <div id="aggregated-report"></div>
                     </div>
                 </div>
-
             </div>
-            <div class="card-footer small text-muted"></div>
         </div>
+        <jsp:include page="/WEB-INF/views/footer.jsp" />
     </div>
-
-    <jsp:include page="/WEB-INF/views/footer.jsp" />
 </div>
-<script src="<c:url value='/resources/js/datepicker.js' />"></script>
-<script src="<c:url value='/resources/js/jquery-3.3.1.js' />"></script>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
+<script src="<c:url value='/resources/js/datepicker.js' />"></script>
 <script>
+    jQuery(document).ready(function() {
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        //TableAdvanced.init();
+    });
 
     $(document).ready(function() {
         $("#searched_value").val('BANGLADESH');
@@ -199,5 +192,4 @@
         });
     }
 </script>
-</body>
 </html>

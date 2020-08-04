@@ -1229,7 +1229,8 @@ th {
 	margin-bottom: 10px;
 }
 .label-width {
-	width: 110px;
+    font-weight: bold;
+    color: blue;
 }
 
 .label-width-no-start {

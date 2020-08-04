@@ -1,16 +1,10 @@
 package org.opensrp.common.repository.impl;
 
 import java.math.BigInteger;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
-import org.castor.util.StringUtil;
-import org.dom4j.Branch;
-import org.exolab.castor.types.DateTime;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -19,7 +13,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.*;
-import org.hibernate.transform.AliasToBeanConstructorResultTransformer;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
@@ -28,13 +21,7 @@ import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
-import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
-import javax.xml.transform.Transformer;
-
-import static org.apache.commons.lang3.time.DateUtils.parseDate;
 
 /**
  * <p>
@@ -2469,6 +2456,67 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 					.setString("startDate", startDate)
 					.setString("endDate", endDate)
 					.setResultTransformer(new AliasToBeanResultTransformer(AggregatedReportDTO.class));
+			report = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return report;
+	}
+
+	@Override
+	public <T> List<T> getAggregatedBiometricReport(String startDate, String endDate, String sql) {
+		Session session = sessionFactory.openSession();
+		List<T> report = new ArrayList<T>();
+		try {
+			Query query = session.createSQLQuery(sql)
+					.addScalar("locationOrProvider", StandardBasicTypes.STRING)
+					.addScalar("registeredWithBio", StandardBasicTypes.INTEGER)
+					.addScalar("eligibleForRegistration", StandardBasicTypes.INTEGER)
+					.addScalar("allIdentified", StandardBasicTypes.INTEGER)
+					.addScalar("allVerified", StandardBasicTypes.INTEGER)
+					.addScalar("allBypass", StandardBasicTypes.INTEGER)
+					.addScalar("ancTotalIdentified", StandardBasicTypes.INTEGER)
+					.addScalar("ancTotalVerified", StandardBasicTypes.INTEGER)
+					.addScalar("ancTotalBypass", StandardBasicTypes.INTEGER)
+					.addScalar("pncTotalIdentified", StandardBasicTypes.INTEGER)
+					.addScalar("pncTotalVerified", StandardBasicTypes.INTEGER)
+					.addScalar("pncTotalBypass", StandardBasicTypes.INTEGER)
+					.addScalar("elcoTotalIdentified", StandardBasicTypes.INTEGER)
+					.addScalar("elcoTotalVerified", StandardBasicTypes.INTEGER)
+					.addScalar("elcoTotalBypass", StandardBasicTypes.INTEGER)
+					.addScalar("otherTotalIdentified", StandardBasicTypes.INTEGER)
+					.addScalar("otherTotalVerified", StandardBasicTypes.INTEGER)
+					.addScalar("otherTotalBypass", StandardBasicTypes.INTEGER)
+					.setString("startDate", startDate)
+					.setString("endDate", endDate)
+					.setResultTransformer(new AliasToBeanResultTransformer(AggregatedBiometricDTO.class));
+			report = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return report;
+	}
+
+	@Override
+	public <T> List<T> getIndividualBiometricReport(String startDate, String endDate, String sql){
+		Session session = sessionFactory.openSession();
+		List<T> report = new ArrayList<T>();
+		try {
+			Query query = session.createSQLQuery(sql)
+					.addScalar("locationOrProvider", StandardBasicTypes.STRING)
+					.addScalar("providerName", StandardBasicTypes.STRING)
+					.addScalar("serviceName", StandardBasicTypes.STRING)
+					.addScalar("eventDate", StandardBasicTypes.DATE)
+					.addScalar("identified", StandardBasicTypes.STRING)
+					.addScalar("verifiedOrBypass", StandardBasicTypes.STRING)
+					.addScalar("memberName", StandardBasicTypes.STRING)
+					.addScalar("memberId", StandardBasicTypes.STRING)
+					.addScalar("branchName", StandardBasicTypes.STRING)
+					.setResultTransformer(new AliasToBeanResultTransformer(IndividualBiometricReportDTO.class));
 			report = query.list();
 		} catch (Exception e) {
 			e.printStackTrace();
