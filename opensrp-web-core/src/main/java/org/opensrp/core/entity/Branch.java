@@ -32,27 +32,27 @@ public class Branch implements Serializable {
 
     @NotNull(message = "division can't be empty")
     @Column(name = "division", nullable = false)
-    private String division;
+    private Integer division;
 
     @NotNull(message = "district can't be empty")
     @Column(name = "district", nullable = false)
-    private String district;
+    private Integer district;
 
     @NotNull(message = "upazila can't be empty")
     @Column(name = "upazila", nullable = false)
-    private String upazila;
+    private Integer upazila;
 
     @Column(name = "sk_position")
-    private String skPosition;
+    private Integer skPosition;
 
     @Column(name = "ss_position")
-    private String ssPosition;
+    private Integer ssPosition;
 
     @Column(name = "pa_position")
-    private String paPosition;
+    private Integer paPosition;
 
     @Column(name = "pk_position")
-    private String pkPosition;
+    private Integer pkPosition;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE", updatable = false)
@@ -108,59 +108,59 @@ public class Branch implements Serializable {
         this.updated = updated;
     }
 
-    public String getSkPosition() {
+    public Integer getSkPosition() {
         return skPosition;
     }
 
-    public void setSkPosition(String skPosition) {
+    public void setSkPosition(Integer skPosition) {
         this.skPosition = skPosition;
     }
 
-    public String getSsPosition() {
+    public Integer getSsPosition() {
         return ssPosition;
     }
 
-    public void setSsPosition(String ssPosition) {
+    public void setSsPosition(Integer ssPosition) {
         this.ssPosition = ssPosition;
     }
 
-    public String getPaPosition() {
+    public Integer getPaPosition() {
         return paPosition;
     }
 
-    public void setPaPosition(String paPosition) {
+    public void setPaPosition(Integer paPosition) {
         this.paPosition = paPosition;
     }
 
-    public String getPkPosition() {
+    public Integer getPkPosition() {
         return pkPosition;
     }
 
-    public void setPkPosition(String pkPosition) {
+    public void setPkPosition(Integer pkPosition) {
         this.pkPosition = pkPosition;
     }
 
-    public String getDivision() {
+    public Integer getDivision() {
         return division;
     }
 
-    public void setDivision(String division) {
+    public void setDivision(Integer division) {
         this.division = division;
     }
 
-    public String getDistrict() {
+    public Integer getDistrict() {
         return district;
     }
 
-    public void setDistrict(String district) {
+    public void setDistrict(Integer district) {
         this.district = district;
     }
 
-    public String getUpazila() {
+    public Integer getUpazila() {
         return upazila;
     }
 
-    public void setUpazila(String upazila) {
+    public void setUpazila(Integer upazila) {
         this.upazila = upazila;
     }
 
