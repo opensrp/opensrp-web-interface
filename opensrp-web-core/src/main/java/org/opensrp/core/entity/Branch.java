@@ -43,16 +43,16 @@ public class Branch implements Serializable {
     private String upazila;
 
     @Column(name = "sk_position")
-    private String skPosition;
+    private Integer skPosition;
 
     @Column(name = "ss_position")
-    private String ssPosition;
+    private Integer ssPosition;
 
     @Column(name = "pa_position")
-    private String paPosition;
+    private Integer paPosition;
 
     @Column(name = "pk_position")
-    private String pkPosition;
+    private Integer pkPosition;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE", updatable = false)
@@ -108,35 +108,35 @@ public class Branch implements Serializable {
         this.updated = updated;
     }
 
-    public String getSkPosition() {
+    public Integer getSkPosition() {
         return skPosition;
     }
 
-    public void setSkPosition(String skPosition) {
+    public void setSkPosition(Integer skPosition) {
         this.skPosition = skPosition;
     }
 
-    public String getSsPosition() {
+    public Integer getSsPosition() {
         return ssPosition;
     }
 
-    public void setSsPosition(String ssPosition) {
+    public void setSsPosition(Integer ssPosition) {
         this.ssPosition = ssPosition;
     }
 
-    public String getPaPosition() {
+    public Integer getPaPosition() {
         return paPosition;
     }
 
-    public void setPaPosition(String paPosition) {
+    public void setPaPosition(Integer paPosition) {
         this.paPosition = paPosition;
     }
 
-    public String getPkPosition() {
+    public Integer getPkPosition() {
         return pkPosition;
     }
 
-    public void setPkPosition(String pkPosition) {
+    public void setPkPosition(Integer pkPosition) {
         this.pkPosition = pkPosition;
     }
 
