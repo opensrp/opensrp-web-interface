@@ -26,15 +26,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Entity
-@Table(name = "stock", schema = "core")
+@Table(name = "_stock", schema = "core")
 public class Stock implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "stock_id_seq")
-	@SequenceGenerator(name = "stock_id_seq", sequenceName = "stock_id_seq", allocationSize = 1)
-	private int id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "_stock_id_seq")
+	@SequenceGenerator(name = "_stock_id_seq", sequenceName = "_stock_id_seq", allocationSize = 1)
+	private Long id;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", referencedColumnName = "id")
@@ -57,6 +57,10 @@ public class Stock implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "receive_date")
 	private Date receiveDate;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "date")
+	private Date date;
 	
 	@Column(name = "division_id")
 	private int divisionId;
@@ -91,7 +95,7 @@ public class Stock implements Serializable {
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 		
 	}
@@ -104,7 +108,7 @@ public class Stock implements Serializable {
 		this.uuid = uuid;
 	}
 	
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

@@ -34,7 +34,7 @@ public class Target implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "target_id_seq")
 	@SequenceGenerator(name = "target_id_seq", sequenceName = "target_id_seq", allocationSize = 1)
-	private int id;
+	private Long id;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", referencedColumnName = "id")
@@ -91,7 +91,7 @@ public class Target implements Serializable {
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 		
 	}
@@ -104,7 +104,7 @@ public class Target implements Serializable {
 		this.uuid = uuid;
 	}
 	
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
