@@ -28,12 +28,9 @@
     <thead>
     <thead>
     <tr>
-        <th rowspan="2"><spring:message code="lbl.slNo"/></th>
-        <th rowspan="2"><spring:message code="lbl.name"/></th>
-        <th rowspan="2"><spring:message code="lbl.idNo"/></th>
-        <th rowspan="2"><spring:message code="lbl.branchId"/></th>
+        <th rowspan="2"><spring:message code="lbl.provider"/></th>
         <th colspan="2"><spring:message code="lbl.adolescentForum"/></th>
-        <th colspan="2"><spring:message code="lbl.iycfForum"/></th>
+        <th colspan="2"><spring:message code="lbl.childForum"/></th>
         <th colspan="2"><spring:message code="lbl.womenHealthForum"/></th>
         <th colspan="2"><spring:message code="lbl.ncdForum"/></th>
 
@@ -43,7 +40,8 @@
         <th><spring:message code="lbl.acvMnt"/></th>
         <th><spring:message code="lbl.target"/></th>
         <th><spring:message code="lbl.acvMnt"/></th>
-        <th><spring:message code="lbl.target"/></th>        <th><spring:message code="lbl.acvMnt"/></th>
+        <th><spring:message code="lbl.target"/></th>
+        <th><spring:message code="lbl.acvMnt"/></th>
         <th><spring:message code="lbl.target"/></th>
         <th><spring:message code="lbl.acvMnt"/></th>
     </tr>
