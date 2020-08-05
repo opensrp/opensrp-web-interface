@@ -1,10 +1,49 @@
 package org.opensrp.common.dto;
 
-public class ForumIndividualReport {
+public class ForumIndividualReportDTO {
     private String providerOrLocation;
     private Integer target;
     private Integer achievement;
     private Integer totalParticipant;
     private Integer serviceSold;
 
+    public String getProviderOrLocation() {
+        return providerOrLocation;
+    }
+
+    public void setProviderOrLocation(String providerOrLocation) {
+        this.providerOrLocation = providerOrLocation;
+    }
+
+    public Integer getTarget() {
+        return target;
+    }
+
+    public void setTarget(Integer target) {
+        this.target = target;
+    }
+
+    public Integer getAchievement() {
+        return achievement;
+    }
+
+    public void setAchievement(Integer achievement) {
+        this.achievement = achievement;
+    }
+
+    public Integer getTotalParticipant() {
+        return totalParticipant;
+    }
+
+    public void setTotalParticipant(Integer totalParticipant) {
+        this.totalParticipant = totalParticipant;
+    }
+
+    public Integer getServiceSold() {
+        return serviceSold;
+    }
+
+    public void setServiceSold(Integer serviceSold) {
+        this.serviceSold = serviceSold;
+    }
 }

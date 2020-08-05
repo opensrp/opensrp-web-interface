@@ -38,10 +38,11 @@
                     <div class="col-sm-4">
                         <select class="custom-select" id="forumType" style="width: 95%" onchange="generateForumReport()">
                             <option value="">All </option>
-                            <option value="adolscent">Adolscent Forum</option>
-                            <option value="iycf">IYCF Forum</option>
+                            <option value="adolescent">Adolescent Forum</option>
+                            <option value="child">Child Forum</option>
                             <option value="womenHealth">Women health forum</option>
                             <option value="ncd">NCD forum</option>
+                            <option value="adult">Adult forum</option>
                         </select>
                     </div>
                 </div>
@@ -164,7 +165,8 @@
                 startDate: $("#start").val(),
                 endDate: $("#end").val(),
                 branch: $("#branchaggregate").val(),
-                locationValue: $("#locationoptions").val()
+                locationValue: $("#locationoptions").val(),
+                forumType: $("#forumType").val()
             },
             beforeSend: function() {
                 $('#loading').show();

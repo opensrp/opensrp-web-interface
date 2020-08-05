@@ -92,6 +92,11 @@ public class ReportService {
         return repository.getChildNutritionReport(startDate, endDate, sql);
     }
 
+    public List<ForumReportDTO> getForumReportDTO() {
+        String sql = "";
+        return
+    }
+
     public JSONObject getCOVID19DataOfDataTable(Integer draw, Integer totalNumberOfRecords, List<COVID19ReportDTO> covid19Reports) throws JSONException {
         JSONObject response = new JSONObject();
         response.put("draw", draw+1);

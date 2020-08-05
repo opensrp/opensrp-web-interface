@@ -1,6 +1,6 @@
 package org.opensrp.common.dto;
 
-public class ForumReport {
+public class ForumReportDTO {
     private String locationOrProvider;
     private Integer childForumTarget;
     private Integer childForumAchievement;
