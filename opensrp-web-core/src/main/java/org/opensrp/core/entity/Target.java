@@ -34,7 +34,7 @@ public class Target implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "target_id_seq")
 	@SequenceGenerator(name = "target_id_seq", sequenceName = "target_id_seq", allocationSize = 1)
-	private int id;
+	private Long id;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", referencedColumnName = "id")
@@ -53,15 +53,6 @@ public class Target implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "start_date")
 	private Date startDate;
-	
-	@Column(name = "division_id")
-	private int divisionId;
-	
-	@Column(name = "district_id")
-	private int districtId;
-	
-	@Column(name = "upazila_id")
-	private int upazilaId;
 	
 	private String unit;
 	
@@ -91,7 +82,7 @@ public class Target implements Serializable {
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 		
 	}
@@ -104,7 +95,7 @@ public class Target implements Serializable {
 		this.uuid = uuid;
 	}
 	
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
@@ -162,30 +153,6 @@ public class Target implements Serializable {
 	
 	public void setProductId(Product productId) {
 		this.productId = productId;
-	}
-	
-	public int getDivisionId() {
-		return divisionId;
-	}
-	
-	public void setDivisionId(int divisionId) {
-		this.divisionId = divisionId;
-	}
-	
-	public int getDistrictId() {
-		return districtId;
-	}
-	
-	public void setDistrictId(int districtId) {
-		this.districtId = districtId;
-	}
-	
-	public int getUpazilaId() {
-		return upazilaId;
-	}
-	
-	public void setUpazilaId(int upazilaId) {
-		this.upazilaId = upazilaId;
 	}
 	
 	public Date getEndDate() {

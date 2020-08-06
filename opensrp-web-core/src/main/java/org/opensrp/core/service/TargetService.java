@@ -8,11 +8,11 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProductService extends CommonService {
+public class TargetService extends CommonService {
 	
-	private static final Logger logger = Logger.getLogger(ProductService.class);
+	private static final Logger logger = Logger.getLogger(TargetService.class);
 	
-	public ProductService() {
+	public TargetService() {
 		
 	}
 	

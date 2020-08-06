@@ -34,7 +34,7 @@ public class Requisition implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "requisition_id_seq")
 	@SequenceGenerator(name = "requisition_id_seq", sequenceName = "requisition_id_seq", allocationSize = 1)
-	private int id;
+	private Long id;
 	
 	@Column(name = "product_id")
 	private int productId;
@@ -52,15 +52,6 @@ public class Requisition implements Serializable {
 	
 	@Temporal(TemporalType.DATE)
 	private Date date = new Date();
-	
-	@Column(name = "division_id")
-	private int divisionId;
-	
-	@Column(name = "district_id")
-	private int districtId;
-	
-	@Column(name = "upazila_id")
-	private int upazilaId;
 	
 	private Long timestamp;
 	
@@ -80,7 +71,7 @@ public class Requisition implements Serializable {
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 		
 	}
@@ -93,7 +84,7 @@ public class Requisition implements Serializable {
 		this.uuid = uuid;
 	}
 	
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
@@ -175,30 +166,6 @@ public class Requisition implements Serializable {
 	
 	public void setDate(Date date) {
 		this.date = date;
-	}
-	
-	public int getDivisionId() {
-		return divisionId;
-	}
-	
-	public void setDivisionId(int divisionId) {
-		this.divisionId = divisionId;
-	}
-	
-	public int getDistrictId() {
-		return districtId;
-	}
-	
-	public void setDistrictId(int districtId) {
-		this.districtId = districtId;
-	}
-	
-	public int getUpazilaId() {
-		return upazilaId;
-	}
-	
-	public void setUpazilaId(int upazilaId) {
-		this.upazilaId = upazilaId;
 	}
 	
 }

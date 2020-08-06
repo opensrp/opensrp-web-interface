@@ -26,15 +26,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Entity
-@Table(name = "stock", schema = "core")
+@Table(name = "_stock", schema = "core")
 public class Stock implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "stock_id_seq")
-	@SequenceGenerator(name = "stock_id_seq", sequenceName = "stock_id_seq", allocationSize = 1)
-	private int id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "_stock_id_seq")
+	@SequenceGenerator(name = "_stock_id_seq", sequenceName = "_stock_id_seq", allocationSize = 1)
+	private Long id;
 	
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", referencedColumnName = "id")
@@ -58,14 +58,9 @@ public class Stock implements Serializable {
 	@Column(name = "receive_date")
 	private Date receiveDate;
 	
-	@Column(name = "division_id")
-	private int divisionId;
-	
-	@Column(name = "district_id")
-	private int districtId;
-	
-	@Column(name = "upazila_id")
-	private int upazilaId;
+	@Temporal(TemporalType.DATE)
+	@Column(name = "date")
+	private Date date;
 	
 	@Column(name = "reference_type")
 	private String referenceType;
@@ -91,7 +86,7 @@ public class Stock implements Serializable {
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 		
 	}
@@ -104,7 +99,7 @@ public class Stock implements Serializable {
 		this.uuid = uuid;
 	}
 	
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
@@ -194,30 +189,6 @@ public class Stock implements Serializable {
 	
 	public void setReceiveDate(Date receiveDate) {
 		this.receiveDate = receiveDate;
-	}
-	
-	public int getDivisionId() {
-		return divisionId;
-	}
-	
-	public void setDivisionId(int divisionId) {
-		this.divisionId = divisionId;
-	}
-	
-	public int getDistrictId() {
-		return districtId;
-	}
-	
-	public void setDistrictId(int districtId) {
-		this.districtId = districtId;
-	}
-	
-	public int getUpazilaId() {
-		return upazilaId;
-	}
-	
-	public void setUpazilaId(int upazilaId) {
-		this.upazilaId = upazilaId;
 	}
 	
 	public String getReferenceType() {

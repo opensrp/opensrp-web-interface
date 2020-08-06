@@ -4,7 +4,6 @@
 package org.opensrp.web.controller;
 
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -587,15 +586,19 @@ public class ReportController {
     @RequestMapping(value = "/forum-report.html", method = RequestMethod.GET)
     public ModelAndView getForumReport(ModelAndView modelAndView) {
 
-	    modelAndView.setViewName("report/forum-report");
-	    modelAndView.addObject("startDate", "");
-	    modelAndView.addObject("endDate", "");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+	    modelAndView.setViewName("report/forum-report/report");
+	    modelAndView.addObject("startDate", formatter.format(DateUtil.getFirstDayOfMonth(new Date())));
+	    modelAndView.addObject("endDate", formatter.format(new Date()));
 	    return modelAndView;
     }
 
     @RequestMapping(value = "/forum-report", method = RequestMethod.GET)
-    public String getForumReportTable() {
-        return "report/forum-report-table";
+    public String getForumReportTable(
+    		HttpSession session,
+    		@RequestParam(value = "forumType", required = false, defaultValue = "") String forumType ) {
+		session.setAttribute("forumType", forumType);
+		return StringUtils.isBlank(forumType) ?  "report/forum-report/report-table" : "report/forum-report/individual-report-table" ;
     }
 
 	@RequestMapping(value = "/aggregated-biometric-report.html", method = RequestMethod.GET)

@@ -232,4 +232,8 @@ public interface DatabaseRepository {
 	public <T> List<T> getPregnancyReport(String startDate, String endDate, String query);
 
 	public <T> List<T> getChildNutritionReport(String startDate, String endDate, String query);
+
+	<T> List<T> getForumReport(String startDate, String endDate, String query);
+
+	<T> List<T> getForumIndividualReport(String startDate, String endDate, String query);
 }
