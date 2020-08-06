@@ -54,15 +54,6 @@ public class Target implements Serializable {
 	@Column(name = "start_date")
 	private Date startDate;
 	
-	@Column(name = "division_id")
-	private int divisionId;
-	
-	@Column(name = "district_id")
-	private int districtId;
-	
-	@Column(name = "upazila_id")
-	private int upazilaId;
-	
 	private String unit;
 	
 	private int quantity;
@@ -162,30 +153,6 @@ public class Target implements Serializable {
 	
 	public void setProductId(Product productId) {
 		this.productId = productId;
-	}
-	
-	public int getDivisionId() {
-		return divisionId;
-	}
-	
-	public void setDivisionId(int divisionId) {
-		this.divisionId = divisionId;
-	}
-	
-	public int getDistrictId() {
-		return districtId;
-	}
-	
-	public void setDistrictId(int districtId) {
-		this.districtId = districtId;
-	}
-	
-	public int getUpazilaId() {
-		return upazilaId;
-	}
-	
-	public void setUpazilaId(int upazilaId) {
-		this.upazilaId = upazilaId;
 	}
 	
 	public Date getEndDate() {

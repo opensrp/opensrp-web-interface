@@ -11,7 +11,6 @@ import org.opensrp.common.dto.AggregatedReportDTO;
 import org.opensrp.common.dto.COVID19ReportDTO;
 import org.opensrp.common.dto.ChildNutritionReportDTO;
 import org.opensrp.common.dto.ElcoReportDTO;
-import org.opensrp.common.dto.ForumReportDTO;
 import org.opensrp.common.dto.IndividualBiometricReportDTO;
 import org.opensrp.common.dto.PregnancyReportDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
@@ -124,10 +123,10 @@ public class ReportService {
 		return repository.getChildNutritionReport(startDate, endDate, sql);
 	}
 	
-	public List<ForumReportDTO> getForumReportDTO() {
+	/*public List<ForumReportDTO> getForumReportDTO() {
 		String sql = "";
 		return null;
-	}
+	}*/
 	
 	public JSONObject getCOVID19DataOfDataTable(Integer draw, Integer totalNumberOfRecords,
 	                                            List<COVID19ReportDTO> covid19Reports) throws JSONException {

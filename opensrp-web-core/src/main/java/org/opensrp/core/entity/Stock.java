@@ -62,15 +62,6 @@ public class Stock implements Serializable {
 	@Column(name = "date")
 	private Date date;
 	
-	@Column(name = "division_id")
-	private int divisionId;
-	
-	@Column(name = "district_id")
-	private int districtId;
-	
-	@Column(name = "upazila_id")
-	private int upazilaId;
-	
 	@Column(name = "reference_type")
 	private String referenceType;
 	
@@ -198,30 +189,6 @@ public class Stock implements Serializable {
 	
 	public void setReceiveDate(Date receiveDate) {
 		this.receiveDate = receiveDate;
-	}
-	
-	public int getDivisionId() {
-		return divisionId;
-	}
-	
-	public void setDivisionId(int divisionId) {
-		this.divisionId = divisionId;
-	}
-	
-	public int getDistrictId() {
-		return districtId;
-	}
-	
-	public void setDistrictId(int districtId) {
-		this.districtId = districtId;
-	}
-	
-	public int getUpazilaId() {
-		return upazilaId;
-	}
-	
-	public void setUpazilaId(int upazilaId) {
-		this.upazilaId = upazilaId;
 	}
 	
 	public String getReferenceType() {
