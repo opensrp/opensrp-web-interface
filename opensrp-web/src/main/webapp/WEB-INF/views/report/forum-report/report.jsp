@@ -8,11 +8,6 @@
 <%@ taglib prefix="security"
            uri="http://www.springframework.org/security/tags"%>
 
-<%
-    String startDate = (String) session.getAttribute("startDate");
-    String endDate = (String) session.getAttribute("endDate");
-%>
-
 
 <title><spring:message code="lbl.forumReport"/></title>
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -20,7 +15,7 @@
 
 <div class="page-content-wrapper">
     <div class="page-content">
-        <jsp:include page="/WEB-INF/views/report/forum-search-panel.jsp" />
+        <jsp:include page="/WEB-INF/views/report/forum-report/forum-search-panel.jsp" />
         <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
             <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
         </div>
@@ -38,11 +33,11 @@
                     <div class="col-sm-4">
                         <select class="custom-select" id="forumType" style="width: 95%" onchange="generateForumReport()">
                             <option value="">All </option>
-                            <option value="adolescent">Adolescent Forum</option>
-                            <option value="child">Child Forum</option>
-                            <option value="womenHealth">Women health forum</option>
-                            <option value="ncd">NCD forum</option>
-                            <option value="adult">Adult forum</option>
+                            <option value="Adolescent Forum">Adolescent forum</option>
+                            <option value="Child Forum">Child forum</option>
+                            <option value="WOMEN Forum">Women health forum</option>
+                            <option value="NCD Forum">NCD forum</option>
+                            <option value="ADULT Forum">Adult forum</option>
                         </select>
                     </div>
                 </div>
@@ -166,7 +161,8 @@
                 endDate: $("#end").val(),
                 branch: $("#branchaggregate").val(),
                 locationValue: $("#locationoptions").val(),
-                forumType: $("#forumType").val()
+                forumType: $("#forumType").val(),
+                designation: $("#designation").val()
             },
             beforeSend: function() {
                 $('#loading').show();

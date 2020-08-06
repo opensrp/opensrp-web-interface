@@ -10,6 +10,8 @@ public class ForumReportDTO {
     private Integer ncdForumAchievement;
     private Integer womenForumTarget;
     private Integer womenForumAchievement;
+    private Integer adultForumTarget;
+    private Integer adultForumAchievement;
 
     public String getLocationOrProvider() {
         return locationOrProvider;
@@ -81,5 +83,21 @@ public class ForumReportDTO {
 
     public void setWomenForumAchievement(Integer womenForumAchievement) {
         this.womenForumAchievement = womenForumAchievement;
+    }
+
+    public Integer getAdultForumTarget() {
+        return adultForumTarget;
+    }
+
+    public void setAdultForumTarget(Integer adultForumTarget) {
+        this.adultForumTarget = adultForumTarget;
+    }
+
+    public Integer getAdultForumAchievement() {
+        return adultForumAchievement;
+    }
+
+    public void setAdultForumAchievement(Integer adultForumAchievement) {
+        this.adultForumAchievement = adultForumAchievement;
     }
 }

@@ -584,19 +584,86 @@ public class ReportController {
 
 
     @RequestMapping(value = "/forum-report.html", method = RequestMethod.GET)
-    public ModelAndView getForumReport(ModelAndView modelAndView) {
+    public ModelAndView getForumReport(ModelAndView modelAndView, HttpSession session) {
 
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 	    modelAndView.setViewName("report/forum-report/report");
-	    modelAndView.addObject("startDate", formatter.format(DateUtil.getFirstDayOfMonth(new Date())));
-	    modelAndView.addObject("endDate", formatter.format(new Date()));
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		searchUtil.setDivisionAttribute(session);
+		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
+		session.setAttribute("startDate", formatter.format(DateUtil.getFirstDayOfMonth(new Date())));
+	    session.setAttribute("endDate", formatter.format(new Date()));
 	    return modelAndView;
     }
 
     @RequestMapping(value = "/forum-report", method = RequestMethod.GET)
     public String getForumReportTable(
     		HttpSession session,
+			@RequestParam(value = "startDate", required = false) String startDate,
+			@RequestParam(value = "endDate", required = false) String endDate,
+			@RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
+			@RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+			@RequestParam(value = "branch", required = false, defaultValue = "") String branchId,
+			@RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue,
+			@RequestParam(value = "designation", required = false, defaultValue = "") String designation,
     		@RequestParam(value = "forumType", required = false, defaultValue = "") String forumType ) {
+
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<ForumReportDTO> forumReport = new ArrayList<>();
+		List<ForumIndividualReportDTO> forumIndividualReport = new ArrayList<>();
+		String skIds = "";
+
+		if (AuthenticationManagerUtil.isAM() && locationValue.equalsIgnoreCase("catchmentArea")) {
+
+			if (StringUtils.isBlank(branchId)) {
+				String branches = branchService.commaSeparatedBranch(new ArrayList<>(loggedInUser.getBranches()));
+				skIds = userService.findSKByBranchSeparatedByComma("'{" + branches + "}'");
+			} else {
+				skIds = userService.findSKByBranchSeparatedByComma("'{" + branchId + "}'");
+			}
+
+			 if(StringUtils.isBlank(forumType)) forumReport = reportService.getForumReportBySK(startDate, endDate, skIds, designation);
+			 else forumIndividualReport = reportService.getForumIndividualReportBySk(startDate, endDate, forumType, skIds, designation) ;
+
+		}
+		else {
+			Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
+			String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
+			String parentLocationName = parentLocation.getName().split(":")[0];
+
+			if (locationTag.equalsIgnoreCase("sk_id")) {
+				skIds = userService.findSKByLocationSeparatedByComma(searchedValueId, Roles.SK.getId());
+				if(StringUtils.isBlank(forumType)) forumReport = reportService.getForumReportBySK(startDate, endDate, skIds, designation);
+				else forumIndividualReport = reportService.getForumIndividualReportBySk(startDate, endDate, forumType, skIds, designation) ;
+
+			}
+			else {
+				// '1991-01-01', '2021-12-01', 'division', 9266 , 'DHAKA' , 'district');
+				if(StringUtils.isBlank(forumType)) {
+					forumReport = reportService.getForumReportByLocation(
+							startDate,
+							endDate,
+							parentLocationTag,
+							searchedValueId,
+							parentLocationName,
+							locationTag,
+							designation);
+				}else {
+					forumIndividualReport = reportService.getForumIndividualReportByLocation(
+							startDate,
+							endDate,
+							parentLocationTag,
+							searchedValueId,
+							parentLocationName,
+							locationTag,
+							forumType,
+							designation
+					);
+				}
+			}
+		}
+		session.setAttribute("forumReport", forumReport);
+		session.setAttribute("forumIndividualReport", forumIndividualReport);
 		session.setAttribute("forumType", forumType);
 		return StringUtils.isBlank(forumType) ?  "report/forum-report/report-table" : "report/forum-report/individual-report-table" ;
     }
