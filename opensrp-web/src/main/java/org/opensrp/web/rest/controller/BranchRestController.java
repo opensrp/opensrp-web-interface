@@ -1,6 +1,7 @@
 package org.opensrp.web.rest.controller;
 
 import com.google.gson.Gson;
+import org.hibernate.validator.internal.engine.PathImpl;
 import org.opensrp.core.dto.BranchDTO;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.service.BranchService;
@@ -9,6 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.Iterator;
+import java.util.Set;
 
 @RestController
 @RequestMapping("rest/api/v1/branch")
@@ -30,8 +36,19 @@ public class BranchRestController {
             } else {
                 msg = "Already created a branch with the same branch code.";
             }
-        } catch (Exception e) {
-            msg = "Something went wrong. Please contract with the admin...";
+        }
+        catch (ConstraintViolationException constEx) {
+
+            Set<ConstraintViolation<?>> set =  constEx.getConstraintViolations();
+            System.out.println("--------------->>> constraint violoation exception");
+            for (Iterator<ConstraintViolation<?>> iterator = set.iterator(); iterator.hasNext(); ) {
+                ConstraintViolation<?> next =  iterator.next();
+                msg += next.getMessage();
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            msg = "Something went wrong. Please contact with the admin...";
         }
         return new ResponseEntity<>(new Gson().toJson(msg), HttpStatus.OK);
     }

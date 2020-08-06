@@ -35,7 +35,7 @@ public class Product implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_seq")
 	@SequenceGenerator(name = "product_id_seq", sequenceName = "product_id_seq", allocationSize = 1)
-	private int id;
+	private Long id;
 	
 	@NotEmpty(message = "Product name can't be empty")
 	@Column(name = "name")
@@ -74,7 +74,7 @@ public class Product implements Serializable {
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 		
 	}
@@ -87,7 +87,7 @@ public class Product implements Serializable {
 		this.uuid = uuid;
 	}
 	
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

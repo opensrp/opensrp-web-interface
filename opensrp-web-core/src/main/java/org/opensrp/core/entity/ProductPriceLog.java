@@ -34,7 +34,7 @@ public class ProductPriceLog implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_price_log_id_seq")
 	@SequenceGenerator(name = "product_price_log_id_seq", sequenceName = "product_price_log_id_seq", allocationSize = 1)
-	private int id;
+	private Long id;
 	
 	@Column(name = "uuid")
 	private String uuid;
@@ -62,7 +62,7 @@ public class ProductPriceLog implements Serializable {
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 		
 	}
@@ -75,7 +75,7 @@ public class ProductPriceLog implements Serializable {
 		this.uuid = uuid;
 	}
 	
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

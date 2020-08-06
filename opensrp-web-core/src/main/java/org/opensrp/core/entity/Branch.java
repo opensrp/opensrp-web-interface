@@ -30,6 +30,30 @@ public class Branch implements Serializable {
     @Column(name = "code", unique = true, nullable = false)
     private String code;
 
+    @NotNull(message = "division can't be empty")
+    @Column(name = "division", nullable = false)
+    private Integer division;
+
+    @NotNull(message = "district can't be empty")
+    @Column(name = "district", nullable = false)
+    private Integer district;
+
+    @NotNull(message = "upazila can't be empty")
+    @Column(name = "upazila", nullable = false)
+    private Integer upazila;
+
+    @Column(name = "sk_position")
+    private Integer skPosition;
+
+    @Column(name = "ss_position")
+    private Integer ssPosition;
+
+    @Column(name = "pa_position")
+    private Integer paPosition;
+
+    @Column(name = "pk_position")
+    private Integer pkPosition;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE", updatable = false)
     @CreationTimestamp
@@ -82,6 +106,62 @@ public class Branch implements Serializable {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public Integer getSkPosition() {
+        return skPosition;
+    }
+
+    public void setSkPosition(Integer skPosition) {
+        this.skPosition = skPosition;
+    }
+
+    public Integer getSsPosition() {
+        return ssPosition;
+    }
+
+    public void setSsPosition(Integer ssPosition) {
+        this.ssPosition = ssPosition;
+    }
+
+    public Integer getPaPosition() {
+        return paPosition;
+    }
+
+    public void setPaPosition(Integer paPosition) {
+        this.paPosition = paPosition;
+    }
+
+    public Integer getPkPosition() {
+        return pkPosition;
+    }
+
+    public void setPkPosition(Integer pkPosition) {
+        this.pkPosition = pkPosition;
+    }
+
+    public Integer getDivision() {
+        return division;
+    }
+
+    public void setDivision(Integer division) {
+        this.division = division;
+    }
+
+    public Integer getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(Integer district) {
+        this.district = district;
+    }
+
+    public Integer getUpazila() {
+        return upazila;
+    }
+
+    public void setUpazila(Integer upazila) {
+        this.upazila = upazila;
     }
 
     @Override
