@@ -1,8 +1,3 @@
-<%@page import="java.util.List"%>
-<%@ page import="org.opensrp.web.util.AuthenticationManagerUtil" %>
-<%@ page import="org.opensrp.common.dto.ReportDTO" %>
-<%@ page import="org.opensrp.web.util.SearchUtil" %>
-<%@ page import="org.opensrp.common.dto.ElcoReportDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
 
@@ -18,8 +13,6 @@
     String endDate = (String) session.getAttribute("endDate");
 %>
 
-<!DOCTYPE html>
-<html lang="en">
 
 <title><spring:message code="lbl.forumReport"/></title>
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -44,11 +37,12 @@
                     <div class="col-sm-1 col-sm-offset-7" style="text-align: right; padding-top: 3px;">Forum:</div>
                     <div class="col-sm-4">
                         <select class="custom-select" id="forumType" style="width: 95%" onchange="generateForumReport()">
-                            <option>All </option>
-                            <option value="adolscent">Adolscent Forum</option>
-                            <option value="iycf">IYCF Forum</option>
+                            <option value="">All </option>
+                            <option value="adolescent">Adolescent Forum</option>
+                            <option value="child">Child Forum</option>
                             <option value="womenHealth">Women health forum</option>
                             <option value="ncd">NCD forum</option>
+                            <option value="adult">Adult forum</option>
                         </select>
                     </div>
                 </div>
@@ -171,7 +165,8 @@
                 startDate: $("#start").val(),
                 endDate: $("#end").val(),
                 branch: $("#branchaggregate").val(),
-                locationValue: $("#locationoptions").val()
+                locationValue: $("#locationoptions").val(),
+                forumType: $("#forumType").val()
             },
             beforeSend: function() {
                 $('#loading').show();
@@ -193,4 +188,4 @@
         });
     }
 </script>
-</html>
+

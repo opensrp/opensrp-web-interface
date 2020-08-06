@@ -28,24 +28,16 @@
     <thead>
     <thead>
     <tr>
-        <th rowspan="2"><spring:message code="lbl.slNo"/></th>
-        <th rowspan="2"><spring:message code="lbl.name"/></th>
-        <th rowspan="2"><spring:message code="lbl.idNo"/></th>
-        <th rowspan="2"><spring:message code="lbl.branchId"/></th>
-        <th colspan="2"><spring:message code="lbl.adolescentForum"/></th>
-        <th colspan="2"><spring:message code="lbl.iycfForum"/></th>
-        <th colspan="2"><spring:message code="lbl.womenHealthForum"/></th>
-        <th colspan="2"><spring:message code="lbl.ncdForum"/></th>
+        <th rowspan="2"><spring:message code="lbl.provider"/></th>
+        <th colspan="5"><%= session.getAttribute("forumType") %></th>
 
     </tr>
     <tr>
         <th><spring:message code="lbl.target"/></th>
         <th><spring:message code="lbl.acvMnt"/></th>
-        <th><spring:message code="lbl.target"/></th>
-        <th><spring:message code="lbl.acvMnt"/></th>
-        <th><spring:message code="lbl.target"/></th>        <th><spring:message code="lbl.acvMnt"/></th>
-        <th><spring:message code="lbl.target"/></th>
-        <th><spring:message code="lbl.acvMnt"/></th>
+        <th><spring:message code="lbl.totalParticipant"/></th>
+        <th><spring:message code="lbl.avgParticipantPerForum"/></th>
+        <th><spring:message code="lbl.numberOfServiceSold"/></th>
     </tr>
     </thead>
     </thead>
