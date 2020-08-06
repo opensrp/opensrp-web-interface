@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Current Inventory List</title>
+<title>Pass Stock Individual</title>
 	
 	
 
@@ -37,23 +37,18 @@
 									<label for="designation">Designation:</label>
 								</div> -->
 								<div class="col-lg-3 form-group">
-								<select class="form-control" name="designation" id="designation">
-								<option selected="selected">Select Designation</option>
-								  <option value="volvo">SK</option>
-								  <option value="saab">PS</option>
-								  <option value="mercedes">SS</option>
-								  
-								</select>
+									<label for="branch">Branch:</label> <input
+										type="text" class="form-control" id="branch" readonly>
 								</div>
 								<div class="col-lg-3 form-group">
-									<button type="submit" onclick=""
-										class="btn btn-primary">
-										<spring:message code="lbl.viewStock" />
-									</button>
+								    <label for="designation">Sk/PS:</label>
+									<input type="text" class="form-control" id="designation" readonly>
 								</div>
 							</div>
 						</div>
+						
 						<div style="overflow-x: auto">
+						<h3>Shamima Khatun's Inventory : </h3>
 						<table class="table table-striped table-bordered " id="passStockInventoryList">
 							<thead>
 								<tr>
@@ -66,24 +61,15 @@
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
 								</tr>
 							</thead>
-							<tbody>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td><a class="btn btn-primary" id="addRequisition" href="<c:url value="/inventoryam/individual-stock/${id}.html?lang=${locale}"/>">
-					<strong>
-					Pass Stock
-				</strong></a></td>
-							</tbody>
 
 						</table>
 						</div>
 					</div>
 					
-				</div>				
+				</div>		
+				<div class="col-lg-12 form-group text-right">
+	                <button type="submit" onclick="" class="btn btn-primary" value="confirm">Confirm All</button>
+	            </div>		
 			</div>
 		</div>
 		</br>

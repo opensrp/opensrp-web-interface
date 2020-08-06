@@ -24,27 +24,27 @@
 					<div class="portlet-title">
 						<div class=center-caption><spring:message code="lbl.branch"/> - ${id}</div>
 						</div>
-		</div>
-		<div class="col-lg-12 form-group requisition-add">
-	                <a class="btn btn-primary" id="addRequisition" href="<c:url value="/inventoryam/requisition-add/${id}.html?lang=${locale}"/>">
-					<strong>
-					Add Requisition
-				</strong></a>
-	            </div>
-					<div class="portlet-body">
-						<table class="table table-striped table-bordered" id="requisitionListOfAm">
-							<thead>
-								<tr>
-									<th><spring:message code="lbl.serialNo"></spring:message></th>
-									<th><spring:message code="lbl.requisitionId"></spring:message></th>
-									<th><spring:message code="lbl.date"></spring:message></th>
-									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
-								</tr>
-							</thead>
+			<div class="portlet-body">
+				<div class="col-lg-12 form-group requisition-add">
+					<a class="btn btn-primary" id="addRequisition"
+						href="<c:url value="/inventoryam/requisition-add/${id}.html?lang=${locale}"/>">
+						<strong> Add Requisition </strong>
+					</a>
+				</div>
+				<table class="table table-striped table-bordered"
+					id="requisitionListOfAm">
+					<thead>
+						<tr>
+							<th><spring:message code="lbl.serialNo"></spring:message></th>
+							<th><spring:message code="lbl.requisitionId"></spring:message></th>
+							<th><spring:message code="lbl.date"></spring:message></th>
+							<th><spring:message code="lbl.actionRequisition"></spring:message></th>
+						</tr>
+					</thead>
 
-						</table>
-					</div>
-					
+				</table>
+			</div>
+		</div>
 		</br>
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>

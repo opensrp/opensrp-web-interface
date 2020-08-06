@@ -251,7 +251,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<li><a href="<c:url value="/inventoryam/pass-stock.html?lang=${locale}"/>">
 									<spring:message code="lbl.passStock" />
 							</a></li>
-							<li><a href="<c:url value="/inventoryam/myinventory.html"/>">
+							<li><a href="<c:url value="/inventoryam/sell-to-ss.html?lang=${locale}"/>">
 									<spring:message code="lbl.sellToSs" />
 							</a></li>
 							<li><a href="<c:url value="/inventoryam/myinventory.html"/>">

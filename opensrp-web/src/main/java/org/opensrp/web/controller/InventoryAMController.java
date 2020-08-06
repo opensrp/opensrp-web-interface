@@ -67,10 +67,29 @@ public class InventoryAMController {
 	}
 	
 	@RequestMapping(value = "inventoryam/pass-stock-inventory/{id}.html", method = RequestMethod.GET)
-	public String passStockInventory(Model model, Locale locale, @PathVariable("id") int id) {
+	public String passStockInventoryList(Model model, Locale locale, @PathVariable("id") int id) {
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
 		return "inventoryAm/pass-stock-inventory-list";
 	}
 	
+	@RequestMapping(value = "inventoryam/individual-stock/{id}.html", method = RequestMethod.GET)
+	public String passStockInventoryIndividual(Model model, Locale locale, @PathVariable("id") int id) {
+		model.addAttribute("id", id);
+		model.addAttribute("locale", locale);
+		return "inventoryAm/pass-stock-individual-inventory-list";
+	}
+	
+	@RequestMapping(value = "inventoryam/sell-to-ss.html", method = RequestMethod.GET)
+	public String sellToSsStock(Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		return "inventoryAm/sell-to-ss";
+	}
+	
+	@RequestMapping(value = "inventoryam/sell-to-ss/{id}.html", method = RequestMethod.GET)
+	public String sellToSsList(Model model, Locale locale, @PathVariable("id") int id) {
+		model.addAttribute("id", id);
+		model.addAttribute("locale", locale);
+		return "inventoryAm/sell-to-ss-list";
+	}
 }
