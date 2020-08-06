@@ -5,6 +5,8 @@ package org.opensrp.core.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -59,6 +62,9 @@ public class Product implements Serializable {
 	private Long timestamp;
 	
 	private String status;
+	
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<ProductRole> productRole = new HashSet<ProductRole>();
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
@@ -169,6 +175,14 @@ public class Product implements Serializable {
 	
 	public void setCreator(User creator) {
 		this.creator = creator;
+	}
+	
+	public Set<ProductRole> getProductRole() {
+		return productRole;
+	}
+	
+	public void setProductRole(Set<ProductRole> productRole) {
+		this.productRole = productRole;
 	}
 	
 }

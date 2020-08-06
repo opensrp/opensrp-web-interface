@@ -3,6 +3,8 @@
  */
 package org.opensrp.core.dto;
 
+import java.util.Set;
+
 public class ProductDTO {
 	
 	private Long id;
@@ -15,7 +17,7 @@ public class ProductDTO {
 	
 	private float sellingPrice;
 	
-	private int sellTo;
+	private Set<Integer> sellTo;
 	
 	public Long getId() {
 		return id;
@@ -57,11 +59,11 @@ public class ProductDTO {
 		this.sellingPrice = sellingPrice;
 	}
 	
-	public int getSellTo() {
+	public Set<Integer> getSellTo() {
 		return sellTo;
 	}
 	
-	public void setSellTo(int sellTo) {
+	public void setSellTo(Set<Integer> sellTo) {
 		this.sellTo = sellTo;
 	}
 	
