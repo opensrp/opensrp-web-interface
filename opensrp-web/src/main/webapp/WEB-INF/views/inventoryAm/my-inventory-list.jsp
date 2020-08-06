@@ -28,7 +28,7 @@
 
 
 					</div>
-		</div>
+		
 					<div class="portlet-body">
 						<table class="table table-striped table-bordered" id="productStockListOfAm">
 							<thead>
@@ -40,6 +40,7 @@
 							</thead>
 
 						</table>
+					</div>
 					</div>
 
 		</br>

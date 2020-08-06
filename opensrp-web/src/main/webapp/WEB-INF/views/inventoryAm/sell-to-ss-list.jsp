@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Current Inventory List</title>
+<title>Sell To SS</title>
 	
 	
 
@@ -27,63 +27,54 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i><spring:message code="lbl.inventory"/>
+							<i class="fa fa-list"></i>Sell To SS
 						</div>
 					</div>					
 					<div class="portlet-body">
 						<div class="form-group">
 							<div class="row">
-							<!-- <div class="col-lg-1 form-group" style="margin-top: 5px;">
-									<label for="designation">Designation:</label>
-								</div> -->
 								<div class="col-lg-3 form-group">
-								<select class="form-control" name="designation" id="designation">
-								<option selected="selected">Select Designation</option>
-								  <option value="volvo">SK</option>
-								  <option value="saab">PS</option>
-								  <option value="mercedes">SS</option>
-								  
-								</select>
+								    <label for="designation">Sk :</label>
+									<input type="text" class="form-control" id="designation" readonly>
 								</div>
 								<div class="col-lg-3 form-group">
-									<button type="submit" onclick=""
-										class="btn btn-primary">
-										<spring:message code="lbl.viewStock" />
-									</button>
+									<label for="date">Date:</label> <input
+										type="date" class="form-control" id="date">
 								</div>
+							
 							</div>
+							<div class = "row">
+							<div class="col-lg-8 form-group text-right">
+									<button type="submit" onclick="" class="btn btn-primary"
+										value="confirm">Sell To Many</button>
+								</div>
+								<div class="col-lg-2 form-group text-right">
+									<button type="submit" onclick="" class="btn btn-primary"
+										value="confirm">View SS List</button>
+								</div></div>
 						</div>
+						
 						<div style="overflow-x: auto">
+						<h3>Inventory : </h3>
 						<table class="table table-striped table-bordered " id="passStockInventoryList">
 							<thead>
 								<tr>
-									<th><spring:message code="lbl.serialNo"></spring:message></th>
-									<th><spring:message code="lbl.date"></spring:message></th>
-									<th><spring:message code="lbl.invoiceNo"></spring:message></th>
-									<th><spring:message code="lbl.stockInId"></spring:message></th>
+								    <th><spring:message code="lbl.serialNo"></spring:message></th>
+									<th><spring:message code="lbl.name"></spring:message></th>
+									<th><spring:message code="lbl.designation"></spring:message></th>
+									<th><spring:message code="lbl.skname"></spring:message></th>
 									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
-									<th><spring:message code="lbl.requisitionBy"></spring:message></th>
+									<th><spring:message code="lbl.saleinMonth"></spring:message></th>
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
 								</tr>
 							</thead>
-							<tbody>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td><a class="btn btn-primary" id="addRequisition" href="<c:url value="/inventoryam/individual-stock/${id}.html?lang=${locale}"/>">
-					<strong>
-					Pass Stock
-				</strong></a></td>
-							</tbody>
 
 						</table>
 						</div>
 					</div>
 					
-				</div>				
+				</div>		
+					
 			</div>
 		</div>
 		</br>
