@@ -17,3 +17,29 @@ Rounded Portlets
 	border-radius: 0px 0px 4px 4px !important;
 }
 */
+
+.myinventory-box {
+  float: left;
+  width: 30%;
+  padding: 30px;
+  text-align: center;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+  margin: 5px 5px;
+  background: #f5b800;
+}
+
+.center-caption {
+    text-align: center;
+    font-size: 18px;
+    line-height: 18px;
+    padding: 10px 0;
+}
+
+.requisition-add {
+	text-align: left;
+    padding: initial;
+}
+
+

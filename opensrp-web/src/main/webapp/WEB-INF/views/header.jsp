@@ -204,7 +204,6 @@ License: You must have a valid license purchased only from themeforest(the above
 <%--				<%} %>--%>
 				
 				
-				<% if(PERM_READ_LOCATION_LIST || PERM_UPLOAD_LOCATION){ %>
 				<li>
 					<a href="javascript:;">
 					<i class="fa fa-map-marker"></i>
@@ -231,18 +230,69 @@ License: You must have a valid license purchased only from themeforest(the above
 						
 					</ul>
 				</li>
-				<% }%>
 				
-				<% if(PERM_READ_ROLE_LIST){ %>
+				<% if(PERM_READ_LOCATION_LIST || PERM_UPLOAD_LOCATION){ %>
+					<li><a href="javascript:;"> <i class="fa fa-cube"></i> <span
+							class="title"> Inventory</span> <span class="arrow "></span>
+					</a>
+						<ul class="sub-menu">
+							<%
+								if (PERM_READ_LOCATION_LIST) {
+							%>
+							<li><a href="<c:url value="/inventoryam/myinventory.html?lang=${locale}"/>">
+									<spring:message code="lbl.myInventoryAm" />
+							</a></li>
+							<li><a href="<c:url value="/inventoryam/requisition.html?lang=${locale}"/>">
+									<spring:message code="lbl.requisitionAm" />
+							</a></li>
+							<li><a href="<c:url value="/inventoryam/stock-in.html?lang=${locale}"/>">
+									<spring:message code="lbl.stockInAm" />
+							</a></li>
+							<li><a href="<c:url value="/inventoryam/pass-stock.html?lang=${locale}"/>">
+									<spring:message code="lbl.passStock" />
+							</a></li>
+							<li><a href="<c:url value="/inventoryam/myinventory.html"/>">
+									<spring:message code="lbl.sellToSs" />
+							</a></li>
+							<li><a href="<c:url value="/inventoryam/myinventory.html"/>">
+									<spring:message code="lbl.stockReport" />
+							</a></li>
+							<li><a href="<c:url value="/inventoryam/myinventory.html"/>">
+									<spring:message code="lbl.productReportDm" />
+							</a></li>
+							<li><a href="<c:url value="/inventoryam/myinventory.html"/>">
+									<spring:message code="lbl.requisitionAm" />
+							</a></li>
+							<li><a href="<c:url value="/inventoryam/myinventory.html"/>">
+									<spring:message code="lbl.stockReport" />
+							</a></li>
+							<li><a href="<c:url value="/inventoryam/myinventory.html"/>">
+									<spring:message code="lbl.ssSalesReport" />
+							</a></li>
+							<%
+								}
+							%>
+						</ul></li>
+					<%
+						}
+					%>
+
+					<%
+						if (PERM_READ_ROLE_LIST) {
+					%>
 				<li>
 					<a href="<c:url value="/role.html"/>">
 						<i class="fa fa-group"></i>
 						<span class="title"> Role</span>
 					</a>
 				</li>
-				<%} %>
+				<%
+					}
+				%>
 				
-				<% if(AuthenticationManagerUtil.isPermitted("PERM_USER_UPLOAD")){ %>
+				<%
+									if (AuthenticationManagerUtil.isPermitted("PERM_USER_UPLOAD")) {
+								%>
 				<li>
 					<a href="<c:url value="/user/upload.html"/>">
 						<i class="fa fa-user"></i>
