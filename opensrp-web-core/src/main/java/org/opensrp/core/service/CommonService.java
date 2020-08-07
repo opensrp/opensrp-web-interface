@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -42,7 +43,9 @@ public abstract class CommonService {
 		
 		try {
 			tx = session.beginTransaction();
+			
 			session.saveOrUpdate(t);
+			
 			logger.info("saved successfully: " + t.getClass().getName());
 			
 			if (!tx.wasCommitted())
@@ -119,6 +122,53 @@ public abstract class CommonService {
 			session.close();
 		}
 		return result.size() > 0 ? (T) result.get(0) : null;
+	}
+	
+	public <T> boolean delete(T t) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		boolean returnValue = false;
+		try {
+			tx = session.beginTransaction();
+			logger.info("deleting: " + t.getClass().getName());
+			session.delete(t);
+			if (!tx.wasCommitted())
+				tx.commit();
+			returnValue = true;
+		}
+		catch (HibernateException e) {
+			returnValue = false;
+			tx.rollback();
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		return returnValue;
+	}
+	
+	public <T> boolean deleteAllByPrimaryKey(T t, String tableName, String fieldName) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		boolean returnValue = false;
+		try {
+			tx = session.beginTransaction();
+			String hql = "delete from core." + tableName + " where " + fieldName + "=" + t;
+			Query query = session.createSQLQuery(hql);
+			query.executeUpdate();
+			if (!tx.wasCommitted())
+				tx.commit();
+			returnValue = true;
+		}
+		catch (HibernateException e) {
+			returnValue = false;
+			tx.rollback();
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		return returnValue;
 	}
 	
 }

@@ -5,6 +5,8 @@ package org.opensrp.core.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -36,19 +39,13 @@ public class Requisition implements Serializable {
 	@SequenceGenerator(name = "requisition_id_seq", sequenceName = "requisition_id_seq", allocationSize = 1)
 	private Long id;
 	
-	@Column(name = "product_id")
-	private int productId;
-	
-	@Column(name = "current_stock")
-	private int currentStock;
-	
-	private int qunatity;
+	@OneToMany(mappedBy = "requisition", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<RequisitionDetails> requisitionDetails = new HashSet<RequisitionDetails>();
 	
 	private String uuid;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "branch_id", referencedColumnName = "id")
-	private Branch branchId;
+	@Column(name = "branch_id")
+	private int branchId;
 	
 	@Temporal(TemporalType.DATE)
 	private Date date = new Date();
@@ -70,6 +67,10 @@ public class Requisition implements Serializable {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "updated_by", referencedColumnName = "id")
+	private User updatedBy;
 	
 	public Long getId() {
 		return id;
@@ -128,35 +129,11 @@ public class Requisition implements Serializable {
 		this.creator = creator;
 	}
 	
-	public int getProductId() {
-		return productId;
-	}
-	
-	public void setProductId(int productId) {
-		this.productId = productId;
-	}
-	
-	public int getCurrentStock() {
-		return currentStock;
-	}
-	
-	public void setCurrentStock(int currentStock) {
-		this.currentStock = currentStock;
-	}
-	
-	public int getQunatity() {
-		return qunatity;
-	}
-	
-	public void setQunatity(int qunatity) {
-		this.qunatity = qunatity;
-	}
-	
-	public Branch getBranchId() {
+	public int getBranchId() {
 		return branchId;
 	}
 	
-	public void setBranchId(Branch branchId) {
+	public void setBranchId(int branchId) {
 		this.branchId = branchId;
 	}
 	
@@ -166,6 +143,22 @@ public class Requisition implements Serializable {
 	
 	public void setDate(Date date) {
 		this.date = date;
+	}
+	
+	public User getUpdatedBy() {
+		return updatedBy;
+	}
+	
+	public void setUpdatedBy(User updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	
+	public Set<RequisitionDetails> getRequisitionDetails() {
+		return requisitionDetails;
+	}
+	
+	public void setRequisitionDetails(Set<RequisitionDetails> requisitionDetails) {
+		this.requisitionDetails = requisitionDetails;
 	}
 	
 }

@@ -66,6 +66,9 @@ public class Product implements Serializable {
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<ProductRole> productRole = new HashSet<ProductRole>();
 	
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<ProductPriceLog> productPriceLogs = new HashSet<ProductPriceLog>();
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
 	@CreationTimestamp
@@ -79,6 +82,10 @@ public class Product implements Serializable {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "updated_by", referencedColumnName = "id")
+	private User updatedBy;
 	
 	public Long getId() {
 		return id;
@@ -183,6 +190,22 @@ public class Product implements Serializable {
 	
 	public void setProductRole(Set<ProductRole> productRole) {
 		this.productRole = productRole;
+	}
+	
+	public User getUpdatedBy() {
+		return updatedBy;
+	}
+	
+	public void setUpdatedBy(User updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	
+	public Set<ProductPriceLog> getProductPriceLogs() {
+		return productPriceLogs;
+	}
+	
+	public void setProductPriceLogs(Set<ProductPriceLog> productPriceLogs) {
+		this.productPriceLogs = productPriceLogs;
 	}
 	
 }

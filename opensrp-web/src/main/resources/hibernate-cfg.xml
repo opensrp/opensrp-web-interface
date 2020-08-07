@@ -54,6 +54,7 @@
 				<value>org.opensrp.core.entity.Stock</value>
 				<value>org.opensrp.core.entity.Target</value>
 				<value>org.opensrp.core.entity.Requisition</value>
+				<value>org.opensrp.core.entity.RequisitionDetails</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

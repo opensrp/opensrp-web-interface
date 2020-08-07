@@ -2,6 +2,7 @@ package org.opensrp.web.rest.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import org.json.JSONObject;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.entity.Product;
 import org.opensrp.core.mapper.ProductMapper;
@@ -16,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
-@RequestMapping("rest/api/v1/inventory")
+@RequestMapping("rest/api/v1/product")
 @RestController
-public class InventoryRestController {
+public class ProductRestController {
 	
 	@Autowired
 	private ProductService productService;
@@ -26,18 +27,32 @@ public class InventoryRestController {
 	@Autowired
 	private ProductMapper productMapper;
 	
-	@RequestMapping(value = "/product/save-update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/save-update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> newPatient(@RequestBody ProductDTO dto) throws Exception {
 		Product product = productService.findById(dto.getId(), "id", Product.class);
-		if (product != null) {
-			product = productMapper.map(dto, product);
-		} else {
-			product = new Product();
-			product = productMapper.map(dto, product);
+		JSONObject response = new JSONObject();
+		try {
+			if (product != null) {
+				product = productMapper.map(dto, product);
+			} else {
+				product = new Product();
+				product = productMapper.map(dto, product);
+			}
+			
+			if (product != null) {
+				
+				productService.save(product);
+			}
+			response.put("status", "SUCCESS");
+			response.put("msg", "you have successfully added the product");
+			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
 		}
-		productService.save(product);
-		
-		return new ResponseEntity<>(new Gson().toJson(""), OK);
+		catch (Exception e) {
+			e.printStackTrace();
+			response.put("status", "FAILED");
+			response.put("msg", e.getMessage());
+			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
+		}
 		
 	}
 }

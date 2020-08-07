@@ -19,6 +19,8 @@ public class ProductDTO {
 	
 	private Set<Integer> sellTo;
 	
+	private String status;
+	
 	public Long getId() {
 		return id;
 	}
@@ -65,6 +67,14 @@ public class ProductDTO {
 	
 	public void setSellTo(Set<Integer> sellTo) {
 		this.sellTo = sellTo;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

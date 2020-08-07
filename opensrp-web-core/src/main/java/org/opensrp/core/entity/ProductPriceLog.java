@@ -39,8 +39,9 @@ public class ProductPriceLog implements Serializable {
 	@Column(name = "uuid")
 	private String uuid;
 	
-	@Column(name = "product_id")
-	private int productId;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id", referencedColumnName = "id")
+	private Product product;
 	
 	@Column(name = "purchase_price")
 	private float purchasePrice;
@@ -95,12 +96,12 @@ public class ProductPriceLog implements Serializable {
 		this.updated = new Date();
 	}
 	
-	public int getProductId() {
-		return productId;
+	public Product getProduct() {
+		return product;
 	}
 	
-	public void setProductId(int productId) {
-		this.productId = productId;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 	
 	public float getPurchasePrice() {
