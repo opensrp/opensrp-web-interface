@@ -3,19 +3,21 @@
  */
 package org.opensrp.core.dto;
 
-public class Target {
+import java.util.Date;
+
+public class TargetDetailsDTO {
 	
 	private Long id;
 	
-	private int productId;
+	private Long productId;
 	
 	private String uuid;
 	
 	private int branchId;
 	
-	private String month;
+	private Date endDate;
 	
-	private int year;
+	private Date startDate;
 	
 	private String unit;
 	
@@ -35,14 +37,6 @@ public class Target {
 		this.id = id;
 	}
 	
-	public int getProductId() {
-		return productId;
-	}
-	
-	public void setProductId(int productId) {
-		this.productId = productId;
-	}
-	
 	public String getUuid() {
 		return uuid;
 	}
@@ -57,22 +51,6 @@ public class Target {
 	
 	public void setBranchId(int branchId) {
 		this.branchId = branchId;
-	}
-	
-	public String getMonth() {
-		return month;
-	}
-	
-	public void setMonth(String month) {
-		this.month = month;
-	}
-	
-	public int getYear() {
-		return year;
-	}
-	
-	public void setYear(int year) {
-		this.year = year;
 	}
 	
 	public String getUnit() {
@@ -113,6 +91,30 @@ public class Target {
 	
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+	
+	public Long getProductId() {
+		return productId;
+	}
+	
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+	
+	public Date getEndDate() {
+		return endDate;
+	}
+	
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+	
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 	
 }

@@ -11,6 +11,8 @@ public class StockDTO {
 	
 	private Set<StockDetailsDTO> stockDetailsDTOs;
 	
+	private Set<Integer> sellTo;
+	
 	public Long getId() {
 		return id;
 	}
@@ -25,6 +27,14 @@ public class StockDTO {
 	
 	public void setStockDetailsDTOs(Set<StockDetailsDTO> stockDetailsDTOs) {
 		this.stockDetailsDTOs = stockDetailsDTOs;
+	}
+	
+	public Set<Integer> getSellTo() {
+		return sellTo;
+	}
+	
+	public void setSellTo(Set<Integer> sellTo) {
+		this.sellTo = sellTo;
 	}
 	
 }

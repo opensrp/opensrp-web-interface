@@ -23,6 +23,8 @@ public class StockDetailsDTO {
 	
 	private String status;
 	
+	private String invoiceNumber;
+	
 	private int sellOrPassTo;
 	
 	private Date expireyDate;
@@ -115,6 +117,14 @@ public class StockDetailsDTO {
 	
 	public void setReceiveDate(Date receiveDate) {
 		this.receiveDate = receiveDate;
+	}
+	
+	public String getInvoiceNumber() {
+		return invoiceNumber;
+	}
+	
+	public void setInvoiceNumber(String invoiceNumber) {
+		this.invoiceNumber = invoiceNumber;
 	}
 	
 }

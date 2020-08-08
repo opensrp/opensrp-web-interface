@@ -41,23 +41,28 @@ public class StockMapper {
 			//stock.setCreator(user);
 			stock.setUuid(UUID.randomUUID().toString());
 		}
-		
-		for (StockDetailsDTO stockDetailsDTO : stockDetailsDTOs) {
-			StockDetails stockDetails = new StockDetails();
-			stockDetails.setBranchId(stockDetailsDTO.getBranchId());
-			stockDetails.setCredit(stockDetailsDTO.getCredit());
-			stockDetails.setDebit(stockDetailsDTO.getDebit());
-			stockDetails.setExpireyDate(stockDetailsDTO.getExpireyDate());
-			stockDetails.setReceiveDate(stockDetailsDTO.getReceiveDate());
-			stockDetails.setProductId(stockDetailsDTO.getProductId());
-			stockDetails.setReferenceType(ReferenceType.valueOf(stockDetailsDTO.getReferenceType()).name());
-			stockDetails.setSellOrPassTo(stockDetailsDTO.getSellOrPassTo());
-			stockDetails.setTimestamp(System.currentTimeMillis());
-			stockDetails.setStatus(Status.valueOf(stockDetailsDTO.getStatus()).name());
-			System.err.println(stockDetails);
-			_stockDetails.add(stockDetails);
+		Set<Integer> sellTos = dto.getSellTo();
+		for (Integer sellTo : sellTos) {
+			
+			for (StockDetailsDTO stockDetailsDTO : stockDetailsDTOs) {
+				StockDetails stockDetails = new StockDetails();
+				stockDetails.setBranchId(stockDetailsDTO.getBranchId());
+				stockDetails.setCredit(stockDetailsDTO.getCredit());
+				stockDetails.setDebit(stockDetailsDTO.getDebit());
+				stockDetails.setExpireyDate(stockDetailsDTO.getExpireyDate());
+				stockDetails.setReceiveDate(stockDetailsDTO.getReceiveDate());
+				stockDetails.setProductId(stockDetailsDTO.getProductId());
+				stockDetails.setReferenceType(ReferenceType.valueOf(stockDetailsDTO.getReferenceType()).name());
+				stockDetails.setSellOrPassTo(sellTo);
+				stockDetails.setTimestamp(System.currentTimeMillis());
+				stockDetails.setStatus(Status.valueOf(stockDetailsDTO.getStatus()).name());
+				stockDetails.setInvoiceNumber(stockDetailsDTO.getInvoiceNumber());
+				stockDetails.setStock(stock);
+				_stockDetails.add(stockDetails);
+			}
+			stock.setStockDetails(_stockDetails);
+			
 		}
-		stock.setStockDetails(_stockDetails);
 		return stock;
 		
 	}

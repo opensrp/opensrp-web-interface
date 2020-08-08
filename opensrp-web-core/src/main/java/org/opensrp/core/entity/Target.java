@@ -5,6 +5,8 @@ package org.opensrp.core.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -36,37 +39,10 @@ public class Target implements Serializable {
 	@SequenceGenerator(name = "target_id_seq", sequenceName = "target_id_seq", allocationSize = 1)
 	private Long id;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_id", referencedColumnName = "id")
-	private Product productId;
-	
 	private String uuid;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "branch_id", referencedColumnName = "id")
-	private Branch branchId;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(name = "end_date")
-	private Date endDate;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(name = "start_date")
-	private Date startDate;
-	
-	private String unit;
-	
-	private int quantity;
-	
-	private String percentage;
-	
-	private Long timestamp;
-	
-	private String status;
-	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private User userId;
+	@OneToMany(mappedBy = "target", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<TargetDetails> targetDetails = new HashSet<TargetDetails>();
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
@@ -81,6 +57,10 @@ public class Target implements Serializable {
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "updated_by", referencedColumnName = "id")
+	private User updatedBy;
 	
 	public Long getId() {
 		return id;
@@ -115,22 +95,6 @@ public class Target implements Serializable {
 		this.updated = new Date();
 	}
 	
-	public Long getTimestamp() {
-		return timestamp;
-	}
-	
-	public void setTimestamp(Long timestamp) {
-		this.timestamp = timestamp;
-	}
-	
-	public String getStatus() {
-		return status;
-	}
-	
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	
 	public User getCreator() {
 		return creator;
 	}
@@ -139,68 +103,20 @@ public class Target implements Serializable {
 		this.creator = creator;
 	}
 	
-	public Branch getBranchId() {
-		return branchId;
+	public User getUpdatedBy() {
+		return updatedBy;
 	}
 	
-	public void setBranchId(Branch branchId) {
-		this.branchId = branchId;
+	public void setUpdatedBy(User updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 	
-	public Product getProductId() {
-		return productId;
+	public Set<TargetDetails> getTargetDetails() {
+		return targetDetails;
 	}
 	
-	public void setProductId(Product productId) {
-		this.productId = productId;
-	}
-	
-	public Date getEndDate() {
-		return endDate;
-	}
-	
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-	
-	public Date getStartDate() {
-		return startDate;
-	}
-	
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-	
-	public String getUnit() {
-		return unit;
-	}
-	
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
-	
-	public int getQuantity() {
-		return quantity;
-	}
-	
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-	
-	public String getPercentage() {
-		return percentage;
-	}
-	
-	public void setPercentage(String percentage) {
-		this.percentage = percentage;
-	}
-	
-	public User getUserId() {
-		return userId;
-	}
-	
-	public void setUserId(User userId) {
-		this.userId = userId;
+	public void setTargetDetails(Set<TargetDetails> targetDetails) {
+		this.targetDetails = targetDetails;
 	}
 	
 }

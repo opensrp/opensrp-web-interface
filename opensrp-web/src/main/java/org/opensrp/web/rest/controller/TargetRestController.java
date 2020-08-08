@@ -3,10 +3,10 @@ package org.opensrp.web.rest.controller;
 import static org.springframework.http.HttpStatus.OK;
 
 import org.json.JSONObject;
-import org.opensrp.core.dto.StockDTO;
-import org.opensrp.core.entity.Stock;
-import org.opensrp.core.mapper.StockMapper;
-import org.opensrp.core.service.StockService;
+import org.opensrp.core.dto.TargetDTO;
+import org.opensrp.core.entity.Target;
+import org.opensrp.core.mapper.TargetMapper;
+import org.opensrp.core.service.TargetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,35 +17,35 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
-@RequestMapping("rest/api/v1/stock")
+@RequestMapping("rest/api/v1/target")
 @RestController
-public class StockRestController {
+public class TargetRestController {
 	
 	@Autowired
-	private StockService stockService;
+	private TargetService targetService;
 	
 	@Autowired
-	private StockMapper stockMapper;
+	private TargetMapper targetMapper;
 	
 	@RequestMapping(value = "/save-update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> newPatient(@RequestBody StockDTO dto) throws Exception {
-		Stock stock = stockService.findById(dto.getId(), "id", Stock.class);
+	public ResponseEntity<String> newPatient(@RequestBody TargetDTO dto) throws Exception {
+		Target target = targetService.findById(dto.getId(), "id", Target.class);
 		JSONObject response = new JSONObject();
 		System.err.println(dto);
 		try {
-			if (stock != null) {
-				stock = stockMapper.map(dto, stock);
+			if (target != null) {
+				target = targetMapper.map(dto, target);
 			} else {
-				stock = new Stock();
-				stock = stockMapper.map(dto, stock);
+				target = new Target();
+				target = targetMapper.map(dto, target);
 			}
-			System.out.println(stock.toString());
-			if (stock != null) {
+			System.out.println(target.toString());
+			if (target != null) {
 				
-				stockService.save(stock);
+				targetService.save(target);
 			}
 			response.put("status", "SUCCESS");
-			response.put("msg", "you have created successfully");
+			response.put("msg", "you have created successfully.");
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
 		}
 		catch (Exception e) {

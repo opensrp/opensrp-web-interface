@@ -61,6 +61,8 @@ public class Product implements Serializable {
 	
 	private Long timestamp;
 	
+	private String type;
+	
 	private String status;
 	
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -206,6 +208,14 @@ public class Product implements Serializable {
 	
 	public void setProductPriceLogs(Set<ProductPriceLog> productPriceLogs) {
 		this.productPriceLogs = productPriceLogs;
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 }

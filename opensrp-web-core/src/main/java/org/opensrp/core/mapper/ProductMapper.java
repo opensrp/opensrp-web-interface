@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import org.opensrp.common.util.ProductType;
 import org.opensrp.common.util.Status;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.entity.Product;
@@ -30,7 +31,7 @@ public class ProductMapper {
 		product.setSellingPrice(dto.getSellingPrice());
 		product.setTimestamp(System.currentTimeMillis());
 		product.setStatus(Status.valueOf(dto.getStatus()).name());
-		
+		product.setType(ProductType.valueOf(dto.getType()).name());
 		Set<Integer> productRoles = dto.getSellTo();
 		Set<ProductRole> _productRoles = new HashSet<>();
 		

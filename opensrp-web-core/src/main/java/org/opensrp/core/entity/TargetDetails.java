@@ -26,52 +26,48 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Entity
-@Table(name = "_stock_details", schema = "core")
-public class StockDetails implements Serializable {
+@Table(name = "target_details", schema = "core")
+public class TargetDetails implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "_stock_details_id_seq")
-	@SequenceGenerator(name = "_stock_details_id_seq", sequenceName = "_stock_details_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "target_details_id_seq")
+	@SequenceGenerator(name = "target_details_id_seq", sequenceName = "target_details_id_seq", allocationSize = 1)
 	private Long id;
 	
 	@Column(name = "product_id")
 	private Long productId;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "stock_id", referencedColumnName = "id")
-	private Stock stock;
-	
-	private int credit;
-	
-	private int debit;
+	@JoinColumn(name = "target_id", referencedColumnName = "id")
+	private Target target;
 	
 	private String uuid;
-	
-	@Column(name = "invoice_number")
-	private String invoiceNumber;
 	
 	@Column(name = "branch_id")
 	private int branchId;
 	
 	@Temporal(TemporalType.DATE)
-	@Column(name = "expirey_date")
-	private Date expireyDate;
+	@Column(name = "end_date")
+	private Date endDate;
 	
 	@Temporal(TemporalType.DATE)
-	@Column(name = "receive_date")
-	private Date receiveDate;
+	@Column(name = "start_date")
+	private Date startDate;
 	
-	@Column(name = "reference_type")
-	private String referenceType;
+	private String unit;
+	
+	private int quantity;
+	
+	private String percentage;
 	
 	private Long timestamp;
 	
 	private String status;
 	
-	@Column(name = "sell_or_pass_to")
-	private int sellOrPassTo;
+	@Column(name = "user_id")
+	private int userId;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
@@ -144,12 +140,44 @@ public class StockDetails implements Serializable {
 		this.creator = creator;
 	}
 	
-	public int getBranchId() {
-		return branchId;
+	public Date getEndDate() {
+		return endDate;
 	}
 	
-	public void setBranchId(int branchId) {
-		this.branchId = branchId;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+	
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	
+	public String getUnit() {
+		return unit;
+	}
+	
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+	
+	public int getQuantity() {
+		return quantity;
+	}
+	
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	
+	public String getPercentage() {
+		return percentage;
+	}
+	
+	public void setPercentage(String percentage) {
+		this.percentage = percentage;
 	}
 	
 	public Long getProductId() {
@@ -160,68 +188,28 @@ public class StockDetails implements Serializable {
 		this.productId = productId;
 	}
 	
-	public int getCredit() {
-		return credit;
+	public Target getTarget() {
+		return target;
 	}
 	
-	public void setCredit(int credit) {
-		this.credit = credit;
+	public void setTarget(Target target) {
+		this.target = target;
 	}
 	
-	public int getDebit() {
-		return debit;
+	public int getBranchId() {
+		return branchId;
 	}
 	
-	public void setDebit(int debit) {
-		this.debit = debit;
+	public void setBranchId(int branchId) {
+		this.branchId = branchId;
 	}
 	
-	public Date getExpireyDate() {
-		return expireyDate;
+	public int getUserId() {
+		return userId;
 	}
 	
-	public void setExpireyDate(Date expireyDate) {
-		this.expireyDate = expireyDate;
-	}
-	
-	public Date getReceiveDate() {
-		return receiveDate;
-	}
-	
-	public void setReceiveDate(Date receiveDate) {
-		this.receiveDate = receiveDate;
-	}
-	
-	public String getReferenceType() {
-		return referenceType;
-	}
-	
-	public void setReferenceType(String referenceType) {
-		this.referenceType = referenceType;
-	}
-	
-	public int getSellOrPassTo() {
-		return sellOrPassTo;
-	}
-	
-	public void setSellOrPassTo(int sellOrPassTo) {
-		this.sellOrPassTo = sellOrPassTo;
-	}
-	
-	public Stock getStock() {
-		return stock;
-	}
-	
-	public void setStock(Stock stock) {
-		this.stock = stock;
-	}
-	
-	public String getInvoiceNumber() {
-		return invoiceNumber;
-	}
-	
-	public void setInvoiceNumber(String invoiceNumber) {
-		this.invoiceNumber = invoiceNumber;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	
 }
