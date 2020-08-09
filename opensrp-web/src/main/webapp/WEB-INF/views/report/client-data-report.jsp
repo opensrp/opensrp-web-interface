@@ -27,6 +27,17 @@
     #downloadFailedMsg {
         color: red;
     }
+
+    @media screen and (min-width: 992px) {
+        .date-size-md {
+            width: 12% !important;
+        }
+    }
+    @media screen and (max-width: 992px) {
+        .date-size-xs {
+            width: 64%;
+        }
+    }
 </style>
 <%--<style>--%>
 <%--    th, td { text-align: center; }--%>
@@ -53,21 +64,21 @@
 
                         <form autocomplete="off">
                             <div class="row">
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-1 date-size-md date-size-xs form-group">
                                     <label><spring:message code="lbl.startDate"/></label>
                                     <input class="form-control custom-select custom-select-lg mb-3" type=text
                                            name="start" id="start">
                                     <label style="display: none;" class="text-danger" id="startDateValidation"><small>Input is not valid for date</small></label>
                                 </div>
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-1 date-size-md date-size-xs form-group">
                                     <label><spring:message code="lbl.endDate"/></label>
                                     <input class="form-control custom-select custom-select-lg mb-3" type=text
                                            name="end" id="end">
                                     <label style="display: none;" class="text-danger" id="endDateValidation"><small>Input is not valid for date</small></label>
                                 </div>
                                 <% if (AuthenticationManagerUtil.isAM()) {%>
-                                <div class="col-md-2 form-group">
-                                    <label><spring:message code="lbl.branches"/></label>
+                                <div class="col-md-3 form-group">
+                                    <label class="col-xs-12" style="padding-left: 0px"><spring:message code="lbl.branches"/></label>
                                     <select class="custom-select custom-select-lg mb-3 js-example-basic-multiple" id="branch" name="branch" onchange="branchChange()">
                                         <option value="0">Select Branch</option>
                                         <%
@@ -80,7 +91,7 @@
                                 </div>
                                 <%}%>
                                 <div class="col-md-3 form-group">
-                                    <label><spring:message code="lbl.sk"/></label>
+                                    <label class="col-xs-12" style="padding-left: 0px"><spring:message code="lbl.sk"/></label>
                                     <select class="form-control js-example-basic-multiple" id="skList" name="sk">
                                         <option value="">Select SK</option>
                                         <%
@@ -92,7 +103,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-3 form-group">
-                                    <label><spring:message code="lbl.formName"/></label>
+                                    <label class="col-xs-12" style="padding-left: 0px"><spring:message code="lbl.formName"/></label>
                                     <select class="form-control js-example-basic-multiple" id="formName" name="formName">
                                         <option value="">Select Form Name</option>
                                         <c:forEach var="map" items="${formNameList}">
@@ -106,11 +117,11 @@
                             <div class="col-6" id="errorMsg"> </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-1">
+                            <div class="col-md-1 col-xs-3">
                                 <button name="search" id="bth-search" onclick="getClientDataReportTable()"
                                         class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-1 col-xs-3">
                                 <button name="export" id="bth-export" onclick="generateExportData()"
                                         class="btn btn-primary" value="export"><spring:message code="lbl.export"/></button>
                             </div>

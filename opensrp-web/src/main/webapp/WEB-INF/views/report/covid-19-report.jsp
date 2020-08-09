@@ -117,7 +117,7 @@
         <div class="portlet box blue-madison">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-list"></i><spring:message code="lbl.searchArea"/>
+                    <i class="fa fa-list"></i><spring:message code="lbl.covid19"/>
                 </div>
             </div>
             <div class="portlet-body">
