@@ -127,7 +127,7 @@
                                 
                             </div>
                             
-                            <div class="form-group row" id="enableSimPrint1">
+                            <div class="form-group row" id="_enableSimPrint">
 			                     <div class="col-sm-6">
 			                        <label class="control-label" for="enableSimPrint"><spring:message code="lbl.enableSimprint"/></label>
                                      <form:checkbox class="checkBoxClass form-check-input"
