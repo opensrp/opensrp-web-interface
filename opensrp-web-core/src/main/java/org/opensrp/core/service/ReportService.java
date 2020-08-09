@@ -94,30 +94,22 @@ public class ReportService {
     }
 
     public List<ForumReportDTO> getForumReportByLocation(String startDate, String endDate, String parentLocationTag, Integer parentLocationId, String parentLocationName, String locationTag, String designation) {
-        String sql = StringUtils.isBlank(designation)
-                ? "select * from report.get_forum_report_by_location(:startDate, :endDate, '"+parentLocationTag+"', "+parentLocationId+" , '"+parentLocationName+"' , '"+locationTag+"');"
-                : "select * from report.get_forum_report_by_location(:startDate, :endDate, '"+parentLocationTag+"', "+parentLocationId+" , '"+parentLocationName+"' , '"+locationTag+"', '"+designation+"');";
+        String sql =  "select * from report.get_forum_report_by_location(:startDate, :endDate, '"+parentLocationTag+"', "+parentLocationId+" , '"+parentLocationName+"' , '"+locationTag+"', '"+designation+"');";
         return repository.getForumReport(startDate, endDate, sql);
     }
 
     public List<ForumReportDTO> getForumReportBySK(String startDate, String endDate, String skIds, String designation) {
-        String sql = StringUtils.isBlank(designation)
-                ?"select * from report.get_forum_report_by_sk(:startDate, :endDate, '{"+skIds+"}');"
-                :"select * from report.get_forum_report_by_sk(:startDate, :endDate, '{"+skIds+"}', '"+designation+"');";
+        String sql = "select * from report.get_forum_report_by_sk(:startDate, :endDate, '{"+skIds+"}', '"+designation+"');";
         return repository.getForumReport(startDate, endDate, sql);
     }
 
     public List<ForumIndividualReportDTO> getForumIndividualReportByLocation(String startDate, String endDate, String parentLocationTag, Integer parentLocationId, String parentLocationName, String locationTag, String forumType, String designation) {
-        String sql = StringUtils.isBlank(designation)
-                ? "select * from report.get_forum_individual_report_by_location(:startDate, :endDate, '"+parentLocationTag+"', "+parentLocationId+" , '"+parentLocationName+"' , '"+locationTag+"', '"+forumType+"');"
-                : "select * from report.get_forum_individual_report_by_location(:startDate, :endDate, '"+parentLocationTag+"', "+parentLocationId+" , '"+parentLocationName+"' , '"+locationTag+"', '"+forumType+"', '"+designation+"');";
+        String sql = "select * from report.get_forum_individual_report_by_location(:startDate, :endDate, '"+parentLocationTag+"', "+parentLocationId+" , '"+parentLocationName+"' , '"+locationTag+"', '"+forumType+"', '"+designation+"');";
         return repository.getForumIndividualReport(startDate, endDate, sql);
     }
 
     public List<ForumIndividualReportDTO> getForumIndividualReportBySk(String startDate, String endDate, String forumType, String skIds, String designation) {
-        String sql =  StringUtils.isBlank(designation)
-                ? "select * from report.get_forum_individual_report_by_sk(:startDate, :endDate, '"+forumType+"' ,'{"+skIds+"}');"
-                : "select * from report.get_forum_individual_report_by_sk(:startDate, :endDate, '"+forumType+"' ,'{"+skIds+"}', '"+designation+"');";
+        String sql =   "select * from report.get_forum_individual_report_by_sk(:startDate, :endDate, '"+forumType+"' ,'{"+skIds+"}', '"+designation+"');";
         return repository.getForumIndividualReport(startDate, endDate, sql);
     }
 
