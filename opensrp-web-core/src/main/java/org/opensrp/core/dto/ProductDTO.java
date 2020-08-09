@@ -23,6 +23,8 @@ public class ProductDTO {
 	
 	private String type;
 	
+	private int stock;
+	
 	public Long getId() {
 		return id;
 	}
@@ -85,6 +87,21 @@ public class ProductDTO {
 	
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public int getStock() {
+		return stock;
+	}
+	
+	public void setStock(int stock) {
+		this.stock = stock;
+	}
+	
+	@Override
+	public String toString() {
+		return "ProductDTO [id=" + id + ", name=" + name + ", description=" + description + ", purchasePrice="
+		        + purchasePrice + ", sellingPrice=" + sellingPrice + ", sellTo=" + sellTo + ", status=" + status + ", type="
+		        + type + ", stock=" + stock + "]";
 	}
 	
 }

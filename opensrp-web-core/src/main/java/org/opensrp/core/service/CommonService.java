@@ -36,6 +36,10 @@ public abstract class CommonService {
 		
 	}
 	
+	public SessionFactory getSessionFactory() {
+		return sessionFactory;
+	}
+	
 	@Transactional
 	public <T> T save(T t) throws Exception {
 		Session session = sessionFactory.openSession();

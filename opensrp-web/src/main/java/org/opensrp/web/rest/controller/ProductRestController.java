@@ -45,6 +45,8 @@ public class ProductRestController {
 			}
 			response.put("status", "SUCCESS");
 			response.put("msg", "you have successfully added the product");
+			
+			//System.err.println(productService.productListFortStockIn(3, 28));
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
 		}
 		catch (Exception e) {
