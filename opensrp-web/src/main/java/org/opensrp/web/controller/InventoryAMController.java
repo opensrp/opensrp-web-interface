@@ -60,6 +60,13 @@ public class InventoryAMController {
 		return "inventoryAm/stock-list";
 	}
 	
+	@RequestMapping(value = "inventoryam/stock-add/{id}.html", method = RequestMethod.GET)
+	public String stockAddForAreaManager(Model model, Locale locale, @PathVariable("id") int id) {
+		model.addAttribute("id", id);
+		model.addAttribute("locale", locale);
+		return "inventoryAm/stock-add";
+	}
+	
 	@RequestMapping(value = "inventoryam/pass-stock.html", method = RequestMethod.GET)
 	public String passStock(Model model, Locale locale) {
 		model.addAttribute("locale", locale);
@@ -73,9 +80,10 @@ public class InventoryAMController {
 		return "inventoryAm/pass-stock-inventory-list";
 	}
 	
-	@RequestMapping(value = "inventoryam/individual-stock/{id}.html", method = RequestMethod.GET)
-	public String passStockInventoryIndividual(Model model, Locale locale, @PathVariable("id") int id) {
+	@RequestMapping(value = "inventoryam/individual-stock/{id}/{skid}.html", method = RequestMethod.GET)
+	public String passStockInventoryIndividual(Model model, Locale locale, @PathVariable("id") int id, @PathVariable("skid") int skid) {
 		model.addAttribute("id", id);
+		model.addAttribute("skid", skid);
 		model.addAttribute("locale", locale);
 		return "inventoryAm/pass-stock-individual-inventory-list";
 	}
@@ -91,5 +99,19 @@ public class InventoryAMController {
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
 		return "inventoryAm/sell-to-ss-list";
+	}
+	
+	@RequestMapping(value = "inventoryam/individual-ss-sell/{id}/{ssid}.html", method = RequestMethod.GET)
+	public String sellToIndividualSs(Model model, Locale locale, @PathVariable("id") int id, @PathVariable("ssid") int ssid) {
+		model.addAttribute("id", id);
+		model.addAttribute("ssid", ssid);
+		model.addAttribute("locale", locale);
+		return "inventoryAm/sell-to-ss-individual";
+	}
+	
+	@RequestMapping(value = "inventoryam/stock-report.html", method = RequestMethod.GET)
+	public String stockReport(Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		return "inventoryAm/stock-report";
 	}
 }

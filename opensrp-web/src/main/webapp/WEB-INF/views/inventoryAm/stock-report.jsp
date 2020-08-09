@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Current Inventory List</title>
+<title>Stock Report</title>
 	
 	
 
@@ -26,43 +26,50 @@
 				<!-- BEGIN EXAMPLE TABLE PORTLET-->
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
-						<div class="caption">
-							<i class="fa fa-list"></i><spring:message code="lbl.inventory"/>
-						</div>
+						
 					</div>					
 					<div class="portlet-body">
 						<div class="form-group">
 							<div class="row">
-							<!-- <div class="col-lg-1 form-group" style="margin-top: 5px;">
-									<label for="designation">Designation:</label>
-								</div> -->
 								<div class="col-lg-3 form-group">
-								<select class="form-control" name="designation" id="designation">
-								<option selected="selected">Select Designation</option>
-								  <option value="volvo">SK</option>
-								  <option value="saab">PS</option>
-								  <option value="mercedes">SS</option>
-								  
-								</select>
+								    <label for="cars">Branch :</label> 
+								    <select
+										name="cars" class="form-control" id="cars">
+										<option selected="selected">Select Branch</option>
+										<option value="volvo">Volvo</option>
+										<option value="saab">Saab</option>
+										<option value="mercedes">Mercedes</option>
+										<option value="audi">Audi</option>
+									</select>
 								</div>
 								<div class="col-lg-3 form-group">
-									<button type="submit" onclick=""
-										class="btn btn-primary">
-										<spring:message code="lbl.viewStock" />
-									</button>
+								    <label for="designation">Sk :</label>
+									<input type="text" class="form-control" id="designation">
 								</div>
+								<div class="col-lg-3 form-group">
+									<label for="date">Date:</label>
+									<input type="text"	readonly name="startYear" id="startYear" class="form-control date-picker-year" />
+								</div>
+								
 							</div>
-						</div>
+							<div class="row">
+								<div class="col-lg-12 form-group text-right">
+									<button type="submit" onclick="" class="btn btn-primary" value="confirm">View SS List</button>
+								</div>
+     							</div>
+							<br/>
+						
 						<div style="overflow-x: auto">
+						<h3>Stock Report : </h3>
 						<table class="table table-striped table-bordered " id="passStockInventoryList">
 							<thead>
 								<tr>
-									<th><spring:message code="lbl.serialNo"></spring:message></th>
-									<th><spring:message code="lbl.date"></spring:message></th>
-									<th><spring:message code="lbl.invoiceNo"></spring:message></th>
-									<th><spring:message code="lbl.stockInId"></spring:message></th>
+								    <th><spring:message code="lbl.serialNo"></spring:message></th>
+									<th><spring:message code="lbl.name"></spring:message></th>
+									<th><spring:message code="lbl.designation"></spring:message></th>
+									<th><spring:message code="lbl.skname"></spring:message></th>
 									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
-									<th><spring:message code="lbl.requisitionBy"></spring:message></th>
+									<th><spring:message code="lbl.saleinMonth"></spring:message></th>
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
 								</tr>
 							</thead>
@@ -73,17 +80,14 @@
 							<td></td>
 							<td></td>
 							<td></td>
-							<td><a class="btn btn-primary" id="passStock" href="<c:url value="/inventoryam/individual-stock/${id}/321.html?lang=${locale}"/>">
-					<strong>
-					Pass Stock
-				</strong></a></td>
+							<td></td>
 							</tbody>
-
 						</table>
 						</div>
 					</div>
 					
-				</div>				
+				</div>		
+					
 			</div>
 		</div>
 		</br>
@@ -102,6 +106,24 @@ jQuery(document).ready(function() {
    //TableAdvanced.init();
 		$('#sample_1').DataTable();
 });
+jQuery(function() {
+	jQuery('.date-picker-year').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'MM yy',
+        maxDate: new Date,
+        onClose: function(dateText, inst) { 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+        }
+    });
+	jQuery(".date-picker-year").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $(".ui-datepicker-current").hide();
+    });
+});
+
 </script>
 
 
