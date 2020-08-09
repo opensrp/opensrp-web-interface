@@ -122,7 +122,6 @@
         <input type="hidden" id ="searched_value" name="searched_value"/>
         <input type="hidden" id ="searched_value_id" name="searched_value_id"/>
         <input type="hidden" id ="currentUser" value="<%= AuthenticationManagerUtil.isAM()%>">
-        <br/>
 
         <div class="row">
             <div class="col-md-2" id="disaggregationHide">
