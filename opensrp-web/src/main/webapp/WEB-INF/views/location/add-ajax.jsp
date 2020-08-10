@@ -92,7 +92,7 @@
 			                        <div class="row">
 			                            <div class="col-lg-6">
 			                                <label for="locationTag"> <spring:message code="lbl.tag"/><span style="color: red;">*</span></label>
-			                                <select class="custom-select custom-select-lg mb-3" id="locationTag" name="locationTag" required="required">
+			                                <select class="form-control custom-select custom-select-lg mb-3" id="locationTag" name="locationTag" required="required">
 			                                    <option value="" selected><spring:message code="lbl.pleaseSelect"/></option>
 			                                    <%
 			                                        for (Map.Entry<Integer, String> entry : tags.entrySet()) {
