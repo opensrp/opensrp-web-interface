@@ -46,10 +46,8 @@
 								</div>
 							</div>
 						</div>
-						
-						<div style="overflow-x: auto">
 						<h3>Shamima Khatun's Inventory : </h3>
-						<table class="table table-striped table-bordered " id="passStockInventoryList">
+						<table class="table table-striped table-bordered " id="passStockIndividualInventoryList">
 							<thead>
 								<tr>
 									<th><spring:message code="lbl.serialNo"></spring:message></th>
@@ -61,9 +59,7 @@
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
 								</tr>
 							</thead>
-
 						</table>
-						</div>
 					</div>
 					
 				</div>		
@@ -86,7 +82,7 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#sample_1').DataTable();
+		$('#passStockIndividualInventoryList').DataTable();
 });
 </script>
 

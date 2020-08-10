@@ -47,8 +47,8 @@
 									<input type="text" class="form-control" id="designation">
 								</div>
 								<div class="col-lg-3 form-group">
-									<label for="date">Date:</label>
-									<input type="text"	readonly name="startYear" id="startYear" class="form-control date-picker-year" />
+									<label for="yearMonth">Date:</label>
+									<input type="text"	readonly name="yearMonth" id="yearMonth" class="form-control date-picker-year" />
 								</div>
 								
 							</div>
@@ -59,7 +59,7 @@
      							</div>
 							<br/>
 						<h3>Stock Report : </h3>
-						<table class="table table-striped table-bordered " id="stockReportOfAm">
+						<table class="table table-striped table-bordered " id="stockReportsForDm">
 							<thead>
 								<tr>
 								    <th><spring:message code="lbl.serialNo"></spring:message></th>
@@ -101,7 +101,7 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#"stockReportOfAm"').DataTable();
+		$('#stockReportsForDm').DataTable();
 });
 jQuery(function() {
 	jQuery('.date-picker-year').datepicker({

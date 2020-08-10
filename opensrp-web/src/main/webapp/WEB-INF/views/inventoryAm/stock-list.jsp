@@ -62,7 +62,7 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#sample_1').DataTable();
+		$('#stockListOfAm').DataTable();
 });
 </script>
 

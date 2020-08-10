@@ -24,7 +24,7 @@
 			<%
 				for (int i = 1; i <= 16; i += 1) {
 			%>
-				<div class="col-sm myinventory-box" onclick=""><a href="<c:url value="/inventoryam/sell-to-ss/10.html?lang=${locale}"/>">Branch <%= i %>  </a></div>
+				<div class="col-sm myinventory-box" onclick=""><a href="<c:url value="/inventoryam/sell-to-ss-list/10.html?lang=${locale}"/>">Branch <%= i %>  </a></div>
 			<%
 				}
 			%>

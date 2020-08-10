@@ -53,10 +53,10 @@
 										value="confirm">View SS List</button>
 								</div></div>
 						</div>
-						
-						<div style="overflow-x: auto">
 						<h3>Inventory : </h3>
-						<table class="table table-striped table-bordered " id="passStockInventoryList">
+						<div class="table-scrollable">
+						
+						<table class="table table-striped table-bordered " id="StockSellHistory">
 							<thead>
 								<tr>
 								    <th><spring:message code="lbl.serialNo"></spring:message></th>
@@ -93,7 +93,6 @@
 										<h4 class="modal-title"><strong>Sell To Many</strong></h4>
 									</div>
 									<div class="modal-body">
-										<div style="overflow-x:auto">
 											<table class="table table-striped table-bordered "
 												id="sellToManySSList">
 												<thead>
@@ -113,7 +112,6 @@
 													<td></td>
 												</tbody>
 											</table>
-										</div>
 										<div class="text-right">
 										<button  type="submit" class="btn btn-primary" data-toggle="modal" data-target="#sellToManyProductSelectModal"
 											>Proceed</button></div>
@@ -139,9 +137,8 @@
 										<h4 class="modal-title"><Strong>Select Product</Strong></h4>
 									</div>
 									<div class="modal-body">
-									<div style="overflow-x:auto">
 										<table class="table table-striped table-bordered "
-											id="sellToManySSList">
+											id="sellToManySSProductList">
 											<thead>
 												<tr>
 													<th><spring:message code="lbl.serialNo"></spring:message></th>
@@ -165,7 +162,6 @@
 												</tr>
 											</tbody>
 										</table>
-										</div>
 										<div class="text-right">
 										<button  type="button" data-dismiss="modal" data-toggle="modal" data-target="#Second_modal" class="btn btn-danger"
 											value="proceed">Back</button>
@@ -230,7 +226,9 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#sample_1').DataTable();
+		$('#StockSellHistory').DataTable();
+		$('#sellToManySSList').DataTable();
+		$('#sellToManySSProductList').DataTable();
 });
 jQuery(function() {
 	jQuery('.date-picker-year').datepicker({
