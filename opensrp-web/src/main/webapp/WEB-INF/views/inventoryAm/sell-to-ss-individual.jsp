@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Current Inventory List</title>
+<title>Individual Sell To SS</title>
 	
 	
 
@@ -37,53 +37,39 @@
 									<label for="designation">Designation:</label>
 								</div> -->
 								<div class="col-lg-3 form-group">
-								<select class="form-control" name="designation" id="designation">
-								<option selected="selected">Select Designation</option>
-								  <option value="volvo">SK</option>
-								  <option value="saab">PS</option>
-								  <option value="mercedes">SS</option>
-								  
-								</select>
+									<label for="branch">Branch:</label> <input
+										type="text" class="form-control" id="branch" readonly>
 								</div>
 								<div class="col-lg-3 form-group">
-									<button type="submit" onclick=""
-										class="btn btn-primary">
-										<spring:message code="lbl.viewStock" />
-									</button>
+								    <label for="skName">Sk:</label>
+									<input type="text" class="form-control" id="skName" readonly>
+								</div>
+								<div class="col-lg-3 form-group">
+								    <label for="designation">SS:</label>
+									<input type="text" class="form-control" id="ssName" readonly>
 								</div>
 							</div>
 						</div>
+						
 						<div style="overflow-x: auto">
-						<table class="table table-striped table-bordered " id="passStockInventoryList">
+						<h3>Sell To Shamima Khatun : </h3>
+						<table class="table table-striped table-bordered " id="indidualSellList">
 							<thead>
 								<tr>
-									<th><spring:message code="lbl.serialNo"></spring:message></th>
-									<th><spring:message code="lbl.date"></spring:message></th>
-									<th><spring:message code="lbl.invoiceNo"></spring:message></th>
-									<th><spring:message code="lbl.stockInId"></spring:message></th>
-									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
-									<th><spring:message code="lbl.requisitionBy"></spring:message></th>
-									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
+									<th><spring:message code="lbl.productName"></spring:message></th>
+									<th><spring:message code="lbl.availableProduct"></spring:message></th>
+									<th><spring:message code="lbl.sellProduct"></spring:message></th>
 								</tr>
 							</thead>
-							<tbody>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td><a class="btn btn-primary" id="passStock" href="<c:url value="/inventoryam/individual-stock/${id}/321.html?lang=${locale}"/>">
-					<strong>
-					Pass Stock
-				</strong></a></td>
-							</tbody>
 
 						</table>
 						</div>
 					</div>
 					
-				</div>				
+				</div>		
+				<div class="col-lg-12 form-group text-right">
+	                <button type="submit" onclick="" class="btn btn-primary" value="confirm">Confirm All</button>
+	            </div>		
 			</div>
 		</div>
 		</br>

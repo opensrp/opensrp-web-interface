@@ -26,7 +26,7 @@
 						</div>
 		</div>
 		<div class="col-lg-12 form-group requisition-add">
-	                <a class="btn btn-primary" id="newInvoice" href="<c:url value="/inventoryam/requisition-add/${id}.html?lang=${locale}"/>">
+	                <a class="btn btn-primary" id="newInvoice" href="<c:url value="/inventoryam/stock-add/${id}.html?lang=${locale}"/>">
 					<strong>
 					New Invoice
 				</strong></a>
