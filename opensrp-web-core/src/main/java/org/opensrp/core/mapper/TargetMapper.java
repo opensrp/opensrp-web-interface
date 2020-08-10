@@ -56,6 +56,8 @@ public class TargetMapper {
 				targetDetails.setTimestamp(System.currentTimeMillis());
 				targetDetails.setStatus(targetDetailsDTO.getStatus());
 				targetDetails.setTarget(target);
+				targetDetails.setYear(targetDetailsDTO.getYear());
+				targetDetails.setMonth(targetDetailsDTO.getMonth());
 				_targetDetails.add(targetDetails);
 				
 			}

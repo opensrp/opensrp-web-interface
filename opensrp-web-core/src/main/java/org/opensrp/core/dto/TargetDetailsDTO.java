@@ -23,6 +23,10 @@ public class TargetDetailsDTO {
 	
 	private int quantity;
 	
+	private int month;
+	
+	private int year;
+	
 	private String percentage;
 	
 	private String status;
@@ -115,6 +119,22 @@ public class TargetDetailsDTO {
 	
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
+	}
+	
+	public int getMonth() {
+		return month;
+	}
+	
+	public void setMonth(int month) {
+		this.month = month;
+	}
+	
+	public int getYear() {
+		return year;
+	}
+	
+	public void setYear(int year) {
+		this.year = year;
 	}
 	
 }

@@ -58,6 +58,12 @@ public class TargetDetails implements Serializable {
 	
 	private String unit;
 	
+	@Column(name = "month")
+	private int month;
+	
+	@Column(name = "year")
+	private int year;
+	
 	private int quantity;
 	
 	private String percentage;
@@ -210,6 +216,22 @@ public class TargetDetails implements Serializable {
 	
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+	
+	public int getMonth() {
+		return month;
+	}
+	
+	public void setMonth(int month) {
+		this.month = month;
+	}
+	
+	public int getYear() {
+		return year;
+	}
+	
+	public void setYear(int year) {
+		this.year = year;
 	}
 	
 }
