@@ -55,7 +55,7 @@
     </tr>
     </thead>
     </thead>
-    <tbody id="t-body">
+    <tbody id="t-body" style="font-size: 12px">
     <% for ( ForumReportDTO report: forumReport) { %>
     <tr>
         <td><%= report.getLocationOrProvider() %></td>
