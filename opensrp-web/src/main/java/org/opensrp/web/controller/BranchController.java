@@ -73,10 +73,11 @@ public class BranchController {
         Branch branch = branchService.findById(id, "id", Branch.class);
         model.addAttribute("locale", locale);
         model.addAttribute("branch", new Branch());
-        model.addAttribute("branchDTO", branchMapper.map(branch));
+        session.setAttribute("branchDTO", branchMapper.map(branch));
         searchUtil.setDivisionAttribute(session);
-        model.addAttribute("districtList", locationServiceImpl.getChildData(branch.getDivision()));
-        model.addAttribute("upazilaList", locationServiceImpl.getChildData(branch.getDivision());
+
+        session.setAttribute("districtList", branch.getDivision() == null ? new ArrayList<>() : locationServiceImpl.getChildData(branch.getDivision()));
+        session.setAttribute("upazilaList", branch.getDistrict() == null ? new ArrayList<>() : locationServiceImpl.getChildData(branch.getDistrict()));
         return "branch/edit";
     }
 
