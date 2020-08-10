@@ -58,6 +58,8 @@ public class StockMapper {
 				stockDetails.setStatus(Status.valueOf(stockDetailsDTO.getStatus()).name());
 				stockDetails.setInvoiceNumber(stockDetailsDTO.getInvoiceNumber());
 				stockDetails.setStock(stock);
+				stockDetails.setMonth(stockDetailsDTO.getMonth());
+				stockDetails.setYear(stockDetailsDTO.getYear());
 				_stockDetails.add(stockDetails);
 			}
 			stock.setStockDetails(_stockDetails);

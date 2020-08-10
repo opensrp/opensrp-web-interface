@@ -31,6 +31,10 @@ public class StockDetailsDTO {
 	
 	private Date receiveDate;
 	
+	private int month;
+	
+	private int year;
+	
 	public Long getId() {
 		return id;
 	}
@@ -125,6 +129,22 @@ public class StockDetailsDTO {
 	
 	public void setInvoiceNumber(String invoiceNumber) {
 		this.invoiceNumber = invoiceNumber;
+	}
+	
+	public int getMonth() {
+		return month;
+	}
+	
+	public void setMonth(int month) {
+		this.month = month;
+	}
+	
+	public int getYear() {
+		return year;
+	}
+	
+	public void setYear(int year) {
+		this.year = year;
 	}
 	
 }

@@ -43,11 +43,20 @@ public class StockDetails implements Serializable {
 	@JoinColumn(name = "stock_id", referencedColumnName = "id")
 	private Stock stock;
 	
+	@Column(name = "credit")
 	private int credit;
 	
+	@Column(name = "debit")
 	private int debit;
 	
+	@Column(name = "uuid")
 	private String uuid;
+	
+	@Column(name = "month")
+	private int month;
+	
+	@Column(name = "year")
+	private int year;
 	
 	@Column(name = "invoice_number")
 	private String invoiceNumber;
@@ -222,6 +231,22 @@ public class StockDetails implements Serializable {
 	
 	public void setInvoiceNumber(String invoiceNumber) {
 		this.invoiceNumber = invoiceNumber;
+	}
+	
+	public int getMonth() {
+		return month;
+	}
+	
+	public void setMonth(int month) {
+		this.month = month;
+	}
+	
+	public int getYear() {
+		return year;
+	}
+	
+	public void setYear(int year) {
+		this.year = year;
 	}
 	
 }
