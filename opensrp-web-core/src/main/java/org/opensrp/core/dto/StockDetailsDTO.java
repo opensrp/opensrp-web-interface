@@ -29,6 +29,8 @@ public class StockDetailsDTO {
 	
 	private Date expireyDate;
 	
+	private Date startDate;
+	
 	private Date receiveDate;
 	
 	private int month;
@@ -145,6 +147,14 @@ public class StockDetailsDTO {
 	
 	public void setYear(int year) {
 		this.year = year;
+	}
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+	
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 	
 }

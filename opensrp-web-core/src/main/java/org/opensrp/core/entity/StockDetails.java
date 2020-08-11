@@ -65,6 +65,10 @@ public class StockDetails implements Serializable {
 	private int branchId;
 	
 	@Temporal(TemporalType.DATE)
+	@Column(name = "start_date")
+	private Date startDate;
+	
+	@Temporal(TemporalType.DATE)
 	@Column(name = "expirey_date")
 	private Date expireyDate;
 	
@@ -247,6 +251,14 @@ public class StockDetails implements Serializable {
 	
 	public void setYear(int year) {
 		this.year = year;
+	}
+	
+	public Date getStartDate() {
+		return startDate;
+	}
+	
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 	
 }

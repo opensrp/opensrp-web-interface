@@ -2,6 +2,8 @@ package org.opensrp.web.rest.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.JSONObject;
 import org.opensrp.core.dto.TargetDTO;
 import org.opensrp.core.entity.Target;
@@ -55,5 +57,12 @@ public class TargetRestController {
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
 		}
 		
+	}
+	
+	// test api 
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public ResponseEntity<String> userWithoutCatchmentArea(HttpServletRequest request) throws Exception {
+		System.err.println(targetService.allActiveTarget(28));
+		return new ResponseEntity<>("", OK);
 	}
 }

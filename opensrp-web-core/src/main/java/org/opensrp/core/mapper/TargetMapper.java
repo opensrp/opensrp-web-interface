@@ -51,7 +51,7 @@ public class TargetMapper {
 				targetDetails.setUnit(targetDetailsDTO.getUnit());
 				targetDetails.setStartDate(targetDetailsDTO.getStartDate());
 				targetDetails.setEndDate(targetDetailsDTO.getEndDate());
-				targetDetails.setUserId(targetDetailsDTO.getUserId());
+				targetDetails.setUserId(targetTo);
 				targetDetails.setUuid(UUID.randomUUID().toString());
 				targetDetails.setTimestamp(System.currentTimeMillis());
 				targetDetails.setStatus(targetDetailsDTO.getStatus());

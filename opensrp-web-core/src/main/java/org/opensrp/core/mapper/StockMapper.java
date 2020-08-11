@@ -60,6 +60,7 @@ public class StockMapper {
 				stockDetails.setStock(stock);
 				stockDetails.setMonth(stockDetailsDTO.getMonth());
 				stockDetails.setYear(stockDetailsDTO.getYear());
+				stockDetails.setStartDate(stockDetailsDTO.getStartDate());
 				_stockDetails.add(stockDetails);
 			}
 			stock.setStockDetails(_stockDetails);
