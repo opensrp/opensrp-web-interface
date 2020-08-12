@@ -21,13 +21,13 @@
 <div class="page-content-wrapper">
 		<div class="page-content">
 		<div class="row">
-			<%
-				for (int i = 1; i <= 16; i += 1) {
-			%>
-				<div class="col-sm myinventory-box" onclick=""><a href="<c:url value="/inventoryam/requisition-list/10.html?lang=${locale}"/>">Branch <%= i %>  </a></div>
-			<%
-				}
-			%>
+			<c:forEach items="${branches}" var="branch">
+				<div class="col-sm myinventory-box" onclick="">
+					<a
+						href="<c:url value="/inventoryam/requisition-list/${branch.id}.html?lang=${locale}"/>">${branch.name}
+						(${branch.code})</a>
+				</div>
+			</c:forEach>
 		</div>
 		</br>
 		<jsp:include page="/WEB-INF/views/footer.jsp" />

@@ -231,13 +231,13 @@ License: You must have a valid license purchased only from themeforest(the above
 					</ul>
 				</li>
 				
-				<% if(PERM_READ_LOCATION_LIST || PERM_UPLOAD_LOCATION){ %>
+				<% if(PERM_READ_AGGREGATED_REPORT){ %>
 					<li><a href="javascript:;"> <i class="fa fa-cube"></i> <span
 							class="title"> Inventory</span> <span class="arrow "></span>
 					</a>
 						<ul class="sub-menu">
 							<%
-								if (PERM_READ_LOCATION_LIST) {
+								if (PERM_READ_AGGREGATED_REPORT) {
 							%>
 							<li><a href="<c:url value="/inventoryam/myinventory.html?lang=${locale}"/>">
 									<spring:message code="lbl.myInventoryAm" />

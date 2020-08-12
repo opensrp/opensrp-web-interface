@@ -30,7 +30,7 @@
 		<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="center-caption">
-							<spring:message code="lbl.branch"/> - ${id}
+							${branchInfo[0][1]} - ${branchInfo[0][2]}
 						</div>
 
 

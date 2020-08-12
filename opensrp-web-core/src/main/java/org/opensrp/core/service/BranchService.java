@@ -118,12 +118,14 @@ public class BranchService {
 			Object[] obj = new Object[10];
 			obj[0] = branch.getId();
 			obj[1] = branch.getName();
+			obj[2] = branch.getCode();
 			branches.add(obj);
 		}else {
 			for (Branch branch: user.getBranches()) {
 				Object[] obj = new Object[10];
 				obj[0] = branch.getId();
 				obj[1] = branch.getName();
+				obj[2] = branch.getCode();
 				branches.add(obj);
 			}
 		}
