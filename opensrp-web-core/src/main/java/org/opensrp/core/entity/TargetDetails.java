@@ -39,9 +39,9 @@ public class TargetDetails implements Serializable {
 	@Column(name = "product_id")
 	private Long productId;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "target_id", referencedColumnName = "id")
-	private Target target;
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "updated_by", referencedColumnName = "id")
+	private User updatedBy;
 	
 	private String uuid;
 	
@@ -194,12 +194,12 @@ public class TargetDetails implements Serializable {
 		this.productId = productId;
 	}
 	
-	public Target getTarget() {
-		return target;
+	public User getUpdatedBy() {
+		return updatedBy;
 	}
 	
-	public void setTarget(Target target) {
-		this.target = target;
+	public void setUpdatedBy(User updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 	
 	public int getBranchId() {

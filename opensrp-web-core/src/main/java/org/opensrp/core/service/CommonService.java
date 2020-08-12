@@ -6,6 +6,7 @@ package org.opensrp.core.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -42,7 +43,7 @@ public abstract class CommonService {
 	
 	@Transactional
 	public <T> T save(T t) throws Exception {
-		Session session = sessionFactory.openSession();
+		Session session = getSessionFactory().openSession();
 		Transaction tx = null;
 		
 		try {
@@ -68,7 +69,7 @@ public abstract class CommonService {
 	
 	@Transactional
 	public <T> T update(T t) {
-		Session session = sessionFactory.openSession();
+		Session session = getSessionFactory().openSession();
 		Transaction tx = null;
 		
 		try {
@@ -93,7 +94,7 @@ public abstract class CommonService {
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public <T> T findById(Long id, String fieldName, Class<?> className) {
-		Session session = sessionFactory.openSession();
+		Session session = getSessionFactory().openSession();
 		List<T> result = new ArrayList<T>();
 		try {
 			Criteria criteria = session.createCriteria(className);
@@ -112,7 +113,7 @@ public abstract class CommonService {
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public <T> T findByKey(String value, String fieldName, Class<?> className) {
-		Session session = sessionFactory.openSession();
+		Session session = getSessionFactory().openSession();
 		List<T> result = new ArrayList<T>();
 		try {
 			Criteria criteria = session.createCriteria(className);
@@ -129,7 +130,7 @@ public abstract class CommonService {
 	}
 	
 	public <T> boolean delete(T t) {
-		Session session = sessionFactory.openSession();
+		Session session = getSessionFactory().openSession();
 		Transaction tx = null;
 		boolean returnValue = false;
 		try {
@@ -152,7 +153,7 @@ public abstract class CommonService {
 	}
 	
 	public <T> boolean deleteAllByPrimaryKey(T t, String tableName, String fieldName) {
-		Session session = sessionFactory.openSession();
+		Session session = getSessionFactory().openSession();
 		Transaction tx = null;
 		boolean returnValue = false;
 		try {
@@ -175,4 +176,23 @@ public abstract class CommonService {
 		return returnValue;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <T> T findByKeys(Map<String, Object> fieldValues, Class<?> className) {
+		Session session = getSessionFactory().openSession();
+		List<T> result = null;
+		try {
+			Criteria criteria = session.createCriteria(className);
+			for (Map.Entry<String, Object> entry : fieldValues.entrySet()) {
+				criteria.add(Restrictions.eq(entry.getKey(), entry.getValue()));
+			}
+			result = criteria.list();
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		return result.size() > 0 ? (T) result.get(0) : null;
+	}
 }

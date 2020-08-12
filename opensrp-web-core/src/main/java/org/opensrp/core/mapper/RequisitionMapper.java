@@ -9,6 +9,7 @@ import org.opensrp.core.dto.RequisitionDTO;
 import org.opensrp.core.dto.RequisitionDetailsDTO;
 import org.opensrp.core.entity.Requisition;
 import org.opensrp.core.entity.RequisitionDetails;
+import org.opensrp.core.entity.User;
 import org.opensrp.core.service.RequisitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,7 +24,7 @@ public class RequisitionMapper {
 	
 	public Requisition map(RequisitionDTO dto, Requisition requisition) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		//User user = (User) auth.getPrincipal();
+		User user = (User) auth.getPrincipal();
 		requisition.setBranchId(dto.getBranchId());
 		
 		requisition.setTimestamp(System.currentTimeMillis());
@@ -35,14 +36,14 @@ public class RequisitionMapper {
 		
 		if (requisition.getId() != null) {
 			requisition.setRequisitionDetails(null);
-			//requisition.setUpdatedBy(user);
+			requisition.setUpdatedBy(user);
 			boolean isDelete = requisitionService.deleteAllByPrimaryKey(requisition.getId(), "requisition_details",
 			    "requisition_id");
 			if (!isDelete) {
 				return null;
 			}
 		} else {
-			//requisition.setCreator(user);
+			requisition.setCreator(user);
 			requisition.setUuid(UUID.randomUUID().toString());
 		}
 		

@@ -9,7 +9,11 @@ public class TargetDTO {
 	
 	private Long id;
 	
-	private Set<Integer> targetTo;
+	private int targetTo;
+	
+	private int role;
+	
+	private String type;
 	
 	private Set<TargetDetailsDTO> targetDetailsDTOs;
 	
@@ -21,11 +25,11 @@ public class TargetDTO {
 		this.id = id;
 	}
 	
-	public Set<Integer> getTargetTo() {
+	public int getTargetTo() {
 		return targetTo;
 	}
 	
-	public void setTargetTo(Set<Integer> targetTo) {
+	public void setTargetTo(int targetTo) {
 		this.targetTo = targetTo;
 	}
 	
@@ -35,6 +39,22 @@ public class TargetDTO {
 	
 	public void setTargetDetailsDTOs(Set<TargetDetailsDTO> targetDetailsDTOs) {
 		this.targetDetailsDTOs = targetDetailsDTOs;
+	}
+	
+	public int getRole() {
+		return role;
+	}
+	
+	public void setRole(int role) {
+		this.role = role;
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 }

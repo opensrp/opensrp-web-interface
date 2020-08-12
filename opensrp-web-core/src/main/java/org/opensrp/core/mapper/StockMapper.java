@@ -10,6 +10,7 @@ import org.opensrp.core.dto.StockDTO;
 import org.opensrp.core.dto.StockDetailsDTO;
 import org.opensrp.core.entity.Stock;
 import org.opensrp.core.entity.StockDetails;
+import org.opensrp.core.entity.User;
 import org.opensrp.core.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,7 @@ public class StockMapper {
 	
 	public Stock map(StockDTO dto, Stock stock) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		//User user = (User) auth.getPrincipal();
+		User user = (User) auth.getPrincipal();
 		
 		Set<StockDetailsDTO> stockDetailsDTOs = dto.getStockDetailsDTOs();
 		
@@ -32,13 +33,13 @@ public class StockMapper {
 		
 		if (stock.getId() != null) {
 			stock.setStockDetails(null);
-			//stock.setUpdatedBy(user);
+			stock.setUpdatedBy(user);
 			boolean isDelete = stockService.deleteAllByPrimaryKey(stock.getId(), "_stock_details", "stock_id");
 			if (!isDelete) {
 				return null;
 			}
 		} else {
-			//stock.setCreator(user);
+			stock.setCreator(user);
 			stock.setUuid(UUID.randomUUID().toString());
 		}
 		Set<Integer> sellTos = dto.getSellTo();

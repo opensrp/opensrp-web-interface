@@ -10,6 +10,7 @@ import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.entity.Product;
 import org.opensrp.core.entity.ProductPriceLog;
 import org.opensrp.core.entity.ProductRole;
+import org.opensrp.core.entity.User;
 import org.opensrp.core.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,7 +25,7 @@ public class ProductMapper {
 	
 	public Product map(ProductDTO dto, Product product) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		//User user = (User) auth.getPrincipal();
+		User user = (User) auth.getPrincipal();
 		product.setName(dto.getName());
 		product.setDescription(dto.getDescription());
 		product.setPurchasePrice(dto.getPurchasePrice());
@@ -37,13 +38,13 @@ public class ProductMapper {
 		
 		if (product.getId() != null) {
 			product.setProductRole(null);
-			//product.setUpdatedBy(user);
+			product.setUpdatedBy(user);
 			boolean isDelete = productService.deleteAllByPrimaryKey(product.getId(), "product_role", "product_id");
 			if (!isDelete) {
 				return null;
 			}
 		} else {
-			//product.setCreator(user);
+			product.setCreator(user);
 			product.setUuid(UUID.randomUUID().toString());
 		}
 		Set<ProductPriceLog> priceLogs = new HashSet<>();
