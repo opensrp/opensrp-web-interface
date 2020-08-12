@@ -257,16 +257,16 @@ License: You must have a valid license purchased only from themeforest(the above
 							<li><a href="<c:url value="/inventoryam/stock-report.html?lang=${locale}"/>">
 									<spring:message code="lbl.stockReport" />
 							</a></li>
-							<li><a href="<c:url value="/inventoryam/myinventory.html"/>">
-									<spring:message code="lbl.productReportDm" />
+							<li><a href="<c:url value="/inventorydm/products-list.html?lang=${locale}"/>">
+									<spring:message code="lbl.productListDm" />
 							</a></li>
-							<li><a href="<c:url value="/inventoryam/myinventory.html"/>">
+							<li><a href="<c:url value="/inventorydm/requisition-list.html?lang=${locale}"/>">
 									<spring:message code="lbl.requisitionAm" />
 							</a></li>
-							<li><a href="<c:url value="/inventoryam/myinventory.html"/>">
+							<li><a href="<c:url value="/inventorydm/stock-report.html?lang=${locale}"/>">
 									<spring:message code="lbl.stockReport" />
 							</a></li>
-							<li><a href="<c:url value="/inventoryam/myinventory.html"/>">
+							<li><a href="<c:url value="/inventorydm/ss-sales-report.html?lang=${locale}"/>">
 									<spring:message code="lbl.ssSalesReport" />
 							</a></li>
 							<%

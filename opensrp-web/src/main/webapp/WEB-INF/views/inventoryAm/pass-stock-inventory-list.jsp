@@ -53,7 +53,6 @@
 								</div>
 							</div>
 						</div>
-						<div style="overflow-x: auto">
 						<table class="table table-striped table-bordered " id="passStockInventoryList">
 							<thead>
 								<tr>
@@ -80,7 +79,6 @@
 							</tbody>
 
 						</table>
-						</div>
 					</div>
 					
 				</div>				
@@ -100,7 +98,7 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#sample_1').DataTable();
+		$('#passStockInventoryList').DataTable();
 });
 </script>
 

@@ -50,10 +50,8 @@
 								</div>
 							</div>
 						</div>
-						
-						<div style="overflow-x: auto">
 						<h3>Sell To Shamima Khatun : </h3>
-						<table class="table table-striped table-bordered " id="indidualSellList">
+						<table class="table table-striped table-bordered " id="indidualSellListToSS">
 							<thead>
 								<tr>
 									<th><spring:message code="lbl.productName"></spring:message></th>
@@ -63,7 +61,6 @@
 							</thead>
 
 						</table>
-						</div>
 					</div>
 					
 				</div>		
@@ -86,7 +83,7 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#sample_1').DataTable();
+		$('#indidualSellListToSS').DataTable();
 });
 </script>
 

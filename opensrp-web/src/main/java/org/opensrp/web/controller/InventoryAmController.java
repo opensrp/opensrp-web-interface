@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-public class InventoryAMController {
+public class InventoryAmController {
 	@RequestMapping(value = "inventoryam/myinventory.html", method = RequestMethod.GET)
 	public String myInventory(Model model,Locale locale) {
 		model.addAttribute("locale", locale);
@@ -94,7 +94,7 @@ public class InventoryAMController {
 		return "inventoryAm/sell-to-ss";
 	}
 	
-	@RequestMapping(value = "inventoryam/sell-to-ss/{id}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "inventoryam/sell-to-ss-list/{id}.html", method = RequestMethod.GET)
 	public String sellToSsList(Model model, Locale locale, @PathVariable("id") int id) {
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);

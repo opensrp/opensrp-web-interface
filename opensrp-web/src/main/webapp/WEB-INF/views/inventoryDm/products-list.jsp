@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Add Requisition</title>
+<title>Product List</title>
 	
 	
 
@@ -20,38 +20,31 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
-		<%-- <div class="portlet-title">
-						<div class="center-caption">
-							<spring:message code="lbl.addRequisition"/>
-						</div>
 
-
-					</div> --%>
 		<div class="portlet box blue-madison">
-					<div class="portlet-title">
-						<div class="center-caption">
-							<spring:message code="lbl.branch"/> - ${id}
-						</div>
+			<div class="portlet-title"></div>
 
-
-					</div>
-
-					<div class="portlet-body">
-						<table class="table table-striped table-bordered" id="requisitionAddList">
-							<thead>
-								<tr>
-									<th><spring:message code="lbl.serialNo"></spring:message></th>
-									<th><spring:message code="lbl.productName"></spring:message></th>
-									<th><spring:message code="lbl.currentStock"></spring:message></th>
-									<th><spring:message code="lbl.requisitionAmount"></spring:message></th>
-								</tr>
-							</thead>
-						</table>
-					</div>
-							</div>
-				<div class="col-lg-12 form-group text-right">
-	                <button type="submit" onclick="" class="btn btn-primary" value="confirm">Confirm All</button>
-	            </div>
+			<div class="portlet-body">
+				<div class="col-lg-12 form-group requisition-add">
+					<a class="btn btn-primary" id="addRequisition"
+						href="<c:url value="/inventorydm/add-product.html?lang=${locale}"/>">
+						<strong> Add Product </strong>
+					</a>
+				</div>
+					<table class="table table-striped table-bordered" id="productListDm">
+						<thead>
+							<tr>
+								<th><spring:message code="lbl.serialNo"></spring:message></th>
+								<th><spring:message code="lbl.productName"></spring:message></th>
+								<th><spring:message code="lbl.description"></spring:message></th>
+								<th><spring:message code="lbl.purchasePrice"></spring:message></th>
+								<th><spring:message code="lbl.sellingPrice"></spring:message></th>
+								<th><spring:message code="lbl.seller"></spring:message></th>
+							</tr>
+						</thead>
+					</table>
+			</div>
+		</div>
 		</br>
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>
@@ -66,7 +59,7 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#requisitionAddList').DataTable();
+		$('#productListDm').DataTable();
 });
 </script>
 

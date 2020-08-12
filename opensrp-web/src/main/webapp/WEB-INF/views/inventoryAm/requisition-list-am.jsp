@@ -41,7 +41,6 @@
 							<th><spring:message code="lbl.actionRequisition"></spring:message></th>
 						</tr>
 					</thead>
-
 				</table>
 			</div>
 		</div>
@@ -59,7 +58,7 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#sample_1').DataTable();
+		$('#requisitionListOfAm').DataTable();
 });
 </script>
 
