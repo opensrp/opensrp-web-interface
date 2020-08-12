@@ -4,10 +4,8 @@
 
 package org.opensrp.core.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -65,19 +63,6 @@ public class ProductService extends CommonService {
 		}
 		
 		return result;
-	}
-	
-	public List<ProductDTO> productListFortStockIn(Integer branchId, Integer roleId) {
-		List<ProductDTO> products = productListByBranchWithCurrentStock(branchId, roleId);
-		
-		List<Long> pids = new ArrayList<>();
-		
-		for (ProductDTO productDTO : products) {
-			pids.add(productDTO.getId());
-		}
-		products.addAll(productListWithoutBranch(StringUtils.join(pids.toArray(), ", "), roleId));
-		
-		return products;
 	}
 	
 }
