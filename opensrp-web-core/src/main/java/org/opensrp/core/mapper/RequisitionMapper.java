@@ -1,6 +1,7 @@
 package org.opensrp.core.mapper;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -44,6 +45,9 @@ public class RequisitionMapper {
 			}
 		} else {
 			requisition.setCreator(user);
+			int number = new Random().nextInt(999999);
+			String requisitionId = dto.getRequisitionId() + String.format("%06d", number);
+			requisition.setRequisitionId(requisitionId);
 			requisition.setUuid(UUID.randomUUID().toString());
 		}
 		

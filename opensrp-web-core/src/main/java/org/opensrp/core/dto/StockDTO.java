@@ -13,6 +13,8 @@ public class StockDTO {
 	
 	private Set<Integer> sellTo;
 	
+	private String stockId;
+	
 	public Long getId() {
 		return id;
 	}
@@ -35,6 +37,14 @@ public class StockDTO {
 	
 	public void setSellTo(Set<Integer> sellTo) {
 		this.sellTo = sellTo;
+	}
+	
+	public String getStockId() {
+		return stockId;
+	}
+	
+	public void setStockId(String stockId) {
+		this.stockId = stockId;
 	}
 	
 }

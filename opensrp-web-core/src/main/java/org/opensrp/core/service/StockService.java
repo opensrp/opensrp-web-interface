@@ -5,6 +5,7 @@
 package org.opensrp.core.service;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -61,6 +62,9 @@ public class StockService extends CommonService {
 					}
 				} else {
 					stock.setCreator(user);
+					int number = new Random().nextInt(999999);
+					String stockId = dto.getStockId() + String.format("%06d", number);
+					stock.setStockId(stockId);
 					stock.setUuid(UUID.randomUUID().toString());
 				}
 				Set<StockDetails> _stockDetails = new HashSet<>();

@@ -52,6 +52,9 @@ public class Requisition implements Serializable {
 	
 	private Long timestamp;
 	
+	@Column(name = "requisition_id")
+	private String requisitionId;
+	
 	private String status;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -159,6 +162,14 @@ public class Requisition implements Serializable {
 	
 	public void setRequisitionDetails(Set<RequisitionDetails> requisitionDetails) {
 		this.requisitionDetails = requisitionDetails;
+	}
+	
+	public String getRequisitionId() {
+		return requisitionId;
+	}
+	
+	public void setRequisitionId(String requisitionId) {
+		this.requisitionId = requisitionId;
 	}
 	
 }

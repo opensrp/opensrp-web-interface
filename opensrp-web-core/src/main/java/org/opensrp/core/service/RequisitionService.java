@@ -37,4 +37,24 @@ public class RequisitionService extends CommonService {
 		
 		return products;
 	}
+	/*private List<Requisition> listWithPagination(int branchId){
+		Session session = getSessionFactory().openSession();
+		List<Requisition> result = null;
+		try {
+			String hql = "select  * from   core.requisition where  ";
+			Query query = session.createSQLQuery(hql).addScalar("name", StandardBasicTypes.STRING)
+			        .addScalar("id", StandardBasicTypes.LONG).addScalar("stock", StandardBasicTypes.INTEGER)
+			        .setInteger("branchId", branchId).setInteger("roleId", roleId)
+			        .setResultTransformer(new AliasToBeanResultTransformer(ProductDTO.class));
+			result = query.list();
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		
+		return result;
+	}*/
 }

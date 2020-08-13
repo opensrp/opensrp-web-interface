@@ -13,6 +13,8 @@ public class RequisitionDTO {
 	
 	private String status;
 	
+	private String requisitionId;
+	
 	private Set<RequisitionDetailsDTO> requisitionDetails;
 	
 	public Long getId() {
@@ -45,6 +47,14 @@ public class RequisitionDTO {
 	
 	public void setRequisitionDetails(Set<RequisitionDetailsDTO> requisitionDetails) {
 		this.requisitionDetails = requisitionDetails;
+	}
+	
+	public String getRequisitionId() {
+		return requisitionId;
+	}
+	
+	public void setRequisitionId(String requisitionId) {
+		this.requisitionId = requisitionId;
 	}
 	
 }
