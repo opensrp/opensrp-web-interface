@@ -23,7 +23,7 @@
 		<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="center-caption">
-							<spring:message code="lbl.branch"/> - ${id}
+							${branchInfo[0][1]} - ${branchInfo[0][2]}
 						</div>
 
 
@@ -38,8 +38,16 @@
 									<th><spring:message code="lbl.currentStock"></spring:message></th>
 								</tr>
 							</thead>
-
-						</table>
+							<tbody>
+								<c:forEach var="product" items="${ productInfo }">
+									<tr>
+										<td>${ product.id }</td>
+										<td>${ product.name }</td>
+										<td>${ product.stock }</td>
+									</tr>
+								</c:forEach>
+							</tbody>
+				</table>
 					</div>
 					</div>
 

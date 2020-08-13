@@ -22,12 +22,12 @@
 		<div class="page-content">
 		<div class="portlet box blue-madison">
 					<div class="portlet-title">
-						<div class=center-caption><spring:message code="lbl.branch"/> - ${id}</div>
+						<div class=center-caption>${branchInfo[0][1]} - ${branchInfo[0][2]}</div>
 						</div>
 			<div class="portlet-body">
 				<div class="col-lg-12 form-group requisition-add">
 					<a class="btn btn-primary" id="addRequisition"
-						href="<c:url value="/inventoryam/requisition-add/${id}.html?lang=${locale}"/>">
+						href="<c:url value="/inventoryam/requisition-add/${branchInfo[0][0]}.html?lang=${locale}"/>">
 						<strong> Add Requisition </strong>
 					</a>
 				</div>
