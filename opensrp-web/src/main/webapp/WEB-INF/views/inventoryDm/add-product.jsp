@@ -123,7 +123,7 @@ $("#addProduct").submit(function(event) {
 	var header = $("meta[name='_csrf_header']").attr("content");
 	var sellTo = [];
 	$("input:checkbox[name=sellerName]:checked").each(function(){
-	    sellTo.push($(this).val());
+	    sellTo.push(+$(this).val());
 	});
 	var formData;
 	
@@ -137,7 +137,6 @@ $("#addProduct").submit(function(event) {
 	            'status': "ACTIVE",
 	            'type': "PRODUCT"
 	        };
-	
 	console.log(formData)
 	event.preventDefault();
 	

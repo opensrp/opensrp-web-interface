@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.opensrp.core.dto.ProductDTO;
+import org.opensrp.core.entity.Product;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.ProductService;
@@ -30,31 +31,19 @@ public class InventoryDmController {
 	@RequestMapping(value = "inventorydm/products-list.html", method = RequestMethod.GET)
 	public String productsList(Model model,Locale locale) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		int roleId = 0;
+/*		int roleId = 0;
 		for (Role role : loggedInUser.getRoles()) {
 			roleId = role.getId();
 		}
-		model.addAttribute("user", loggedInUser.getRoles());
+		model.addAttribute("user", loggedInUser.getRoles());*/
 		model.addAttribute("locale", locale);
 		return "inventoryDm/products-list";
 	}
 	
 	@RequestMapping(value = "inventorydm/add-product.html", method = RequestMethod.GET)
 	public String addProduct(Model model,Locale locale) {
-		List<Role> roles = roleServiceImpl.findAll("Role");
-		List<Role> filteredRole = new ArrayList<Role>();
-		HashMap<String,String> rolesMap = new HashMap<String,String>();
-		rolesMap.put("SK", "SK");
-		rolesMap.put("PK", "SK");
-		rolesMap.put("SS", "SK");
-		rolesMap.put("PA", "PA");
-		
-		for (Role role : roles) {
-			if (rolesMap.containsKey(role.getName())) {
-				filteredRole.add(role);
-			}
-		}
-		model.addAttribute("roles", filteredRole);
+		List<Role> roles = productService.getRoleForProduct();
+		model.addAttribute("roles", roles);
 		model.addAttribute("locale", locale);
 		return "inventoryDm/add-product";
 	}

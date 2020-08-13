@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
 import org.opensrp.core.dto.ProductDTO;
+import org.opensrp.core.entity.Role;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -53,6 +54,26 @@ public class ProductService extends CommonService {
 			Query query = session.createSQLQuery(hql).addScalar("name", StandardBasicTypes.STRING)
 			        .addScalar("id", StandardBasicTypes.LONG).addScalar("stock", StandardBasicTypes.INTEGER)
 			        .setInteger("roleId", roleId).setResultTransformer(new AliasToBeanResultTransformer(ProductDTO.class));
+			result = query.list();
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Role> getRoleForProduct() {
+		Session session = getSessionFactory().openSession();
+		List<Role> result = null;
+		try {
+			String hql = "select * from core.get_role_for_product();";
+			Query query = session.createSQLQuery(hql).addScalar("id",StandardBasicTypes.INTEGER).addScalar("name", StandardBasicTypes.STRING)
+					.setResultTransformer(new AliasToBeanResultTransformer(Role.class));
 			result = query.list();
 		}
 		catch (Exception e) {

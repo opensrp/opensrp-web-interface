@@ -70,11 +70,10 @@ public class InventoryAmController {
 	public String requisitionListForAreaManager(Model model, Locale locale, @PathVariable("id") String id) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Object[]> branchInfo = branchService.getBranchByUser(id, loggedInUser);
-		int roleId = 0;
-		for (Role role : loggedInUser.getRoles()) {
-			roleId = role.getId();
-		}
-		List<ProductDTO> requisitionList = requisitionService.productListFortRequisition(Integer.parseInt(id), roleId);
+//		int roleId = 0;
+//		for (Role role : loggedInUser.getRoles()) {
+//			roleId = role.getId();
+//		}
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("locale", locale);
 		return "inventoryAm/requisition-list-am";
@@ -84,6 +83,8 @@ public class InventoryAmController {
 	public String addRequisitionAreaManager(Model model, Locale locale, @PathVariable("id") String id) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Object[]> branchInfo = branchService.getBranchByUser(id, loggedInUser);
+		List<ProductDTO> productListForRequisition = requisitionService.productListFortRequisition(Integer.parseInt(id), 0);
+		model.addAttribute("productList", productListForRequisition);
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("locale", locale);
 		return "inventoryAm/requisition-add-am";
