@@ -85,4 +85,12 @@ public class RequisitionDetails implements Serializable {
 		this.qunatity = qunatity;
 	}
 	
+	public Requisition getRequisition() {
+		return requisition;
+	}
+	
+	public void setRequisition(Requisition requisition) {
+		this.requisition = requisition;
+	}
+	
 }

@@ -53,6 +53,7 @@ public class RequisitionMapper {
 			rDetails.setProductId(requisitionDetailsDTO.getProductId());
 			rDetails.setQunatity(requisitionDetailsDTO.getQunatity());
 			rDetails.setUuid(UUID.randomUUID().toString());
+			rDetails.setRequisition(requisition);
 			requisitionDetails.add(rDetails);
 		}
 		requisition.setRequisitionDetails(requisitionDetails);
