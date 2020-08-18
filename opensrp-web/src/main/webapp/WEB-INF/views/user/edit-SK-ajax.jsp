@@ -127,10 +127,11 @@
                                 
                             </div>
                             
-                            <div class="form-group row" id="_enableSimprint">
+                            <div class="form-group row" id="_enableSimPrint">
 			                     <div class="col-sm-6">
 			                        <label class="control-label" for="enableSimPrint"><spring:message code="lbl.enableSimprint"/></label>
-			                        <input type="checkbox" id="enableSimPrint" name="enableSimPrint"  class="checkBoxClass form-check-input"/>
+                                     <form:checkbox class="checkBoxClass form-check-input"
+                                                    path="enableSimPrint" value="${account.getEnableSimPrint()}"/>
 			                   </div>
 			                </div>
 			                
@@ -144,14 +145,15 @@
 							</div>
 
                             <hr class="dotted">
-                            <div class="form-group text-right">
-                            <input type="submit" id="updateContinue" name="updateContinue" value="Update & Continue To Edit Catchment Area"
-								  class="btn btn-primary" />
-                               <input type="submit" id="update" name="update"  value="Update"
-								  class="btn btn-primary" />
+                            <div class="form-group text-right row" style="margin-top: 50px">
+                                <input type="submit" id="updateContinue" name="updateContinue" value="Update & Continue To Edit Catchment Area"
+								  class="btn btn-primary col-md-offset-6 col-md-3 col-xs-12"  style="margin-bottom: 5px"/>
+
+                                <input type="submit" id="update" name="update"  value="Update"
+								  class="btn btn-primary col-md-1 col-xs-12" style=" margin-left: 5px;margin-bottom: 5px" />
                                
                                 
-                                <a class="btn btn-primary" href="${cancelUrl}">Cancel</a>
+                                <a class="btn btn-primary col-md-1 col-xs-12 " href="${cancelUrl}" style=" margin-left: 5px;margin-bottom: 5px">Cancel</a>
                             </div>
                             <div id="errorMessage" style="display:none">
                                 <div class="alert-message warning">

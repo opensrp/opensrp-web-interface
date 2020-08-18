@@ -114,7 +114,7 @@ public class User implements UserDetails {
 	@Column(name = "person_uuid")
 	public String personUUid;
 	
-	@ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
 	@JoinColumn(name = "parent_user_id", referencedColumnName = "id")
 	private User parentUser;
 	

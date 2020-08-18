@@ -31,6 +31,21 @@
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 <c:url var="back" value="/user/sk-list.html" />
 
+<style>
+    /*for computers*/
+    @media screen and (min-width: 992px) {
+        .modal-margin {
+            margin-top: 5%;
+        }
+    }
+    /*for mobile devices*/
+    @media screen and (max-width: 992px) {
+        .modal-margin {
+            margin-top: 40%;
+        }
+    }
+</style>
+
 <div class="page-content-wrapper">
 	<div class="page-content">
 
@@ -66,7 +81,7 @@
 
         <!-- Modal for add new SS -->
         <div style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1050; min-height: 300px;"
-             id="add-ss" class="modal">
+             id="add-ss" class="modal modal-margin">
             <div id="add-ss-body">
                 <div style="position: absolute; margin-left:45%; margin-top: 105px;">
                     <img width="90px" height="90px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
@@ -97,7 +112,7 @@
 
         <!--Modal for catchment - start-->
         <div style="overflow: unset;display: none;top:30px; max-width: none; position: relative;z-index: 1050"
-             id="catchment-area" class="modal">
+             id="catchment-area" class="modal modal-margin">
             <div id="user-info-body" class="row"></div>
             <div id ="modal-body" class="form-group row">
                 <div class="col-sm-5">

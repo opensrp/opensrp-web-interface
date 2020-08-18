@@ -122,20 +122,16 @@
         <input type="hidden" id ="searched_value" name="searched_value"/>
         <input type="hidden" id ="searched_value_id" name="searched_value_id"/>
         <input type="hidden" id ="currentUser" value="<%= AuthenticationManagerUtil.isAM()%>">
-        <br/>
 
         <div class="row">
-            <div class="col-md-2" id="branchHide">
-                <label><spring:message code="lbl.branches"/></label>
-                <select class="custom-select custom-select-lg mb-3" id="branch" name="branch">
-                    <option value="">All Branch</option>
-                </select>
-            </div>
             <div class="col-md-2" id="disaggregationHide">
-                <label><spring:message code="lbl.disaggregationBy"/></label>
-                <select class="custom-select custom-select-lg mb-3" id="disaggregation"
-                        name="disaggregation">
-                    <option value=""></option>
+                <label><spring:message code="lbl.designation"/></label>
+                <select class="custom-select custom-select-lg mb-3" id="designation"
+                        name="designation" onchange="generateForumReport()">
+                    <option value="">ALL</option>
+                    <option value="SK">SK</option>
+                    <option value="SS">SS</option>
+                    <option value="PK">PK</option>
                 </select>
             </div>
         </div>

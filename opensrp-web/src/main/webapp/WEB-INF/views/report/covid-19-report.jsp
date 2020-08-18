@@ -28,6 +28,17 @@
         color: red;
     }
     th, td { text-align: center; }
+
+    @media screen and (min-width: 992px) {
+        .date-size-md {
+            width: 12% !important;
+        }
+    }
+    @media screen and (max-width: 992px) {
+        .date-size-xs {
+            width: 64%;
+        }
+    }
 </style>
 <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -47,13 +58,13 @@
                     <div class="form-group">
                         <form autocomplete="off">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-1 date-size-md date-size-xs">
                                     <label><spring:message code="lbl.startDate"/></label>
                                     <input class="form-control custom-select custom-select-lg mb-3" type=text
                                            name="start" id="start" value="${startDate}">
                                     <label style="display: none;" class="text-danger" id="startDateValidation"><small>Input is not valid for date</small></label>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-1 date-size-md date-size-xs">
                                     <label><spring:message code="lbl.endDate"/></label>
                                     <input class="form-control custom-select custom-select-lg mb-3" type=text
                                            name="end" id="end" value="${endDate}">
@@ -74,7 +85,7 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label><spring:message code="lbl.sk"/></label>
+                                    <label><spring:message code="lbl.sk"/></label> <br>
                                     <select class="js-example-basic-multiple" id="skList" name="sk">
                                         <option value="">Select SK</option>
                                         <%
@@ -94,11 +105,11 @@
                         <br/>
 
                         <div class="row">
-                            <div class="col-md-1">
+                            <div class="col-md-1 col-xs-3">
                                 <button name="search" id="bth-search" onclick="drawDataTables()"
                                         class="btn btn-primary" value="search"><spring:message code="lbl.search"/></button>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-1 col-xs-3">
                                 <button name="export" id="bth-export" onclick="generateCOVID19ExportData()"
                                         class="btn btn-primary" value="export"><spring:message code="lbl.export"/></button>
                             </div>
@@ -117,7 +128,7 @@
         <div class="portlet box blue-madison">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-list"></i><spring:message code="lbl.searchArea"/>
+                    <i class="fa fa-list"></i><spring:message code="lbl.covid19"/>
                 </div>
             </div>
             <div class="portlet-body">

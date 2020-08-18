@@ -85,10 +85,13 @@ public class Product implements Serializable {
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
+<<<<<<< HEAD
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "updated_by", referencedColumnName = "id")
 	private User updatedBy;
 	
+=======
+>>>>>>> 52e8cda68fc7e23441b5ed5c3ab16f0ef5efd93e
 	public Long getId() {
 		return id;
 		

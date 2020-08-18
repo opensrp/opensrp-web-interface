@@ -72,8 +72,9 @@ public class ProductService extends CommonService {
 		List<Role> result = null;
 		try {
 			String hql = "select * from core.get_role_for_product();";
-			Query query = session.createSQLQuery(hql).addScalar("id",StandardBasicTypes.INTEGER).addScalar("name", StandardBasicTypes.STRING)
-					.setResultTransformer(new AliasToBeanResultTransformer(Role.class));
+			Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.INTEGER)
+			        .addScalar("name", StandardBasicTypes.STRING)
+			        .setResultTransformer(new AliasToBeanResultTransformer(Role.class));
 			result = query.list();
 		}
 		catch (Exception e) {
