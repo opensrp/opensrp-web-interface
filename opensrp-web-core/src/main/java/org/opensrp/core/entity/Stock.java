@@ -47,41 +47,6 @@ public class Stock implements Serializable {
 	@Column(name = "stock_id")
 	private String stockId;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "branch_id", referencedColumnName = "id")
-	private Branch branchId;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(name = "expirey_date")
-	private Date expireyDate;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(name = "receive_date")
-	private Date receiveDate;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(name = "date")
-	private Date date;
-	
-	@Column(name = "division_id")
-	private int divisionId;
-	
-	@Column(name = "district_id")
-	private int districtId;
-	
-	@Column(name = "upazila_id")
-	private int upazilaId;
-	
-	@Column(name = "reference_type")
-	private String referenceType;
-	
-	private Long timestamp;
-	
-	private String status;
-	
-	@Column(name = "sell_or_pass_to")
-	private int sellOrPassTo;
-	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
 	@CreationTimestamp

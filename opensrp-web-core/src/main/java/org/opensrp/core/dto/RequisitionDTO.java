@@ -17,12 +17,6 @@ public class RequisitionDTO {
 	
 	private Set<RequisitionDetailsDTO> requisitionDetails;
 	
-	private int productId;
-	
-	private int currentStock;
-	
-	private int qunatity;
-	
 	public Long getId() {
 		return id;
 	}
@@ -61,30 +55,6 @@ public class RequisitionDTO {
 	
 	public void setRequisitionId(String requisitionId) {
 		this.requisitionId = requisitionId;
-	}
-	
-	public int getProductId() {
-		return productId;
-	}
-	
-	public void setProductId(int productId) {
-		this.productId = productId;
-	}
-	
-	public int getCurrentStock() {
-		return currentStock;
-	}
-	
-	public void setCurrentStock(int currentStock) {
-		this.currentStock = currentStock;
-	}
-	
-	public int getQunatity() {
-		return qunatity;
-	}
-	
-	public void setQunatity(int qunatity) {
-		this.qunatity = qunatity;
 	}
 	
 }

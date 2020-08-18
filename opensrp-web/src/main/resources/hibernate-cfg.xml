@@ -49,7 +49,6 @@
 				<value>org.opensrp.core.entity.UsersCatchmentArea</value>
 				<value>org.opensrp.core.entity.Imei</value>
 				<value>org.opensrp.core.entity.Product</value>
-
 				<value>org.opensrp.core.entity.ProductRole</value>
 				<value>org.opensrp.core.entity.ProductPriceLog</value>
 				<value>org.opensrp.core.entity.Stock</value>
@@ -57,7 +56,6 @@
 				<value>org.opensrp.core.entity.TargetDetails</value>
 				<value>org.opensrp.core.entity.Requisition</value>
 				<value>org.opensrp.core.entity.RequisitionDetails</value>
-
 			</list>
 		</property>
 		<property name="hibernateProperties">

@@ -69,6 +69,7 @@ public class TargetService extends CommonService {
 					TargetDetails targetDetails = findByKeys(fieldValues, TargetDetails.class);
 					if (targetDetails == null) {
 						targetDetails = new TargetDetails();
+						targetDetails.setCreator(user);
 					} else {
 						targetDetails.setUpdatedBy(user);
 					}

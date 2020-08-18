@@ -57,11 +57,9 @@ public class BranchMapper {
 		branchDTO.setId(branch.getId());
 		branchDTO.setCode(branch.getCode());
 		branchDTO.setName(branch.getName());
-		
 		branchDTO.setDivision(branch.getDivision());
 		branchDTO.setDistrict(branch.getDistrict());
 		branchDTO.setUpazila(branch.getUpazila());
-		
 		branchDTO.setSsPosition(branch.getSsPosition());
 		branchDTO.setSkPosition(branch.getSkPosition());
 		branchDTO.setPaPosition(branch.getPaPosition());

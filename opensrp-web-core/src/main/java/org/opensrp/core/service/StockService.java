@@ -108,5 +108,4 @@ public class StockService extends CommonService {
 		}
 		return returnValue;
 	}
-	
 }
