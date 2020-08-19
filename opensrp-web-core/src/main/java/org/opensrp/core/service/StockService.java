@@ -48,6 +48,8 @@ public class StockService extends CommonService {
 			User user = (User) auth.getPrincipal();
 			Set<StockDetailsDTO> stockDetailsDTOs = dto.getStockDetailsDTOs();
 			Set<Integer> sellTos = dto.getSellTo();
+			int number = new Random().nextInt(999999);
+			String stockId = dto.getStockId() + String.format("%06d", number);
 			for (Integer sellTo : sellTos) {
 				Stock stock = findById(dto.getId(), "id", Stock.class);
 				if (stock == null) {
@@ -62,9 +64,6 @@ public class StockService extends CommonService {
 					}
 				} else {
 					stock.setCreator(user);
-					int number = new Random().nextInt(999999);
-					String stockId = dto.getStockId() + String.format("%06d", number);
-					stock.setStockId(stockId);
 					stock.setUuid(UUID.randomUUID().toString());
 				}
 				Set<StockDetails> _stockDetails = new HashSet<>();
@@ -84,6 +83,7 @@ public class StockService extends CommonService {
 					stockDetails.setStock(stock);
 					stockDetails.setMonth(stockDetailsDTO.getMonth());
 					stockDetails.setYear(stockDetailsDTO.getYear());
+					stockDetails.setStockInId(stockId);
 					stockDetails.setStartDate(stockDetailsDTO.getStartDate());
 					_stockDetails.add(stockDetails);
 					

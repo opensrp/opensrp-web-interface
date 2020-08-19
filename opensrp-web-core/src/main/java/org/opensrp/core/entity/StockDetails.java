@@ -86,6 +86,9 @@ public class StockDetails implements Serializable {
 	@Column(name = "sell_or_pass_to")
 	private int sellOrPassTo;
 	
+	@Column(name = "stock_in_id")
+	private String stockInId;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
 	@CreationTimestamp
@@ -259,6 +262,14 @@ public class StockDetails implements Serializable {
 	
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
+	}
+	
+	public String getStockInId() {
+		return stockInId;
+	}
+	
+	public void setStockInId(String stockInId) {
+		this.stockInId = stockInId;
 	}
 	
 }
