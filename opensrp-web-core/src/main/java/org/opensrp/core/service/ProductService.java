@@ -86,4 +86,42 @@ public class ProductService extends CommonService {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<ProductDTO> getAllProductList() {
+		Session session = getSessionFactory().openSession();
+		List<ProductDTO> result = null;
+		try {
+			String hql = ""
+					+ "SELECT p.id, "
+					+ "       p.\"name\", "
+					+ "       p.selling_price           AS sellingPrice, "
+					+ "       p.purchase_price          AS purchasePrice, "
+					+ "       p.description, "
+					+ "       String_agg(r.\"name\", ',') buyers "
+					+ "FROM   core.product p "
+					+ "       JOIN core.product_role pr "
+					+ "         ON p.id = pr.product_id "
+					+ "       JOIN core.\"role\" r "
+					+ "         ON pr.role_id = r.id "
+					+ "GROUP  BY p.id, "
+					+ "          p.\"name\", "
+					+ "          p.selling_price, "
+					+ "          p.purchase_price, "
+					+ "          p.description "
+					+ "ORDER  BY p.id ASC";
+			Query query = session.createSQLQuery(hql).addScalar("id",StandardBasicTypes.LONG).addScalar("name", StandardBasicTypes.STRING)
+						.addScalar("sellingPrice", StandardBasicTypes.FLOAT).addScalar("purchasePrice", StandardBasicTypes.FLOAT)
+						.addScalar("description", StandardBasicTypes.STRING).addScalar("buyers", StandardBasicTypes.STRING)
+						.setResultTransformer(new AliasToBeanResultTransformer(ProductDTO.class));
+			result = query.list();
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		
+		return result;
+	}
 }

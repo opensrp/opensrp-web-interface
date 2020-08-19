@@ -87,7 +87,9 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		requisitionTable = $('#requisitionAddList').DataTable();
+		requisitionTable = $('#requisitionAddList').DataTable({
+			  "pageLength": 25
+		});
 });
 
 

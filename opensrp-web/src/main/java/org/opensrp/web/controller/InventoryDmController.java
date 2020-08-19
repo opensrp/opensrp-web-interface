@@ -5,13 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpSession;
+
 import org.opensrp.core.dto.ProductDTO;
+import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Product;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
+import org.opensrp.core.service.BranchService;
+import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.ProductService;
 import org.opensrp.core.service.RoleService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
+import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,16 +32,18 @@ public class InventoryDmController {
 	
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private BranchService branchService;
+	
+	@Autowired
+	private SearchUtil searchUtil;
 
 	
 	@RequestMapping(value = "inventorydm/products-list.html", method = RequestMethod.GET)
 	public String productsList(Model model,Locale locale) {
-		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-/*		int roleId = 0;
-		for (Role role : loggedInUser.getRoles()) {
-			roleId = role.getId();
-		}
-		model.addAttribute("user", loggedInUser.getRoles());*/
+		List<ProductDTO> productList = productService.getAllProductList();
+		model.addAttribute("productList", productList);
 		model.addAttribute("locale", locale);
 		return "inventoryDm/products-list";
 	}
@@ -49,8 +57,13 @@ public class InventoryDmController {
 	}
 	
 	@RequestMapping(value = "inventorydm/requisition-list.html", method = RequestMethod.GET)
-	public String requisitonListForDm(Model model,Locale locale) {
+	public String requisitonListForDm(Model model,Locale locale,HttpSession session) {
+		List<Branch> branches = branchService.findAll("Branch");
+		List<Role> roles = roleServiceImpl.findAll("Role");
+		searchUtil.setDivisionAttribute(session);
 		model.addAttribute("locale", locale);
+		model.addAttribute("roles", roles);
+		model.addAttribute("branches", branches);
 		return "inventoryDm/requisition-list";
 	}
 	

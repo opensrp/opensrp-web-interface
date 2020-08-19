@@ -42,6 +42,18 @@
 								<th><spring:message code="lbl.seller"></spring:message></th>
 							</tr>
 						</thead>
+						<tbody>
+						<c:forEach var="product" items="${ productList }">
+									<tr>
+										<td>${ product.id }</td>
+										<td>${ product.name }</td>
+										<td>${ product.description }</td>
+										<td>${ product.purchasePrice }</td>
+										<td>${ product.sellingPrice }</td>
+										<td>${ product.buyers }</td>
+									</tr>
+								</c:forEach>
+						</tbody>
 					</table>
 			</div>
 		</div>
@@ -59,7 +71,9 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#productListDm').DataTable();
+		$('#productListDm').DataTable({
+			  "pageLength": 25
+		});
 });
 </script>
 

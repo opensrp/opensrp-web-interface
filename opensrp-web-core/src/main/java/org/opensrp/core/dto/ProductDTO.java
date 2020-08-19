@@ -25,6 +25,8 @@ public class ProductDTO {
 	
 	private int stock;
 	
+	private String buyers;
+	
 	public Long getId() {
 		return id;
 	}
@@ -97,6 +99,14 @@ public class ProductDTO {
 		this.stock = stock;
 	}
 	
+	public String getBuyers() {
+		return buyers;
+	}
+
+	public void setBuyers(String buyers) {
+		this.buyers = buyers;
+	}
+
 	@Override
 	public String toString() {
 		return "ProductDTO [id=" + id + ", name=" + name + ", description=" + description + ", purchasePrice="
