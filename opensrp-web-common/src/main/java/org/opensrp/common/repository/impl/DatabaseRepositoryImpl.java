@@ -2602,7 +2602,18 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		try {
 			Query query = session.createSQLQuery(sql)
 					.addScalar("locationOrProvider", StandardBasicTypes.STRING)
-
+					.addScalar("adolescentForumTarget", StandardBasicTypes.INTEGER)
+					.addScalar("adolescentForumAchievement", StandardBasicTypes.INTEGER)
+					.addScalar("womenForumTarget", StandardBasicTypes.INTEGER)
+					.addScalar("womenForumAchievement", StandardBasicTypes.INTEGER)
+					.addScalar("ncdForumTarget", StandardBasicTypes.INTEGER)
+					.addScalar("ncdForumAchievement", StandardBasicTypes.INTEGER)
+					.addScalar("childForumTarget", StandardBasicTypes.INTEGER)
+					.addScalar("childForumAchievement", StandardBasicTypes.INTEGER)
+					.addScalar("adultForumTarget", StandardBasicTypes.INTEGER)
+					.addScalar("adultForumAchievement", StandardBasicTypes.INTEGER)
+					.setString("startDate", startDate)
+					.setString("endDate", endDate)
 					.setResultTransformer(new AliasToBeanResultTransformer(ForumReportDTO.class));
 			report = query.list();
 		} catch (Exception e) {
@@ -2619,7 +2630,12 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		try {
 			Query query = session.createSQLQuery(sql)
 					.addScalar("locationOrProvider", StandardBasicTypes.STRING)
-
+					.addScalar("target", StandardBasicTypes.INTEGER)
+					.addScalar("achievement", StandardBasicTypes.INTEGER)
+					.addScalar("totalParticipant", StandardBasicTypes.INTEGER)
+					.addScalar("serviceSold", StandardBasicTypes.INTEGER)
+					.setString("startDate", startDate)
+					.setString("endDate", endDate)
 					.setResultTransformer(new AliasToBeanResultTransformer(ForumIndividualReportDTO.class));
 			report = query.list();
 		} catch (Exception e) {

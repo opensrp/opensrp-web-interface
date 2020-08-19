@@ -44,9 +44,6 @@ public class Stock implements Serializable {
 	
 	private String uuid;
 	
-	@Column(name = "stock_id")
-	private String stockId;
-	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
 	@CreationTimestamp
@@ -120,14 +117,6 @@ public class Stock implements Serializable {
 	
 	public void setUpdatedBy(User updatedBy) {
 		this.updatedBy = updatedBy;
-	}
-	
-	public String getStockId() {
-		return stockId;
-	}
-	
-	public void setStockId(String stockId) {
-		this.stockId = stockId;
 	}
 	
 }

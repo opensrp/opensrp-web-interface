@@ -1,6 +1,8 @@
 <%@page import="java.util.List"%>
 <%@ page import="org.opensrp.common.dto.ElcoReportDTO" %>
 <%@ page import="org.opensrp.common.dto.AggregatedReportDTO" %>
+<%@ page import="org.opensrp.common.dto.ForumIndividualReportDTO" %>
+<%@ page import="org.opensrp.web.util.ArithmeticUtil" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
 
@@ -23,6 +25,11 @@
 </head>
 <body>
 
+<%
+    List<ForumIndividualReportDTO> forumIndividualReport = (List<ForumIndividualReportDTO>) session.getAttribute("forumIndividualReport");
+%>
+
+
 <table class="display table table-bordered table-striped" id="forum"
        style="width: 100%;">
     <thead>
@@ -41,7 +48,17 @@
     </tr>
     </thead>
     </thead>
-    <tbody id="t-body">
+    <tbody id="t-body" style="font-size: 12px">
+    <% for ( ForumIndividualReportDTO report: forumIndividualReport) { %>
+    <tr>
+        <td><%= report.getLocationOrProvider() %></td>
+        <td><%= report.getTarget() %></td>
+        <td><%= report.getAchievement() %></td>
+        <td><%= report.getTotalParticipant() %> </td>
+        <td><%= ArithmeticUtil.getForumAvg(report.getTotalParticipant(), report.getAchievement()) %> </td>
+        <td><%= report.getServiceSold() %></td>
+    </tr>
+    <% } %>
     </tbody>
 </table>
 </body>

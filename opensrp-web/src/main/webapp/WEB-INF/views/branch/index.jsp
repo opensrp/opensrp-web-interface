@@ -22,6 +22,12 @@
 		font-size: 13px;
 		font-weight: bold;
 	}
+	.dataTables_wrapper .dataTables_paginate .paginate_button {
+		padding: 0px;
+	}
+	.pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover  {
+		margin: 0px;
+	}
 </style>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -38,7 +44,7 @@
 			</div>
 			<div class="portlet-body">
 				<div class="table-responsive">
-						<table class="display" id="branchList">
+						<table class=" table table-striped table-bordered" id="branchList">
 							<thead>
 							<tr>
 								<th><spring:message code="lbl.branchName"/></th>
@@ -83,10 +89,8 @@
 <!-- /.content-wrapper-->
 </div>
 
-<script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
-<script src="<c:url value='/resources/js/jquery.dataTables.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.jqueryui.min.js' />"></script>
-<script src="<c:url value='/resources/js/dataTables.buttons.js' />"></script>
+<jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
+<script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script>
 	jQuery(document).ready(function() {
 		Metronic.init(); // init metronic core components
@@ -104,7 +108,7 @@
 			],
 			lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
 			language: {
-				searchPlaceholder: "Branch Name / Code"
+				searchPlaceholder: "Name / Code"
 			}
 		});
 	});

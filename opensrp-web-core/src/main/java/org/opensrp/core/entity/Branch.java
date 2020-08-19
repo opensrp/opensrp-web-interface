@@ -39,10 +39,16 @@ public class Branch implements Serializable {
 	@Column(name = "code", unique = true, nullable = false)
 	private String code;
 	
+	@NotNull(message = "division can't be empty")
+	@Column(name = "division", nullable = false)
 	private Integer division;
 	
+	@NotNull(message = "district can't be empty")
+	@Column(name = "district", nullable = false)
 	private Integer district;
 	
+	@NotNull(message = "upazila can't be empty")
+	@Column(name = "upazila", nullable = false)
 	private Integer upazila;
 	
 	@Column(name = "sk_position")

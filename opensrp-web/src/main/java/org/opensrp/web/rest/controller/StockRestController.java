@@ -26,7 +26,7 @@ public class StockRestController {
 	public ResponseEntity<String> newPatient(@RequestBody StockDTO dto) throws Exception {
 		
 		JSONObject response = new JSONObject();
-		
+		System.err.println("DDD;" + dto);
 		try {
 			
 			Integer isSave = stockService.saveAll(dto);

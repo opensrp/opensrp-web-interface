@@ -69,12 +69,16 @@
                     <form:input path="id" name = "id" style="display: none;"/>
 
 
-                    <div class="form-group text-right">
-                     	<input type="submit" id="updateContinue" name="updateContinue" value="Update & Continue To Edit Catchment Area"
-								  class="btn btn-primary" />
+                    <div class="form-group text-right row" style="margin-top: 50px">
+                        <input type="submit" id="updateContinue" name="updateContinue" value="Update & Continue To Edit Catchment Area"
+                               class="btn btn-primary col-md-offset-6 col-md-3 col-xs-12" style="margin-bottom: 5px; padding: 7px" />
+
+
                         <input type="submit" id="update" name="update"  value="Update"
-								  class="btn btn-primary" />
-                        <a href="#"  rel="modal:close" style="margin-left: 20px;" class="btn btn-primary">Close</a>
+								  class="btn btn-primary col-md-1 col-xs-12 " style=" margin-left: 5px;margin-bottom: 5px" />
+
+                        <a href="#"  rel="modal:close" class="btn btn-primary col-md-1 col-xs-12 " style="margin-left: 5px; margin-bottom: 5px">Close</a>
+
 
                     </div>
                 </form:form>

@@ -124,9 +124,10 @@ License: You must have a valid license purchased only from themeforest(the above
 					
 					<li class="dropdown dropdown-user dropdown-dark">
 						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<span class="username username-hide-on-mobile">
+						<span class="username">
 						Login as <%=AuthenticationManagerUtil.getLoggedInUser().getUsername() %> </span>
 						<!-- DOC: Do not remove below empty space(&nbsp;) as its purposely used -->
+							<i class="fa fa-user"></i>
 						
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">

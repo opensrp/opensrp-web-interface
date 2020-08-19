@@ -1,18 +1,18 @@
 package org.opensrp.common.dto;
 
 public class ForumIndividualReportDTO {
-    private String providerOrLocation;
+    private String locationOrProvider;
     private Integer target;
     private Integer achievement;
     private Integer totalParticipant;
     private Integer serviceSold;
 
-    public String getProviderOrLocation() {
-        return providerOrLocation;
+    public String getLocationOrProvider() {
+        return locationOrProvider;
     }
 
-    public void setProviderOrLocation(String providerOrLocation) {
-        this.providerOrLocation = providerOrLocation;
+    public void setLocationOrProvider(String locationOrProvider) {
+        this.locationOrProvider = locationOrProvider;
     }
 
     public Integer getTarget() {

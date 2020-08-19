@@ -11,6 +11,8 @@ import org.opensrp.common.dto.AggregatedReportDTO;
 import org.opensrp.common.dto.COVID19ReportDTO;
 import org.opensrp.common.dto.ChildNutritionReportDTO;
 import org.opensrp.common.dto.ElcoReportDTO;
+import org.opensrp.common.dto.ForumIndividualReportDTO;
+import org.opensrp.common.dto.ForumReportDTO;
 import org.opensrp.common.dto.IndividualBiometricReportDTO;
 import org.opensrp.common.dto.PregnancyReportDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
@@ -123,10 +125,37 @@ public class ReportService {
 		return repository.getChildNutritionReport(startDate, endDate, sql);
 	}
 	
-	/*public List<ForumReportDTO> getForumReportDTO() {
-		String sql = "";
-		return null;
-	}*/
+	public List<ForumReportDTO> getForumReportByLocation(String startDate, String endDate, String parentLocationTag,
+	                                                     Integer parentLocationId, String parentLocationName,
+	                                                     String locationTag, String designation) {
+		String sql = "select * from report.get_forum_report_by_location(:startDate, :endDate, '" + parentLocationTag + "', "
+		        + parentLocationId + " , '" + parentLocationName + "' , '" + locationTag + "', '" + designation + "');";
+		return repository.getForumReport(startDate, endDate, sql);
+	}
+	
+	public List<ForumReportDTO> getForumReportBySK(String startDate, String endDate, String skIds, String designation) {
+		String sql = "select * from report.get_forum_report_by_sk(:startDate, :endDate, '{" + skIds + "}', '" + designation
+		        + "');";
+		return repository.getForumReport(startDate, endDate, sql);
+	}
+	
+	public List<ForumIndividualReportDTO> getForumIndividualReportByLocation(String startDate, String endDate,
+	                                                                         String parentLocationTag,
+	                                                                         Integer parentLocationId,
+	                                                                         String parentLocationName, String locationTag,
+	                                                                         String forumType, String designation) {
+		String sql = "select * from report.get_forum_individual_report_by_location(:startDate, :endDate, '"
+		        + parentLocationTag + "', " + parentLocationId + " , '" + parentLocationName + "' , '" + locationTag
+		        + "', '" + forumType + "', '" + designation + "');";
+		return repository.getForumIndividualReport(startDate, endDate, sql);
+	}
+	
+	public List<ForumIndividualReportDTO> getForumIndividualReportBySk(String startDate, String endDate, String forumType,
+	                                                                   String skIds, String designation) {
+		String sql = "select * from report.get_forum_individual_report_by_sk(:startDate, :endDate, '" + forumType + "' ,'{"
+		        + skIds + "}', '" + designation + "');";
+		return repository.getForumIndividualReport(startDate, endDate, sql);
+	}
 	
 	public JSONObject getCOVID19DataOfDataTable(Integer draw, Integer totalNumberOfRecords,
 	                                            List<COVID19ReportDTO> covid19Reports) throws JSONException {
