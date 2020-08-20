@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Stock History</title>
+<title>Requistion Details</title>
 	
 	
 
@@ -22,32 +22,36 @@
 		<div class="page-content">
 		<div class="portlet box blue-madison">
 					<div class="portlet-title">
-						<div class=center-caption> ${branchInfo[0][1]} - ${branchInfo[0][2]}</div>
+						<div class=center-caption>${branchInfo}</div>
 						</div>
+			<div class="portlet-body">
+			<div class="col-sm-12 text-center"><h4><u>Requisition - ${requisitionId}</u></h4></div>
+				
+				<table class="table table-striped table-bordered"
+					id="requisitionDetails">
+					<thead>
+						<tr>
+							<th><spring:message code="lbl.date"></spring:message></th>
+							<th><spring:message code="lbl.productName"></spring:message></th>
+							<th><spring:message code="lbl.description"></spring:message></th>
+							<th><spring:message code="lbl.quantity"></spring:message></th>
+							<th><spring:message code="lbl.buyingPrice"></spring:message></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach var="requisition" items="${ requisitionList }">
+							<tr>
+								<td>${ requisition.requisition_date }</td>
+								<td>${ requisition.product_name }</td>
+								<td>${ requisition.description }</td>
+								<td>${ requisition.quantity }</td>
+								<td>${ requisition.buying_price }</td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
 		</div>
-		<div class="col-lg-12 form-group requisition-add">
-	                <a class="btn btn-primary" id="newInvoice" href="<c:url value="/inventoryam/stock-add/${id}.html?lang=${locale}"/>">
-					<strong>
-					New Invoice
-				</strong></a>
-	            </div>
-					<div class="portlet-body">
-						<table class="table table-striped table-bordered" id="stockListOfAm">
-							<thead>
-								<tr>
-									<th><spring:message code="lbl.serialNo"></spring:message></th>
-									<th><spring:message code="lbl.date"></spring:message></th>
-									<th><spring:message code="lbl.invoiceNo"></spring:message></th>
-									<th><spring:message code="lbl.stockInId"></spring:message></th>
-									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
-									<th><spring:message code="lbl.requisitionBy"></spring:message></th>
-									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
-								</tr>
-							</thead>
-
-						</table>
-					</div>
-					
 		</br>
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>
@@ -62,7 +66,7 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#stockListOfAm').DataTable();
+		$('#requisitionDetails').DataTable();
 });
 </script>
 

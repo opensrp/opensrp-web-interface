@@ -24,7 +24,7 @@
 		<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="center-caption">
-							<spring:message code="lbl.branch"/> - ${id}
+							${branchInfo[0][1]} - ${branchInfo[0][2]}
 						</div>
 
 
@@ -33,8 +33,8 @@
 				<div class="portlet-body">
 				<div class="row">
 					<div class="col-lg-3 form-group">
-						<label for="invoiceNo">Invoice Number:</label> <input type="text"
-							class="form-control" id="invoiceNo" readonly>
+						<label for="invoiceNo">Invoice Number:</label> <input type="number"
+							class="form-control" id="invoiceNo" >
 					</div>
 					<div class="col-lg-3 form-group">
 						<label for="receiveDate">Receive Date:</label> <input type="date"

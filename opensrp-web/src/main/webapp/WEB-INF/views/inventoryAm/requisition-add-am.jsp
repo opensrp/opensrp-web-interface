@@ -96,18 +96,42 @@ jQuery(document).ready(function() {
 
 function mapRowData() {
 	var requisitionDetails = [];
-	 var data = requisitionTable.rows().data();
+	 /* var data = requisitionTable.row( element.parentNode ).data();
 	 data.each(function (value, index) {
 		 var productObject = {};
 		 productObject["productId"] = parseInt(value[0]);
 		 productObject["currentStock"] = parseInt(value[2]);
 
 		 var quantity = requisitionTable.cell(index,3).nodes().to$().find('input').val();
+		 var cell = requisitionTable.cell({ row: index, column: 3 }).node();
+		 var vaueTest = $('input', cell).val()
 		 productObject["qunatity"] = parseInt(quantity);
 		 if(!isNaN(productObject["qunatity"])) {
 			 requisitionDetails.push(productObject);
 		 }
-	 });
+	 }); */
+	 $('#requisitionAddList > tbody > tr').each(function (index, tr) {
+		    
+			var productObject = {};
+		    //get td of each row and insert it into cols array
+		    $(this).find('td').each(function (colIndex, row) {
+		    	if(colIndex == 0) {
+		    		productObject['productId'] = parseInt(row.textContent);
+		    	}
+		    	if(colIndex == 2) {
+		    		productObject['currentStock'] = parseInt(row.textContent);
+		    	}
+		    	if(colIndex == 3) {
+		    	 $(this).find('input').each(function() {
+		    		     productObject['qunatity'] = parseInt($(this).val());
+		    		   })
+		    	}
+		    });
+		    if(!isNaN(productObject["qunatity"])) {
+				 requisitionDetails.push(productObject);
+			 }
+		  }); 
+		  
 	 
 	 return requisitionDetails;
 }
@@ -129,14 +153,13 @@ function mapRowData() {
 	    	}
 	    });
 	    requisitionDetails.push(productObject);
-	  }); */
+	  });  */
 	  
 	  function submitRequisition() { 
-			debugger;
-			
 			var requisionDetailsArray = mapRowData();
 			if(requisionDetailsArray.length < 1) {
 				 $("#amountSelection").html("<strong>* Atleast one field need to be selected</strong>");
+				 $(window).scrollTop(0);
 				 return;
 			}
 			 $("#loading").show();

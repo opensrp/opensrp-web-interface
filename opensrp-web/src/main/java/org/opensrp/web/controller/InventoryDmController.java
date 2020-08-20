@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
 
+import org.opensrp.common.dto.UserDTO;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Product;
@@ -15,12 +16,14 @@ import org.opensrp.core.entity.User;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.ProductService;
+import org.opensrp.core.service.RequisitionService;
 import org.opensrp.core.service.RoleService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -38,11 +41,14 @@ public class InventoryDmController {
 	
 	@Autowired
 	private SearchUtil searchUtil;
+	
+	@Autowired
+	private RequisitionService requisitionService;
 
 	
 	@RequestMapping(value = "inventorydm/products-list.html", method = RequestMethod.GET)
 	public String productsList(Model model,Locale locale) {
-		List<ProductDTO> productList = productService.getAllProductList();
+		List<ProductDTO> productList = productService.getAllProductListDetails();
 		model.addAttribute("productList", productList);
 		model.addAttribute("locale", locale);
 		return "inventoryDm/products-list";
@@ -65,6 +71,13 @@ public class InventoryDmController {
 		model.addAttribute("roles", roles);
 		model.addAttribute("branches", branches);
 		return "inventoryDm/requisition-list";
+	}
+	
+	@RequestMapping(value = "inventoryam/user-by-branch/{id}", method = RequestMethod.GET)
+	public String userByBranch(Model model,@PathVariable("id") int id) {
+		List<UserDTO> userListByBranch= requisitionService.getUserListByBranch(id);
+		model.addAttribute("userList", userListByBranch);
+		return "inventoryDm/user-list";
 	}
 	
 	@RequestMapping(value = "inventorydm/stock-report.html", method = RequestMethod.GET)

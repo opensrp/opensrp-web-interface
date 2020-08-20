@@ -5,7 +5,7 @@ public class RequisitionQueryDto {
 	
 	private Long id;
 	
-	private int branchId;
+	private Integer branchId;
 	
 	private String requisition_id;
 	
@@ -22,6 +22,15 @@ public class RequisitionQueryDto {
 	private String first_name;
 	
 	private String last_name;
+	
+	private Integer quantity;
+	
+	private String product_name;
+	
+	private String description;
+	
+	private Float buying_price;
+	
 
 	public Long getId() {
 		return id;
@@ -102,4 +111,42 @@ public class RequisitionQueryDto {
 	public void setLast_name(String last_name) {
 		this.last_name = last_name;
 	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public String getProduct_name() {
+		return product_name;
+	}
+
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Float getBuying_price() {
+		return buying_price;
+	}
+
+	public void setBuying_price(Float buying_price) {
+		this.buying_price = buying_price;
+	}
+
+	public void setBranchId(Integer branchId) {
+		this.branchId = branchId;
+	}
+
+
 }

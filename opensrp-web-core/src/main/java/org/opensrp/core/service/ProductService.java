@@ -88,7 +88,7 @@ public class ProductService extends CommonService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ProductDTO> getAllProductList() {
+	public List<ProductDTO> getAllProductListDetails() {
 		Session session = getSessionFactory().openSession();
 		List<ProductDTO> result = null;
 		try {

@@ -34,7 +34,7 @@
 							Requisition(AM)
 						</div>
 
-
+					<input type="hidden" id="locale" value="${locale}">
 					</div>				
 					<div class="portlet-body">
 					
@@ -72,7 +72,7 @@
 								<div class="col-lg-3 form-group">
 								    <label for="cars"><spring:message code="lbl.branch"></spring:message> :</label> 
 								    <select class="form-control js-example-basic-multiple"
-										id="branch" name="branch">
+										id="branchDM" name="branchDM">
 										<option value="0"><spring:message
 												code="lbl.selectBranch" /></option>
 										<c:forEach items="${branches}" var="branch">
@@ -88,28 +88,29 @@
 								
 								<div class="col-lg-3 form-group">
 								    <label for="designation"><spring:message code="lbl.requisitionBy"></spring:message> :</label>
-									<select
-										name="requisitor" class="form-control" id="requisitor">
-										<option value="0">Select Requision By</option>
-										<c:forEach items="${roles}" var="role">
-										<option value="${role.id}">${role.name}</option>
-										</c:forEach>
+									<select class="form-control" id="selectRequisitionBy" name="selectRequisitionBy">
+										<option value="0"><spring:message
+												code="lbl.requisitionBy" /></option>
+										<option value=""></option>
+
 									</select>
 								</div>
 								
 								<div class="col-lg-3 form-group">
-								    <label for="from"><spring:message code="lbl.from"></spring:message> :</label>
+								    <label for="from"><spring:message code="lbl.from"></spring:message><span class="text-danger">*</span> :</label>
 									<input type="date" class="form-control" id="from">
-								</div>
+									<span class="text-danger" id="startDateValidation"></span>
+								</div> 
 								<div class="col-lg-3 form-group">
-									<label for="to"><spring:message code="lbl.to"></spring:message>:</label>
+									<label for="to"><spring:message code="lbl.to"></spring:message><span class="text-danger">*</span> :</label>
 									<input type="date" class="form-control" id="to">
+									<span class="text-danger" id="endDateValidation"></span>
 								</div>
 								
 							</div>
 							<div class="row">
 								<div class="col-lg-12 form-group text-right">
-									<button type="button" onclick="filter()"  class="btn btn-primary">View</button>
+									<button type="button" onclick="filter()"  class="btn btn-primary">Search</button>
 								</div>
      							</div>
 							<br/>
@@ -148,6 +149,10 @@ jQuery(document).ready(function() {
 	 Layout.init(); // init current layout
    //TableAdvanced.init();
 	$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
+	debugger;
+	var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+	var startDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
+	var endDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));
 	requisitionList = $('#requisitionListForAm').DataTable({
            bFilter: false,
            serverSide: true,
@@ -169,8 +174,8 @@ jQuery(document).ready(function() {
 					data.upazila = 0;
 					data.branch = 0;
 					data.requisitor = 0;
-					data.startDate = "2020-06-30",
-					data.endDate = "2020-08-30"
+					data.startDate = startDateDm,
+					data.endDate = endDateDm
 					
                },
                dataSrc: function(json){
@@ -197,17 +202,22 @@ function filter(){
 	var division = +$('#division').val().split("?")[0];;
 	var district = +$('#district').val().split("?")[0];;
 	var upazila = +$('#upazila').val().split("?")[0];;
-	var requisitor = +$('#requisitor').val();
-	var branch = +$('#branch').val();
+	var requisitor = +$('#selectRequisitionBy').val();
+	var branch = +$('#branchDM').val();
 	var startDate = $('#from').val();
 	var endDate = $('#to').val();
 	if(startDate == "") {
-		startDate = $.datepicker.formatDate('yy-mm-dd', new Date());
+		//startDate = $.datepicker.formatDate('yy-mm-dd', new Date());
+		$("#startDateValidation").html("<strong>Please fill out this field</strong>");
+		return;
 	}
-	
+	$("#startDateValidation").html("");
 	if(endDate == "") {
-		endDate = $.datepicker.formatDate('yy-mm-dd', new Date());
+		//endDate = $.datepicker.formatDate('yy-mm-dd', new Date());
+		$("#endDateValidation").html("<strong>Please fill out this field</strong>");
+		return;
 	}
+	$("#endDateValidation").html("");
 	
  		requisitionList = $('#requisitionListForAm').DataTable({
         bFilter: false,
@@ -253,6 +263,42 @@ function filter(){
         }
     });  
 }
+
+$("#branchDM").change(function (event) {
+	debugger;
+	let branchId = +$('#branchDM').val();
+	var url = "/opensrp-dashboard/inventoryam/user-by-branch/"+branchId;
+	$("#selectRequisitionBy").html("");
+	$.ajax({
+		type : "GET",
+		contentType : "application/json",
+		url : url,
+
+		dataType : 'html',
+		timeout : 100000,
+		beforeSend: function() {},
+		success : function(data) {
+			debugger;
+			$("#selectRequisitionBy").html(data);
+		},
+		error : function(e) {
+			console.log("ERROR: ", e);
+			display(e);
+		},
+		done : function(e) {
+
+			console.log("DONE");
+			//enableSearchButton(true);
+		}
+	});
+});
+
+function navigateTodetails(requisitionId,branchName,branchCode) {
+var locale = $('#locale').val();
+var branchString= branchName+"-"+branchCode;
+window.location.replace("/opensrp-dashboard/inventory/requisition-details/"+requisitionId+".html?lang="+locale+"&&branch="+branchString+"");
+}
+
 
 </script>
 

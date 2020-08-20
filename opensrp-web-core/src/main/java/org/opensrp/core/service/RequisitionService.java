@@ -126,8 +126,8 @@ public class RequisitionService extends CommonService {
 				requisition.put(dto.getRequisition_date());
 				requisition.put(dto.getRequisition_id());
 				requisition.put(dto.getBranch_name() + "("+dto.getBranch_code()+")");
-				requisition.put(dto.getUsername());
-				String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"#\">View details</a> </div>";
+				requisition.put(dto.getFirst_name() + dto.getLast_name());
+				String view = "<div class='col-sm-12 form-group'><a id=\"viewDetails\" class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"javascript:;\" onclick='navigateTodetails("+dto.getId()+",\""+dto.getBranch_name()+"\",\""+dto.getBranch_code()+"\")'>View details</a> </div>";
 				requisition.put(view);
 				array.put(requisition);
 			}
@@ -153,6 +153,43 @@ public class RequisitionService extends CommonService {
 			Query query = session.createSQLQuery(userSql).addScalar("id",StandardBasicTypes.INTEGER)
 							.addScalar("firstName",StandardBasicTypes.STRING).addScalar("lastName",StandardBasicTypes.STRING)
 						.setResultTransformer(new AliasToBeanResultTransformer(UserDTO.class));
+			result = query.list();
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<RequisitionQueryDto> getRequistionDetailsById(Integer requisitionId) {
+		Session session = getSessionFactory().openSession();
+		List<RequisitionQueryDto> result = null;
+		try {
+			String rawSql = ""
+					+ "SELECT req.requisition_id, "
+					+ "       rd.qunatity     AS quantity, "
+					+ "       p.\"name\"        AS product_name, "
+					+ "       p.description, "
+					+ "       p.selling_price AS buying_price, "
+					+ "       req.\"date\" AS requisition_date "
+					+ "FROM   core.requisition req "
+					+ "       JOIN core.requisition_details rd "
+					+ "         ON rd.requisition_id = req.id "
+					+ "       JOIN core.product p "
+					+ "         ON p.id = rd.product_id "
+					+ "WHERE  req.id = "+requisitionId+" order by p.id";
+			Query query = session.createSQLQuery(rawSql).addScalar("requisition_id",StandardBasicTypes.STRING)
+							.addScalar("quantity",StandardBasicTypes.INTEGER)
+							.addScalar("product_name",StandardBasicTypes.STRING)
+							.addScalar("description",StandardBasicTypes.STRING)
+							.addScalar("buying_price",StandardBasicTypes.FLOAT)
+							.addScalar("requisition_date",StandardBasicTypes.STRING)
+							.setResultTransformer(new AliasToBeanResultTransformer(RequisitionQueryDto.class));
 			result = query.list();
 		}
 		catch (Exception e) {

@@ -24,24 +24,49 @@
 					<div class="portlet-title">
 						<div class=center-caption>${branchInfo[0][1]} - ${branchInfo[0][2]}</div>
 						</div>
+				<input type="hidden" id="selectRequisitionBy" value="<%=AuthenticationManagerUtil.getLoggedInUser().getId() %>">
+				<input type="hidden" id="branchid" value="${branchInfo[0][0]}">
 			<div class="portlet-body">
 				<div class="col-lg-12 form-group requisition-add">
 					<a class="btn btn-primary" id="addRequisition"
 						href="<c:url value="/inventoryam/requisition-add/${branchInfo[0][0]}.html?lang=${locale}"/>">
 						<strong> Add Requisition </strong>
 					</a>
+				<input type="hidden" id="locale" value="${locale}">
 				</div>
-				<table class="table table-striped table-bordered"
-					id="requisitionListOfAm">
-					<thead>
-						<tr>
-							<th><spring:message code="lbl.serialNo"></spring:message></th>
-							<th><spring:message code="lbl.requisitionId"></spring:message></th>
-							<th><spring:message code="lbl.date"></spring:message></th>
-							<th><spring:message code="lbl.actionRequisition"></spring:message></th>
-						</tr>
-					</thead>
-				</table>
+				<div class="row">
+
+					<div class="col-lg-3 form-group">
+						<label for="from"><spring:message code="lbl.from"></spring:message><span
+							class="text-danger">*</span> :</label> <input type="date"
+							class="form-control" id="from"> <span class="text-danger"
+							id="startDateValidation"></span>
+					</div>
+					<div class="col-lg-3 form-group">
+						<label for="to"><spring:message code="lbl.to"></spring:message><span
+							class="text-danger">*</span> :</label> <input type="date"
+							class="form-control" id="to"> <span class="text-danger"
+							id="endDateValidation"></span>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-lg-12 form-group text-right">
+						<button type="button" onclick="filter()" class="btn btn-primary">Search</button>
+					</div>
+				</div>
+				<table class="table table-striped table-bordered " id="requisitionListForAm">
+							<thead>
+								<tr>
+								    <th><spring:message code="lbl.serialNo"></spring:message></th>
+									<th><spring:message code="lbl.date"></spring:message></th>
+									<th><spring:message code="lbl.requisitionId"></spring:message></th>
+									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
+									<th><spring:message code="lbl.requisitionBy"></spring:message></th>
+									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
+								</tr>
+							</thead>
+						</table>
 			</div>
 		</div>
 		</br>
@@ -54,12 +79,133 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script>
+let requisitionList;
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
-		Layout.init(); // init current layout
+	 Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#requisitionListOfAm').DataTable();
+	var branchId = +$('#branchid').val();
+	var requisitor = +$('#selectRequisitionBy').val();
+	var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+	var startDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
+	var endDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));
+	requisitionList = $('#requisitionListForAm').DataTable({
+           bFilter: false,
+           serverSide: true,
+           processing: true,
+           columnDefs: [
+               { targets: [0], orderable: false },
+               { width: "10%", targets: 0 },
+               { width: "20%", targets: 1 },
+               { width: "20%", targets: 2 },
+               { width: "20%", targets: 3,"visible": false },
+               { width: "20%", targets: 4,"visible": false },
+               { width: "20%", targets: 5 }
+           ],
+           ajax: {
+               url: "/opensrp-dashboard/rest/api/v1/requisition/list",
+               data: function(data){
+					data.division = 0;
+					data.district = 0;
+					data.upazila = 0;
+					data.branch = branchId;
+					data.requisitor = requisitor;
+					data.startDate = startDateDm,
+					data.endDate = endDateDm
+					
+               },
+               dataSrc: function(json){
+                   if(json.data){
+                       return json.data;
+                   }
+                   else {
+                       return [];
+                   }
+               },
+               complete: function() {
+               },
+               type: 'GET'
+           },
+           bInfo: true,
+           destroy: true,
+           language: {
+               searchPlaceholder: ""
+           }
+       });
 });
+
+function filter(){
+/* 	var division = +$('#division').val().split("?")[0];;
+	var district = +$('#district').val().split("?")[0];;
+	var upazila = +$('#upazila').val().split("?")[0];; */
+	var branchId = +$('#branchid').val();
+	var requisitor = +$('#selectRequisitionBy').val();
+	var startDate = $('#from').val();
+	var endDate = $('#to').val();
+	if(startDate == "") {
+		//startDate = $.datepicker.formatDate('yy-mm-dd', new Date());
+		$("#startDateValidation").html("<strong>Please fill out this field</strong>");
+		return;
+	}
+	$("#startDateValidation").html("");
+	if(endDate == "") {
+		//endDate = $.datepicker.formatDate('yy-mm-dd', new Date());
+		$("#endDateValidation").html("<strong>Please fill out this field</strong>");
+		return;
+	}
+	$("#endDateValidation").html("");
+	
+ 		requisitionList = $('#requisitionListForAm').DataTable({
+        bFilter: false,
+        serverSide: true,
+        processing: true,
+        columnDefs: [
+             { targets: [0], orderable: false },
+             { width: "10%", targets: 0 },
+             { width: "20%", targets: 1 },
+             { width: "20%", targets: 2 },
+             { width: "20%", targets: 3,"visible": false },
+             { width: "20%", targets: 4,"visible": false },
+             { width: "20%", targets: 5 }
+        ],
+        ajax: {
+            url: "/opensrp-dashboard/rest/api/v1/requisition/list",
+            data: function(data){
+					data.division = 0;
+					data.district = 0;
+					data.upazila = 0;
+					data.branch = branchId;
+					data.requisitor = requisitor;
+					data.startDate = startDate,
+					data.endDate = endDate
+					
+            },
+            dataSrc: function(json){
+                if(json.data){
+                    return json.data;
+                }
+                else {
+                    return [];
+                }
+            },
+            complete: function() {
+            },
+            type: 'GET'
+        },
+        bInfo: true,
+        destroy: true,
+        language: {
+            searchPlaceholder: ""
+        }
+    });  
+}
+
+function navigateTodetails(requisitionId,branchName,branchCode) {
+	var locale = $('#locale').val();
+	var branchString= branchName+"-"+branchCode;
+	window.location.replace("/opensrp-dashboard/inventory/requisition-details/"+requisitionId+".html?lang="+locale+"&&branch="+branchString+"");
+}
+
 </script>
 
 
