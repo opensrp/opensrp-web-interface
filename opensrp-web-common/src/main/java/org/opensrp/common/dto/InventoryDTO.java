@@ -22,6 +22,8 @@ public class InventoryDTO {
 	
 	private String firstName;
 	
+	private String roleName;
+	
 	public Long getId() {
 		return id;
 	}
@@ -84,6 +86,14 @@ public class InventoryDTO {
 	
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+	
+	public String getRoleName() {
+		return roleName;
+	}
+	
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
 	
 	@Transient

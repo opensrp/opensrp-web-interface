@@ -174,6 +174,53 @@ public class StockService extends CommonService {
 		return total.intValue();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<InventoryDTO> getPassStockUserList(int branchId, String name, int roleId, Integer length, Integer start,
+	                                               String orderColumn, String orderDirection) {
+		
+		Session session = getSessionFactory().openSession();
+		List<InventoryDTO> dtos = new ArrayList<>();
+		try {
+			String hql = "select id,role_name roleName,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName  from core.pass_stock_user_list_by_role_branch(:branchId,:roleId,:name,:start,:length)";
+			Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
+			        .addScalar("roleName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
+			        .addScalar("lastName", StandardBasicTypes.STRING).setInteger("branchId", branchId)
+			        .setInteger("roleId", roleId).setString("name", name).setInteger("length", length)
+			        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
+			dtos = query.list();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public int getPassStockUserListCount(int branchId, int roleId, String name) {
+		
+		Session session = getSessionFactory().openSession();
+		BigInteger total = null;
+		try {
+			String hql = "select  * from core.pass_stock_user_list_by_role_branch_count(:branchId,:roleId,:name)";
+			Query query = session.createSQLQuery(hql).setInteger("branchId", branchId).setInteger("roleId", roleId)
+			        .setString("name", name);
+			total = (BigInteger) query.uniqueResult();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return total.intValue();
+	}
+	
 	public JSONObject getStockInListDataOfDataTable(Integer draw, int patientCount, List<InventoryDTO> dtos)
 	    throws JSONException {
 		JSONObject response = new JSONObject();
@@ -189,16 +236,30 @@ public class StockService extends CommonService {
 			patient.put(dto.getStockInId());
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
 			patient.put("" + dto.getFullName());
-			
-			/*String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"view/"
-			        + dto.getEncounterId()
-			        + "/details.html\">View details</a> </div><div class='col-sm-12 form-group'><div id="
-			        + dto.getEncounterId()
-			        + " class=\"sendPrescriptionMessageToMobile bt col-sm-12 form-group btn btn-warning sm\">Send prescription message</div></div>";
-			patient.put(view);*/
-			
 			String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"view/"
 			        + dto.getId() + "/details.html\">View details</a> </div>";
+			patient.put(view);
+			array.put(patient);
+		}
+		response.put("data", array);
+		return response;
+	}
+	
+	public JSONObject getPassStockUserListDataOfDataTable(Integer draw, int passStockUserCount, List<InventoryDTO> dtos)
+	    throws JSONException {
+		JSONObject response = new JSONObject();
+		response.put("draw", draw + 1);
+		response.put("recordsTotal", passStockUserCount);
+		response.put("recordsFiltered", passStockUserCount);
+		JSONArray array = new JSONArray();
+		for (InventoryDTO dto : dtos) {
+			JSONArray patient = new JSONArray();
+			patient.put(dto.getFullName());
+			patient.put(dto.getRoleName());
+			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
+			
+			String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"view/"
+			        + dto.getId() + "/details.html\">Pass stock</a> </div>";
 			patient.put(view);
 			array.put(patient);
 		}

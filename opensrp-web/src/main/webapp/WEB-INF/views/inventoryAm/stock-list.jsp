@@ -43,7 +43,7 @@
 				</div>
 				<div class="col-lg-4" style="padding-top: 20px">
 				
-					<div  onclick="filter()"  class="btn btn-success btn-lg">Search</div>
+					<div  onclick="filter()"  class="btn btn-primary btn-lg">Search</div>
 				</div>
 			
 			</div>
@@ -116,14 +116,14 @@ $(function() {
 </script>
 <script>
 
-    let patientList;
+    let stockList;
     $(document).ready(function() {
-        patientList = $('#stockListOfAm').DataTable({
+    	stockList = $('#stockListOfAm').DataTable({
             bFilter: false,
             serverSide: true,
             processing: true,
             columnDefs: [
-                { targets: [0, 1, 2, 3, 4,5,6], orderable: true },
+                { targets: [0, 1, 2, 3, 4,5,6], orderable: false },
                 { width: "20%", targets: 0 },
                 { width: "20%", targets: 1 },
                 { width: "20%", targets: 2 },
@@ -168,7 +168,7 @@ $(function() {
 
 function filter(){
 	
-	 patientList = $('#stockListOfAm').DataTable({
+	stockList = $('#stockListOfAm').DataTable({
          bFilter: false,
          serverSide: true,
          processing: true,

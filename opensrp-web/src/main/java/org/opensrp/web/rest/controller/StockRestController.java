@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.InventoryDTO;
@@ -57,7 +58,7 @@ public class StockRestController {
 	}
 	
 	@RequestMapping(value = "/in-list", method = RequestMethod.GET)
-	public ResponseEntity<String> allPatientSchedule(HttpServletRequest request) throws JSONException {
+	public ResponseEntity<String> allStockInList(HttpServletRequest request) throws JSONException {
 		Integer start = Integer.valueOf(request.getParameter("start"));
 		Integer length = Integer.valueOf(request.getParameter("length"));
 		//String name = request.getParameter("search[value]");
@@ -83,6 +84,34 @@ public class StockRestController {
 		    division, district, upazila, userId);
 		
 		JSONObject response = stockService.getStockInListDataOfDataTable(draw, stockInListCount, stockInList);
+		return new ResponseEntity<>(response.toString(), OK);
+	}
+	
+	@RequestMapping(value = "/pass-user-list", method = RequestMethod.GET)
+	public ResponseEntity<String> allStockPass(HttpServletRequest request) throws JSONException {
+		Integer start = Integer.valueOf(request.getParameter("start"));
+		Integer length = Integer.valueOf(request.getParameter("length"));
+		//String name = request.getParameter("search[value]");
+		Integer draw = Integer.valueOf(request.getParameter("draw"));
+		String orderColumn = request.getParameter("order[0][column]");
+		String orderDirection = request.getParameter("order[0][dir]");
+		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
+		
+		String search = request.getParameter("search");
+		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		String name = request.getParameter("name");
+		if (!StringUtils.isBlank(name)) {
+			name = "%" + name + "%";
+		}
+		int roleId = Integer.parseInt(request.getParameter("roleId"));
+		
+		List<InventoryDTO> stockPassUserList = stockService.getPassStockUserList(branchId, name, roleId, length, start,
+		    orderColumn, orderDirection);
+		
+		int stockPassUserListCount = stockService.getPassStockUserListCount(branchId, roleId, name);
+		
+		JSONObject response = stockService.getPassStockUserListDataOfDataTable(draw, stockPassUserListCount,
+		    stockPassUserList);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 }
