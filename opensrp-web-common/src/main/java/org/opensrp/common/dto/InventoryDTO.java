@@ -24,6 +24,12 @@ public class InventoryDTO {
 	
 	private String roleName;
 	
+	private String SKName;
+	
+	private float salesPrice;
+	
+	private float purchasePrice;
+	
 	public Long getId() {
 		return id;
 	}
@@ -104,6 +110,30 @@ public class InventoryDTO {
 		} else
 			fullName = firstName;
 		return fullName.trim();
+	}
+	
+	public String getSKName() {
+		return SKName;
+	}
+	
+	public void setSKName(String sKName) {
+		SKName = sKName;
+	}
+	
+	public float getSalesPrice() {
+		return salesPrice;
+	}
+	
+	public void setSalesPrice(float salesPrice) {
+		this.salesPrice = salesPrice;
+	}
+	
+	public float getPurchasePrice() {
+		return purchasePrice;
+	}
+	
+	public void setPurchasePrice(float purchasePrice) {
+		this.purchasePrice = purchasePrice;
 	}
 	
 	@Override

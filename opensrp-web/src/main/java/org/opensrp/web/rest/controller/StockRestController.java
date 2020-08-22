@@ -114,4 +114,33 @@ public class StockRestController {
 		    stockPassUserList);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
+	
+	@RequestMapping(value = "/sell_to_ss_list", method = RequestMethod.GET)
+	public ResponseEntity<String> sellToSSlist(HttpServletRequest request) throws JSONException {
+		Integer start = Integer.valueOf(request.getParameter("start"));
+		Integer length = Integer.valueOf(request.getParameter("length"));
+		//String name = request.getParameter("search[value]");
+		Integer draw = Integer.valueOf(request.getParameter("draw"));
+		String orderColumn = request.getParameter("order[0][column]");
+		String orderDirection = request.getParameter("order[0][dir]");
+		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
+		
+		String name = request.getParameter("search");
+		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		
+		int division = Integer.parseInt(request.getParameter("division"));
+		int district = Integer.parseInt(request.getParameter("district"));
+		int upazila = Integer.parseInt(request.getParameter("upazila"));
+		int skId = Integer.parseInt(request.getParameter("skId"));
+		int year = Integer.parseInt(request.getParameter("year"));
+		int month = Integer.parseInt(request.getParameter("month"));
+		System.err.println("" + year + ":" + month);
+		List<InventoryDTO> stockInList = stockService.getsellToSSList(branchId, skId, division, district, upazila, year,
+		    month, length, start, orderColumn, orderDirection);
+		
+		int stockInListCount = stockService.getsellToSSListCount(branchId, skId, division, district, upazila, year, month);
+		
+		JSONObject response = stockService.getSellToSSListDataOfDataTable(draw, stockInListCount, stockInList);
+		return new ResponseEntity<>(response.toString(), OK);
+	}
 }

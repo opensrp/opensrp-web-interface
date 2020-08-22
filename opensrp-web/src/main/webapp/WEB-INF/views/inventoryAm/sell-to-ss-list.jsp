@@ -12,6 +12,7 @@
 <title>Sell To SS</title>
 	
 	
+<c:url var="sell_to_ss_list" value="/rest/api/v1/stock/sell_to_ss_list" />
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -49,7 +50,7 @@
 										<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sellToManyModal">Sell To Many</button>				
 								</div>
 								<div class="col-lg-2 form-group text-right">
-									<button type="submit" onclick="" class="btn btn-primary"
+									<button type="submit" onclick="filter()" class="btn btn-primary"
 										value="confirm">View SS List</button>
 								</div></div>
 						</div>
@@ -59,7 +60,7 @@
 						<table class="table table-striped table-bordered " id="StockSellHistory">
 							<thead>
 								<tr>
-								    <th><spring:message code="lbl.serialNo"></spring:message></th>
+								   <%--  <th><spring:message code="lbl.serialNo"></spring:message></th> --%>
 									<th><spring:message code="lbl.name"></spring:message></th>
 									<th><spring:message code="lbl.designation"></spring:message></th>
 									<th><spring:message code="lbl.skname"></spring:message></th>
@@ -68,18 +69,7 @@
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
 								</tr>
 							</thead>
-							<tbody>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td><a class="btn btn-primary" id="addRequisition" href="<c:url value="/inventoryam/individual-ss-sell/${id}/6540.html?lang=${locale}"/>">
-					<strong>
-					Sell Products
-				</strong></a></td>
-							</tbody>
+							
 						</table>
 						</div>
 						<!-- Modal -->
@@ -141,7 +131,7 @@
 											id="sellToManySSProductList">
 											<thead>
 												<tr>
-													<th><spring:message code="lbl.serialNo"></spring:message></th>
+													<th><spring:message code="lbl.serialNo"></spring:message></th> 
 													<th><spring:message code="lbl.name"></spring:message></th>
 													<th><spring:message code="lbl.productUnitPrice"></spring:message></th>
 													<th><spring:message code="lbl.perPersonProduct"></spring:message></th>
@@ -226,7 +216,7 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#StockSellHistory').DataTable();
+		//$('#StockSellHistory').DataTable();
 		$('#sellToManySSList').DataTable();
 		$('#sellToManySSProductList').DataTable();
 });
@@ -249,9 +239,115 @@ jQuery(function() {
 });
 
 </script>
+<script>
+    let stockList;
+    $(document).ready(function() {
+    	var today = new Date();    	
+    	var currentMonth = today.getMonth() + 1; 
+    	var currentYear = today.getFullYear();
+    	
+    	stockList = $('#StockSellHistory').DataTable({
+            bFilter: false,
+            serverSide: true,
+            processing: true,
+            columnDefs: [
+                { targets: [0, 1, 2, 3, 4,5], orderable: false },
+                { width: "20%", targets: 0 },
+                { width: "20%", targets: 1 },
+                { width: "20%", targets: 2 },
+                { width: "20%", targets: 3 },
+                { width: "20%", targets: 4 },
+                { width: "20%", targets: 5 }
+                
+            ],
+            ajax: {
+                url: "${sell_to_ss_list}",
+                data: function(data){
+                	data.year = currentYear;
+                    data.month =currentMonth;
+                    data.branchId = ${id};
+                    data.division=0;
+                    data.district=0;
+                    data.upazila=0;
+                    data.skId=0;
+                    
+                },
+                dataSrc: function(json){
+                    if(json.data){
+                        return json.data;
+                    }
+                    else {
+                        return [];
+                    }
+                },
+                complete: function() {
+                },
+                type: 'GET'
+            },
+            bInfo: true,
+            destroy: true,
+            language: {
+                searchPlaceholder: ""
+            }
+        });
+    });
 
-
-
+function filter(){
+	
+	var d = new Date($("#startYear").datepicker("getDate"));
+	var date = d. getDate();
+	var month = d. getMonth() + 1; 
+	var year = d. getFullYear();
+	
+	stockList = $('#StockSellHistory').DataTable({
+         bFilter: false,
+         serverSide: true,
+         processing: true,
+         columnDefs: [
+             { targets: [0, 1, 2, 3, 4,5], orderable: false },
+             { width: "20%", targets: 0 },
+             { width: "20%", targets: 1 },
+             { width: "20%", targets: 2 },
+             { width: "20%", targets: 3 },
+             { width: "20%", targets: 4 },
+             { width: "20%", targets: 5 }
+         ],
+         ajax: {
+             url: "${sell_to_ss_list}",
+             data: function(data){
+            	
+            	//let dateFieldvalue = $("#dateRange").val();            	
+     	      	data.search = $('#search').val();            	
+            	
+            	
+     	      	data.year = year;
+                data.month =month;
+                data.branchId =${id};
+                data.division=0;
+                data.district=0;
+                data.upazila=0;
+                data.skId=0;
+             },
+             dataSrc: function(json){
+                 if(json.data){
+                     return json.data;
+                 }
+                 else {
+                     return [];
+                 }
+             },
+             complete: function() {
+             },
+             type: 'GET'
+         },
+         bInfo: true,
+         destroy: true,
+         language: {
+             searchPlaceholder: ""
+         }
+     });
+}
+</script>
 
 
 

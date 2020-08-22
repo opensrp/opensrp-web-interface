@@ -266,4 +266,84 @@ public class StockService extends CommonService {
 		response.put("data", array);
 		return response;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<InventoryDTO> getsellToSSList(int branchId, int skId, int division, int district, int upazila, int year,
+	                                          int month, Integer length, Integer start, String orderColumn,
+	                                          String orderDirection) {
+		
+		Session session = getSessionFactory().openSession();
+		List<InventoryDTO> dtos = new ArrayList<>();
+		try {
+			String hql = "select ss_id id,sell_amount salesPrice, purchase_amount purchasePrice, sk_name SKName,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName from core.sell_report(:branchId,:skId,:division,:district,:upazila,:year,:month,:start,:length)";
+			Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
+			        .addScalar("salesPrice", StandardBasicTypes.FLOAT).addScalar("purchasePrice", StandardBasicTypes.FLOAT)
+			        .addScalar("SKName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
+			        .addScalar("lastName", StandardBasicTypes.STRING).setInteger("branchId", branchId)
+			        .setInteger("skId", skId).setInteger("division", division).setInteger("district", district)
+			        .setInteger("upazila", upazila).setInteger("year", year).setInteger("month", month)
+			        .setInteger("length", length).setInteger("start", start)
+			        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
+			dtos = query.list();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dtos;
+	}
+	
+	@Transactional
+	public int getsellToSSListCount(int branchId, int skId, int division, int district, int upazila, int year, int month) {
+		
+		Session session = getSessionFactory().openSession();
+		BigInteger total = null;
+		try {
+			String hql = "select * from core.sell_report_count(:branchId,:skId,:division,:district,:upazila,:year,:month)";
+			Query query = session.createSQLQuery(hql).setInteger("branchId", branchId).setInteger("skId", skId)
+			        .setInteger("division", division).setInteger("district", district).setInteger("upazila", upazila)
+			        .setInteger("year", year).setInteger("month", month);
+			
+			total = (BigInteger) query.uniqueResult();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return total.intValue();
+	}
+	
+	public JSONObject getSellToSSListDataOfDataTable(Integer draw, int sellToSSCount, List<InventoryDTO> dtos)
+	    throws JSONException {
+		JSONObject response = new JSONObject();
+		response.put("draw", draw + 1);
+		response.put("recordsTotal", sellToSSCount);
+		response.put("recordsFiltered", sellToSSCount);
+		JSONArray array = new JSONArray();
+		
+		for (InventoryDTO dto : dtos) {
+			JSONArray patient = new JSONArray();
+			System.err.println(dto.getSalesPrice());
+			patient.put(dto.getFullName());
+			patient.put("SS");
+			patient.put(dto.getSKName());
+			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
+			patient.put(dto.getSalesPrice());
+			String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"individual-ss-sell/"
+			        + dto.getId() + "/" + dto.getId() + ".html\"><strong>Sell Products </strong></a> </div>";
+			
+			patient.put(view);
+			array.put(patient);
+			
+		}
+		response.put("data", array);
+		return response;
+	}
+	
 }
