@@ -140,7 +140,7 @@ public class StockRestController {
 		int skId = Integer.parseInt(request.getParameter("skId"));
 		int year = Integer.parseInt(request.getParameter("year"));
 		int month = Integer.parseInt(request.getParameter("month"));
-		System.err.println("" + year + ":" + month);
+		
 		List<InventoryDTO> stockInList = stockService.getsellToSSList(branchId, skId, division, district, upazila, year,
 		    month, length, start, orderColumn, orderDirection);
 		

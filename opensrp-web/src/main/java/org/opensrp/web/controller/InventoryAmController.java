@@ -5,16 +5,14 @@ import java.util.Locale;
 
 import org.opensrp.common.dto.RequisitionQueryDto;
 import org.opensrp.core.dto.ProductDTO;
-import org.opensrp.core.dto.RequisitionDTO;
 import org.opensrp.core.entity.Branch;
-import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.ProductService;
 import org.opensrp.core.service.RequisitionService;
+import org.opensrp.core.service.StockService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class InventoryAmController {
+	
 	@Autowired
 	private BranchService branchService;
 	
@@ -33,8 +32,11 @@ public class InventoryAmController {
 	@Autowired
 	private RequisitionService requisitionService;
 	
+	@Autowired
+	private StockService stockService;
+	
 	@RequestMapping(value = "inventoryam/myinventory.html", method = RequestMethod.GET)
-	public String myInventory(Model model,Locale locale) {
+	public String myInventory(Model model, Locale locale) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
 		model.addAttribute("branches", branches);
@@ -42,17 +44,16 @@ public class InventoryAmController {
 		return "inventoryAm/my-inventory";
 	}
 	
-	
 	@RequestMapping(value = "inventoryam/myinventory-list/{id}.html", method = RequestMethod.GET)
 	public String myInventoryList(Model model, Locale locale, @PathVariable("id") String id) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Object[]> branchInfo = branchService.getBranchByUser(id, loggedInUser);
 		List<ProductDTO> productInfo = productService.productListByBranchWithCurrentStock(Integer.parseInt(id), 0);
-//		for (ProductDTO productDTO : productInfo) {
-//			System.out.println(productDTO.getName());
-//			System.out.println(productDTO.getDescription());
-//			System.out.println(productDTO.getId());
-//		}
+		//		for (ProductDTO productDTO : productInfo) {
+		//			System.out.println(productDTO.getName());
+		//			System.out.println(productDTO.getDescription());
+		//			System.out.println(productDTO.getId());
+		//		}
 		model.addAttribute("productList", productInfo);
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("id", id);
@@ -79,10 +80,11 @@ public class InventoryAmController {
 	}
 	
 	@RequestMapping(value = "inventory/requisition-details/{id}.html", method = RequestMethod.GET)
-	public String requisitionDetails(Model model, Locale locale, @PathVariable("id") String id,@RequestParam(value = "branch") String branch) {
+	public String requisitionDetails(Model model, Locale locale, @PathVariable("id") String id,
+	                                 @RequestParam(value = "branch") String branch) {
 		//User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		//List<Object[]> branchInfo = branchService.getBranchByUser(branchId, loggedInUser);
-		List<RequisitionQueryDto> requisitionList = requisitionService.getRequistionDetailsById(Integer.parseInt(id));		
+		List<RequisitionQueryDto> requisitionList = requisitionService.getRequistionDetailsById(Integer.parseInt(id));
 		model.addAttribute("branchInfo", branch);
 		model.addAttribute("requisitionList", requisitionList);
 		model.addAttribute("requisitionId", requisitionList.get(0).getRequisition_id());
@@ -143,7 +145,8 @@ public class InventoryAmController {
 	}
 	
 	@RequestMapping(value = "inventoryam/individual-stock/{id}/{skid}.html", method = RequestMethod.GET)
-	public String passStockInventoryIndividual(Model model, Locale locale, @PathVariable("id") int id, @PathVariable("skid") int skid) {
+	public String passStockInventoryIndividual(Model model, Locale locale, @PathVariable("id") int id,
+	                                           @PathVariable("skid") int skid) {
 		model.addAttribute("id", id);
 		model.addAttribute("skid", skid);
 		model.addAttribute("locale", locale);
@@ -175,5 +178,14 @@ public class InventoryAmController {
 	public String stockReport(Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		return "inventoryAm/stock-report";
+	}
+	
+	@RequestMapping(value = "inventoryam/stock-list/view/{id}.html", method = RequestMethod.GET)
+	public String stockInDetails(Model model, Locale locale, @PathVariable("id") long id) {
+		
+		model.addAttribute("stocks", stockService.getStockInByStockId(id));
+		
+		model.addAttribute("locale", locale);
+		return "inventoryAm/stock-in-details";
 	}
 }

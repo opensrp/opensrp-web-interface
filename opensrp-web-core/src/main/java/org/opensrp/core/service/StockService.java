@@ -237,7 +237,7 @@ public class StockService extends CommonService {
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
 			patient.put("" + dto.getFullName());
 			String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"view/"
-			        + dto.getId() + "/details.html\">View details</a> </div>";
+			        + dto.getId() + ".html\">View details</a> </div>";
 			patient.put(view);
 			array.put(patient);
 		}
@@ -358,6 +358,31 @@ public class StockService extends CommonService {
 		}
 		response.put("data", array);
 		return response;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<InventoryDTO> getStockInByStockId(long stockId) {
+		
+		Session session = getSessionFactory().openSession();
+		List<InventoryDTO> dtos = new ArrayList<>();
+		try {
+			String hql = "select product_name productName,invoice_number invoiceNumber,stock_in_id stockInId ,receive_date receiveDate,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName,qty quantity  from core.stock_in_by_stock_id(:stockId)";
+			Query query = session.createSQLQuery(hql).addScalar("productName", StandardBasicTypes.STRING)
+			        .addScalar("invoiceNumber", StandardBasicTypes.STRING).addScalar("stockInId", StandardBasicTypes.STRING)
+			        .addScalar("receiveDate", StandardBasicTypes.DATE).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
+			        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("quantity", StandardBasicTypes.INTEGER)
+			        .setLong("stockId", stockId).setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
+			dtos = query.list();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dtos;
 	}
 	
 }
