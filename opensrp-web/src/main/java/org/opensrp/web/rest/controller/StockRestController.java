@@ -3,8 +3,10 @@ package org.opensrp.web.rest.controller;
 import static org.springframework.http.HttpStatus.OK;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -12,10 +14,14 @@ import org.json.JSONObject;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.util.UserColumn;
 import org.opensrp.core.dto.StockDTO;
+import org.opensrp.core.entity.Role;
+import org.opensrp.core.entity.User;
 import org.opensrp.core.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -116,7 +122,7 @@ public class StockRestController {
 	}
 	
 	@RequestMapping(value = "/sell_to_ss_list", method = RequestMethod.GET)
-	public ResponseEntity<String> sellToSSlist(HttpServletRequest request) throws JSONException {
+	public ResponseEntity<String> sellToSSlist(HttpServletRequest request, HttpSession session) throws JSONException {
 		Integer start = Integer.valueOf(request.getParameter("start"));
 		Integer length = Integer.valueOf(request.getParameter("length"));
 		//String name = request.getParameter("search[value]");
@@ -139,8 +145,16 @@ public class StockRestController {
 		    month, length, start, orderColumn, orderDirection);
 		
 		int stockInListCount = stockService.getsellToSSListCount(branchId, skId, division, district, upazila, year, month);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
 		
-		JSONObject response = stockService.getSellToSSListDataOfDataTable(draw, stockInListCount, stockInList);
+		Set<Role> roles = user.getRoles();
+		
+		int roleId = 0;
+		for (Role role : roles) {
+			roleId = role.getId();
+		}
+		JSONObject response = stockService.getSellToSSListDataOfDataTable(draw, stockInListCount, stockInList, roleId);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 }

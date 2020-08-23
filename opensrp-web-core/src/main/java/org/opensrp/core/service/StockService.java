@@ -319,7 +319,7 @@ public class StockService extends CommonService {
 		return total.intValue();
 	}
 	
-	public JSONObject getSellToSSListDataOfDataTable(Integer draw, int sellToSSCount, List<InventoryDTO> dtos)
+	public JSONObject getSellToSSListDataOfDataTable(Integer draw, int sellToSSCount, List<InventoryDTO> dtos, int roleId)
 	    throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
@@ -329,16 +329,30 @@ public class StockService extends CommonService {
 		
 		for (InventoryDTO dto : dtos) {
 			JSONArray patient = new JSONArray();
-			System.err.println(dto.getSalesPrice());
+			
 			patient.put(dto.getFullName());
-			patient.put("SS");
+			if (roleId == 28) {
+				patient.put("SS"); // for am
+			}
 			patient.put(dto.getSKName());
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
+			if (roleId != 28) {
+				patient.put("0"); // target amount for DIvM
+			}
 			patient.put(dto.getSalesPrice());
-			String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"individual-ss-sell/"
-			        + dto.getId() + "/" + dto.getId() + ".html\"><strong>Sell Products </strong></a> </div>";
-			
-			patient.put(view);
+			if (roleId != 28) {
+				patient.put(dto.getPurchasePrice()); // for DIvM
+			}
+			if (roleId == 28) {
+				String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"individual-ss-sell/"
+				        + dto.getId() + "/" + dto.getId() + ".html\"><strong>Sell Products </strong></a> </div>";
+				
+				patient.put(view);
+			} else {
+				String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"individual-ss-sell/"
+				        + dto.getId() + "/" + dto.getId() + ".html\"><strong>View details </strong></a> </div>";
+				patient.put(view);
+			}
 			array.put(patient);
 			
 		}

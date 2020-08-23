@@ -25,6 +25,7 @@ public class AuthenticationManagerUtil {
 	//april_17_2019
 	public static User getLoggedInUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		System.err.println("auth:" + auth);
 		User user = (User) auth.getPrincipal();
 		
 		logger.info("\nLogger-in User :" + user + "\n");
