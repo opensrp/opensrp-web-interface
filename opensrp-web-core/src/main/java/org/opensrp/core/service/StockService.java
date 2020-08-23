@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.util.ReferenceType;
 import org.opensrp.common.util.Status;
+import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.dto.StockDTO;
 import org.opensrp.core.dto.StockDetailsDTO;
 import org.opensrp.core.entity.Stock;
@@ -95,6 +96,7 @@ public class StockService extends CommonService {
 					stockDetails.setYear(stockDetailsDTO.getYear());
 					stockDetails.setStockInId(stockId);
 					stockDetails.setStartDate(stockDetailsDTO.getStartDate());
+					stockDetails.setCreator(user);
 					_stockDetails.add(stockDetails);
 					
 				}
@@ -258,8 +260,7 @@ public class StockService extends CommonService {
 			patient.put(dto.getRoleName());
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
 			
-			String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"view/"
-			        + dto.getId() + "/details.html\">Pass stock</a> </div>";
+			String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"javascript:;\" onclick='navigateToPassStock("+dto.getId()+")'>Pass stock</a> </div>";
 			patient.put(view);
 			array.put(patient);
 		}
@@ -344,6 +345,61 @@ public class StockService extends CommonService {
 		}
 		response.put("data", array);
 		return response;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ProductDTO> getAllProductListForStock() {
+		Session session = getSessionFactory().openSession();
+		List<ProductDTO> result = null;
+		try {
+			String productSql = ""
+					+ "SELECT p.NAME, "
+					+ "       p.id "
+					+ "FROM   core.product AS p "
+					+ "GROUP  BY p.id "
+					+ "ORDER  BY p.id ASC";
+			Query query = session.createSQLQuery(productSql).addScalar("id",StandardBasicTypes.LONG).addScalar("name", StandardBasicTypes.STRING)
+						.setResultTransformer(new AliasToBeanResultTransformer(ProductDTO.class));
+			result = query.list();
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		
+		return result;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public ProductDTO getProductDetailsById(Integer branchId, Integer productId) {
+		Session session = getSessionFactory().openSession();
+		List<ProductDTO> result = null;
+		try {
+			String productSql = "select * from core.product_list_by_branch_with_current_stock_without_role("+branchId+","+productId+");";
+			Query query = session.createSQLQuery(productSql).addScalar("id",StandardBasicTypes.LONG)
+					.addScalar("name", StandardBasicTypes.STRING)
+					.addScalar("stock", StandardBasicTypes.INTEGER)
+						.setResultTransformer(new AliasToBeanResultTransformer(ProductDTO.class));
+			result = query.list();
+
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		
+		if(result.size() < 1) {
+			return null;
+		}
+		else {
+			return result.get(0);
+		}
+		
 	}
 	
 }

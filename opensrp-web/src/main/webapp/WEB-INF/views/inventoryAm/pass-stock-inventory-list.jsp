@@ -27,8 +27,8 @@
 				<!-- BEGIN EXAMPLE TABLE PORTLET-->
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
-						<div class="caption">
-							<i class="fa fa-list"></i><spring:message code="lbl.inventory"/>
+						<div class="center-caption">
+							${branchInfo[0][1]} - ${branchInfo[0][2]}
 						</div>
 					</div>					
 					<div class="portlet-body">
@@ -187,6 +187,12 @@ function filter(){
              searchPlaceholder: ""
          }
      });
+}
+
+function navigateToPassStock(skId) {
+	var locale = "${locale}";
+	var branchId= ${branchInfo[0][0]};
+	window.location.replace("/opensrp-dashboard/inventoryam/individual-stock/"+skId+"/"+branchId+".html?lang="+locale);
 }
 </script>
 

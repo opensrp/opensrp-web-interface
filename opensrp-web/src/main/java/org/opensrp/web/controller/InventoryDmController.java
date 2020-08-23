@@ -73,7 +73,7 @@ public class InventoryDmController {
 		return "inventoryDm/requisition-list";
 	}
 	
-	@RequestMapping(value = "inventoryam/user-by-branch/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "inventorydm/user-by-branch/{id}", method = RequestMethod.GET)
 	public String userByBranch(Model model,@PathVariable("id") int id) {
 		List<UserDTO> userListByBranch= requisitionService.getUserListByBranch(id);
 		model.addAttribute("userList", userListByBranch);

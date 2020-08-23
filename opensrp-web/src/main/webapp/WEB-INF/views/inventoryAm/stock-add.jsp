@@ -26,43 +26,99 @@
 						<div class="center-caption">
 							${branchInfo[0][1]} - ${branchInfo[0][2]}
 						</div>
-
-
+						<c:url var="branchIdHidden" value="${branchInfo[0][0]}" />
+						<c:url var="branchCode" value="${branchInfo[0][2]}" />
 					</div>
 
 				<div class="portlet-body">
+				<div style="display: none;" class="alert alert-success" id="serverResponseMessage" role="alert"></div>
+					<p><span class="text-danger"> * Required Fields</span></p>
 				<div class="row">
 					<div class="col-lg-3 form-group">
-						<label for="invoiceNo">Invoice Number:</label> <input type="number"
+						<label for="invoiceNo">Invoice Number:</label><span class="text-danger"> *</span> <input type="text"
 							class="form-control" id="invoiceNo" >
+							<span id="invoiceNoValidation" class="text-danger"></span>
 					</div>
 					<div class="col-lg-3 form-group">
-						<label for="receiveDate">Receive Date:</label> <input type="date"
-							class="form-control" id="receiveDate">
+						<label for="receiveDate">Receive Date:</label><span class="text-danger"> *</span>  <input type="date"
+							class="form-control" onkeydown="return false" id="receiveDate">
+							<span id="receiveDateValidation" class="text-danger"></span>
 					</div>
 				</div>
-				<div class="col-lg-12 form-group requisition-add">
-					<a class="btn btn-primary" id="newInvoice"
-						data-toggle="modal" data-target="#addProductToStock">
+				
+				<div class="col-lg-12 form-group">
+					<a class="btn btn-primary pull-right add-record"  id="newInvoice"><i class="glyphicon glyphicon-plus"></i>
 						<strong>Add Product </strong>
 					</a>
 				</div>
-				<table class="table table-striped table-bordered" id="addProductTemporaryList">
-							<thead>
-								<tr>
-									<th><spring:message code="lbl.serialNo"></spring:message></th>
-									<th><spring:message code="lbl.productName"></spring:message></th>
-									<th><spring:message code="lbl.quantityInUnit"></spring:message></th>
-									<th><spring:message code="lbl.expiryDate"></spring:message></th>
-									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
-								</tr>
-							</thead>
+				<div id="loading"
+						style="display: none; position: absolute; z-index: 1000; margin-left: 35%">
+						<img width="50px" height="50px"
+							src="<c:url value="/resources/images/ajax-loading.gif"/>">
+					</div>
+				<div class="table-scrollable">
+				<table class="table table-striped table-bordered"
+					id="addProductTemporaryList">
+					<thead>
+						<tr>
+							<th><spring:message code="lbl.serialNo"></spring:message></th>
+							<th><spring:message code="lbl.productName"></spring:message><span class="text-danger"> *</span></th>
+							<th><spring:message code="lbl.currentStock"></spring:message></th>
+							<th><spring:message code="lbl.quantityInUnit"></spring:message><span class="text-danger"> *</span></th>
+							<th><spring:message code="lbl.expiryDate"></spring:message><span class="text-danger"> *</span></th>
+							<th><spring:message code="lbl.actionRequisition"></spring:message></th>
+						</tr>
+					</thead>
+					<tbody id="tbl_posts_body">
+						<tr id="rec-1">
+							<td><span class="sn">1</span>.</td>
+							<td><select class="form-control"
+									id="product" name="product">
+										<option value="0"><spring:message
+												code="lbl.selectProduct" /></option>
+										<c:forEach items="${productList}" var="product">
+											<option value="${product.id}">${product.name}</option>
+										</c:forEach>
 
-						</table>
-						<div class="modal fade" id="addProductToStock" role="dialog">
+
+								</select></td>
+							<td><input type="text" class="form-control" id="currentStock" placeholder="Stock" readonly></td>
+							<td><input type="number" min="1" class="form-control" id="quantity" placeholder="Quantity"></td>
+							<td><input type="date" class="form-control" id="expiryDate" onkeydown="return false" placeholder="Expiry Date"></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+				<div style="display: none;">
+					<table id="sample_table">
+						<tr id="">
+							<td><span class="sn"></span>.</td>
+							<td><select class="form-control"
+									id="product" name="product">
+										<option value="0"><spring:message
+												code="lbl.selectProduct" /></option>
+										<c:forEach items="${productList}" var="product">
+											<option value="${product.id}">${product.name}</option>
+										</c:forEach>
+
+
+								</select></td>
+							<td><input type="text" class="form-control" id="currentStock" placeholder="Stock" readonly></td>
+							<td><input type="number" class="form-control" min="1" id="quantity" placeholder="Quantity"></td>
+							<td><input type="date" class="form-control" id="expiryDate" onkeydown="return false" placeholder="Expiry Date"></td>
+							<td><a class="btn btn-xs delete-record" data-id="1"><i
+									class="glyphicon glyphicon-trash"></i></a></td>
+						</tr>
+					</table>
+				</div>
+				<div>
+					<p class="text-danger" id="validationMessage"><strong></strong></p>
+				</div>
+				<!-- <div class="modal fade" id="addProductToStock" role="dialog">
 							<div class="modal-dialog">
 
-								<!-- Modal content-->
+								Modal content
 								<div class="modal-content">
 									<div class="modal-header">
 										<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -110,11 +166,11 @@
 								</div>
 
 							</div>
-						</div>
+						</div> -->
 					</div>
 							</div>
 				<div class="col-lg-12 form-group text-right">
-	                <button type="submit" onclick="" class="btn btn-primary" value="confirm">Confirm All</button>
+	                <button type="submit" onclick="saveStockData()" class="btn btn-primary" value="confirm">Confirm All</button>
 	            </div>
 		</br>
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
@@ -126,12 +182,191 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script>
+var tableData = [];
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
-   //TableAdvanced.init();
-		$('#addProductTemporaryList').DataTable();
+	     jQuery(document).delegate('a.add-record', 'click', function(e) {
+	         e.preventDefault();    
+	         var content = jQuery('#sample_table tr'),
+	         size = jQuery('#addProductTemporaryList >tbody >tr').length + 1,
+	         element = null,    
+	         element = content.clone();
+	         element.attr('id', 'rec-'+size);
+	         element.find('.delete-record').attr('data-id', size);
+	         element.appendTo('#tbl_posts_body');
+	         element.find('.sn').html(size);
+	       });
+	        jQuery(document).delegate('a.delete-record', 'click', function(e) {
+	         e.preventDefault();    
+	         var didConfirm = confirm("Are you sure You want to delete");
+	         if (didConfirm == true) {
+	          var id = jQuery(this).attr('data-id');
+	          //var targetDiv = jQuery(this).attr('targetDiv');
+	          jQuery('#rec-' + id).remove();
+	          
+	        //regnerate index number on table
+	        $('#tbl_posts_body tr').each(function(index){
+	    		$(this).find('span.sn').html(index+1);
+	        });
+	        return true;
+	      } else {
+	        return false;
+	      }
+	    });
 });
+
+
+
+function createStockArray() {
+	var stockArray = [];
+	$('#addProductTemporaryList tr').each(function(index, tr) {
+		var stockObject = {};
+		var todayDate = new Date(), y = todayDate.getFullYear(), m = todayDate.getMonth();
+		var invoiceNo = $('#invoiceNo').val();
+		var recieveDate = $('#receiveDate').val();
+		var branchId = "${branchIdHidden}";
+		//get td of each row and insert it into cols array
+		$(this).find('td').each(function(colIndex, c) {
+
+			if(colIndex == 1) {
+				stockObject["productId"] = +$(this).find('option:selected').val();
+			}
+			if(colIndex == 2) {
+				stockObject["debit"] = +$(this).find('input[type="text"]').val();
+			}
+			
+			if(colIndex == 3) {
+				stockObject["credit"] = +$(this).find('input[type="number"]').val();
+			}
+			
+			if(colIndex == 4) {
+				stockObject["expireyDate"] = $(this).find('input[type="date"]').val();
+			}
+
+		});
+		if(stockObject["productId"] == 0 || stockObject["credit"] == 0 || stockObject["expireyDate"] == "") {
+			$("#validationMessage").html("<strong>* Please fill out the required fields</strong>");
+			stockArray = [];
+			return;
+		}
+		$("#validationMessage").html("");
+		stockObject["year"] = todayDate.getFullYear();
+		stockObject["month"] = todayDate.getMonth()+1;
+		stockObject["branchId"] = parseInt(branchId);
+		stockObject["status"] = "ACTIVE";
+		stockObject["sellOrPassTo"] = 0;
+		stockObject["referenceType"] = "STOCK";
+		stockObject["invoiceNumber"] = invoiceNo;
+		stockObject["receiveDate"] = recieveDate;
+		stockObject["startDate"] = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
+		//insert this cols(full rows data) array into stock array
+		if(!isNaN(stockObject["credit"])) {
+			stockArray.push(stockObject);
+		 }
+	});
+	return stockArray;
+}
+
+$('#addProductTemporaryList').delegate('select', 'change', function() {
+	var productId = $(this).val();
+	let branchId = "${branchIdHidden}";
+	var inputContext = $(this).parents('td').next().find('input[type="text"]');
+	var url = "/opensrp-dashboard/inventoryam/product-by-id/"+branchId+ "/" +productId;
+	$.ajax({
+		type : "GET",
+		contentType : "application/json",
+		url : url,
+
+		dataType : 'html',
+		timeout : 100000,
+		beforeSend: function() {},
+		success : function(data) {
+			inputContext.val(data);
+		},
+		error : function(e) {
+			console.log("ERROR: ", e);
+			display(e);
+		},
+		done : function(e) {
+
+			console.log("DONE");
+			//enableSearchButton(true);
+		}
+	});
+	
+	//$(this).parents('td').next().text(selectedText);
+});
+	
+function saveStockData() {
+	var invoiceNo = $('#invoiceNo').val();
+	var recieveDate = $('#receiveDate').val();
+	if(invoiceNo == "") {
+		 $("#invoiceNoValidation").html("<strong>* Please fill out the required fields</strong>");
+		 $(window).scrollTop(0);
+		 return;
+	}
+	$("#invoiceNoValidation").html("");
+	if(recieveDate == "") {
+		 $("#receiveDateValidation").html("<strong>* Please fill out the required fields</strong>");
+		 $(window).scrollTop(0);
+		 return;
+	}
+	$("#invoiceNoValidation").html("");
+	var stockListArray = createStockArray();
+	if(stockListArray.length < 1) {
+		 $("#validationMessage").html("<strong>* Please fill out the required fields</strong>");
+		 $(window).scrollTop(0);
+		 return;
+	}
+	 $("#loading").show();
+	 $("#validationMessage").html("");
+	var branchId = "${branchIdHidden}";
+	var branchCode = "${branchCode}";
+	var url = "/opensrp-dashboard/rest/api/v1/stock/save-update";			
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	var formData;
+		formData = {
+	            'id': 0,
+	            "sellTo":[0],
+	            "stockId":branchCode,
+	            'stockDetailsDTOs': stockListArray
+	        };
+	console.log(formData)
+	event.preventDefault();
+	$.ajax({
+		contentType : "application/json",
+		type: "POST",
+        url: url,
+        data: JSON.stringify(formData), 
+        dataType : 'json',
+        
+		timeout : 100000,
+		beforeSend: function(xhr) {				    
+			 xhr.setRequestHeader(header, token);
+		},
+		success : function(data) {
+		   var response = JSON.parse(data);
+		   $("#loading").hide();
+		   $(window).scrollTop(0);
+		   $("#serverResponseMessage").show();
+		   $("#serverResponseMessage").html(response.msg);
+		   
+			   if(response.status == "SUCCESS"){					   
+			   window.location.replace("/opensrp-dashboard/inventoryam/stock-list/"+branchId+".html");
+			   
+		   }
+		   
+		},
+		error : function(e) {
+		   
+		},
+		done : function(e) {				    
+		    console.log("DONE");				    
+		}
+	});
+};	
 </script>
 
 

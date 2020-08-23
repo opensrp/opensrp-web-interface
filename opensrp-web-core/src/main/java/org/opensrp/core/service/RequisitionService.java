@@ -7,6 +7,8 @@ package org.opensrp.core.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
@@ -35,15 +37,15 @@ public class RequisitionService extends CommonService {
 		
 	}
 	
-	public List<ProductDTO> productListFortRequisition(Integer branchId, Integer roleId) {
-		List<ProductDTO> products = productService.productListByBranchWithCurrentStock(branchId, roleId);
+	public List<ProductDTO> productListFortRequisition(Integer branchId, Integer productId) {
+		List<ProductDTO> products = productService.productListByBranchWithCurrentStockWithoutRole(branchId, productId);
 		
-		List<Long> pids = new ArrayList<>();
-		
-		for (ProductDTO productDTO : products) {
-			pids.add(productDTO.getId());
-		}
-		products.addAll(productService.productListWithoutBranch(StringUtils.join(pids.toArray(), ", "), roleId));
+//		List<Long> pids = new ArrayList<>();
+//		
+//		for (ProductDTO productDTO : products) {
+//			pids.add(productDTO.getId());
+//		}
+//		products.addAll(productService.productListWithoutBranch(StringUtils.join(pids.toArray(), ", "), roleId));
 		
 		return products;
 	}
@@ -70,6 +72,7 @@ public class RequisitionService extends CommonService {
 	
 	
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public Long getCountOfRequisiton(Integer branchId, String startDate, String endDate,int divisionId,int distirct,int upazilla,int user_id) {
 		Session session = getSessionFactory().openSession();
 		List<RequisitionQueryDto> result = null;
@@ -90,6 +93,7 @@ public class RequisitionService extends CommonService {
 	}
 	
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<RequisitionQueryDto> getRequisitonList(Integer branchId, String startDate, String endDate,int divisionId,int distirct,int upazilla,int user_id,int offSetNo, int limit) {
 		Session session = getSessionFactory().openSession();
 		List<RequisitionQueryDto> result = null;
@@ -136,6 +140,7 @@ public class RequisitionService extends CommonService {
 		}
 	
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<UserDTO> getUserListByBranch(Integer branchId) {
 		Session session = getSessionFactory().openSession();
 		List<UserDTO> result = null;
@@ -166,6 +171,7 @@ public class RequisitionService extends CommonService {
 	}
 	
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<RequisitionQueryDto> getRequistionDetailsById(Integer requisitionId) {
 		Session session = getSessionFactory().openSession();
 		List<RequisitionQueryDto> result = null;

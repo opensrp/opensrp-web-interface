@@ -25,14 +25,14 @@ public class ProductService extends CommonService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ProductDTO> productListByBranchWithCurrentStock(Integer branchId, Integer roleId) {
+	public List<ProductDTO> productListByBranchWithCurrentStockWithoutRole(Integer branchId, Integer productId) {
 		Session session = getSessionFactory().openSession();
 		List<ProductDTO> result = null;
 		try {
-			String hql = "select * from core.product_list_by_branch_with_current_stock(:branchId,:roleId);";
+			String hql = "select * from core.product_list_by_branch_with_current_stock_without_role(:branchId,:productId);";
 			Query query = session.createSQLQuery(hql).addScalar("name", StandardBasicTypes.STRING)
 			        .addScalar("id", StandardBasicTypes.LONG).addScalar("stock", StandardBasicTypes.INTEGER)
-			        .setInteger("branchId", branchId).setInteger("roleId", roleId)
+			        .setInteger("branchId", branchId).setInteger("productId", productId)
 			        .setResultTransformer(new AliasToBeanResultTransformer(ProductDTO.class));
 			result = query.list();
 		}

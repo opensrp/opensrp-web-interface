@@ -39,7 +39,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="product" items="${ productInfo }">
+								<c:forEach var="product" items="${ productList }">
 									<tr>
 										<td>${ product.id }</td>
 										<td>${ product.name }</td>
@@ -65,7 +65,9 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#productStockListOfAm').DataTable();
+		$('#productStockListOfAm').DataTable({
+			  "pageLength": 25
+		});
 });
 </script>
 

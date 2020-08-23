@@ -33,8 +33,6 @@
 						<div class="center-caption">
 							Requisition(AM)
 						</div>
-
-					<input type="hidden" id="locale" value="${locale}">
 					</div>				
 					<div class="portlet-body">
 					
@@ -267,7 +265,7 @@ function filter(){
 $("#branchDM").change(function (event) {
 	debugger;
 	let branchId = +$('#branchDM').val();
-	var url = "/opensrp-dashboard/inventoryam/user-by-branch/"+branchId;
+	var url = "/opensrp-dashboard/inventorydm/user-by-branch/"+branchId;
 	$("#selectRequisitionBy").html("");
 	$.ajax({
 		type : "GET",
@@ -294,7 +292,7 @@ $("#branchDM").change(function (event) {
 });
 
 function navigateTodetails(requisitionId,branchName,branchCode) {
-var locale = $('#locale').val();
+var locale = "${locale}";
 var branchString= branchName+"-"+branchCode;
 window.location.replace("/opensrp-dashboard/inventory/requisition-details/"+requisitionId+".html?lang="+locale+"&&branch="+branchString+"");
 }

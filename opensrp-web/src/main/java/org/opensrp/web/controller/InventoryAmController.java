@@ -3,7 +3,9 @@ package org.opensrp.web.controller;
 import java.util.List;
 import java.util.Locale;
 
+import org.json.JSONObject;
 import org.opensrp.common.dto.RequisitionQueryDto;
+import org.opensrp.common.dto.UserDTO;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.dto.RequisitionDTO;
 import org.opensrp.core.entity.Branch;
@@ -12,6 +14,7 @@ import org.opensrp.core.entity.User;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.ProductService;
 import org.opensrp.core.service.RequisitionService;
+import org.opensrp.core.service.StockService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class InventoryAmController {
@@ -32,6 +36,9 @@ public class InventoryAmController {
 	
 	@Autowired
 	private RequisitionService requisitionService;
+	
+	@Autowired
+	private StockService stockService;
 	
 	@RequestMapping(value = "inventoryam/myinventory.html", method = RequestMethod.GET)
 	public String myInventory(Model model,Locale locale) {
@@ -47,7 +54,7 @@ public class InventoryAmController {
 	public String myInventoryList(Model model, Locale locale, @PathVariable("id") String id) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Object[]> branchInfo = branchService.getBranchByUser(id, loggedInUser);
-		List<ProductDTO> productInfo = productService.productListByBranchWithCurrentStock(Integer.parseInt(id), 0);
+		List<ProductDTO> productInfo = productService.productListByBranchWithCurrentStockWithoutRole(Integer.parseInt(id), 0);
 //		for (ProductDTO productDTO : productInfo) {
 //			System.out.println(productDTO.getName());
 //			System.out.println(productDTO.getDescription());
@@ -124,19 +131,36 @@ public class InventoryAmController {
 	public String stockAddForAreaManager(Model model, Locale locale, @PathVariable("id") String id) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Object[]> branchInfo = branchService.getBranchByUser(id, loggedInUser);
+		List<ProductDTO> productListOfStock = stockService.getAllProductListForStock();
+		model.addAttribute("productList", productListOfStock);
+
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("locale", locale);
 		return "inventoryAm/stock-add";
 	}
 	
+	@RequestMapping(value = "inventoryam/product-by-id/{branchid}/{productid}", method = RequestMethod.GET)
+	@ResponseBody
+	public String userByBranch(Model model,@PathVariable("branchid") String branchid ,@PathVariable("productid") String productid) {
+		ProductDTO productStock = stockService.getProductDetailsById(Integer.parseInt(branchid), Integer.parseInt(productid));
+		String stockAvailable = String.valueOf( productStock.getStock());
+		return stockAvailable;
+	}
+	
 	@RequestMapping(value = "inventoryam/pass-stock.html", method = RequestMethod.GET)
 	public String passStock(Model model, Locale locale) {
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		return "inventoryAm/pass-stock";
 	}
 	
 	@RequestMapping(value = "inventoryam/pass-stock-inventory/{id}.html", method = RequestMethod.GET)
 	public String passStockInventoryList(Model model, Locale locale, @PathVariable("id") int id) {
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<Object[]> branchInfo = branchService.getBranchByUser(String.valueOf(id), loggedInUser);
+		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
 		return "inventoryAm/pass-stock-inventory-list";

@@ -32,7 +32,6 @@
 						href="<c:url value="/inventoryam/requisition-add/${branchInfo[0][0]}.html?lang=${locale}"/>">
 						<strong> Add Requisition </strong>
 					</a>
-				<input type="hidden" id="locale" value="${locale}">
 				</div>
 				<div class="row">
 
@@ -201,8 +200,8 @@ function filter(){
 }
 
 function navigateTodetails(requisitionId,branchName,branchCode) {
-	var locale = $('#locale').val();
-	var branchString= branchName+"-"+branchCode;
+	var locale = "${locale}";
+	var branchString= "${branchInfo[0][1]}"+"-"+"${branchInfo[0][2]}";
 	window.location.replace("/opensrp-dashboard/inventory/requisition-details/"+requisitionId+".html?lang="+locale+"&&branch="+branchString+"");
 }
 
