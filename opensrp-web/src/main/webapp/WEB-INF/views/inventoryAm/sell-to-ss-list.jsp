@@ -253,11 +253,11 @@ jQuery(function() {
             columnDefs: [
                 { targets: [0, 1, 2, 3, 4,5], orderable: false },
                 { width: "20%", targets: 0 },
-                { width: "20%", targets: 1 },
+                { width: "5%", targets: 1 },
                 { width: "20%", targets: 2 },
                 { width: "20%", targets: 3 },
-                { width: "20%", targets: 4 },
-                { width: "20%", targets: 5 }
+                { width: "5%", targets: 4 },
+                { width: "30%", targets: 5 }
                 
             ],
             ajax: {
@@ -306,11 +306,11 @@ function filter(){
          columnDefs: [
              { targets: [0, 1, 2, 3, 4,5], orderable: false },
              { width: "20%", targets: 0 },
-             { width: "20%", targets: 1 },
+             { width: "5%", targets: 1 },
              { width: "20%", targets: 2 },
              { width: "20%", targets: 3 },
-             { width: "20%", targets: 4 },
-             { width: "20%", targets: 5 }
+             { width: "5%", targets: 4 },
+             { width: "30%", targets: 5 }
          ],
          ajax: {
              url: "${sell_to_ss_list}",

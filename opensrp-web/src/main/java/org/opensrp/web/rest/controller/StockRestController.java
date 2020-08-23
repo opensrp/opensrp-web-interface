@@ -117,7 +117,7 @@ public class StockRestController {
 		int stockPassUserListCount = stockService.getPassStockUserListCount(branchId, roleId, name);
 		
 		JSONObject response = stockService.getPassStockUserListDataOfDataTable(draw, stockPassUserListCount,
-		    stockPassUserList);
+		    stockPassUserList, branchId);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	
@@ -154,7 +154,39 @@ public class StockRestController {
 		for (Role role : roles) {
 			roleId = role.getId();
 		}
-		JSONObject response = stockService.getSellToSSListDataOfDataTable(draw, stockInListCount, stockInList, roleId);
+		JSONObject response = stockService.getSellToSSListDataOfDataTable(draw, stockInListCount, stockInList, roleId,
+		    branchId);
+		return new ResponseEntity<>(response.toString(), OK);
+	}
+	
+	@RequestMapping(value = "/pass-stock-or-sell-to-ss-list", method = RequestMethod.GET)
+	public ResponseEntity<String> allPassOrSellToSSList(HttpServletRequest request) throws JSONException {
+		Integer start = Integer.valueOf(request.getParameter("start"));
+		Integer length = Integer.valueOf(request.getParameter("length"));
+		//String name = request.getParameter("search[value]");
+		Integer draw = Integer.valueOf(request.getParameter("draw"));
+		String orderColumn = request.getParameter("order[0][column]");
+		String orderDirection = request.getParameter("order[0][dir]");
+		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+		String search = request.getParameter("search");
+		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		String productName = request.getParameter("productName");
+		if (!StringUtils.isBlank(productName)) {
+			productName = "%" + productName + "%";
+		}
+		String type = request.getParameter("type");
+		int userId = Integer.parseInt(request.getParameter("userId"));
+		
+		List<InventoryDTO> stockPassUserList = stockService.getStockPassOrSellToSSByUserId(branchId, userId, type,
+		    productName, startDate, endDate, length, start);
+		
+		int stockPassUserListCount = stockService.getStockPassOrSellToSSByUserIdCount(branchId, userId, type, productName,
+		    startDate, endDate);
+		
+		JSONObject response = stockService.getStockPassorSellToSSListDataOfDataTable(draw, stockPassUserListCount,
+		    stockPassUserList);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 }

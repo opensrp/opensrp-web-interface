@@ -245,8 +245,8 @@ public class StockService extends CommonService {
 		return response;
 	}
 	
-	public JSONObject getPassStockUserListDataOfDataTable(Integer draw, int passStockUserCount, List<InventoryDTO> dtos)
-	    throws JSONException {
+	public JSONObject getPassStockUserListDataOfDataTable(Integer draw, int passStockUserCount, List<InventoryDTO> dtos,
+	                                                      int branchId) throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", passStockUserCount);
@@ -258,8 +258,11 @@ public class StockService extends CommonService {
 			patient.put(dto.getRoleName());
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
 			
-			String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"view/"
+			/*String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"view/"
 			        + dto.getId() + "/details.html\">Pass stock</a> </div>";
+			*/
+			String view = "<div class='col-sm-12 form-group'>" + "<a  href=\"view/" + dto.getId() + ".html\">Pass Stock</a>"
+			        + " | <a  href=\"view/" + branchId + "/" + dto.getId() + ".html\">View details</a> </div>";
 			patient.put(view);
 			array.put(patient);
 		}
@@ -319,8 +322,8 @@ public class StockService extends CommonService {
 		return total.intValue();
 	}
 	
-	public JSONObject getSellToSSListDataOfDataTable(Integer draw, int sellToSSCount, List<InventoryDTO> dtos, int roleId)
-	    throws JSONException {
+	public JSONObject getSellToSSListDataOfDataTable(Integer draw, int sellToSSCount, List<InventoryDTO> dtos, int roleId,
+	                                                 int branchId) throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", sellToSSCount);
@@ -344,13 +347,14 @@ public class StockService extends CommonService {
 				patient.put(dto.getPurchasePrice()); // for DIvM
 			}
 			if (roleId == 28) {
-				String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"individual-ss-sell/"
-				        + dto.getId() + "/" + dto.getId() + ".html\"><strong>Sell Products </strong></a> </div>";
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"individual-ss-sell/" + dto.getId() + "/"
+				        + dto.getId() + ".html\"><strong>Sell Products </strong></a>  | " + "<a \" href=\"view/" + branchId
+				        + "/" + dto.getId() + ".html\"><strong>View Details </strong></a> " + "</div>";
 				
 				patient.put(view);
 			} else {
-				String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"individual-ss-sell/"
-				        + dto.getId() + "/" + dto.getId() + ".html\"><strong>View details </strong></a> </div>";
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"view/" + branchId + "/" + dto.getId()
+				        + ".html\"><strong>View details </strong></a> </div>";
 				patient.put(view);
 			}
 			array.put(patient);
@@ -375,6 +379,99 @@ public class StockService extends CommonService {
 			        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("quantity", StandardBasicTypes.INTEGER)
 			        .setLong("stockId", stockId).setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
 			dtos = query.list();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<InventoryDTO> getStockPassOrSellToSSByUserId(int branchId, int userId, String type, String productName,
+	                                                         String startDate, String endDate, Integer length, Integer start) {
+		
+		Session session = getSessionFactory().openSession();
+		List<InventoryDTO> dtos = new ArrayList<>();
+		try {
+			String hql = "select product_name productName,receive_date receiveDate,qty quantity  from core.stock_pass_or_sell_by_user_id(:branchId,:userId,:type,:productName,:startDate,:endDate,:start,:length )";
+			Query query = session.createSQLQuery(hql).addScalar("productName", StandardBasicTypes.STRING)
+			        .addScalar("receiveDate", StandardBasicTypes.DATE).addScalar("quantity", StandardBasicTypes.INTEGER)
+			        .setInteger("userId", userId).setString("type", type).setString("productName", productName)
+			        .setInteger("length", length).setInteger("start", start).setInteger("branchId", branchId)
+			        .setString("startDate", startDate).setString("endDate", endDate)
+			        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
+			dtos = query.list();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public int getStockPassOrSellToSSByUserIdCount(int branchId, int userId, String type, String productName,
+	                                               String startDate, String endDate) {
+		
+		Session session = getSessionFactory().openSession();
+		BigInteger total = null;
+		try {
+			String hql = "select *  from core.stock_pass_or_sell_by_user_id_count(:branchId,:userId,:type,:productName,:startDate,:endDate)";
+			Query query = session.createSQLQuery(hql).setInteger("userId", userId).setString("type", type)
+			        .setString("startDate", startDate).setString("endDate", endDate).setString("productName", productName)
+			        .setInteger("branchId", branchId);
+			total = (BigInteger) query.uniqueResult();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return total.intValue();
+	}
+	
+	public JSONObject getStockPassorSellToSSListDataOfDataTable(Integer draw, int sellToSSCount, List<InventoryDTO> dtos)
+	    throws JSONException {
+		JSONObject response = new JSONObject();
+		response.put("draw", draw + 1);
+		response.put("recordsTotal", sellToSSCount);
+		response.put("recordsFiltered", sellToSSCount);
+		JSONArray array = new JSONArray();
+		
+		for (InventoryDTO dto : dtos) {
+			JSONArray patient = new JSONArray();
+			patient.put(dto.getProductName());
+			patient.put(dto.getReceiveDate());
+			patient.put(dto.getQuantity());
+			array.put(patient);
+			
+		}
+		response.put("data", array);
+		return response;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public InventoryDTO getUserAndBrachByuserId(int userId) {
+		
+		Session session = getSessionFactory().openSession();
+		InventoryDTO dtos = null;
+		try {
+			String hql = "select u.first_name firstName,u.last_name lastName ,b.name branchName,b.code branchCode from core.users as u join core.user_branch ub on u.id = ub.user_id join core.branch b on b.id=ub.branch_id where u.id =:userId";
+			Query query = session.createSQLQuery(hql).addScalar("firstName", StandardBasicTypes.STRING)
+			        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
+			        .addScalar("lastName", StandardBasicTypes.STRING).setInteger("userId", userId)
+			        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
+			dtos = (InventoryDTO) query.uniqueResult();
 		}
 		catch (HibernateException he) {
 			he.printStackTrace();

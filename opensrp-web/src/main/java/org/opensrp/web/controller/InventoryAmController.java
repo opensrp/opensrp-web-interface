@@ -188,4 +188,29 @@ public class InventoryAmController {
 		model.addAttribute("locale", locale);
 		return "inventoryAm/stock-in-details";
 	}
+	
+	@RequestMapping(value = "inventoryam/pass-stock-inventory/view/{branch_id}/{id}.html", method = RequestMethod.GET)
+	public String passStockDetails(Model model, Locale locale, @PathVariable("branch_id") int branchId,
+	                               @PathVariable("id") int userId) {
+		model.addAttribute("branchId", branchId);
+		model.addAttribute("userId", userId);
+		model.addAttribute("type", "'PASS'");
+		model.addAttribute("titleType", "Pass stock ");
+		model.addAttribute("user", stockService.getUserAndBrachByuserId(userId));
+		model.addAttribute("locale", locale);
+		return "inventoryAm/user-wise-stock-pass-sell";
+	}
+	
+	@RequestMapping(value = "inventoryam/sell-to-ss-list/view/{branch_id}/{id}.html", method = RequestMethod.GET)
+	public String selltoSSDetails(Model model, Locale locale, @PathVariable("branch_id") int branchId,
+	                              @PathVariable("id") int userId) {
+		model.addAttribute("branchId", branchId);
+		model.addAttribute("userId", userId);
+		model.addAttribute("titleType", "Sell");
+		model.addAttribute("type", "'SELL'");
+		model.addAttribute("user", stockService.getUserAndBrachByuserId(userId));
+		model.addAttribute("locale", locale);
+		return "inventoryAm/user-wise-stock-pass-sell";
+	}
+	
 }
