@@ -28,7 +28,11 @@ public class InventoryDTO {
 	
 	private float salesPrice;
 	
+	private int quantity;
+	
 	private float purchasePrice;
+	
+	private String productName;
 	
 	public Long getId() {
 		return id;
@@ -112,6 +116,15 @@ public class InventoryDTO {
 		return fullName.trim();
 	}
 	
+	@Transient
+	public String getBranch() {
+		String branch = "";
+		
+		branch = getBranchName() + " ( " + getBranchCode() + " )";
+		
+		return branch;
+	}
+	
 	public String getSKName() {
 		return SKName;
 	}
@@ -134,6 +147,22 @@ public class InventoryDTO {
 	
 	public void setPurchasePrice(float purchasePrice) {
 		this.purchasePrice = purchasePrice;
+	}
+	
+	public int getQuantity() {
+		return quantity;
+	}
+	
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+	
+	public String getProductName() {
+		return productName;
+	}
+	
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 	
 	@Override
