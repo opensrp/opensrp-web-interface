@@ -7,33 +7,33 @@
 <c:url var="branch_url" value="/branch-list-options" />
 	<div class="row">
 			<div class="col-lg-3 form-group">
-			    <label for="cars"><spring:message code="lbl.division"></spring:message> :</label> 
-			    <select	onclick="getChildLocation(this.value,'districtList')" name="division" class="form-control" id="division">
-					<option value="">Please select</option>
+			    <label for="cars"><spring:message code="lbl.division"></spring:message> </label> 
+			    <select	onclick="getChildLocation(this.value,'districtList')" name="division" class="form-control" id="divisionList">
+					<option value="0">Please select</option>
 					<c:forEach items="${divisions}" var="division">
 					<option value="${division.id}">${division.name}</option>
 					</c:forEach>
 				</select>
 			</div>
 			<div class="col-lg-3 form-group">
-			    <label for="cars"><spring:message code="lbl.district"></spring:message> :</label> 
+			    <label for="cars"><spring:message code="lbl.district"></spring:message> </label> 
 			    
 			    <select	name="districtList" onclick="getChildLocation(this.value,'upazilaList')" id="districtList" class="form-control">
-					<option value="">Please select </option>
+					<option value="0">Please select </option>
 					
 				</select>
 			</div>
 			<div class="col-lg-3 form-group">
-			    <label for="cars"><spring:message code="lbl.upazila"></spring:message> :</label> 
+			    <label for="cars"><spring:message code="lbl.upazila"></spring:message> </label> 
 			    <select	name="upazilaList" onclick="getBranchList(this.value,'branchList')" id="upazilaList" class="form-control">
-					<option value="">Please select </option>
+					<option value="0">Please select </option>
 					
 				</select>
 			</div>
 			<div class="col-lg-3 form-group">
-			    <label for="cars"><spring:message code="lbl.branch"></spring:message> :</label> 
+			    <label for="cars"><spring:message code="lbl.branch"></spring:message></label> 
 			    <select	name="branchList" class="form-control" id="branchList">
-					<option value="">please select</option>
+					<option value="0">please select</option>
 					
 				</select>
 			</div>
@@ -44,12 +44,12 @@
 function getChildLocation(locationId,divId) {
 	$("#"+divId).html("");	
 	if(divId=='districtList'){
-		$("#districtList").html("");
-		$("#upazilaList").html("");
-		$("#branchList").html("");
+		$("#districtList").html('<option value="0">Please select </option>');
+		$("#upazilaList").html('<option value="0">Please select </option>');
+		$("#branchList").html('<option value="0">Please select </option>');
 	}else if(divId=='upazilaList'){
-		$("#upazilaList").html("");
-		$("#branchList").html("");
+		$("#upazilaList").html('<option value="0">Please select </option>');
+		$("#branchList").html('<option value="0">Please select </option>');
 	}
 	let url = '${location_url}';	
 	$.ajax({

@@ -34,7 +34,7 @@ public class TargetController {
 	@RequestMapping(value = "/sk-pa-list-for-individual-target.html", method = RequestMethod.GET)
 	public String listTeam(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
-		System.err.println("dd;" + targetService.getLocationByTagId(divisionTagId));
+		
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		return "target/sk-pa-list-for-individual-target";
 	}

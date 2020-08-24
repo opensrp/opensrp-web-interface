@@ -4,6 +4,8 @@
 
 package org.opensrp.core.service;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.util.Status;
 import org.opensrp.common.util.TaregtSettingsType;
 import org.opensrp.core.dto.ProductDTO;
@@ -141,4 +147,74 @@ public class TargetService extends CommonService {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetCommontDTO> getAllSKPAListForIndividualTargetSetting(int locationId, int branchId, String roleName,
+	                                                                       Integer length, Integer start,
+	                                                                       String orderColumn, String orderDirection) {
+		
+		Session session = getSessionFactory().openSession();
+		List<TargetCommontDTO> dtos = new ArrayList<>();
+		try {
+			String hql = "select user_id userId,branch_id branchId,role_id roleId,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName,role_name roleName from core.sk_pa_list_for_individual_target_setting(:locationId,:branchId,:roleName,:start,:length)";
+			Query query = session.createSQLQuery(hql).addScalar("userId", StandardBasicTypes.INTEGER)
+			        .addScalar("branchId", StandardBasicTypes.INTEGER).addScalar("roleId", StandardBasicTypes.INTEGER)
+			        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("branchCode", StandardBasicTypes.STRING)
+			        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
+			        .addScalar("roleName", StandardBasicTypes.STRING).setInteger("locationId", locationId)
+			        .setInteger("branchId", branchId).setString("roleName", roleName).setInteger("length", length)
+			        .setInteger("start", start)
+			        .setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+			dtos = query.list();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dtos;
+	}
+	
+	@Transactional
+	public int getAllSKPAListForIndividualTargetSettingCount(int locationId, int branchId, String roleName) {
+		
+		Session session = getSessionFactory().openSession();
+		BigInteger total = null;
+		try {
+			String hql = "select * from core.sk_pa_list_for_individual_target_setting_count(:locationId,:branchId,:roleName)";
+			Query query = session.createSQLQuery(hql).setInteger("locationId", locationId).setInteger("branchId", branchId)
+			        .setString("roleName", roleName);
+			total = (BigInteger) query.uniqueResult();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return total.intValue();
+	}
+	
+	public JSONObject getSKPATargetSettingDataOfDataTable(Integer draw, int userCount, List<TargetCommontDTO> dtos)
+	    throws JSONException {
+		JSONObject response = new JSONObject();
+		response.put("draw", draw + 1);
+		response.put("recordsTotal", userCount);
+		response.put("recordsFiltered", userCount);
+		JSONArray array = new JSONArray();
+		for (TargetCommontDTO dto : dtos) {
+			JSONArray patient = new JSONArray();
+			patient.put(dto.getFullName());
+			patient.put(dto.getRoleName());
+			patient.put(dto.getBranch());
+			
+			String view = "<div class='col-sm-12 form-group'><a \" href=\"view/" + "/" + dto.getBranchId() + "/"
+			        + dto.getRoleId() + "/" + dto.getUserId() + ".html\">Set target</a> </div>";
+			patient.put(view);
+			array.put(patient);
+		}
+		response.put("data", array);
+		return response;
+	}
 }
