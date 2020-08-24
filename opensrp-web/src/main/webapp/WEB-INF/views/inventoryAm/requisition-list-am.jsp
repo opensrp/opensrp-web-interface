@@ -202,7 +202,7 @@ function filter(){
 function navigateTodetails(requisitionId,branchName,branchCode) {
 	var locale = "${locale}";
 	var branchString= "${branchInfo[0][1]}"+"-"+"${branchInfo[0][2]}";
-	window.location.replace("/opensrp-dashboard/inventory/requisition-details/"+requisitionId+".html?lang="+locale+"&&branch="+branchString+"");
+	window.location.replace("/opensrp-dashboard/inventory/requisition-details/"+requisitionId+".html?lang="+locale+"&branch="+branchString+"");
 }
 
 </script>
