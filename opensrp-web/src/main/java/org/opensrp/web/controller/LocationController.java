@@ -22,6 +22,7 @@ import org.opensrp.core.entity.Location;
 import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.LocationTagService;
+import org.opensrp.core.service.TargetService;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -42,12 +43,15 @@ public class LocationController {
 	
 	@Autowired
 	private LocationService locationServiceImpl;
-
+	
 	@Autowired
 	private FacilityService facilityServiceImpl;
 	
 	@Autowired
 	private LocationTagService locationTagServiceImpl;
+	
+	@Autowired
+	private TargetService targetService;
 	
 	@Autowired
 	private Location location;
@@ -58,9 +62,9 @@ public class LocationController {
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION_LIST')")
 	@RequestMapping(value = "location/location.html", method = RequestMethod.GET)
 	public String locationList(HttpServletRequest request, HttpSession session, ModelMap model, Locale locale) {
-//		Class<Location> entityClassName = Location.class;
+		//		Class<Location> entityClassName = Location.class;
 		model.addAttribute("locale", locale);
-//		paginationUtil.createPagination(request, session, entityClassName);
+		//		paginationUtil.createPagination(request, session, entityClassName);
 		return "location/index";
 	}
 	
@@ -89,7 +93,7 @@ public class LocationController {
 		return new ModelAndView("location/add", "command", location);
 		
 	}
-
+	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_LOCATION')")
 	@RequestMapping(value = "location/add-ajax.html", method = RequestMethod.GET)
 	public ModelAndView addLocation(ModelMap model, HttpSession session, Locale locale) throws JSONException {
@@ -122,16 +126,16 @@ public class LocationController {
 		return new ModelAndView("redirect:/location/location.html?lang=" + locale);
 		
 	}
-
+	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_LOCATION')")
 	@RequestMapping(value = "/location/add-new.html", method = RequestMethod.POST)
 	public ModelAndView saveLocationNew(@RequestParam(value = "parentLocation", required = false) int parentLocationId,
-									 @RequestParam(value = "locationTag") int tagId,
-									 @ModelAttribute("location") @Valid Location location, BindingResult binding,
-									 ModelMap model, HttpSession session, Locale locale) throws Exception {
+	                                    @RequestParam(value = "locationTag") int tagId,
+	                                    @ModelAttribute("location") @Valid Location location, BindingResult binding,
+	                                    ModelMap model, HttpSession session, Locale locale) throws Exception {
 		location.setName(location.getName().toUpperCase().trim());
 		location = locationServiceImpl.setCreatorParentLocationTagAttributeInLocation(location, parentLocationId, tagId);
-
+		
 		if (!locationServiceImpl.locationExists(location)) {
 			locationServiceImpl.saveToOpenSRP(location);
 		} else {
@@ -141,7 +145,7 @@ public class LocationController {
 		}
 		return new ModelAndView("redirect:/location/location.html?lang=" + locale);
 	}
-
+	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_LOCATION')")
 	@RequestMapping(value = "location/{id}/edit.html", method = RequestMethod.GET)
 	public ModelAndView editLocation(ModelMap model, HttpSession session, @PathVariable("id") int id, Locale locale) {
@@ -188,21 +192,24 @@ public class LocationController {
 	}
 	
 	@RequestMapping(value = "/location", method = RequestMethod.GET)
-	public String getChildLocationList(HttpServletRequest request, HttpSession session, Model model, @RequestParam int id, @RequestParam String title) {
+	public String getChildLocationList(HttpServletRequest request, HttpSession session, Model model, @RequestParam int id,
+	                                   @RequestParam String title) {
 		List<Object[]> parentData = locationServiceImpl.getChildData(id);
 		session.setAttribute("data", parentData);
 		return "/location";
 	}
-
+	
 	@RequestMapping(value = "/child-locations", method = RequestMethod.GET)
-	public String getChildLocations(HttpServletRequest request, HttpSession session, Model model, @RequestParam int id, @RequestParam String title) {
+	public String getChildLocations(HttpServletRequest request, HttpSession session, Model model, @RequestParam int id,
+	                                @RequestParam String title) {
 		List<Object[]> parentData = locationServiceImpl.getChildData(id);
 		session.setAttribute("data", parentData);
 		return "location/location-options";
 	}
-
+	
 	@RequestMapping(value = "/location-by-tag-id", method = RequestMethod.GET)
-	public String getLocationByTag(HttpServletRequest request, HttpSession session, Model model, @RequestParam int id, @RequestParam String title) {
+	public String getLocationByTag(HttpServletRequest request, HttpSession session, Model model, @RequestParam int id,
+	                               @RequestParam String title) {
 		List<Object[]> parentData = locationServiceImpl.getLocationByTagId(id);
 		session.setAttribute("data", parentData);
 		return "location/location-options";
@@ -225,9 +232,9 @@ public class LocationController {
 			model.addAttribute("msg", "Failed to upload the file because it is empty");
 			return new ModelAndView("/location/upload_csv");
 		} /*else if (!"text/csv".equalsIgnoreCase(file.getContentType())) {
-			model.addAttribute("msg", "File type should be '.csv'");
-			return new ModelAndView("/location/upload_csv");
-		}*/
+		  model.addAttribute("msg", "File type should be '.csv'");
+		  return new ModelAndView("/location/upload_csv");
+		  }*/
 		
 		String rootPath = request.getSession().getServletContext().getRealPath("/");
 		File dir = new File(rootPath + File.separator + "uploadedfile");
@@ -258,5 +265,12 @@ public class LocationController {
 			return new ModelAndView("/location/upload_csv");
 		}
 		return new ModelAndView("redirect:/location/location.html?lang=" + locale);
+	}
+	
+	@RequestMapping(value = "/child-location-options", method = RequestMethod.GET)
+	public String getChildLocationLists(HttpServletRequest request, Model model, @RequestParam int id) {
+		List<Location> locations = targetService.getLocationByParentId(id);
+		model.addAttribute("locations", locations);
+		return "location-options";
 	}
 }

@@ -18,7 +18,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.AliasToBeanResultTransformer;
+import org.hibernate.type.StandardBasicTypes;
 import org.opensrp.common.interfaces.DatabaseRepository;
+import org.opensrp.core.entity.Branch;
+import org.opensrp.core.entity.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -194,5 +198,79 @@ public abstract class CommonService {
 			session.close();
 		}
 		return result.size() > 0 ? (T) result.get(0) : null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<Location> getLocationByTagId(int tagId) {
+		String sqlQuery = "SELECT location.id id, split_part(location.name, ':', 1) as name from core.location "
+		        + " WHERE location_tag_id=:location_tag_id";
+		
+		Session session = sessionFactory.openSession();
+		
+		List<Location> results = new ArrayList<>();
+		try {
+			Query query = session.createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
+			        .addScalar("name", StandardBasicTypes.STRING).setInteger("location_tag_id", tagId)
+			        .setResultTransformer(new AliasToBeanResultTransformer(Location.class));
+			results = query.list();
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		return results;
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<Location> getLocationByParentId(int parentId) {
+		String sqlQuery = "SELECT location.id id, split_part(location.name, ':', 1) as name from core.location "
+		        + " WHERE parent_location_id=:parentId";
+		
+		Session session = sessionFactory.openSession();
+		
+		List<Location> results = new ArrayList<>();
+		try {
+			Query query = session.createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
+			        .addScalar("name", StandardBasicTypes.STRING).setInteger("parentId", parentId)
+			        .setResultTransformer(new AliasToBeanResultTransformer(Location.class));
+			results = query.list();
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		return results;
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<Branch> getLocationByLocationId(int parentId) {
+		String sqlQuery = "select b.id,b.code,b.name from core.branch as b where b.division =:parentId or b.district =:parentId or b.upazila = :parentId";
+		
+		Session session = sessionFactory.openSession();
+		
+		List<Branch> results = new ArrayList<>();
+		try {
+			Query query = session.createSQLQuery(sqlQuery).addScalar("id", StandardBasicTypes.INTEGER)
+			        .addScalar("code", StandardBasicTypes.STRING).addScalar("name", StandardBasicTypes.STRING)
+			        .setInteger("parentId", parentId).setResultTransformer(new AliasToBeanResultTransformer(Branch.class));
+			results = query.list();
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}
+		return results;
+		
 	}
 }
