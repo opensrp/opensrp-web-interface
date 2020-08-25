@@ -209,8 +209,9 @@ public class TargetService extends CommonService {
 			patient.put(dto.getRoleName());
 			patient.put(dto.getBranch());
 			
-			String view = "<div class='col-sm-12 form-group'><a \" href=\"view/" + "/" + dto.getBranchId() + "/"
-			        + dto.getRoleId() + "/" + dto.getUserId() + ".html\">Set target</a> </div>";
+			String view = "<div class='col-sm-12 form-group'><a \" href=\"set-individual/" + dto.getBranchId() + "/"
+			        + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
+			        + "\">Set target</a> </div>";
 			patient.put(view);
 			array.put(patient);
 		}
