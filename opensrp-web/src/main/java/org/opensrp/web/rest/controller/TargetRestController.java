@@ -39,10 +39,10 @@ public class TargetRestController {
 		try {
 			Integer isSave = targetService.saveAll(dto);
 			if (isSave != null) {
-				response.put("status", "FAILED");
-				response.put("msg", "you have created successfully.");
-			} else {
 				response.put("status", "SUCCESS");
+				response.put("msg", "You have submitted successfully.");
+			} else {
+				response.put("status", "FAILED");
 				response.put("msg", "Something went worng please contact with admin .");
 				
 			}

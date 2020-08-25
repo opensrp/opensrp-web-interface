@@ -11,9 +11,11 @@
 
 <title>SK, PA  list</title>
 	
-	
-<c:url var="urlForSKPAList" value="/rest/api/v1/target/sk-pa-user-list-for-individual-target-setting" />
-
+<meta name="_csrf" content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
+<c:url var="add_url" value="/rest/api/v1/target/save-update" />
+<c:url var="redirect_url" value="/target/sk-pa-list-for-individual-target.html" />
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -80,16 +82,22 @@
 				        		</c:forEach>
 				        	</div>
 				        </div>
-				        
-				        	<div class="col-md-12 form-group text-right">
+				       <div id="errorMessage">
+										  <div class="alert-message warn">
+										      <div id="errormessageContent" class="alert alert-successs text-right"> </div>
+										  </div>
+							</div> 
+				       		
+						
+				        <div class="col-md-12 form-group text-right">
 					    		<div class="row">
 							     	<div class="col-lg-12">
-										 <button class="bt btn btn-primary" id="approve" name="approve" value="1" type="submit">Submit</button>
+										 <button class="bt btn btn-primary" id="approve" name="s" value="1" type="submit">Submit</button>
 									</div>
 					            </div>
-					        </div>
-					       </form>
-					            
+					      </div>
+					 </form>
+					           
 						</div>
 						
 						
@@ -123,7 +131,8 @@ $('#targetInfo').submit(function(event) {
 	var month = d. getMonth() + 1; 
 	var year = d. getFullYear();
     var item=[];
-    
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
     $('input[name^="qty"]').each(function() { 
     	var details={
     		"productId":$($(this)).attr("id"),
@@ -143,21 +152,21 @@ $('#targetInfo').submit(function(event) {
     	
 	
 	});
-    console.log(JSON.stringify(item));
-    return 0;
+    
+  
     formData = {
         'id': 0,
         'targetTo':'${userId}',
-        'type': '',
+        'type': 'USER',
         'role': '${roleId}',
         "targetDetailsDTOs":item
     };
     console.log(formData);
-    return 0;
+   
     $.ajax({
         contentType : "application/json",
         type: "POST",
-        url: url,
+        url: '${add_url}',
         data: JSON.stringify(formData),
         dataType : 'json',
 
@@ -167,10 +176,15 @@ $('#targetInfo').submit(function(event) {
             $("#loading").show();
         },
         success : function(data) {
-            $("#usernameUniqueErrorMessage").html(data);
-            $("#loading").hide();
-            if(data == ""){
-                window.location.replace("/opensrp-dashboard/user.html");
+        	let response = JSON.parse(data);
+    		console.log(response);
+    		$("#errorMessage").show();            	  
+            $("#errormessageContent").html(response.msg)  
+            if(response.status == 'SUCCESS'){
+            	setTimeout(function(){
+            		 window.location.replace("${redirect_url}");
+                 }, 2000);
+
             }
         },
         error : function(e) {
