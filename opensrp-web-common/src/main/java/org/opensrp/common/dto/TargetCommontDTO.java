@@ -8,7 +8,8 @@ public class TargetCommontDTO extends InventoryDTO {
 	
 	private int userId;
 	
-	public int getRoleId() {
+	@Override
+	public Integer getRoleId() {
 		return roleId;
 	}
 	

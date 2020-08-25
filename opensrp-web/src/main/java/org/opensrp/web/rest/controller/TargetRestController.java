@@ -43,7 +43,7 @@ public class TargetRestController {
 				response.put("msg", "you have created successfully.");
 			} else {
 				response.put("status", "SUCCESS");
-				response.put("msg", "Something went worng please contact with admin.");
+				response.put("msg", "Something went worng please contact with admin .");
 				
 			}
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);

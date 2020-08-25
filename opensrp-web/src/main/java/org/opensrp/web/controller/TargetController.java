@@ -37,7 +37,7 @@ public class TargetController {
 		model.addAttribute("locale", locale);
 		
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
-		return "target/sk-pa-list-for-individual-target";
+		return "targets/sk-pa-list-for-individual-target";
 	}
 	
 	@RequestMapping(value = "/set-individual/{branch_id}/{role_id}/{user_id}.html", method = RequestMethod.GET)
@@ -48,8 +48,9 @@ public class TargetController {
 		model.addAttribute("targets", targetService.allActiveTarget(roleId));
 		model.addAttribute("branchId", branchId);
 		model.addAttribute("userId", userId);
+		model.addAttribute("roleId", roleId);
 		model.addAttribute("name", request.getParameter("name"));
-		return "target/sk-pa-individual-target-set";
+		return "targets/sk-pa-individual-target-set";
 	}
 	
 }
