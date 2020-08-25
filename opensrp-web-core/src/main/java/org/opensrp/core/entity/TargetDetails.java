@@ -6,15 +6,11 @@ package org.opensrp.core.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -39,9 +35,8 @@ public class TargetDetails implements Serializable {
 	@Column(name = "product_id")
 	private Long productId;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "updated_by", referencedColumnName = "id")
-	private User updatedBy;
+	@Column(name = "updated_by")
+	private Integer updatedBy;
 	
 	private String uuid;
 	
@@ -73,7 +68,7 @@ public class TargetDetails implements Serializable {
 	private String status;
 	
 	@Column(name = "user_id")
-	private int userId;
+	private Integer userId;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
@@ -85,9 +80,7 @@ public class TargetDetails implements Serializable {
 	@UpdateTimestamp
 	private Date updated = new Date();
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "creator", referencedColumnName = "id")
-	private User creator;
+	private int creator;
 	
 	public Long getId() {
 		return id;
@@ -138,11 +131,11 @@ public class TargetDetails implements Serializable {
 		this.status = status;
 	}
 	
-	public User getCreator() {
+	public int getCreator() {
 		return creator;
 	}
 	
-	public void setCreator(User creator) {
+	public void setCreator(int creator) {
 		this.creator = creator;
 	}
 	
@@ -194,11 +187,11 @@ public class TargetDetails implements Serializable {
 		this.productId = productId;
 	}
 	
-	public User getUpdatedBy() {
+	public Integer getUpdatedBy() {
 		return updatedBy;
 	}
 	
-	public void setUpdatedBy(User updatedBy) {
+	public void setUpdatedBy(Integer updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 	
@@ -210,11 +203,11 @@ public class TargetDetails implements Serializable {
 		this.branchId = branchId;
 	}
 	
-	public int getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 	
-	public void setUserId(int userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 	

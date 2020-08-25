@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -73,14 +74,20 @@ public class TargetService extends CommonService {
 					fieldValues.put("month", targetDetailsDTO.getMonth());
 					fieldValues.put("userId", targetTo);
 					TargetDetails targetDetails = findByKeys(fieldValues, TargetDetails.class);
+					
+					System.err.println("targetDetails:::" + targetDetails);
 					if (targetDetails == null) {
 						targetDetails = new TargetDetails();
-						targetDetails.setCreator(user);
+						targetDetails.setUuid(UUID.randomUUID().toString());
+						targetDetails.setCreator(user.getId());
 					} else {
-						targetDetails.setUpdatedBy(user);
+						
+						targetDetails.setUpdatedBy(user.getId());
 					}
+					
 					targetDetails = targetMapper.map(targetDetailsDTO, targetDetails);
 					targetDetails.setUserId(targetTo);
+					System.err.println("targetDetails:::" + targetDetails);
 					session.saveOrUpdate(targetDetails);
 					
 				}
@@ -209,8 +216,9 @@ public class TargetService extends CommonService {
 			patient.put(dto.getRoleName());
 			patient.put(dto.getBranch());
 			
-			String view = "<div class='col-sm-12 form-group'><a \" href=\"view/" + "/" + dto.getBranchId() + "/"
-			        + dto.getRoleId() + "/" + dto.getUserId() + ".html\">Set target</a> </div>";
+			String view = "<div class='col-sm-12 form-group'><a \" href=\"set-individual/" + dto.getBranchId() + "/"
+			        + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
+			        + "\">Set target</a> </div>";
 			patient.put(view);
 			array.put(patient);
 		}

@@ -1,7 +1,5 @@
 package org.opensrp.core.mapper;
 
-import java.util.UUID;
-
 import org.opensrp.core.dto.TargetDetailsDTO;
 import org.opensrp.core.entity.TargetDetails;
 import org.opensrp.core.service.TargetService;
@@ -23,7 +21,6 @@ public class TargetMapper {
 		targetDetails.setStartDate(targetDetailsDTO.getStartDate());
 		targetDetails.setEndDate(targetDetailsDTO.getEndDate());
 		
-		targetDetails.setUuid(UUID.randomUUID().toString());
 		targetDetails.setTimestamp(System.currentTimeMillis());
 		targetDetails.setStatus(targetDetailsDTO.getStatus());
 		
