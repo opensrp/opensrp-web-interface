@@ -25,7 +25,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.InventoryDTO;
-import org.opensrp.common.dto.PassStockIndividualQueryDTO;
 import org.opensrp.common.util.ReferenceType;
 import org.opensrp.common.util.Status;
 import org.opensrp.core.dto.ProductDTO;
@@ -335,22 +334,23 @@ public class StockService extends CommonService {
 		
 		for (InventoryDTO dto : dtos) {
 			JSONArray patient = new JSONArray();
-			
+			String checkBox = "<input type=\"checkbox\" id=\"ss" + branchId+"\" value="+ branchId+">";
+			patient.put(checkBox);
 			patient.put(dto.getFullName());
-			if (roleId == 28) {
+			if (roleId == 32) {
 				patient.put("SS"); // for am
 			}
 			patient.put(dto.getSKName());
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
-			if (roleId != 28) {
+			if (roleId != 32) {
 				patient.put("0"); // target amount for DIvM
 			}
 			patient.put(dto.getSalesPrice());
-			if (roleId != 28) {
+			if (roleId != 32) {
 				patient.put(dto.getPurchasePrice()); // for DIvM
 			}
-			if (roleId == 28) {
-				String view = "<div class='col-sm-12 form-group'><a \" href=\"individual-ss-sell/" + dto.getId() + "/"
+			if (roleId == 32) {
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"/opensrp-dashboard/inventoryam/individual-ss-sell/" + branchId + "/"
 				        + dto.getId() + ".html\"><strong>Sell Products </strong></a>  | " + "<a \" href=\"view/" + branchId
 				        + "/" + dto.getId() + ".html\"><strong>View Details </strong></a> " + "</div>";
 				
@@ -487,15 +487,15 @@ public class StockService extends CommonService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<PassStockIndividualQueryDTO> getPassStockIndividualStockList(String userName,Integer branchId, Integer roleId) {
+	public List<InventoryDTO> getIndividualStockList(String userName,Integer branchId, Integer roleId) {
 		Session session = getSessionFactory().openSession();
-		List<PassStockIndividualQueryDTO> result = null;
+		List<InventoryDTO> result = null;
 		try {
 			String rawSql = "select * from core.product_list_for_sk_pk_pa_with_current_stock('"+userName+"',"+branchId+","+roleId+")";
 			Query query = session.createSQLQuery(rawSql).addScalar("id",StandardBasicTypes.LONG)
 					.addScalar("name", StandardBasicTypes.STRING)
 					.addScalar("stock", StandardBasicTypes.INTEGER).addScalar("available", StandardBasicTypes.INTEGER)
-						.setResultTransformer(new AliasToBeanResultTransformer(PassStockIndividualQueryDTO.class));
+						.setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
 			result = query.list();
 
 		}
@@ -546,6 +546,42 @@ public class StockService extends CommonService {
 			        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
 			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
 			        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("roleId", StandardBasicTypes.INTEGER).setInteger("userId", userId)
+			        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
+			dtos = (InventoryDTO) query.uniqueResult();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dtos;
+
+	}
+	
+	public InventoryDTO getUserInfoWithSkByUserId(int userId) {
+		
+		Session session = getSessionFactory().openSession();
+		InventoryDTO dtos = null;
+		try {
+			String hql = ""
+					+ "SELECT Concat(sk.first_name, ' ', sk.last_name) SKName, "
+					+ "       u.first_name firstName, "
+					+ "       u.last_name lastName, "
+					+ "       u.username, "
+					+ "       r.role_id                                AS roleId "
+					+ "FROM   core.users AS u "
+					+ "       JOIN core.users sk "
+					+ "         ON u.parent_user_id = sk.id "
+					+ "       JOIN core.user_role r "
+					+ "         ON r.user_id = u.id "
+					+ "WHERE  u.id = "+userId+"";
+			Query query = session.createSQLQuery(hql)
+					.addScalar("SKName", StandardBasicTypes.STRING)
+					.addScalar("firstName", StandardBasicTypes.STRING)
+			        .addScalar("lastName", StandardBasicTypes.STRING)
+			        .addScalar("roleId", StandardBasicTypes.INTEGER)
+			        .addScalar("username", StandardBasicTypes.STRING)
 			        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
 			dtos = (InventoryDTO) query.uniqueResult();
 		}

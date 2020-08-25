@@ -8,6 +8,8 @@ public class InventoryDTO {
 	
 	private Long id;
 	
+	private String name;
+	
 	private String branchName;
 	
 	private String branchCode;
@@ -36,7 +38,11 @@ public class InventoryDTO {
 	
 	private String username;
 	
-	private Integer roleId;
+	private int roleId;
+	
+	private int stock;
+	
+	private int available;
 	
 	public Long getId() {
 		return id;
@@ -46,6 +52,14 @@ public class InventoryDTO {
 		this.id = id;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public String getBranchName() {
 		return branchName;
 	}
@@ -177,12 +191,30 @@ public class InventoryDTO {
 		this.username = username;
 	}
 
-	public Integer getRoleId() {
+
+
+	public int getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(Integer roleId) {
+	public void setRoleId(int roleId) {
 		this.roleId = roleId;
+	}
+
+	public int getStock() {
+		return stock;
+	}
+
+	public void setStock(int stock) {
+		this.stock = stock;
+	}
+
+	public int getAvailable() {
+		return available;
+	}
+
+	public void setAvailable(int available) {
+		this.available = available;
 	}
 
 	@Override

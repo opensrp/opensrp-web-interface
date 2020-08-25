@@ -26,11 +26,20 @@
 				<!-- BEGIN EXAMPLE TABLE PORTLET-->
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
-						<div class="caption">
-							<i class="fa fa-list"></i><spring:message code="lbl.inventory"/>
+						<div class="center-caption">
+							${branchInfo[0][1]} - ${branchInfo[0][2]}
 						</div>
 					</div>					
 					<div class="portlet-body">
+					<div style="display: none;" class="alert alert-success" id="serverResponseMessage" role="alert"></div>
+						<div class="card-body">
+							<div id="loading"
+								style="display: none; position: absolute; z-index: 1000; margin-left: 35%">
+								<img width="50px" height="50px"
+									src="<c:url value="/resources/images/ajax-loading.gif"/>">
+							</div>
+
+						</div>
 						<div class="form-group">
 							<div class="row">
 							<!-- <div class="col-lg-1 form-group" style="margin-top: 5px;">
@@ -38,35 +47,51 @@
 								</div> -->
 								<div class="col-lg-3 form-group">
 									<label for="branch">Branch:</label> <input
-										type="text" class="form-control" id="branch" readonly>
+										type="text" value="${branchInfo[0][1]}" class="form-control" id="branch" readonly>
 								</div>
 								<div class="col-lg-3 form-group">
 								    <label for="skName">Sk:</label>
-									<input type="text" class="form-control" id="skName" readonly>
+									<input type="text" value="${skName}" class="form-control" id="skName" readonly>
 								</div>
 								<div class="col-lg-3 form-group">
-								    <label for="designation">SS:</label>
-									<input type="text" class="form-control" id="ssName" readonly>
+								    <label for="ssName">SS:</label>
+									<input type="text" value="${ssName}" class="form-control" id="ssName" readonly>
 								</div>
 							</div>
 						</div>
-						<h3>Sell To Shamima Khatun : </h3>
-						<table class="table table-striped table-bordered " id="indidualSellListToSS">
+						<h3>Sell To ${ssName} : </h3>
+						<br>
+						<table class="table table-striped table-bordered " id="individualSellListToSS">
 							<thead>
 								<tr>
+									<th style="display: none"><spring:message code="lbl.serialNo"></spring:message></th>
 									<th><spring:message code="lbl.productName"></spring:message></th>
+									<th>${ssName}'s <spring:message code="lbl.currentStock"></spring:message></th>
 									<th><spring:message code="lbl.availableProduct"></spring:message></th>
-									<th><spring:message code="lbl.sellProduct"></spring:message></th>
+									<th><spring:message code="lbl.sellProduct"></spring:message><span class="text-danger"> *</span><p style="display: none" class="text-danger" id="validationMessage"></p></th>
 								</tr>
 							</thead>
-
+							<tbody>
+							<c:forEach var="product" items="${ productList }">
+									<tr>
+										<td style="display: none">${ product.id }</td>
+										<td>${ product.name }</td>
+										<td>${ product.available }</td>
+										<td>${ product.stock }</td>
+										<td><input type="number" min="1" id="sellAmount" name ="sellAmount"><span class="text-danger" id="sellAmountSelection"></span></td>
+									</tr>
+								</c:forEach>
+								</tbody>
 						</table>
+						<div class="text-center">
+						<button type="submit" onclick="saveStockData()" class="btn btn-primary" value="confirm">Confirm All</button>
+						</div>
 					</div>
 					
 				</div>		
-				<div class="col-lg-12 form-group text-right">
-	                <button type="submit" onclick="" class="btn btn-primary" value="confirm">Confirm All</button>
-	            </div>		
+				<!-- <div class="col-lg-12 form-group text-right">
+	                <button type="submit" onclick="" class="btn btn-primary" value="confirm">Sell</button>
+	            </div>	 -->	
 			</div>
 		</div>
 		</br>
@@ -83,8 +108,126 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#indidualSellListToSS').DataTable();
+		$('#individualSellListToSS').DataTable({
+			  "pageLength": 25
+		});
 });
+function createStockArray() {
+	var stockArray = [];
+	$('#individualSellListToSS  > tbody  > tr').each(function(index, tr) {
+		var stockObject = {};
+		var todayDate = new Date(), y = todayDate.getFullYear(), m = todayDate.getMonth();
+		var invoiceNo = "";
+		var recieveDate = "";
+		var branchId = "${id}";
+		var avilableStock = 0;
+		//get td of each row and insert it into cols array
+		$(this).find('td').each(function(colIndex, c) {
+
+			if(colIndex == 0) {
+				stockObject["productId"] = parseInt(c.textContent);
+			}
+			if(colIndex == 3) {
+				avilableStock = parseInt(c.textContent);
+			}
+			if(colIndex == 4) {
+				stockObject["debit"] = parseInt($(this).find('input[type="number"]').val());;
+			}
+
+		});
+		if(!isNaN(stockObject["debit"])) {
+			if(stockObject["debit"] > avilableStock) {
+				$("#validationMessage").show();
+				$("#validationMessage").html("<strong>* Not enough stock available to sell.</strong>");
+				stockArray = [];
+				return false;
+			}
+		}
+
+		stockObject["credit"] = 0;
+		stockObject["year"] = todayDate.getFullYear();
+		stockObject["month"] = todayDate.getMonth()+1;
+		stockObject["branchId"] = ${id};
+		stockObject["status"] = "ACTIVE";
+		stockObject["sellOrPassTo"] = 0;
+		stockObject["referenceType"] = "SELL";
+		stockObject["invoiceNumber"] = invoiceNo;
+		stockObject["receiveDate"] = $.datepicker.formatDate('yy-mm-dd', new Date());
+		stockObject["startDate"] = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
+		stockObject["expireyDate"] =  $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));
+
+		//insert this cols(full rows data) array into stock array
+		if(!isNaN(stockObject["debit"])) {
+			stockArray.push(stockObject);
+		 }
+	});
+	console.log(stockArray);
+	return stockArray;
+}
+
+function saveStockData() {
+	$("#sellAmountSelection").html("");
+	$("#validationMessage").hide();
+	$("#validationMessage").html("");
+	var stockListArray = createStockArray();
+	if(stockListArray.length < 1) {
+		if ($('#validationMessage').is(':empty')) { 
+			 $("#sellAmountSelection").html("<strong>* Atleast one field need to be selected</strong>");
+		}
+		 $(window).scrollTop(0);
+		 return;
+	}
+	$("#loading").show();
+	$("#amountSelection").html("");
+	$("#validationMessage").hide();
+	$("#validationMessage").html("");
+	var branchId = parseInt("${id}");
+	var branchCode = "${branchInfo[0][2]}";
+	var sellToId = parseInt("${ssid}");
+	var url = "/opensrp-dashboard/rest/api/v1/stock/save-update";			
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	var formData;
+		formData = {
+	            'id': 0,
+	            "sellTo":[sellToId],
+	            "stockId":branchCode,
+	            'stockDetailsDTOs': stockListArray
+	        };
+	console.log(formData);
+	event.preventDefault();
+	$.ajax({
+		contentType : "application/json",
+		type: "POST",
+        url: url,
+        data: JSON.stringify(formData), 
+        dataType : 'json',
+        
+		timeout : 100000,
+		beforeSend: function(xhr) {				    
+			 xhr.setRequestHeader(header, token);
+		},
+		success : function(data) {
+		   var response = JSON.parse(data);
+		   $("#loading").hide();
+		   $(window).scrollTop(0);
+		   $("#serverResponseMessage").show();
+		   $("#serverResponseMessage").html(response.msg);
+		   
+			   if(response.status == "SUCCESS"){					   
+			   window.location.replace("/opensrp-dashboard/inventoryam/sell-to-ss-list/"+branchId+".html?lang=${locale}");
+			   
+		   }
+		   
+		},
+		error : function(e) {
+		   
+		},
+		done : function(e) {				    
+		    console.log("DONE");				    
+		}
+	});
+};	
 </script>
 
 

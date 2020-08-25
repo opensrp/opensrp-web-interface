@@ -40,7 +40,7 @@
 								<div class="col-lg-3 form-group">
 								<label class="control-label"><spring:message
 												code="lbl.designation" /> </label> 
-									<select class="form-control" id="branchDM" name="branchDM">
+									<select class="form-control" id="roleId" name="roleId">
 										<option value="0"><spring:message
 												code="lbl.pleaseSelect" /></option>
 										<c:forEach items="${roles}" var="role">
@@ -152,7 +152,7 @@ jQuery(document).ready(function() {
     });
 
 function filter(){
-	
+	let roleId = +$('#roleId').val();
 	passStockInventoryList = $('#passStockInventoryList').DataTable({
          bFilter: false,
          serverSide: true,
@@ -169,7 +169,7 @@ function filter(){
              data: function(data){           	
      	      	data.search = $('#search').val();            	
 	     	    data.branchId = ${id} ;
-	            data.roleId =  0;
+	            data.roleId =  roleId;
 	            data.name=$('#userName').val();
              },
              dataSrc: function(json){

@@ -156,7 +156,7 @@ jQuery(document).ready(function() {
            serverSide: true,
            processing: true,
            columnDefs: [
-               { targets: [0], orderable: false },
+               { targets: [0,1,2,3,4,5], orderable: false },
                { width: "20%", targets: 0 },
                { width: "20%", targets: 1 },
                { width: "20%", targets: 2 },
@@ -222,7 +222,7 @@ function filter(){
         serverSide: true,
         processing: true,
         columnDefs: [
-            { targets: [0], orderable: false },
+            { targets: [0,1,2,3,4,5], orderable: false },
             { width: "20%", targets: 0 },
             { width: "20%", targets: 1 },
             { width: "20%", targets: 2 },

@@ -56,6 +56,9 @@
 						<img width="50px" height="50px"
 							src="<c:url value="/resources/images/ajax-loading.gif"/>">
 					</div>
+					<div>
+					<p class="text-danger" id="validationMessage"><strong></strong></p>
+				</div>
 				<div class="table-scrollable">
 				<table class="table table-striped table-bordered"
 					id="addProductTemporaryList">
@@ -111,10 +114,11 @@
 									class="glyphicon glyphicon-trash"></i></a></td>
 						</tr>
 					</table>
+					
 				</div>
-				<div>
-					<p class="text-danger" id="validationMessage"><strong></strong></p>
-				</div>
+				<div class="text-center">
+	                <button type="submit" onclick="saveStockData()" class="btn btn-primary" value="confirm">Confirm All</button>
+	            </div>
 				<!-- <div class="modal fade" id="addProductToStock" role="dialog">
 							<div class="modal-dialog">
 
@@ -169,9 +173,9 @@
 						</div> -->
 					</div>
 							</div>
-				<div class="col-lg-12 form-group text-right">
+				<!-- <div class="col-lg-12 form-group text-right">
 	                <button type="submit" onclick="saveStockData()" class="btn btn-primary" value="confirm">Confirm All</button>
-	            </div>
+	            </div> -->
 		</br>
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>
@@ -220,7 +224,7 @@ jQuery(document).ready(function() {
 
 function createStockArray() {
 	var stockArray = [];
-	$('#addProductTemporaryList tr').each(function(index, tr) {
+	$('#addProductTemporaryList > tbody > tr').each(function(index, tr) {
 		var stockObject = {};
 		var todayDate = new Date(), y = todayDate.getFullYear(), m = todayDate.getMonth();
 		var invoiceNo = $('#invoiceNo').val();
@@ -237,7 +241,7 @@ function createStockArray() {
 			}
 			
 			if(colIndex == 3) {
-				stockObject["credit"] = +$(this).find('input[type="number"]').val();
+				stockObject["credit"] = parseInt($(this).find('input[type="number"]').val());
 			}
 			
 			if(colIndex == 4) {
@@ -245,7 +249,7 @@ function createStockArray() {
 			}
 
 		});
-		if(stockObject["productId"] == 0 || stockObject["credit"] == 0 || stockObject["expireyDate"] == "") {
+ 		if(stockObject["productId"] == 0 || stockObject["credit"] == 0 || stockObject["expireyDate"] == "") {
 			$("#validationMessage").html("<strong>* Please fill out the required fields</strong>");
 			stockArray = [];
 			return false;
