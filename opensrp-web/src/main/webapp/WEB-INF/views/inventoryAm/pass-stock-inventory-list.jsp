@@ -38,14 +38,17 @@
 									<label for="designation">Designation:</label>
 								</div> -->
 								<div class="col-lg-3 form-group">
-								<label class="control-label">Designation </label> 
-								<select class="form-control" name="designation" id="designation">
-								<option selected="selected">Select Designation</option>
-								  <option value="volvo">SK</option>
-								  <option value="saab">PS</option>
-								  <option value="mercedes">SS</option>
-								  
-								</select>
+								<label class="control-label"><spring:message
+												code="lbl.designation" /> </label> 
+									<select class="form-control" id="branchDM" name="branchDM">
+										<option value="0"><spring:message
+												code="lbl.pleaseSelect" /></option>
+										<c:forEach items="${roles}" var="role">
+										<option value="${role.id}">${role.name}</option>
+										</c:forEach>
+
+										
+									</select>
 								</div>
 								<div class="col-lg-4 form-group ">
 									<label class="control-label">Name </label> 
@@ -192,7 +195,7 @@ function filter(){
 function navigateToPassStock(skId) {
 	var locale = "${locale}";
 	var branchId= ${branchInfo[0][0]};
-	window.location.replace("/opensrp-dashboard/inventoryam/individual-stock/"+skId+"/"+branchId+".html?lang="+locale);
+	window.location.replace("/opensrp-dashboard/inventoryam/individual-stock/"+branchId+"/"+skId+".html?lang="+locale);
 }
 </script>
 

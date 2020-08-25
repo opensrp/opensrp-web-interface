@@ -3,11 +3,12 @@ package org.opensrp.web.controller;
 import java.util.List;
 import java.util.Locale;
 
-import org.json.JSONObject;
+import org.opensrp.common.dto.InventoryDTO;
+import org.opensrp.common.dto.PassStockIndividualQueryDTO;
 import org.opensrp.common.dto.RequisitionQueryDto;
-import org.opensrp.common.dto.UserDTO;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.entity.Branch;
+import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.ProductService;
@@ -37,6 +38,8 @@ public class InventoryAmController {
 	
 	@Autowired
 	private StockService stockService;
+	
+
 	
 	@RequestMapping(value = "inventoryam/myinventory.html", method = RequestMethod.GET)
 	public String myInventory(Model model, Locale locale) {
@@ -153,6 +156,8 @@ public class InventoryAmController {
 	public String passStockInventoryList(Model model, Locale locale, @PathVariable("id") int id) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Object[]> branchInfo = branchService.getBranchByUser(String.valueOf(id), loggedInUser);
+		List<Role> roles = productService.getRoleForProduct();
+		model.addAttribute("roles", roles);
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
@@ -162,6 +167,13 @@ public class InventoryAmController {
 	@RequestMapping(value = "inventoryam/individual-stock/{id}/{skid}.html", method = RequestMethod.GET)
 	public String passStockInventoryIndividual(Model model, Locale locale, @PathVariable("id") int id,
 	                                           @PathVariable("skid") int skid) {
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<Object[]> branchInfo = branchService.getBranchByUser(String.valueOf(id), loggedInUser);
+		InventoryDTO userdetails = stockService.getUserAndBrachByuserId(skid);
+		List<PassStockIndividualQueryDTO> passStockList = stockService.getPassStockIndividualStockList(userdetails.getUsername(), id, userdetails.getRoleId());
+		model.addAttribute("fullname", userdetails.getFullName());
+		model.addAttribute("passIndividualStockList", passStockList);
+		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("id", id);
 		model.addAttribute("skid", skid);
 		model.addAttribute("locale", locale);
@@ -196,11 +208,13 @@ public class InventoryAmController {
 	}
 	
 	@RequestMapping(value = "inventoryam/stock-list/view/{id}.html", method = RequestMethod.GET)
-	public String stockInDetails(Model model, Locale locale, @PathVariable("id") long id) {
-		
-		model.addAttribute("stocks", stockService.getStockInByStockId(id));
-		
+	public String stockInDetails(Model model, Locale locale, @PathVariable("id") long id, @RequestParam(value = "branch") String branch) {
+
+		List<InventoryDTO> stockDetails = stockService.getStockInByStockId(id);
+		model.addAttribute("stocks", stockDetails);
+		model.addAttribute("stockID", stockDetails.get(0).getStockInId());
 		model.addAttribute("locale", locale);
+		model.addAttribute("branchInfo", branch);
 		return "inventoryAm/stock-in-details";
 	}
 	

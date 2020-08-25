@@ -248,7 +248,7 @@ function createStockArray() {
 		if(stockObject["productId"] == 0 || stockObject["credit"] == 0 || stockObject["expireyDate"] == "") {
 			$("#validationMessage").html("<strong>* Please fill out the required fields</strong>");
 			stockArray = [];
-			return;
+			return false;
 		}
 		$("#validationMessage").html("");
 		stockObject["year"] = todayDate.getFullYear();

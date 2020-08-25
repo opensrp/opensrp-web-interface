@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.InventoryDTO;
+import org.opensrp.common.dto.PassStockIndividualQueryDTO;
 import org.opensrp.common.util.ReferenceType;
 import org.opensrp.common.util.Status;
 import org.opensrp.core.dto.ProductDTO;
@@ -238,8 +239,7 @@ public class StockService extends CommonService {
 			patient.put(dto.getStockInId());
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
 			patient.put("" + dto.getFullName());
-			String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"view/"
-			        + dto.getId() + ".html\">View details</a> </div>";
+			String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"javascript:;\" onclick='navigateTodetails("+dto.getId()+",\""+dto.getBranchName()+"\",\""+dto.getBranchCode()+"\")'>View details</a> </div>";
 			patient.put(view);
 			array.put(patient);
 		}
@@ -486,6 +486,28 @@ public class StockService extends CommonService {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<PassStockIndividualQueryDTO> getPassStockIndividualStockList(String userName,Integer branchId, Integer roleId) {
+		Session session = getSessionFactory().openSession();
+		List<PassStockIndividualQueryDTO> result = null;
+		try {
+			String rawSql = "select * from core.product_list_for_sk_pk_pa_with_current_stock('"+userName+"',"+branchId+","+roleId+")";
+			Query query = session.createSQLQuery(rawSql).addScalar("id",StandardBasicTypes.LONG)
+					.addScalar("name", StandardBasicTypes.STRING)
+					.addScalar("stock", StandardBasicTypes.INTEGER).addScalar("available", StandardBasicTypes.INTEGER)
+						.setResultTransformer(new AliasToBeanResultTransformer(PassStockIndividualQueryDTO.class));
+			result = query.list();
+
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}		
+		return result;
+	}
+	
 	
 	@SuppressWarnings("unchecked")
 	public ProductDTO getProductDetailsById(Integer branchId, Integer productId) {
@@ -519,11 +541,11 @@ public class StockService extends CommonService {
 		Session session = getSessionFactory().openSession();
 		InventoryDTO dtos = null;
 		try {
-			String hql = "select u.first_name firstName,u.last_name lastName ,b.name branchName,b.code branchCode from core.users as u join core.user_branch ub on u.id = ub.user_id join core.branch b on b.id=ub.branch_id where u.id =:userId";
-			Query query = session.createSQLQuery(hql).addScalar("firstName", StandardBasicTypes.STRING)
+			String hql = "select u.username, u.first_name firstName,u.last_name lastName ,r.role_id  roleId,b.name branchName,b.code branchCode from core.users as u join core.user_branch ub on u.id = ub.user_id join core.branch b on b.id=ub.branch_id join core.user_role r on r.user_id = u.id where u.id =:userId";
+			Query query = session.createSQLQuery(hql).addScalar("username", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
 			        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
 			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
-			        .addScalar("lastName", StandardBasicTypes.STRING).setInteger("userId", userId)
+			        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("roleId", StandardBasicTypes.INTEGER).setInteger("userId", userId)
 			        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
 			dtos = (InventoryDTO) query.uniqueResult();
 		}

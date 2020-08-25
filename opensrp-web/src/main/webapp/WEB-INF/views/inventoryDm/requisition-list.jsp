@@ -294,7 +294,7 @@ $("#branchDM").change(function (event) {
 function navigateTodetails(requisitionId,branchName,branchCode) {
 var locale = "${locale}";
 var branchString= branchName+"-"+branchCode;
-window.location.replace("/opensrp-dashboard/inventory/requisition-details/"+requisitionId+".html?lang="+locale+"&&branch="+branchString+"");
+window.location.replace("/opensrp-dashboard/inventory/requisition-details/"+requisitionId+".html?lang="+locale+"&branch="+branchString+"");
 }
 
 

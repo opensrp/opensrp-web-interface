@@ -25,10 +25,10 @@
 						<div class=center-caption>${branchInfo}</div>
 						</div>
 			<div class="portlet-body">
-			<div class="col-sm-12 text-center"><h4><u>Stock in detail</u></h4></div>
+			<div class="col-sm-12 text-center"><h4><u>Stock - ${stockID}</u></h4></div>
 				
 				<table class="table table-striped table-bordered"
-					id="requisitionDetails">
+					id="stockDetails">
 					<thead>
 						<tr>
 							<th>Product name</th>
@@ -68,7 +68,7 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#requisitionDetails').DataTable();
+		$('#stockDetails').DataTable();
 });
 </script>
 

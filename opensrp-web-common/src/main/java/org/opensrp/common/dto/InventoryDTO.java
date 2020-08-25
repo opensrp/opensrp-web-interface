@@ -34,6 +34,10 @@ public class InventoryDTO {
 	
 	private String productName;
 	
+	private String username;
+	
+	private Integer roleId;
+	
 	public Long getId() {
 		return id;
 	}
@@ -165,6 +169,22 @@ public class InventoryDTO {
 		this.productName = productName;
 	}
 	
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public Integer getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
+
 	@Override
 	public String toString() {
 		return "InventoryDTO [id=" + id + ", branchName=" + branchName + ", branchCode=" + branchCode + ", invoiceNumber="
