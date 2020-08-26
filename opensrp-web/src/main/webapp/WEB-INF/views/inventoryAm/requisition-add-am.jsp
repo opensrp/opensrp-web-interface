@@ -66,12 +66,17 @@
 								</c:forEach>
 								</tbody>
 						</table>
-					</div>
+				<div class="text-center">
+					<button onclick="submitRequisition()" class="btn btn-primary"
+						value="confirm">Confirm All</button>
+
+				</div>
+			</div>
 							</div>
-				<div class="col-lg-12 form-group text-right">
+				<!-- <div class="col-lg-12 form-group text-right">
 				<button onclick="submitRequisition()" class="btn btn-primary" value="confirm">Confirm All</button>
 			
-	            </div>
+	            </div> -->
 		</br>
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>

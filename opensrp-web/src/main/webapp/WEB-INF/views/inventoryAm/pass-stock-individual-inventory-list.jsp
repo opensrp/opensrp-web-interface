@@ -78,15 +78,16 @@
 								</c:forEach>
 								</tbody>
 						</table>
-						<div>
-							<p class="text-danger" id="validationMessage"></p>
+						<div class="text-center">
+							<button type="submit" onclick="saveStockData()"
+								class="btn btn-primary" value="confirm">Save All</button>
 						</div>
 					</div>
 					
 				</div>		
-				<div class="col-lg-12 form-group text-right">
-	                <button type="submit" onclick="saveStockData()" class="btn btn-primary" value="confirm">Confirm All</button>
-	            </div>		
+				<!-- <div class="col-lg-12 form-group text-right">
+	                <button type="submit" onclick="saveStockData()" class="btn btn-primary" value="confirm">Save All</button>
+	            </div>	 -->	
 			</div>
 		</div>
 		</br>
@@ -105,7 +106,9 @@ jQuery(document).ready(function() {
 		Layout.init(); // init current layout
    //TableAdvanced.init();
 
-	$('#passStockIndividualInventoryList').DataTable();
+	$('#passStockIndividualInventoryList').DataTable({
+		  "pageLength": 25
+	});
 	});
 	
 function createStockArray() {

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Locale;
 
 import org.opensrp.common.dto.InventoryDTO;
-import org.opensrp.common.dto.PassStockIndividualQueryDTO;
 import org.opensrp.common.dto.RequisitionQueryDto;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.entity.Branch;
@@ -170,7 +169,7 @@ public class InventoryAmController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Object[]> branchInfo = branchService.getBranchByUser(String.valueOf(id), loggedInUser);
 		InventoryDTO userdetails = stockService.getUserAndBrachByuserId(skid);
-		List<PassStockIndividualQueryDTO> passStockList = stockService.getPassStockIndividualStockList(userdetails.getUsername(), id, userdetails.getRoleId());
+		List<InventoryDTO> passStockList = stockService.getIndividualStockList(userdetails.getUsername(), id, userdetails.getRoleId());
 		model.addAttribute("fullname", userdetails.getFullName());
 		model.addAttribute("passIndividualStockList", passStockList);
 		model.addAttribute("branchInfo", branchInfo);
@@ -182,12 +181,18 @@ public class InventoryAmController {
 	
 	@RequestMapping(value = "inventoryam/sell-to-ss.html", method = RequestMethod.GET)
 	public String sellToSsStock(Model model, Locale locale) {
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		return "inventoryAm/sell-to-ss";
 	}
 	
 	@RequestMapping(value = "inventoryam/sell-to-ss-list/{id}.html", method = RequestMethod.GET)
 	public String sellToSsList(Model model, Locale locale, @PathVariable("id") int id) {
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<Object[]> branchInfo = branchService.getBranchByUser(String.valueOf(id), loggedInUser);
+		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
 		return "inventoryAm/sell-to-ss-list";
@@ -195,6 +200,14 @@ public class InventoryAmController {
 	
 	@RequestMapping(value = "inventoryam/individual-ss-sell/{id}/{ssid}.html", method = RequestMethod.GET)
 	public String sellToIndividualSs(Model model, Locale locale, @PathVariable("id") int id, @PathVariable("ssid") int ssid) {
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<Object[]> branchInfo = branchService.getBranchByUser(String.valueOf(id), loggedInUser);
+		InventoryDTO skInformation = stockService.getUserInfoWithSkByUserId(ssid);
+		List<InventoryDTO> productStockDetails = stockService.getIndividualStockList(skInformation.getUsername(), id, skInformation.getRoleId());
+		model.addAttribute("productList", productStockDetails);
+		model.addAttribute("branchInfo", branchInfo);
+		model.addAttribute("skName", skInformation.getSKName());
+		model.addAttribute("ssName", skInformation.getFullName());
 		model.addAttribute("id", id);
 		model.addAttribute("ssid", ssid);
 		model.addAttribute("locale", locale);

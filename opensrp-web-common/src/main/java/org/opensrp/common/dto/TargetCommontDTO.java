@@ -11,10 +11,6 @@ public class TargetCommontDTO extends InventoryDTO {
 	private int userCount;
 	
 	@Override
-	public Integer getRoleId() {
-		return roleId;
-	}
-	
 	public void setRoleId(int roleId) {
 		this.roleId = roleId;
 	}

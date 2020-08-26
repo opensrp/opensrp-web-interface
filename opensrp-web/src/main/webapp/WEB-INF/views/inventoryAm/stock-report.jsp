@@ -101,7 +101,7 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#"stockReportOfAm"').DataTable();
+		$("#stockReportOfAm").DataTable();
 });
 jQuery(function() {
 	jQuery('.date-picker-year').datepicker({

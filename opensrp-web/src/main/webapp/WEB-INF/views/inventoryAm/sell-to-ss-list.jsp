@@ -27,8 +27,8 @@
 				<!-- BEGIN EXAMPLE TABLE PORTLET-->
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
-						<div class="caption">
-							<i class="fa fa-list"></i>Sell To SS
+						<div class="center-caption">
+							${branchInfo[0][1]} - ${branchInfo[0][2]}
 						</div>
 					</div>					
 					<div class="portlet-body">
@@ -47,7 +47,7 @@
 							<br/>
 							<div class = "row">
 							<div class="col-lg-8 form-group text-right">
-										<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sellToManyModal">Sell To Many</button>				
+										<button type="button" onclick="sellToMany()" class="btn btn-primary" data-toggle="modal" data-target="#sellToManyModal">Sell To Many</button>				
 								</div>
 								<div class="col-lg-2 form-group text-right">
 									<button type="submit" onclick="filter()" class="btn btn-primary"
@@ -55,12 +55,10 @@
 								</div></div>
 						</div>
 						<h3>Inventory : </h3>
-						<div class="table-scrollable">
-						
 						<table class="table table-striped table-bordered " id="StockSellHistory">
 							<thead>
 								<tr>
-								   <%--  <th><spring:message code="lbl.serialNo"></spring:message></th> --%>
+								   <th><input type="checkbox" value=""></th>
 									<th><spring:message code="lbl.name"></spring:message></th>
 									<th><spring:message code="lbl.designation"></spring:message></th>
 									<th><spring:message code="lbl.skname"></spring:message></th>
@@ -71,7 +69,6 @@
 							</thead>
 							
 						</table>
-						</div>
 						<!-- Modal -->
 						<div class="modal fade" id="sellToManyModal" role="dialog">
 							<div class="modal-dialog modal-lg">
@@ -87,20 +84,15 @@
 												id="sellToManySSList">
 												<thead>
 													<tr>
-														<th></th>
-														<th><spring:message code="lbl.name"></spring:message></th>
-														<th><spring:message code="lbl.designation"></spring:message></th>
-														<th><spring:message code="lbl.skname"></spring:message></th>
-														<th><spring:message code="lbl.branchNameCode"></spring:message></th>
-													</tr>
+													<th><input type="checkbox" value=""></th>
+													<th><spring:message code="lbl.name"></spring:message></th>
+													<th><spring:message code="lbl.designation"></spring:message></th>
+													<th><spring:message code="lbl.skname"></spring:message></th>
+													<th><spring:message code="lbl.branchNameCode"></spring:message></th>
+													<th><spring:message code="lbl.saleinMonth"></spring:message></th>
+													<th><spring:message code="lbl.actionRequisition"></spring:message></th>
+												</tr>
 												</thead>
-												<tbody>
-													<td><input type="checkbox" value=""></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-												</tbody>
 											</table>
 										<div class="text-right">
 										<button  type="submit" class="btn btn-primary" data-toggle="modal" data-target="#sellToManyProductSelectModal"
@@ -217,7 +209,7 @@ jQuery(document).ready(function() {
 		Layout.init(); // init current layout
    //TableAdvanced.init();
 		//$('#StockSellHistory').DataTable();
-		$('#sellToManySSList').DataTable();
+		//$('#sellToManySSList').DataTable();
 		$('#sellToManySSProductList').DataTable();
 });
 jQuery(function() {
@@ -241,6 +233,7 @@ jQuery(function() {
 </script>
 <script>
     let stockList;
+    let selltoMany;
     $(document).ready(function() {
     	var today = new Date();    	
     	var currentMonth = today.getMonth() + 1; 
@@ -251,13 +244,14 @@ jQuery(function() {
             serverSide: true,
             processing: true,
             columnDefs: [
-                { targets: [0, 1, 2, 3, 4,5], orderable: false },
-                { width: "20%", targets: 0 },
-                { width: "5%", targets: 1 },
+                { targets: [0, 1, 2, 3, 4,5, 6], orderable: false },
+                { width: "5%", targets: 0,"visible": false },
+                { width: "20%", targets: 1 },
                 { width: "20%", targets: 2 },
                 { width: "20%", targets: 3 },
                 { width: "5%", targets: 4 },
-                { width: "30%", targets: 5 }
+                { width: "5%", targets: 5 },
+                { width: "25%", targets: 6 }
                 
             ],
             ajax: {
@@ -304,13 +298,72 @@ function filter(){
          serverSide: true,
          processing: true,
          columnDefs: [
-             { targets: [0, 1, 2, 3, 4,5], orderable: false },
-             { width: "20%", targets: 0 },
-             { width: "5%", targets: 1 },
+             { targets: [0, 1, 2, 3, 4,5, 6], orderable: false, "searchable": false },
+             { width: "5%", targets: 0,"visible": false },
+             { width: "20%", targets: 1 },
              { width: "20%", targets: 2 },
              { width: "20%", targets: 3 },
              { width: "5%", targets: 4 },
-             { width: "30%", targets: 5 }
+             { width: "5%", targets: 5 },
+             { width: "25%", targets: 6 }
+         ],
+         ajax: {
+             url: "${sell_to_ss_list}",
+             data: function(data){
+            	
+            	//let dateFieldvalue = $("#dateRange").val();            	
+     	      	data.search = $('#search').val();            	
+            	
+            	
+     	      	data.year = year;
+                data.month =month;
+                data.branchId =${id};
+                data.division=0;
+                data.district=0;
+                data.upazila=0;
+                data.skId=0;
+             },
+             dataSrc: function(json){
+                 if(json.data){
+                     return json.data;
+                 }
+                 else {
+                     return [];
+                 }
+             },
+             complete: function() {
+             },
+             type: 'GET'
+         },
+         bInfo: true,
+         destroy: true,
+         language: {
+             searchPlaceholder: ""
+         }
+     });
+}
+
+function sellToMany(){
+	
+	var d = new Date($("#startYear").datepicker("getDate"));
+	var date = d. getDate();
+	var month = d. getMonth() + 1; 
+	var year = d. getFullYear();
+	
+	selltoMany = $('#sellToManySSList').DataTable({
+         bFilter: false,
+         serverSide: true,
+         processing: true,
+         columnDefs: [
+                      { targets: [0, 1, 2, 3, 4,5, 6], orderable: false, "searchable": false },
+	                  { width: "5%", targets: 0,"searchable": false,orderable: false },
+	                  { width: "20%", targets: 1 },
+	                  { width: "20%", targets: 2 },
+	                  { width: "20%", targets: 3 },
+	                  { width: "5%", targets: 4 },
+	                  { width: "5%", targets: 5,"visible": false },
+	                  { width: "25%", targets: 6,"visible": false }
+
          ],
          ajax: {
              url: "${sell_to_ss_list}",
