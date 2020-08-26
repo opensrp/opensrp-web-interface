@@ -137,7 +137,7 @@ $('#targetInfo').submit(function(event) {
     	var details={
     		"productId":$($(this)).attr("id"),
     		"branchId":'${branchId}',
-    		"unit":'',
+    		"unit":'quantity',
     		"percentage":0.0,
     		"userId":'${userId}',    		
     		"quantity":$(this).val(),

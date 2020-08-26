@@ -32,12 +32,20 @@ public class TargetController {
 	
 	private int divisionTagId = 35;
 	
-	@RequestMapping(value = "/sk-pa-list-for-individual-target.html", method = RequestMethod.GET)
-	public String listTeam(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+	@RequestMapping(value = "/target-by-individual.html", method = RequestMethod.GET)
+	public String targetByIndividual(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		return "targets/sk-pa-list-for-individual-target";
+	}
+	
+	@RequestMapping(value = "/target-by-position-list.html", method = RequestMethod.GET)
+	public String targetByPosition(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		
+		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		return "targets/target-by-position-list";
 	}
 	
 	@RequestMapping(value = "/set-individual/{branch_id}/{role_id}/{user_id}.html", method = RequestMethod.GET)

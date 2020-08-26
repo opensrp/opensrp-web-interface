@@ -73,9 +73,9 @@ public class TargetService extends CommonService {
 					fieldValues.put("year", targetDetailsDTO.getYear());
 					fieldValues.put("month", targetDetailsDTO.getMonth());
 					fieldValues.put("userId", targetTo);
+					fieldValues.put("productId", targetDetailsDTO.getProductId());
 					TargetDetails targetDetails = findByKeys(fieldValues, TargetDetails.class);
 					
-					System.err.println("targetDetails:::" + targetDetails);
 					if (targetDetails == null) {
 						targetDetails = new TargetDetails();
 						targetDetails.setUuid(UUID.randomUUID().toString());
@@ -87,7 +87,7 @@ public class TargetService extends CommonService {
 					
 					targetDetails = targetMapper.map(targetDetailsDTO, targetDetails);
 					targetDetails.setUserId(targetTo);
-					System.err.println("targetDetails:::" + targetDetails);
+					
 					session.saveOrUpdate(targetDetails);
 					
 				}
@@ -220,6 +220,72 @@ public class TargetService extends CommonService {
 			        + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
 			        + "\">Set target</a> </div>";
 			patient.put(view);
+			array.put(patient);
+		}
+		response.put("data", array);
+		return response;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetCommontDTO> getBranchListForPositionalTarget(int locationId, int branchId, String roleName,
+	                                                               Integer length, Integer start, String orderColumn,
+	                                                               String orderDirection) {
+		
+		Session session = getSessionFactory().openSession();
+		List<TargetCommontDTO> dtos = new ArrayList<>();
+		try {
+			String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,:branchId,:roleName,:start,:length)";
+			Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
+			        .setInteger("locationId", locationId).setInteger("branchId", branchId).setString("roleName", roleName)
+			        .setInteger("length", length).setInteger("start", start)
+			        .setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+			dtos = query.list();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dtos;
+	}
+	
+	@Transactional
+	public int getBranchListForPositionalTargetCount(int locationId, int branchId, String roleName) {
+		
+		Session session = getSessionFactory().openSession();
+		BigInteger total = null;
+		try {
+			String hql = "select * from core.branch_list_by_location_with_user_list_count(:locationId,:branchId,:roleName)";
+			Query query = session.createSQLQuery(hql).setInteger("locationId", locationId).setInteger("branchId", branchId)
+			        .setString("roleName", roleName);
+			total = (BigInteger) query.uniqueResult();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return total.intValue();
+	}
+	
+	public JSONObject getPositionalTargetDataOfDataTable(Integer draw, int total, List<TargetCommontDTO> dtos)
+	    throws JSONException {
+		JSONObject response = new JSONObject();
+		response.put("draw", draw + 1);
+		response.put("recordsTotal", total);
+		response.put("recordsFiltered", total);
+		JSONArray array = new JSONArray();
+		for (TargetCommontDTO dto : dtos) {
+			JSONArray patient = new JSONArray();
+			patient.put(dto.getBranchName());
+			patient.put(dto.getBranchCode());
+			patient.put(dto.getUpazilaName());
+			patient.put(dto.getUserCount());
 			array.put(patient);
 		}
 		response.put("data", array);
