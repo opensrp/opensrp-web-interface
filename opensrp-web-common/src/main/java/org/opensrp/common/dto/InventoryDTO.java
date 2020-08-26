@@ -44,6 +44,8 @@ public class InventoryDTO {
 	
 	private int available;
 	
+	private String upazilaName;
+	
 	public Long getId() {
 		return id;
 	}
@@ -55,11 +57,11 @@ public class InventoryDTO {
 	public String getName() {
 		return name;
 	}
-
+	
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
 	public String getBranchName() {
 		return branchName;
 	}
@@ -186,37 +188,43 @@ public class InventoryDTO {
 	public String getUsername() {
 		return username;
 	}
-
+	
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
-
-
+	
+	public String getUpazilaName() {
+		return upazilaName;
+	}
+	
+	public void setUpazilaName(String upazilaName) {
+		this.upazilaName = upazilaName;
+	}
+	
 	public int getRoleId() {
 		return roleId;
 	}
-
+	
 	public void setRoleId(int roleId) {
 		this.roleId = roleId;
 	}
-
+	
 	public int getStock() {
 		return stock;
 	}
-
+	
 	public void setStock(int stock) {
 		this.stock = stock;
 	}
-
+	
 	public int getAvailable() {
 		return available;
 	}
-
+	
 	public void setAvailable(int available) {
 		this.available = available;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "InventoryDTO [id=" + id + ", branchName=" + branchName + ", branchCode=" + branchCode + ", invoiceNumber="
