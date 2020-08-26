@@ -192,6 +192,8 @@ public class InventoryAmController {
 	public String sellToSsList(Model model, Locale locale, @PathVariable("id") int id) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Object[]> branchInfo = branchService.getBranchByUser(String.valueOf(id), loggedInUser);
+		List<InventoryDTO>getProductList = stockService.getProductListByBranchWithRole(id,29,0);
+		model.addAttribute("productList", getProductList);
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
