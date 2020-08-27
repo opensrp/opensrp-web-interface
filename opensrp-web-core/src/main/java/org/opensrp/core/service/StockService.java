@@ -620,4 +620,41 @@ public class StockService extends CommonService {
 		return result;
 	}
 	
+	
+	@SuppressWarnings("unchecked")
+	public List<InventoryDTO> getSkListByBranch(Integer branchId, Integer roleId) {
+		Session session = getSessionFactory().openSession();
+		List<InventoryDTO> result = null;
+		try {
+			
+			String rawSql = ""
+					+ "SELECT u.id         id, "
+					+ "       u.username   username, "
+					+ "       u.first_name firstName, "
+					+ "       u.last_name  lastName, "
+					+ "concat(u.first_name,'',u.last_name) as name "
+					+ "FROM   core.users u "
+					+ "       JOIN core.user_role ur "
+					+ "         ON u.id = ur.user_id "
+					+ "       JOIN core.user_branch ub "
+					+ "         ON u.id = ub.user_id "
+					+ "WHERE  ur.role_id = "+roleId+" "
+					+ "       AND ub.branch_id = "+branchId+"";
+			Query query = session.createSQLQuery(rawSql).addScalar("id",StandardBasicTypes.LONG)
+					.addScalar("name", StandardBasicTypes.STRING)
+					.addScalar("username", StandardBasicTypes.STRING)
+						.setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
+			result = query.list();
+
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}		
+		return result;
+	}
+	
+	
 }

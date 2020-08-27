@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.dto.RequisitionQueryDto;
+import org.opensrp.common.util.Roles;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Role;
@@ -192,7 +193,9 @@ public class InventoryAmController {
 	public String sellToSsList(Model model, Locale locale, @PathVariable("id") int id) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Object[]> branchInfo = branchService.getBranchByUser(String.valueOf(id), loggedInUser);
-		List<InventoryDTO>getProductList = stockService.getProductListByBranchWithRole(id,29,0);
+		List<InventoryDTO> getSkList = stockService.getSkListByBranch(id,Roles.SK.getId());
+		List<InventoryDTO>getProductList = stockService.getProductListByBranchWithRole(id,Roles.SS.getId(),0);
+		model.addAttribute("skList", getSkList);
 		model.addAttribute("productList", getProductList);
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("id", id);
