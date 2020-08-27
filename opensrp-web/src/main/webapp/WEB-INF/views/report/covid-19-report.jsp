@@ -17,7 +17,7 @@
 %>
 
 <!DOCTYPE html>
-<html lang="en">
+
 
 <style>
     #errorMsg{
@@ -38,6 +38,9 @@
         .date-size-xs {
             width: 64%;
         }
+    }
+    .table-responsive {
+        overflow-x: hidden !important;
     }
 </style>
 <link type="text/css" href="<c:url value="/resources/css/select2.css"/>" rel="stylesheet">
