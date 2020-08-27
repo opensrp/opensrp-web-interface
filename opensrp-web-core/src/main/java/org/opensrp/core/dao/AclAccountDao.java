@@ -32,7 +32,7 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 	@Override
-	public synchronized User getByUsername(String username) {
+	public User getByUsername(String username) {
 		Session session = sessionFactory.openSession();
 		try{
 		return (User) session.getNamedQuery("account.byUsername").setParameter("username", username).uniqueResult();

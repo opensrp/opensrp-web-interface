@@ -611,7 +611,7 @@ public class UserController {
 	//	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public synchronized String loginPage() {
+	public String loginPage() {
 		return "user/login";
 	}
 
