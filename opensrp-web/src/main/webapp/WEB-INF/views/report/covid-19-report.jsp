@@ -163,7 +163,8 @@
 </div>
 <script src="<c:url value='/resources/js/jquery-ui.js' />"></script>
 <script src="<c:url value='/resources/js/datepicker.js' />"></script>
-
+<jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
+<script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script>
     jQuery(document).ready(function() {
         Metronic.init(); // init metronic core components
