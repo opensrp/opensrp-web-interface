@@ -334,8 +334,10 @@ public class StockService extends CommonService {
 		
 		for (InventoryDTO dto : dtos) {
 			JSONArray patient = new JSONArray();
-			String checkBox = "<input type=\"checkbox\" id=\"ss" + branchId+"\" value="+ branchId+">";
-			patient.put(checkBox);
+			if (roleId == 32) {
+				String checkBox = "<input type=\"checkbox\" class=\"select-checkbox\" id=\"ss" + dto.getId()+"\" value="+ dto.getId()+">";
+				patient.put(checkBox);
+			}
 			patient.put(dto.getFullName());
 			if (roleId == 32) {
 				patient.put("SS"); // for am
@@ -594,5 +596,65 @@ public class StockService extends CommonService {
 		return dtos;
 
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<InventoryDTO> getProductListByBranchWithRole(Integer branchId, Integer roleId, int productId) {
+		Session session = getSessionFactory().openSession();
+		List<InventoryDTO> result = null;
+		try {
+			String rawSql = "select name,id,stock,unitprice as salesPrice from core.product_list_by_branch_with_current_stock_with_role("+branchId+","+roleId+","+productId+")";
+			Query query = session.createSQLQuery(rawSql).addScalar("id",StandardBasicTypes.LONG)
+					.addScalar("name", StandardBasicTypes.STRING)
+					.addScalar("stock", StandardBasicTypes.INTEGER)
+					.addScalar("salesPrice", StandardBasicTypes.FLOAT)
+						.setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
+			result = query.list();
+
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}		
+		return result;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<InventoryDTO> getSkListByBranch(Integer branchId, Integer roleId) {
+		Session session = getSessionFactory().openSession();
+		List<InventoryDTO> result = null;
+		try {
+			
+			String rawSql = ""
+					+ "SELECT u.id         id, "
+					+ "       u.username   username, "
+					+ "       u.first_name firstName, "
+					+ "       u.last_name  lastName, "
+					+ "concat(u.first_name,'',u.last_name) as name "
+					+ "FROM   core.users u "
+					+ "       JOIN core.user_role ur "
+					+ "         ON u.id = ur.user_id "
+					+ "       JOIN core.user_branch ub "
+					+ "         ON u.id = ub.user_id "
+					+ "WHERE  ur.role_id = "+roleId+" "
+					+ "       AND ub.branch_id = "+branchId+"";
+			Query query = session.createSQLQuery(rawSql).addScalar("id",StandardBasicTypes.LONG)
+					.addScalar("name", StandardBasicTypes.STRING)
+					.addScalar("username", StandardBasicTypes.STRING)
+						.setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
+			result = query.list();
+
+		}
+		catch (Exception e) {
+			logger.error(e);
+		}
+		finally {
+			session.close();
+		}		
+		return result;
+	}
+	
 	
 }
