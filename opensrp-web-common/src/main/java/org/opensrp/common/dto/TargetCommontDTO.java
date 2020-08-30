@@ -2,7 +2,7 @@ package org.opensrp.common.dto;
 
 public class TargetCommontDTO extends InventoryDTO {
 	
-	private int roleId;
+	private int productId;
 	
 	private int branchId;
 	
@@ -10,9 +10,14 @@ public class TargetCommontDTO extends InventoryDTO {
 	
 	private int userCount;
 	
-	@Override
-	public void setRoleId(int roleId) {
-		this.roleId = roleId;
+	private String percentage;
+	
+	public int getProductId() {
+		return productId;
+	}
+	
+	public void setProductId(int productId) {
+		this.productId = productId;
 	}
 	
 	public int getBranchId() {
@@ -37,6 +42,14 @@ public class TargetCommontDTO extends InventoryDTO {
 	
 	public void setUserCount(int userCount) {
 		this.userCount = userCount;
+	}
+	
+	public String getPercentage() {
+		return percentage;
+	}
+	
+	public void setPercentage(String percentage) {
+		this.percentage = percentage;
 	}
 	
 }

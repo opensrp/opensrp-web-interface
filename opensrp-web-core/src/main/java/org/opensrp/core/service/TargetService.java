@@ -63,16 +63,16 @@ public class TargetService extends CommonService {
 			
 			Set<TargetDetailsDTO> targetDetailsDTOs = dto.getTargetDetailsDTOs();
 			
-			List<Integer> targetTos = allTargetUser(dto.getRole(), TaregtSettingsType.valueOf(dto.getType()).name(),
-			    dto.getTargetTo());
+			List<TargetCommontDTO> targetTos = allTargetUser(dto.getRole(),
+			    TaregtSettingsType.valueOf(dto.getType()).name(), dto.getTargetTo());
 			
-			for (Integer targetTo : targetTos) {
+			for (TargetCommontDTO targetTo : targetTos) {
 				
 				for (TargetDetailsDTO targetDetailsDTO : targetDetailsDTOs) {
 					Map<String, Object> fieldValues = new HashMap<>();
 					fieldValues.put("year", targetDetailsDTO.getYear());
 					fieldValues.put("month", targetDetailsDTO.getMonth());
-					fieldValues.put("userId", targetTo);
+					fieldValues.put("userId", targetTo.getUserId());
 					fieldValues.put("productId", targetDetailsDTO.getProductId());
 					TargetDetails targetDetails = findByKeys(fieldValues, TargetDetails.class);
 					
@@ -86,7 +86,8 @@ public class TargetService extends CommonService {
 					}
 					
 					targetDetails = targetMapper.map(targetDetailsDTO, targetDetails);
-					targetDetails.setUserId(targetTo);
+					targetDetails.setUserId(targetTo.getUserId());
+					targetDetails.setBranchId(targetTo.getBranchId());
 					
 					session.saveOrUpdate(targetDetails);
 					
@@ -134,13 +135,14 @@ public class TargetService extends CommonService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Integer> allTargetUser(int roleId, String type, int id) {
+	public List<TargetCommontDTO> allTargetUser(int roleId, String type, int id) {
 		Session session = getSessionFactory().openSession();
-		List<Integer> result = null;
+		List<TargetCommontDTO> result = null;
 		try {
-			String hql = "select * from core.get_userid_by_branch_or_location(:roleId,:id,:type);";
-			Query query = session.createSQLQuery(hql).setInteger("roleId", roleId).setString("type", type)
-			        .setInteger("id", id);
+			String hql = "select user_id userId, branch_id branchId from core.get_userid_by_branch_or_location(:roleId,:id,:type);";
+			Query query = session.createSQLQuery(hql).addScalar("userId", StandardBasicTypes.INTEGER)
+			        .addScalar("branchId", StandardBasicTypes.INTEGER).setInteger("roleId", roleId).setString("type", type)
+			        .setInteger("id", id).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
 			
 			result = query.list();
 		}
@@ -290,5 +292,33 @@ public class TargetService extends CommonService {
 		}
 		response.put("data", array);
 		return response;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetCommontDTO> getTargetInfoByBranchOrLocationOrUserByRoleByMonth(int roleId,
+	                                                                                 int locationOrBranchOrUserId,
+	                                                                                 String typeName, String locationTag,
+	                                                                                 int month, int year) {
+		
+		Session session = getSessionFactory().openSession();
+		List<TargetCommontDTO> dtos = new ArrayList<>();
+		try {
+			String hql = "select percentage, id Id, product_id productId ,product_name productName,quantity from core.get_target_info_by_branch_or_location_or_user_by_role_by_month(:roleId,:locationOrBranchOrUserId,:typeName,:locationTag,:month,:year)";
+			Query query = session.createSQLQuery(hql).addScalar("percentage", StandardBasicTypes.STRING)
+			        .addScalar("Id", StandardBasicTypes.LONG).addScalar("productId", StandardBasicTypes.INTEGER)
+			        .addScalar("productName", StandardBasicTypes.STRING).addScalar("quantity", StandardBasicTypes.INTEGER)
+			        .setInteger("roleId", roleId).setInteger("locationOrBranchOrUserId", locationOrBranchOrUserId)
+			        .setString("typeName", typeName).setString("locationTag", locationTag).setInteger("month", month)
+			        .setInteger("year", year).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+			dtos = query.list();
+		}
+		catch (HibernateException he) {
+			he.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dtos;
 	}
 }

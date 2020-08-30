@@ -13,7 +13,7 @@ public class TargetMapper {
 	private TargetService targetService;
 	
 	public TargetDetails map(TargetDetailsDTO targetDetailsDTO, TargetDetails targetDetails) {
-		targetDetails.setBranchId(targetDetailsDTO.getBranchId());
+		
 		targetDetails.setProductId(targetDetailsDTO.getProductId());
 		targetDetails.setPercentage(targetDetailsDTO.getPercentage());
 		targetDetails.setQuantity(targetDetailsDTO.getQuantity());
