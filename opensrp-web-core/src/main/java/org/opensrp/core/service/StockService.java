@@ -622,7 +622,7 @@ public class StockService extends CommonService {
 	
 	
 	@SuppressWarnings("unchecked")
-	public List<InventoryDTO> getSkListByBranch(Integer branchId, Integer roleId) {
+	public List<InventoryDTO> getUserListByBranchWithRole(Integer branchId, Integer roleId) {
 		Session session = getSessionFactory().openSession();
 		List<InventoryDTO> result = null;
 		try {

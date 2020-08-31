@@ -35,7 +35,8 @@
 					</div>				
 					<div class="portlet-body">
 						<div class="form-group">
-						<div class="row">
+						<jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" />
+<%-- 						<div class="row">
 								<div class="col-lg-3 form-group">
 								    <label for="cars"><spring:message code="lbl.division"></spring:message> :</label> 
 								    <select
@@ -81,36 +82,22 @@
 									</select>
 								</div>
 								
-							</div>
-							<div class="row">
-								<div class="col-lg-3 form-group">
-								    <label for="cars"><spring:message code="lbl.branch"></spring:message> :</label> 
-								    <select
-										name="cars" class="form-control" id="cars">
-										<option selected="selected">Select Branch</option>
-										<option value="volvo">Volvo</option>
-										<option value="saab">Saab</option>
-										<option value="mercedes">Mercedes</option>
-										<option value="audi">Audi</option>
-									</select>
-								</div>
+							</div> --%>
+							 <div class="row">
 								<div class="col-lg-3 form-group">
 								    <label for="designation"><spring:message code="lbl.selectSk"></spring:message> :</label>
-									<select
-										name="cars" class="form-control" id="cars">
-										<option selected="selected">Select Branch</option>
-										<option value="volvo">Volvo</option>
-										<option value="saab">Saab</option>
-										<option value="mercedes">Mercedes</option>
-										<option value="audi">Audi</option>
+									<select class="form-control" id="selectsk" name="selectsk">
+										<option value="0"><spring:message
+												code="lbl.selectSk" /></option>
+										<option value=""></option>
+
 									</select>
 								</div>
-								
 								<div class="col-lg-3 form-group">
 									<label for="yearMonth">Date:</label>
 									<input type="text"	readonly name="yearMonth" id="yearMonth" class="form-control date-picker-year" />
 								</div>
-							</div>
+							</div> 
 							<div class="row">
 								<div class="col-lg-12 form-group text-right">
 									<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
@@ -232,11 +219,22 @@ jQuery(function() {
     });
 
 function filter(){
-	
-	var d = new Date($("#yearMonth").datepicker("getDate"));
-	var date = d. getDate();
-	var month = d. getMonth() + 1; 
-	var year = d. getFullYear();
+	var division = +$('#divisionList').val();
+	var district = +$('#districtList').val();
+	var upazila = +$('#upazilaList').val();
+	var skId = +$('#selectsk').val();
+	var branch = +$('#branchList').val();
+	var date = $("#yearMonth").val();
+	var d = new Date(date);
+	var date = d.getDate();
+	var month = d.getMonth() + 1;
+	var year = d.getFullYear();
+	if(isNaN(date)) {
+		var today = new Date();
+		month = today.getMonth() + 1;
+		year = today.getFullYear();
+	}
+
 	
 	stockList = $('#ssSalesReportForDm').DataTable({
          bFilter: false,
@@ -248,7 +246,7 @@ function filter(){
              { width: "20%", targets: 1 },
              { width: "20%", targets: 2 },
              { width: "20%", targets: 3 },
-             { width: "20%", targets: 4 },
+             { width0: "20%", targets: 4 },
              { width: "20%", targets: 5 },
              { width: "20%", targets: 6 }
          ],
@@ -261,12 +259,12 @@ function filter(){
             	
             	
      	      	data.year = year;
-                data.month =month;
-                data.branchId =0;
-                data.division=0;
-                data.district=0;
-                data.upazila=0;
-                data.skId=0;
+                data.month = month;
+                data.branchId = branch;
+                data.division = division;
+                data.district = district;
+                data.upazila = upazila;
+                data.skId = skId;
              },
              dataSrc: function(json){
                  if(json.data){
@@ -287,6 +285,33 @@ function filter(){
          }
      });
 }
+
+$("#branchList").change(function (event) {
+	let branchId = +$('#branchList').val();
+	var url = "/opensrp-dashboard/inventorydm/sk-by-branch/"+branchId;
+	$("#selectsk").html("");
+	$.ajax({
+		type : "GET",
+		contentType : "application/json",
+		url : url,
+
+		dataType : 'html',
+		timeout : 100000,
+		beforeSend: function() {},
+		success : function(data) {
+			$("#selectsk").html(data);
+		},
+		error : function(e) {
+			console.log("ERROR: ", e);
+			display(e);
+		},
+		done : function(e) {
+
+			console.log("DONE");
+			//enableSearchButton(true);
+		}
+	});
+});
 </script>
 
 

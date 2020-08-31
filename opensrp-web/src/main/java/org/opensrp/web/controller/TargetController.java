@@ -30,7 +30,7 @@ public class TargetController {
 	@Autowired
 	SearchBuilder searchBuilder;
 	
-	private int divisionTagId = 35;
+	private int divisionTagId = 28;
 	
 	@RequestMapping(value = "/target-by-individual.html", method = RequestMethod.GET)
 	public String targetByIndividual(HttpServletRequest request, HttpSession session, Model model, Locale locale) {

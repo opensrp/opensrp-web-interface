@@ -9,6 +9,6 @@
 		   uri="http://www.springframework.org/security/tags"%>
 		   
 <option value="0"><spring:message code="lbl.pleaseSelect"/></option>
-<c:forEach items="${userList}" var="userList">
-	<option value="${userList.id}">${userList.name}</option>
+<c:forEach items="${skList}" var="sk">
+	<option value="${sk.id}">${sk.name}</option>
 </c:forEach>

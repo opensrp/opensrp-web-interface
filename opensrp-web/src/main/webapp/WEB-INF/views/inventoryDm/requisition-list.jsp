@@ -37,7 +37,8 @@
 					<div class="portlet-body">
 					
 						<div class="form-group">
-						<div class="row">
+						<jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" />
+						<%-- <div class="row">
 								<div class="col-lg-3 form-group">
 								    <label for="cars"><spring:message code="lbl.division"></spring:message> :</label> <select class="form-control" id="division" name="division">
 										<option value=""><spring:message
@@ -81,7 +82,7 @@
 									</select>
 								</div>
 								
-							</div>
+							</div> --%>
 							<div class="row">
 								
 								<div class="col-lg-3 form-group">
@@ -147,7 +148,6 @@ jQuery(document).ready(function() {
 	 Layout.init(); // init current layout
    //TableAdvanced.init();
 	$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
-	debugger;
 	var date = new Date(), y = date.getFullYear(), m = date.getMonth();
 	var startDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
 	var endDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));
@@ -197,11 +197,11 @@ jQuery(document).ready(function() {
 });
 
 function filter(){
-	var division = +$('#division').val().split("?")[0];;
-	var district = +$('#district').val().split("?")[0];;
-	var upazila = +$('#upazila').val().split("?")[0];;
+	var division = +$('#divisionList').val();
+	var district = +$('#districtList').val();
+	var upazila = +$('#upazilaList').val();
 	var requisitor = +$('#selectRequisitionBy').val();
-	var branch = +$('#branchDM').val();
+	var branch = +$('#branchList').val();
 	var startDate = $('#from').val();
 	var endDate = $('#to').val();
 	if(startDate == "") {
@@ -262,9 +262,8 @@ function filter(){
     });  
 }
 
-$("#branchDM").change(function (event) {
-	debugger;
-	let branchId = +$('#branchDM').val();
+$("#branchList").change(function (event) {
+	let branchId = +$('#branchList').val();
 	var url = "/opensrp-dashboard/inventorydm/user-by-branch/"+branchId;
 	$("#selectRequisitionBy").html("");
 	$.ajax({
@@ -276,7 +275,6 @@ $("#branchDM").change(function (event) {
 		timeout : 100000,
 		beforeSend: function() {},
 		success : function(data) {
-			debugger;
 			$("#selectRequisitionBy").html(data);
 		},
 		error : function(e) {

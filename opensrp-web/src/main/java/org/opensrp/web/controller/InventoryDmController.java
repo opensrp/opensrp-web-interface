@@ -5,15 +5,16 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
 
-import org.opensrp.common.dto.UserDTO;
+import org.opensrp.common.dto.InventoryDTO;
+import org.opensrp.common.util.Roles;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.ProductService;
 import org.opensrp.core.service.RequisitionService;
-import org.opensrp.core.service.RoleService;
-import org.opensrp.web.util.SearchUtil;
+import org.opensrp.core.service.StockService;
+import org.opensrp.core.service.TargetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,8 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class InventoryDmController {
 	
-	@Autowired
-	private RoleService roleServiceImpl;
+
 	
 	@Autowired
 	private ProductService productService;
@@ -34,10 +34,13 @@ public class InventoryDmController {
 	private BranchService branchService;
 	
 	@Autowired
-	private SearchUtil searchUtil;
+	private RequisitionService requisitionService;
 	
 	@Autowired
-	private RequisitionService requisitionService;
+	private TargetService targetService;
+	
+	@Autowired
+	private StockService stockService;
 	
 	@RequestMapping(value = "inventorydm/products-list.html", method = RequestMethod.GET)
 	public String productsList(Model model, Locale locale) {
@@ -58,10 +61,8 @@ public class InventoryDmController {
 	@RequestMapping(value = "inventorydm/requisition-list.html", method = RequestMethod.GET)
 	public String requisitonListForDm(Model model, Locale locale, HttpSession session) {
 		List<Branch> branches = branchService.findAll("Branch");
-		List<Role> roles = roleServiceImpl.findAll("Role");
-		searchUtil.setDivisionAttribute(session);
+		model.addAttribute("divisions", targetService.getLocationByTagId(28));
 		model.addAttribute("locale", locale);
-		model.addAttribute("roles", roles);
 		model.addAttribute("branches", branches);
 		return "inventoryDm/requisition-list";
 	}
@@ -69,9 +70,17 @@ public class InventoryDmController {
 
 	@RequestMapping(value = "inventorydm/user-by-branch/{id}", method = RequestMethod.GET)
 	public String userByBranch(Model model,@PathVariable("id") int id) {
-		List<UserDTO> userListByBranch= requisitionService.getUserListByBranch(id);
+		//List<UserDTO> userListByBranch= requisitionService.getUserListByBranch(id);
+		List<InventoryDTO> userListByBranch= stockService.getUserListByBranchWithRole(id,Roles.AM.getId());
 		model.addAttribute("userList", userListByBranch);
 		return "inventoryDm/user-list";
+	}
+	
+	@RequestMapping(value = "inventorydm/sk-by-branch/{id}", method = RequestMethod.GET)
+	public String skByBranch(Model model,@PathVariable("id") int id) {
+		List<InventoryDTO> skListByBranch= stockService.getUserListByBranchWithRole(id,Roles.SK.getId());
+		model.addAttribute("skList", skListByBranch);
+		return "inventoryDm/sk-list";
 	}
 	
 	@RequestMapping(value = "inventorydm/stock-report.html", method = RequestMethod.GET)
@@ -83,7 +92,7 @@ public class InventoryDmController {
 	@RequestMapping(value = "inventorydm/ss-sales-report.html", method = RequestMethod.GET)
 	public String ssSellReportForDm(Model model, HttpSession session, Locale locale) {
 		model.addAttribute("locale", locale);
-		
+		model.addAttribute("divisions", targetService.getLocationByTagId(28));
 		return "inventoryDm/ss-sales-report";
 	}
 	
