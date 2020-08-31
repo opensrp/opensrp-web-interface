@@ -13,7 +13,7 @@
 	
 	
 <c:url var="get_url" value="/rest/api/v1/target/branch-list-for-positional-target" />
-
+<c:url var="set_target_url" value="/target/set-target-by-position.html" />
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -57,8 +57,22 @@
 									<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
 								</div>
      						</div>
+     						
+     						
 						</div>
-						<h3>Target</h3>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-lg-3 form-group">
+									
+								</div>
+								<div class="col-lg-9 form-group text-right">
+									<button type="submit" onclick="settTaretForAll()" class="btn btn-primary" value="confirm">Set target for all</button>
+									
+									
+								</div>
+							</div>
+						
+						</div>
 						<div class="table-scrollable">
 						
 						<table class="table table-striped table-bordered " id="targetTable">
@@ -67,7 +81,7 @@
 								 <th>Branch name</th>
 									<th>Branch code</th>
 									<th>Upazila</th>
-									<th>Total user</th>
+									<th>Total worker</th>
 								</tr>
 							</thead>
 							
@@ -97,7 +111,58 @@ jQuery(document).ready(function() {
    
 });
 
-
+function settTaretForAll(){
+	var url = '${set_target_url}';
+	let district = $("#districtList option:selected").val();
+	let districtText = $("#districtList option:selected").text();
+	let division = $("#divisionList option:selected").val();
+	let divisionText = $("#divisionList option:selected").text();
+	let upazila = $("#upazilaList option:selected").val();
+	let upazilaText = $("#upazilaList option:selected").text();
+	var branch = $("#branchList option:selected").val();
+	var branchText = $("#branchList option:selected").text();
+	var role = $("#roleList option:selected").val();
+	var targetName = "";
+	var locationTag = "";
+	if(division != 0){
+		targetName = "Division : "+divisionText;
+		locationTag="division";
+	}
+	if(district != 0){
+		targetName +=", District : "+districtText;
+		locationTag="district";
+	} 
+	
+	if(upazila != 0){
+		targetName +=", Upazila : "+upazilaText;
+		locationTag="upazila";
+	} 
+	
+	if(branch !=0){
+		targetName +=", Branch : "+branchText;
+	}
+	if(role !=0){
+		targetName +=", Role : "+role;
+	}
+	
+	var type="";
+	var locationId="";
+	if(branch!=0){
+		locationId = branch;
+		type = "BRANCH"
+	}else if(upazila != 0){
+		locationId = upazila;
+		type = "LOCATION"
+	}else if(district != 0){
+		locationId = district;
+		type = "LOCATION"
+	}else if(division != 0){
+		locationId =division; 
+		type = "LOCATION"
+	}	
+    url = url+"?setTargetTo="+locationId+"&role="+role+"&type="+type+"&text="+targetName+"&locationTag="+locationTag
+	window.location.replace(url);
+}
 
 jQuery(function() {
 	jQuery('.date-picker-year').datepicker({
@@ -171,7 +236,7 @@ function filter(){
 	if(upazila != 0){
 		locationId = upazila;
 	}else if(district != 0){
-		locationId = upazila;
+		locationId = district;
 	}else if(division != 0){
 		locationId =division; 
 	}

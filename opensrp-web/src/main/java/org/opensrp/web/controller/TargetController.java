@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.core.entity.Role;
 import org.opensrp.core.service.TargetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,6 +49,20 @@ public class TargetController {
 		return "targets/target-by-position-list";
 	}
 	
+	@RequestMapping(value = "/set-target-by-position.html", method = RequestMethod.GET)
+	public String seTtargetByPosition(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		String roleName = request.getParameter("role");
+		Role role = targetService.findByKey(roleName, "name", Role.class);
+		model.addAttribute("targets", targetService.allActiveTarget(role.getId()));
+		model.addAttribute("setTargetTo", request.getParameter("setTargetTo"));
+		model.addAttribute("role", role.getId());
+		model.addAttribute("type", request.getParameter("type"));
+		model.addAttribute("locationTag", request.getParameter("locationTag"));
+		model.addAttribute("text", request.getParameter("text"));
+		return "targets/set-target-by-position";
+	}
+	
 	@RequestMapping(value = "/set-individual/{branch_id}/{role_id}/{user_id}.html", method = RequestMethod.GET)
 	public String targetSetIndividually(HttpServletRequest request, HttpSession session, Model model, Locale locale,
 	                                    @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
@@ -59,6 +74,23 @@ public class TargetController {
 		model.addAttribute("roleId", roleId);
 		model.addAttribute("name", request.getParameter("name"));
 		return "targets/sk-pa-individual-target-set";
+	}
+	
+	@RequestMapping(value = "/get-target-info", method = RequestMethod.GET)
+	public String getTargetInfo(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("locale", locale);
+		int role = Integer.parseInt(request.getParameter("role"));
+		System.err.println("OKKKKPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+		String typeName = request.getParameter("typeName");
+		String locationTag = request.getParameter("locationTag");
+		int month = Integer.parseInt(request.getParameter("month"));
+		int year = Integer.parseInt(request.getParameter("year"));
+		int locationOrBranchOrUserId = Integer.parseInt(request.getParameter("locationOrBranchOrUserId"));
+		model.addAttribute("targets", targetService.getTargetInfoByBranchOrLocationOrUserByRoleByMonth(role,
+		    locationOrBranchOrUserId, typeName, locationTag, month, year));
+		
+		return "targets/get-target-info";
 	}
 	
 }

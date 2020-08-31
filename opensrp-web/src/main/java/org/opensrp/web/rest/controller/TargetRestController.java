@@ -33,7 +33,6 @@ public class TargetRestController {
 	@RequestMapping(value = "/save-update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> newPatient(@RequestBody TargetDTO dto) throws Exception {
 		
-		System.err.println("OKKK");
 		JSONObject response = new JSONObject();
 		
 		try {

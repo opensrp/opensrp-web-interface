@@ -10,17 +10,21 @@
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <title>SK, PA  list</title>
-	
+	<style>
+	.ui-datepicker-calendar {
+    display:none;
+}
+	</style>
 <meta name="_csrf" content="${_csrf.token}"/>
 <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 <c:url var="add_url" value="/rest/api/v1/target/save-update" />
-<c:url var="redirect_url" value="/target/target-by-individual.html" />
+<c:url var="redirect_url" value="/target/target-by-position-list.html" />
 <c:url var="get_target_url" value="/target/get-target-info" />
 
 
+
 <jsp:include page="/WEB-INF/views/header.jsp" />
-<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 	
 
 <div class="page-content-wrapper">
@@ -32,7 +36,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>SK, PA  list
+							<i class="fa fa-list"></i>Set target for ${text} 
 						</div>
 					</div>					
 					<div class="portlet-body">
@@ -51,10 +55,11 @@
 									
 								</div>
 								
+								
 							</div>
 							
 						</div>
-						<h3>${name }'s target </h3>
+						
 						<div class="table-scrollable ">
 						<form id="targetInfo"  autocomplete="off">
 						<div class="col-md-12 form-group text-al">
@@ -76,16 +81,16 @@
 				        		<br />
 				        		<hr />
 				        		<div id="productInfoS">
-				        		<c:forEach var="target" items="${ targets }">
-				        		<div class="col-lg-6 form-group">
-				        			<div class="col-md-6">
-				                    	<label><strong>${ target.name } </strong></label>
-				                    </div>
-				                     <div class="col-md-6">
-				                    	<input type="number" class="form-control" min="1" id="${target.id }" name ="qty[]">
-				                    </div>
-				        		</div>
-				        		</c:forEach>
+					        		<c:forEach var="target" items="${ targets }">
+					        		<div class="col-lg-6 form-group">
+					        			<div class="col-md-6">
+					                    	<label><strong>${ target.name } </strong></label>
+					                    </div>
+					                     <div class="col-md-6">
+					                    	<input type="number" class="form-control" min="1" id="${target.id }" name ="qty[]">
+					                    </div>
+					        		</div>
+					        		</c:forEach>
 				        		</div>
 				        	</div>
 				        </div>
@@ -119,15 +124,31 @@
 		</div>
 	</div>
 	<!-- END CONTENT -->
-<jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
-<script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script>
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
 		
+});
+
+jQuery(function() {
+	jQuery('.date-picker-year').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'mm-yy',
+        maxDate: new Date,
+        onClose: function(dateText, inst) { 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+        }
+    });
+	jQuery(".date-picker-year").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $(".ui-datepicker-current").hide();
+    });
 });
 
 function getTargetInfo(){
@@ -143,7 +164,7 @@ function getTargetInfo(){
 	
 	var url = '${get_target_url}';
 	
-    url = url+"?locationOrBranchOrUserId="+'${userId}'+"&role="+'${roleId}'+"&typeName="+'USER'+"&locationTag="+'NA'+"&month="+month+"&year="+year;
+    url = url+"?locationOrBranchOrUserId="+'${setTargetTo}'+"&role="+'${role}'+"&typeName="+'${type}'+"&locationTag="+'${locationTag}'+"&month="+month+"&year="+year;
 
 	$.ajax({
         contentType : "application/json",
@@ -166,10 +187,8 @@ function getTargetInfo(){
         }
     });
 }
-
 $('#targetInfo').submit(function(event) {
-    event.preventDefault();
-    
+    event.preventDefault();    
     var d = new Date($("#startYear").datepicker("getDate"));
 	var date = d. getDate();
 	var month =0; 
@@ -179,16 +198,18 @@ $('#targetInfo').submit(function(event) {
 	var splitingString = monthYearString.split("-");
 	month = parseInt(splitingString[0]);
 	year = parseInt(splitingString[1]);
+	console.log(month);
     var item=[];
+   
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
     $('input[name^="qty"]').each(function() { 
     	var details={
     		"productId":$($(this)).attr("id"),
-    		"branchId":'${branchId}',
+    		"branchId":0,
     		"unit":'quantity',
     		"percentage":0.0,
-    		"userId":'${userId}',    		
+    		"userId":0,    		
     		"quantity":$(this).val(),
     		"startDate":'2020-08-01',
     		"endDate":'2020-08-01',
@@ -205,12 +226,12 @@ $('#targetInfo').submit(function(event) {
   
     formData = {
         'id': 0,
-        'targetTo':'${userId}',
-        'type': 'USER',
-        'role': '${roleId}',
+        'targetTo':'${setTargetTo}',
+        'type': '${type}',
+        'role': '${role}',
         "targetDetailsDTOs":item
     };
-    console.log(formData);
+    console.log(JSON.stringify(formData));
    
     $.ajax({
         contentType : "application/json",
@@ -247,23 +268,6 @@ $('#targetInfo').submit(function(event) {
 
 
 
-jQuery(function() {
-	jQuery('.date-picker-year').datepicker({
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'mm-yy',
-        maxDate: new Date,
-        onClose: function(dateText, inst) { 
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-        }
-    });
-	jQuery(".date-picker-year").focus(function () {
-        $(".ui-datepicker-calendar").hide();
-        $(".ui-datepicker-current").hide();
-    });
-});
 
 </script>
 
