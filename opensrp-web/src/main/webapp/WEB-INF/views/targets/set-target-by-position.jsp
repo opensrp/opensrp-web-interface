@@ -10,7 +10,11 @@
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <title>SK, PA  list</title>
-	
+	<style>
+	.ui-datepicker-calendar {
+    display:none;
+}
+	</style>
 <meta name="_csrf" content="${_csrf.token}"/>
 <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
@@ -128,17 +132,36 @@ jQuery(document).ready(function() {
 		Layout.init(); // init current layout
 		
 });
+
+jQuery(function() {
+	jQuery('.date-picker-year').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'mm-yy',
+        maxDate: new Date,
+        onClose: function(dateText, inst) { 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+        }
+    });
+	jQuery(".date-picker-year").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $(".ui-datepicker-current").hide();
+    });
+});
+
 function getTargetInfo(){
-	
-	var d = new Date($("#startYear").datepicker("getDate"));
-	var date = d. getDate();
-	var month = d. getMonth(); 
-	var year = d. getFullYear();
+	var monthYearString=$('input#startYear').val();
+	var splitingString = monthYearString.split("-");
+	var month = parseInt(splitingString[0])-1;
+	var year = parseInt(splitingString[1]);
 	if(month==0){
+		console.log(month);
 		month = 12;
 		year = year-1;
 	}
-	month=8;
+	
 	var url = '${get_target_url}';
 	
     url = url+"?locationOrBranchOrUserId="+'${setTargetTo}'+"&role="+'${role}'+"&typeName="+'${type}'+"&locationTag="+'${locationTag}'+"&month="+month+"&year="+year;
@@ -165,13 +188,19 @@ console.log(url);
     });
 }
 $('#targetInfo').submit(function(event) {
-    event.preventDefault();
-    
+    event.preventDefault();    
     var d = new Date($("#startYear").datepicker("getDate"));
 	var date = d. getDate();
-	var month = d. getMonth() + 1; 
-	var year = d. getFullYear();
+	var month =0; 
+	var year = 0;
+	
+	var monthYearString=$('input#startYear').val();
+	var splitingString = monthYearString.split("-");
+	month = parseInt(splitingString[0]);
+	year = parseInt(splitingString[1]);
+	console.log(month);
     var item=[];
+   
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
     $('input[name^="qty"]').each(function() { 
@@ -239,23 +268,6 @@ $('#targetInfo').submit(function(event) {
 
 
 
-jQuery(function() {
-	jQuery('.date-picker-year').datepicker({
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'MM yy',
-        maxDate: new Date,
-        onClose: function(dateText, inst) { 
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-        }
-    });
-	jQuery(".date-picker-year").focus(function () {
-        $(".ui-datepicker-calendar").hide();
-        $(".ui-datepicker-current").hide();
-    });
-});
 
 </script>
 

@@ -75,7 +75,7 @@ public class TargetService extends CommonService {
 					fieldValues.put("userId", targetTo.getUserId());
 					fieldValues.put("productId", targetDetailsDTO.getProductId());
 					TargetDetails targetDetails = findByKeys(fieldValues, TargetDetails.class);
-					
+					System.err.println("targetDetails::" + targetTo.getUserId());
 					if (targetDetails == null) {
 						targetDetails = new TargetDetails();
 						targetDetails.setUuid(UUID.randomUUID().toString());
