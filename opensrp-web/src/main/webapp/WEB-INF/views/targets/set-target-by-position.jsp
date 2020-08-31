@@ -165,7 +165,7 @@ function getTargetInfo(){
 	var url = '${get_target_url}';
 	
     url = url+"?locationOrBranchOrUserId="+'${setTargetTo}'+"&role="+'${role}'+"&typeName="+'${type}'+"&locationTag="+'${locationTag}'+"&month="+month+"&year="+year;
-console.log(url);
+
 	$.ajax({
         contentType : "application/json",
         type: "GET",

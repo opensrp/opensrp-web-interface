@@ -15,7 +15,8 @@
 <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 <c:url var="add_url" value="/rest/api/v1/target/save-update" />
-<c:url var="redirect_url" value="/target/sk-pa-list-for-individual-target.html" />
+<c:url var="redirect_url" value="/target/target-by-individual.html" />
+<c:url var="get_target_url" value="/target/get-target-info" />
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -44,7 +45,11 @@
 									<label for="date">Date:</label>
 									<input type="text"	readonly name="startYear" id="startYear" class="form-control date-picker-year" />
 								</div>
-								
+								<div class="col-lg-9 form-group text-right">
+									<button type="submit" onclick="getTargetInfo()" class="btn btn-primary" value="confirm">Same as previous month</button>
+									
+									
+								</div>
 								
 							</div>
 							
@@ -70,6 +75,7 @@
 				        		</div>
 				        		<br />
 				        		<hr />
+				        		<div id="productInfoS">
 				        		<c:forEach var="target" items="${ targets }">
 				        		<div class="col-lg-6 form-group">
 				        			<div class="col-md-6">
@@ -80,6 +86,7 @@
 				                    </div>
 				        		</div>
 				        		</c:forEach>
+				        		</div>
 				        	</div>
 				        </div>
 				       <div id="errorMessage">
@@ -123,13 +130,55 @@ jQuery(document).ready(function() {
 		
 });
 
+function getTargetInfo(){
+	var monthYearString=$('input#startYear').val();
+	var splitingString = monthYearString.split("-");
+	var month = parseInt(splitingString[0])-1;
+	var year = parseInt(splitingString[1]);
+	if(month==0){
+		console.log(month);
+		month = 12;
+		year = year-1;
+	}
+	
+	var url = '${get_target_url}';
+	
+    url = url+"?locationOrBranchOrUserId="+'${userId}'+"&role="+'${roleId}'+"&typeName="+'USER'+"&locationTag="+'NA'+"&month="+month+"&year="+year;
+
+	$.ajax({
+        contentType : "application/json",
+        type: "GET",
+        url: url,        
+        dataType : 'html',
+        timeout : 100000,
+        beforeSend: function(xhr) {            
+            $("#loading").show();
+        },
+        success : function(data) {
+        	console.log(data);
+        	$("#productInfoS").html(data);
+        },
+        error : function(e) {
+            console.log(e);
+        },
+        done : function(e) {
+            console.log("DONE");
+        }
+    });
+}
+
 $('#targetInfo').submit(function(event) {
     event.preventDefault();
     
     var d = new Date($("#startYear").datepicker("getDate"));
 	var date = d. getDate();
-	var month = d. getMonth() + 1; 
-	var year = d. getFullYear();
+	var month =0; 
+	var year = 0;
+	
+	var monthYearString=$('input#startYear').val();
+	var splitingString = monthYearString.split("-");
+	month = parseInt(splitingString[0]);
+	year = parseInt(splitingString[1]);
     var item=[];
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
@@ -203,7 +252,7 @@ jQuery(function() {
         changeMonth: true,
         changeYear: true,
         showButtonPanel: true,
-        dateFormat: 'MM yy',
+        dateFormat: 'mm-yy',
         maxDate: new Date,
         onClose: function(dateText, inst) { 
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
