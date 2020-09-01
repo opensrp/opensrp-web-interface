@@ -56,6 +56,7 @@
 				<value>org.opensrp.core.entity.TargetDetails</value>
 				<value>org.opensrp.core.entity.Requisition</value>
 				<value>org.opensrp.core.entity.RequisitionDetails</value>
+				<value>org.opensrp.core.entity.TargetPopulation</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

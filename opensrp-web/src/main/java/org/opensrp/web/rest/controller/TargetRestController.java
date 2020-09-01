@@ -111,4 +111,28 @@ public class TargetRestController {
 		JSONObject response = targetService.getPositionalTargetDataOfDataTable(draw, total, totalList);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
+	
+	@RequestMapping(value = "/pk-user-list-for-population-target-setting", method = RequestMethod.GET)
+	public ResponseEntity<String> pkUserListForPopulationBaseTarget(HttpServletRequest request, HttpSession session) throws JSONException {
+		Integer start = Integer.valueOf(request.getParameter("start"));
+		Integer length = Integer.valueOf(request.getParameter("length"));
+		//String name = request.getParameter("search[value]");
+		Integer draw = Integer.valueOf(request.getParameter("draw"));
+		String orderColumn = request.getParameter("order[0][column]");
+		String orderDirection = request.getParameter("order[0][dir]");
+		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
+		
+		String name = request.getParameter("search");
+		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		String roleName = request.getParameter("roleName");
+		int locationId = Integer.parseInt(request.getParameter("locationId"));
+		
+		List<TargetCommontDTO> userList = targetService.getUserListForTargetSet(locationId, branchId, roleName, length,
+		    start, orderColumn, orderDirection);
+		
+		int userCount = targetService.getUserListForTargetSetCount(locationId, branchId, roleName);
+		
+		JSONObject response = targetService.getUserListForTargetSetOfDataTable(draw, userCount, userList);
+		return new ResponseEntity<>(response.toString(), OK);
+	}
 }

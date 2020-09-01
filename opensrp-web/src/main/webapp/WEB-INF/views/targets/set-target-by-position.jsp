@@ -46,8 +46,9 @@
 							<div class="row">
 								
 								<div class="col-lg-3 form-group">
-									<label for="date">Date:</label>
+									<label for="date">Date:</label><span class="text-danger"> *</span>
 									<input type="text"	readonly name="startYear" id="startYear" class="form-control date-picker-year" />
+									<span id="validationMessage" class="text-danger"></span>
 								</div>
 								<div class="col-lg-9 form-group text-right">
 									<button type="submit" onclick="getTargetInfo()" class="btn btn-primary" value="confirm">Same as previous month</button>
@@ -138,7 +139,7 @@ jQuery(function() {
         changeMonth: true,
         changeYear: true,
         showButtonPanel: true,
-        dateFormat: 'mm-yy',
+        dateFormat: 'MM yy',
         maxDate: new Date,
         onClose: function(dateText, inst) { 
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
@@ -152,10 +153,21 @@ jQuery(function() {
 });
 
 function getTargetInfo(){
-	var monthYearString=$('input#startYear').val();
+	var date = $("#startYear").val();
+	if(date == "" || date ==null) {
+		$("#validationMessage").html("<strong>This field is required</strong>");
+		return;
+	}
+	$("#validationMessage").html("");
+	var d = new Date(date);
+	var date = d.getDate();
+	var month = (d.getMonth() + 1)-1;
+	var year = d.getFullYear();
+	
+/* 	var monthYearString=$('input#startYear').val();
 	var splitingString = monthYearString.split("-");
 	var month = parseInt(splitingString[0])-1;
-	var year = parseInt(splitingString[1]);
+	var year = parseInt(splitingString[1]); */
 	if(month==0){
 		console.log(month);
 		month = 12;
@@ -189,7 +201,7 @@ function getTargetInfo(){
 }
 $('#targetInfo').submit(function(event) {
     event.preventDefault();    
-    var d = new Date($("#startYear").datepicker("getDate"));
+/*     var d = new Date($("#startYear").datepicker("getDate"));
 	var date = d. getDate();
 	var month =0; 
 	var year = 0;
@@ -197,7 +209,23 @@ $('#targetInfo').submit(function(event) {
 	var monthYearString=$('input#startYear').val();
 	var splitingString = monthYearString.split("-");
 	month = parseInt(splitingString[0]);
-	year = parseInt(splitingString[1]);
+	year = parseInt(splitingString[1]); */
+	
+	var date = $("#startYear").val();
+	if(date == "" || date ==null) {
+		$("#validationMessage").html("<strong>This field is required</strong>");
+		return;
+	}
+	$("#validationMessage").html("");
+	var d = new Date(date);
+	var date = d.getDate();
+	var month = d.getMonth() + 1;
+	var year = d.getFullYear();
+
+	var todayDate = new Date(), y = todayDate.getFullYear(), m = todayDate.getMonth();
+	var startDate = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
+	var endDate =  $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));
+	
 	console.log(month);
     var item=[];
    
@@ -211,8 +239,8 @@ $('#targetInfo').submit(function(event) {
     		"percentage":0.0,
     		"userId":0,    		
     		"quantity":$(this).val(),
-    		"startDate":'2020-08-01',
-    		"endDate":'2020-08-01',
+    		"startDate":startDate,
+    		"endDate": endDate,
     		"month":month,
     		"year":year,
     		"status":"ACTIVE"
@@ -232,7 +260,6 @@ $('#targetInfo').submit(function(event) {
         "targetDetailsDTOs":item
     };
     console.log(JSON.stringify(formData));
-   
     $.ajax({
         contentType : "application/json",
         type: "POST",
