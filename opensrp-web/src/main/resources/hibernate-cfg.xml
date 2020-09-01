@@ -56,6 +56,10 @@
 				<value>org.opensrp.core.entity.TargetDetails</value>
 				<value>org.opensrp.core.entity.Requisition</value>
 				<value>org.opensrp.core.entity.RequisitionDetails</value>
+								
+				<value>org.opensrp.core.entity.Training</value>
+				<value>org.opensrp.core.entity.TrainingRole</value>
+				<value>org.opensrp.core.entity.TrainingUser</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
