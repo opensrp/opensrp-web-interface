@@ -81,7 +81,6 @@ public class TargetController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("locale", locale);
 		int role = Integer.parseInt(request.getParameter("role"));
-		System.err.println("OKKKKPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
 		String typeName = request.getParameter("typeName");
 		String locationTag = request.getParameter("locationTag");
 		int month = Integer.parseInt(request.getParameter("month"));

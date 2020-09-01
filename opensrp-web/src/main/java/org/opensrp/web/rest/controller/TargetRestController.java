@@ -78,12 +78,12 @@ public class TargetRestController {
 		String roleName = request.getParameter("roleName");
 		int locationId = Integer.parseInt(request.getParameter("locationId"));
 		
-		List<TargetCommontDTO> userList = targetService.getAllSKPAListForIndividualTargetSetting(locationId, branchId,
-		    roleName, length, start, orderColumn, orderDirection);
+		List<TargetCommontDTO> userList = targetService.getUserListForTargetSet(locationId, branchId, roleName, length,
+		    start, orderColumn, orderDirection);
 		
-		int userCount = targetService.getAllSKPAListForIndividualTargetSettingCount(locationId, branchId, roleName);
+		int userCount = targetService.getUserListForTargetSetCount(locationId, branchId, roleName);
 		
-		JSONObject response = targetService.getSKPATargetSettingDataOfDataTable(draw, userCount, userList);
+		JSONObject response = targetService.getUserListForTargetSetOfDataTable(draw, userCount, userList);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	

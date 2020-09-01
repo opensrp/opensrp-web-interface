@@ -158,19 +158,19 @@ public class TargetService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<TargetCommontDTO> getAllSKPAListForIndividualTargetSetting(int locationId, int branchId, String roleName,
-	                                                                       Integer length, Integer start,
-	                                                                       String orderColumn, String orderDirection) {
+	public List<TargetCommontDTO> getUserListForTargetSet(int locationId, int branchId, String roleName, Integer length,
+	                                                      Integer start, String orderColumn, String orderDirection) {
 		
 		Session session = getSessionFactory().openSession();
 		List<TargetCommontDTO> dtos = new ArrayList<>();
 		try {
-			String hql = "select user_id userId,branch_id branchId,role_id roleId,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName,role_name roleName from core.sk_pa_list_for_individual_target_setting(:locationId,:branchId,:roleName,:start,:length)";
-			Query query = session.createSQLQuery(hql).addScalar("userId", StandardBasicTypes.INTEGER)
-			        .addScalar("branchId", StandardBasicTypes.INTEGER).addScalar("roleId", StandardBasicTypes.INTEGER)
-			        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("branchCode", StandardBasicTypes.STRING)
-			        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
-			        .addScalar("roleName", StandardBasicTypes.STRING).setInteger("locationId", locationId)
+			String hql = "select username,user_id userId,branch_id branchId,role_id roleId,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName,role_name roleName,location_name locationName from core.user_list_for_target_set(:locationId,:branchId,:roleName,:start,:length)";
+			Query query = session.createSQLQuery(hql).addScalar("username", StandardBasicTypes.STRING)
+			        .addScalar("userId", StandardBasicTypes.INTEGER).addScalar("branchId", StandardBasicTypes.INTEGER)
+			        .addScalar("roleId", StandardBasicTypes.INTEGER).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
+			        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
+			        .addScalar("locationName", StandardBasicTypes.STRING).setInteger("locationId", locationId)
 			        .setInteger("branchId", branchId).setString("roleName", roleName).setInteger("length", length)
 			        .setInteger("start", start)
 			        .setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
@@ -186,12 +186,12 @@ public class TargetService extends CommonService {
 	}
 	
 	@Transactional
-	public int getAllSKPAListForIndividualTargetSettingCount(int locationId, int branchId, String roleName) {
+	public int getUserListForTargetSetCount(int locationId, int branchId, String roleName) {
 		
 		Session session = getSessionFactory().openSession();
 		BigInteger total = null;
 		try {
-			String hql = "select * from core.sk_pa_list_for_individual_target_setting_count(:locationId,:branchId,:roleName)";
+			String hql = "select * from core.user_list_for_target_set_count(:locationId,:branchId,:roleName)";
 			Query query = session.createSQLQuery(hql).setInteger("locationId", locationId).setInteger("branchId", branchId)
 			        .setString("roleName", roleName);
 			total = (BigInteger) query.uniqueResult();
@@ -205,7 +205,7 @@ public class TargetService extends CommonService {
 		return total.intValue();
 	}
 	
-	public JSONObject getSKPATargetSettingDataOfDataTable(Integer draw, int userCount, List<TargetCommontDTO> dtos)
+	public JSONObject getUserListForTargetSetOfDataTable(Integer draw, int userCount, List<TargetCommontDTO> dtos)
 	    throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
@@ -216,8 +216,9 @@ public class TargetService extends CommonService {
 			JSONArray patient = new JSONArray();
 			patient.put(dto.getFullName());
 			patient.put(dto.getRoleName());
+			patient.put(dto.getUsername());
 			patient.put(dto.getBranch());
-			
+			patient.put(dto.getLocationName());
 			String view = "<div class='col-sm-12 form-group'><a \" href=\"set-individual/" + dto.getBranchId() + "/"
 			        + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
 			        + "\">Set target</a> </div>";

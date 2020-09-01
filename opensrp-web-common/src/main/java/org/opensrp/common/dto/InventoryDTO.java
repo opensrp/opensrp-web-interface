@@ -46,6 +46,8 @@ public class InventoryDTO {
 	
 	private String upazilaName;
 	
+	private String locationName;
+	
 	public Long getId() {
 		return id;
 	}
@@ -223,6 +225,14 @@ public class InventoryDTO {
 	
 	public void setAvailable(int available) {
 		this.available = available;
+	}
+	
+	public String getLocationName() {
+		return locationName;
+	}
+	
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
 	}
 	
 	@Override

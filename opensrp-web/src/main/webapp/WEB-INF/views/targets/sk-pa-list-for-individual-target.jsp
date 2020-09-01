@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>SK, PA  list</title>
+<title>User  list</title>
 	
 	
 <c:url var="urlForSKPAList" value="/rest/api/v1/target/sk-pa-user-list-for-individual-target-setting" />
@@ -29,7 +29,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>SK, PA   list
+							<i class="fa fa-list"></i>User   list
 						</div>
 					</div>					
 					<div class="portlet-body">
@@ -58,7 +58,7 @@
 								</div>
      						</div>
 						</div>
-						<h3>Inventory : </h3>
+						<h3>Target </h3>
 						<div class="table-scrollable">
 						
 						<table class="table table-striped table-bordered " id="StockSellHistory">
@@ -67,7 +67,9 @@
 								   
 									<th><spring:message code="lbl.name"></spring:message></th>
 									<th><spring:message code="lbl.designation"></spring:message></th>
+									<th>Id</th>
 									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
+									<th>Location name</th>
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
 								</tr>
 							</thead>
@@ -132,11 +134,13 @@ jQuery(function() {
             serverSide: true,
             processing: true,
             columnDefs: [
-                { targets: [0, 1, 2, 3], orderable: false },
+                { targets: [0, 1, 2, 3,4,5], orderable: false },
                 { width: "20%", targets: 0 },
                 { width: "5%", targets: 1 },
                 { width: "20%", targets: 2 },
-                { width: "20%", targets: 3 }
+                { width: "20%", targets: 3 },
+                { width: "20%", targets: 4 },
+                { width: "20%", targets: 5 }
                 
             ],
             ajax: {
@@ -184,11 +188,13 @@ function filter(){
          serverSide: true,
          processing: true,
          columnDefs: [
-             { targets: [0, 1, 2, 3], orderable: false },
+             { targets: [0, 1, 2, 3,4,5], orderable: false },
              { width: "20%", targets: 0 },
              { width: "5%", targets: 1 },
              { width: "20%", targets: 2 },
-             { width: "20%", targets: 3 }
+             { width: "20%", targets: 3 },
+             { width: "20%", targets: 4 },
+             { width: "20%", targets: 5 }
          ],
          ajax: {
              url: "${urlForSKPAList}",
