@@ -8,6 +8,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.service.TargetService;
@@ -90,6 +91,27 @@ public class TargetController {
 		    locationOrBranchOrUserId, typeName, locationTag, month, year));
 		
 		return "targets/get-target-info";
+	}
+	
+	@RequestMapping(value = "/target-by-population.html", method = RequestMethod.GET)
+	public String targetByPopulation(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		return "targets/target-by-population-list";
+	}
+	
+	@RequestMapping(value = "/set-individual-target-pk", method = RequestMethod.GET)
+	public String indiviualTargetSetForPkB(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("targets", targetService.allActiveTarget(Roles.PK.getId()));
+		return "targets/individual-target-by-population-pk";
+	}
+	
+	@RequestMapping(value = "/population-wise-target-set", method = RequestMethod.GET)
+	public String populationWiseTargetSet(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("targets", targetService.allActiveTarget(Roles.PK.getId()));
+		return "targets/population-wise-target-set";
 	}
 	
 }

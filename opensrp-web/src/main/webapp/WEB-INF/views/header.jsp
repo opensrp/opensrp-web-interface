@@ -232,6 +232,34 @@ License: You must have a valid license purchased only from themeforest(the above
 					</ul>
 				</li>
 				
+								<% if(PERM_READ_AGGREGATED_REPORT){ %>
+					<li><a href="javascript:;"> <i class="fa fa-bullseye"></i> <span
+							class="title"> Set Target</span> <span class="arrow "></span>
+					</a>
+						<ul class="sub-menu">
+							<%
+								if (PERM_READ_AGGREGATED_REPORT) {
+							%>
+							<li><a href="<c:url value=""/>">
+									<spring:message code="lbl.viewTarget" />
+							</a></li>
+							<li><a href="<c:url value="/target/target-by-individual.html"/>">
+									<spring:message code="lbl.setTargetIndividually" />
+							</a></li>
+							<li><a href="<c:url value="/target/target-by-position-list.html"/>">
+									<spring:message code="lbl.setTargetByPosition" />
+							</a></li>
+							<li><a href="<c:url value="/target/target-by-population.html"/>">
+									<spring:message code="lbl.setTargetByPopulation" />
+							</a></li>
+							<%
+								}
+							%>
+						</ul></li>
+					<%
+						}
+					%>
+				
 				<% if(PERM_READ_AGGREGATED_REPORT){ %>
 					<li><a href="javascript:;"> <i class="fa fa-cube"></i> <span
 							class="title"> Inventory</span> <span class="arrow "></span>

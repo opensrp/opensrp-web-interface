@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>SK, PA  list</title>
+<title>Population Wise Target</title>
 	
 <meta name="_csrf" content="${_csrf.token}"/>
 <!-- default header name is X-CSRF-TOKEN -->
@@ -31,9 +31,6 @@
 				<!-- BEGIN EXAMPLE TABLE PORTLET-->
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
-						<div class="caption">
-							<i class="fa fa-list"></i>SK, PA  list
-						</div>
 					</div>					
 					<div class="portlet-body">
 						<div class="form-group">
@@ -54,24 +51,22 @@
 								
 							</div>
 							
-						</div>
-						<h3>${name }'s target </h3>
 						<div class="table-scrollable ">
 						<form id="targetInfo"  autocomplete="off">
 						<div class="col-md-12 form-group text-al">
 				        	<div class="row  form-group">
 				        		<div class="col-lg-12 form-group">
 				        			<div class="col-md-3">
-				                    	<label><strong>Item </strong></label>
+				                    	<label><strong>Target Item </strong></label>
 				                    </div>
 				                     <div class="col-md-3">
-				                    	<label><strong>Target</strong></label>
+				                    	<label><strong>Amount</strong></label>
 				                    </div>
 				                    <div class="col-md-3">
-				                    	<label><strong>Item </strong></label>
+				                    	<label><strong>Target Item </strong></label>
 				                    </div>
 				                     <div class="col-md-3">
-				                    	<label><strong>Target</strong></label>
+				                    	<label><strong>Amount</strong></label>
 				                    </div>
 				        		</div>
 				        		<br />
