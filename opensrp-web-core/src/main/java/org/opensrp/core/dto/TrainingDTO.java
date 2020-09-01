@@ -42,6 +42,8 @@ public class TrainingDTO {
 	
 	private String description;
 	
+	private String trainingLocationType;
+	
 	public Long getId() {
 		return id;
 	}
@@ -176,6 +178,14 @@ public class TrainingDTO {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getTrainingLocationType() {
+		return trainingLocationType;
+	}
+	
+	public void setTrainingLocationType(String trainingLocationType) {
+		this.trainingLocationType = trainingLocationType;
 	}
 	
 }

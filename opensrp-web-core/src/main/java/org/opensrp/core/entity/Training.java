@@ -49,6 +49,9 @@ public class Training implements Serializable {
 	@Column(name = "training_id")
 	private String trainingId;
 	
+	@Column(name = "training_location_type")
+	private String trainingLocationType;
+	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "start_date")
 	private Date startDate;
@@ -290,6 +293,14 @@ public class Training implements Serializable {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getTrainingLocationType() {
+		return trainingLocationType;
+	}
+	
+	public void setTrainingLocationType(String trainingLocationType) {
+		this.trainingLocationType = trainingLocationType;
 	}
 	
 }
