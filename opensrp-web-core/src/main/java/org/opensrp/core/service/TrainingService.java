@@ -4,6 +4,9 @@
 
 package org.opensrp.core.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
@@ -35,7 +38,11 @@ public class TrainingService extends CommonService {
 		Training training;
 		Session session = getSessionFactory().openSession();
 		if (TrainingLocationType.valueOf(dto.getTrainingLocationType()).name().equalsIgnoreCase("BRANCH")) {
-			Branch branch = findById(dto.getBranch().longValue(), "id", Branch.class);
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", dto.getBranch());
+			Branch branch = findByKeys(map, Branch.class);
+			
 			dto.setDivision(branch.getDivision());
 			dto.setDistrict(branch.getDistrict());
 			dto.setUpazila(branch.getUpazila());
@@ -43,7 +50,9 @@ public class TrainingService extends CommonService {
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
-			if (dto.getId() != 0) {
+			deleteAllByPrimaryKey(dto.getId(), "training_role", "training_id", session);
+			deleteAllByPrimaryKey(dto.getId(), "training_user", "training_id", session);
+			if (dto.getId() != null && dto.getId() != 0) {
 				training = findById(dto.getId(), "id", Training.class);
 				training = trainingMapper.map(dto, training);
 			} else {

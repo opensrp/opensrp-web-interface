@@ -180,6 +180,14 @@ public abstract class CommonService {
 		return returnValue;
 	}
 	
+	public <T> void deleteAllByPrimaryKey(T t, String tableName, String fieldName, Session session) {
+		
+		String hql = "delete from core." + tableName + " where " + fieldName + "=" + t;
+		Query query = session.createSQLQuery(hql);
+		query.executeUpdate();
+		
+	}
+	
 	@SuppressWarnings("unchecked")
 	public <T> T findByKeys(Map<String, Object> fieldValues, Class<?> className) {
 		Session session = getSessionFactory().openSession();
