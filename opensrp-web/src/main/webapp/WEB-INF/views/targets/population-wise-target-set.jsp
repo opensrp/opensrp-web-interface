@@ -14,9 +14,9 @@
 <meta name="_csrf" content="${_csrf.token}"/>
 <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
-<c:url var="add_url" value="/rest/api/v1/target/save-update" />
-<c:url var="redirect_url" value="/target/target-by-individual.html" />
-<c:url var="get_target_url" value="/target/get-target-info" />
+<c:url var="add_url" value="/rest/api/v1/target/population-wise-save-update" />
+<c:url var="redirect_url" value="/target/target-by-population.html" />
+<c:url var="get_target_url" value="/target/get-population-wise-target-info" />
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -35,7 +35,7 @@
 					<div class="portlet-body">
 						<div class="form-group">
 							
-							
+							<div style="display: none;" class="alert alert-success" id="serverResponseMessage" role="alert"></div>
 							<div class="row">
 								
 								<div class="col-lg-3 form-group">
@@ -150,7 +150,7 @@ function getTargetInfo(){
 	}
 	var url = '${get_target_url}';
 	
-    url = url+"?locationOrBranchOrUserId="+'${userId}'+"&role="+'${roleId}'+"&typeName="+'USER'+"&locationTag="+'NA'+"&month="+month+"&year="+year;
+    url = url+"?month="+month+"&year="+year;
 
 	$.ajax({
         contentType : "application/json",
@@ -189,6 +189,7 @@ $('#targetInfo').submit(function(event) {
 	var date = $("#startYear").val();
 	if(date == "" || date ==null) {
 		$("#validationMessage").html("<strong>This field is required</strong>");
+		$(window).scrollTop(0);
 		return;
 	}
 	$("#validationMessage").html("");
@@ -206,11 +207,11 @@ $('#targetInfo').submit(function(event) {
     $('input[name^="qty"]').each(function() { 
     	var details={
     		"productId":$($(this)).attr("id"),
-    		"branchId":'${branchId}',
+    		"branchId": 0,
     		"unit":'quantity',
-    		"percentage":0.0,
-    		"userId":'${userId}',    		
-    		"quantity":$(this).val(),
+    		"percentage":$(this).val(),
+    		"userId":0,    		
+    		"quantity":0,
     		"startDate":startDate,
     		"endDate":endDate,
     		"month":month,
@@ -232,6 +233,7 @@ $('#targetInfo').submit(function(event) {
         "targetDetailsDTOs":item
     };
     console.log(formData);
+    return;
     $.ajax({
         contentType : "application/json",
         type: "POST",
@@ -247,8 +249,9 @@ $('#targetInfo').submit(function(event) {
         success : function(data) {
         	let response = JSON.parse(data);
     		console.log(response);
-    		$("#errorMessage").show();            	  
-            $("#errormessageContent").html(response.msg)  
+    		$(window).scrollTop(0);
+			$("#serverResponseMessage").show();
+			$("#serverResponseMessage").html(response.msg); 
             if(response.status == 'SUCCESS'){
             	setTimeout(function(){
             		 window.location.replace("${redirect_url}");

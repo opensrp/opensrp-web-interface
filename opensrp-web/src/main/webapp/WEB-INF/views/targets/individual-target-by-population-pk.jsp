@@ -15,7 +15,7 @@
 <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 <c:url var="add_url" value="/rest/api/v1/target/save-update" />
-<c:url var="redirect_url" value="/target/target-by-individual.html" />
+<c:url var="redirect_url" value="/target/target-by-population.html" />
 <c:url var="get_target_url" value="/target/get-target-info" />
 
 
@@ -27,7 +27,6 @@
 		<div class="page-content">
 		<div class="row">
 			<div class="col-md-12">
-
 				<!-- BEGIN EXAMPLE TABLE PORTLET-->
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
@@ -35,7 +34,7 @@
 					<div class="portlet-body">
 						<div class="form-group">
 							
-							
+							<div style="display: none;" class="alert alert-success" id="serverResponseMessage" role="alert"></div>
 							<div class="row">
 								
 								<div class="col-lg-3 form-group">
@@ -50,35 +49,45 @@
 								</div>
 								
 							</div>
-							
-						<div class="form-group row">
-						<label for="productName" class="col-sm-3 col-form-label">PK Name :</label>
-						<div class="col-sm-6">
-							<label for="productName" class="col-sm-3 col-form-label">PK Name :</label>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="productName" class="col-sm-3 col-form-label">PK ID:</label>
-						<div class="col-sm-6">
-							<label for="productName" class="col-sm-3 col-form-label">PK ID :</label>
-						</div>
-					</div><div class="form-group row">
-						<label for="productName" class="col-sm-3 col-form-label">Unions PK works in :</label>
-						<div class="col-sm-6">
-							<label for="productName" class="col-sm-3 col-form-label">PK Name:</label>
-						</div>
-					</div><div class="form-group row">
-						<label for="productName" class="col-sm-3 col-form-label">Population of the union :</label>
-						<div class="col-sm-6">
-							<label for="productName" class="col-sm-3 col-form-label">PK Name:</label>
-						</div>
-					</div><div class="form-group row">
-						<label for="productName" class="col-sm-3 col-form-label">Set Target By :</label>
-						<div class="col-sm-6">
-							<label for="productName" class="col-sm-3 col-form-label">Amount</label>
-						</div>
-						</div>
-						<div class="table-scrollable ">
+							</br>
+							<div class="form-group row">
+								<label for="productName" class="col-sm-3 col-form-label"><strong>PK
+										Name :</strong></label>
+								<div class="col-sm-6">
+									<label for="productName" class="col-sm-3 col-form-label">${pkname}</label>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="productName" class="col-sm-3 col-form-label"><strong>PK
+										ID:</strong></label>
+								<div class="col-sm-6">
+									<label for="productName" class="col-sm-3 col-form-label">${pkid}</label>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="productName" class="col-sm-3 col-form-label"><strong>Unions
+										PK works in :</strong></label>
+								<div class="col-sm-6">
+									<label for="productName" class="col-sm-3 col-form-label">${pkLocation}</label>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="productName" class="col-sm-3 col-form-label"><strong>Population
+										of the union :</strong></label>
+								<div class="col-sm-6">
+									<label for="productName" class="col-sm-3 col-form-label">${population}</label>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="productName" class="col-sm-3 col-form-label"><strong>Set
+										Target By :</strong></label>
+								<div class="col-sm-6">
+									<label for="productName" class="col-sm-3 col-form-label">Amount</label>
+								</div>
+							</div>
+							</div>
+							</br>
+							<div class="table-scrollable ">
 						<form id="targetInfo"  autocomplete="off">
 						<div class="col-md-12 form-group text-al">
 				        	<div class="row  form-group">
@@ -216,6 +225,7 @@ $('#targetInfo').submit(function(event) {
 	var date = $("#startYear").val();
 	if(date == "" || date ==null) {
 		$("#validationMessage").html("<strong>This field is required</strong>");
+		$(window).scrollTop(0);
 		return;
 	}
 	$("#validationMessage").html("");
@@ -274,12 +284,13 @@ $('#targetInfo').submit(function(event) {
         success : function(data) {
         	let response = JSON.parse(data);
     		console.log(response);
-    		$("#errorMessage").show();            	  
-            $("#errormessageContent").html(response.msg)  
+    		$(window).scrollTop(0);
+			$("#serverResponseMessage").show();
+			$("#serverResponseMessage").html(response.msg); 
             if(response.status == 'SUCCESS'){
             	setTimeout(function(){
             		 window.location.replace("${redirect_url}");
-                 }, 2000);
+                 }, 1000);
 
             }
         },

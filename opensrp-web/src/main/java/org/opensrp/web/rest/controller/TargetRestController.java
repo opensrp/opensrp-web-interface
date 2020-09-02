@@ -56,6 +56,32 @@ public class TargetRestController {
 		
 	}
 	
+	@RequestMapping(value = "/population-wise-save-update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> populationWiseSaveTarget(@RequestBody TargetDTO dto) throws Exception {
+		
+		JSONObject response = new JSONObject();
+		
+		try {
+			Integer isSave = targetService.savePopulationWiseTargetAll(dto);
+			if (isSave != null) {
+				response.put("status", "SUCCESS");
+				response.put("msg", "You have submitted successfully.");
+			} else {
+				response.put("status", "FAILED");
+				response.put("msg", "Something went worng please contact with admin .");
+				
+			}
+			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			response.put("status", "FAILED");
+			response.put("msg", e.getMessage());
+			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
+		}
+		
+	}
+	
 	// test api 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ResponseEntity<String> userWithoutCatchmentArea(HttpServletRequest request) throws Exception {
@@ -132,7 +158,7 @@ public class TargetRestController {
 		
 		int userCount = targetService.getUserListForTargetSetCount(locationId, branchId, roleName);
 		
-		JSONObject response = targetService.getUserListForTargetSetOfDataTable(draw, userCount, userList);
+		JSONObject response = targetService.getUnionWisePopulationSetOfDataTable(draw, userCount, userList);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 }
