@@ -16,21 +16,21 @@ public class TrainingDTO {
 	
 	private Date startDate;
 	
-	private Date duration;
+	private String duration;
 	
 	private int participantNumber;
 	
-	private int nameOfTrainer;
+	private String nameOfTrainer;
 	
-	private int designationOfTrainer;
+	private String designationOfTrainer;
 	
-	private Integer division;
+	private int division;
 	
-	private Integer district;
+	private int district;
 	
-	private Integer upazila;
+	private int upazila;
 	
-	private Integer branch;
+	private int branch;
 	
 	private String type;
 	
@@ -41,6 +41,10 @@ public class TrainingDTO {
 	private Set<Integer> users;
 	
 	private String description;
+	
+	private String trainingLocationType;
+	
+	private int blc;
 	
 	public Long getId() {
 		return id;
@@ -74,11 +78,11 @@ public class TrainingDTO {
 		this.startDate = startDate;
 	}
 	
-	public Date getDuration() {
+	public String getDuration() {
 		return duration;
 	}
 	
-	public void setDuration(Date duration) {
+	public void setDuration(String duration) {
 		this.duration = duration;
 	}
 	
@@ -90,51 +94,51 @@ public class TrainingDTO {
 		this.participantNumber = participantNumber;
 	}
 	
-	public int getNameOfTrainer() {
+	public String getNameOfTrainer() {
 		return nameOfTrainer;
 	}
 	
-	public void setNameOfTrainer(int nameOfTrainer) {
+	public void setNameOfTrainer(String nameOfTrainer) {
 		this.nameOfTrainer = nameOfTrainer;
 	}
 	
-	public int getDesignationOfTrainer() {
+	public String getDesignationOfTrainer() {
 		return designationOfTrainer;
 	}
 	
-	public void setDesignationOfTrainer(int designationOfTrainer) {
+	public void setDesignationOfTrainer(String designationOfTrainer) {
 		this.designationOfTrainer = designationOfTrainer;
 	}
 	
-	public Integer getDivision() {
+	public int getDivision() {
 		return division;
 	}
 	
-	public void setDivision(Integer division) {
+	public void setDivision(int division) {
 		this.division = division;
 	}
 	
-	public Integer getDistrict() {
+	public int getDistrict() {
 		return district;
 	}
 	
-	public void setDistrict(Integer district) {
+	public void setDistrict(int district) {
 		this.district = district;
 	}
 	
-	public Integer getUpazila() {
+	public int getUpazila() {
 		return upazila;
 	}
 	
-	public void setUpazila(Integer upazila) {
+	public void setUpazila(int upazila) {
 		this.upazila = upazila;
 	}
 	
-	public Integer getBranch() {
+	public int getBranch() {
 		return branch;
 	}
 	
-	public void setBranch(Integer branch) {
+	public void setBranch(int branch) {
 		this.branch = branch;
 	}
 	
@@ -176,6 +180,22 @@ public class TrainingDTO {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getTrainingLocationType() {
+		return trainingLocationType;
+	}
+	
+	public void setTrainingLocationType(String trainingLocationType) {
+		this.trainingLocationType = trainingLocationType;
+	}
+	
+	public int getBlc() {
+		return blc;
+	}
+	
+	public void setBlc(int blc) {
+		this.blc = blc;
 	}
 	
 }
