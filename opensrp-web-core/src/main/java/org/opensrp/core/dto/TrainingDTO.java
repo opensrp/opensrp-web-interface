@@ -44,6 +44,8 @@ public class TrainingDTO {
 	
 	private String trainingLocationType;
 	
+	private int blc;
+	
 	public Long getId() {
 		return id;
 	}
@@ -186,6 +188,14 @@ public class TrainingDTO {
 	
 	public void setTrainingLocationType(String trainingLocationType) {
 		this.trainingLocationType = trainingLocationType;
+	}
+	
+	public int getBlc() {
+		return blc;
+	}
+	
+	public void setBlc(int blc) {
+		this.blc = blc;
 	}
 	
 }

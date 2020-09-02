@@ -110,6 +110,8 @@ public class Training implements Serializable {
 	@OneToMany(mappedBy = "training", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<TrainingUser> trainingUsers = new HashSet<TrainingUser>();
 	
+	private int blc;
+	
 	public Long getId() {
 		return id;
 		
@@ -301,6 +303,14 @@ public class Training implements Serializable {
 	
 	public void setTrainingLocationType(String trainingLocationType) {
 		this.trainingLocationType = trainingLocationType;
+	}
+	
+	public int getBlc() {
+		return blc;
+	}
+	
+	public void setBlc(int blc) {
+		this.blc = blc;
 	}
 	
 }

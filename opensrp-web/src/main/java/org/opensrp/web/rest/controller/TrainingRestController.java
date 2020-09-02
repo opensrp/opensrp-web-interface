@@ -26,7 +26,7 @@ public class TrainingRestController {
 	public ResponseEntity<String> newPatient(@RequestBody TrainingDTO dto) throws Exception {
 		
 		JSONObject response = new JSONObject();
-		System.err.println("DDD:" + dto);
+		
 		try {
 			trainingService.save(dto);
 			response.put("status", "SUCCESS");

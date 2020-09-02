@@ -10,6 +10,7 @@ import org.opensrp.core.dto.TrainingDTO;
 import org.opensrp.core.entity.Training;
 import org.opensrp.core.entity.TrainingRole;
 import org.opensrp.core.entity.TrainingUser;
+import org.opensrp.core.entity.User;
 import org.opensrp.core.service.TrainingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -24,9 +25,10 @@ public class TrainingMapper {
 	
 	public Training map(TrainingDTO dto, Training training) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		//User user = (User) auth.getPrincipal();
+		User user = (User) auth.getPrincipal();
 		
 		training.setTitle(dto.getTitle());
+		
 		training.setDescription(dto.getDescription());
 		training.setBranch(dto.getBranch());
 		training.setNameOfTrainer(dto.getNameOfTrainer());
@@ -42,12 +44,13 @@ public class TrainingMapper {
 		training.setStartDate(dto.getStartDate());
 		training.setParticipantNumber(dto.getParticipantNumber());
 		training.setTrainingId(dto.getTrainingId());
+		training.setBlc(dto.getBlc());
 		if (training.getId() != null && (training.getId() != 0)) {
 			
-			//training.setUpdatedBy(user.getId());
+			training.setUpdatedBy(user.getId());
 			
 		} else {
-			//training.setCreator(user.getId());
+			training.setCreator(user.getId());
 			training.setUuid(UUID.randomUUID().toString());
 		}
 		Set<Integer> trainingRoles = dto.getRoles();
