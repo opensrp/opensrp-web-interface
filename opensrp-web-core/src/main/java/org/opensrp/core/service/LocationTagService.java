@@ -7,6 +7,7 @@ package org.opensrp.core.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -44,17 +45,14 @@ public class LocationTagService {
 	@Transactional
 	public <T> long save(T t) throws Exception {
 		LocationTag locationTag = (LocationTag) t;
-		locationTag = (LocationTag) openMRSServiceFactory.getOpenMRSConnector("tag").add(locationTag);
+		
 		long createdTag = 0;
-		if (!locationTag.getUuid().isEmpty()) {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			User creator = (User) repository.findByKey(auth.getName(), "username", User.class);
-			locationTag.setCreator(creator);
-			createdTag = repository.save(t);
-		} else {
-			logger.error("No uuid found for user:" + locationTag.getName());
-			// TODO
-		}
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User creator = (User) repository.findByKey(auth.getName(), "username", User.class);
+		locationTag.setUuid(UUID.randomUUID().toString());
+		locationTag.setCreator(creator);
+		createdTag = repository.save(t);
 		
 		return createdTag;
 	}
@@ -63,13 +61,9 @@ public class LocationTagService {
 	public <T> int update(T t) throws JSONException {
 		LocationTag locationTag = (LocationTag) t;
 		int updatedTag = 0;
-		String uuid = openMRSServiceFactory.getOpenMRSConnector("tag").update(locationTag, locationTag.getUuid(), null);
-		if (!uuid.isEmpty()) {
-			updatedTag = repository.update(locationTag);
-		} else {
-			logger.error("No uuid found for user:" + locationTag.getName());
-			// TODO
-		}
+		
+		updatedTag = repository.update(locationTag);
+		
 		return updatedTag;
 	}
 	

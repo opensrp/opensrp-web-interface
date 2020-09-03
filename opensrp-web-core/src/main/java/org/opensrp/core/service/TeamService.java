@@ -7,6 +7,7 @@ package org.opensrp.core.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
@@ -50,14 +51,10 @@ public class TeamService {
 	@Transactional
 	public <T> long save(T t) throws Exception {
 		Team team = (Team) t;
-		team = (Team) openMRSServiceFactory.getOpenMRSConnector("team").add(team);
+		
 		long createdTeam = 0;
-		if (!team.getUuid().isEmpty()) {
-			createdTeam = repository.save(team);
-		} else {
-			logger.error("No uuid found for user:" + team.getName());
-			// TODO
-		}
+		team.setUuid(UUID.randomUUID().toString());
+		createdTeam = repository.save(team);
 		
 		return createdTeam;
 	}
@@ -66,13 +63,9 @@ public class TeamService {
 	public <T> int update(T t) throws JSONException {
 		Team team = (Team) t;
 		int updatedTag = 0;
-		String uuid = openMRSServiceFactory.getOpenMRSConnector("team").update(team, team.getUuid(), null);
-		if (!uuid.isEmpty()) {
-			updatedTag = repository.update(team);
-		} else {
-			logger.error("No uuid found for team:" + team.getName());
-			// TODO
-		}
+		
+		updatedTag = repository.update(team);
+		
 		return updatedTag;
 	}
 	
