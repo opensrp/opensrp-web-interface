@@ -14,8 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.core.entity.User;
-import org.opensrp.core.service.UserService;
-import org.opensrp.core.util.FacilityHelperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,21 +26,15 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 	
 	private static final Logger logger = Logger.getLogger(AclAccountDao.class);
 	
-	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
 	@Override
+	@Transactional
 	public User getByUsername(String username) {
-		Session session = sessionFactory.openSession();
-		try{
+		Session session = sessionFactory.getCurrentSession();
 		return (User) session.getNamedQuery("account.byUsername").setParameter("username", username).uniqueResult();
-		}catch(Exception e){
-			e.printStackTrace();
-			
-		}finally{
-			session.close();
-		}
-		return null;
+		
 	}
 	
 	@Override
@@ -52,9 +44,9 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 		try {
 			logger.info("usernameAndPassword:" + username);
 			
-			System.err.println("login start:"+username+"-"+ System.currentTimeMillis());
+			System.err.println("login start:" + username + "-" + System.currentTimeMillis());
 			account = getByUsername(username);
-			System.err.println("login end:"+username+"-"+ System.currentTimeMillis());
+			System.err.println("login end:" + username + "-" + System.currentTimeMillis());
 		}
 		catch (Exception e) {
 			logger.error("account null: " + e);
@@ -62,21 +54,21 @@ public class AclAccountDao extends AbstractAclDao<User> implements AccountDao {
 		return account;
 	}
 	
-	public JSONObject convertStringToJSONObject(String inputString) throws JSONException{
+	public JSONObject convertStringToJSONObject(String inputString) throws JSONException {
 		JSONObject outputJSONObject = null;
 		outputJSONObject = new JSONObject(inputString);
 		return outputJSONObject;
 	}
 	
-	public JSONArray convertStringToJSONArray(String inputString) throws JSONException{
+	public JSONArray convertStringToJSONArray(String inputString) throws JSONException {
 		JSONArray outputJSONArray = null;
 		outputJSONArray = new JSONArray(inputString);
 		return outputJSONArray;
 	}
 	
 	private static String xAuthToken = "13f983a019cb9fe661a77d251daa63f70b894bd2843bd76b7cef4f732bd7739e";
-	private static String clientId = "151880";
 	
+	private static String clientId = "151880";
 	
 	@Override
 	public void create(User t) {

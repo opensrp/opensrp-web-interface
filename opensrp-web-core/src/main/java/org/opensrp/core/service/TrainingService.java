@@ -10,9 +10,7 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.opensrp.common.util.TrainingLocationType;
 import org.opensrp.core.dto.TrainingDTO;
 import org.opensrp.core.entity.Branch;
@@ -36,7 +34,7 @@ public class TrainingService extends CommonService {
 	@Transactional
 	public Training save(TrainingDTO dto) throws Exception {
 		Training training;
-		Session session = getSessionFactory().openSession();
+		Session session = getSessionFactory();
 		if (TrainingLocationType.valueOf(dto.getTrainingLocationType()).name().equalsIgnoreCase("BRANCH")) {
 			
 			Map<String, Object> map = new HashMap<>();
@@ -47,35 +45,21 @@ public class TrainingService extends CommonService {
 			dto.setDistrict(branch.getDistrict());
 			dto.setUpazila(branch.getUpazila());
 		}
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			deleteAllByPrimaryKey(dto.getId(), "training_role", "training_id", session);
-			deleteAllByPrimaryKey(dto.getId(), "training_user", "training_id", session);
-			if (dto.getId() != null && dto.getId() != 0) {
-				training = findById(dto.getId(), "id", Training.class);
-				training = trainingMapper.map(dto, training);
-			} else {
-				training = new Training();
-				training = trainingMapper.map(dto, training);
-			}
-			
-			session.saveOrUpdate(training);
-			
-			logger.info("training saved successfully: ");
-			
-			if (!tx.wasCommitted())
-				tx.commit();
-			
+		
+		deleteAllByPrimaryKey(dto.getId(), "training_role", "training_id", session);
+		deleteAllByPrimaryKey(dto.getId(), "training_user", "training_id", session);
+		if (dto.getId() != null && dto.getId() != 0) {
+			training = findById(dto.getId(), "id", Training.class);
+			training = trainingMapper.map(dto, training);
+		} else {
+			training = new Training();
+			training = trainingMapper.map(dto, training);
 		}
-		catch (HibernateException e) {
-			tx.rollback();
-			logger.error(e);
-			throw new Exception(e.getMessage());
-		}
-		finally {
-			session.close();
-		}
+		
+		session.saveOrUpdate(training);
+		
+		logger.info("training saved successfully: ");
+		
 		return training;
 		
 	}
