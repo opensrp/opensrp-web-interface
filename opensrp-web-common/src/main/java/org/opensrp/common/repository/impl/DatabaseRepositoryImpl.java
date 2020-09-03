@@ -1280,7 +1280,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		int isUpdate = 0;
 		
 		String hql = "update core.users set parent_user_id = :parentId where id = :ssId";
-		
+		isUpdate = session.createSQLQuery(hql).setInteger("parentId", parentId).setInteger("ssId", ssId).executeUpdate();
 		return isUpdate;
 	}
 	
