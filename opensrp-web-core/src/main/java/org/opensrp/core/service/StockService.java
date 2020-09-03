@@ -477,6 +477,7 @@ public class StockService extends CommonService {
 		
 	}
 	
+	@Transactional
 	public InventoryDTO getUserInfoWithSkByUserId(int userId) {
 		
 		Session session = getSessionFactory();
@@ -498,6 +499,7 @@ public class StockService extends CommonService {
 	}
 	
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<InventoryDTO> getProductListByBranchWithRole(Integer branchId, Integer roleId, int productId) {
 		Session session = getSessionFactory();
 		List<InventoryDTO> result = null;
@@ -514,6 +516,7 @@ public class StockService extends CommonService {
 	}
 	
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<InventoryDTO> getUserListByBranchWithRole(Integer branchId, Integer roleId) {
 		Session session = getSessionFactory();
 		List<InventoryDTO> result = null;

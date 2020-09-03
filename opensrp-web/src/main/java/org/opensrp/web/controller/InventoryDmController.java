@@ -6,6 +6,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpSession;
 
 import org.opensrp.common.dto.InventoryDTO;
+import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.Roles;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.entity.Branch;
@@ -61,7 +62,7 @@ public class InventoryDmController {
 	@RequestMapping(value = "inventorydm/requisition-list.html", method = RequestMethod.GET)
 	public String requisitonListForDm(Model model, Locale locale, HttpSession session) {
 		List<Branch> branches = branchService.findAll("Branch");
-		model.addAttribute("divisions", targetService.getLocationByTagId(28));
+		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
 		model.addAttribute("locale", locale);
 		model.addAttribute("branches", branches);
 		return "inventoryDm/requisition-list";
@@ -92,7 +93,7 @@ public class InventoryDmController {
 	@RequestMapping(value = "inventorydm/ss-sales-report.html", method = RequestMethod.GET)
 	public String ssSellReportForDm(Model model, HttpSession session, Locale locale) {
 		model.addAttribute("locale", locale);
-		model.addAttribute("divisions", targetService.getLocationByTagId(28));
+		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
 		return "inventoryDm/ss-sales-report";
 	}
 	

@@ -148,6 +148,7 @@ public class TargetService extends CommonService {
 	}
 	
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<ProductDTO> allActiveTarget(int roleId) {
 		Session session = getSessionFactory();
 		List<ProductDTO> result = null;

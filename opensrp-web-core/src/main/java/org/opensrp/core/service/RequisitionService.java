@@ -34,6 +34,7 @@ public class RequisitionService extends CommonService {
 		
 	}
 	
+	@Transactional
 	public List<ProductDTO> productListFortRequisition(Integer branchId, Integer productId) {
 		List<ProductDTO> products = productService.productListByBranchWithCurrentStockWithoutRole(branchId, productId);
 		
