@@ -12,7 +12,7 @@
 <title>Target By Population</title>
 	
 	
-<c:url var="urlForSKPAList" value="/rest/api/v1/target/sk-pa-user-list-for-individual-target-setting" />
+<c:url var="urlForPKList" value="/rest/api/v1/target/pk-user-list-for-population-target-setting" />
 
 
 
@@ -70,7 +70,6 @@
 							<thead>
 								<tr>
 								   
-									<th><spring:message code="lbl.serialNo"></spring:message></th>
 									<th><spring:message code="lbl.name"></spring:message></th>
 									<th><spring:message code="lbl.designation"></spring:message></th>
 									<th><spring:message code="lbl.id"></spring:message></th>
@@ -79,19 +78,6 @@
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
 								</tr>
 							</thead>
-							<tbody>
-							<tr>
-							<td> </td>
-							<td> </td>
-							<td> </td>
-							<td> </td>
-							<td> </td>
-							<td> </td>
-							<td> <a href="<c:url value="/target/set-individual-target-pk"/>">
-									Set Target
-							</a></td>
-							</tr>
-							</tbody>
 						</table>
 						</div>
 						
@@ -117,8 +103,6 @@ jQuery(document).ready(function() {
 		Layout.init(); // init current layout
    //TableAdvanced.init();
 		//$('#StockSellHistory').DataTable();
-		$('#targetByPopulationList').DataTable();
-		$('#sellToManySSProductList').DataTable();
 });
 
 
@@ -143,11 +127,11 @@ jQuery(function() {
 
 </script>
 <script>
- /*    let stockList;
+     let stockList;
     $(document).ready(function() {
     	
     	
-    	stockList = $('#StockSellHistory').DataTable({
+    	stockList = $('#targetByPopulationList').DataTable({
             bFilter: false,
             serverSide: true,
             processing: true,
@@ -162,11 +146,11 @@ jQuery(function() {
                 
             ],
             ajax: {
-                url: "${urlForSKPAList}",
+                url: "${urlForPKList}",
                 data: function(data){                	
                     data.branchId = 0;
                     data.locationId=0;                    
-                    data.roleName='SK';
+                    data.roleName='PK';
                     
                 },
                 dataSrc: function(json){
@@ -190,6 +174,7 @@ jQuery(function() {
     });
 
 function filter(){
+	debugger;
 	let locationId = 0;
 	let district = $("#districtList option:selected").val();
 	let division = $("#divisionList option:selected").val();
@@ -201,7 +186,7 @@ function filter(){
 	}else if(division != 0){
 		locationId =division; 
 	}
-	stockList = $('#StockSellHistory').DataTable({
+	stockList = $('#targetByPopulationList').DataTable({
          bFilter: false,
          serverSide: true,
          processing: true,
@@ -215,12 +200,12 @@ function filter(){
              { width: "20%", targets: 5 }
          ],
          ajax: {
-             url: "${urlForSKPAList}",
+             url: "${urlForPKList}",
              data: function(data){
             	
             	 data.branchId = $("#branchList option:selected").val();
                  data.locationId=locationId;                    
-                 data.roleName=$("#roleList option:selected").val();
+                 data.roleName=$("#roleList option:selected").val() == "0" ? "PK" : $("#roleList option:selected").val();
              },
              dataSrc: function(json){
                  if(json.data){
@@ -239,7 +224,7 @@ function filter(){
          language: {
              searchPlaceholder: ""
          }
-     }); */
+     }); 
 }
 </script>
 

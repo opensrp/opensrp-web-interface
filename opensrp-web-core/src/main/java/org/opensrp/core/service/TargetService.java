@@ -23,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.TargetCommontDTO;
+import org.opensrp.common.util.LocationTags;
+import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.Status;
 import org.opensrp.common.util.TaregtSettingsType;
 import org.opensrp.core.dto.ProductDTO;
@@ -97,6 +99,54 @@ public class TargetService extends CommonService {
 	}
 	
 	@Transactional
+	public <T> Integer savePopulationWiseTargetAll(TargetDTO dto) throws Exception {
+		Session session = getSessionFactory();
+		
+		Integer returnValue = null;
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+		
+		Set<TargetDetailsDTO> targetDetailsDTOs = dto.getTargetDetailsDTOs();
+		
+		List<TargetCommontDTO> targetList = allTargetUserByUnionWithPopulation(Roles.PK.getId(),
+		    LocationTags.UNION_WARD.getId());
+		
+		for (TargetCommontDTO target : targetList) {
+			
+			for (TargetDetailsDTO targetDetailsDTO : targetDetailsDTOs) {
+				Map<String, Object> fieldValues = new HashMap<>();
+				fieldValues.put("year", targetDetailsDTO.getYear());
+				fieldValues.put("month", targetDetailsDTO.getMonth());
+				fieldValues.put("userId", target.getUserId());
+				fieldValues.put("productId", targetDetailsDTO.getProductId());
+				TargetDetails targetDetails = findByKeys(fieldValues, TargetDetails.class);
+				System.err.println("targetDetails::" + target.getUserId());
+				if (targetDetails == null) {
+					targetDetails = new TargetDetails();
+					targetDetails.setUuid(UUID.randomUUID().toString());
+					targetDetails.setCreator(user.getId());
+				} else {
+					
+					targetDetails.setUpdatedBy(user.getId());
+				}
+				
+				targetDetails = targetMapper.targetMapForUnionWiseTarget(targetDetailsDTO, targetDetails,
+				    target.getPopulation());
+				targetDetails.setUserId(target.getUserId());
+				targetDetails.setBranchId(target.getBranchId());
+				
+				session.saveOrUpdate(targetDetails);
+				
+			}
+			
+		}
+		
+		returnValue = 1;
+		
+		return returnValue;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<ProductDTO> allActiveTarget(int roleId) {
 		Session session = getSessionFactory();
@@ -123,6 +173,30 @@ public class TargetService extends CommonService {
 		Query query = session.createSQLQuery(hql).addScalar("userId", StandardBasicTypes.INTEGER)
 		        .addScalar("branchId", StandardBasicTypes.INTEGER).setInteger("roleId", roleId).setString("type", type)
 		        .setInteger("id", id).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		
+		result = query.list();
+		
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<TargetCommontDTO> allTargetUserByUnionWithPopulation(Integer roleId, Integer locationTagId) {
+		Session session = getSessionFactory();
+		List<TargetCommontDTO> result = null;
+		
+		String hql = "" + "SELECT cat.user_id as userId, " + "       cat.location_id as locationId, "
+		        + "       wp.population as population, " + "       ub.branch_id as branchId "
+		        + "FROM   core.users_catchment_area cat " + "       JOIN core.\"location\" l "
+		        + "         ON cat.location_id = l.id " + "       JOIN core.location_tag ltag "
+		        + "         ON l.location_tag_id = ltag.id " + "       JOIN core.user_role r "
+		        + "         ON r.user_id = cat.user_id " + "       JOIN core.union_wise_population wp "
+		        + "         ON l.id = wp.union_id " + "       JOIN core.user_branch ub "
+		        + "         ON ub.user_id = cat.user_id " + "WHERE  ltag.id = " + locationTagId + " "
+		        + "       AND r.role_id = " + roleId + "";
+		Query query = session.createSQLQuery(hql).addScalar("userId", StandardBasicTypes.INTEGER)
+		        .addScalar("branchId", StandardBasicTypes.INTEGER).addScalar("locationId", StandardBasicTypes.INTEGER)
+		        .addScalar("population", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
 		
 		result = query.list();
 		
@@ -181,6 +255,31 @@ public class TargetService extends CommonService {
 			patient.put(dto.getLocationName());
 			String view = "<div class='col-sm-12 form-group'><a \" href=\"set-individual/" + dto.getBranchId() + "/"
 			        + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
+			        + "\">Set target</a> </div>";
+			patient.put(view);
+			array.put(patient);
+		}
+		response.put("data", array);
+		return response;
+	}
+	
+	public JSONObject getUnionWisePopulationSetOfDataTable(Integer draw, int userCount, List<TargetCommontDTO> dtos)
+	    throws JSONException {
+		JSONObject response = new JSONObject();
+		response.put("draw", draw + 1);
+		response.put("recordsTotal", userCount);
+		response.put("recordsFiltered", userCount);
+		JSONArray array = new JSONArray();
+		for (TargetCommontDTO dto : dtos) {
+			JSONArray patient = new JSONArray();
+			patient.put(dto.getFullName());
+			patient.put(dto.getRoleName());
+			patient.put(dto.getUsername());
+			patient.put(dto.getLocationName());
+			patient.put("1200");
+			String view = "<div class='col-sm-12 form-group'><a \" href=\"set-individual-target-pk/" + dto.getBranchId()
+			        + "/" + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName() + "&id="
+			        + dto.getUsername() + "&location=" + dto.getLocationName() + "&population=1200"
 			        + "\">Set target</a> </div>";
 			patient.put(view);
 			array.put(patient);
@@ -260,6 +359,34 @@ public class TargetService extends CommonService {
 		        .setInteger("roleId", roleId).setInteger("locationOrBranchOrUserId", locationOrBranchOrUserId)
 		        .setString("typeName", typeName).setString("locationTag", locationTag).setInteger("month", month)
 		        .setInteger("year", year).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		dtos = query.list();
+		
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetCommontDTO> getTargetInfoForPopulationWise(int roleId, int locationTagId, int month, int year) {
+		
+		Session session = getSessionFactory();
+		List<TargetCommontDTO> dtos = new ArrayList<>();
+		
+		String hql = "" + "SELECT td.percentage as percentage, "
+		        + "        cast(Coalesce(td.product_id, 0) as integer) as productId, "
+		        + "       p.\"name\" as productName, " + "       Coalesce(td.quantity, 0) as quantity "
+		        + "FROM   core.target_details td " + "       join core.product p " + "         ON p.id = td.product_id "
+		        + "       join core.user_role r " + "         ON td.user_id = r.user_id "
+		        + "       join core.users_catchment_area cat " + "         ON cat.user_id = td.user_id "
+		        + "       join core.\"location\" l " + "         ON cat.location_id = l.id "
+		        + "       join core.location_tag ltag " + "         ON l.location_tag_id = ltag.id "
+		        + "       join core.union_wise_population wp " + "         ON l.id = wp.union_id " + "WHERE  r.role_id = "
+		        + roleId + " " + "       AND ltag.id = " + locationTagId + " " + "       AND td.\"month\" = " + month + " "
+		        + "       AND td.\"year\" = " + year + " " + "       AND p.status = 'ACTIVE' " + "GROUP  BY td.product_id, "
+		        + "          p.\"name\", " + "          td.quantity, " + "          td.percentage;";
+		Query query = session.createSQLQuery(hql).addScalar("percentage", StandardBasicTypes.STRING)
+		        .addScalar("productId", StandardBasicTypes.INTEGER).addScalar("productName", StandardBasicTypes.STRING)
+		        .addScalar("quantity", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
 		dtos = query.list();
 		
 		return dtos;

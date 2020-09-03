@@ -8,6 +8,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Role;
@@ -93,6 +94,18 @@ public class TargetController {
 		return "targets/get-target-info";
 	}
 	
+	@RequestMapping(value = "/get-population-wise-target-info", method = RequestMethod.GET)
+	public String getTargetInfoPopulationWise(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		int role = Roles.PK.getId();
+		int locationTag = LocationTags.UNION_WARD.getId();
+		int month = Integer.parseInt(request.getParameter("month"));
+		int year = Integer.parseInt(request.getParameter("year"));
+		model.addAttribute("targets", targetService.getTargetInfoForPopulationWise(role, locationTag, month, year));
+		
+		return "targets/get-target-info-for-populationwise-target";
+	}
+	
 	@RequestMapping(value = "/target-by-population.html", method = RequestMethod.GET)
 	public String targetByPopulation(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
@@ -100,10 +113,18 @@ public class TargetController {
 		return "targets/target-by-population-list";
 	}
 	
-	@RequestMapping(value = "/set-individual-target-pk", method = RequestMethod.GET)
-	public String indiviualTargetSetForPkB(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+	@RequestMapping(value = "/set-individual-target-pk/{branch_id}/{role_id}/{user_id}", method = RequestMethod.GET)
+	public String indiviualTargetSetForPkB(HttpServletRequest request, HttpSession session, Model model, Locale locale,@PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
+            @PathVariable("user_id") int userId) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("targets", targetService.allActiveTarget(Roles.PK.getId()));
+		model.addAttribute("branchId", branchId);
+		model.addAttribute("userId", userId);
+		model.addAttribute("roleId", roleId);
+		model.addAttribute("pkname", request.getParameter("name"));
+		model.addAttribute("pkid", request.getParameter("id"));
+		model.addAttribute("pkLocation", request.getParameter("location"));
+		model.addAttribute("population", request.getParameter("population"));
 		return "targets/individual-target-by-population-pk";
 	}
 	
