@@ -170,11 +170,10 @@ public class UserService {
 				dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 				repository.updatePassword(dto);
 			} else {
-				Integer statusCode = openMRSServiceFactory.getOpenMRSConnector("user").post(dto).statusCode();
-				if (statusCode == 200) {
-					dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-					repository.updatePassword(dto);
-				}
+				
+				dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+				repository.updatePassword(dto);
+				
 			}
 			String message = "Your Password has been changed successfully!";
 			setToasterToSession(session, "Success", message);
@@ -733,25 +732,22 @@ public class UserService {
 					
 					if (locations != null && locations.size() > 0) {
 						if (isExists == null) {
-							if (!users[3].trim().equalsIgnoreCase("SS")) {
+							/*if (!users[3].trim().equalsIgnoreCase("SS")) {
 								user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
-							}
-							if ((user != null && !user.getUuid().isEmpty()) || users[3].trim().equalsIgnoreCase("SS")) {
-								user.setPassword(passwordEncoder.encode(user.getPassword()));
-								repository.save(user);
-								User newUser = repository.findByKey(user.getUsername(), "username", User.class);
-								logger.info("created new user:" + user.getUsername());
-								int[] locationsForSave = new int[1];
-								locationsForSave[0] = locations.get(0).getId();
-								UserLocationDTO userLocationDTO = new UserLocationDTO();
-								userLocationDTO.setUserId(newUser.getId());
-								userLocationDTO.setLocations(locationsForSave);
-								saveTeamMemberAndCatchmentAreas(session, userLocationDTO);
-							} else {
-								String errorMessage = "OpenMRS: Bad format found for this user. Please check line "
-								        + (position + 1) + " of the csv file ";
-								throw new BadFormatException(errorMessage);
-							}
+							}*/
+							user.setUuid(UUID.randomUUID().toString());
+							user.setPersonUUid(UUID.randomUUID().toString());
+							user.setPassword(passwordEncoder.encode(user.getPassword()));
+							repository.save(user);
+							User newUser = repository.findByKey(user.getUsername(), "username", User.class);
+							logger.info("created new user:" + user.getUsername());
+							int[] locationsForSave = new int[1];
+							locationsForSave[0] = locations.get(0).getId();
+							UserLocationDTO userLocationDTO = new UserLocationDTO();
+							userLocationDTO.setUserId(newUser.getId());
+							userLocationDTO.setLocations(locationsForSave);
+							saveTeamMemberAndCatchmentAreas(session, userLocationDTO);
+							
 						} else {
 							try {
 								int[] locationsForSave = new int[1];
