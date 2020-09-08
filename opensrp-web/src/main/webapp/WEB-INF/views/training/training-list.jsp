@@ -99,38 +99,33 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script>
-let requisitionList;
+let trainingList;
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 	 Layout.init(); // init current layout
-   	$('#trainingList').DataTable();
-   	
-});
-/*  
-var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+	var date = new Date(), y = date.getFullYear(), m = date.getMonth();
 	var startDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
 	var endDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));
-	requisitionList = $('#requisitionListForAm').DataTable({
+	trainingList = $('#trainingList').DataTable({
            bFilter: false,
            serverSide: true,
            processing: true,
            columnDefs: [
                { targets: [0,1,2,3,4,5], orderable: false },
-               { width: "20%", targets: 0 },
-               { width: "20%", targets: 1 },
-               { width: "20%", targets: 2 },
-               { width: "20%", targets: 3 },
-               { width: "20%", targets: 4 },
-               { width: "20%", targets: 5 }
+               { width: "5%", targets: 0 },
+               { width: "15%", targets: 1 },
+               { width: "15%", targets: 2 },
+               { width: "15%", targets: 3 },
+               { width: "15%", targets: 4 },
+               { width: "20%", targets: 5 },
+               { width: "15%", targets: 6 }
            ],
            ajax: {
-               url: "/opensrp-dashboard/rest/api/v1/requisition/list",
+               url: "/opensrp-dashboard/rest/api/v1/training/training-list",
                data: function(data){
-					data.division = 0;
-					data.district = 0;
-					data.upazila = 0;
-					data.branch = 0;
-					data.requisitor = 0;
+					data.locationId = 0;
+					data.branchId = 0;
+					data.roleId = 0;
 					data.startDate = startDateDm,
 					data.endDate = endDateDm
 					
@@ -153,7 +148,12 @@ var date = new Date(), y = date.getFullYear(), m = date.getMonth();
                searchPlaceholder: ""
            }
        });
+   	
 });
+
+
+
+
 
 function filter(){
 	var division = +$('#divisionList').val();
@@ -254,7 +254,6 @@ var branchString= branchName+"-"+branchCode;
 window.location.replace("/opensrp-dashboard/inventory/requisition-details/"+requisitionId+".html?lang="+locale+"&branch="+branchString+"");
 }
 
-  */
 </script>
 
 

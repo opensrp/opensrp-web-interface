@@ -175,9 +175,9 @@
 					</div>
 				</form>
 				<div class="modal modal-margin" id="addAttendanceModal" style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1150; max-width: 75%;">
-
+						
 					<div class="row">
-					<div class="modal-header" style="border-bottom: none;">
+					<div class="modal-header text-center" style="border-bottom: none;">
 										<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
 										<h4 class="modal-title">
 											<Strong>Trainer List</Strong>
@@ -186,13 +186,31 @@
 						<div id="validationSelectOne" style="display: none"
 							class="alert alert-danger text-center" role="alert">Please
 							select one to proceed</div>
-						<jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" />
-						<div class="row">
+							<div class="form-group row">
 							<div class="col-lg-3 form-group">
-								<label for="from"><spring:message code="lbl.designation"></spring:message>
-									:</label> <input type="text" class="form-control" id="designation">
-							</div>
-						</div>
+								    <label for="cars"><spring:message code="lbl.designation"></spring:message> :</label> 
+								    <select class="form-control mx-sm-3 js-example-basic-multiple" id="selectRole" name="selectRole">
+									<option value="0"><spring:message
+											code="lbl.pleaseSelect" /></option>
+									<c:forEach items="${roles}" var="role">
+										<option value="${role.id}">${role.name}</option>
+									</c:forEach>
+									</select>
+								</div>
+                               <div class="col-lg-3">
+											<label class="control-label" for="username"> <spring:message code="lbl.branches"/> <span class="required">* </span>	</label>                                     
+											<select id="branches"
+			                                class="form-control mx-sm-3 js-example-basic-multiple"
+			                                name="branches" required>
+			                                <option value="0"><spring:message
+												code="lbl.selectBranch" /></option>
+			                            <c:forEach items="${branches}" var="branch">
+			                                <option value="${branch.id}">${branch.name}</option>
+			                            </c:forEach>
+			                        </select>
+                                </div>
+                            </div>
+							 
 						<div class="row">
 							<div class="col-lg-12 form-group text-right">
 								<button type="button" onclick="filter()" class="btn btn-primary">Search</button>
@@ -214,27 +232,6 @@
 								<td><input type="checkbox" class="remove-checkbox" value="selectall"></td>
 								<td>1</td>
 								<td>Tariqul</td>
-								<td>xxxxx</td>
-								<td>PA</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="remove-checkbox" value="selectall"></td>
-								<td>2</td>
-								<td>Zaki Anan</td>
-								<td>xxxxx</td>
-								<td>PA</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="remove-checkbox" value="selectall"></td>
-								<td>3</td>
-								<td>Akramul Haider</td>
-								<td>xxxxx</td>
-								<td>PA</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="remove-checkbox" value="selectall"></td>
-								<td>4</td>
-								<td>Touhidul</td>
 								<td>xxxxx</td>
 								<td>PA</td>
 							</tr>
@@ -265,6 +262,7 @@
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
+		$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
 		//$('#addAttendanceList').DataTable();
 });
 
@@ -300,70 +298,70 @@ $('#addAttendanceList tbody input[type=checkbox]:checked').each(function(index, 
 	}
 
 	/* $("#addProduct").submit(function(event) { 
-	 debugger;
-	 $("#loading").show();
-	 var url = "/opensrp-dashboard/rest/api/v1/product/save-update";			
-	 var token = $("meta[name='_csrf']").attr("content");
-	 var header = $("meta[name='_csrf_header']").attr("content");
-	 var sellTo = [];
-	 $("input:checkbox[name=sellerName]:checked").each(function(){
-	 sellTo.push(+$(this).val());
-	 });
-	 var formData;
+		 debugger;
+		 $("#loading").show();
+		 var url = "/opensrp-dashboard/rest/api/v1/product/save-update";			
+		 var token = $("meta[name='_csrf']").attr("content");
+		 var header = $("meta[name='_csrf_header']").attr("content");
+		 var sellTo = [];
+		 $("input:checkbox[name=sellerName]:checked").each(function(){
+		 sellTo.push(+$(this).val());
+		 });
+		 var formData;
+		
+		 formData = {
+		 'name': $('input[name=productName]').val(),
+		 'description': $('input[name=productDescription]').val(),
+		 'id': 0,
+		 'purchasePrice': +$('input[name=purchasePrice]').val(),
+		 'sellingPrice': +$('input[name=sellingPrice]').val(),
+		 'sellTo': sellTo,
+		 'status': "ACTIVE",
+		 'type': "PRODUCT"
+		 };
+		 console.log(formData)
+		 event.preventDefault();
+		
+		 $.ajax({
+		 contentType : "application/json",
+		 type: "POST",
+		 url: url,
+		 data: JSON.stringify(formData), 
+		 dataType : 'json',
+		
+		 timeout : 100000,
+		 beforeSend: function(xhr) {				    
+		 xhr.setRequestHeader(header, token);
+		 },
+		 success : function(data) {
+		 debugger;
+		 var response = JSON.parse(data);
+		 $("#serverResponseMessage").html(response.msg);
+		 $("#loading").hide();
+		 if(response.status == "SUCCESS"){					   
+		 window.location.replace("/opensrp-dashboard/inventorydm/products-list.html");
+		
+		 }
+		
+		 },
+		 error : function(e) {
+		
+		 },
+		 done : function(e) {				    
+		 console.log("DONE");				    
+		 }
+		 });
+		 });	
 	
-	 formData = {
-	 'name': $('input[name=productName]').val(),
-	 'description': $('input[name=productDescription]').val(),
-	 'id': 0,
-	 'purchasePrice': +$('input[name=purchasePrice]').val(),
-	 'sellingPrice': +$('input[name=sellingPrice]').val(),
-	 'sellTo': sellTo,
-	 'status': "ACTIVE",
-	 'type': "PRODUCT"
-	 };
-	 console.log(formData)
-	 event.preventDefault();
+		 function Validate() {
 	
-	 $.ajax({
-	 contentType : "application/json",
-	 type: "POST",
-	 url: url,
-	 data: JSON.stringify(formData), 
-	 dataType : 'json',
-	
-	 timeout : 100000,
-	 beforeSend: function(xhr) {				    
-	 xhr.setRequestHeader(header, token);
-	 },
-	 success : function(data) {
-	 debugger;
-	 var response = JSON.parse(data);
-	 $("#serverResponseMessage").html(response.msg);
-	 $("#loading").hide();
-	 if(response.status == "SUCCESS"){					   
-	 window.location.replace("/opensrp-dashboard/inventorydm/products-list.html");
-	
-	 }
-	
-	 },
-	 error : function(e) {
-	
-	 },
-	 done : function(e) {				    
-	 console.log("DONE");				    
-	 }
-	 });
-	 });	
-
-	 function Validate() {
-
-	 if($('input[type=checkbox]:checked').length == 0)
-	 {
-	 $("#checkBoxSelection").html("<strong>Please fill out this field</strong>");
-	 return false;
-	 }
-	
-	 $("#checkBoxSelection").html("");
+		 if($('input[type=checkbox]:checked').length == 0)
+		 {
+		 $("#checkBoxSelection").html("<strong>Please fill out this field</strong>");
+		 return false;
+		 }
+		
+		 $("#checkBoxSelection").html("");
 	 }
 	 */
 </script>

@@ -31,8 +31,6 @@ public class InventoryDmController {
 	@Autowired
 	private ProductService productService;
 	
-	@Autowired
-	private BranchService branchService;
 	
 	@Autowired
 	private RequisitionService requisitionService;
@@ -61,10 +59,8 @@ public class InventoryDmController {
 	
 	@RequestMapping(value = "inventorydm/requisition-list.html", method = RequestMethod.GET)
 	public String requisitonListForDm(Model model, Locale locale, HttpSession session) {
-		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
 		model.addAttribute("locale", locale);
-		model.addAttribute("branches", branches);
 		return "inventoryDm/requisition-list";
 	}
 	

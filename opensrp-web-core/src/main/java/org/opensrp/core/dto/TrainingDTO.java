@@ -46,6 +46,10 @@ public class TrainingDTO {
 	
 	private int blc;
 	
+	private String audience;
+	
+	private String locationName;
+	
 	public Long getId() {
 		return id;
 	}
@@ -196,6 +200,22 @@ public class TrainingDTO {
 	
 	public void setBlc(int blc) {
 		this.blc = blc;
+	}
+
+	public String getAudience() {
+		return audience;
+	}
+
+	public void setAudience(String audience) {
+		this.audience = audience;
+	}
+
+	public String getLocationName() {
+		return locationName;
+	}
+
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
 	}
 	
 }
