@@ -15,16 +15,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -116,98 +115,41 @@ public class UserService {
 	public <T> long save(T t, boolean isUpdate) throws Exception {
 		User user = (User) t;
 		long createdUser = 0;
-		Set<Role> roles = user.getRoles();
-		boolean isAdminOrSS = roleServiceImpl.isOpenMRSRole(roles);
-		JSONArray existingOpenMRSUser = new JSONArray();
-		String query = "";
-		String existingUserUUid = "";
-		String existingUserPersonUUid = "";
-		query = "v=full&username=" + user.getUsername();
-		if (!isAdminOrSS) {
-			existingOpenMRSUser = openMRSServiceFactory.getOpenMRSConnector("user").getByQuery(query);
-			if (existingOpenMRSUser.length() == 0) {
-				user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
-				if (!StringUtils.isBlank(user.getUuid())) {
-					user.setPassword(passwordEncoder.encode(user.getPassword()));
-					user.setProvider(true);
-					createdUser = repository.save(user);
-				} else {
-					logger.error("No uuid found for user:" + user.getUsername());
-				}
-			} else {
-				JSONObject userOb = new JSONObject();
-				userOb = (JSONObject) existingOpenMRSUser.get(0);
-				existingUserUUid = (String) userOb.get("uuid");
-				JSONObject person = new JSONObject();
-				person = (JSONObject) userOb.get("person");
-				existingUserPersonUUid = (String) person.get("uuid");
-				user.setProvider(true);
-				user.setUuid(existingUserUUid);
-				user.setPersonUUid(existingUserPersonUUid);
-				if (StringUtils.isBlank(user.getUuid())) {
-					existingOpenMRSUser = openMRSServiceFactory.getOpenMRSConnector("user").getByQuery(query);
-					if (existingOpenMRSUser.length() == 0) {
-						user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
-					}
-				} else {
-					openMRSServiceFactory.getOpenMRSConnector("user").update(user, existingUserUUid, userOb);
-				}
-				
-				if (!isUpdate) {
-					user.setPassword(passwordEncoder.encode(user.getPassword()));
-				}
-				createdUser = repository.save(user);
-			}
-			
-		} else {
-			user.setProvider(false);
+		
+		user.setProvider(true);
+		
+		if (!isUpdate) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
-			createdUser = repository.save(user);
+			user.setUuid(UUID.randomUUID().toString());
+			user.setPersonUUid(UUID.randomUUID().toString());
 		}
+		createdUser = repository.save(user);
 		
 		return createdUser;
 	}
 	
+	@Transactional
 	public User save(User user) throws Exception {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			session.save(user);
-			logger.info("saved successfully: " + user.getClass().getName());
-			if (!tx.wasCommitted())
-				tx.commit();
-		}
-		catch (HibernateException e) {
-			tx.rollback();
-			logger.error(e);
-			throw new Exception(e.getMessage());
-		}
-		finally {
-			session.close();
-			
-		}
+		Session session = sessionFactory.getCurrentSession();
+		
+		session.save(user);
+		logger.info("saved successfully: " + user.getClass().getName());
+		
 		return user;
 	}
 	
 	@Transactional
 	public User saveNew(User user, boolean isUpdate) throws Exception {
 		User createdUser = new User();
-		Set<Role> roles = user.getRoles();
-		boolean isAdminOrSS = roleServiceImpl.isOpenMRSRole(roles);
 		
-		if (!isAdminOrSS) {
-			
-			if (!isUpdate) {
-				user.setPassword(passwordEncoder.encode(user.getPassword()));
-			}
-			createdUser = save(user);
-			
-		} else {
-			user.setProvider(false);
+		user.setProvider(true);
+		
+		if (!isUpdate) {
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
-			createdUser = save(user);
+			user.setUuid(UUID.randomUUID().toString());
+			user.setPersonUUid(UUID.randomUUID().toString());
 		}
+		createdUser = save(user);
 		
 		return createdUser;
 	}
@@ -228,11 +170,10 @@ public class UserService {
 				dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 				repository.updatePassword(dto);
 			} else {
-				Integer statusCode = openMRSServiceFactory.getOpenMRSConnector("user").post(dto).statusCode();
-				if (statusCode == 200) {
-					dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-					repository.updatePassword(dto);
-				}
+				
+				dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+				repository.updatePassword(dto);
+				
 			}
 			String message = "Your Password has been changed successfully!";
 			setToasterToSession(session, "Success", message);
@@ -473,7 +414,6 @@ public class UserService {
 		
 		boolean isProvider = roleServiceImpl.isOpenMRSRole(roles);
 		if (isProvider) {
-			String uuid = openMRSServiceFactory.getOpenMRSConnector("user").update(user, user.getUuid(), null);
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setProvider(true);
 			updatedUser = repository.update(user);
@@ -792,25 +732,22 @@ public class UserService {
 					
 					if (locations != null && locations.size() > 0) {
 						if (isExists == null) {
-							if (!users[3].trim().equalsIgnoreCase("SS")) {
+							/*if (!users[3].trim().equalsIgnoreCase("SS")) {
 								user = (User) openMRSServiceFactory.getOpenMRSConnector("user").add(user);
-							}
-							if ((user != null && !user.getUuid().isEmpty()) || users[3].trim().equalsIgnoreCase("SS")) {
-								user.setPassword(passwordEncoder.encode(user.getPassword()));
-								repository.save(user);
-								User newUser = repository.findByKey(user.getUsername(), "username", User.class);
-								logger.info("created new user:" + user.getUsername());
-								int[] locationsForSave = new int[1];
-								locationsForSave[0] = locations.get(0).getId();
-								UserLocationDTO userLocationDTO = new UserLocationDTO();
-								userLocationDTO.setUserId(newUser.getId());
-								userLocationDTO.setLocations(locationsForSave);
-								saveTeamMemberAndCatchmentAreas(session, userLocationDTO);
-							} else {
-								String errorMessage = "OpenMRS: Bad format found for this user. Please check line "
-								        + (position + 1) + " of the csv file ";
-								throw new BadFormatException(errorMessage);
-							}
+							}*/
+							user.setUuid(UUID.randomUUID().toString());
+							user.setPersonUUid(UUID.randomUUID().toString());
+							user.setPassword(passwordEncoder.encode(user.getPassword()));
+							repository.save(user);
+							User newUser = repository.findByKey(user.getUsername(), "username", User.class);
+							logger.info("created new user:" + user.getUsername());
+							int[] locationsForSave = new int[1];
+							locationsForSave[0] = locations.get(0).getId();
+							UserLocationDTO userLocationDTO = new UserLocationDTO();
+							userLocationDTO.setUserId(newUser.getId());
+							userLocationDTO.setLocations(locationsForSave);
+							saveTeamMemberAndCatchmentAreas(session, userLocationDTO);
+							
 						} else {
 							try {
 								int[] locationsForSave = new int[1];
