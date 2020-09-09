@@ -79,24 +79,59 @@ public class TrainingService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<InventoryDTO> getTrainingAttendanceList(int branchId, int roleId, int ssId,int adminId,int start,int length) {
+	public List<InventoryDTO> getTrainingAttendanceList(int branchId, int roleId, int ssRoledId,int adminRoleId,int start,int length) {
 		
 		Session session = getSessionFactory();
 		List<InventoryDTO> dtos = new ArrayList<>();
-		String hql = " select id,username,role_id roleId, role_name roleName,branch_name branchName  from core.training_attendance_list_user(:branchId,:roleId,:ssId,:adminId,:start,:length)";
-		//String hql = " select id,username,role_id roleId, role_name roleName,branch_name branchName  from core.training_attendance_list_user(6,32,29,26,0,20)";
+		String hql = " select id,username,role_id roleId, role_name roleName,branch_name branchName,full_name as firstName  from core.training_attendance_list_user(:branchId,:roleId,:ssId,:adminId,:start,:length)";
 		Query query = session.createSQLQuery(hql)
 		        .addScalar("id", StandardBasicTypes.LONG).addScalar("username", StandardBasicTypes.STRING)
 		        .addScalar("roleId", StandardBasicTypes.INTEGER).addScalar("roleName", StandardBasicTypes.STRING)
-		        .addScalar("branchName", StandardBasicTypes.STRING)
-		        .setInteger("branchId", branchId).setInteger("roleId", roleId).setInteger("ssId", ssId)
-		        .setInteger("adminId", adminId)
+		        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
+		        .setInteger("branchId", branchId).setInteger("roleId", roleId).setInteger("ssId", ssRoledId)
+		        .setInteger("adminId", adminRoleId)
 		        .setInteger("start", start).setInteger("length", length)
 		        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
 		dtos = query.list();
 		
 		return dtos;
 	}
+	
+	@Transactional
+	public int getTrainingAttendanceListCount(int branchId, int roleId,int ssRoledId,int adminRoleId) {
+		
+		Session session = getSessionFactory();
+		BigInteger total = null;
+		
+		String hql = "select * from core.training_attendance_list_user_count(:branchId,:roleId,:ssId,:adminId)";
+		Query query = session.createSQLQuery(hql).setInteger("branchId", branchId).setInteger("roleId", roleId)
+		        .setInteger("roleId", roleId).setInteger("ssId", ssRoledId).setInteger("adminId", adminRoleId);
+		total = (BigInteger) query.uniqueResult();
+		
+		return total.intValue();
+	}
+	
+	public JSONObject geTrainingAttendanceListSetOfDataTable(Integer draw, int attendanceListCount, List<InventoryDTO> dtos)
+		    throws JSONException {
+			JSONObject response = new JSONObject();
+			response.put("draw", draw + 1);
+			response.put("recordsTotal", attendanceListCount);
+			response.put("recordsFiltered", attendanceListCount);
+			JSONArray array = new JSONArray();
+			for (InventoryDTO dto : dtos) {
+				JSONArray training = new JSONArray();
+				String checkBox = "<input type=\"checkbox\" class=\"select-checkbox\" id=" + dto.getId() + "\" value="
+				        + dto.getId() +"_"+dto.getRoleId()+ ">";
+				training.put(checkBox);
+				training.put(dto.getFirstName());
+				training.put(dto.getUsername());
+				training.put(dto.getRoleName());
+				training.put(dto.getBranchName());
+				array.put(training);
+			}
+			response.put("data", array);
+			return response;
+		}
 	
 	@Transactional
 	public int getTrainingListCount(int locationId, int branchId, int roleId,String startDate,String endDate) {
@@ -171,5 +206,22 @@ public class TrainingService extends CommonService {
 		
 		return dtos;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TrainingDTO> getAllBlcList() {
+		
+		Session session = getSessionFactory();
+		List<TrainingDTO> dtos = new ArrayList<>();
+		String hql = "";
+		Query query = session.createSQLQuery(hql).addScalar("blc", StandardBasicTypes.INTEGER)
+		        .addScalar("title", StandardBasicTypes.STRING)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TrainingDTO.class));
+		dtos = query.list();
+		
+		return dtos;
+	}
+	
+	
 	
 }
