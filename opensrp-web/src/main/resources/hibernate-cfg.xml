@@ -61,6 +61,8 @@
 				<value>org.opensrp.core.entity.TrainingUser</value>
 				<value>org.opensrp.core.entity.UnionWisePopulation</value>
 				<value>org.opensrp.core.entity.BLC</value>
+				<value>org.opensrp.core.entity.WebNotification</value>
+				<value>org.opensrp.core.entity.WebNotificationUser</value>
 
 			</list>
 		</property>

@@ -7,7 +7,13 @@ package org.opensrp.core.service;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -23,12 +29,12 @@ import org.hibernate.type.StandardBasicTypes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.common.dto.LocationDTO;
 import org.opensrp.common.dto.LocationTreeDTO;
 import org.opensrp.common.dto.UserAssignedLocationDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.TreeNode;
-import org.opensrp.common.dto.LocationDTO;
 import org.opensrp.core.dto.LocationHierarchyDTO;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.LocationTag;
@@ -63,7 +69,8 @@ public class LocationService {
 	
 	@Transactional
 	public List<Object[]> getLocationByTagId(int tagId) {
-		String sqlQuery = "SELECT split_part(location.name, ':', 1), location.id from core.location " + " WHERE location_tag_id=:location_tag_id";
+		String sqlQuery = "SELECT split_part(location.name, ':', 1), location.id from core.location "
+		        + " WHERE location_tag_id=:location_tag_id";
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("location_tag_id", tagId);
 		return repository.executeSelectQuery(sqlQuery, params);
@@ -85,17 +92,14 @@ public class LocationService {
 	@Transactional
 	public <T> long save(T t) throws Exception {
 		Location location = (Location) t;
-		location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
+		
 		long createdLocation = 0;
-		if (!location.getUuid().isEmpty()) {
-			createdLocation = repository.save(location);
-		} else {
-			logger.error("No uuid found for location:" + location.getName());
-			// TODO
-		}
+		location.setUuid(UUID.randomUUID().toString());
+		createdLocation = repository.save(location);
+		
 		return createdLocation;
 	}
-
+	
 	@Transactional
 	public <T> long saveToOpenSRP(T t) throws Exception {
 		Location location = (Location) t;
@@ -107,14 +111,9 @@ public class LocationService {
 	public <T> int update(T t) throws JSONException {
 		Location location = (Location) t;
 		int updatedLocation = 0;
-		String uuid = openMRSServiceFactory.getOpenMRSConnector("location").update(location, location.getUuid(), null);
-		if (!uuid.isEmpty()) {
-			location.setUuid(uuid);
-			updatedLocation = repository.update(location);
-		} else {
-			logger.error("No uuid found for user:" + location.getName());
-			// TODO
-		}
+		
+		updatedLocation = repository.update(location);
+		
 		return updatedLocation;
 	}
 	
@@ -127,7 +126,7 @@ public class LocationService {
 	public <T> T findById(int id, String fieldName, Class<?> className) {
 		return repository.findById(id, fieldName, className);
 	}
-
+	
 	@Transactional
 	public <T> List<T> findAllById(List<Integer> ids, String fieldName, String className) {
 		return repository.findAllById(ids, fieldName, className);
@@ -142,23 +141,22 @@ public class LocationService {
 	public <T> List<T> findAll(String tableClass) {
 		return repository.findAll(tableClass);
 	}
-
+	
 	@Transactional
 	public <T> List<T> findAllLocation(String tableClass) {
 		return repository.findAllLocation(tableClass);
 	}
-
+	
 	@Transactional
 	public <T> List<T> findAllLocationPartialProperty(Integer roleId) {
 		return repository.findAllLocationPartialProperty(roleId);
 	}
-
+	
 	@Transactional
 	public <T> List<T> findAllLocationByAM(Integer userId, Integer roleId) {
 		return repository.getLocationByAM(userId, roleId);
 	}
-
-
+	
 	public Location setCreatorParentLocationTagAttributeInLocation(Location location, int parentLocationId, int tagId) {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -171,7 +169,7 @@ public class LocationService {
 		
 		return location;
 	}
-
+	
 	@Transactional
 	public <T> List<T> getVillageIdByProvider(int memberId, int childRoleId, int locationTagId) {
 		return repository.getVillageIdByProvider(memberId, childRoleId, locationTagId);
@@ -216,7 +214,7 @@ public class LocationService {
 		
 		return exists;
 	}
-
+	
 	public boolean locationExists(Location location) {
 		boolean exists = false;
 		if (location != null) {
@@ -290,12 +288,12 @@ public class LocationService {
 		List<Location> locations = findAll("Location");
 		for (Location location : locations) {
 			JSONObject dataObject = new JSONObject();
-            Location parentLocation = location.getParentLocation();
-            if (parentLocation != null) {
-                dataObject.put(parentKey, parentLocation.getId());
-            } else {
-                dataObject.put(parentKey, parentIndication);
-            }
+			Location parentLocation = location.getParentLocation();
+			if (parentLocation != null) {
+				dataObject.put(parentKey, parentLocation.getId());
+			} else {
+				dataObject.put(parentKey, parentIndication);
+			}
 			dataObject.put("id", location.getId());
 			dataObject.put("text", location.getName());
 			dataObject.put("icon", location.getLocationTag().getName());
@@ -305,10 +303,13 @@ public class LocationService {
 		return dataArray;
 		
 	}
-
-	public JSONArray getLocationWithDisableFacility(HttpSession session, String parentIndication, String parentKey, List<UserAssignedLocationDTO> userAssignedLocationDTOS, Integer userId, String role, Integer loggedInUserId, Integer roleId) throws JSONException {
+	
+	public JSONArray getLocationWithDisableFacility(HttpSession session, String parentIndication, String parentKey,
+	                                                List<UserAssignedLocationDTO> userAssignedLocationDTOS, Integer userId,
+	                                                String role, Integer loggedInUserId, Integer roleId)
+	    throws JSONException {
 		JSONArray dataArray = new JSONArray();
-
+		
 		Map<Integer, Integer> locationMap = new HashMap<>();
 		if (roleId != Roles.AM.getId()) {
 			for (UserAssignedLocationDTO dto : userAssignedLocationDTOS) {
@@ -316,13 +317,13 @@ public class LocationService {
 			}
 		}
 		List<LocationDTO> locations = new ArrayList<>();
-
+		
 		if (role.equalsIgnoreCase(Roles.AM.getName()) || (roleId == Roles.SS.getId() || roleId == Roles.SK.getId())) {
 			locations = findAllLocationByAM(loggedInUserId, roleId);
 		} else {
 			locations = findAllLocationPartialProperty(roleId);
 		}
-
+		
 		for (LocationDTO location : locations) {
 			JSONObject dataObject = new JSONObject();
 			if (location.getParentLocationId() != null) {
@@ -331,36 +332,36 @@ public class LocationService {
 				dataObject.put(parentKey, parentIndication);
 			}
 			JSONObject state = new JSONObject();
-
-			if (locationMap.get(location.getId())!=null && !locationMap.get(location.getId()).equals(userId) ) {
-
+			
+			if (locationMap.get(location.getId()) != null && !locationMap.get(location.getId()).equals(userId)) {
+				
 				if (locationMap.containsKey(location.getId())) {
 					state.put("disabled", true);
 				} else if (locationMap.get(location.getId()) != null && location.getParentLocationId() != null
-						&& !locationMap.get(location.getParentLocationId()).equals(userId)) {
-
+				        && !locationMap.get(location.getParentLocationId()).equals(userId)) {
+					
 					if (locationMap.containsKey(location.getParentLocationId())) {
 						locationMap.put(location.getId(), locationMap.get(location.getParentLocationId()));
 						state.put("disabled", true);
-					}
-					else state.put("disabled", false);
+					} else
+						state.put("disabled", false);
 				} else {
 					state.put("disabled", false);
 				}
 			} else {
 				state.put("disabled", false);
 			}
-
+			
 			dataObject.put("id", location.getId());
-			dataObject.put("text", location.getLocationName()+"("+location.getLocationTagName()+")");
-			dataObject.put("icon", location.getUsers()==null?
-					location.getLocationName():location.getLocationName()+"("+location.getUsers()+")");
+			dataObject.put("text", location.getLocationName() + "(" + location.getLocationTagName() + ")");
+			dataObject.put("icon", location.getUsers() == null ? location.getLocationName() : location.getLocationName()
+			        + "(" + location.getUsers() + ")");
 			dataObject.put("state", state);
 			dataArray.put(dataObject);
 		}
-
+		
 		return dataArray;
-
+		
 	}
 	
 	@Transactional
@@ -474,7 +475,7 @@ public class LocationService {
 				} else {
 					for (int i = 0; i < locations.length; i = i + 2) {
 						Long start = System.currentTimeMillis();
-						System.err.println("start timestamp request->>>>>>>>>>>>>>>>>>>>>>"+start);
+						System.err.println("start timestamp request->>>>>>>>>>>>>>>>>>>>>>" + start);
 						tag = tags[i + 1];
 						code = locations[i];
 						name = locations[i + 1];
@@ -483,34 +484,33 @@ public class LocationService {
 						}
 						LocationTag locationTag = findByKey(tag, "name", LocationTag.class);
 						Location parentLocation = findByKey(parent.toUpperCase().trim(), "name", Location.class);
-						if (!tag.equalsIgnoreCase("country")
-								&& !tag.equalsIgnoreCase("division")) {
+						if (!tag.equalsIgnoreCase("country") && !tag.equalsIgnoreCase("division")) {
 							name += ":" + parentLocation.getId();
-							locations[i+1] = name;
+							locations[i + 1] = name;
 						}
 						Location isExists = findByKey(name.toUpperCase().trim(), "name", Location.class);
 						Location location = new Location();
-						if(isExists == null){							
+						if (isExists == null) {
 							location.setCode(code);
 							location.setName(name.toUpperCase().trim());
 							location.setLocationTag(locationTag);
 							location.setParentLocation(parentLocation);
 							location.setDescription(name);
-//							location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
-//							if (!location.getUuid().isEmpty()) {
+							//							location = (Location) openMRSServiceFactory.getOpenMRSConnector("location").add(location);
+							//							if (!location.getUuid().isEmpty()) {
 							repository.save(location);
-//							} else {
-//								logger.info("No uuid found for location:" + location.getName());
-//
-//							}
+							//							} else {
+							//								logger.info("No uuid found for location:" + location.getName());
+							//
+							//							}
 							
-						}else{
+						} else {
 							logger.info("already exists location:" + location.getName());
 						}
-
+						
 						Long end = System.currentTimeMillis();
-						Long dif = end-start;
-						System.err.println("End timestamp:"+end+" time difference.>>>>>>>>>>>>>>>>>>>>>>>>>>>:"+dif);
+						Long dif = end - start;
+						System.err.println("End timestamp:" + end + " time difference.>>>>>>>>>>>>>>>>>>>>>>>>>>>:" + dif);
 						
 					}
 				}
@@ -525,7 +525,7 @@ public class LocationService {
 		}
 		return msg;
 	}
-
+	
 	public Set<Location> getLocationByIds(int[] locations) {
 		Set<Location> locationSet = new HashSet<Location>();
 		if (locations != null && locations.length != 0) {
@@ -538,19 +538,19 @@ public class LocationService {
 		}
 		return locationSet;
 	}
-
+	
 	public JSONArray convertLocationTreeToJSON(List<LocationTreeDTO> treeDTOS, boolean enableSimPrint) throws JSONException {
 		JSONArray locationTree = new JSONArray();
-
+		
 		Map<String, Boolean> mp = new HashMap<>();
 		JSONObject object = new JSONObject();
 		JSONArray locations = new JSONArray();
 		JSONObject fullLocation = new JSONObject();
-
+		
 		int counter = 0;
 		String username = "";
-
-		for (LocationTreeDTO treeDTO: treeDTOS) {
+		
+		for (LocationTreeDTO treeDTO : treeDTOS) {
 			counter++;
 			if (mp.get(treeDTO.getUsername()) == null || !mp.get(treeDTO.getUsername())) {
 				if (counter > 1) {
@@ -563,9 +563,9 @@ public class LocationService {
 				}
 				mp.put(treeDTO.getUsername(), true);
 			}
-
+			
 			username = treeDTO.getUsername();
-
+			
 			if (treeDTO.getLoc_tag_name().equalsIgnoreCase("country")) {
 				if (counter > 1) {
 					fullLocation = setEmptyValues(fullLocation);
@@ -573,13 +573,13 @@ public class LocationService {
 					fullLocation = new JSONObject();
 				}
 			}
-
+			
 			JSONObject location = new JSONObject();
 			location.put("code", treeDTO.getCode());
 			location.put("id", treeDTO.getId());
 			location.put("name", treeDTO.getName());
 			fullLocation.put(treeDTO.getLoc_tag_name().toLowerCase().replaceAll(" ", "_"), location);
-
+			
 			if (counter == treeDTOS.size()) {
 				locations.put(fullLocation);
 				object.put("username", username);
@@ -592,7 +592,7 @@ public class LocationService {
 		}
 		return locationTree;
 	}
-
+	
 	private JSONObject getLocationProperty() throws JSONException {
 		JSONObject property = new JSONObject();
 		property.put("name", "");
@@ -600,7 +600,7 @@ public class LocationService {
 		property.put("code", "00");
 		return property;
 	}
-
+	
 	private JSONObject setEmptyValues(JSONObject fullLocation) throws JSONException {
 		if (!fullLocation.has("country")) {
 			fullLocation.put("country", getLocationProperty());
@@ -625,7 +625,7 @@ public class LocationService {
 		}
 		return fullLocation;
 	}
-
+	
 	public int getLocationId(HttpServletRequest request) {
 		Location country = repository.findByKey("BANGLADESH", "name", Location.class);
 		int locationId = country.getId();
@@ -679,47 +679,39 @@ public class LocationService {
 		}
 		return locationId;
 	}
-
+	
 	@Transactional
 	public LocationHierarchyDTO getLocationHierarchy(Integer locationId) {
-		Session session = sessionFactory.openSession();
+		Session session = sessionFactory.getCurrentSession();
 		LocationHierarchyDTO dto = new LocationHierarchyDTO();
-		try {
-			String hql = "select * from core.single_location_tree(:locationId);";
-			Query query = session.createSQLQuery(hql)
-					.addScalar("villageId", StandardBasicTypes.INTEGER)
-					.addScalar("unionId", StandardBasicTypes.INTEGER)
-					.addScalar("pourasabhaId", StandardBasicTypes.INTEGER)
-					.addScalar("upazilaId", StandardBasicTypes.INTEGER)
-					.addScalar("districtId", StandardBasicTypes.INTEGER)
-					.addScalar("divisionId", StandardBasicTypes.INTEGER)
-					.setInteger("locationId", locationId)
-					.setResultTransformer(new AliasToBeanResultTransformer(LocationHierarchyDTO.class));
-			dto = (LocationHierarchyDTO) query.list().get(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
+		
+		String hql = "select * from core.single_location_tree(:locationId);";
+		Query query = session.createSQLQuery(hql).addScalar("villageId", StandardBasicTypes.INTEGER)
+		        .addScalar("unionId", StandardBasicTypes.INTEGER).addScalar("pourasabhaId", StandardBasicTypes.INTEGER)
+		        .addScalar("upazilaId", StandardBasicTypes.INTEGER).addScalar("districtId", StandardBasicTypes.INTEGER)
+		        .addScalar("divisionId", StandardBasicTypes.INTEGER).setInteger("locationId", locationId)
+		        .setResultTransformer(new AliasToBeanResultTransformer(LocationHierarchyDTO.class));
+		dto = (LocationHierarchyDTO) query.list().get(0);
 		return dto;
 	}
-
-	public List<LocationDTO> getLocations(String name, Integer length, Integer start, String orderColumn, String orderDirection) {
+	
+	public List<LocationDTO> getLocations(String name, Integer length, Integer start, String orderColumn,
+	                                      String orderDirection) {
 		return repository.getLocations(name, length, start, orderColumn, orderDirection);
 	}
-
+	
 	public Integer getLocationCount(String name) {
 		return repository.getLocationCount(name);
 	}
-
-	public JSONObject getLocationDataOfDataTable(Integer draw, Integer totalLocation,
-											 List<LocationDTO> locations) throws JSONException {
+	
+	public JSONObject getLocationDataOfDataTable(Integer draw, Integer totalLocation, List<LocationDTO> locations)
+	    throws JSONException {
 		JSONObject response = new JSONObject();
-		response.put("draw", draw+1);
+		response.put("draw", draw + 1);
 		response.put("recordsTotal", totalLocation);
 		response.put("recordsFiltered", totalLocation);
 		JSONArray array = new JSONArray();
-		for (LocationDTO dto: locations) {
+		for (LocationDTO dto : locations) {
 			JSONArray location = new JSONArray();
 			location.put(dto.getName());
 			location.put(dto.getDescription());
@@ -730,5 +722,5 @@ public class LocationService {
 		response.put("data", array);
 		return response;
 	}
-
+	
 }

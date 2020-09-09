@@ -77,51 +77,45 @@ public class BranchService {
 	}
 	
 	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<Branch> getBranchByUser(Integer user_id) {
 		List<Branch> lists = new ArrayList<Branch>();
-		Session session = sessionFactory.openSession();
+		Session session = sessionFactory.getCurrentSession();
 		String hql = "select b.id,b.name,b.code from core.branch as b join core.user_branch as ub on b.id = ub.branch_id where user_id =:user_id";
-		try {
-			Query query = session.createSQLQuery(hql)
-			
-			.addScalar("id", StandardBasicTypes.INTEGER).addScalar("name", StandardBasicTypes.STRING)
-			        .addScalar("code", StandardBasicTypes.STRING)
-			        .setResultTransformer(new AliasToBeanResultTransformer(Branch.class));
-			lists = query.setInteger("user_id", user_id).list();
-			
-		}
-		catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			session.close();
-		}
+		
+		Query query = session.createSQLQuery(hql)
+		
+		.addScalar("id", StandardBasicTypes.INTEGER).addScalar("name", StandardBasicTypes.STRING)
+		        .addScalar("code", StandardBasicTypes.STRING)
+		        .setResultTransformer(new AliasToBeanResultTransformer(Branch.class));
+		lists = query.setInteger("user_id", user_id).list();
+		
 		return lists;
 	}
-
+	
 	public String commaSeparatedBranch(List<Branch> branches) {
 		String branchIds = "";
 		int size = branches.size(), iterate = 0;
-		for (Branch branch: branches) {
+		for (Branch branch : branches) {
 			iterate++;
 			branchIds += branch.getId();
-			if (size != iterate) branchIds += ", ";
+			if (size != iterate)
+				branchIds += ", ";
 		}
 		return branchIds;
 	}
-
+	
 	public List<Object[]> getBranchByUser(String branchId, User user) {
 		List<Object[]> branches = new ArrayList<>();
-		if(!branchId.isEmpty() ){
+		if (!branchId.isEmpty()) {
 			Branch branch = findById(Integer.parseInt(branchId), "id", Branch.class);
 			Object[] obj = new Object[10];
 			obj[0] = branch.getId();
 			obj[1] = branch.getName();
 			obj[2] = branch.getCode();
 			branches.add(obj);
-		}else {
-			for (Branch branch: user.getBranches()) {
+		} else {
+			for (Branch branch : user.getBranches()) {
 				Object[] obj = new Object[10];
 				obj[0] = branch.getId();
 				obj[1] = branch.getName();
