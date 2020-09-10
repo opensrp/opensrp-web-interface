@@ -40,6 +40,8 @@ public class WebNotificationDTO {
 	
 	private Set<Integer> users;
 	
+	private Set<Integer> roles;
+	
 	public Long getId() {
 		return id;
 	}
@@ -166,6 +168,14 @@ public class WebNotificationDTO {
 	
 	public void setLocationTypeId(int locationTypeId) {
 		this.locationTypeId = locationTypeId;
+	}
+	
+	public Set<Integer> getRoles() {
+		return roles;
+	}
+	
+	public void setRoles(Set<Integer> roles) {
+		this.roles = roles;
 	}
 	
 }

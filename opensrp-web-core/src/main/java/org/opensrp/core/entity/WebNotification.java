@@ -96,8 +96,11 @@ public class WebNotification implements Serializable {
 	@Column(name = "updated_by")
 	private int updatedBy;
 	
-	@OneToMany(mappedBy = "webNotification", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "webNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<WebNotificationUser> webNotifications = new HashSet<WebNotificationUser>();
+	
+	@OneToMany(mappedBy = "webNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Set<WebNotificationRole> webNotificationRoles = new HashSet<WebNotificationRole>();
 	
 	public Long getId() {
 		return id;
@@ -258,6 +261,14 @@ public class WebNotification implements Serializable {
 	
 	public void setWebNotifications(Set<WebNotificationUser> webNotifications) {
 		this.webNotifications = webNotifications;
+	}
+	
+	public Set<WebNotificationRole> getWebNotificationRoles() {
+		return webNotificationRoles;
+	}
+	
+	public void setWebNotificationRoles(Set<WebNotificationRole> webNotificationRoles) {
+		this.webNotificationRoles = webNotificationRoles;
 	}
 	
 }
