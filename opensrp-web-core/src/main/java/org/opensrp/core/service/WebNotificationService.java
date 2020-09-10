@@ -79,31 +79,32 @@ public class WebNotificationService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<WebNotificationCommonDTO> getWebNotificationList(int locationId, int branchId, String roleId,
-	                                                             String startDate, String endDate, String type,
-	                                                             Integer length, Integer start, String orderColumn,
-	                                                             String orderDirection) {
+	public List<WebNotificationCommonDTO> getWebNotificationList(int locationId, int branchId, int roleId, String startDate,
+	                                                             String endDate, String type, Integer length, Integer start,
+	                                                             String orderColumn, String orderDirection) {
 		
 		Session session = getSessionFactory();
 		List<WebNotificationCommonDTO> dtos = new ArrayList<>();
 		
-		String hql = "select id,title,notification,start_date sendDate,send_time_hour sendTimeHour,send_time_minute sendTimeMinute,branch_name branchName,branch_code branchCode,role_name roleName,type from core.web_notification_list( :locationId,:branchId ,:roleId,:startDate ,:endDate,:type',:start,:length)";
+		String hql = "select id,title,notification,start_date sendDate,send_time_hour sendTimeHour,send_time_minute sendTimeMinute,branch_name branchName,branch_code branchCode,role_name roleName,type from core.web_notification_list( :locationId,:branchId ,:roleId,:startDate ,:endDate, :type, :start, :length)";
 		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
 		        .addScalar("title", StandardBasicTypes.STRING).addScalar("notification", StandardBasicTypes.STRING)
 		        .addScalar("sendDate", StandardBasicTypes.DATE).addScalar("sendTimeHour", StandardBasicTypes.INTEGER)
 		        .addScalar("sendTimeMinute", StandardBasicTypes.INTEGER).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
 		        .addScalar("type", StandardBasicTypes.STRING).setInteger("locationId", locationId)
-		        .setInteger("branchId", branchId).setString("roleId", roleId).setString("startDate", startDate)
-		        .setString("endDate", endDate).setString("type", type).setInteger("length", length)
-		        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		        .setInteger("branchId", branchId).setInteger("roleId", roleId).setString("startDate", startDate)
+		        .setString("endDate", endDate).setString("type", type).setInteger("start", start)
+		        .setInteger("length", length)
+		        
+		        .setResultTransformer(new AliasToBeanResultTransformer(WebNotificationCommonDTO.class));
 		dtos = query.list();
 		
 		return dtos;
 	}
 	
 	@Transactional
-	public int getWebNotificationListCount(int locationId, int branchId, String roleId, String startDate, String endDate,
+	public int getWebNotificationListCount(int locationId, int branchId, int roleId, String startDate, String endDate,
 	                                       String type) {
 		
 		Session session = getSessionFactory();
@@ -111,7 +112,7 @@ public class WebNotificationService extends CommonService {
 		
 		String hql = "select * from core.web_notification_list_count( :locationId,:branchId,:roleId,:startDate,:endDate,:type)";
 		Query query = session.createSQLQuery(hql).setInteger("locationId", locationId).setInteger("branchId", branchId)
-		        .setString("roleId", roleId).setString("startDate", startDate).setString("endDate", endDate)
+		        .setInteger("roleId", roleId).setString("startDate", startDate).setString("endDate", endDate)
 		        .setString("type", type);
 		total = (BigInteger) query.uniqueResult();
 		
@@ -132,7 +133,7 @@ public class WebNotificationService extends CommonService {
 			patient.put(dto.getTitle());
 			patient.put(dto.getRoleName());
 			//patient.put(dto.getLocationName());
-			String view = "<div class='col-sm-12 form-group'><a \" href=\"set-individual/" + dto.getId()
+			String view = "<div class='col-sm-12 form-group'><a \" href=\"details/" + dto.getId()
 			        + ".html\">Details</a> </div>";
 			patient.put(view);
 			array.put(patient);

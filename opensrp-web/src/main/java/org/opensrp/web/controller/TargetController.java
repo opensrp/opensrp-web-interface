@@ -14,6 +14,7 @@ import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.service.TargetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +34,8 @@ public class TargetController {
 	@Autowired
 	SearchBuilder searchBuilder;
 	
-	private int divisionTagId = 28;
+	@Value("#{opensrp['division.tag.id']}")
+	private int divisionTagId;
 	
 	@RequestMapping(value = "/target-by-individual.html", method = RequestMethod.GET)
 	public String targetByIndividual(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
@@ -114,8 +116,9 @@ public class TargetController {
 	}
 	
 	@RequestMapping(value = "/set-individual-target-pk/{branch_id}/{role_id}/{user_id}", method = RequestMethod.GET)
-	public String indiviualTargetSetForPkB(HttpServletRequest request, HttpSession session, Model model, Locale locale,@PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
-            @PathVariable("user_id") int userId) {
+	public String indiviualTargetSetForPkB(HttpServletRequest request, HttpSession session, Model model, Locale locale,
+	                                       @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
+	                                       @PathVariable("user_id") int userId) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("targets", targetService.allActiveTarget(Roles.PK.getId()));
 		model.addAttribute("branchId", branchId);
