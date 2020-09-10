@@ -1,5 +1,7 @@
 package org.opensrp.connector;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import junit.framework.Test;
@@ -35,5 +37,21 @@ public class AppTest extends TestCase {
 		String s = String.format("%06d", number);
 		System.err.println(s + "23455");
 		assertTrue(true);
+		List<Integer> a = new ArrayList<Integer>();
+		a.add(1);
+		a.add(2);
+		a.add(2);
+		a.add(2);
+		a.add(2);
+		String prefix = "";
+		StringBuffer sb = new StringBuffer();
+		for (Integer integer : a) {
+			sb.append(prefix);
+			prefix = ",";
+			sb.append(integer);
+			
+		}
+		String roles = "'{" + sb + "}'";
+		System.err.println();
 	}
 }

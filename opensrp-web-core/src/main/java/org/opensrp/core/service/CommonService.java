@@ -7,6 +7,7 @@ package org.opensrp.core.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -18,6 +19,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
+import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Location;
@@ -196,5 +198,31 @@ public abstract class CommonService {
 		
 		return results;
 		
+	}
+	
+	@Transactional
+	@SuppressWarnings("unchecked")
+	public List<TargetCommontDTO> getAllUser(Set<Integer> roleIds, String locationType, int locationId) {
+		String prefix = "";
+		StringBuffer sb = new StringBuffer();
+		for (Integer roleId : roleIds) {
+			sb.append(prefix);
+			prefix = ",";
+			sb.append(roleId);
+			
+		}
+		String roles = "'{" + sb + "}'";
+		Session session = getSessionFactory();
+		List<TargetCommontDTO> result = null;
+		
+		String hql = "select user_id userId, branch_id branchId from core.get_userid_brancid_by_branch_location_multi_role("
+		        + roles + ",:id,:type);";
+		Query query = session.createSQLQuery(hql).addScalar("userId", StandardBasicTypes.INTEGER)
+		        .addScalar("branchId", StandardBasicTypes.INTEGER).setString("type", locationType)
+		        .setInteger("id", locationId).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		
+		result = query.list();
+		
+		return result;
 	}
 }

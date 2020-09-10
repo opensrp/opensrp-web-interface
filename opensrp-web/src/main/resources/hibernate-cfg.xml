@@ -63,6 +63,7 @@
 				<value>org.opensrp.core.entity.BLC</value>
 				<value>org.opensrp.core.entity.WebNotification</value>
 				<value>org.opensrp.core.entity.WebNotificationUser</value>
+				<value>org.opensrp.core.entity.WebNotificationRole</value>
 
 			</list>
 		</property>
