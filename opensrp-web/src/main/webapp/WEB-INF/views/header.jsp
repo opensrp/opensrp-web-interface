@@ -309,7 +309,7 @@ License: You must have a valid license purchased only from themeforest(the above
 					<%
 						if (PERM_READ_AGGREGATED_REPORT) {
 					%>
-					<li><a href="<c:url value="/training/view-training.html?lang=${locale}"/>"><i
+					<li><a href="<c:url value="/training/training-list.html?lang=${locale}"/>"><i
 							class="fa fa-tasks" aria-hidden="true"></i> <span class="title">
 								<spring:message code="lbl.trainingManagement" />
 						</span> </a></li>
