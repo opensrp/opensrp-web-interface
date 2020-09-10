@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.opensrp.common.util.Status;
 import org.opensrp.common.util.WebNotificationType;
 import org.opensrp.core.dto.WebNotificationDTO;
+import org.opensrp.core.entity.User;
 import org.opensrp.core.entity.WebNotification;
 import org.opensrp.core.entity.WebNotificationRole;
 import org.opensrp.core.service.TrainingService;
