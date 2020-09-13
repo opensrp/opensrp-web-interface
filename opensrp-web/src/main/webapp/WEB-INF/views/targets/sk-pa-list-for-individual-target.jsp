@@ -179,7 +179,7 @@ function filter(){
 	if(upazila != 0){
 		locationId = upazila;
 	}else if(district != 0){
-		locationId = upazila;
+		locationId = district;
 	}else if(division != 0){
 		locationId =division; 
 	}

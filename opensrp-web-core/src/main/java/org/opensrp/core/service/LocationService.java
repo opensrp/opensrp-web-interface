@@ -22,6 +22,7 @@ import javax.transaction.Transactional;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.transform.AliasToBeanResultTransformer;
@@ -67,6 +68,10 @@ public class LocationService {
 		
 	}
 	
+	public Session getSessionFactory() {
+		return sessionFactory.getCurrentSession();
+	}
+	
 	@Transactional
 	public List<Object[]> getLocationByTagId(int tagId) {
 		String sqlQuery = "SELECT split_part(location.name, ':', 1), location.id from core.location "
@@ -82,6 +87,25 @@ public class LocationService {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("parentId", parentId);
 		return repository.executeSelectQuery(sqlQuery, params);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<Location> getChildLocation(int parentId) {
+		String sqlQuery = "SELECT split_part(location.name, ':', 1) as name, location.id as id from core.location where parent_location_id=:parentId";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("parentId", parentId);
+		
+		List<Location> results = new ArrayList<>();
+		
+		SQLQuery query = getSessionFactory().createSQLQuery(sqlQuery);
+		for (Map.Entry<String, Object> param : params.entrySet()) {
+			query.setParameter(param.getKey(), param.getValue());
+		}
+		
+		results = query.addScalar("name", StandardBasicTypes.STRING).addScalar("id", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(Location.class)).list();
+		return results;
 	}
 	
 	@Transactional
@@ -630,7 +654,7 @@ public class LocationService {
 		Location country = repository.findByKey("BANGLADESH", "name", Location.class);
 		int locationId = country.getId();
 		if (request.getParameterMap().containsKey("division")) {
-			String division = (String) request.getParameter("division");
+			String division = request.getParameter("division");
 			if (division != null && division.length() > 0) {
 				String[] location = division.split("\\?");
 				if (!location[0].trim().equalsIgnoreCase("0") && !StringUtils.isBlank(location[0].trim()))
@@ -638,7 +662,7 @@ public class LocationService {
 			}
 		}
 		if (request.getParameterMap().containsKey("district")) {
-			String district = (String) request.getParameter("district");
+			String district = request.getParameter("district");
 			if (district != null) {
 				String[] location = district.split("\\?");
 				if (!location[0].trim().equalsIgnoreCase("0") && !StringUtils.isBlank(location[0].trim()))
@@ -646,7 +670,7 @@ public class LocationService {
 			}
 		}
 		if (request.getParameterMap().containsKey("upazila")) {
-			String upazila = (String) request.getParameter("upazila");
+			String upazila = request.getParameter("upazila");
 			if (upazila != null) {
 				String[] location = upazila.split("\\?");
 				if (!location[0].trim().equalsIgnoreCase("0") && !StringUtils.isBlank(location[0].trim()))
@@ -654,7 +678,7 @@ public class LocationService {
 			}
 		}
 		if (request.getParameterMap().containsKey("pourasabha")) {
-			String pourasabha = (String) request.getParameter("pourasabha");
+			String pourasabha = request.getParameter("pourasabha");
 			if (pourasabha != null) {
 				String[] location = pourasabha.split("\\?");
 				if (!location[0].trim().equalsIgnoreCase("0") && !StringUtils.isBlank(location[0].trim()))
@@ -662,7 +686,7 @@ public class LocationService {
 			}
 		}
 		if (request.getParameterMap().containsKey("union")) {
-			String union = (String) request.getParameter("union");
+			String union = request.getParameter("union");
 			if (union != null) {
 				String[] location = union.split("\\?");
 				if (!location[0].trim().equalsIgnoreCase("0") && !StringUtils.isBlank(location[0].trim()))
@@ -670,7 +694,7 @@ public class LocationService {
 			}
 		}
 		if (request.getParameterMap().containsKey("village")) {
-			String village = (String) request.getParameter("village");
+			String village = request.getParameter("village");
 			if (village != null) {
 				String[] location = village.split("\\?");
 				if (!location[0].trim().equalsIgnoreCase("0") && !StringUtils.isBlank(location[0].trim()))

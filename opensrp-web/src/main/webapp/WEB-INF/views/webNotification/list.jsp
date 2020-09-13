@@ -13,6 +13,7 @@
 	
 	
 <c:url var="get_url" value="/rest/api/v1/web-notfication/list" />
+<c:url var="add_page" value="/web-notification/add-new.html" />
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -48,11 +49,12 @@
 								</div>
 								<div class="col-lg-3 form-group">
 								    <label for="designation">Designation</label>
-									<select
-										name="roleList" class="form-control" id="roleList">
-										
-										<option value="SK">SK</option>
-										<option value="PA">PA</option>										
+									<select name="roleList" class="form-control" id="roleList">
+									<option value="0">Please Select</option>
+									<c:forEach items="${roles}" var="role">
+										<option value="${role.id}">${role.name}</option>
+									</c:forEach>
+																			
 									</select>
 								</div>
 								
@@ -61,6 +63,8 @@
 							<div class="row">
 								<div class="col-lg-12 form-group text-right">
 									<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
+									<a  href="${add_page}" class="btn btn-primary btn-lg" id="back">Add new </a> 
+						            		
 								</div>
      						</div>
      						
@@ -217,9 +221,9 @@ function filter(){
              		data.startDate = '';
                      data.endDate ='';
              	}
-            	 data.branchId = 0;
-                 data.locationId=0;                    
-                 data.roleId=0;
+            	 data.branchId = $("#branchList").val();
+                 data.locationId=locationId;                    
+                 data.roleId=$("#roleList").val();
                  data.type="";
                 
              },

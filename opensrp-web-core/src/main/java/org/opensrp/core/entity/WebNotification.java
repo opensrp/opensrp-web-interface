@@ -24,7 +24,6 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,7 +38,6 @@ public class WebNotification implements Serializable {
 	@SequenceGenerator(name = "web_notification_id_seq", sequenceName = "web_notification_id_seq", allocationSize = 1)
 	private Long id;
 	
-	@NotEmpty(message = "Notification title name can't be empty")
 	@Column(name = "title")
 	private String notificationTitle;
 	
@@ -96,10 +94,10 @@ public class WebNotification implements Serializable {
 	@Column(name = "updated_by")
 	private int updatedBy;
 	
-	@OneToMany(mappedBy = "webNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "webNotification", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<WebNotificationUser> webNotifications = new HashSet<WebNotificationUser>();
 	
-	@OneToMany(mappedBy = "webNotification", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "webNotification", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<WebNotificationRole> webNotificationRoles = new HashSet<WebNotificationRole>();
 	
 	public Long getId() {

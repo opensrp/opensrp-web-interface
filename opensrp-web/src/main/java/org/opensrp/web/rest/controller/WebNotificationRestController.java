@@ -1,5 +1,6 @@
 package org.opensrp.web.rest.controller;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import org.json.JSONObject;
 import org.opensrp.common.dto.WebNotificationCommonDTO;
 import org.opensrp.common.util.UserColumn;
 import org.opensrp.core.dto.WebNotificationDTO;
+import org.opensrp.core.entity.Role;
 import org.opensrp.core.service.WebNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -57,7 +59,7 @@ public class WebNotificationRestController {
 	}
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ResponseEntity<String> sellToSSlist(HttpServletRequest request, HttpSession session) throws JSONException {
+	public ResponseEntity<String> webNotificationlist(HttpServletRequest request, HttpSession session) throws JSONException {
 		Integer start = Integer.valueOf(request.getParameter("start"));
 		Integer length = Integer.valueOf(request.getParameter("length"));
 		//String name = request.getParameter("search[value]");
@@ -83,5 +85,18 @@ public class WebNotificationRestController {
 		
 		JSONObject response = webNotificationService.drawDataTableOfWebNotification(draw, total, list);
 		return new ResponseEntity<>(response.toString(), OK);
+	}
+	
+	@RequestMapping(value = "/roles", method = RequestMethod.GET)
+	public ResponseEntity<String> getAll() throws JSONException {
+		try {
+			List<Role> roles = webNotificationService.getWebNotificationRoles();
+			return new ResponseEntity<>(new Gson().toJson(roles), OK);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(new Gson().toJson(e.getMessage()), BAD_REQUEST);
+		}
+		
 	}
 }

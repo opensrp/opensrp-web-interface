@@ -24,6 +24,7 @@ import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.dto.WebNotificationCommonDTO;
 import org.opensrp.common.util.TaregtSettingsType;
 import org.opensrp.core.dto.WebNotificationDTO;
+import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.WebNotification;
 import org.opensrp.core.entity.WebNotificationUser;
 import org.opensrp.core.mapper.WebNotificationMapper;
@@ -133,12 +134,27 @@ public class WebNotificationService extends CommonService {
 			patient.put(dto.getTitle());
 			patient.put(dto.getRoleName());
 			//patient.put(dto.getLocationName());
-			String view = "<div class='col-sm-12 form-group'><a \" href=\"details/" + dto.getId()
-			        + ".html\">Details</a> </div>";
+			String view = "<div class='col-sm-12 form-group'><a \" href=\"details/" + dto.getId() + ".html\">Details</a> "
+			        + " | <a \" href=\"edit/" + dto.getId() + ".html\">Edit</a> " + "</div>";
 			patient.put(view);
 			array.put(patient);
 		}
 		response.put("data", array);
 		return response;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<Role> getWebNotificationRoles() {
+		
+		Session session = getSessionFactory();
+		List<Role> dtos = new ArrayList<>();
+		
+		String hql = "select id,name from core.web_notification_roles()";
+		Query query = session.createSQLQuery(hql).setResultTransformer(new AliasToBeanResultTransformer(Role.class));
+		dtos = query.list();
+		
+		return dtos;
+	}
+	
 }
