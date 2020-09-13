@@ -25,6 +25,7 @@ import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.util.TrainingLocationType;
 import org.opensrp.core.dto.TrainingDTO;
+import org.opensrp.core.entity.BLC;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.Training;
@@ -57,6 +58,16 @@ public class TrainingService extends CommonService {
 			dto.setDivision(branch.getDivision());
 			dto.setDistrict(branch.getDistrict());
 			dto.setUpazila(branch.getUpazila());
+		}
+		if (TrainingLocationType.valueOf(dto.getTrainingLocationType()).name().equalsIgnoreCase("BLC")) {
+			
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", dto.getBlc());
+			BLC blc = findByKeys(map, BLC.class);
+			
+			dto.setDivision(blc.getDivision());
+			dto.setDistrict(blc.getDistrict());
+			dto.setUpazila(blc.getUpazila());
 		}
 		
 		deleteAllByPrimaryKey(dto.getId(), "training_role", "training_id", session);
@@ -162,7 +173,9 @@ public class TrainingService extends CommonService {
 				training.put(dto.getAudience());
 				training.put(dto.getNameOfTrainer());
 				training.put(dto.getLocationName());
-				String view = "<div class='col-sm-12 form-group'><a \" href=\"view-training/" + dto.getId()+">View Details</a> </div>";
+				//String view = "<div class='col-sm-12 form-group'><a \" href=\"view-training/" + dto.getId()+">View Details</a> </div>";
+				String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"view-training/"  + dto.getId()
+				        + ".html\"><strong>View details </strong></a> </div>";
 				training.put(view);
 				array.put(training);
 			}
@@ -195,9 +208,10 @@ public class TrainingService extends CommonService {
 		Session session = getSessionFactory();
 		List<TrainingDTO> dtos = new ArrayList<>();
 		String hql = " select id,title, start_date startDate,trainee_name nameOfTrainer,user_type audience,location_name locationName from core.training_list(:locationId,:branchId,:roleId,:startDate,:endDate,:start,:length)";
-		Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
-		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
-		        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
+		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
+		        .addScalar("title", StandardBasicTypes.STRING).addScalar("startDate", StandardBasicTypes.DATE)
+		        .addScalar("nameOfTrainer", StandardBasicTypes.STRING).addScalar("audience", StandardBasicTypes.STRING)
+		        .addScalar("locationName", StandardBasicTypes.STRING)
 		        .setInteger("locationId", locationId).setInteger("branchId", branchId).setInteger("roleId", roledId)
 		        .setString("startDate", startDate).setString("endDate", endDate)
 		        .setInteger("length", length).setInteger("start", start)
@@ -213,13 +227,82 @@ public class TrainingService extends CommonService {
 		
 		Session session = getSessionFactory();
 		List<TrainingDTO> dtos = new ArrayList<>();
-		String hql = "";
+		String hql = "select id as blc,code as description from core.blc";
 		Query query = session.createSQLQuery(hql).addScalar("blc", StandardBasicTypes.INTEGER)
-		        .addScalar("title", StandardBasicTypes.STRING)
+		        .addScalar("description", StandardBasicTypes.STRING)
 		        .setResultTransformer(new AliasToBeanResultTransformer(TrainingDTO.class));
 		dtos = query.list();
 		
 		return dtos;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public TrainingDTO getTrainingDetailsListById(int trainingId) {
+		
+		Session session = getSessionFactory();
+		List<TrainingDTO> dtos = new ArrayList<>();
+		String hql 	= ""
+					+ "WITH training_details "
+					+ "     AS (SELECT tr.id, "
+					+ "                l.\"name\"  AS division, "
+					+ "                ld.\"name\" AS district, "
+					+ "                lu.\"name\" AS upazilla, "
+					+ "                tr.\"name\" AS title, "
+					+ "                tr.description, "
+					+ "                tr.designation_of_trainer, "
+					+ "                tr.name_of_trainer, "
+					+ "                tr.start_date, "
+					+ "                tr.duration, "
+					+ "                tr.participant_number "
+					+ "         FROM   core.training tr "
+					+ "                JOIN core.\"location\" l "
+					+ "                  ON tr.division_id = l.id "
+					+ "                JOIN core.\"location\" ld "
+					+ "                  ON tr.district_id = ld.id "
+					+ "                JOIN core.\"location\" lu "
+					+ "                  ON tr.upazila_id = lu.id), "
+					+ "     user_audience "
+					+ "     AS (SELECT String_agg(r.\"name\", ',')audience, "
+					+ "                tr.id "
+					+ "         FROM   core.training tr "
+					+ "                JOIN core.training_role trole "
+					+ "                  ON trole.training_id = tr.id "
+					+ "                JOIN core.\"role\" r "
+					+ "                  ON r.id = trole.role_id "
+					+ "         GROUP  BY tr.id) "
+					+ "SELECT td.id, "
+					+ "       td.title, "
+					+ "       concat(td.division,' ,',td.district,' ,',td.upazilla) as locationName, "
+					+ "       ua.audience, "
+					+ "       td.description, "
+					+ "       td.designation_of_trainer AS designationOfTrainer, "
+					+ "       td.name_of_trainer        AS nameOfTrainer, "
+					+ "       td.start_date             AS startDate, "
+					+ "       td.duration, " 
+					+ "		  td.participant_number AS participantNumber "
+					+ "FROM   training_details td "
+					+ "       JOIN user_audience ua "
+					+ "         ON td.id = ua.id "
+					+ "WHERE  td.id = "+trainingId+"";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("id", StandardBasicTypes.LONG)
+		        .addScalar("title", StandardBasicTypes.STRING)
+		        .addScalar("locationName", StandardBasicTypes.STRING)
+		        .addScalar("audience", StandardBasicTypes.STRING)
+		        .addScalar("description", StandardBasicTypes.STRING)
+		        .addScalar("designationOfTrainer", StandardBasicTypes.STRING)
+		        .addScalar("nameOfTrainer", StandardBasicTypes.STRING)
+		        .addScalar("startDate", StandardBasicTypes.DATE)
+		        .addScalar("duration", StandardBasicTypes.STRING)
+		        .addScalar("participantNumber", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TrainingDTO.class));
+		dtos = query.list();
+		if(dtos.size() < 1) {
+			return null;
+		}
+		else return dtos.get(0);
 	}
 	
 	

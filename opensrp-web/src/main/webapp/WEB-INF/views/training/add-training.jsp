@@ -98,7 +98,7 @@
 						</div>
 					</div>
 					<div class="form-group row">
-						<label for="participantNumber" class="col-sm-4 col-form-label"><spring:message code="lbl.participantNumber"></spring:message><span class="text-danger">*</span> :</label>
+						<label for="participantNumber" class="col-sm-4 col-form-label"><spring:message code="lbl.participantNumber"></spring:message><span class="text-danger">*</span>:</label>
 						<div class="col-sm-6">
 							<input type="number" min="1"  class="form-control" id="participantNumber" name ="participantNumber" required>
 						</div>
@@ -145,12 +145,11 @@
 									</label>
 
 								</div>
-							<p>
+								<p>
+									<span class="text-danger" id="radioButtonSelection"></span>
+								</p>
 
-	                          		 <span class="text-danger" id="checkBoxSelection"></span>
-	                        	</p>
-	                        	  
-						</div> 
+							</div> 
 	<%-- 					 <div class="col-sm-5">
 								<div class="form-check" id="checkboxDiv" style="display:none">
 											<select  id="checkboxBranch"
@@ -205,8 +204,8 @@
 						
 					</div>
 						<div class="form-group row" id="checkboxDiv" style="display:none">
-							<label for="designationOfTrainer" class="col-sm-4 col-form-label"><spring:message
-									code="lbl.branch"></spring:message> :</label>
+							<label for="checkboxBranch" class="col-sm-4 col-form-label"><spring:message
+									code="lbl.branch"></spring:message><span class="text-danger">*</span> :</label>
 							<div class="col-sm-6">
 								<select id="checkboxBranch"
 									class="form-control mx-sm-3 search-dropdown"
@@ -217,15 +216,18 @@
 										<option value="${branch.id}">${branch.name}</option>
 									</c:forEach>
 								</select>
+								<p>
+									<span class="text-danger" id="branchSelectionValidation"></span>
+								</p>
 							</div>
 
 						</div>
 						<div class="form-group row" id="divisionDiv" style="display:none">
-							<label for="designationOfTrainer" class="col-sm-4 col-form-label"><spring:message
-									code="lbl.division"></spring:message> :</label>
+							<label for="division" class="col-sm-4 col-form-label"><spring:message
+									code="lbl.division"></spring:message><span class="text-danger">*</span> :</label>
 							<div class="col-sm-6">
 								<select class="form-control " id="division" name="division">
-									<option value=""><spring:message
+									<option value="0"><spring:message
 											code="lbl.selectDivision" />
 									</option>
 									<%
@@ -236,43 +238,64 @@
 										}
 									%>
 								</select>
+								<p>
+									<span class="text-danger" id="divisionSelectionValidation"></span>
+								</p>
 							</div>
 						</div>
 						
 						<div class="form-group row" id="districtDiv" style="display:none">
-							<label for="designationOfTrainer" class="col-sm-4 col-form-label"><spring:message code="lbl.district"></spring:message> :</label>
+							<label for="district" class="col-sm-4 col-form-label"><spring:message code="lbl.district"></spring:message><span class="text-danger">*</span> :</label>
 							<div class="col-sm-6">
 								<select class="form-control district-dropdown" id="district" name="district">
-										<option value="0?"><spring:message
+										<option value="0"><spring:message
 												code="lbl.selectDistrict" /></option>
 										<option value=""></option>
 									</select>
+								<p>
+									<span class="text-danger" id="districtSelectionValidation"></span>
+								</p>
 							</div>
 						</div>
 						<div class="form-group row" id="upazillaDiv" style="display:none">
-							<label for="designationOfTrainer" class="col-sm-4 col-form-label"><spring:message code="lbl.upazila"></spring:message>:</label>
+							<label for="upazila" class="col-sm-4 col-form-label"><spring:message code="lbl.upazila"></spring:message><span class="text-danger">*</span> :</label>
 							<div class="col-sm-6">
 								<select class="form-control upazilla-dropdown" id="upazila" name="upazila">
-										<option value="0?"><spring:message code="lbl.upazila"></spring:message></option>
-										<option value=""></option>
+									<option value="0"><spring:message code="lbl.upazila"></spring:message></option>
+									<option value=""></option>
 
-									</select>
+								</select>
+								<p>
+									<span class="text-danger" id="upazillaSelectionValidation"></span>
+								</p>
 							</div>
 						</div>
 						<div class="form-group row" id="blcDiv" style="display:none">
-							<label for="designationOfTrainer" class="col-sm-4 col-form-label">BLC :</label>
+							<label for="designationOfTrainer" class="col-sm-4 col-form-label">BLC <span class="text-danger">*</span> :</label>
 							<div class="col-sm-6">
-								<select class="form-control blc-dropdown" id="blc" name="blc">
-										<option value="">Select BLC
-										</option>
-									</select>
+									<select id="blc"
+			                                class="form-control"
+			                                name="blc" required>
+			                                <option value="0"><spring:message
+											code="lbl.pleaseSelect" /></option>
+			                            <c:forEach items="${blcList}" var="blc">
+			                                <option value="${blc.blc}">${blc.description}</option>
+			                            </c:forEach>
+			                        </select>
+			                        <p>
+									<span class="text-danger" id="blcSelectionValidation"></span>
+								</p>
 							</div>
 						</div>
 						<div class="form-group row" id="descriptionDiv" style="display:none" >
-							<label for="designationOfTrainer" class="col-sm-4 col-form-label">Description :</label>
+							<label for="designationOfTrainer" class="col-sm-4 col-form-label">Description <span class="text-danger">*</span> :</label>
 							<div class="col-sm-6">
-								<input class="form-control" type="text" name="description" id="decription" placeholder="Description">
+								<input class="form-control" type="text" name="description" id="description" placeholder="Description">
+							<p>
+								<span class="text-danger" id="descriptionSelectionValidation"></span>
+							</p>
 							</div>
+							
 						</div>
 						
 					</div>
@@ -287,6 +310,7 @@
 						<label for=attendanceList class="col-sm-6 col-form-label"><spring:message code="lbl.attendanceList"></spring:message>:<span class="text-danger">*</span></label>
 						<div class="col-sm-6">
 							<button type="button" class="btn btn-primary" onclick="openAttendaceModal()" id="addAttendance" >Add Attendance</button>
+							
 						</div>
 					</div>
 					<div class="table-scrollable ">
@@ -304,14 +328,35 @@
 							<tbody>
 							</tbody>
 						</table>
+						
 						</div>
+						<p>
+							<span class="text-danger" id="trainingListValidation"></span>
+						</p>
 					</div>
 					
 					<!-- Second Half of Form Ends -->
 					
 					
 					<div class="form-group row"></div>
-					<div class="form-group row">
+					<br>
+					<br>
+					 <div class="row">
+							<div class="col-lg-8 form-group text-right">
+							</div>
+						<div class="col-lg-4 form-group text-right">
+							<div class="col-lg-6 form-group text-right">
+								<a class="btn btn-danger" id="cancelProduct"
+									href="<c:url value="/training/view-training.html?lang=${locale}"/>">
+									<strong>Cancel</strong>
+								</a>
+							</div>
+							<div class="col-lg-6 form-group text-right">
+								<button type="submit" onclick="return ValidateForm()" class="btn btn-primary">Confirm</button>
+							</div>
+						</div>
+					</div>
+					<%-- <div class="form-group row"	>
 						<div class="col-sm-3"></div>
 						<div class="col-sm-2">
 							<a class="btn btn-danger" id="cancelProduct"
@@ -322,13 +367,13 @@
 						<div class="col-sm-2">
 							<button type="submit" onclick="return Validate()" class="btn btn-primary">Confirm</button>
 						</div>
-					</div>
+					</div> --%>
 				</form>
 				 
 				 <!-- Attendance Modal Starts-->
 				 
 				<div class="modal modal-margin" id="addAttendanceModal" style="overflow: unset;display: none; max-width: none; position: relative; z-index: 1150; max-width: 75%;">
-					<div class="row">
+					<div class="row" id="scrollDiv">
 					<div class="modal-header text-center" style="border-bottom: none;">
 										<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
 										<h4 class="modal-title">
@@ -480,6 +525,7 @@ function openAttendaceModal() {
 
 function appendRowInTable() {
 $//('#trainingList tbody').empty();
+var emptyRowCheckValidation = [];
 $('#addAttendanceList tbody input[type=checkbox]:checked').each(function(index, tr) {
 			var ssId = $(this).val();
 			var $row = $(this).closest('tr');
@@ -487,220 +533,281 @@ $('#addAttendanceList tbody input[type=checkbox]:checked').each(function(index, 
 			var id = $row.find('td').eq(3).text();
 			var designation = $row.find('td').eq(3).text();
 			var location = $row.find('td').eq(4).text();
-			var size = jQuery('#trainingList >tbody >tr').length + 1
+			var size = jQuery('#trainingList >tbody >tr').length + 1;
 			$("#trainingList tbody").append("<tr id='rec-"+size+"'><td><span class=\"sn\">"+size+"</span>.</td><td style='display:none'>"+ssId+"</td><td>"+name+"</td><td>"+designation+"</td><td>"+location+"</td><td><a class=\"btn btn-xs delete-record\" data-id="+size+"><i class=\"glyphicon glyphicon-trash\"></i></a></td></tr>");
+			emptyRowCheckValidation.push(size);
 		});
-	$.modal.close();
- 
-}
-
-jQuery(document).delegate('a.delete-record', 'click', function(e) {
-    e.preventDefault();    
-    var didConfirm = confirm("Are you sure You want to delete");
-    if (didConfirm == true) {
-     var id = jQuery(this).attr('data-id');
-     //var targetDiv = jQuery(this).attr('targetDiv');
-     jQuery('#rec-' + id).remove();
-     
-   //regnerate index number on table
-    $('#trainingList tr').each(function(index){
-		$(this).find('span.sn').html(index+1);
-   }); 
-   return true;
- } else {
-   return false;
- }
-});
-
-
-
- $('input:radio[name="locationName"]').change(
-	    function(){
-
-	        // checks that the clicked radio button is the one of value 'Yes'
-	        // the value of the element is the one that's checked (as noted by @shef in comments)
-	        if ($(this).val() == 'BRANCH') {
-				$("#checkboxDiv").show();
-				$('.search-dropdown').select2({dropdownAutoWidth : true});
-				$("#districtDiv").hide();
-				$("#divisionDiv").hide();
-				$("#upazillaDiv").hide();
-				$("#blcDiv").hide();
-				$("#descriptionDiv").hide();
-				
-	            // appends the 'appended' element to the 'body' tag
-	           // $(appended).appendTo('body');
-	        }
-	        else if ($(this).val() == 'HQ') {
-				$("#checkboxDiv").hide();
-				$("#districtDiv").hide();
-				$("#divisionDiv").hide();
-				$("#upazillaDiv").hide();
-				$("#blcDiv").hide();
-				$("#descriptionDiv").hide();
-	            // appends the 'appended' element to the 'body' tag
-	           // $(appended).appendTo('body');
-	        }
-	        else if ($(this).val() == 'BLC') {
-				$("#checkboxDiv").hide();
-				$("#districtDiv").hide();
-				$("#divisionDiv").hide();
-				$("#upazillaDiv").hide();
-				$("#blcDiv").show();
-				$("#descriptionDiv").hide();
-	        }
-	        else if ($(this).val() == 'OTHERS') {
-				$("#checkboxDiv").hide();
-				$("#districtDiv").show();
-				$("#divisionDiv").show();
-				$("#upazillaDiv").show();
-				$("#blcDiv").hide();
-				$("#descriptionDiv").show();
-	            // appends the 'appended' element to the 'body' tag
-	           // $(appended).appendTo('body');
-	        }
-	        else {
-	        	
-	        }
-	    }); 
-	    
-/* 	jQuery(document).delegate('input:radio[name="locationName"]', 'change', function() {
-	var productId = $(this).val();
-
-}); */
-
-function filter(){
-	debugger;
-	var roleId = +$('#selectRole').val();
-	var branchId = +$('#branches').val();
-	if(roleId == "") {
-		//startDate = $.datepicker.formatDate('yy-mm-dd', new Date());
-		$("#roleValidation").html("<strong>Please fill out this field</strong>");
+	if(emptyRowCheckValidation.length < 1) {
+		$("#validationSelectOne").show();		
 		return;
 	}
-	$("#roleValidation").html("");
-/* 	if(endDate == "") {
-		//endDate = $.datepicker.formatDate('yy-mm-dd', new Date());
-		$("#endDateValidation").html("<strong>Please fill out this field</strong>");
-		return;
+	else {
+		$.modal.close();
+		$("#validationSelectOne").hide();
 	}
-	$("#endDateValidation").html(""); */
-	
-	trainingAttendanceList = $('#addAttendanceList').DataTable({
-        bFilter: false,
-        serverSide: true,
-        processing: true,
-        columnDefs: [
-            { targets: [0,1,2,3,4], orderable: false },
-            { width: "10%", targets: 0 },
-            { width: "25%", targets: 1 },
-            { width: "20%", targets: 2 },
-            { width: "20%", targets: 3 },
-            { width: "25%", targets: 4 }
-        ],
-        ajax: {
-            url: "/opensrp-dashboard/rest/api/v1/training/training-attendance-list",
-            data: function(data){
-					data.branchId = branchId;
-					data.roleId = roleId;
-            },
-            dataSrc: function(json){
-                if(json.data){
-                    return json.data;
-                }
-                else {
-                    return [];
-                }
-            },
-            complete: function() {
-            },
-            type: 'GET'
-        },
-        bInfo: true,
-        destroy: true,
-        language: {
-            searchPlaceholder: ""
-        }
-    }); 
 }
 
-$("#addTraining").submit(function(event) { 
-	debugger;
-	$("#loading").show();
-	var url = "/opensrp-dashboard/rest/api/v1/training/save-update";			
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
-	var userIdSet = [];
-	var roleIdSet = [];
-	$('#trainingList > tbody > tr').each(function(index, tr) {
-			var $row = $(this).closest('tr'); //get the current row
-			var selectedUsers = parseFloat($row.find('td').eq(1).text());
-			var splitedItem = selectedUsers.split("_");
-			var userId = parseInt(splitedItem[0]);
-			var roleId = parseInt(splitedItem[1]);
-			if(!isNaN(userId)) {
-				userIdSet.push(userId);
-			}
-			if(!isNaN(roleId)) {
-				roleIdSet.push(roleIdSet);
-			}
-		});
-	var formData;
-	
-		formData = {
-	            "title": $('input[name=trainingTitle]').val(),
-	            "id":0,
-	            "trainingId": $('input[name=trainingId]').val(),
-	            "startDate": $("#trainingStartDate").val(),
-	            "duration": $('input[name=trainingDuration]').val(),
-	            "participantNumber": +$('input[name=participantNumber]').val(),
-	            "nameOfTrainer": $('input[name=nameOfTrainer]').val(),
-	            "designationOfTrainer": $('input[name=designationOfTrainer]').val(),
-	            "division": divisionId,
-	            "district": districtId,
-	            "upazila": upazillaId,
-	            "branch":branchId,
-	            "trainingLocationType": trainingLocationType,
-	            "type":"NA",
-	            "description": $('input[name=description]').val(),
-	            "blc":0,
-	            "users":userIdSet,
-	            "roles":roleIdSet,
-	            "status":"ACTIVE" 
-	        };
-	console.log(formData)
-	event.preventDefault();
-	
-	$.ajax({
-		contentType : "application/json",
-		type: "POST",
-        url: url,
-        data: JSON.stringify(formData), 
-        dataType : 'json',
-        
-		timeout : 100000,
-		beforeSend: function(xhr) {				    
-			 xhr.setRequestHeader(header, token);
-		},
-		success : function(data) {
-			debugger;
-		   var response = JSON.parse(data);
-		   $("#serverResponseMessage").html(response.msg);
-		   $("#loading").hide();
-		   if(response.status == "SUCCESS"){					   
-			   window.location.replace("/opensrp-dashboard/inventorydm/products-list.html");
-			   
-		   }
-		   
-		},
-		error : function(e) {
-		   
-		},
-		done : function(e) {				    
-		    console.log("DONE");				    
+	jQuery(document).delegate('a.delete-record', 'click', function(e) {
+		e.preventDefault();
+		var didConfirm = confirm("Are you sure You want to delete");
+		if (didConfirm == true) {
+			var id = jQuery(this).attr('data-id');
+			//var targetDiv = jQuery(this).attr('targetDiv');
+			jQuery('#rec-' + id).remove();
+
+			//regnerate index number on table
+			$('#trainingList tr').each(function(index) {
+				$(this).find('span.sn').html(index + 1);
+			});
+			return true;
+		} else {
+			return false;
 		}
 	});
-});	
+
+	$('input:radio[name="locationName"]').change(function() {
+
+		// checks that the clicked radio button is the one of value 'Yes'
+
+		if ($(this).val() == 'BRANCH') {
+			$("#checkboxDiv").show();
+			$('.search-dropdown').select2({
+				dropdownAutoWidth : true
+			});
+			$("#districtDiv").hide();
+			$("#divisionDiv").hide();
+			$("#upazillaDiv").hide();
+			$("#blcDiv").hide();
+			$("#descriptionDiv").hide();
+
+		} else if ($(this).val() == 'HQ') {
+			$("#checkboxDiv").hide();
+			$("#districtDiv").hide();
+			$("#divisionDiv").hide();
+			$("#upazillaDiv").hide();
+			$("#blcDiv").hide();
+			$("#descriptionDiv").hide();
+
+		} else if ($(this).val() == 'BLC') {
+			$("#checkboxDiv").hide();
+			$("#districtDiv").hide();
+			$("#divisionDiv").hide();
+			$("#upazillaDiv").hide();
+			$("#blcDiv").show();
+			$("#descriptionDiv").hide();
+		} else if ($(this).val() == 'OTHERS') {
+			$("#checkboxDiv").hide();
+			$("#districtDiv").show();
+			$("#divisionDiv").show();
+			$("#upazillaDiv").show();
+			$("#blcDiv").hide();
+			$("#descriptionDiv").show();
+		} else {
+
+		}
+	});
+
+	/* 	jQuery(document).delegate('input:radio[name="locationName"]', 'change', function() {
+	 var productId = $(this).val();
+
+	 }); */
+
+	function filter() {
+		var roleId = +$('#selectRole').val();
+		var branchId = +$('#branches').val();
+		if (roleId == "") {
+			$("#roleValidation").html(
+					"<strong>Please fill out this field</strong>");
+			return;
+		}
+		$("#roleValidation").html("");
+		trainingAttendanceList = $('#addAttendanceList').DataTable({
+	        bFilter: false,
+	        serverSide: true,
+	        processing: true,
+	        columnDefs: [
+	            { targets: [0,1,2,3,4], orderable: false },
+	            { width: "10%", targets: 0 },
+	            { width: "25%", targets: 1 },
+	            { width: "20%", targets: 2 },
+	            { width: "20%", targets: 3 },
+	            { width: "25%", targets: 4 }
+	        ],
+	        ajax: {
+	            url: "/opensrp-dashboard/rest/api/v1/training/training-attendance-list",
+	            data: function(data){
+						data.branchId = branchId;
+						data.roleId = roleId;
+	            },
+	            dataSrc: function(json){
+	                if(json.data){
+	                    return json.data;
+	                }
+	                else {
+	                    return [];
+	                }
+	            },
+	            complete: function() {
+	            },
+	            type: 'GET'
+	        },
+	        bInfo: true,
+	        destroy: true,
+	        language: {
+	            searchPlaceholder: ""
+	        }
+	    });
+	}
+
+$("#addTraining").submit(function(event) {
+
+	$("#loading").show();
+	var url = "/opensrp-dashboard/rest/api/v1/training/save-update";
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	var branchId = +$("#checkboxBranch").val();
+	var divisionId,districtId,upazillaId,description;
+
+	var trainingLocationType = $('input:radio[name="locationName"]:checked').val();
+	if(trainingLocationType == "HQ") {
+		 divisionId = parseInt("${hqDivision}");
+		 districtId = parseInt("${hqDistrict}");
+		 upazillaId = parseInt("${hqUpazilla}");
+		 description = "Head Office";
+	}
+	else {
+		 divisionId = +$("#division").val().split("?")[0];
+		 districtId = +$("#district").val().split("?")[0];
+		 upazillaId = +$("#upazila").val().split("?")[0];
+		 if(trainingLocationType == "BRANCH" || trainingLocationType == "BLC") {
+			 description = trainingLocationType;
+		 }
+		 else {
+			 description = $("#description").val();
+		 }
+		 
+	}
+	var userIdSet = [];
+	var roleIdSet = [];
+	$('#trainingList > tbody > tr').each(
+			function(index, tr) {
+				var $row = $(this).closest('tr'); //get the current row
+				var selectedUsers = $row.find('td').eq(1).text();
+				var splitedItem = selectedUsers.split("_");
+				var userId = parseInt(splitedItem[0]);
+				var roleId = parseInt(splitedItem[1]);
+				if (!isNaN(userId)) {
+					userIdSet.push(userId);
+				}
+				if (!isNaN(roleId)) {
+					roleIdSet.push(roleId);
+				}
+			});
+	var formData;
+
+		formData = {
+			"title" : $('input[name=trainingTitle]').val(),
+			"id" : 0,
+			"trainingId" : $('input[name=trainingId]').val(),
+			"startDate" : $("#trainingStartDate").val(),
+			"duration" : $('input[name=trainingDuration]').val(),
+			"participantNumber" : +$('input[name=participantNumber]').val(),
+			"nameOfTrainer" : $('input[name=nameOfTrainer]').val(),
+			"designationOfTrainer" : $('input[name=designationOfTrainer]').val(),
+			"division" : divisionId,
+			"district" : districtId,
+			"upazila" : upazillaId,
+			"branch" : branchId,
+			"trainingLocationType" : trainingLocationType,
+			"type" : "NA",
+			"description" : description,
+			"blc" : +$("#blc").val(),
+			"users" : userIdSet,
+			"roles" : roleIdSet,
+			"status" : "ACTIVE"
+		};
+		console.log(formData)
+		event.preventDefault();
+		$.ajax({
+			contentType : "application/json",
+			type: "POST",
+	        url: url,
+	        data: JSON.stringify(formData), 
+	        dataType : 'json',
+	        
+			timeout : 100000,
+			beforeSend: function(xhr) {				    
+				 xhr.setRequestHeader(header, token);
+			},
+			success : function(data) {
+				$(window).scrollTop(0);
+				var response = JSON.parse(data);
+				$("#serverResponseMessage").html(response.msg);
+				$("#loading").hide();
+				if (response.status == "SUCCESS") {
+					window.location.replace("/opensrp-dashboard/training/training-list.html?lang=en");
+				}
+			},
+			error : function(e) {
+			   
+			},
+			done : function(e) {				    
+			    console.log("DONE");				    
+			}
+		});
+	});
+
+	function ValidateForm() {
+		var size = $('#trainingList >tbody >tr').length;
+		if ($('input[type=radio]:checked').length == 0) {
+			$("#radioButtonSelection").html("<strong>Please fill out this field</strong>");
+			return false;
+		}
+		$("#radioButtonSelection").html("");
+		var selectedRadioButtonValue = $('input:radio[name="locationName"]:checked').val();
+		if (selectedRadioButtonValue == "BRANCH") {
+			if ($("#checkboxBranch").val() == "0"|| $("#checkboxBranch").val() == "") {
+				$("#branchSelectionValidation").html("<strong>Please fill out this field</strong>");
+				return false;
+			}
+			$("#branchSelectionValidation").html("");
+		} else if (selectedRadioButtonValue == "BLC") {
+			if ($("#blc").val() == "0" || $("#blc").val() == "") {
+				$("#blcSelectionValidation").html("<strong>Please fill out this field</strong>");
+				return false;
+			}
+			$("#blcSelectionValidation").html("");
+		}
+
+		else if (selectedRadioButtonValue == "OTHERS") {
+			if ($("#division").val() == "0" || $("#division").val() == "") {
+				$("#divisionSelectionValidation").html("<strong>Please fill out this field</strong>");
+				return false;
+			}
+			$("#divisionSelectionValidation").html("");
+			if ($("#district").val() == "0?" || $("#district").val() == "") {
+				$("#districtSelectionValidation").html("<strong>Please fill out this field</strong>");
+				return false;
+			}
+			$("#districtSelectionValidation").html("");
+			if ($("#upazila").val() == "0?" || $("#upazila").val() == "") {
+				$("#upazillaSelectionValidation").html("<strong>Please fill out this field</strong>");
+				return false;
+			}
+			$("#upazillaSelectionValidation").html("");
+			var up = $("#description").val();
+			if ($("#description").val() == null|| $("#description").val() == "") {
+				$("#descriptionSelectionValidation").html("<strong>Please fill out this field</strong>");
+				return false;
+			}
+			$("#descriptionSelectionValidation").html("");
+		}
+		if (size < 1) {
+			$("#trainingListValidation").html("<strong>Please fill out this field</strong>");
+			return false;
+		}
+		$("#trainingListValidation").html("");
+	}
 </script>
 
 
