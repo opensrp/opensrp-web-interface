@@ -314,7 +314,11 @@
 			<artifactId>javamelody-core</artifactId>
 			<version>1.69.0</version>
 		</dependency>
-
+		<dependency>
+		  <groupId>com.google.firebase</groupId>
+		  <artifactId>firebase-admin</artifactId>
+		  <version>7.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

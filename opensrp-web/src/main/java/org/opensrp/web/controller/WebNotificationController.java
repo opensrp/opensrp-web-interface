@@ -26,6 +26,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
+
 /**
  * @author proshanto
  */
@@ -49,7 +53,8 @@ public class WebNotificationController {
 	private BranchService branchService;
 	
 	@RequestMapping(value = "/list.html", method = RequestMethod.GET)
-	public String targetByIndividual(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+	public String targetByIndividual(HttpServletRequest request, HttpSession session, Model model, Locale locale)
+	    throws FirebaseMessagingException {
 		model.addAttribute("locale", locale);
 		model.addAttribute("roles", webNotificationService.getWebNotificationRoles());
 		model.addAttribute("divisions", webNotificationService.getLocationByTagId(divisionTagId));
@@ -57,6 +62,30 @@ public class WebNotificationController {
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
 		model.addAttribute("types", types);
+		
+		// The topic name can be optionally prefixed with "/topics/".
+		String topic = "highScores";
+		
+		// See documentation on defining a message payload.
+		Message message = Message.builder().putData("score", "850").putData("time", "2:45").setTopic(topic).build();
+		
+		// Send a message to the devices subscribed to the provided topic.
+		String response = FirebaseMessaging.getInstance().send(message);
+		// Response is a message ID string.
+		System.out.println("Successfully sent message: " + response);
+		/*// This registration token comes from the client FCM SDKs.
+		String registrationToken = "errr";
+		
+		// See documentation on defining a message payload.
+		Message message = Message.builder().putData("score", "850").putData("time", "2:45").setToken(registrationToken)
+		        .build();
+		
+		// Send a message to the device corresponding to the provided
+		// registration token.
+		String response = FirebaseMessaging.getInstance().send(message);
+		// Response is a message ID string.
+		System.out.println("Successfully sent message: " + response);*/
+		
 		return "webNotification/list";
 	}
 	

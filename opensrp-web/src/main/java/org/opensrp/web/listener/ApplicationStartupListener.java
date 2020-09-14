@@ -22,9 +22,12 @@ public class ApplicationStartupListener implements ApplicationListener<ContextRe
 	@Autowired
 	private DefaultApplicationSettingService defaultSystemSettingService;
 	
+	@Autowired
+	private FCMInitializer fcmInitializer;
+	
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-		
+		fcmInitializer.initialize();
 		if (event.getApplicationContext().getParent() != null) {
 			logger.info("Opensrp Dashboard " + " Application Stating............" + event.getApplicationContext().getId());
 			try {
