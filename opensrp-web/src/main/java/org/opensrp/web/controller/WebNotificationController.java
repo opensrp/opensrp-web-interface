@@ -3,6 +3,7 @@
  */
 package org.opensrp.web.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -11,8 +12,10 @@ import javax.servlet.http.HttpSession;
 
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.common.util.WebNotificationType;
+import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.WebNotification;
+import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.WebNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,11 +45,18 @@ public class WebNotificationController {
 	@Autowired
 	private LocationService locationService;
 	
+	@Autowired
+	private BranchService branchService;
+	
 	@RequestMapping(value = "/list.html", method = RequestMethod.GET)
 	public String targetByIndividual(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("roles", webNotificationService.getWebNotificationRoles());
 		model.addAttribute("divisions", webNotificationService.getLocationByTagId(divisionTagId));
+		List<WebNotificationType> types = Arrays.asList(WebNotificationType.values());
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("branches", branches);
+		model.addAttribute("types", types);
 		return "webNotification/list";
 	}
 	
@@ -62,6 +72,8 @@ public class WebNotificationController {
 	public String addNew(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("roles", webNotificationService.getWebNotificationRoles());
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("branches", branches);
 		model.addAttribute("divisions", webNotificationService.getLocationByTagId(divisionTagId));
 		return "webNotification/add";
 	}
@@ -77,11 +89,8 @@ public class WebNotificationController {
 		model.addAttribute("Upazilas", Upazilas);
 		model.addAttribute("id", id);
 		String dateTime = "";
-		if (webNotification.getType().equalsIgnoreCase(WebNotificationType.SCHEDULE.name())) {
-			dateTime = webNotification.getSendDate() + " " + webNotification.getSendTimeHour() + ":"
-			        + webNotification.getSendTimeMinute();
-		}
-		System.err.println("dateTime:" + dateTime);
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("branches", branches);
 		model.addAttribute("dateTime", dateTime);
 		model.addAttribute("webNotification", webNotification);
 		model.addAttribute("divisions", webNotificationService.getLocationByTagId(divisionTagId));

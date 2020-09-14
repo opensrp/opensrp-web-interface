@@ -22,7 +22,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.dto.WebNotificationCommonDTO;
+import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.TaregtSettingsType;
+import org.opensrp.common.util.WebNotificationType;
 import org.opensrp.core.dto.WebNotificationDTO;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.WebNotification;
@@ -87,10 +89,11 @@ public class WebNotificationService extends CommonService {
 		Session session = getSessionFactory();
 		List<WebNotificationCommonDTO> dtos = new ArrayList<>();
 		
-		String hql = "select id,title,notification,start_date sendDate,send_time_hour sendTimeHour,send_time_minute sendTimeMinute,branch_name branchName,branch_code branchCode,role_name roleName,type from core.web_notification_list( :locationId,:branchId ,:roleId,:startDate ,:endDate, :type, :start, :length)";
-		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
-		        .addScalar("title", StandardBasicTypes.STRING).addScalar("notification", StandardBasicTypes.STRING)
-		        .addScalar("sendDate", StandardBasicTypes.DATE).addScalar("sendTimeHour", StandardBasicTypes.INTEGER)
+		String hql = "select created createdTime, id,title,notification,start_date sendDate,send_time_hour sendTimeHour,send_time_minute sendTimeMinute,branch_name branchName,branch_code branchCode,role_name roleName,type from core.web_notification_list( :locationId,:branchId ,:roleId,:startDate ,:endDate, :type, :start, :length)";
+		Query query = session.createSQLQuery(hql).addScalar("createdTime", StandardBasicTypes.STRING)
+		        .addScalar("id", StandardBasicTypes.LONG).addScalar("title", StandardBasicTypes.STRING)
+		        .addScalar("notification", StandardBasicTypes.STRING).addScalar("sendDate", StandardBasicTypes.DATE)
+		        .addScalar("sendTimeHour", StandardBasicTypes.INTEGER)
 		        .addScalar("sendTimeMinute", StandardBasicTypes.INTEGER).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
 		        .addScalar("type", StandardBasicTypes.STRING).setInteger("locationId", locationId)
@@ -120,8 +123,8 @@ public class WebNotificationService extends CommonService {
 		return total.intValue();
 	}
 	
-	public JSONObject drawDataTableOfWebNotification(Integer draw, int total, List<WebNotificationCommonDTO> dtos)
-	    throws JSONException {
+	public JSONObject drawDataTableOfWebNotification(Integer draw, int total, List<WebNotificationCommonDTO> dtos,
+	                                                 String type) throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", total);
@@ -129,13 +132,35 @@ public class WebNotificationService extends CommonService {
 		JSONArray array = new JSONArray();
 		for (WebNotificationCommonDTO dto : dtos) {
 			JSONArray patient = new JSONArray();
-			patient.put(dto.getSendDate());
-			patient.put(dto.getSendTimeHour() + ":" + dto.getSendTimeMinute());
+			
+			String view = "";
+			if (dto.getType().equalsIgnoreCase(WebNotificationType.SCHEDULE.name())) {
+				patient.put(dto.getSendDate() + " " + dto.getSendTimeHour() + ":" + dto.getSendTimeMinute());
+				String date = dto.getSendDate() + " " + dto.getSendTimeHour() + ":" + dto.getSendTimeMinute();
+				if (DateUtil.getTimestamp(date) > System.currentTimeMillis()) {
+					
+					view = "<div class='col-sm-12 form-group'><a \" href=\"details/" + dto.getId() + ".html\">Details</a> "
+					        + " | <a \" href=\"edit/" + dto.getId() + ".html\">Edit</a> " + "</div>";
+					
+				} else {
+					
+					view = "<div class='col-sm-12 form-group'><a \" href=\"details/" + dto.getId()
+					        + ".html\">Details</a> </div>";
+				}
+			} else if (dto.getType().equalsIgnoreCase(WebNotificationType.DRAFT.name())) {
+				patient.put(dto.getCreatedTime());
+				view = "<div class='col-sm-12 form-group'><a \" href=\"details/" + dto.getId() + ".html\">Details</a> "
+				        + " | <a \" href=\"edit/" + dto.getId() + ".html\">Edit</a> " + "</div>";
+			} else {
+				patient.put(dto.getCreatedTime());
+				view = "<div class='col-sm-12 form-group'><a \" href=\"details/" + dto.getId()
+				        + ".html\">Details</a> </div>";
+			}
+			
+			patient.put(dto.getType());
 			patient.put(dto.getTitle());
 			patient.put(dto.getRoleName());
-			//patient.put(dto.getLocationName());
-			String view = "<div class='col-sm-12 form-group'><a \" href=\"details/" + dto.getId() + ".html\">Details</a> "
-			        + " | <a \" href=\"edit/" + dto.getId() + ".html\">Edit</a> " + "</div>";
+			
 			patient.put(view);
 			array.put(patient);
 		}

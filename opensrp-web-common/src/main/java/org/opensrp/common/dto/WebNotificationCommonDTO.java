@@ -24,6 +24,8 @@ public class WebNotificationCommonDTO {
 	
 	private String type;
 	
+	private String createdTime;
+	
 	public long getId() {
 		return id;
 	}
@@ -102,6 +104,14 @@ public class WebNotificationCommonDTO {
 	
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public String getCreatedTime() {
+		return createdTime;
+	}
+	
+	public void setCreatedTime(String createdTime) {
+		this.createdTime = createdTime;
 	}
 	
 }

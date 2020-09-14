@@ -58,12 +58,23 @@
 									</select>
 								</div>
 								
+								<div class="col-lg-3 form-group">
+								    <label for="designation">Notification type</label>
+									<select name="nType" class="form-control" id="nType">
+									<option value="">Please Select</option>
+									<c:forEach items="${types}" var="type">
+										<option value="${type.name()}">${type.name()}</option>
+									</c:forEach>
+																			
+									</select>
+								</div>
+								
 								
 							</div>
 							<div class="row">
 								<div class="col-lg-12 form-group text-right">
-									<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
-									<a  href="${add_page}" class="btn btn-primary btn-lg" id="back">Add new </a> 
+									<button type="submit" onclick="filter()" class="btn btn-primary btn-sm" value="confirm">View</button>
+									<a  href="${add_page}" class="btn btn-primary btn-sm" id="back">Add new </a> 
 						            		
 								</div>
      						</div>
@@ -76,8 +87,8 @@
 						<table class="table table-striped table-bordered " id="webNotificationTable">
 							<thead>
 								<tr>
-									<th>Date</th>
-									<th>Sending time</th>
+									<th id="dtime">Sending date & time</th>
+									<th>Notification type</th>
 									<th>Notification title</th>
 									<th>Recipient type</th>
 									<th>Action</th>
@@ -152,8 +163,7 @@ $(function() {
                 { width: "5%", targets: 1 },
                 { width: "10%", targets: 2 },
                 { width: "10%", targets: 3 },
-                { width: "5%", targets: 4 }
-                
+                { width: "10%", targets: 4 }
             ],
             ajax: {
                 url: "${get_url}",
@@ -161,7 +171,7 @@ $(function() {
                 	data.branchId = 0;
                     data.locationId=0;                    
                     data.roleId=0;
-                    data.type="";
+                    data.type="SEND";
                     data.startDate="";
                     data.endDate="";
                     
@@ -198,6 +208,16 @@ function filter(){
 	}else if(division != 0){
 		locationId =division; 
 	}
+	let _nType = $("#nType").val();
+	let header="";
+	if(_nType=='SEND'){
+		_nType="Sending";
+	}else if(_nType=='DRAFT'){
+		_nType="Draft";
+	}else if(_nType=='SCHEDULE'){
+		_nType="Schedule";
+	}
+	var dateTimeHeader = _nType+" date & time";
 	stockList = $('#webNotificationTable').DataTable({
          bFilter: false,
          serverSide: true,
@@ -208,7 +228,7 @@ function filter(){
                 { width: "5%", targets: 1 },
                 { width: "10%", targets: 2 },
                 { width: "10%", targets: 3 },
-                { width: "5%", targets: 4 }
+                { width: "10%", targets: 4 }
          ],
          ajax: {
              url: "${get_url}",
@@ -219,16 +239,17 @@ function filter(){
  	                data.endDate =$("#dateRange").data('daterangepicker').endDate.format('YYYY-MM-DD');
              	}else{
              		data.startDate = '';
-                     data.endDate ='';
+                    data.endDate ='';
              	}
             	 data.branchId = $("#branchList").val();
                  data.locationId=locationId;                    
                  data.roleId=$("#roleList").val();
-                 data.type="";
+                 data.type=$("#nType").val();
                 
              },
              dataSrc: function(json){
                  if(json.data){
+                	 $("#dtime").html(dateTimeHeader);
                      return json.data;
                  }
                  else {

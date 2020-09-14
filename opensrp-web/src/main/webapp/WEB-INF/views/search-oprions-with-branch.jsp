@@ -34,7 +34,16 @@
 			    <label for="cars"><spring:message code="lbl.branch"></spring:message></label> 
 			    <select	name="branchList" class="form-control" id="branchList">
 					<option value="0">please select</option>
-					
+					<c:forEach items="${branches}" var="branch">
+						<c:choose>
+						 	 <c:when test="${branch.id ==webNotification.getBranch()}">
+								<option value="${branch.id}" selected="selected">${branch.name}</option>
+							</c:when>
+							 <c:otherwise>
+							 	<option value="${branch.id}">${branch.name}</option>
+							 </c:otherwise>
+						</c:choose>
+					</c:forEach>
 				</select>
 			</div>
 								

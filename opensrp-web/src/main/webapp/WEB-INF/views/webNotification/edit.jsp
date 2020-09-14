@@ -82,26 +82,26 @@
 				
 				<div class="col-lg-6">
 					<div class="form-group row">
-						<label for="trainingTitle" class="col-sm-4 col-form-label">Notification title<span class="text-danger"> *</span> </label>
+						<label for="trainingTitle" class="col-sm-4 col-form-label">Notification title<span class="text-danger"> </span> </label>
 						<div class="col-sm-12">
 							<input type="text" class="form-control" value="${webNotification.notificationTitle}" id="notificationTitle" name ="notificationTitle">
 						</div>
 					</div>
 					<div class="form-group row">
-						<label for="notification" class="col-sm-4 col-form-label">Notification<span class="text-danger"> *</span> </label>
+						<label for="notification" class="col-sm-4 col-form-label">Notification<span class="text-danger"> </span> </label>
 						<div class="col-sm-12">
 							<textarea id="notification" name="notification" style="margin: 0px -11px 0px 0px; height: 107px; width: 100%;" class="form-control">${webNotification.notification}</textarea>
 						</div>
 					</div>
 					
 					<div class="form-group row">
-						<label for="notification" class="col-sm-4 col-form-label">Recipient types<span class="text-danger"> *</span> </label>
+						<label for="notification" class="col-sm-4 col-form-label">Recipient types<span class="text-danger"> </span> </label>
 						<div class="col-sm-12">
 							<input name="roles"  id="roles" type="text" class="form-control">
 						</div>
 					</div>	
 					<div class="form-group row">
-						<label for="notification" class="col-sm-4 col-form-label">Date & time<span class="text-danger"> *</span> </label>
+						<label for="notification" class="col-sm-4 col-form-label">Date & time<span class="text-danger"> </span> </label>
 						<div class="col-sm-12">
 							<input name="date"  id="date" type="text" class="form-control" value="${dateTime }">
 						</div>
@@ -124,6 +124,7 @@
 					<div class="form-group row"></div>
 					<div class="form-group row">
 						<div class="col-lg-12 form-group text-right">
+							<a href="${back}" class="btn btn-primary">Back</a>
 							<button type="submit"  class="btn btn-primary webNotificationClass" value="DRAFT">Save as draft</button>
 							<button type="submit"  class="btn btn-primary webNotificationClass" value="SCHEDULE">Schedule</button>
 							<button type="submit"  class="btn btn-primary webNotificationClass" value="SEND">Send</button>
@@ -217,7 +218,8 @@ $('#addWebNotification').submit(function(event) {
     let districtId = $('#districtList').val();
     let upazilaId = $('#upazilaList').val();
    
-    let branchId = $('#upazilaList').val();
+    let branchId = $('#branchList').val();
+   
     let locationId = 0;
     let locationType="LOCATION";
     if(branchId !=0){
@@ -237,17 +239,20 @@ $('#addWebNotification').submit(function(event) {
 		
 	}
    
-   let dateTime = $("#date").val();
-   let sendDate="2020-09-01";
-   let hour = 0;
-   let minute=0;
-   if(dateTime != "") {
-   let dateTimeInArray = dateTime.split(" ");
-   let timeInArray = dateTimeInArray[1].split(":");
-    sendDate = dateTimeInArray[0];
-    hour = timeInArray[0];
-    minute=timeInArray[1];
-   }
+    
+    let dateTime = $("#date").val();
+    let sendDate="2020-09-01";
+    let hour = 0;
+    let minute=0;
+    if(dateTime != ""){
+	    let dateTimeInArray = dateTime.split(" ");
+	    let timeInArray = dateTimeInArray[1].split(":");
+	     sendDate = dateTimeInArray[0];
+	     hour = timeInArray[0];
+	     minute=timeInArray[1];
+    }else{
+ 	   dateTime = '${webNotification.getSendDateAndTime()}';
+    }
     formData = {
         'id': '${id}',
         'notificationTitle': $('#notificationTitle').val(),
@@ -264,18 +269,18 @@ $('#addWebNotification').submit(function(event) {
         "branch":branchId,
         "locationType":locationType,
         "locationTypeId":locationId,
-
+        "sendDateAndTime":dateTime
 
     };
+   // alert(branchId);
     console.log(formData);
-  
+  //return false;
     $.ajax({
         contentType : "application/json",
         type: "POST",
         url: url,
         data: JSON.stringify(formData),
         dataType : 'json',
-
         timeout : 100000,
         beforeSend: function(xhr) {
             xhr.setRequestHeader(header, token);
@@ -334,11 +339,20 @@ function Validate() {
 		$("#errorText").append("<p style='color:red'>Date & time  will not empty</p>");
 		retValue = false;
 	}
-    if($('#divisionList').val() == 0){
-		$("#errorText").append("<p style='color:red'>Division  will not empty</p>");
+    
+
+    var divisionId = $('#divisionList').val();
+    var branchId = $('#branchList').val();
+    
+    if($('#divisionList').val() == 0 && branchId==0){
+		$("#errorText").append("<p style='color:red'>Division or branch will not empty</p>");
 		retValue = false;
 	}
-    
+    let _dateTime = $("#date").val();
+    if(type=='SCHEDULE' && _dateTime==''){
+    	$("#errorText").append("<p style='color:red'>Date and time will not empty</p>");
+		retValue = false;
+	}
     
     return retValue;
 }

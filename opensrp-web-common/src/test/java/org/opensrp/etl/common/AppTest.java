@@ -1,5 +1,9 @@
 package org.opensrp.etl.common;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -14,6 +18,9 @@ public class AppTest extends TestCase {
 	 *
 	 * @param testName name of the test case
 	 */
+	
+	private final static SimpleDateFormat getYYYYMMDDHHMMSSFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	
 	public AppTest(String testName) {
 		super(testName);
 	}
@@ -30,5 +37,14 @@ public class AppTest extends TestCase {
 	 */
 	public void testApp() {
 		assertTrue(true);
+		try {
+			Date d = getYYYYMMDDHHMMSSFormat.parse("2020-09-14 14:30");
+			
+			System.err.println(d.getTime() + ":" + System.currentTimeMillis());
+		}
+		catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

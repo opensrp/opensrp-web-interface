@@ -25,6 +25,8 @@ public class DateUtil {
 	
 	private final static SimpleDateFormat getYYYYMMDDHHMMSSFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
+	private final static SimpleDateFormat getYYYYMMDDHHMMFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	
 	private final static SimpleDateFormat getEddMMMyyyyhhmmssz = new SimpleDateFormat("E, dd MMM yyyy hh:mm:ss z");
 	
 	private final static SimpleDateFormat getYYYYMMDDTHHMMSSFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss");
@@ -40,6 +42,14 @@ public class DateUtil {
 		catch (ParseException e) {}
 		return null;
 		
+	}
+	
+	public static long getTimestamp(String date) {
+		try {
+			return getYYYYMMDDHHMMFormat.parse(date).getTime();
+		}
+		catch (ParseException e) {}
+		return 0;
 	}
 	
 	public static List<Integer> getYearList() {
@@ -86,13 +96,13 @@ public class DateUtil {
 		}
 		return date;
 	}
-
+	
 	public static Date getFirstDayOfMonth(Date date) {
-		Calendar calendar = Calendar.getInstance();   // this takes current date
+		Calendar calendar = Calendar.getInstance(); // this takes current date
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		return calendar.getTime();
 	}
-
+	
 	public static Date getDateTFromString(JSONObject doc, String key) throws ParseException, JSONException {
 		Date date = null;
 		if (doc.has(key) && !"null".equalsIgnoreCase(doc.getString(key)) && !doc.getString(key).isEmpty()) {
@@ -101,6 +111,7 @@ public class DateUtil {
 		}
 		return date;
 	}
+	
 	public static Date atEndOfDay(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -110,7 +121,7 @@ public class DateUtil {
 		calendar.set(Calendar.MILLISECOND, 999);
 		return calendar.getTime();
 	}
-
+	
 	public static Date atStartOfDay(Date date) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -120,5 +131,5 @@ public class DateUtil {
 		calendar.set(Calendar.MILLISECOND, 0);
 		return calendar.getTime();
 	}
-
+	
 }

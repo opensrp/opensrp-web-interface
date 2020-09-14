@@ -69,7 +69,7 @@ public class WebNotificationRestController {
 		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
 		
 		String name = request.getParameter("search");
-		System.err.println(request.getParameter("roleId"));
+		
 		int branchId = Integer.parseInt(request.getParameter("branchId"));
 		int roleId = Integer.parseInt(request.getParameter("roleId"));
 		int locationId = Integer.parseInt(request.getParameter("locationId"));
@@ -83,7 +83,7 @@ public class WebNotificationRestController {
 		int total = webNotificationService.getWebNotificationListCount(locationId, branchId, roleId, startDate, endDate,
 		    type);
 		
-		JSONObject response = webNotificationService.drawDataTableOfWebNotification(draw, total, list);
+		JSONObject response = webNotificationService.drawDataTableOfWebNotification(draw, total, list, type);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	

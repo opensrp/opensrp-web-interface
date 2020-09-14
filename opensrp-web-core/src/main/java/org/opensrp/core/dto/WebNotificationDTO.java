@@ -42,6 +42,8 @@ public class WebNotificationDTO {
 	
 	private Set<Integer> roles;
 	
+	private String sendDateAndTime;
+	
 	public Long getId() {
 		return id;
 	}
@@ -176,6 +178,14 @@ public class WebNotificationDTO {
 	
 	public void setRoles(Set<Integer> roles) {
 		this.roles = roles;
+	}
+	
+	public String getSendDateAndTime() {
+		return sendDateAndTime;
+	}
+	
+	public void setSendDateAndTime(String sendDateAndTime) {
+		this.sendDateAndTime = sendDateAndTime;
 	}
 	
 }
