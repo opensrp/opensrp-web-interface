@@ -62,8 +62,8 @@
     <% for (AggregatedBiometricDTO report: aggregateBiometricdReports) { %>
         <tr>
             <td><%=report.getLocationOrProvider()%></td>
-            <td><%=report.getRegisteredWithBio()%></td>
             <td><%=report.getEligibleForRegistration()%></td>
+            <td><%=report.getRegisteredWithBio()%></td>
             <td><%=report.getAllIdentified()%></td>
             <td><%=report.getAllVerified()%></td>
             <td><%=report.getAllBypass()%></td>
