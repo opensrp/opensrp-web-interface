@@ -248,7 +248,7 @@ public class InventoryAmController {
 		return "inventoryAm/user-wise-stock-pass-sell";
 	}
 	
-	@RequestMapping(value = "inventoryam/sell-to-ss-list/view/{branch_id}/{id}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "inventory/ss-sales/view/{branch_id}/{id}.html", method = RequestMethod.GET)
 	public String selltoSSDetails(Model model, Locale locale, @PathVariable("branch_id") int branchId,
 	                              @PathVariable("id") int userId) {
 		model.addAttribute("branchId", branchId);

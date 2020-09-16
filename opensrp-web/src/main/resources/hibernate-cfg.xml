@@ -64,6 +64,7 @@
 				<value>org.opensrp.core.entity.WebNotification</value>
 				<value>org.opensrp.core.entity.WebNotificationUser</value>
 				<value>org.opensrp.core.entity.WebNotificationRole</value>
+				<value>org.opensrp.core.entity.TrainingRole</value>
 
 			</list>
 		</property>

@@ -35,11 +35,23 @@
 							<div class="row">
 							<div class="col-lg-3 form-group">
 								    <label for="from"><spring:message code="lbl.trainingTopic"></spring:message> :</label>
-									<input type="text" class="form-control" id="topic">
+										<select id="trainingTitle" class="form-control" name="trainingTitle" required >
+										<option value=""><spring:message
+												code="lbl.pleaseSelect" /></option>
+										<c:forEach items="${trainingTitleList}" var="training">
+											<option value="${training.title}">${training.title}</option>
+										</c:forEach>
+									</select>
 								</div> 
 								<div class="col-lg-3 form-group">
 								    <label for="from"><spring:message code="lbl.trainingAudience"></spring:message>:</label>
-									<input type="text" class="form-control" id="audience">
+										<select class="form-control js-example-basic-multiple" id="multipleRle"   name="selectRole" >
+											<option value="0"><spring:message
+													code="lbl.pleaseSelect" /></option>
+											<c:forEach items="${roles}" var="role">
+												<option value="${role.id}">${role.name}</option>
+											</c:forEach>
+										</select>
 								</div> 
 								<div class="col-lg-3 form-group">
 								    <label for="from"><spring:message code="lbl.from"></spring:message><span class="text-danger">*</span> :</label>
@@ -103,6 +115,8 @@ let trainingList;
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 	 Layout.init(); // init current layout
+	 $('#branchList').select2({dropdownAutoWidth : true});
+	 //$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
 	var date = new Date(), y = date.getFullYear(), m = date.getMonth();
 	var startDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
 	var endDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));
@@ -126,6 +140,7 @@ jQuery(document).ready(function() {
 					data.locationId = 0;
 					data.branchId = 0;
 					data.roleId = 0;
+					data.trainingTitle = '';
 					data.startDate = startDateDm,
 					data.endDate = endDateDm
 					
@@ -156,10 +171,22 @@ jQuery(document).ready(function() {
 
 
 function filter(){
+	debugger;
+	var role = +$('#multipleRle').val();
 	var division = +$('#divisionList').val();
 	var district = +$('#districtList').val();
 	var upazila = +$('#upazilaList').val();
-	var requisitor = +$('#selectRequisitionBy').val();
+	var trainingTitle = $('#trainingTitle').val();
+	var locationId = 0;
+	if(division != 0) {
+		locationId = division;
+	}
+	if (district !=0) {
+		locationId = district;
+	}
+	if (upazila !=0) {
+		locationId = upazila;
+	}
 	var branch = +$('#branchList').val();
 	var startDate = $('#from').val();
 	var endDate = $('#to').val();
@@ -176,29 +203,29 @@ function filter(){
 	}
 	$("#endDateValidation").html("");
 	
- 		requisitionList = $('#requisitionListForAm').DataTable({
+	trainingList = $('#trainingList').DataTable({
         bFilter: false,
         serverSide: true,
         processing: true,
         columnDefs: [
             { targets: [0,1,2,3,4,5], orderable: false },
-            { width: "20%", targets: 0 },
-            { width: "20%", targets: 1 },
-            { width: "20%", targets: 2 },
-            { width: "20%", targets: 3 },
-            { width: "20%", targets: 4 },
-            { width: "20%", targets: 5 }
+            { width: "5%", targets: 0 },
+            { width: "15%", targets: 1 },
+            { width: "15%", targets: 2 },
+            { width: "15%", targets: 3 },
+            { width: "15%", targets: 4 },
+            { width: "20%", targets: 5 },
+            { width: "15%", targets: 6 }
         ],
         ajax: {
-            url: "/opensrp-dashboard/rest/api/v1/requisition/list",
+            url: "/opensrp-dashboard/rest/api/v1/training/training-list",
             data: function(data){
-					data.division = division;
-					data.district = district;
-					data.upazila = upazila;
-					data.branch = branch;
-					data.requisitor = requisitor;
+					data.locationId = locationId;
+					data.branchId = branch;
+					data.roleId = role;
 					data.startDate = startDate,
-					data.endDate = endDate
+					data.endDate = endDate,
+					data.trainingTitle = trainingTitle
 					
             },
             dataSrc: function(json){

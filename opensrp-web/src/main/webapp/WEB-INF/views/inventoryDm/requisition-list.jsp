@@ -147,7 +147,8 @@ jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 	 Layout.init(); // init current layout
    //TableAdvanced.init();
-	$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
+	//$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
+	$('#branchList').select2({dropdownAutoWidth : true});
 	var date = new Date(), y = date.getFullYear(), m = date.getMonth();
 	var startDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
 	var endDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));

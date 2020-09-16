@@ -70,7 +70,16 @@
 					<div class="form-group row">
 						<label for="trainingTitle" class="col-sm-4 col-form-label"><spring:message code="lbl.trainingTitle"></spring:message><span class="text-danger">*</span> :</label>
 						<div class="col-sm-6">
-							<input type="text" class="form-control" id="trainingTitle" name ="trainingTitle" required>
+							<select id="trainingTitle"
+									class="form-control"
+									name="trainingTitle" required >
+									<option value=""><spring:message
+											code="lbl.pleaseSelect" /></option>
+									<c:forEach items="${trainingTitleList}" var="training">
+										<option value="${training.title}">${training.title}</option>
+									</c:forEach>
+								</select>
+							<!-- <input type="text" class="form-control" id="trainingTitle" name ="trainingTitle" required> -->
 						</div>
 					</div>
 					<div class="form-group row">
@@ -91,12 +100,12 @@
 							<input type="number" min="1"  class="form-control" id="trainingDuration" name ="trainingDuration" >
 						</div>
 					</div>
-					<div class="form-group row">
+					<%-- <div class="form-group row">
 						<label for="trainingAudience" class="col-sm-4 col-form-label"><spring:message code="lbl.trainingAudience"></spring:message><span class="text-danger">*</span> :</label>
 						<div class="col-sm-6">
 							<input type="text"  class="form-control" id="trainingAudience" name ="trainingAudience" required >
 						</div>
-					</div>
+					</div> --%>
 					<div class="form-group row">
 						<label for="participantNumber" class="col-sm-4 col-form-label"><spring:message code="lbl.participantNumber"></spring:message><span class="text-danger">*</span>:</label>
 						<div class="col-sm-6">
@@ -347,7 +356,7 @@
 						<div class="col-lg-4 form-group text-right">
 							<div class="col-lg-6 form-group text-right">
 								<a class="btn btn-danger" id="cancelProduct"
-									href="<c:url value="/training/view-training.html?lang=${locale}"/>">
+									href="<c:url value="/training/training-list.html?lang=${locale}"/>">
 									<strong>Cancel</strong>
 								</a>
 							</div>
@@ -660,7 +669,6 @@ $('#addAttendanceList tbody input[type=checkbox]:checked').each(function(index, 
 	}
 
 $("#addTraining").submit(function(event) {
-
 	$("#loading").show();
 	var url = "/opensrp-dashboard/rest/api/v1/training/save-update";
 	var token = $("meta[name='_csrf']").attr("content");
@@ -706,7 +714,7 @@ $("#addTraining").submit(function(event) {
 	var formData;
 
 		formData = {
-			"title" : $('input[name=trainingTitle]').val(),
+			"title" : $('#trainingTitle').val(),
 			"id" : 0,
 			"trainingId" : $('input[name=trainingId]').val(),
 			"startDate" : $("#trainingStartDate").val(),
@@ -742,6 +750,7 @@ $("#addTraining").submit(function(event) {
 			success : function(data) {
 				$(window).scrollTop(0);
 				var response = JSON.parse(data);
+				$("#serverResponseMessage").show();
 				$("#serverResponseMessage").html(response.msg);
 				$("#loading").hide();
 				if (response.status == "SUCCESS") {

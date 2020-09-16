@@ -240,9 +240,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<%
 								if (PERM_READ_AGGREGATED_REPORT) {
 							%>
-							<li><a href="<c:url value=""/>">
-									<spring:message code="lbl.viewTarget" />
-							</a></li>
+							
 							<li><a href="<c:url value="/target/target-by-individual.html"/>">
 									<spring:message code="lbl.setTargetIndividually" />
 							</a></li>
@@ -411,6 +409,15 @@ License: You must have a valid license purchased only from themeforest(the above
 				</li>
 				<% }%>
 				
+				<% if(PERM_READ_AGGREGATED_REPORT){ %>
+					<li><a href="<c:url value="/web-notification/list.html?lang=${locale}"/>"><i
+							class="fa fa-bell" aria-hidden="true"></i> <span class="title">
+								Web Notification
+						</span> </a>
+						</li>
+					<%
+						}
+					%>
 				
 				<!-- <li>
 					<a href="javascript:;">

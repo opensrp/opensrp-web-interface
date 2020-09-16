@@ -5,18 +5,13 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
 
-import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.util.DefaultHeadQuarter;
 import org.opensrp.common.util.LocationTags;
-import org.opensrp.common.util.Roles;
-import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.dto.TrainingDTO;
 import org.opensrp.core.entity.Branch;
-import org.opensrp.core.entity.User;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.TargetService;
 import org.opensrp.core.service.TrainingService;
-import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,6 +40,10 @@ public class TrainingManagementController {
 	@RequestMapping(value = "/training-list.html", method = RequestMethod.GET)
 	public String myInventory(Model model, Locale locale) {
 		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
+		model.addAttribute("roles", trainingService.getRoleFOrTraining("excludeRoles"));
+		model.addAttribute("trainingTitleList", trainingService.getAllTrainingTitle());
+		List<Branch> branches = branchService.findAll("Branch");
+        model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		return "training/training-list";
 	}
@@ -54,6 +53,7 @@ public class TrainingManagementController {
 		//model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
 		model.addAttribute("roles", trainingService.getRoleFOrTraining("excludeRoles"));
 		model.addAttribute("blcList", trainingService.getAllBlcList());
+		model.addAttribute("trainingTitleList", trainingService.getAllTrainingTitle());
 		List<Branch> branches = branchService.findAll("Branch");
 		searchUtil.setDivisionAttribute(session);
 		model.addAttribute("hqDivision", DefaultHeadQuarter.DIVISION.getId());

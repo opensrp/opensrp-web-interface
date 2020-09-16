@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>User  list</title>
+<title>Individual Target</title>
 	
 	
 <c:url var="urlForSKPAList" value="/rest/api/v1/target/sk-pa-user-list-for-individual-target-setting" />
@@ -29,7 +29,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>User   list
+							<i class="fa fa-list"></i>Individual Target
 						</div>
 					</div>					
 					<div class="portlet-body">

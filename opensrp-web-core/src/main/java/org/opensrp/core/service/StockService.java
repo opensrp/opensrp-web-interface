@@ -310,7 +310,7 @@ public class StockService extends CommonService {
 				        + "/"
 				        + dto.getId()
 				        + ".html\"><strong>Sell Products </strong></a>  | "
-				        + "<a \" href=\"view/"
+				        + "<a \" href=\"/opensrp-dashboard/inventory/ss-sales/view/"
 				        + branchId
 				        + "/"
 				        + dto.getId()
@@ -318,7 +318,7 @@ public class StockService extends CommonService {
 				
 				patient.put(view);
 			} else {
-				String view = "<div class='col-sm-12 form-group'><a \" href=\"view/" + branchId + "/" + dto.getId()
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"/opensrp-dashboard/inventory/ss-sales/view/" + branchId + "/" + dto.getId()
 				        + ".html\"><strong>View details </strong></a> </div>";
 				patient.put(view);
 			}
@@ -462,7 +462,7 @@ public class StockService extends CommonService {
 	public InventoryDTO getUserAndBrachByuserId(int userId) {
 		
 		Session session = getSessionFactory();
-		InventoryDTO dtos = null;
+		List<InventoryDTO> dtos = null;
 		
 		String hql = "select u.username, u.first_name firstName,u.last_name lastName ,r.role_id  roleId,b.name branchName,b.code branchCode from core.users as u join core.user_branch ub on u.id = ub.user_id join core.branch b on b.id=ub.branch_id join core.user_role r on r.user_id = u.id where u.id =:userId";
 		Query query = session.createSQLQuery(hql).addScalar("username", StandardBasicTypes.STRING)
@@ -471,9 +471,9 @@ public class StockService extends CommonService {
 		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
 		        .addScalar("roleId", StandardBasicTypes.INTEGER).setInteger("userId", userId)
 		        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
-		dtos = (InventoryDTO) query.uniqueResult();
+		dtos =  query.list();
 		
-		return dtos;
+		return dtos.get(0);
 		
 	}
 	

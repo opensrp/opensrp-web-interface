@@ -25,7 +25,7 @@
 			</div>
 			<div class="col-lg-3 form-group">
 			    <label for="cars"><spring:message code="lbl.upazila"></spring:message> </label> 
-			    <select	name="upazilaList" onclick="getBranchList(this.value,'branchList')" id="upazilaList" class="form-control">
+			    <select	name="upazilaList"  id="upazilaList" class="form-control">
 					<option value="0">Please select </option>
 					
 				</select>
@@ -55,10 +55,10 @@ function getChildLocation(locationId,divId) {
 	if(divId=='districtList'){
 		$("#districtList").html('<option value="0">Please select </option>');
 		$("#upazilaList").html('<option value="0">Please select </option>');
-		$("#branchList").html('<option value="0">Please select </option>');
+		//$("#branchList").html('<option value="0">Please select </option>');
 	}else if(divId=='upazilaList'){
 		$("#upazilaList").html('<option value="0">Please select </option>');
-		$("#branchList").html('<option value="0">Please select </option>');
+		//$("#branchList").html('<option value="0">Please select </option>');
 	}
 	let url = '${location_url}';	
 	$.ajax({

@@ -59,7 +59,7 @@
 					</div>
 					
 					<div class="form-group row">
-						<label for="trainingAudience" class="col-sm-2 col-form-label"><spring:message code="lbl.trainingAudience"></spring:message><span class="text-danger">*</span> :</label>
+						<label for="trainingAudience" class="col-sm-2 col-form-label"><spring:message code="lbl.trainingAudience"></spring:message> :</label>
 						<div class="col-sm-6">
 							<label for="trainingTitle" class=" col-form-label">${trainingObj.getAudience()}</label>
 						</div>

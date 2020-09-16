@@ -68,9 +68,10 @@ public class TrainingRestController {
 		int locationId = Integer.parseInt(request.getParameter("locationId"));
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
+		String trainingTitle = request.getParameter("trainingTitle");
 
 		
-		List<TrainingDTO> trainingList = trainingService.getTrainingList(locationId, branchId, roleId, startDate, endDate, length, start, orderColumn, orderDirection);
+		List<TrainingDTO> trainingList = trainingService.getTrainingList(locationId, branchId, roleId,trainingTitle, startDate, endDate, length, start, orderColumn, orderDirection);
 		
 		int trainingListCount = trainingService.getTrainingListCount(locationId, branchId, roleId, startDate, endDate);
 		

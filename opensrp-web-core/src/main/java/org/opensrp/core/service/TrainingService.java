@@ -201,20 +201,35 @@ public class TrainingService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<TrainingDTO> getTrainingList(int locationId, int branchId, int roledId, String startDate,String endDate,
+	public List<TrainingDTO> getTrainingList(int locationId, int branchId, int roledId,String trainingTitle, String startDate,String endDate,
 	                                                               Integer length, Integer start, String orderColumn,
 	                                                               String orderDirection) {
 		
 		Session session = getSessionFactory();
 		List<TrainingDTO> dtos = new ArrayList<>();
-		String hql = " select id,title, start_date startDate,trainee_name nameOfTrainer,user_type audience,location_name locationName from core.training_list(:locationId,:branchId,:roleId,:startDate,:endDate,:start,:length)";
+		String hql = " select id,title, start_date startDate,trainee_name nameOfTrainer,user_type audience,location_name locationName from core.training_list(:locationId,:branchId,:roleId,:trainingTitle,:startDate,:endDate,:start,:length)";
 		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
 		        .addScalar("title", StandardBasicTypes.STRING).addScalar("startDate", StandardBasicTypes.DATE)
 		        .addScalar("nameOfTrainer", StandardBasicTypes.STRING).addScalar("audience", StandardBasicTypes.STRING)
 		        .addScalar("locationName", StandardBasicTypes.STRING)
-		        .setInteger("locationId", locationId).setInteger("branchId", branchId).setInteger("roleId", roledId)
+		        .setInteger("locationId", locationId).setInteger("branchId", branchId).setInteger("roleId", roledId).setString("trainingTitle", trainingTitle)
 		        .setString("startDate", startDate).setString("endDate", endDate)
 		        .setInteger("length", length).setInteger("start", start)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TrainingDTO.class));
+		dtos = query.list();
+		
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TrainingDTO> getAllTrainingTitle() {
+		
+		Session session = getSessionFactory();
+		List<TrainingDTO> dtos = new ArrayList<>();
+		String hql = "select id,name as title from core.training_title";
+		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
+		        .addScalar("title", StandardBasicTypes.STRING)
 		        .setResultTransformer(new AliasToBeanResultTransformer(TrainingDTO.class));
 		dtos = query.list();
 		

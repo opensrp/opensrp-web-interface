@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Stock in Details</title>
+<title>SS Sell Details</title>
 	
 	
 <c:url var="stock_in_list" value="/rest/api/v1/stock/pass-stock-or-sell-to-ss-list" />

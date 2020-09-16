@@ -41,6 +41,9 @@ public class InventoryDmController {
 	@Autowired
 	private StockService stockService;
 	
+	@Autowired
+	private BranchService branchService;
+	
 	@RequestMapping(value = "inventorydm/products-list.html", method = RequestMethod.GET)
 	public String productsList(Model model, Locale locale) {
 		List<ProductDTO> productList = productService.getAllProductListDetails();
@@ -60,6 +63,8 @@ public class InventoryDmController {
 	@RequestMapping(value = "inventorydm/requisition-list.html", method = RequestMethod.GET)
 	public String requisitonListForDm(Model model, Locale locale, HttpSession session) {
 		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
+		List<Branch> branches = branchService.findAll("Branch");
+        model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		return "inventoryDm/requisition-list";
 	}
@@ -89,6 +94,8 @@ public class InventoryDmController {
 	@RequestMapping(value = "inventorydm/ss-sales-report.html", method = RequestMethod.GET)
 	public String ssSellReportForDm(Model model, HttpSession session, Locale locale) {
 		model.addAttribute("locale", locale);
+		List<Branch> branches = branchService.findAll("Branch");
+        model.addAttribute("branches", branches);
 		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
 		return "inventoryDm/ss-sales-report";
 	}
