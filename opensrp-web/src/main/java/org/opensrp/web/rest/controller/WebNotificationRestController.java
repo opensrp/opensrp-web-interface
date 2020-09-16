@@ -3,7 +3,10 @@ package org.opensrp.web.rest.controller;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -23,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.gson.Gson;
 
 @RequestMapping("rest/api/v1/web-notfication")
@@ -59,7 +64,8 @@ public class WebNotificationRestController {
 	}
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ResponseEntity<String> webNotificationlist(HttpServletRequest request, HttpSession session) throws JSONException {
+	public ResponseEntity<String> webNotificationlist(HttpServletRequest request, HttpSession session) throws JSONException,
+	    JsonParseException, JsonMappingException, IOException {
 		Integer start = Integer.valueOf(request.getParameter("start"));
 		Integer length = Integer.valueOf(request.getParameter("length"));
 		//String name = request.getParameter("search[value]");
@@ -77,13 +83,22 @@ public class WebNotificationRestController {
 		String endDate = request.getParameter("endDate");
 		String type = request.getParameter("type");
 		
+		SimpleDateFormat df = new SimpleDateFormat("MMM dd,yyyy");
+		df.setTimeZone(TimeZone.getTimeZone("UTC"));
+		
 		List<WebNotificationCommonDTO> list = webNotificationService.getWebNotificationList(locationId, branchId, roleId,
 		    startDate, endDate, type, length, start, orderColumn, orderDirection);
-		
+		/*	String json = new Gson().toJson(list);		
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.setDateFormat(df);
+			
+			List<WebNotificationCommonDTO> lst = mapper.readValue(json, new TypeReference<List<WebNotificationCommonDTO>>() {});
+			*/
 		int total = webNotificationService.getWebNotificationListCount(locationId, branchId, roleId, startDate, endDate,
 		    type);
 		
 		JSONObject response = webNotificationService.drawDataTableOfWebNotification(draw, total, list, type);
+		
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	

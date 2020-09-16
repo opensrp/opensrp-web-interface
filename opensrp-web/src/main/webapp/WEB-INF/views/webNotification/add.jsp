@@ -141,6 +141,16 @@
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>
 	</div>
+	
+	<script>
+jQuery(document).ready(function() {       
+	 Metronic.init(); // init metronic core components
+		Layout.init(); // init current layout
+   
+});
+
+
+</script>
 	<!-- END CONTENT -->
 <%-- <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
  --%>

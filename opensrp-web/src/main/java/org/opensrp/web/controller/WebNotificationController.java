@@ -89,14 +89,6 @@ public class WebNotificationController {
 		return "webNotification/list";
 	}
 	
-	@RequestMapping(value = "/target-by-position-list.html", method = RequestMethod.GET)
-	public String targetByPosition(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
-		model.addAttribute("locale", locale);
-		
-		model.addAttribute("divisions", webNotificationService.getLocationByTagId(divisionTagId));
-		return "targets/target-by-position-list";
-	}
-	
 	@RequestMapping(value = "/add-new.html", method = RequestMethod.GET)
 	public String addNew(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
