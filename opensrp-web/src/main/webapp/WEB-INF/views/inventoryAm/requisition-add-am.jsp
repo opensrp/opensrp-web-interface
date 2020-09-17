@@ -61,7 +61,7 @@
 										<td>${ product.id }</td>
 										<td>${ product.name }</td>
 										<td>${ product.stock }</td>
-										<td><input type="number" min="1" id="requisitionAmount" name ="requisitionAmount"><span class="text-danger" id="amountSelection"></span></td>
+										<td><input type="number"  min="1" oninput="this.value = Math.abs(this.value)" id="requisitionAmount" name ="requisitionAmount"><span class="text-danger" id="amountSelection"></span></td>
 									</tr>
 								</c:forEach>
 								</tbody>
@@ -97,7 +97,15 @@ jQuery(document).ready(function() {
 		});
 });
 
-
+/* $('.identifier').change(function() {
+	var $row = $(this).closest("tr");
+	var quantity = +$(this).val();
+	if(quantity < 1) {
+		$(this).val('');
+		$row.find('span:first').html("<strong>* Quantity Can not be less than 1</strong>");
+	}
+	else $row.find('span:first').html("");
+}); */
 
 function mapRowData() {
 	var requisitionDetails = [];
@@ -128,12 +136,17 @@ function mapRowData() {
 		    	}
 		    	if(colIndex == 3) {
 		    	 $(this).find('input').each(function() {
+		    		 	if(parseInt($(this).val()) == 0) {
+		    		 		$(this).val('');
+		    		 	}
 		    		     productObject['qunatity'] = parseInt($(this).val());
 		    		   })
 		    	}
 		    });
 		    if(!isNaN(productObject["qunatity"])) {
-				 requisitionDetails.push(productObject);
+		    	 if(productObject["qunatity"] > 0) {
+		    		 requisitionDetails.push(productObject);
+		    	 }
 			 }
 		  }); 
 		  
@@ -183,6 +196,7 @@ function mapRowData() {
 			            'requisitionDetails': requisionDetailsArray
 			        };
 			console.log(formData)
+			$(window).scrollTop(0);
 			event.preventDefault();
 			$.ajax({
 				contentType : "application/json",
@@ -198,13 +212,13 @@ function mapRowData() {
 				success : function(data) {
 				   var response = JSON.parse(data);
 				   $("#loading").hide();
-				   $(window).scrollTop(0);
 				   $("#serverResponseMessage").show();
 				   $("#serverResponseMessage").html(response.msg);
 				   
- 				   if(response.status == "SUCCESS"){					   
-					   window.location.replace("/opensrp-dashboard/inventoryam/requisition-list/"+branchId+".html");
-					   
+ 				   if(response.status == "SUCCESS"){
+ 		            	setTimeout(function(){
+ 		            		window.location.replace("/opensrp-dashboard/inventoryam/requisition-list/"+branchId+".html");
+ 		                 }, 1000);
 				   }
 				   
 				},

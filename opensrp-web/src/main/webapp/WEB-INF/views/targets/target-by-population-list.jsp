@@ -101,6 +101,7 @@
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
+		$('#branchList').select2({dropdownAutoWidth : true});
    //TableAdvanced.init();
 		//$('#StockSellHistory').DataTable();
 });

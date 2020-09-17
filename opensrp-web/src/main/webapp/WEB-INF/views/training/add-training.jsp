@@ -735,6 +735,7 @@ $("#addTraining").submit(function(event) {
 			"status" : "ACTIVE"
 		};
 		console.log(formData)
+		$(window).scrollTop(0);
 		event.preventDefault();
 		$.ajax({
 			contentType : "application/json",
@@ -748,13 +749,16 @@ $("#addTraining").submit(function(event) {
 				 xhr.setRequestHeader(header, token);
 			},
 			success : function(data) {
-				$(window).scrollTop(0);
+				
 				var response = JSON.parse(data);
 				$("#serverResponseMessage").show();
 				$("#serverResponseMessage").html(response.msg);
 				$("#loading").hide();
 				if (response.status == "SUCCESS") {
-					window.location.replace("/opensrp-dashboard/training/training-list.html?lang=en");
+	            	setTimeout(function(){
+	            		window.location.replace("/opensrp-dashboard/training/training-list.html?lang=en");
+	                 }, 1000);
+					
 				}
 			},
 			error : function(e) {

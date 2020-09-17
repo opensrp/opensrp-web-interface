@@ -36,7 +36,11 @@
 							
 							<div style="display: none;" class="alert alert-success" id="serverResponseMessage" role="alert"></div>
 							<div class="row">
-								
+									<div id="loading"
+										style="display: none; position: absolute; z-index: 1000; margin-left: 35%">
+										<img width="50px" height="50px"
+											src="<c:url value="/resources/images/ajax-loading.gif"/>">
+									</div>
 								<div class="col-lg-3 form-group">
 									<label for="date">Date:</label> <span class="text-danger"> *</span>
 									<input type="text"	readonly name="startYear" id="startYear" class="form-control date-picker-year" />
@@ -199,6 +203,7 @@ function getTargetInfo(){
         },
         success : function(data) {
         	console.log(data);
+        	 $("#loading").hide();
         	$("#productInfoS").html(data);
         },
         error : function(e) {
@@ -269,6 +274,7 @@ $('#targetInfo').submit(function(event) {
         "targetDetailsDTOs":item
     };
     console.log(formData);
+    $(window).scrollTop(0);
     $.ajax({
         contentType : "application/json",
         type: "POST",
@@ -284,7 +290,7 @@ $('#targetInfo').submit(function(event) {
         success : function(data) {
         	let response = JSON.parse(data);
     		console.log(response);
-    		$(window).scrollTop(0);
+    		$("#loading").hide();
 			$("#serverResponseMessage").show();
 			$("#serverResponseMessage").html(response.msg); 
             if(response.status == 'SUCCESS'){

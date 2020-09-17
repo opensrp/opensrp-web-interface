@@ -156,11 +156,11 @@ $("#addProduct").submit(function(event) {
 		   var response = JSON.parse(data);
 		   $("#serverResponseMessage").html(response.msg);
 		   $("#loading").hide();
-		   if(response.status == "SUCCESS"){					   
-			   window.location.replace("/opensrp-dashboard/inventorydm/products-list.html");
-			   
+		   if(response.status == "SUCCESS"){
+           	setTimeout(function(){
+           			window.location.replace("/opensrp-dashboard/inventorydm/products-list.html");
+                }, 1000);
 		   }
-		   
 		},
 		error : function(e) {
 		   

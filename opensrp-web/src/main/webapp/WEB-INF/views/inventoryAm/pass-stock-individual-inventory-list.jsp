@@ -73,7 +73,7 @@
 										<td>${ passStock.name }</td>
 										<td>${ passStock.available }</td>
 										<td>${ passStock.stock }</td>
-										<td><input type="number" min="1" id="passAmount" name ="passAmount"><span class="text-danger" id="amountSelection"></span></td>
+										<td><input type="number" min="1" oninput="this.value = Math.abs(this.value)" id="passAmount" name ="passAmount"><p class="text-danger" id="amountSelection"></p><span class="text-danger" id="negativeValue"></span></td>
 									</tr>
 								</c:forEach>
 								</tbody>
@@ -110,7 +110,17 @@ jQuery(document).ready(function() {
 		  "pageLength": 25
 	});
 	});
-	
+
+/* $('.identifier').change(function() {
+	var $row = $(this).closest("tr");
+	var quantity = +$(this).val();
+	if(quantity < 1) {
+		$(this).val('');
+		$row.find('span:first').html("<strong>* Quantity Can not be less than 1</strong>");
+	}
+	else $row.find('span:first').html("");
+}); */
+
 function createStockArray() {
 	var stockArray = [];
 	$('#passStockIndividualInventoryList  > tbody  > tr').each(function(index, tr) {
@@ -130,6 +140,9 @@ function createStockArray() {
 				avilableStock = parseInt(c.textContent);
 			}
 			if(colIndex == 4) {
+    		 	if(parseInt($(this).find('input[type="number"]').val()) == 0) {
+    		 		$(this).find('input[type="number"]').val('');
+    		 	}
 				stockObject["debit"] = parseInt($(this).find('input[type="number"]').val());;
 			}
 
@@ -194,6 +207,7 @@ function saveStockData() {
 	            'stockDetailsDTOs': stockListArray
 	        };
 	console.log(formData)
+	$(window).scrollTop(0);
 	event.preventDefault();
 	$.ajax({
 		contentType : "application/json",
@@ -209,13 +223,13 @@ function saveStockData() {
 		success : function(data) {
 		   var response = JSON.parse(data);
 		   $("#loading").hide();
-		   $(window).scrollTop(0);
+		   
 		   $("#serverResponseMessage").show();
 		   $("#serverResponseMessage").html(response.msg);
-		   
-			   if(response.status == "SUCCESS"){					   
-			   window.location.replace("/opensrp-dashboard/inventoryam/pass-stock-inventory/"+branchId+".html");
-			   
+			   if(response.status == "SUCCESS"){
+	            	setTimeout(function(){
+	            		window.location.replace("/opensrp-dashboard/inventoryam/pass-stock-inventory/"+branchId+".html");
+		                 }, 1000);
 		   }
 		   
 		},

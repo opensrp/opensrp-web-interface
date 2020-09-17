@@ -212,13 +212,14 @@ public class TargetService extends CommonService {
 		Session session = getSessionFactory();
 		List<TargetCommontDTO> dtos = new ArrayList<>();
 		
-		String hql = "select username,user_id userId,branch_id branchId,role_id roleId,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName,role_name roleName,location_name locationName from core.user_list_for_target_set(:locationId,:branchId,:roleName,:start,:length)";
+		String hql = "select username,user_id userId,branch_id branchId,role_id roleId,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName,role_name roleName,location_name locationName,population from core.user_list_for_target_set(:locationId,:branchId,:roleName,:start,:length)";
 		Query query = session.createSQLQuery(hql).addScalar("username", StandardBasicTypes.STRING)
 		        .addScalar("userId", StandardBasicTypes.INTEGER).addScalar("branchId", StandardBasicTypes.INTEGER)
 		        .addScalar("roleId", StandardBasicTypes.INTEGER).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
 		        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
-		        .addScalar("locationName", StandardBasicTypes.STRING).setInteger("locationId", locationId)
+		        .addScalar("locationName", StandardBasicTypes.STRING).addScalar("population", StandardBasicTypes.INTEGER)
+		        .setInteger("locationId", locationId)
 		        .setInteger("branchId", branchId).setString("roleName", roleName).setInteger("length", length)
 		        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
 		dtos = query.list();
@@ -277,7 +278,7 @@ public class TargetService extends CommonService {
 			patient.put(dto.getRoleName());
 			patient.put(dto.getUsername());
 			patient.put(dto.getLocationName());
-			patient.put("1200");
+			patient.put(dto.getPopulation());
 			String view = "<div class='col-sm-12 form-group'><a \" href=\"set-individual-target-pk/" + dto.getBranchId()
 			        + "/" + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName() + "&id="
 			        + dto.getUsername() + "&location=" + dto.getLocationName() + "&population=1200"

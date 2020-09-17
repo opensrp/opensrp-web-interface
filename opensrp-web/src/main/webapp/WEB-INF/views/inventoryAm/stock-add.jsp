@@ -86,7 +86,7 @@
 
 								</select></td>
 							<td><input type="text" class="form-control" id="currentStock" placeholder="Stock" readonly></td>
-							<td><input type="number" min="1" class="form-control" id="quantity" placeholder="Quantity"></td>
+							<td><input type="number" class="form-control" min="1" oninput="this.value = Math.abs(this.value)" id="quantity" placeholder="Quantity"><p class="text-danger" id="amountSelection"></p></td>
 							<td><input type="date" class="form-control" id="expiryDate" onkeydown="return false" placeholder="Expiry Date"></td>
 							<td></td>
 						</tr>
@@ -108,7 +108,7 @@
 
 								</select></td>
 							<td><input type="text" class="form-control" id="currentStock" placeholder="Stock" readonly></td>
-							<td><input type="number" class="form-control" min="1" id="quantity" placeholder="Quantity"></td>
+							<td><input type="number" class="form-control" min="1" oninput="this.value = Math.abs(this.value)" id="quantity" placeholder="Quantity"><p class="text-danger" id="amountSelection"></p></td>
 							<td><input type="date" class="form-control" id="expiryDate" onkeydown="return false" placeholder="Expiry Date"></td>
 							<td><a class="btn btn-xs delete-record" data-id="1"><i
 									class="glyphicon glyphicon-trash"></i></a></td>
@@ -220,7 +220,16 @@ jQuery(document).ready(function() {
 	    });
 });
 
-
+/* $('#addProductTemporaryList').delegate('.identifier', 'change', function() {
+	var $row = $(this).closest("tr");
+	var quantity = +$(this).val();
+	if(quantity < 1) {
+		$(this).val('');
+		$row.find("p:first").html("* Quantity Can not be less than 1");
+	}
+	else $row.find("p:first").html("");
+});
+ */
 
 function createStockArray() {
 	var stockArray = [];
@@ -241,6 +250,9 @@ function createStockArray() {
 			}
 			
 			if(colIndex == 3) {
+    		 	if(parseInt($(this).find('input[type="number"]').val()) == 0) {
+    		 		$(this).find('input[type="number"]').val('');
+    		 	}
 				stockObject["credit"] = parseInt($(this).find('input[type="number"]').val());
 			}
 			
@@ -249,7 +261,7 @@ function createStockArray() {
 			}
 
 		});
- 		if(stockObject["productId"] == 0 || stockObject["credit"] == 0 || stockObject["expireyDate"] == "") {
+ 		if(stockObject["productId"] == 0 || isNaN(stockObject["credit"]) || stockObject["expireyDate"] == "") {
 			$("#validationMessage").html("<strong>* Please fill out the required fields</strong>");
 			stockArray = [];
 			return false;
@@ -338,6 +350,7 @@ function saveStockData() {
 	            'stockDetailsDTOs': stockListArray
 	        };
 	console.log(formData)
+	$(window).scrollTop(0);
 	event.preventDefault();
 	$.ajax({
 		contentType : "application/json",
@@ -353,13 +366,13 @@ function saveStockData() {
 		success : function(data) {
 		   var response = JSON.parse(data);
 		   $("#loading").hide();
-		   $(window).scrollTop(0);
 		   $("#serverResponseMessage").show();
 		   $("#serverResponseMessage").html(response.msg);
 		   
-			   if(response.status == "SUCCESS"){					   
-			   window.location.replace("/opensrp-dashboard/inventoryam/stock-list/"+branchId+".html");
-			   
+			   if(response.status == "SUCCESS"){
+	            	setTimeout(function(){
+	            		window.location.replace("/opensrp-dashboard/inventoryam/stock-list/"+branchId+".html");
+		                 }, 1000);			   	   
 		   }
 		   
 		},

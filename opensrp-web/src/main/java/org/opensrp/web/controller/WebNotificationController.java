@@ -10,6 +10,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.opensrp.common.dto.WebNotificationCommonDTO;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.common.util.WebNotificationType;
 import org.opensrp.core.entity.Branch;
@@ -116,6 +117,15 @@ public class WebNotificationController {
 		model.addAttribute("webNotification", webNotification);
 		model.addAttribute("divisions", webNotificationService.getLocationByTagId(divisionTagId));
 		return "webNotification/edit";
+	}
+	
+	@RequestMapping(value = "/details/{id}.html", method = RequestMethod.GET)
+	public String viewDetails(HttpServletRequest request, HttpSession session, Model model, Locale locale, @PathVariable("id") long id) {
+		model.addAttribute("locale", locale);
+		List<WebNotificationCommonDTO> webNotification = webNotificationService.getWebNotificationDetailsById(id);
+
+		model.addAttribute("notificationDetails", webNotification.get(0));
+		return "webNotification/notificationDetails";
 	}
 	
 }

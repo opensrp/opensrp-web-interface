@@ -147,7 +147,11 @@
 <script src="<c:url value='/resources/js/jquery.simple-dtpicker.js' />"></script>
 
 <script>
-
+jQuery(document).ready(function() {       
+	 Metronic.init(); // init metronic core components
+		Layout.init(); // init current layout
+  
+});
 var rolesArray = [];
 '<c:forEach items="${webNotification.getWebNotificationRoles()}" var="itm">'
 	rolesArray.push("${itm.getRole()}"); 

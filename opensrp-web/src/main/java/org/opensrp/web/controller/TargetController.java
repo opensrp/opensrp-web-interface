@@ -3,6 +3,7 @@
  */
 package org.opensrp.web.controller;
 
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +12,9 @@ import javax.servlet.http.HttpSession;
 import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Role;
+import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.TargetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,22 +37,27 @@ public class TargetController {
 	@Autowired
 	SearchBuilder searchBuilder;
 	
+	@Autowired
+	private BranchService branchService;
+	
 	@Value("#{opensrp['division.tag.id']}")
 	private int divisionTagId;
 	
 	@RequestMapping(value = "/target-by-individual.html", method = RequestMethod.GET)
 	public String targetByIndividual(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
-		
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+        model.addAttribute("branches", branches);
 		return "targets/sk-pa-list-for-individual-target";
 	}
 	
 	@RequestMapping(value = "/target-by-position-list.html", method = RequestMethod.GET)
 	public String targetByPosition(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
-		
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+        model.addAttribute("branches", branches);
 		return "targets/target-by-position-list";
 	}
 	
@@ -112,6 +120,8 @@ public class TargetController {
 	public String targetByPopulation(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+        model.addAttribute("branches", branches);
 		return "targets/target-by-population-list";
 	}
 	
