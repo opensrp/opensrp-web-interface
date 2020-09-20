@@ -82,6 +82,12 @@ License: You must have a valid license purchased only from themeforest(the above
 	boolean MEMBER_APPROVAL = AuthenticationManagerUtil.isPermitted("MEMBER_APPROVAL");
 	boolean PERM_READ_BRANCH_LIST = AuthenticationManagerUtil.isPermitted("PERM_READ_BRANCH_LIST");
 	boolean PERM_SK_LIST = AuthenticationManagerUtil.isPermitted("PERM_SK_LIST");
+	boolean PERM_READ_INVENTORY = AuthenticationManagerUtil.isPermitted("PERM_READ_INVENTORY");
+	boolean PERM_READ_WRITE_INVENTORY_AM = AuthenticationManagerUtil.isPermitted("PERM_READ_WRITE_INVENTORY_AM");
+	boolean PERM_READ_WRITE_INVENTORY_DM = AuthenticationManagerUtil.isPermitted("PERM_READ_WRITE_INVENTORY_DM");
+	boolean PERM_READ_WRITE_TRAINING = AuthenticationManagerUtil.isPermitted("PERM_READ_WRITE_TRAINING");
+	boolean PERM_READ_WRITE_TARGET = AuthenticationManagerUtil.isPermitted("PERM_READ_WRITE_TARGET");
+	boolean PERM_READ_WRITE_WEBNOTIFICATION = AuthenticationManagerUtil.isPermitted("PERM_READ_WRITE_WEBNOTIFICATION");
 	
    %>
   
@@ -232,13 +238,13 @@ License: You must have a valid license purchased only from themeforest(the above
 					</ul>
 				</li>
 				
-					<% if(PERM_READ_AGGREGATED_REPORT){ %>
+					<% if(PERM_READ_WRITE_TARGET){ %>
 					<li><a href="javascript:;"> <i class="fa fa-bullseye"></i> <span
 							class="title"> Set Target</span> <span class="arrow "></span>
 					</a>
 						<ul class="sub-menu">
 							<%
-								if (PERM_READ_AGGREGATED_REPORT) {
+								if (PERM_READ_WRITE_TARGET) {
 							%>
 							
 							<li><a href="<c:url value="/target/target-by-individual.html"/>">
@@ -258,13 +264,13 @@ License: You must have a valid license purchased only from themeforest(the above
 						}
 					%>
 				
-				<% if(PERM_READ_AGGREGATED_REPORT){ %>
+				<% if(PERM_READ_INVENTORY){ %>
 					<li><a href="javascript:;"> <i class="fa fa-cube"></i> <span
 							class="title"> Inventory</span> <span class="arrow "></span>
 					</a>
 						<ul class="sub-menu">
 							<%
-								if (PERM_READ_AGGREGATED_REPORT) {
+								if (PERM_READ_WRITE_INVENTORY_AM) {
 							%>
 							<li><a href="<c:url value="/inventoryam/myinventory.html?lang=${locale}"/>">
 									<spring:message code="lbl.myInventoryAm" />
@@ -284,6 +290,15 @@ License: You must have a valid license purchased only from themeforest(the above
 							<li><a href="<c:url value="/inventoryam/stock-report.html?lang=${locale}"/>">
 									<spring:message code="lbl.stockReport" />
 							</a></li>
+							
+							<%
+							
+								}
+							%>
+							
+							<%
+								if (PERM_READ_WRITE_INVENTORY_DM) {
+							%>
 							<li><a href="<c:url value="/inventorydm/products-list.html?lang=${locale}"/>">
 									<spring:message code="lbl.productListDm" />
 							</a></li>
@@ -299,13 +314,23 @@ License: You must have a valid license purchased only from themeforest(the above
 							<%
 								}
 							%>
+							<%
+								if (PERM_READ_WRITE_INVENTORY_DM || PERM_READ_WRITE_INVENTORY_AM) {
+							%>
+							<li><a href="<c:url value="/inventory/adjust-history-list.html?lang=${locale}"/>">
+									<spring:message code="lbl.adjustHistory" />
+							</a></li>
+							<%
+							
+								}
+							%>
 						</ul></li>
 					<%
 						}
 					%>
 
 					<%
-						if (PERM_READ_AGGREGATED_REPORT) {
+						if (PERM_READ_WRITE_TRAINING) {
 					%>
 					<li><a href="<c:url value="/training/training-list.html?lang=${locale}"/>"><i
 							class="fa fa-tasks" aria-hidden="true"></i> <span class="title">
@@ -409,7 +434,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				</li>
 				<% }%>
 				
-				<% if(PERM_READ_AGGREGATED_REPORT){ %>
+				<% if(PERM_READ_WRITE_WEBNOTIFICATION){ %>
 					<li><a href="<c:url value="/web-notification/list.html?lang=${locale}"/>"><i
 							class="fa fa-bell" aria-hidden="true"></i> <span class="title">
 								Web Notification

@@ -259,5 +259,14 @@ public class InventoryAmController {
 		model.addAttribute("locale", locale);
 		return "inventoryAm/user-wise-stock-pass-sell";
 	}
+		
+	@RequestMapping(value = "inventory/adjust-history-list.html", method = RequestMethod.GET)
+	public String adjustHistoryList(Model model, Locale locale) {
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		model.addAttribute("branches", branches);
+		model.addAttribute("locale", locale);
+		return "inventoryAm/adjust-history-list";
+	}
 	
 }
