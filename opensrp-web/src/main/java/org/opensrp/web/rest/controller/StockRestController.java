@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.util.UserColumn;
+import org.opensrp.core.dto.StockAdjustDTO;
 import org.opensrp.core.dto.StockDTO;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
@@ -57,6 +58,31 @@ public class StockRestController {
 		catch (Exception e) {
 			e.printStackTrace();
 			
+			response.put("msg", e.getMessage());
+			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
+		}
+		
+	}
+	
+	@RequestMapping(value = "/stock-adjust-save-update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> saveAdjustStockDetails(@RequestBody StockAdjustDTO dto) throws Exception {
+		
+		JSONObject response = new JSONObject();
+		try {
+			
+			Integer isSave = stockService.saveAdjustDetails(dto);
+			if (isSave != null) {
+				response.put("status", "SUCCESS");
+				response.put("msg", "you have created successfully");
+			} else {
+				response.put("status", "FAILED");
+				response.put("msg", "Something went worng please contact with admin.");
+			}
+			
+			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
+		}
+		catch (Exception e) {
+			e.printStackTrace();	
 			response.put("msg", e.getMessage());
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
 		}

@@ -154,8 +154,10 @@ $("#addProduct").submit(function(event) {
 		success : function(data) {
 			debugger;
 		   var response = JSON.parse(data);
-		   $("#serverResponseMessage").html(response.msg);
 		   $("#loading").hide();
+		   $("#serverResponseMessage").show();
+		   $("#serverResponseMessage").html(response.msg);
+
 		   if(response.status == "SUCCESS"){
            	setTimeout(function(){
            			window.location.replace("/opensrp-dashboard/inventorydm/products-list.html");

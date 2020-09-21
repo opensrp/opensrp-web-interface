@@ -26,9 +26,11 @@ import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.util.ReferenceType;
 import org.opensrp.common.util.Status;
 import org.opensrp.core.dto.ProductDTO;
+import org.opensrp.core.dto.StockAdjustDTO;
 import org.opensrp.core.dto.StockDTO;
 import org.opensrp.core.dto.StockDetailsDTO;
 import org.opensrp.core.entity.Stock;
+import org.opensrp.core.entity.StockAdjust;
 import org.opensrp.core.entity.StockDetails;
 import org.opensrp.core.entity.User;
 import org.springframework.security.core.Authentication;
@@ -101,6 +103,34 @@ public class StockService extends CommonService {
 		}
 		
 		returnValue = 1;
+		
+		return returnValue;
+	}
+	
+	@Transactional
+	public <T> Integer saveAdjustDetails(StockAdjustDTO dto) throws Exception {
+		Session session = getSessionFactory();
+		
+		Integer returnValue = null;
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = (User) auth.getPrincipal();
+		StockAdjust stock = findById(dto.getId(), "id", StockAdjust.class);
+			if (stock == null) {
+				stock = new StockAdjust();
+			}
+			stock.setProductId(dto.getProductId());
+			stock.setMonth(dto.getMonth());
+			stock.setYear(dto.getYear());
+			stock.setBranchId(dto.getBranchId());
+			stock.setAdjustDate(dto.getAdjustDate());
+			stock.setCurrentStock(dto.getCurrentStock());
+			stock.setChangedStock(dto.getChangedStock());
+			stock.setAdjustReason(dto.getAdjustReason());
+			stock.setCreator(user.getId());
+			session.saveOrUpdate(stock);
+
+			returnValue = 1;
 		
 		return returnValue;
 	}

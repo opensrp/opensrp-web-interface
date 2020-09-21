@@ -86,6 +86,14 @@
 
 								</div>
 								<div class="modal-body">
+									<div id="loading" style="display: none; position: absolute; z-index: 1000; margin-left: 35%">
+										<img width="50px" height="50px"
+											src="<c:url value="/resources/images/ajax-loading.gif"/>">
+									</div>
+									<div>
+									<div style="display: none;" class="alert alert-success" id="serverResponseMessage" role="alert"></div>
+								</div>
+								<form id = "adjustStock">
 									<div class="form-group row">
 										<label for="trainingId" class="col-sm-4 col-form-label">Product Name :</label>
 										<div class="col-sm-6">
@@ -101,7 +109,7 @@
 									<div class="form-group row">
 										<label for="trainingStartDate" class="col-sm-4 col-form-label"><spring:message code="lbl.date"></spring:message> :</label>
 										<div class="col-sm-6">
-											<input type="date" class="form-control" id="date" name = "date" required>
+											<input type="date" class="form-control" id="date" name = "date" required readonly>
 										</div>
 									</div>
 									<div class="form-group row">
@@ -111,14 +119,14 @@
 										</div>
 									</div>
 									<div class="form-group row">
-										<label for="trainingId" class="col-sm-4 col-form-label">Changed Stock :</label>
+										<label for="trainingId" class="col-sm-4 col-form-label">Changed Stock<span class="text-danger"> *</span> :</label>
 										<div class="col-sm-6">
-											<input type="number" min="1" oninput="this.value = Math.abs(this.value)"  class="form-control" id="changedStock" name ="changedStock" >
+											<input type="number" min="1" oninput="this.value = Math.abs(this.value)"  class="form-control" id="changedStock" name ="changedStock" required>
 											<span class="text-danger" id="numberValidation"></span>
 										</div>
 									</div>
 									<div class="form-group row">
-										<label for="diference" class="col-sm-4 col-form-label">Difference<span class="text-danger"> *</span> :</label>
+										<label for="diference" class="col-sm-4 col-form-label">Difference :</label>
 										<div class="col-sm-6">
 											<input type="text" class="form-control" id="diference" name ="diference" readonly>
 										</div>
@@ -128,17 +136,25 @@
 										<div class="col-sm-6">
 											<select id="reason" class="form-control" name="reason" required >
 												<option value=""><spring:message code="lbl.pleaseSelect" /></option>
-												<option value="">Date Expired</option>
-												<option value="">Order By Mistake</option>
+												<option value="Date Expired">Date Expired</option>
+												<option value="Product Damaged">Product Damaged</option>
+												<option value="Lost">Lost</option>
+												<option value="Others">Others</option>
 											</select>
+										</div>
+									</div>
+									<div class="form-group row" id="othersDiv" style="display:none;">
+										<label for="others" class="col-sm-4 col-form-label">Please Specify<span class="text-danger"> *</span> :</label>
+										<div class="col-sm-6">
+											<input type="text" class="form-control" id="others" name ="others">
+											<span id="othervalidation" class="text-danger"></span>
 										</div>
 									</div>
 									<br>
 										<div class="text-right">
-											
-											<button type="button" onclick="sellManyTOSSSubmit()" class="btn btn-primary"
-												value="confirm">Confirm</button>
+											<button type="submit" onclick="return Validate()" class="btn btn-primary">Confirm</button>
 										</div>
+										</form>
 									</div>
 							<div class="footer text-right">
 							<a href="#close-modal" class="btn btn-default" rel="modal:close" class="close-modal ">Close</a>
@@ -157,12 +173,15 @@
 
 <script>
 jQuery(document).ready(function() {       
-	 Metronic.init(); // init metronic core components
+	 	Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
-   //TableAdvanced.init();
+   		//TableAdvanced.init();
+		//var todayDate = new Date(), y = todayDate.getFullYear(), m = todayDate.getMonth();
+		var todayDate = $.datepicker.formatDate('yy-mm-dd', new Date());
 		$('#productStockListOfAm').DataTable({
 			  "pageLength": 25
 		});
+		$('#date').val(todayDate);
 });
 
 $('.modal-body').delegate('#changedStock', 'input propertychange', function (event) {
@@ -184,8 +203,8 @@ function openAdjustStockModal(id,currentStock,productName) {
 	$("#productName").val(productName);
 	$("#productId").val(id);
 	$("#currentStock").val(currentStock);
-
-
+	$("#changedStock").val('');
+	$('#diference').val('');
 	$('#adjustStockModal').modal({
         escapeClose: false,
         clickClose: false,
@@ -196,6 +215,90 @@ function openAdjustStockModal(id,currentStock,productName) {
 }
 
 
+$("#reason").change(function (event) {
+	let reasonValue = $('#reason').val();
+	if(reasonValue == "Others") {
+		$('#othersDiv').show();
+	}
+	else {
+		$('#othersDiv').hide();
+	}
+
+});
+
+
+$("#adjustStock").submit(function(event) { 
+	debugger;
+	$("#loading").show();
+	var url = "/opensrp-dashboard/rest/api/v1/stock/stock-adjust-save-update";			
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	var todayDate = new Date();
+	let reasonValue = "";
+	if($('#reason').val() == "Others") {
+		reasonValue = $('#others').val();
+	}
+	else {
+		reasonValue = $('#reason').val();
+	}
+	var formData;
+	
+		formData = {
+	            'productId': +$('input[name=productId]').val(),
+	            'branchId': parseInt('${id}'),
+	            'id': 0,
+	            'adjustDate': $('input[name=date]').val(),
+	            'currentStock': +$('input[name=currentStock]').val(),
+	            'changedStock': +$('input[name=changedStock]').val(),
+	            'adjustReason': reasonValue,
+	            'month': todayDate.getMonth()+1,
+	            'year': todayDate.getFullYear()
+	        };
+	console.log(formData)
+	event.preventDefault();
+	$.ajax({
+		contentType : "application/json",
+		type: "POST",
+        url: url,
+        data: JSON.stringify(formData), 
+        dataType : 'json',
+        
+		timeout : 100000,
+		beforeSend: function(xhr) {				    
+			 xhr.setRequestHeader(header, token);
+		},
+		success : function(data) {
+			debugger;
+		   var response = JSON.parse(data);
+		   $("#loading").hide();
+		   $("#serverResponseMessage").show();
+		   $("#serverResponseMessage").html(response.msg);
+
+		   if(response.status == "SUCCESS"){
+           	setTimeout(function(){
+           			window.location.replace("/opensrp-dashboard/inventoryam/myinventory-list/${id}.html?lang=en");
+                }, 1000);
+		   }
+		},
+		error : function(e) {
+		   
+		},
+		done : function(e) {				    
+		    console.log("DONE");				    
+		}
+	});
+});	
+
+function Validate() {
+	if($('#reason').val() == "Others") {
+		var reasonValue = $('#others').val();
+		if(reasonValue == "") {
+		   	 $("#othervalidation").html("<strong>Please fill out this field</strong>");
+		     return false;
+		}
+	}
+	$("#othervalidation").html("");
+}
 
 </script>
 
