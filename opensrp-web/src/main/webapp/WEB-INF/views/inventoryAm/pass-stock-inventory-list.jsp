@@ -195,7 +195,8 @@ function filter(){
 function navigateToPassStock(skId) {
 	var locale = "${locale}";
 	var branchId= ${branchInfo[0][0]};
-	window.location.replace("/opensrp-dashboard/inventoryam/individual-stock/"+branchId+"/"+skId+".html?lang="+locale);
+	//window.location.replace("/opensrp-dashboard/inventoryam/individual-stock/"+branchId+"/"+skId+".html?lang="+locale);
+	window.location.assign("/opensrp-dashboard/inventoryam/individual-stock/"+branchId+"/"+skId+".html?lang="+locale);
 }
 </script>
 

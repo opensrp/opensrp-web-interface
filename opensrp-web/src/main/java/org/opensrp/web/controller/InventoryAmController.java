@@ -7,6 +7,7 @@ import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.dto.RequisitionQueryDto;
 import org.opensrp.common.util.Roles;
 import org.opensrp.core.dto.ProductDTO;
+import org.opensrp.core.dto.StockAdjustDTO;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
@@ -263,10 +264,24 @@ public class InventoryAmController {
 	@RequestMapping(value = "inventory/adjust-history-list.html", method = RequestMethod.GET)
 	public String adjustHistoryList(Model model, Locale locale) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		for (Role role : loggedInUser.getRoles()) {
+			if(role.getId() == Roles.DIV_M.getId()) {
+				model.addAttribute("isShowBranch", true);
+			}
+		}		
+		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		return "inventoryAm/adjust-history-list";
+	}
+	
+	@RequestMapping(value = "inventory/adjust-history/{id}.html", method = RequestMethod.GET)
+	public String adjustHistoryDetailsById(Model model, Locale locale,@PathVariable("id") int id) {
+
+		List<StockAdjustDTO> stockAdjustList = stockService.getAdjustHistoryList(id, 0,"","", 0, 10);
+		model.addAttribute("stockAdjustObj", stockAdjustList.get(0));
+		model.addAttribute("locale", locale);
+		return "inventoryAm/adjust-history-details";
 	}
 	
 }

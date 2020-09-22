@@ -60,7 +60,7 @@
 										<td>${ product.id }</td>
 										<td>${ product.name }</td>
 										<td>${ product.stock }</td>
-										<td><a class="btn btn-primary col-sm-5 form-group sm" href="javascript:;" onclick="openAdjustStockModal(${ product.id },${ product.stock },'${ product.name }')">Adjust Stock</a></td>
+										<td><div class="col-sm-12 form-group"><a class="text-primary" href="javascript:;" onclick="openAdjustStockModal(${ product.id },${ product.stock },'${ product.name }')"><strong>Adjust Stock</strong></a></div></td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -119,14 +119,14 @@
 										</div>
 									</div>
 									<div class="form-group row">
-										<label for="trainingId" class="col-sm-4 col-form-label">Changed Stock<span class="text-danger"> *</span> :</label>
+										<label for="trainingId" class="col-sm-4 col-form-label">Adjustment<span class="text-danger"> *</span> :</label>
 										<div class="col-sm-6">
 											<input type="number" min="1" oninput="this.value = Math.abs(this.value)"  class="form-control" id="changedStock" name ="changedStock" required>
 											<span class="text-danger" id="numberValidation"></span>
 										</div>
 									</div>
 									<div class="form-group row">
-										<label for="diference" class="col-sm-4 col-form-label">Difference :</label>
+										<label for="diference" class="col-sm-4 col-form-label">Stock after Adjustment :</label>
 										<div class="col-sm-6">
 											<input type="text" class="form-control" id="diference" name ="diference" readonly>
 										</div>

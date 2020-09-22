@@ -119,13 +119,13 @@ public class RequisitionService extends CommonService {
 			requisition.put(dto.getRequisition_id());
 			requisition.put(dto.getBranch_name() + "(" + dto.getBranch_code() + ")");
 			requisition.put(dto.getFirst_name() + dto.getLast_name());
-			String view = "<div class='col-sm-12 form-group'><a id=\"viewDetails\" class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"javascript:;\" onclick='navigateTodetails("
+			String view = "<div class='col-sm-6 form-group'><a class='text-primary' id=\"viewDetails\" class=\" col-sm-12 form-group sm\" href=\"javascript:;\" onclick='navigateTodetails("
 			        + dto.getId()
 			        + ",\""
 			        + dto.getBranch_name()
 			        + "\",\""
 			        + dto.getBranch_code()
-			        + "\")'>View details</a> </div>";
+			        + "\")'><strong>View details</strong></a> </div>";
 			requisition.put(view);
 			array.put(requisition);
 		}

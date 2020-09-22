@@ -139,21 +139,21 @@ public class WebNotificationService extends CommonService {
 				String date = dto.getSendDate() + " " + dto.getSendTimeHour() + ":" + dto.getSendTimeMinute();
 				if (DateUtil.getTimestamp(date) > System.currentTimeMillis()) {
 					
-					view = "<div class='col-sm-12 form-group'><a \" href=\"details/" + dto.getId() + ".html\">Details</a> "
-					        + " | <a \" href=\"edit/" + dto.getId() + ".html\">Edit</a> " + "</div>";
+					view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId() + ".html\">Details</a> "
+					        + " | <a class='text-primary' \" href=\"edit/" + dto.getId() + ".html\">Edit</a> " + "</div>";
 					
 				} else {
 					
-					view = "<div class='col-sm-12 form-group'><a \" href=\"details/" + dto.getId()
+					view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId()
 					        + ".html\">Details</a> </div>";
 				}
 			} else if (dto.getType().equalsIgnoreCase(WebNotificationType.DRAFT.name())) {
 				patient.put(dto.getCreatedTime());
-				view = "<div class='col-sm-12 form-group'><a \" href=\"details/" + dto.getId() + ".html\">Details</a> "
-				        + " | <a \" href=\"edit/" + dto.getId() + ".html\">Edit</a> " + "</div>";
+				view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId() + ".html\">Details</a> "
+				        + " | <a class='text-primary' \" href=\"edit/" + dto.getId() + ".html\">Edit</a> " + "</div>";
 			} else {
 				patient.put(dto.getCreatedTime());
-				view = "<div class='col-sm-12 form-group'><a \" href=\"details/" + dto.getId()
+				view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId()
 				        + ".html\">Details</a> </div>";
 			}
 			

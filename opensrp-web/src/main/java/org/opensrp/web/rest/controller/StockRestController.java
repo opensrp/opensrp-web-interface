@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.InventoryDTO;
+import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.UserColumn;
 import org.opensrp.core.dto.StockAdjustDTO;
 import org.opensrp.core.dto.StockDTO;
@@ -136,7 +137,9 @@ public class StockRestController {
 			name = "%" + name + "%";
 		}
 		int roleId = Integer.parseInt(request.getParameter("roleId"));
-		
+		if(roleId == 0 && StringUtils.isBlank(name)) {
+			roleId = Roles.SK.getId();
+		}
 		List<InventoryDTO> stockPassUserList = stockService.getPassStockUserList(branchId, name, roleId, length, start,
 		    orderColumn, orderDirection);
 		
@@ -213,6 +216,29 @@ public class StockRestController {
 		
 		JSONObject response = stockService.getStockPassorSellToSSListDataOfDataTable(draw, stockPassUserListCount,
 		    stockPassUserList);
+		return new ResponseEntity<>(response.toString(), OK);
+	}
+	
+	
+	@RequestMapping(value = "/stock-adjust-history-list", method = RequestMethod.GET)
+	public ResponseEntity<String> getStockAdjustHistoryList(HttpServletRequest request) throws JSONException {
+		Integer start = Integer.valueOf(request.getParameter("start"));
+		Integer length = Integer.valueOf(request.getParameter("length"));
+		//String name = request.getParameter("search[value]");
+		Integer draw = Integer.valueOf(request.getParameter("draw"));
+		String orderColumn = request.getParameter("order[0][column]");
+		String orderDirection = request.getParameter("order[0][dir]");
+		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+		String search = request.getParameter("search");
+		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		
+		List<StockAdjustDTO> stockAdjustList = stockService.getAdjustHistoryList(0, branchId, startDate, endDate, start, length);
+		
+		int stockAdjustListCount = stockService.getAdjustStockListCount(branchId, startDate, endDate);
+		
+		JSONObject response = stockService.getAdjustStockListDataOfDataTable(draw, stockAdjustListCount, stockAdjustList);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 }

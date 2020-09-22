@@ -227,13 +227,13 @@ public class StockService extends CommonService {
 			patient.put(dto.getStockInId());
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
 			patient.put("" + dto.getFullName());
-			String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"javascript:;\" onclick='navigateTodetails("
+			String view = "<div class='col-sm-12 form-group'><a class=\"text-primary\" href=\"javascript:;\" onclick='navigateTodetails("
 			        + dto.getId()
 			        + ",\""
 			        + dto.getBranchName()
 			        + "\",\""
 			        + dto.getBranchCode()
-			        + "\")'>View details</a> </div>";
+			        + "\")'><strong>View details</strong></a> </div>";
 			patient.put(view);
 			array.put(patient);
 		}
@@ -254,8 +254,8 @@ public class StockService extends CommonService {
 			patient.put(dto.getRoleName());
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
 			
-			String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"javascript:;\" onclick='navigateToPassStock("
-			        + dto.getId() + ")'>Pass stock</a> </div>";
+			String view = "<div class='col-sm-12 form-group'><a class=\"text-primary\" href=\"javascript:;\" onclick='navigateToPassStock("
+			        + dto.getId() + ")'><strong>Pass stock</strong></a> </div>";
 			/*String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"view/"
 			        + dto.getId() + "/details.html\">Pass stock</a> </div>";
 			*/
@@ -562,6 +562,69 @@ public class StockService extends CommonService {
 		result = query.list();
 		
 		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<StockAdjustDTO> getAdjustHistoryList(long adjustId,int branchId,String fromDate,String toDate,Integer start, Integer length) {
+		
+		Session session = getSessionFactory();
+		List<StockAdjustDTO> dtos = new ArrayList<>();
+		
+		String hql = "select id,product_name productName,branch_name branchName,product_id productId,current_stock currentStock,changed_stock changedStock,adjust_date adjustDate,adjust_reason adjustReason from core.stock_adjust_list(:adjustId,:branchId,:fromDate,:toDate,:start,:length)";
+		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
+		        .addScalar("productName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+		        .addScalar("productId", StandardBasicTypes.LONG).addScalar("currentStock", StandardBasicTypes.INTEGER)
+		        .addScalar("changedStock", StandardBasicTypes.INTEGER).addScalar("adjustDate", StandardBasicTypes.DATE)
+		        .addScalar("adjustReason", StandardBasicTypes.STRING).setLong("adjustId", adjustId).setInteger("branchId", branchId)
+		        .setString("fromDate", fromDate).setString("toDate", toDate).setInteger("start", start).setInteger("length", length)
+		        .setResultTransformer(new AliasToBeanResultTransformer(StockAdjustDTO.class));
+		dtos = query.list();
+		
+		return dtos;
+	}
+	
+	@Transactional
+	public int getAdjustStockListCount(int branchId,String fromDate,String toDate) {
+		
+		Session session = getSessionFactory();
+		BigInteger total = null;
+		
+		String hql = "select *  from core.stock_adjust_list_count(:branchId,:fromDate,:toDate)";
+		Query query = session.createSQLQuery(hql).setInteger("branchId", branchId).setString("fromDate", fromDate)
+		        .setString("toDate", toDate);
+		total = (BigInteger) query.uniqueResult();
+		
+		return total.intValue();
+	}
+	
+	
+	public JSONObject getAdjustStockListDataOfDataTable(Integer draw, int adjustStockCount, List<StockAdjustDTO> dtos) throws JSONException {
+		JSONObject response = new JSONObject();
+		response.put("draw", draw + 1);
+		response.put("recordsTotal", adjustStockCount);
+		response.put("recordsFiltered", adjustStockCount);
+		JSONArray array = new JSONArray();
+		for (StockAdjustDTO dto : dtos) {
+			JSONArray stockAdjust = new JSONArray();
+			stockAdjust.put(dto.getAdjustDate());
+			stockAdjust.put(dto.getProductName());
+			stockAdjust.put(dto.getProductId());
+			stockAdjust.put(dto.getBranchName());
+			stockAdjust.put(dto.getCurrentStock());
+			stockAdjust.put(dto.getChangedStock());
+			stockAdjust.put(dto.getCurrentStock()- dto.getChangedStock());
+			stockAdjust.put(dto.getAdjustReason());
+			
+			
+			String view = "<div class='col-sm-12 form-group'><a class='text-primary'  href=\"/opensrp-dashboard/inventory/adjust-history/" + dto.getId()
+			        + ".html\"><strong>View details </strong></a> </div>";
+			stockAdjust.put(view);
+			
+			array.put(stockAdjust);
+		}
+		response.put("data", array);
+		return response;
 	}
 	
 }

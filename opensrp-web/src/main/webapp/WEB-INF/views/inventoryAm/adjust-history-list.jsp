@@ -34,48 +34,51 @@
 					<div class="row">
 					<div class="col-lg-3 form-group">
 								    <label for="from"><spring:message code="lbl.from"></spring:message><span class="text-danger">*</span> :</label>
-									<input type="date" class="form-control" id="from">
+									<input type="date" onkeydown="return false" class="form-control" id="startDate">
 									<span class="text-danger" id="startDateValidation"></span>
 								</div> 
 								<div class="col-lg-3 form-group">
 									<label for="to"><spring:message code="lbl.to"></spring:message><span class="text-danger">*</span> :</label>
-									<input type="date" class="form-control" id="to">
+									<input type="date" onkeydown="return false" class="form-control" id="endDate">
 									<span class="text-danger" id="endDateValidation"></span>
 								</div>
-								<div class="col-lg-3 form-group">
-								<label for="to"><spring:message code="lbl.branch"></spring:message> :</label>
-								<select id=branchSelect class="form-control" name="branchSelect" required>
-									<option value="0"><spring:message
-											code="lbl.pleaseSelect" /></option>
-									<c:forEach items="${branches}" var="branch">
-										<option value="${branch.id}">${branch.name}</option>
-									</c:forEach>
-								</select>
-								<p>
-									<span class="text-danger" id="branchSelectionValidation"></span>
-								</p>
-							</div>
+								
+								<c:if test="${isShowBranch}">
+									<div class="col-lg-3 form-group">
+									<label for="to"><spring:message code="lbl.branch"></spring:message> :</label>
+									<select id=branchSelect class="form-control" name="branchSelect" required>
+										<option value="0"><spring:message
+												code="lbl.pleaseSelect" /></option>
+										<c:forEach items="${branches}" var="branch">
+											<option value="${branch.id}">${branch.name}</option>
+										</c:forEach>
+									</select>
+									<p>
+										<span class="text-danger" id="branchSelectionValidation"></span>
+									</p>
+								</div>
+								</c:if>
+							
+								<div class="col-lg-12 form-group text-right">
+									<button type="button" onclick="filter()"  class="btn btn-primary">Search</button>
+								</div>
+
 					</div>
 					
 						<table class="table table-striped table-bordered" id="adjustHistoryList">
 							<thead>
 								<tr>
-									<th><spring:message code="lbl.serialNo"></spring:message></th>
+									<th><spring:message code="lbl.date"></spring:message></th>
 									<th><spring:message code="lbl.productName"></spring:message></th>
-									<th><spring:message code="lbl.currentStock"></spring:message></th>
+									<th>Product ID</th>
+									<th>Branch</th>
+									<th>Previous Stock</th>
+									<th>Adjustment</th>
+									<th>After Adjustment</th>
+									<th>Reason</th>
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
 								</tr>
 							</thead>
-							<tbody>
-								<c:forEach var="product" items="${ productList }">
-									<tr>
-										<td>${ product.id }</td>
-										<td>${ product.name }</td>
-										<td>${ product.stock }</td>
-										<td><a class="btn btn-primary col-sm-5 form-group sm" href="javascript:;" onclick="openAdjustStockModal(${ product.id },${ product.stock },'${ product.name }')">Adjust Stock</a></td>
-									</tr>
-								</c:forEach>
-							</tbody>
 				</table>
 					</div>
 					</div>
@@ -89,12 +92,58 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script>
+let stockAdjustList;
+
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
-   //TableAdvanced.init();
-		$('#adjustHistoryList').DataTable();
 		$('#branchSelect').select2({dropdownAutoWidth : true});
+		//var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+		//var startDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
+		//var endDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));
+		stockAdjustList = $('#adjustHistoryList').DataTable({
+		       bFilter: false,
+		       serverSide: true,
+		       processing: true,
+		       columnDefs: [
+		           { targets: [0,1,2,3,4,5,6,7], orderable: false },
+	               { width: "15%", targets: 0 },
+	               { width: "10%", targets: 1 },
+	               { width: "10%", targets: 2 },
+	               { width: "15%", targets: 3 },
+	               { width: "5%", targets: 4 },
+	               { width: "5%", targets: 5 },
+	               { width: "10%", targets: 6 },
+	               { width: "15%", targets: 7 },
+	               { width: "15%", targets: 8 }
+		       ],
+		       ajax: {
+		           url: "/opensrp-dashboard/rest/api/v1/stock/stock-adjust-history-list",
+		           data: function(data){
+						data.branchId = 0;
+						data.startDate = '',
+						data.endDate = ''
+						
+		           },
+		           dataSrc: function(json){
+		               if(json.data){
+		                   return json.data;
+		               }
+		               else {
+		                   return [];
+		               }
+		           },
+		           complete: function() {
+		           },
+		           type: 'GET'
+		       },
+		       bInfo: true,
+		       destroy: true,
+		       language: {
+		           searchPlaceholder: ""
+		       }
+		   });
+
 });
 
 
@@ -115,6 +164,70 @@ function openAdjustStockModal(id,currentStock,productName) {
 	});
 }
 
+
+
+function filter(){
+
+var branch = +$('#branchSelect').val();
+var startDate = $('#startDate').val();
+var endDate = $('#endDate').val();
+if(startDate == "") {
+	//startDate = $.datepicker.formatDate('yy-mm-dd', new Date());
+	$("#startDateValidation").html("<strong>Please fill out this field</strong>");
+	return;
+}
+$("#startDateValidation").html("");
+if(endDate == "") {
+	//endDate = $.datepicker.formatDate('yy-mm-dd', new Date());
+	$("#endDateValidation").html("<strong>Please fill out this field</strong>");
+	return;
+}
+$("#endDateValidation").html("");
+
+	stockAdjustList = $('#adjustHistoryList').DataTable({
+    bFilter: false,
+    serverSide: true,
+    processing: true,
+    columnDefs: [
+        { targets: [0,1,2,3,4,5], orderable: false },
+        { width: "15%", targets: 0 },
+        { width: "10%", targets: 1 },
+        { width: "10%", targets: 2 },
+        { width: "15%", targets: 3 },
+        { width: "5%", targets: 4 },
+        { width: "5%", targets: 5 },
+        { width: "10%", targets: 6 },
+        { width: "15%", targets: 7 },
+        { width: "15%", targets: 8 }
+    ],
+    ajax: {
+    	url: "/opensrp-dashboard/rest/api/v1/stock/stock-adjust-history-list",
+        data: function(data){
+			data.branchId = branch;
+			data.startDate = startDate,
+			data.endDate = endDate
+				
+        },
+        dataSrc: function(json){
+            if(json.data){
+                return json.data;
+            }
+            else {
+                return [];
+            }
+        },
+        complete: function() {
+        },
+        type: 'GET'
+    },
+    bInfo: true,
+    destroy: true,
+    language: {
+        searchPlaceholder: ""
+    }
+});
+		
+}
 
 
 </script>

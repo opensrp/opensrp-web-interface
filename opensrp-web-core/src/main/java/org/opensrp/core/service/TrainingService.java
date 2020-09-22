@@ -174,7 +174,7 @@ public class TrainingService extends CommonService {
 				training.put(dto.getNameOfTrainer());
 				training.put(dto.getLocationName());
 				//String view = "<div class='col-sm-12 form-group'><a \" href=\"view-training/" + dto.getId()+">View Details</a> </div>";
-				String view = "<div class='col-sm-12 form-group'><a class=\"bt btn btn-success col-sm-12 form-group sm\" href=\"view-training/"  + dto.getId()
+				String view = "<div class='col-sm-12 form-group'><a class=\"text-primary\" href=\"view-training/"  + dto.getId()
 				        + ".html\"><strong>View details </strong></a> </div>";
 				training.put(view);
 				array.put(training);

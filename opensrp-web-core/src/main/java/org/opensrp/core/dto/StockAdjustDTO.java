@@ -21,6 +21,10 @@ public class StockAdjustDTO {
 	private int month;
 	
 	private int year;
+	
+	private String productName;
+	
+	private String branchName;
 
 	public Long getId() {
 		return id;
@@ -92,6 +96,22 @@ public class StockAdjustDTO {
 
 	public void setYear(int year) {
 		this.year = year;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public String getBranchName() {
+		return branchName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
 	}
 	
 }

@@ -255,7 +255,7 @@ public class TargetService extends CommonService {
 			patient.put(dto.getUsername());
 			patient.put(dto.getBranch());
 			patient.put(dto.getLocationName());
-			String view = "<div class='col-sm-12 form-group'><a \" href=\"set-individual/" + dto.getBranchId() + "/"
+			String view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"set-individual/" + dto.getBranchId() + "/"
 			        + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
 			        + "\">Set target</a> </div>";
 			patient.put(view);
@@ -279,7 +279,7 @@ public class TargetService extends CommonService {
 			patient.put(dto.getUsername());
 			patient.put(dto.getLocationName());
 			patient.put(dto.getPopulation());
-			String view = "<div class='col-sm-12 form-group'><a \" href=\"set-individual-target-pk/" + dto.getBranchId()
+			String view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"set-individual-target-pk/" + dto.getBranchId()
 			        + "/" + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName() + "&id="
 			        + dto.getUsername() + "&location=" + dto.getLocationName() + "&population=1200"
 			        + "\">Set target</a> </div>";
