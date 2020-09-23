@@ -129,7 +129,9 @@
 									class="btn btn-primary" onclick="proceedToChooseProduct()">Proceed</button>
 							</div>
 							<div class="footer text-right">
-							<a href="#close-modal" class="btn btn-default" rel="modal:close" class="close-modal ">Close</a>
+							<button id="closeselltomany" type="button"
+									class="btn btn-default" onclick="closeModal()">Close</button>
+							<!-- <a href="#" class="btn btn-default" onclick="closeModal()" class="close-modal ">Close</a> -->
 									</div>
 						</div>
 						</div>
@@ -549,12 +551,20 @@
 	}
 
 	function sellToMany() {
+		//$('.checked').removeClass('checked').addClass('');
+        $('#sellToManyModal').modal({
+            escapeClose: false,
+            clickClose: false,
+            closeExisting: false,
+            showClose: false,
+            show: true
+        });
 		$("#validationSelectOne").hide();
 		var d = new Date($("#startYear").datepicker("getDate"));
 		var date = d.getDate();
 		var month = d.getMonth() + 1;
 		var year = d.getFullYear();
-
+		
 		selltoMany = $('#sellToManySSList').DataTable({
 			bFilter : false,
 			serverSide : true,
@@ -585,14 +595,9 @@
 					data.skId = 0;
 				},
 				dataSrc : function(json) {
-					$('.checked').removeClass('checked').addClass('');
-			        $('#sellToManyModal').modal({
-			            escapeClose: false,
-			            clickClose: false,
-			            closeExisting: false,
-			            show: true
-			        });
-			        $(".close-modal").hide();
+					
+
+			       // $(".close-modal").hide();
 					if (json.data) {
 						return json.data;
 					} else {
@@ -609,8 +614,8 @@
 				searchPlaceholder : ""
 			}
 		});
-
-
+	
+		
 	}
 
 $('#sellToManySSList th input:checkbox').click(
@@ -655,35 +660,44 @@ $('#sellToManySSList th input:checkbox').click(
 	            escapeClose: false,
 	            clickClose: false,
 	            closeExisting: false,
+	            showClose: false,
 	            show: true
 			});
-			$(".close-modal").hide();
+			//$(".close-modal").hide();
 		}
 
 	}
 
 	$('.identifier').change(function() {
 		var $row = $(this).closest("tr");
-		var quantity = +$(this).val();
-		if(quantity < 1) {
-			$row.find('span:first').html("<strong>* Quantity Can not be less than 1</strong>");
-			$("#sellButton").hide();
-			return;
+		var va = $(this).val();
+		if($(this).val() !="") {
+			var quantity = +$(this).val();
+			if(quantity < 1) {
+				$row.find('span:first').html("<strong>* Quantity Can not be less than 1</strong>");
+				$("#sellButton").hide();
+				return;
+			}
+			else $row.find('span:first').html("");
+			var productUnitPrice = parseFloat($row.find('td').eq(2).text());
+			var currentStock = parseInt($row.find('td').eq(3).text());
+			if(quantity > currentStock) {
+				$row.find('span:first').html("<strong>* Not available Stock</strong>");
+				return;
+			}
+			else $row.find('span:first').html("");
+			//var totalSelected = parseInt($row.find('td').eq(5).val());
+			var totalSelected = sellToArray.length;
+			var perPersonAmount = quantity * productUnitPrice;
+			var totalAmount = totalSelected * perPersonAmount;
+			$row.find('td').eq(5).text(perPersonAmount);
+			$row.find('td').eq(7).text(totalAmount);
 		}
-		else $row.find('span:first').html("");
-		var productUnitPrice = parseFloat($row.find('td').eq(2).text());
-		var currentStock = parseInt($row.find('td').eq(3).text());
-		if(quantity > currentStock) {
-			$row.find('span:first').html("<strong>* Not available Stock</strong>");
-			return;
+		else {
+			$row.find('span:first').html("");
+			$row.find('td').eq(5).text(0);
+			$row.find('td').eq(7).text(0);
 		}
-		else $row.find('span:first').html("");
-		//var totalSelected = parseInt($row.find('td').eq(5).val());
-		var totalSelected = sellToArray.length;
-		var perPersonAmount = quantity * productUnitPrice;
-		var totalAmount = totalSelected * perPersonAmount;
-		$row.find('td').eq(5).text(perPersonAmount);
-		$row.find('td').eq(7).text(totalAmount);
 	});
 	
 	function goToSellProduct() {
@@ -731,10 +745,11 @@ $('#sellToManySSList th input:checkbox').click(
 		            escapeClose: false,
 		            clickClose: false,
 		            closeExisting: false,
+		            showClose: false,
 		            show: true
 				});
 				//$("#confirmSellModal").modal('show');
-				$(".close-modal").hide();
+				//$(".close-modal").hide();
 			}
 
 		}
@@ -835,6 +850,11 @@ $('#sellToManySSList th input:checkbox').click(
 			}
 		});
 	};
+	
+	
+   function closeModal() {
+	   location.reload();
+   }
 </script>
 
 

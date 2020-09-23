@@ -57,7 +57,11 @@ public class WebNotificationService extends CommonService {
 			webNotification = new WebNotification();
 		} else {
 			boolean isDelete = deleteAllByPrimaryKey(dto.getId(), "web_notification_user", "web_notification_id");
+			boolean isdeleteRole = deleteAllByPrimaryKey(dto.getId(), "web_notification_role", "web_notification_id");
 			if (!isDelete) {
+				return null;
+			}
+			if(!isdeleteRole) {
 				return null;
 			}
 		}

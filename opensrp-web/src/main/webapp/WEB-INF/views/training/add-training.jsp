@@ -334,7 +334,7 @@
 									<th>Action</th>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody id="tbl_posts_body">
 							</tbody>
 						</table>
 						
@@ -565,7 +565,7 @@ $('#addAttendanceList tbody input[type=checkbox]:checked').each(function(index, 
 			jQuery('#rec-' + id).remove();
 
 			//regnerate index number on table
-			$('#trainingList tr').each(function(index) {
+			$('#tbl_posts_body tr').each(function(index) {
 				$(this).find('span.sn').html(index + 1);
 			});
 			return true;

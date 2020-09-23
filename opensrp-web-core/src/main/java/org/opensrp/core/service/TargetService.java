@@ -383,7 +383,8 @@ public class TargetService extends CommonService {
 		        + "       join core.location_tag ltag " + "         ON l.location_tag_id = ltag.id "
 		        + "       join core.union_wise_population wp " + "         ON l.id = wp.union_id " + "WHERE  r.role_id = "
 		        + roleId + " " + "       AND ltag.id = " + locationTagId + " " + "       AND td.\"month\" = " + month + " "
-		        + "       AND td.\"year\" = " + year + " " + "       AND p.status = 'ACTIVE' " + "GROUP  BY td.product_id, "
+		        + "       AND td.\"year\" = " + year + " " + "       AND p.status = 'ACTIVE'   AND td.percentage != '0' "
+		        + " GROUP  BY td.product_id, "
 		        + "          p.\"name\", " + "          td.quantity, " + "          td.percentage;";
 		Query query = session.createSQLQuery(hql).addScalar("percentage", StandardBasicTypes.STRING)
 		        .addScalar("productId", StandardBasicTypes.INTEGER).addScalar("productName", StandardBasicTypes.STRING)
