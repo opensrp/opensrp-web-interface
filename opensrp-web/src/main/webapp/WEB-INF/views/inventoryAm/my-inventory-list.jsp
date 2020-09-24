@@ -228,7 +228,6 @@ $("#reason").change(function (event) {
 
 
 $("#adjustStock").submit(function(event) { 
-	debugger;
 	$("#loading").show();
 	var url = "/opensrp-dashboard/rest/api/v1/stock/stock-adjust-save-update";			
 	var token = $("meta[name='_csrf']").attr("content");
@@ -268,7 +267,6 @@ $("#adjustStock").submit(function(event) {
 			 xhr.setRequestHeader(header, token);
 		},
 		success : function(data) {
-			debugger;
 		   var response = JSON.parse(data);
 		   $("#loading").hide();
 		   $("#serverResponseMessage").show();
@@ -297,7 +295,14 @@ function Validate() {
 		     return false;
 		}
 	}
+	var currentStock = +$("#currentStock").val();
+	var changedStock = +$("#changedStock").val();
+	if(changedStock > currentStock) {
+		$("#numberValidation").html("Changed stock can not be grater than current stock");
+		return false;
+	}
 	$("#othervalidation").html("");
+	$("#numberValidation").html("");
 }
 
 </script>
