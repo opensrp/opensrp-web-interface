@@ -1,8 +1,10 @@
 package org.opensrp.common.dto;
 
-public class ClientDTO {
+public class ClientListDTO {
 	
 	private long id;
+	
+	private String baseEntityId;
 	
 	private String householdHead;
 	
@@ -22,12 +24,34 @@ public class ClientDTO {
 	
 	private String contact;
 	
+	private String memberName;
+	
+	private String memberId;
+	
+	private String relationWithHousehold;
+	
+	private String age;
+	
+	private String dob;
+	
+	private String gender;
+	
+	private String memberType;
+	
 	public long getId() {
 		return id;
 	}
 	
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	public String getBaseEntityId() {
+		return baseEntityId;
+	}
+	
+	public void setBaseEntityId(String baseEntityId) {
+		this.baseEntityId = baseEntityId;
 	}
 	
 	public String getHouseholdHead() {
@@ -105,4 +129,61 @@ public class ClientDTO {
 	public String getBranchAndCode() {
 		return this.branchName + "(" + this.branchCode + ")";
 	}
+	
+	public String getMemberName() {
+		return memberName;
+	}
+	
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+	
+	public String getMemberId() {
+		return memberId;
+	}
+	
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
+	}
+	
+	public String getRelationWithHousehold() {
+		return relationWithHousehold;
+	}
+	
+	public void setRelationWithHousehold(String relationWithHousehold) {
+		this.relationWithHousehold = relationWithHousehold;
+	}
+	
+	public String getAge() {
+		return age;
+	}
+	
+	public void setAge(String age) {
+		this.age = age;
+	}
+	
+	public String getDob() {
+		return dob;
+	}
+	
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+	
+	public String getGender() {
+		return gender;
+	}
+	
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
+	public String getMemberType() {
+		return memberType;
+	}
+	
+	public void setMemberType(String memberType) {
+		this.memberType = memberType;
+	}
+	
 }

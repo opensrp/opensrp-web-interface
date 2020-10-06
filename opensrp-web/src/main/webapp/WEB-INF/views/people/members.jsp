@@ -9,11 +9,11 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Households</title>
+<title>Members</title>
 	
 	
 
-<c:url var="get_url" value="/rest/api/v1/people/household/list" />
+<c:url var="get_url" value="/rest/api/v1/people/member/list" />
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -29,7 +29,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>Households
+							<i class="fa fa-list"></i>Members
 						</div>
 					</div>					
 					<div class="portlet-body">
@@ -39,7 +39,15 @@
 							
 							
 							<div class="row">
-								
+								<div class="col-lg-3 form-group">
+								   
+									<select
+										name="type" class="form-control" id="type">
+										<option value="">Select Type</option>
+										<option value="child">Child</option>
+										<option value="member">Member</option>										
+									</select>
+								</div>
 								<div class="col-lg-3 form-group">
 								    <label for="designation"></label>
 									<input name="search" class="form-control"id="search" placeholder="Search Key"/> 
@@ -58,17 +66,18 @@
 						
 						<div class="table-scrollable">
 						
-						<table class="table table-striped table-bordered " id="householdTable">
+						<table class="table table-striped table-bordered " id="memberTable">
 							<thead>
 								<tr>
-								 <th>HH ID</th>
-									<th>HH head name</th>
-									<th>#Members</th>
-									<th>Registration date</th>
-									<th>Last visit date</th>
+								 	<th>Member name</th>
+									<th>Member ID</th>
+									<th>Household ID</th>
+									<th>Relation with <br/>household head</th>
+									<th>Age</th>
+									<th>Gender</th>
+									<th>Status</th>
 									<th>Village</th>
-									<th>Branch(code)</th>
-									<th>Contact</th>
+									<th>Branch(code)</th>									
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -108,21 +117,22 @@ jQuery(document).ready(function() {
     $(document).ready(function() {
     	
     	
-    	stockList = $('#householdTable').DataTable({
+    	stockList = $('#memberTable').DataTable({
             bFilter: false,
             serverSide: true,
             processing: true,
             columnDefs: [
                 
                 { orderable: false, className: 'reorder', width: "10%", targets: 0 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 1 },
+                { orderable: false, className: 'reorder',width: "10%", targets: 1 },
                 { orderable: false, className: 'reorder', width: "10%", targets: 2 },
-                { width: "10%", targets: 3 },
+                { orderable: false, className: 'reorder',width: "10%", targets: 3 },
                 { width: "10%", targets: 4 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 5},
-                { orderable: false, className: 'reorder', width: "10%", targets: 6},
+                { width: "10%", targets: 5},
+                { orderable: false, className: 'reorder',width: "10%", targets: 6},
                 { orderable: false, className: 'reorder', width: "10%", targets: 7},
-                { orderable: false, className: 'reorder', width: "10%", targets: 8}
+                { orderable: false, className: 'reorder', width: "10%", targets: 8},
+                { orderable: false, className: 'reorder', width: "10%", targets: 9}
                 
             ],
             ajax: {
@@ -130,7 +140,7 @@ jQuery(document).ready(function() {
                 data: function(data){                	
                     data.branchId = 0;
                     data.locationId=0;                    
-                    data.roleName='SK';
+                    data.type='';
                     
                 },
                 dataSrc: function(json){
@@ -165,21 +175,21 @@ function filter(){
 	}else if(division != 0){
 		locationId =division; 
 	}
-	stockList = $('#householdTable').DataTable({
+	stockList = $('#memberTable').DataTable({
          bFilter: false,
          serverSide: true,
          processing: true,
          columnDefs: [
-             
-                { orderable: false, className: 'reorder', width: "10%", targets: 0 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 1 },
+             { orderable: false, className: 'reorder', width: "10%", targets: 0 },
+                { orderable: false, className: 'reorder',width: "10%", targets: 1 },
                 { orderable: false, className: 'reorder', width: "10%", targets: 2 },
-                { width: "10%", targets: 3 },
+                { orderable: false, className: 'reorder',width: "10%", targets: 3 },
                 { width: "10%", targets: 4 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 5},
-                { orderable: false, className: 'reorder', width: "10%", targets: 6},
+                { width: "10%", targets: 5},
+                { orderable: false, className: 'reorder',width: "10%", targets: 6},
                 { orderable: false, className: 'reorder', width: "10%", targets: 7},
-                { orderable: false, className: 'reorder', width: "10%", targets: 8}
+                { orderable: false, className: 'reorder', width: "10%", targets: 8},
+                { orderable: false, className: 'reorder', width: "10%", targets: 9}
          ],
          ajax: {
              url: "${get_url}",
@@ -187,7 +197,9 @@ function filter(){
             	
             	 data.branchId = $("#branchList option:selected").val();
                  data.locationId=locationId;                    
-                 data.roleName=$("#roleList option:selected").val();
+                 data.type= $("#type option:selected").val();
+                 data.search = $("#search").val();
+                 
              },
              dataSrc: function(json){
                  if(json.data){

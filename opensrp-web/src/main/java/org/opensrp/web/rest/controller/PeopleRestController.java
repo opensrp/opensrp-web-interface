@@ -7,8 +7,9 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.common.dto.ClientDetailsDTO;
+import org.opensrp.common.dto.ClientCommonDTO;
 import org.opensrp.common.util.HouseholdColumn;
+import org.opensrp.common.util.MemberColumn;
 import org.opensrp.core.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,15 +35,39 @@ public class PeopleRestController {
 		String orderDirection = request.getParameter("order[0][dir]");
 		orderColumn = HouseholdColumn.valueOf("_" + orderColumn).getValue();
 		
-		String name = request.getParameter("search");
+		String searchKey = request.getParameter("search");
 		int branchId = Integer.parseInt(request.getParameter("branchId"));
-		String roleName = request.getParameter("roleName");
+		
 		String location = request.getParameter("locationId");
 		
-		ClientDetailsDTO households = peopleService.getHouseholdData(location, branchId, length, start, orderColumn,
-		    orderDirection);
+		ClientCommonDTO households = peopleService.getHouseholdData(searchKey, location, branchId, length, start,
+		    orderColumn, orderDirection);
 		
 		JSONObject response = peopleService.drawHouseholdDataTable(draw, 0, households);
+		return new ResponseEntity<>(response.toString(), OK);
+	}
+	
+	@RequestMapping(value = "/member/list", method = RequestMethod.GET)
+	public ResponseEntity<String> memberList(HttpServletRequest request, HttpSession session) throws JSONException {
+		Integer start = Integer.valueOf(request.getParameter("start"));
+		Integer length = Integer.valueOf(request.getParameter("length"));
+		//String name = request.getParameter("search[value]");
+		Integer draw = Integer.valueOf(request.getParameter("draw"));
+		String orderColumn = request.getParameter("order[0][column]");
+		
+		String orderDirection = request.getParameter("order[0][dir]");
+		orderColumn = MemberColumn.valueOf("_" + orderColumn).getValue();
+		
+		String searchKey = request.getParameter("search");
+		String baseEntityId = request.getParameter("baseEntityId");
+		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		System.err.println(orderColumn + ":" + orderDirection + ":" + baseEntityId);
+		String location = request.getParameter("locationId");
+		
+		ClientCommonDTO data = peopleService.getMemberData(baseEntityId, searchKey, location, branchId, length, start,
+		    orderColumn, orderDirection);
+		
+		JSONObject response = peopleService.drawMemberDataTable(draw, 0, data);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	

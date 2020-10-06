@@ -18,7 +18,6 @@
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
-<c:url var="get_member_url" value="/rest/api/v1/people/member/list" />
 	
 
 <div class="page-content-wrapper">
@@ -29,7 +28,7 @@
 					<i class="fa fa-circle"></i>
 				</li>
 				<li>
-					<a href="<c:url value="/people/households.html"/>">Households</a>
+					<a href="<c:url value="/people/members.html"/>">Members</a>
 					
 				</li>
 			
@@ -89,7 +88,7 @@
 								</div>
 								
 								
-								<div class="tab-pane" id="reg_visit">								
+								<div class="tab-pane" id="member_info">								
 									<div class="margin-top-10">
 										<div class="col-md-12 form-group">						
 							
@@ -115,52 +114,23 @@
 								
 								
 								
-								<div class="tab-pane" id="member_info">								
+								<div class="tab-pane" id="reg_visit">								
 									<div class="margin-top-10">
 										<div class="col-md-12 form-group">						
 							
 								            <div class="form-group">
 									           
 								              <div class="row">
-								                <div class="table-scrollable">						
-													<table class="table table-striped table-bordered " id="memberTable">
-														<thead>
-															<tr>
-															 	<th>Member name</th>
-																<th>Member ID</th>
-																<th>Household ID</th>
-																<th>Relation with <br/>household head</th>
-																<th>Age</th>
-																<th>Gender</th>
-																<th>Status</th>
-																<th>Village</th>
-																<th>Branch(code)</th>
-																							
-																<th>Action</th>
-															</tr>
-															</thead>
-															<tbody>
-															<c:forEach var="member" items="${members}" varStatus="loop">
-															<tr>
-															<td> ${member.getMemberName() }</td>
-															<td> ${member.getMemberId() }</td>
-															<td> ${member.getHouseholdId() }</td>
-															<td> ${member.getRelationWithHousehold() }</td>
-															<td> ${member.getAge() }</td>
-															<td> ${member.getGender() }</td>
-															<td> ${member.getMemberType() }</td>
-															<td> ${member.getVillage() }</td>
-															<td> ${member.getBranchAndCode() }</td>
-															<%-- <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_LOCATION_TAG")){ %> --%>
-															<td>	<a href="<c:url value="/people/member-details/${member.getBaseEntityId()}/${member.getId()}.html?lang=${locale}"/>">Details</a>
-															<%-- <%} %> --%>
-															</td>
-															</tr>
-															</c:forEach>
-														</tbody>
-														
-													</table>
-													</div>
+								                 <div class="col-lg-4 form-group"> 
+								                	<label class="control-label"><strong>Patient name : </strong> lajsjsd	</label>
+								                  	
+								                 </div>
+								                  <div class="col-lg-4 form-group">
+								                    <label class="control-label"><strong>Patient phone number </strong><span class="required">* </span>	</label> 
+								                       <input  type="text" disabled pattern="^(?:\+88|01)?\d{11}\r?$"  class="form-control validate" name="mobileNumber" id ="callerMobile"  value="${patient.getMobileNumber()}">    
+								                  </div>
+								                  
+								                  
 								                  
 								              </div>
 								            </div> 
@@ -201,39 +171,7 @@ jQuery(document).ready(function() {
 </script>
 
 
-<script>
-    let stockList;
-    $(document).ready(function() {
-    	
-    	
-    	stockList = $('#memberTable').DataTable({
-            bFilter: false,         
-          
-            columnDefs: [
-                
-                { orderable: false, className: 'reorder', width: "10%", targets: 0 },
-                { orderable: false, className: 'reorder',width: "10%", targets: 1 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 2 },
-                { orderable: false, className: 'reorder',width: "10%", targets: 3 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 4 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 5},
-                { orderable: false, className: 'reorder',width: "10%", targets: 6},
-                { orderable: false, className: 'reorder', width: "10%", targets: 7},
-                { orderable: false, className: 'reorder', width: "10%", targets: 8},
-                { orderable: false, className: 'reorder', width: "10%", targets: 9}
-                
-            ],
-            
-            bInfo: true,
-            destroy: true,
-            language: {
-                searchPlaceholder: ""
-            }
-        });
-    });
 
-
-</script>
 
 
 

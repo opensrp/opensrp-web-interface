@@ -2,11 +2,11 @@ package org.opensrp.common.dto;
 
 import java.util.List;
 
-public class ClientDetailsDTO {
+public class ClientCommonDTO {
 	
 	private int totalCount;
 	
-	List<ClientDTO> clientDTO;
+	List<ClientListDTO> clientDTO;
 	
 	public int getTotalCount() {
 		return totalCount;
@@ -16,11 +16,11 @@ public class ClientDetailsDTO {
 		this.totalCount = totalCount;
 	}
 	
-	public List<ClientDTO> getClientDTO() {
+	public List<ClientListDTO> getClientDTO() {
 		return clientDTO;
 	}
 	
-	public void setClientDTO(List<ClientDTO> clientDTO) {
+	public void setClientDTO(List<ClientListDTO> clientDTO) {
 		this.clientDTO = clientDTO;
 	}
 	

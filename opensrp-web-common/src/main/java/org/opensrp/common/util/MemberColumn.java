@@ -1,11 +1,11 @@
 package org.opensrp.common.util;
 
-public enum HouseholdColumn {
-	_0(""), _3("number_Of_member"), _2("registration_date"), _4("last_visit_date");
+public enum MemberColumn {
+	_0(""), _4("age"), _5("gender"), _6("");
 	
 	private String value;
 	
-	HouseholdColumn(String value) {
+	MemberColumn(String value) {
 		this.value = value;
 	}
 	
