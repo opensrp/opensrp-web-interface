@@ -71,16 +71,18 @@
 								            <div class="form-group">
 									           
 								              <div class="row">
-								                 <div class="col-lg-4 form-group"> 
-								                	<label class="control-label"><strong>Patient name : </strong> lajsjsd	</label>
-								                  	
-								                 </div>
-								                  <div class="col-lg-4 form-group">
-								                    <label class="control-label"><strong>Patient phone number </strong><span class="required">* </span>	</label> 
-								                       <input  type="text" disabled pattern="^(?:\+88|01)?\d{11}\r?$"  class="form-control validate" name="mobileNumber" id ="callerMobile"  value="${patient.getMobileNumber()}">    
-								                  </div>
-								                  
-								                  
+								               
+								                
+								                <c:forEach begin="0" end="${hh.length() -1}" var="index">
+								                   <c:choose>
+									                   	<c:when test="${configs.has(hh.getJSONObject(index).getString('key')) ==true}">
+														     <div class="col-lg-12 form-group"> 
+										                		<label class="control-label"><strong>${configs.getString(hh.getJSONObject(index).getString("key"))} : </strong>	${hh.getJSONObject(index).getString("value")}	</label>
+										                  	
+										                	 </div>
+									                	 </c:when>
+												    </c:choose>
+												</c:forEach>  
 								                  
 								              </div>
 								            </div> 

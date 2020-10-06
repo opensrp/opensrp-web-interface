@@ -92,6 +92,19 @@ public abstract class CommonService {
 		return result.size() > 0 ? (T) result.get(0) : null;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public <T> List<T> findAllByKey(String value, String fieldName, Class<?> className) {
+		Session session = getSessionFactory();
+		List<T> result = new ArrayList<T>();
+		
+		Criteria criteria = session.createCriteria(className);
+		criteria.add(Restrictions.eq(fieldName, value));
+		result = criteria.list();
+		
+		return result.size() > 0 ? (List<T>) result : null;
+	}
+	
 	@Transactional
 	public <T> boolean delete(T t) {
 		Session session = getSessionFactory();

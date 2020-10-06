@@ -132,4 +132,9 @@ public class PeopleService extends CommonService {
 		return response;
 	}
 	
+	public JSONArray getHouseholdInfor(String baseEntityId) throws JSONException {
+		String response = "[{\"value\":2,\"key\":\"id\"},{\"value\":\"json roy\",\"key\":\"name\"},{\"value\":\"naNDID GR\",\"key\":\"village\"},{\"value\":\"23453453535\",\"key\":\"householdId\"},{\"value\":\"VO\",\"key\":\"khnanaType\"},{\"value\":\"Farmer\",\"key\":\"occupation\"},{\"value\":\"2345\",\"key\":\"montlyIncome\"},{\"value\":\"TV\",\"key\":\"asset\"}]";
+		JSONArray jsA = new JSONArray(response);
+		return jsA;
+	}
 }

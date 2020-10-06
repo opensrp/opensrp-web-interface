@@ -66,6 +66,7 @@
 				<value>org.opensrp.core.entity.WebNotificationRole</value>
 				<value>org.opensrp.core.entity.TrainingRole</value>
 				<value>org.opensrp.core.entity.StockAdjust</value>
+				<value>org.opensrp.core.entity.DataViewConfiguration</value>
 
 			</list>
 		</property>

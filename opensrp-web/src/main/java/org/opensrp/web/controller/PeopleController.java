@@ -9,10 +9,13 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONException;
 import org.opensrp.common.dto.ClientCommonDTO;
+import org.opensrp.common.util.FormName;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.service.BranchService;
+import org.opensrp.core.service.DataViewConfigurationService;
 import org.opensrp.core.service.PeopleService;
 import org.opensrp.core.service.TargetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,9 @@ public class PeopleController {
 	SearchBuilder searchBuilder;
 	
 	@Autowired
+	private DataViewConfigurationService dataViewConfigurationService;
+	
+	@Autowired
 	private BranchService branchService;
 	
 	@Value("#{opensrp['division.tag.id']}")
@@ -56,13 +62,18 @@ public class PeopleController {
 	
 	@RequestMapping(value = "/household-details/{baseEntityId}/{id}.html", method = RequestMethod.GET)
 	public String householdDetails(HttpServletRequest request, @PathVariable("baseEntityId") String baseEntityId,
-	                               @PathVariable("id") int id, HttpSession session, Model model, Locale locale) {
+	                               @PathVariable("id") int id, HttpSession session, Model model, Locale locale)
+	    throws JSONException {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
 		ClientCommonDTO data = peopleService.getMemberData(baseEntityId, "", "", 0, 10, 0, "", "");
+		model.addAttribute("hh", peopleService.getHouseholdInfor(baseEntityId));
 		System.err.println(data.getClientDTO());
+		
+		model.addAttribute("configs",
+		    dataViewConfigurationService.getConfigurationByNameFormName(FormName.HH_Registration.name()));
 		model.addAttribute("members", data.getClientDTO());
 		return "people/household_details";
 	}
