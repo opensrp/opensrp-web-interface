@@ -61,7 +61,7 @@ public class PeopleRestController {
 		String searchKey = request.getParameter("search");
 		String baseEntityId = request.getParameter("baseEntityId");
 		int branchId = Integer.parseInt(request.getParameter("branchId"));
-		System.err.println(orderColumn + ":" + orderDirection + ":" + baseEntityId);
+		
 		String location = request.getParameter("locationId");
 		
 		ClientCommonDTO data = peopleService.getMemberData(baseEntityId, searchKey, location, branchId, length, start,

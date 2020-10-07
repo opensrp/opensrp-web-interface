@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.opensrp.common.dto.ClientCommonDTO;
-import org.opensrp.common.util.FormName;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.service.BranchService;
@@ -65,26 +65,31 @@ public class PeopleController {
 	                               @PathVariable("id") int id, HttpSession session, Model model, Locale locale)
 	    throws JSONException {
 		model.addAttribute("locale", locale);
-		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
-		List<Branch> branches = branchService.findAll("Branch");
-		model.addAttribute("branches", branches);
-		ClientCommonDTO data = peopleService.getMemberData(baseEntityId, "", "", 0, 10, 0, "", "");
-		model.addAttribute("hh", peopleService.getHouseholdInfor(baseEntityId));
-		System.err.println(data.getClientDTO());
 		
+		ClientCommonDTO data = peopleService.getMemberData(baseEntityId, "", "", 0, 10, 0, "", "");
+		JSONObject dataInfos = peopleService.getHouseholdInfor(baseEntityId);
+		model.addAttribute("reg_info", dataInfos.get("data"));
+		
+		model.addAttribute("services", peopleService.getServiceList(baseEntityId));
 		model.addAttribute("configs",
-		    dataViewConfigurationService.getConfigurationByNameFormName(FormName.HH_Registration.name()));
+		    dataViewConfigurationService.getConfigurationByNameFormName(dataInfos.getString("form_name")));
 		model.addAttribute("members", data.getClientDTO());
 		return "people/household_details";
 	}
 	
 	@RequestMapping(value = "/member-details/{baseEntityId}/{id}.html", method = RequestMethod.GET)
 	public String memberDetails(HttpServletRequest request, @PathVariable("baseEntityId") String baseEntityId,
-	                            @PathVariable("id") int id, HttpSession session, Model model, Locale locale) {
+	                            @PathVariable("id") int id, HttpSession session, Model model, Locale locale)
+	    throws JSONException {
 		model.addAttribute("locale", locale);
-		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
-		List<Branch> branches = branchService.findAll("Branch");
-		model.addAttribute("branches", branches);
+		
+		JSONObject dataInfos = peopleService.getHouseholdInfor(baseEntityId);
+		model.addAttribute("reg_info", dataInfos.get("data"));
+		
+		model.addAttribute("services", peopleService.getServiceList(baseEntityId));
+		model.addAttribute("configs",
+		    dataViewConfigurationService.getConfigurationByNameFormName(dataInfos.getString("form_name")));
+		
 		return "people/member_details";
 	}
 	
@@ -95,5 +100,20 @@ public class PeopleController {
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
 		return "people/members";
+	}
+	
+	@RequestMapping(value = "/activity-details/{formName}/{id}", method = RequestMethod.GET)
+	public String activityDetails(HttpServletRequest request, @PathVariable("formName") String formName,
+	                              @PathVariable("id") long id, HttpSession session, Model model, Locale locale)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
+		
+		JSONObject service = peopleService.getServiceDetails(formName, id);
+		model.addAttribute("reg_info", service.get("data"));
+		
+		model.addAttribute("configs",
+		    dataViewConfigurationService.getConfigurationByNameFormName(service.getString("form_name")));
+		
+		return "dynamic_content";
 	}
 }

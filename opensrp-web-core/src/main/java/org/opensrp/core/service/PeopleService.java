@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.ClientCommonDTO;
 import org.opensrp.common.dto.ClientListDTO;
+import org.opensrp.common.dto.ServiceCommonDTO;
 import org.opensrp.core.mapper.TargetMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -132,9 +133,29 @@ public class PeopleService extends CommonService {
 		return response;
 	}
 	
-	public JSONArray getHouseholdInfor(String baseEntityId) throws JSONException {
-		String response = "[{\"value\":2,\"key\":\"id\"},{\"value\":\"json roy\",\"key\":\"name\"},{\"value\":\"naNDID GR\",\"key\":\"village\"},{\"value\":\"23453453535\",\"key\":\"householdId\"},{\"value\":\"VO\",\"key\":\"khnanaType\"},{\"value\":\"Farmer\",\"key\":\"occupation\"},{\"value\":\"2345\",\"key\":\"montlyIncome\"},{\"value\":\"TV\",\"key\":\"asset\"}]";
-		JSONArray jsA = new JSONArray(response);
-		return jsA;
+	public JSONObject getHouseholdInfor(String baseEntityId) throws JSONException {
+		String response = "{\"form_name\":\"HH_Registration\",\"data\":[{\"value\":2,\"key\":\"id\"},{\"value\":\"json roy\",\"key\":\"name\"},{\"value\":\"naNDID GR\",\"key\":\"village\"},{\"value\":\"23453453535\",\"key\":\"householdId\"},{\"value\":\"VO\",\"key\":\"khnanaType\"},{\"value\":\"Farmer\",\"key\":\"occupation\"},{\"value\":\"2345\",\"key\":\"montlyIncome\"},{\"value\":\"TV\",\"key\":\"asset\"}]}";
+		JSONObject responseObj = new JSONObject(response);
+		return responseObj;
+	}
+	
+	public List<ServiceCommonDTO> getServiceList(String baseEntityId) {
+		List<ServiceCommonDTO> dtos = new ArrayList<ServiceCommonDTO>();
+		for (int i = 0; i < 50; i++) {
+			
+			ServiceCommonDTO dto = new ServiceCommonDTO();
+			dto.setDate("2020-03-20");
+			dto.setId(i);
+			dto.setFormName("HH_Visit" + 1);
+			dtos.add(dto);
+		}
+		
+		return dtos;
+	}
+	
+	public JSONObject getServiceDetails(String formName, long id) throws JSONException {
+		String response = "{\"form_name\":\"HH_Registration\",\"data\":[{\"value\":2,\"key\":\"id\"},{\"value\":\"json roy\",\"key\":\"name\"},{\"value\":\"naNDID GR\",\"key\":\"village\"},{\"value\":\"23453453535\",\"key\":\"householdId\"},{\"value\":\"VO\",\"key\":\"khnanaType\"},{\"value\":\"Farmer\",\"key\":\"occupation\"},{\"value\":\"2345\",\"key\":\"montlyIncome\"},{\"value\":\"TV\",\"key\":\"asset\"}]}";
+		JSONObject responseObj = new JSONObject(response);
+		return responseObj;
 	}
 }
