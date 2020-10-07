@@ -19,6 +19,7 @@
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 <c:url var="get_member_url" value="/rest/api/v1/people/member/list" />
+<jsp:include page="/WEB-INF/views/modal_content.jsp" />
 
 
 <div class="page-content-wrapper">

@@ -5,8 +5,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 
-       <c:url var="get_service_url" value="/people/activity-details" />
-        
+<c:url var="get_service_url" value="/people/activity-details" />
+
 <div class="table-scrollable">
 	<table class="table table-striped table-bordered " id="serviceTable">
 		<thead>
@@ -22,13 +22,11 @@
 				<tr>
 					<td>${service.getDate() }</td>
 					<td>${service.getFormName() }</td>
-					<td><span onclick="loadContent('${service.getId()}','${service.getFormName()}','${get_service_url}')">Details</span>
-						
-						
-						<%-- <a onclick="loadContent(${service.getId()},${service.getFormName()})"
-						href="<c:url value="/people/service-details/${service.getFormName()}/${service.getId()}.html?lang=${locale}"/>">Details</a>
-						
- --%>					</td>
+					<td><div class="btn btn-primary"
+						onclick="loadContent('${service.getId()}','${service.getFormName()}','${get_service_url}')">Details</div>
+
+
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>

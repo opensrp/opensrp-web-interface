@@ -16,29 +16,13 @@
 <c:url var="get_url" value="/rest/api/v1/people/household/list" />
 
 
-<link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 <c:url var="get_member_url" value="/rest/api/v1/people/member/list" />
 
-        <!--Modal start-->
-        <div style="overflow: unset;display: none;top:30px; max-width: none; position: relative; z-index: 1050"
-             id="content" class="modal modal-margin">
-             <a class="btn btn-sm btn-dark text-right" style="float: right; bottom: 0px" href="#" rel="modal:close">Close</a>
-            <div id="user-info-body" class="row"></div>
-            
-                 <div class="form-group row" id ="modal-body">
-	                <div style="position: absolute; margin-left:45%; margin-top: 105px;">
-                    <img width="90px" height="90px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
-                </div>
-                </div>
-                
-           
-            <div id="table-body" class="row" style="overflow-x: auto; margin-bottom: 10px;">
-            </div>
-<a class="btn btn-sm btn-dark text-right" style="float: right; bottom: 0px" href="#" rel="modal:close">Close</a>            
-        </div>
+       
+<jsp:include page="/WEB-INF/views/modal_content.jsp" />
 
 <div class="page-content-wrapper">
 	<div class="page-content">
@@ -135,62 +119,6 @@ jQuery(document).ready(function() {
 		
 });
 
-/* var loadContent = function(id, formName){
-	$('#content').modal({
-        escapeClose: false,
-        clickClose: false,
-        showClose: false,
-        show: true
-    });
-	alert("ok");
-} */
-let url = '${get_service_url}';
-function loadContent(id, formName ,url) {
-	
-	 var token = $("meta[name='_csrf']").attr("content");
-     var header = $("meta[name='_csrf_header']").attr("content");
-	$.ajax({
-		type : "GET",
-		contentType : "application/json",
-	    url: url+"/"+formName+"/"+id,	    
-	    dataType : 'html',
-	    timeout : 100000,
-	    beforeSend: function(xhr) {
-	        xhr.setRequestHeader(header, token);
-	        $('#content').modal({
-	            escapeClose: false,
-	            clickClose: true,
-	            showClose: false,
-	            show: true,
-	            closeExisting: false
-	        });
-	       
-	    },
-	    success : function(data) {
-	    	
-	    	
-	    	$('#modal-body').html(data);
-	       /*  $('#pleaseWait').hide(); */
-	       
-	    },
-	    error : function(e) {
-	       
-	    },
-	    done : function(e) {
-	       /*  $('#saveCatchmentArea').prop('disabled', false);
-	        $('#pleaseWait').hide(); */
-	    }
-	});
-	
-	
-	
-	
-} 
-function closeMainModal() {
-    console.log("IN CLOSE");
-    
-    $.modal.getCurrent.close();
-}
 
 
 
