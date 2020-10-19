@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 @RequestMapping("rest/api/v1/people")
 @RestController
 public class PeopleRestController {
@@ -40,8 +42,15 @@ public class PeopleRestController {
 		
 		String location = request.getParameter("locationId");
 		
-		ClientCommonDTO households = peopleService.getHouseholdData(searchKey, location, branchId, length, start,
-		    orderColumn, orderDirection);
+		JSONObject households = null;
+		try {
+			households = peopleService.getHouseholdData(searchKey, location, branchId, length, start, orderColumn,
+			    orderDirection);
+		}
+		catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		JSONObject response = peopleService.drawHouseholdDataTable(draw, 0, households);
 		return new ResponseEntity<>(response.toString(), OK);

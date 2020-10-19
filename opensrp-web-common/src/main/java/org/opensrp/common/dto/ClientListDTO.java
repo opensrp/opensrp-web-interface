@@ -28,6 +28,8 @@ public class ClientListDTO {
 	
 	private String memberId;
 	
+	private String eventDate;
+	
 	private String relationWithHousehold;
 	
 	private String age;
@@ -184,6 +186,14 @@ public class ClientListDTO {
 	
 	public void setMemberType(String memberType) {
 		this.memberType = memberType;
+	}
+	
+	public String getEventDate() {
+		return eventDate;
+	}
+	
+	public void setEventDate(String eventDate) {
+		this.eventDate = eventDate;
 	}
 	
 }

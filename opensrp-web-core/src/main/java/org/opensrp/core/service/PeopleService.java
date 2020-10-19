@@ -7,16 +7,26 @@ package org.opensrp.core.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.transform.AliasToBeanResultTransformer;
+import org.hibernate.type.StandardBasicTypes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.ClientCommonDTO;
 import org.opensrp.common.dto.ClientListDTO;
 import org.opensrp.common.dto.ServiceCommonDTO;
+import org.opensrp.common.dto.WebNotificationCommonDTO;
 import org.opensrp.core.mapper.TargetMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class PeopleService extends CommonService {
@@ -30,8 +40,25 @@ public class PeopleService extends CommonService {
 		
 	}
 	
-	public ClientCommonDTO getHouseholdData(String search, String location, int branchId, int length, int start,
-	                                        String orderColumn, String orderDirection) {
+	static final List<String> householdColumnList;
+	static {
+		householdColumnList = new ArrayList<String>();
+		householdColumnList.add("householdId");
+		householdColumnList.add("householdHead");
+		householdColumnList.add("numberOfMember");
+		householdColumnList.add("registrationDate");
+		householdColumnList.add("lastVisitDate");
+		householdColumnList.add("village");
+		householdColumnList.add("branchAndCode");
+		householdColumnList.add("contact");
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public JSONObject getHouseholdData(String search, String location, int branchId, int length, int start,
+	                                   String orderColumn, String orderDirection) throws JSONException,
+	    JsonProcessingException {
 		List<ClientListDTO> households = new ArrayList<ClientListDTO>();
 		for (int i = 0; i < length; i++) {
 			
@@ -52,7 +79,52 @@ public class PeopleService extends CommonService {
 		ClientCommonDTO clientDetailsDTO = new ClientCommonDTO();
 		clientDetailsDTO.setClientDTO(households);
 		clientDetailsDTO.setTotalCount(100);
-		return clientDetailsDTO;
+		
+		Session session = getSessionFactory();
+		List<WebNotificationCommonDTO> dtos = new ArrayList<>();
+		JSONObject jo = new JSONObject();
+		jo.put("branch_id", 2);
+		jo.put("division", "DHAKA");
+		jo.put("offset", 0);
+		jo.put("limit", 10);
+		
+		List<ClientListDTO> householdList = new ArrayList<ClientListDTO>();
+		
+		String hql = "select  id,hh_id householdId,hh_name householdHead,member_count numberOfMember,reg_date registrationDate"
+		        + " ,last_visit_date lastVisitDate,village,branch_name branchName,branch_code branchCode,"
+		        + " contact contact,base_entity_id baseEntityId from report.get_household_list('" + jo + "')";
+		
+		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
+		        .addScalar("householdId", StandardBasicTypes.STRING).addScalar("householdHead", StandardBasicTypes.STRING)
+		        .addScalar("numberOfMember", StandardBasicTypes.INTEGER)
+		        .addScalar("registrationDate", StandardBasicTypes.STRING)
+		        .addScalar("lastVisitDate", StandardBasicTypes.STRING).addScalar("village", StandardBasicTypes.STRING)
+		        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("branchCode", StandardBasicTypes.STRING)
+		        .addScalar("contact", StandardBasicTypes.STRING).addScalar("baseEntityId", StandardBasicTypes.STRING)
+		        .setResultTransformer(new AliasToBeanResultTransformer(ClientListDTO.class));
+		householdList = query.list();
+		ClientCommonDTO householdDetailsDTO = new ClientCommonDTO();
+		householdDetailsDTO.setClientDTO(householdList);
+		householdDetailsDTO.setTotalCount(100);
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(householdDetailsDTO);
+		//System.out.println(json);
+		
+		JSONObject jsonObject = new JSONObject(json + "");
+		//System.err.println("" + jsonObject);
+		
+		//JSONObject obj = new JSONObject(json);
+		/*householdList.stream().forEach(household -> {
+			
+			for (int i = 0; i < household.length; i++) {
+				System.err.println("JJ:" + household[i]);
+			}
+			System.err.println("---------------------------");
+		});*/
+		
+		return jsonObject;
 	}
 	
 	public ClientCommonDTO getMemberData(String baseEntityId, String search, String location, int branchId, int length,
@@ -82,27 +154,32 @@ public class PeopleService extends CommonService {
 		return clientDetailsDTO;
 	}
 	
-	public JSONObject drawHouseholdDataTable(Integer draw, int total, ClientCommonDTO dtos) throws JSONException {
+	public JSONObject drawHouseholdDataTable(Integer draw, int total, JSONObject datas) throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
-		response.put("recordsTotal", dtos.getTotalCount());
-		response.put("recordsFiltered", dtos.getTotalCount());
+		response.put("recordsTotal", datas.getInt("totalCount"));
+		response.put("recordsFiltered", datas.getInt("totalCount"));
 		JSONArray array = new JSONArray();
-		for (ClientListDTO dto : dtos.getClientDTO()) {
+		JSONArray dataList = datas.getJSONArray("clientDTO");
+		
+		for (int i = 0; i < dataList.length(); i++) {
+			JSONObject row = dataList.getJSONObject(i);
+			
+			String baseEntityId = row.getString("baseEntityId");
+			String id = row.getString("id") + "";
 			JSONArray tableData = new JSONArray();
-			tableData.put(dto.getHouseholdId());
-			tableData.put(dto.getHouseholdHead());
-			tableData.put(dto.getNumberOfMember());
-			tableData.put(dto.getRegistrationDate());
-			tableData.put(dto.getLastVisitDate());
-			tableData.put(dto.getVillage());
-			tableData.put(dto.getBranchAndCode());
-			tableData.put(dto.getContact());
+			
+			for (String key : householdColumnList) {
+				tableData.put(row.get(key));
+			}
+			
 			String view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"household-details/"
-			        + dto.getBaseEntityId() + "/" + dto.getId() + ".html" + "\">Details</a> </div>";
+			        + baseEntityId + "/" + id + ".html" + "\">Details</a> </div>";
 			tableData.put(view);
 			array.put(tableData);
+			
 		}
+		
 		response.put("data", array);
 		return response;
 	}
