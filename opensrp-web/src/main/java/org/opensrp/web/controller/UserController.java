@@ -2,12 +2,22 @@ package org.opensrp.web.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
-import java.io.*;
-import java.security.Principal;
-import java.util.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +31,6 @@ import org.opensrp.common.exception.BadFormatException;
 import org.opensrp.common.exception.BranchNotFoundException;
 import org.opensrp.common.exception.LocationNotFoundException;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
-import org.opensrp.common.util.PermissionName;
 import org.opensrp.common.util.Roles;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Facility;
@@ -59,7 +68,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -142,7 +150,7 @@ public class UserController {
 	
 	@Autowired
 	private SearchUtil searchUtil;
-
+	
 	@Autowired
 	private UserMapper userMapper;
 	
@@ -206,14 +214,14 @@ public class UserController {
 		model.addAttribute("teamMember", new TeamMember());
 		model.addAttribute("branches", branches);
 		String personName = "";
-//		session.setAttribute("locationList", locationServiceImpl.list().toString());
+		//		session.setAttribute("locationList", locationServiceImpl.list().toString());
 		int[] locations = new int[0];
-//		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+		//		teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
 		session.setAttribute("ss", ss);
 		//end: adding location and team
 		return new ModelAndView("user/add", "command", account);
 	}
-
+	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_WRITE_USER')")
 	@RequestMapping(value = "/user/add-ajax.html", method = RequestMethod.GET)
 	public ModelAndView addAjaxUser(Model model, HttpSession session, Locale locale) throws JSONException {
@@ -429,33 +437,33 @@ public class UserController {
 	                             HttpSession session, @PathVariable("id") int id, Locale locale) throws Exception {
 		String errorMessage = "";
 		session.setAttribute("errorMessageForSK", errorMessage);
-//		if (roles[0].equals(Roles.AM.getId().toString())){
-//			User updateAbleUser = userServiceImpl.findById(id, "id", User.class);
-//			List<Branch> existingBranch = new ArrayList<>(updateAbleUser.getBranches());
-//			for (Branch b: existingBranch) {
-//				Integer branchId = b.getId();
-//				boolean flag = false;
-//				for (int i = 0; i < branches.length; i++) {
-//					System.out.println(branchId + " : " +branches[i]);
-//					if (branchId.equals(Integer.valueOf(branches[i]))) {
-//						flag = true;
-//						break;
-//					}
-//				}
-//				if (flag == false) {
-//					List<Object[]> branchesCheck = databaseServiceImpl.getSKByBranch(branchId.toString());
-//					if (branchesCheck.size() > 0) {
-//						errorMessage = "You have to remove SK from "+ b.getName() + " Branch to continue";
-//						session.setAttribute("errorMessageForSK", errorMessage);
-//						System.out.println("ID: "+ id);
-//						return new ModelAndView("redirect:/user/"+id+"/edit.html?lang=" + locale);
-//					}
-//				} else {
-//					errorMessage = "";
-//					session.setAttribute("errorMessageForSK", errorMessage);
-//				}
-//			}
-//		}
+		//		if (roles[0].equals(Roles.AM.getId().toString())){
+		//			User updateAbleUser = userServiceImpl.findById(id, "id", User.class);
+		//			List<Branch> existingBranch = new ArrayList<>(updateAbleUser.getBranches());
+		//			for (Branch b: existingBranch) {
+		//				Integer branchId = b.getId();
+		//				boolean flag = false;
+		//				for (int i = 0; i < branches.length; i++) {
+		//					System.out.println(branchId + " : " +branches[i]);
+		//					if (branchId.equals(Integer.valueOf(branches[i]))) {
+		//						flag = true;
+		//						break;
+		//					}
+		//				}
+		//				if (flag == false) {
+		//					List<Object[]> branchesCheck = databaseServiceImpl.getSKByBranch(branchId.toString());
+		//					if (branchesCheck.size() > 0) {
+		//						errorMessage = "You have to remove SK from "+ b.getName() + " Branch to continue";
+		//						session.setAttribute("errorMessageForSK", errorMessage);
+		//						System.out.println("ID: "+ id);
+		//						return new ModelAndView("redirect:/user/"+id+"/edit.html?lang=" + locale);
+		//					}
+		//				} else {
+		//					errorMessage = "";
+		//					session.setAttribute("errorMessageForSK", errorMessage);
+		//				}
+		//			}
+		//		}
 		account.setRoles(userServiceImpl.setRoles(roles));
 		account.setBranches(userServiceImpl.setBranches(branches));
 		String ssPrefix = "";
@@ -557,8 +565,8 @@ public class UserController {
 	 * <p>
 	 * This method render user html form for user password to edit, where login user can update user
 	 * password to save it in permanent storage.This is a get request method, there is a post
-	 * request method at {@link UserController} which actually
-	 * update the user password in to permanent storage.
+	 * request method at {@link UserController} which actually update the user password in to
+	 * permanent storage.
 	 * </p>
 	 * 
 	 * @param session is an argument to the HttpSession's session
@@ -575,7 +583,7 @@ public class UserController {
 		session.setAttribute("username", account.getUsername());
 		return new ModelAndView("user/change-password");
 	}
-
+	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
 	@RequestMapping(value = "/user/{id}/change-password-ajax.html", method = RequestMethod.GET)
 	public ModelAndView editPasswordAM(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
@@ -586,12 +594,21 @@ public class UserController {
 		return new ModelAndView("user/change-password-ajax");
 	}
 	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
+	@RequestMapping(value = "/user/{id}/pk-change-password-ajax.html", method = RequestMethod.GET)
+	public ModelAndView editPKPasswordAM(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
+		model.addAttribute("locale", locale);
+		User account = userServiceImpl.findById(id, "id", User.class);
+		model.addAttribute("account", account);
+		session.setAttribute("username", account.getUsername());
+		return new ModelAndView("user/pk-change-password-ajax");
+	}
+	
 	/**
 	 * <p>
 	 * This method is a post request of corresponding of get request method #editPassword which
 	 * actually update the user information in to permanent storage.
 	 * </p>
-	 *
 	 */
 	//	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
 	//	@RequestMapping(value = "/user/{id}/password.html", method = RequestMethod.POST)
@@ -614,10 +631,10 @@ public class UserController {
 	public String loginPage() {
 		return "user/login";
 	}
-
+	
 	@RequestMapping(value = "/session-expired", method = RequestMethod.GET)
 	public ModelAndView sessionExpired(ModelAndView modelAndView) {
-
+		
 		modelAndView.setViewName("user/login");
 		modelAndView.addObject("sessionExpiredMsg", "Your session has expired, please login again to continue");
 		return modelAndView;
@@ -639,21 +656,21 @@ public class UserController {
 	@RequestMapping(value = "user/upload.html", method = RequestMethod.GET)
 	public String userUpload(Model model, HttpSession session, Locale locale) throws JSONException {
 		model.addAttribute("locale", locale);
-//		String parentIndication = "#";
-//		String parentKey = "parent";
-//		JSONArray data = userServiceImpl.getUserDataAsJson(parentIndication, parentKey);
-//		session.setAttribute("userTreeData", data);
+		//		String parentIndication = "#";
+		//		String parentKey = "parent";
+		//		JSONArray data = userServiceImpl.getUserDataAsJson(parentIndication, parentKey);
+		//		session.setAttribute("userTreeData", data);
 		
 		return "user/upload";
 	}
-
+	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPLOAD_IMEI')")
 	@RequestMapping(value = "user/upload-imei.html", method = RequestMethod.GET)
 	public String imeiUpload(Model model, HttpSession session, Locale locale) {
 		model.addAttribute("locale", locale);
 		return "user/upload-imei";
 	}
-
+	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logoutPage(HttpServletRequest request, HttpServletResponse response, Locale locale) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -673,10 +690,10 @@ public class UserController {
 	
 	@RequestMapping(value = "user/user.html", method = RequestMethod.GET)
 	public String userSearch(Model model, HttpSession session, @RequestParam String name) throws JSONException {
-		System.err.println("user home start:"+System.currentTimeMillis());
+		System.err.println("user home start:" + System.currentTimeMillis());
 		List<User> users = userServiceImpl.findAllByKeysWithALlMatches(name, false);
 		session.setAttribute("searchedUsers", users);
-		System.err.println("user home end:"+System.currentTimeMillis());
+		System.err.println("user home end:" + System.currentTimeMillis());
 		return "user/search";
 	}
 	
@@ -690,7 +707,7 @@ public class UserController {
 		List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByForeignKey(id, "user_id",
 		    "UsersCatchmentArea");
 		User user = userServiceImpl.findById(id, "id", User.class);
-
+		
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Role> roles = new ArrayList<>(user.getRoles());
 		Integer roleId = roles.get(0).getId();
@@ -698,25 +715,29 @@ public class UserController {
 		String role = "Admin";
 		if (AuthenticationManagerUtil.isAM())
 			role = "AM";
-
+		
 		Integer parentUserId;
 		if (roleId == Roles.SK.getId() || roleId == Roles.SS.getId()) {
 			if (user.getParentUser() == null) {
 				if (roleId == Roles.SK.getId()) {
 					List<Branch> branches = new ArrayList<>(user.getBranches());
 					Integer branchId = 0;
-					if (branches != null && branches.size() > 0) branchId = branches.get(0).getId();
+					if (branches != null && branches.size() > 0)
+						branchId = branches.get(0).getId();
 					UserDTO parentUser = userServiceImpl.findAMByBranchId(branchId);
-					if (parentUser != null) parentUserId = parentUser.getId();
-					else  parentUserId = 0;
-				}
-				else  parentUserId = 0;
-			}
-			else parentUserId = user.getParentUser().getId();
-		} else parentUserId = loggedInUser.getId();
+					if (parentUser != null)
+						parentUserId = parentUser.getId();
+					else
+						parentUserId = 0;
+				} else
+					parentUserId = 0;
+			} else
+				parentUserId = user.getParentUser().getId();
+		} else
+			parentUserId = loggedInUser.getId();
 		JSONArray data = locationServiceImpl.getLocationWithDisableFacility(session, parentIndication, parentKey,
 		    userAssignedLocationDTOS, user.getId(), role, parentUserId, roleId);
-
+		
 		TeamMember member = teamMemberServiceImpl.findByForeignKey(id, "person_id", "TeamMember");
 		boolean isTeamMember = member != null ? true : false;
 		session.setAttribute("usersCatchmentAreas", usersCatchmentAreas);
@@ -748,8 +769,8 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/upload/user-catchment.html", method = RequestMethod.POST)
-	public ModelAndView uploadUser(HttpSession session, @RequestParam MultipartFile file, HttpServletRequest request, ModelMap model,
-	                               Locale locale) throws Exception {
+	public ModelAndView uploadUser(HttpSession session, @RequestParam MultipartFile file, HttpServletRequest request,
+	                               ModelMap model, Locale locale) throws Exception {
 		
 		if (file.isEmpty()) {
 			model.put("msg", "Failed to upload the file because it is empty");
@@ -805,52 +826,56 @@ public class UserController {
 		}
 		return new ModelAndView("redirect:/user.html?lang=" + locale);
 	}
-
+	
 	@RequestMapping(value = "/upload/imei.html", method = RequestMethod.POST)
-	public ModelAndView uploadImei(HttpSession session, @RequestParam MultipartFile file, HttpServletRequest request, ModelMap model,
-	                               Locale locale) throws Exception {
-
+	public ModelAndView uploadImei(HttpSession session, @RequestParam MultipartFile file, HttpServletRequest request,
+	                               ModelMap model, Locale locale) throws Exception {
+		
 		if (file.isEmpty()) {
 			model.put("msg", "Failed to upload the file because it is empty");
 			model.addAttribute("msg", "Failed to upload the file because it is empty");
 			return new ModelAndView("/user/upload-imei");
 		}
 		if (!"text/csv".equalsIgnoreCase(file.getContentType())
-				&& !"application/vnd.ms-excel".equalsIgnoreCase(file.getContentType())) {
+		        && !"application/vnd.ms-excel".equalsIgnoreCase(file.getContentType())) {
 			model.addAttribute("msg", "File type should be '.csv'");
 			return new ModelAndView("/user/upload-imei");
 		}
-
+		
 		String rootPath = request.getSession().getServletContext().getRealPath("/");
 		File dir = new File(rootPath + File.separator + "uploadedfile");
-		if (!dir.exists()) dir.mkdirs();
-
+		if (!dir.exists())
+			dir.mkdirs();
+		
 		File csvFile = new File(dir.getAbsolutePath() + File.separator + file.getOriginalFilename());
-
+		
 		try {
 			try (InputStream is = file.getInputStream();
-			     BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(csvFile))) {
+			        BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(csvFile))) {
 				int i;
-
+				
 				while ((i = is.read()) != -1) {
 					stream.write(i);
 				}
 				stream.flush();
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			model.put("msg", "failed to process file because : " + e.getMessage());
 			return new ModelAndView("/user/upload-imei");
 		}
-
+		
 		String msg = "";
 		try {
 			msg = userServiceImpl.uploadImei(session, csvFile);
-		} catch (BadFormatException bf) {
+		}
+		catch (BadFormatException bf) {
 			msg = bf.getErrorMessage();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			msg = e.getMessage();
 		}
-
+		
 		if (!msg.isEmpty()) {
 			model.put("msg", msg);
 		}
@@ -861,12 +886,25 @@ public class UserController {
 	public String getSKByPM(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		System.err.println("sk start: "+loggedInUser.getUsername()+":  "+System.currentTimeMillis() );
+		System.err.println("sk start: " + loggedInUser.getUsername() + ":  " + System.currentTimeMillis());
 		List<UserDTO> users = userServiceImpl.getChildUserFromParent(loggedInUser.getId(), "SK");
 		session.setAttribute("allSK", users);
 		session.setAttribute("fromRole", "SK");
-		System.err.println("sk end: "+loggedInUser.getUsername()+":  "+System.currentTimeMillis() );
+		System.err.println("sk end: " + loggedInUser.getUsername() + ":  " + System.currentTimeMillis());
 		return "user/sk-list";
+	}
+	
+	@RequestMapping(value = "/user/pk-list.html", method = RequestMethod.GET)
+	public String getPKByPM(HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		System.err.println("sk start: " + loggedInUser.getUsername() + ":  " + System.currentTimeMillis());
+		List<UserDTO> users = userServiceImpl.getPKUserFromParent(loggedInUser.getId(), "PK");
+		System.err.println("users;" + users);
+		session.setAttribute("allSK", users);
+		session.setAttribute("fromRole", "PK");
+		System.err.println("sk end: " + loggedInUser.getUsername() + ":  " + System.currentTimeMillis());
+		return "user/pk-list";
 	}
 	
 	@RequestMapping(value = "/user/{skId}/{skUsername}/my-ss.html", method = RequestMethod.GET)
@@ -878,7 +916,7 @@ public class UserController {
 		List<UserDTO> users = userServiceImpl.getChildUserFromParent(skId, "SS");
 		List<UserDTO> ssWithoutCatchment = userServiceImpl.getSSWithoutCatchmentArea(skId);
 		User skOfSS = userServiceImpl.findById(skId, "id", User.class);
-
+		
 		model.addAttribute("skUsername", skUsername);
 		model.addAttribute("skFullName", skOfSS.getFullName());
 		model.addAttribute("branches", branches);
@@ -890,6 +928,29 @@ public class UserController {
 		session.setAttribute("ssWithoutCatchment", ssWithoutCatchment);
 		session.setAttribute("skName", skOfSS.getFullName());
 		return "user/ss-list";
+	}
+	
+	@RequestMapping(value = "/user/{skId}/{skUsername}/pk-ss.html", method = RequestMethod.GET)
+	public String getSSByPK(@PathVariable("skId") Integer skId, @PathVariable("skUsername") String skUsername,
+	                        HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		List<UserDTO> users = userServiceImpl.getChildUserFromParent(skId, "SS");
+		List<UserDTO> ssWithoutCatchment = userServiceImpl.getSSWithoutCatchmentArea(skId);
+		User skOfSS = userServiceImpl.findById(skId, "id", User.class);
+		
+		model.addAttribute("skUsername", skUsername);
+		model.addAttribute("skFullName", skOfSS.getFullName());
+		model.addAttribute("branches", branches);
+		model.addAttribute("skId", skId);
+		session.setAttribute("allSS", users);
+		session.setAttribute("fromRole", "SS");
+		session.setAttribute("idFinal", skId);
+		session.setAttribute("usernameFinal", skUsername);
+		session.setAttribute("ssWithoutCatchment", ssWithoutCatchment);
+		session.setAttribute("skName", skOfSS.getFullName());
+		return "user/pk-ss-list";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_ADD_SS')")
@@ -970,10 +1031,14 @@ public class UserController {
 		Role ss = roleServiceImpl.findByKey("SS", "name", Role.class);
 		account.setId(id);
 		User user = userServiceImpl.findById(id, "id", User.class);
-		if (user.getParentUser() != null) account.setParentUser(user.getParentUser());
-		if (user.getCreator() != null) account.setCreator(user.getCreator());
-		if (user.getBranches() != null) account.setBranches(user.getBranches());
-		if (user.getRoles() != null) account.setRoles(user.getRoles());
+		if (user.getParentUser() != null)
+			account.setParentUser(user.getParentUser());
+		if (user.getCreator() != null)
+			account.setCreator(user.getCreator());
+		if (user.getBranches() != null)
+			account.setBranches(user.getBranches());
+		if (user.getRoles() != null)
+			account.setRoles(user.getRoles());
 		//account.setPassword("");
 		String redirectUrl = "redirect:/user/" + skId + "/" + skUsername + "/my-ss.html";
 		userServiceImpl.update(account);
@@ -1060,18 +1125,20 @@ public class UserController {
 		account.setBranches(userServiceImpl.setBranches(branches));
 		account.setId(id);
 		User user = userServiceImpl.findById(id, "id", User.class);
-		if (user.getParentUser() != null) account.setParentUser(user.getParentUser());
-		if (user.getCreator() != null) account.setCreator(user.getCreator());
+		if (user.getParentUser() != null)
+			account.setParentUser(user.getParentUser());
+		if (user.getCreator() != null)
+			account.setCreator(user.getCreator());
 		String redirectUrl = "redirect:/user/sk-list.html";
 		
 		userServiceImpl.update(account);
 		return new ModelAndView(redirectUrl + "?lang=" + locale);
 		
 	}
-
+	
 	@RequestMapping(value = "/user/check-imei", method = RequestMethod.GET)
 	public ResponseEntity<String> getHouseholdIds(@RequestParam("imei") String imei) {
-		String isVerified = userServiceImpl.checkImei(imei)?"true":"false";
+		String isVerified = userServiceImpl.checkImei(imei) ? "true" : "false";
 		return new ResponseEntity<>(isVerified, HttpStatus.OK);
 	}
 	
@@ -1081,11 +1148,10 @@ public class UserController {
 		model.addAttribute("locale", locale);
 		User account = userServiceImpl.findById(id, "id", User.class);
 		model.addAttribute("account", account);
-		model.addAttribute("id", id);	
+		model.addAttribute("id", id);
 		
 		String parentUserName = "";
 		int parentUserId = 0;
-		
 		
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		int amId = loggedInUser.getId();
@@ -1093,16 +1159,39 @@ public class UserController {
 		model.addAttribute("branches", branches);
 		session.setAttribute("parentUserName", parentUserName);
 		session.setAttribute("parentUserId", parentUserId);
-		model.addAttribute("amId",amId);
+		model.addAttribute("amId", amId);
 		session.setAttribute("selectedBranches", account.getBranches());
 		
 		return new ModelAndView("user/edit-SK-ajax", "command", account);
 	}
 	
+	@RequestMapping(value = "/sk/{id}/edit-pk-ajax.html", method = RequestMethod.GET)
+	public ModelAndView getPKAjax(HttpSession session, @PathVariable("id") int id, Locale locale, Model model)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
+		User account = userServiceImpl.findById(id, "id", User.class);
+		model.addAttribute("account", account);
+		model.addAttribute("id", id);
+		
+		String parentUserName = "";
+		int parentUserId = 0;
+		
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		int amId = loggedInUser.getId();
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		model.addAttribute("branches", branches);
+		session.setAttribute("parentUserName", parentUserName);
+		session.setAttribute("parentUserId", parentUserId);
+		model.addAttribute("amId", amId);
+		session.setAttribute("selectedBranches", account.getBranches());
+		
+		return new ModelAndView("user/edit-pk-ajax", "command", account);
+	}
+	
 	@RequestMapping(value = "/user/add-SK-ajax.html", method = RequestMethod.GET)
 	public ModelAndView addSKAjax(Model model, HttpSession session, Locale locale) throws JSONException {
 		
-		model.addAttribute("account", new User());		
+		model.addAttribute("account", new User());
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		/*if (AuthenticationManagerUtil.isAM()) {
 			session.setAttribute("amId", loggedInUser.getId());
@@ -1113,20 +1202,36 @@ public class UserController {
 		session.setAttribute("amId", loggedInUser.getId());
 		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
 		Role sk = roleServiceImpl.findByKey("SK", "name", Role.class);
-		model.addAttribute("locale", locale);		
-		model.addAttribute("branches", branches);		
-		session.setAttribute("sk", sk);		
+		model.addAttribute("locale", locale);
+		model.addAttribute("branches", branches);
+		session.setAttribute("sk", sk);
 		
 		return new ModelAndView("user/add-SK-ajax", "command", account);
 	}
-
+	
+	@RequestMapping(value = "/user/add-pk-ajax.html", method = RequestMethod.GET)
+	public ModelAndView addPKAjax(Model model, HttpSession session, Locale locale) throws JSONException {
+		
+		model.addAttribute("account", new User());
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		
+		session.setAttribute("amId", loggedInUser.getId());
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		Role pk = roleServiceImpl.findByKey("PK", "name", Role.class);
+		model.addAttribute("locale", locale);
+		model.addAttribute("branches", branches);
+		session.setAttribute("pk", pk);
+		
+		return new ModelAndView("user/add-pk-ajax", "command", account);
+	}
+	
 	@RequestMapping(value = "/user/sk-list", method = RequestMethod.GET)
 	public String generateSKListByBranch(HttpSession session, @RequestParam("branchId") Integer branchId) {
 		List<UserDTO> skList = userServiceImpl.findSKByBranch(branchId);
 		session.setAttribute("skList", skList);
 		return "user/make-options";
 	}
-
+	
 	@RequestMapping(value = "/{id}/catchment-area-table.html", method = RequestMethod.GET)
 	public String catchmentAreaByUser(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
 		List<Object[]> catchmentAreaTable = userServiceImpl.getCatchmentAreaTableForUser(id);

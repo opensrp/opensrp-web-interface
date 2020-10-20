@@ -846,6 +846,11 @@ public class UserService {
 		        .getChildUserByParentUptoVillage(userId, roleName);
 	}
 	
+	public List<UserDTO> getPKUserFromParent(Integer userId, String roleName) {
+		return roleName.equalsIgnoreCase("PK") ? repository.getChildUserByParentUptoUnion(userId, roleName) : repository
+		        .getChildUserByParentUptoVillage(userId, roleName);
+	}
+	
 	public List<UserDTO> getSSWithoutCatchmentArea(Integer userId) {
 		return repository.getSSWithoutCatchmentAreaByAM(userId);
 	}
