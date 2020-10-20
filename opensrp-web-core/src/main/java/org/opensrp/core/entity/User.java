@@ -98,7 +98,7 @@ public class User implements UserDetails {
 	@JoinTable(name = "user_branch", schema = "core", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "branch_id") })
 	private Set<Branch> branches = new HashSet<>();
 	
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
@@ -114,7 +114,7 @@ public class User implements UserDetails {
 	@Column(name = "person_uuid")
 	public String personUUid;
 	
-	@ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinColumn(name = "parent_user_id", referencedColumnName = "id")
 	private User parentUser;
 	
@@ -126,10 +126,19 @@ public class User implements UserDetails {
 	
 	@Column(name = "ss_no")
 	private String ssNo;
-
+	
 	@Column(name = "app_version")
 	private String appVersion;
-
+	
+	@Column(name = "pk_id")
+	private Integer pkId;
+	
+	@Column(name = "sk_id")
+	private Integer skId;
+	
+	@Column(name = "pa_id")
+	private Integer paId;
+	
 	public User() {
 	}
 	
@@ -157,6 +166,7 @@ public class User implements UserDetails {
 		return id;
 	}
 	
+	@Override
 	public String getUsername() {
 		return username;
 	}
@@ -186,7 +196,8 @@ public class User implements UserDetails {
 		String fullName = "";
 		if (lastName != null) {
 			fullName = firstName + " " + lastName.replaceAll("\\.$", "");
-		} else fullName = firstName;
+		} else
+			fullName = firstName;
 		return fullName.trim();
 	}
 	
@@ -198,6 +209,7 @@ public class User implements UserDetails {
 		this.email = email;
 	}
 	
+	@Override
 	public String getPassword() {
 		return password;
 	}
@@ -230,21 +242,25 @@ public class User implements UserDetails {
 		this.creator = creator;
 	}
 	
+	@Override
 	@Transient
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 	
+	@Override
 	@Transient
 	public boolean isAccountNonLocked() {
 		return true;
 	}
 	
+	@Override
 	@Transient
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
 	
+	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -324,15 +340,39 @@ public class User implements UserDetails {
 	public void setSsNo(String ssNo) {
 		this.ssNo = ssNo;
 	}
-
+	
 	public String getAppVersion() {
 		return appVersion;
 	}
-
+	
 	public void setAppVersion(String appVersion) {
 		this.appVersion = appVersion;
 	}
-
+	
+	public Integer getPkId() {
+		return pkId;
+	}
+	
+	public void setPkId(Integer pkId) {
+		this.pkId = pkId;
+	}
+	
+	public Integer getSkId() {
+		return skId;
+	}
+	
+	public void setSkId(Integer skId) {
+		this.skId = skId;
+	}
+	
+	public Integer getPaId() {
+		return paId;
+	}
+	
+	public void setPaId(Integer paId) {
+		this.paId = paId;
+	}
+	
 	@Transient
 	public Set<Permission> getPermissions() {
 		Set<Permission> perms = new HashSet<Permission>();
@@ -342,6 +382,7 @@ public class User implements UserDetails {
 		return perms;
 	}
 	
+	@Override
 	@Transient
 	public Collection<GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
@@ -349,7 +390,5 @@ public class User implements UserDetails {
 		authorities.addAll(getPermissions());
 		return authorities;
 	}
-	
-	
 	
 }

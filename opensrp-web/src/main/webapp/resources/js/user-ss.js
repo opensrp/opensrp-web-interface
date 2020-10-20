@@ -543,6 +543,7 @@ $("#update-ss-information").submit(function(event) {
         'firstName': $('input[name=firstName]').val(),
         'lastName': $('input[name=lastName]').val(),
         'mobile': $('input[name=mobile]').val(),
+        'pkId':$("#pkId").val(),
         'id': ssId
     };
 

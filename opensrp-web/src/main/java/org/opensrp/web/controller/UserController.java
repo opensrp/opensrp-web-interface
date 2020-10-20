@@ -1015,7 +1015,8 @@ public class UserController {
 		session.setAttribute("parentUserId", parentUserId);
 		
 		session.setAttribute("selectedBranches", account.getBranches());
-		
+		List<UserDTO> pks = userServiceImpl.getPKUserFromParent(loggedInUser.getId(), "PK");
+		model.addAttribute("pks", pks);
 		return new ModelAndView("user/edit-ss-ajax", "command", account);
 	}
 	

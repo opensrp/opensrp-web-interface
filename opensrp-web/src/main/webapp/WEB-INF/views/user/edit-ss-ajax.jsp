@@ -53,15 +53,36 @@
                     </div>
                     
                     <div class="form-group row" >
-                    	<div class="col-sm-6">
+                    	<div class="col-sm-4">
                             <label class="control-label" for="mobile"><spring:message code="lbl.mobile"/></label>
                             <form:input path="mobile" class="form-control mx-sm-3" />
                         </div>
                     
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <label class="control-label" for="username"><spring:message code="lbl.username"/><span class="required">* </span></label>
                             <form:input path="username" class="form-control mx-sm-3"
                                         readonly="true"	required="required"/>
+
+                        </div>
+                        ${account.pkId}
+                        <div class="col-sm-4">
+                            <label class="control-label" for="username">Select PK<span class="required">* </span></label>
+                            <select required="required" name="pkId" id="pkId" class="form-control">
+								<option value="">Please Select</option>
+		                        <c:forEach items="${pks}" var="pk">
+		                        	
+		                        	<c:choose>
+		                        	 <c:when test="${pk.id ==account.pkId}">
+		                        	 <option value="${pk.id}" selected="selected">${pk.firstName} ${pk.lastName } (${pk.username})</option>
+		                        	 </c:when>
+		                        	 <c:otherwise>
+		                        	 <option value="${pk.id}">${pk.firstName} ${pk.lastName } (${pk.username})</option>
+		                        	 </c:otherwise>
+		                        	</c:choose>
+		                        	
+		                        	
+		                        </c:forEach>
+							 </select>
 
                         </div>
                    

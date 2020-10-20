@@ -2,82 +2,113 @@ package org.opensrp.web.rest.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.common.dto.*;
+import org.opensrp.common.dto.ChangePasswordDTO;
+import org.opensrp.common.dto.SKWithLocationDTO;
+import org.opensrp.common.dto.SSWithLocationDTO;
+import org.opensrp.common.dto.SSWithUCAIdDTO;
+import org.opensrp.common.dto.UserAssignedLocationDTO;
+import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.UserColumn;
 import org.opensrp.core.dto.UserLocationDTO;
-import org.opensrp.core.entity.*;
-import org.opensrp.core.service.*;
+import org.opensrp.core.entity.Facility;
+import org.opensrp.core.entity.FacilityWorker;
+import org.opensrp.core.entity.FacilityWorkerType;
+import org.opensrp.core.entity.Location;
+import org.opensrp.core.entity.Role;
+import org.opensrp.core.entity.Team;
+import org.opensrp.core.entity.TeamMember;
+import org.opensrp.core.entity.User;
+import org.opensrp.core.entity.UsersCatchmentArea;
+import org.opensrp.core.service.EmailService;
+import org.opensrp.core.service.FacilityService;
+import org.opensrp.core.service.FacilityWorkerTypeService;
+import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.RoleService;
+import org.opensrp.core.service.TeamMemberService;
+import org.opensrp.core.service.TeamService;
+import org.opensrp.core.service.UserService;
+import org.opensrp.core.service.UsersCatchmentAreaService;
 import org.opensrp.core.service.mapper.FacilityWorkerMapper;
 import org.opensrp.core.service.mapper.UserMapper;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import java.util.*;
 
 @RequestMapping("rest/api/v1/user")
 @RestController
 public class UserRestController {
-
+	
 	@Autowired
 	private UserService userServiceImpl;
-
+	
 	@Autowired
 	private TeamMemberService teamMemberServiceImpl;
-
+	
 	@Autowired
 	private TeamService teamService;
-
+	
 	@Autowired
 	private FacilityService facilityService;
-
+	
 	@Autowired
 	private RoleService roleService;
-
+	
 	@Autowired
 	private FacilityWorkerTypeService facilityWorkerTypeService;
-
+	
 	@Autowired
 	private LocationService locationService;
-
+	
 	@Autowired
 	private EmailService emailService;
-
+	
 	@Autowired
 	private FacilityWorkerMapper facilityWorkerMapper;
-
+	
 	@Autowired
 	private UserMapper userMapper;
-
+	
 	@Autowired
 	private UsersCatchmentAreaService usersCatchmentAreaService;
-
+	
 	private static final Logger logger = Logger.getLogger(UserRestController.class);
+	
 	private static final Integer SK_ROLE_ID = Roles.SK.getId();
+	
 	private static final Integer SS_ROLE_ID = Roles.SS.getId();
+	
 	private static final int villageTagId = LocationTags.VILLAGE.getId();
-
-
+	
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO,
-	                                       ModelMap model) throws Exception {
+	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO, ModelMap model) throws Exception {
 		String userNameUniqueError = "";
 		try {
 			User user = userMapper.map(userDTO);
@@ -101,10 +132,9 @@ public class UserRestController {
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}
-
+	
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public ResponseEntity<String> saveAdd(@RequestBody UserDTO userDTO,
-	                                       ModelMap model) throws Exception {
+	public ResponseEntity<String> saveAdd(@RequestBody UserDTO userDTO, ModelMap model) throws Exception {
 		String userNameUniqueError = "User already exists";
 		try {
 			User user = userMapper.map(userDTO);
@@ -120,7 +150,7 @@ public class UserRestController {
 			if (Integer.valueOf(userDTO.getRoles()) == Roles.SS.getId() && AuthenticationManagerUtil.isAdmin()) {
 				User sk = userServiceImpl.findById(userDTO.getParentUserId(), "id", User.class);
 				user.setPassword("brac12345");
-				user.setUsername(sk.getUsername()+userDTO.getSsNo());
+				user.setUsername(sk.getUsername() + userDTO.getSsNo());
 				user.setParentUser(sk);
 			}
 			boolean isExists = userServiceImpl.isUserExist(user.getUsername());
@@ -135,7 +165,7 @@ public class UserRestController {
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}
-
+	
 	@RequestMapping(value = "/change-password", method = RequestMethod.POST)
 	public ResponseEntity<String> changeUserPassword(HttpSession session, @RequestBody ChangePasswordDTO dto, ModelMap model) {
 		try {
@@ -170,7 +200,7 @@ public class UserRestController {
 				user.setChcp(facility.getId() + "");
 				firstName = user.getFirstName();
 				lastName = user.getLastName();
-//				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
+				//				int numberOfUserSaved = (int) userServiceImpl.save(user, false);
 				String[] locations = userDTO.getLocationList().split(",");
 				int[] locationList = new int[locations.length];
 				for (int i = 0; i < locations.length; i++) {
@@ -181,22 +211,22 @@ public class UserRestController {
 				    user.getId(), team, locationList);
 				teamMember.setIdentifier(userDTO.getIdetifier());
 				teamMemberServiceImpl.save(teamMember);
-
+				
 				FacilityWorkerType facilityWorkerType = facilityWorkerTypeService.findByKey("MULTIPURPOSE HEALTH VOLUNTEER",
 				    "name", FacilityWorkerType.class);
-
+				
 				FacilityWorker facilityWorker = facilityWorkerMapper.map(user, facility, facilityWorkerType);
-
+				
 				facilityWorkerTypeService.save(facilityWorker);
-
+				
 				String mailBody = "Dear " + user.getFullName()
 				        + ",\n\nYour login credentials for CBHC are given below -\nusername : " + user.getUsername()
 				        + "\npassword : " + userDTO.getPassword();
-
-//				if (numberOfUserSaved > 0) {
-//					logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
-//					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
-//				}
+				
+				//				if (numberOfUserSaved > 0) {
+				//					logger.info("<><><><><> in user rest controller before sending mail to-" + user.getEmail());
+				//					emailService.sendSimpleMessage(user.getEmail(), "Login credentials for CBHC", mailBody);
+				//				}
 				
 			} else {
 				userNameUniqueError = "User name already taken.";
@@ -230,9 +260,10 @@ public class UserRestController {
 		}
 		return new ResponseEntity<>(new Gson().toJson(userNameUniqueError), OK);
 	}
-
+	
 	@RequestMapping(value = "/catchment-area/save", method = RequestMethod.POST)
-	public ResponseEntity<String> saveUsersCatchmentArea(HttpSession session, @RequestBody UserLocationDTO userLocationDTO) throws Exception {
+	public ResponseEntity<String> saveUsersCatchmentArea(HttpSession session, @RequestBody UserLocationDTO userLocationDTO)
+	    throws Exception {
 		String errorMessage = "";
 		userServiceImpl.saveTeamMemberAndCatchmentAreas(session, userLocationDTO);
 		List<Object[]> catchmentAreaTable = userServiceImpl.getCatchmentAreaTableForUser(userLocationDTO.getUserId());
@@ -240,9 +271,10 @@ public class UserRestController {
 		response.put("catchmentAreaTable", catchmentAreaTable);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
-
+	
 	@RequestMapping(value = "/catchment-area/update", method = RequestMethod.POST)
-	public ResponseEntity<String> updateUsersCatchmentArea(HttpSession session, @RequestBody UserLocationDTO userLocationDTO) throws Exception {
+	public ResponseEntity<String> updateUsersCatchmentArea(HttpSession session, @RequestBody UserLocationDTO userLocationDTO)
+	    throws Exception {
 		String errorMessage = "";
 		User user = userServiceImpl.findById(userLocationDTO.getUserId(), "id", User.class);
 		String role = userServiceImpl.getRole(user.getRoles());
@@ -253,55 +285,57 @@ public class UserRestController {
 		response.put("catchmentAreaTable", catchmentAreaTable);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
-
+	
 	@RequestMapping(value = "/{id}/catchment-area", method = RequestMethod.GET)
 	public ResponseEntity<String> catchmentArea(Model model, HttpSession session, @PathVariable("id") int id, Locale locale)
-			throws JSONException {
-
+	    throws JSONException {
+		
 		System.out.println("::LOAD CATCHMENT AREA::");
-
+		
 		String role = "Admin";
 		if (AuthenticationManagerUtil.isAM())
 			role = "AM";
-
+		
 		String parentIndication = "#";
 		String parentKey = "parent";
 		List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByForeignKey(id, "user_id",
-				"UsersCatchmentArea");
+		    "UsersCatchmentArea");
 		User user = userServiceImpl.findById(id, "id", User.class);
 		List<Role> roles = new ArrayList<>(user.getRoles());
-
+		
 		TeamMember member = teamMemberServiceImpl.findByForeignKey(id, "person_id", "TeamMember");
 		boolean isTeamMember = member != null ? true : false;
-
+		
 		Integer roleId = roles.get(0).getId();
 		List<UserAssignedLocationDTO> userAssignedLocationDTOS = userServiceImpl.assignedLocationByRole(roleId);
-
+		
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		Integer userLocationId = 0;
 		if (user.getParentUser() != null) {
-			if (role.equals(Roles.AM.getName()) && roleId.equals(Roles.SS.getId())) userLocationId = user.getParentUser().getId();
-			if (!role.equals(Roles.AM.getName())) userLocationId = user.getParentUser().getId();
+			if (role.equals(Roles.AM.getName()) && roleId.equals(Roles.SS.getId()))
+				userLocationId = user.getParentUser().getId();
+			if (!role.equals(Roles.AM.getName()))
+				userLocationId = user.getParentUser().getId();
 		}
 		JSONArray locationTree = locationService.getLocationWithDisableFacility(session, parentIndication, parentKey,
-				userAssignedLocationDTOS, id, role, userLocationId!=0?userLocationId:loggedInUser.getId(), roleId);
-
+		    userAssignedLocationDTOS, id, role, userLocationId != 0 ? userLocationId : loggedInUser.getId(), roleId);
+		
 		List<Object[]> catchmentAreaTable = userServiceImpl.getCatchmentAreaTableForUser(id);
-
+		
 		JSONArray assignedLocations = new JSONArray();
-		for (UserAssignedLocationDTO dto: userAssignedLocationDTOS) {
+		for (UserAssignedLocationDTO dto : userAssignedLocationDTOS) {
 			JSONObject jOb = new JSONObject();
 			jOb.put("userId", dto.getId());
 			jOb.put("locationId", dto.getLocationId());
 			assignedLocations.put(jOb);
 		}
-
+		
 		JSONArray catchmentAreas = new JSONArray();
 		if (usersCatchmentAreas != null)
-		for (UsersCatchmentArea area: usersCatchmentAreas) {
-			catchmentAreas.put(area.getLocationId());
-		}
-
+			for (UsersCatchmentArea area : usersCatchmentAreas) {
+				catchmentAreas.put(area.getLocationId());
+			}
+		
 		JSONObject finalResponse = new JSONObject();
 		finalResponse.put("locationTree", locationTree);
 		finalResponse.put("assignedLocation", assignedLocations);
@@ -309,17 +343,17 @@ public class UserRestController {
 		finalResponse.put("isTeamMember", isTeamMember);
 		finalResponse.put("catchmentAreaTable", catchmentAreaTable);
 		finalResponse.put("userFullName", user.getFullName());
-
+		
 		return new ResponseEntity<>(finalResponse.toString(), OK);
 	}
-
+	
 	@RequestMapping(value = "/ss-by-location", method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<SSWithUCAIdDTO> getSSListByLocation(@RequestParam("locationId") Integer locationId) {
 		List<SSWithUCAIdDTO> ssList = userServiceImpl.getSSListByLocation(locationId, SS_ROLE_ID);
 		return ssList;
 	}
-
+	
 	@RequestMapping(value = "/delete-sk-location", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteLocationFromSKAndRelatedSS(@RequestBody SKWithLocationDTO dto) {
 		String responseMessage = "DELETED";
@@ -328,24 +362,25 @@ public class UserRestController {
 			mp.put("locationId", dto.getSkLocationId());
 			mp.put("userId", dto.getSkId());
 			List<Integer> catchmentAreaIds = new ArrayList<>();
-			if (dto.getSsWithUCAIdDTOList()!= null) {
-				for (SSWithUCAIdDTO ssWithUCAIdDTO: dto.getSsWithUCAIdDTOList()) {
+			if (dto.getSsWithUCAIdDTOList() != null) {
+				for (SSWithUCAIdDTO ssWithUCAIdDTO : dto.getSsWithUCAIdDTOList()) {
 					catchmentAreaIds.add(ssWithUCAIdDTO.getUcaId());
 				}
 			}
 			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByKeys(mp);
-			for (UsersCatchmentArea area: usersCatchmentAreas) {
+			for (UsersCatchmentArea area : usersCatchmentAreas) {
 				catchmentAreaIds.add(area.getId());
 			}
-
+			
 			int response = usersCatchmentAreaService.deleteCatchmentAreas(catchmentAreaIds);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			responseMessage = e.getMessage();
 		}
 		return new ResponseEntity<>(new Gson().toJson(responseMessage), OK);
 	}
-
+	
 	@RequestMapping(value = "/delete-ss-location", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteLocationFromSKAndRelatedSS(@RequestBody SSWithLocationDTO dto) {
 		String responseMessage = "DELETED";
@@ -355,18 +390,19 @@ public class UserRestController {
 			mp.put("userId", dto.getSsId());
 			List<Integer> catchmentAreaIds = new ArrayList<>();
 			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByKeys(mp);
-			for (UsersCatchmentArea area: usersCatchmentAreas) {
+			for (UsersCatchmentArea area : usersCatchmentAreas) {
 				catchmentAreaIds.add(area.getId());
 			}
-
+			
 			int response = usersCatchmentAreaService.deleteCatchmentAreas(catchmentAreaIds);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			responseMessage = e.getMessage();
 		}
 		return new ResponseEntity<>(new Gson().toJson(responseMessage), OK);
 	}
-
+	
 	@RequestMapping(value = "/delete-users-location", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteLocationFromUsers(@RequestBody SSWithLocationDTO dto) {
 		String responseMessage = "DELETED";
@@ -376,32 +412,32 @@ public class UserRestController {
 			mp.put("userId", dto.getSsId());
 			List<Integer> catchmentAreaIds = new ArrayList<>();
 			List<UsersCatchmentArea> usersCatchmentAreas = usersCatchmentAreaService.findAllByKeys(mp);
-			for (UsersCatchmentArea area: usersCatchmentAreas) {
+			for (UsersCatchmentArea area : usersCatchmentAreas) {
 				catchmentAreaIds.add(area.getId());
 			}
-
+			
 			int response = usersCatchmentAreaService.deleteCatchmentAreas(catchmentAreaIds);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			responseMessage = e.getMessage();
 		}
 		return new ResponseEntity<>(new Gson().toJson(responseMessage), OK);
 	}
-
-
+	
 	@RequestMapping(value = "/update/ss-parent", method = RequestMethod.GET)
-	public ResponseEntity<String> updateParentForSS(@RequestParam("ssId") Integer ssId, @RequestParam("parentUsername") String parentUsername)
-			throws Exception {
+	public ResponseEntity<String> updateParentForSS(@RequestParam("ssId") Integer ssId,
+	                                                @RequestParam("parentUsername") String parentUsername) throws Exception {
 		Integer response = userServiceImpl.updateParentForSS(ssId, parentUsername);
-		return new ResponseEntity<>(response==1?"updated":"not updated", OK);
+		return new ResponseEntity<>(response == 1 ? "updated" : "not updated", OK);
 	}
-
+	
 	@RequestMapping(value = "/branch/sk", method = RequestMethod.GET)
 	public ResponseEntity<String> getSKByBranch(@RequestParam("branchId") Integer branchId) {
 		JSONObject res = new JSONObject();
 		return new ResponseEntity<>(res.toString(), OK);
 	}
-
+	
 	@RequestMapping(value = "/database/activity-status", method = RequestMethod.GET)
 	public ResponseEntity<String> databaseActivityStatus() {
 		Location location = locationService.findByKey("BANGLADESH", "name", Location.class);
@@ -409,11 +445,10 @@ public class UserRestController {
 	}
 	
 	@RequestMapping(value = "/update-sk", method = RequestMethod.POST)
-	public ResponseEntity<String> editSK(@RequestBody UserDTO userDTO,
-	                                       ModelMap model) throws Exception {		
+	public ResponseEntity<String> editSK(@RequestBody UserDTO userDTO, ModelMap model) throws Exception {
 		
 		String msg = "";
-		try{						
+		try {
 			User account = userServiceImpl.findById(userDTO.getId(), "id", User.class);
 			account.setFirstName(userDTO.getFirstName());
 			account.setLastName(userDTO.getLastName());
@@ -421,57 +456,61 @@ public class UserRestController {
 			account.setEmail(userDTO.getEmail());
 			account.setEnableSimPrint(userDTO.getEnableSimPrint());
 			account.setEnabled(userDTO.isStatus());
-			account.setBranches(userServiceImpl.setBranch(userDTO.getBranches()));	
+			account.setBranches(userServiceImpl.setBranch(userDTO.getBranches()));
 			userServiceImpl.update(account);
-		}catch(Exception e){
+		}
+		catch (Exception e) {
 			msg = "Some problem occurred please contact with Admin";
 		}
 		return new ResponseEntity<>(new Gson().toJson(msg), OK);
 	}
-
+	
 	@RequestMapping(value = "/update-ss", method = RequestMethod.POST)
-	public ResponseEntity<String> editSS(@RequestBody UserDTO userDTO,
-	                                     ModelMap model) throws Exception {
-
+	public ResponseEntity<String> editSS(@RequestBody UserDTO userDTO, ModelMap model) throws Exception {
+		
 		String msg = "";
-		try{
+		try {
 			User account = userServiceImpl.findById(userDTO.getId(), "id", User.class);
 			account.setFirstName(userDTO.getFirstName());
 			account.setLastName(userDTO.getLastName());
 			account.setMobile(userDTO.getMobile());
+			account.setPkId(userDTO.getPkId());
 			userServiceImpl.update(account);
-		} catch(Exception e) {
+		}
+		catch (Exception e) {
 			msg = "Some problem occurred please contact with Admin";
 		}
 		return new ResponseEntity<>(new Gson().toJson(msg), OK);
 	}
-
+	
 	@RequestMapping(value = "/user-without-catchment-area", method = RequestMethod.GET)
 	public ResponseEntity<String> userWithoutCatchmentArea(HttpServletRequest request) throws Exception {
 		Integer draw = Integer.valueOf(request.getParameter("draw"));
 		String name = request.getParameter("search[value]");
 		String role = request.getParameter("role");
 		String branch = request.getParameter("branch");
-		Integer roleId = StringUtils.isBlank(role)?0:Integer.valueOf(role);
-		Integer branchId = StringUtils.isBlank(branch)?0:Integer.valueOf(branch);
+		Integer roleId = StringUtils.isBlank(role) ? 0 : Integer.valueOf(role);
+		Integer branchId = StringUtils.isBlank(branch) ? 0 : Integer.valueOf(branch);
 		String orderColumn = request.getParameter("order[0][column]");
 		String orderDirection = request.getParameter("order[0][dir]");
-		orderColumn = UserColumn.valueOf("_"+orderColumn).getValue();
+		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
 		Integer start = Integer.valueOf(request.getParameter("start"));
 		Integer length = Integer.valueOf(request.getParameter("length"));
 		boolean editPermitted = AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER");
-
-		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId, name, length, start, orderColumn, orderDirection);
+		
+		List<Object[]> usersWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentArea(roleId, branchId, name,
+		    length, start, orderColumn, orderDirection);
 		Integer totalUserWithoutCatchmentArea = 0;
-		if(start > 0) {
+		if (start > 0) {
 			totalUserWithoutCatchmentArea = Integer.valueOf(request.getParameter("userCountWithoutCatchmentArea"));
 		} else {
 			totalUserWithoutCatchmentArea = userServiceImpl.getUserListWithoutCatchmentAreaCount(roleId, branchId, name);
 		}
-		JSONObject response = userServiceImpl.getUserDataOfDataTable(draw, totalUserWithoutCatchmentArea, usersWithoutCatchmentArea, editPermitted);
+		JSONObject response = userServiceImpl.getUserDataOfDataTable(draw, totalUserWithoutCatchmentArea,
+		    usersWithoutCatchmentArea, editPermitted);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
-
+	
 	@RequestMapping(value = "/user-with-catchment-area", method = RequestMethod.GET)
 	public ResponseEntity<String> userWithCatchmentArea(HttpServletRequest request) throws Exception {
 		String branch = request.getParameter("branch");
@@ -479,23 +518,26 @@ public class UserRestController {
 		String name = request.getParameter("search[value]");
 		String orderColumn = request.getParameter("order[0][column]");
 		String orderDirection = request.getParameter("order[0][dir]");
-		orderColumn = UserColumn.valueOf("_"+orderColumn).getValue();
+		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
 		int locationId = locationService.getLocationId(request);
-		Integer branchId = StringUtils.isBlank(branch)?0:Integer.valueOf(branch);
+		Integer branchId = StringUtils.isBlank(branch) ? 0 : Integer.valueOf(branch);
 		Integer draw = Integer.valueOf(request.getParameter("draw"));
-		Integer roleId = StringUtils.isBlank(role)?0:Integer.valueOf(role);
+		Integer roleId = StringUtils.isBlank(role) ? 0 : Integer.valueOf(role);
 		Integer start = Integer.valueOf(request.getParameter("start"));
 		Integer length = Integer.valueOf(request.getParameter("length"));
 		boolean editPermitted = AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER");
-
-		List<Object[]> usersWithCatchmentArea = userServiceImpl.getUserListByFilterString(locationId, villageTagId, roleId, branchId, name, length, start, orderColumn, orderDirection);
+		
+		List<Object[]> usersWithCatchmentArea = userServiceImpl.getUserListByFilterString(locationId, villageTagId, roleId,
+		    branchId, name, length, start, orderColumn, orderDirection);
 		Integer totalUserWithCatchmentArea = 0;
-		if(start > 0 ) {
+		if (start > 0) {
 			totalUserWithCatchmentArea = Integer.valueOf(request.getParameter("userCount"));
 		} else {
-			totalUserWithCatchmentArea = userServiceImpl.getUserListByFilterStringCount(locationId, villageTagId, roleId, branchId, name, length, start);
+			totalUserWithCatchmentArea = userServiceImpl.getUserListByFilterStringCount(locationId, villageTagId, roleId,
+			    branchId, name, length, start);
 		}
-		JSONObject response = userServiceImpl.getUserDataOfDataTable(draw, totalUserWithCatchmentArea, usersWithCatchmentArea, editPermitted);
+		JSONObject response = userServiceImpl.getUserDataOfDataTable(draw, totalUserWithCatchmentArea,
+		    usersWithCatchmentArea, editPermitted);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 }
