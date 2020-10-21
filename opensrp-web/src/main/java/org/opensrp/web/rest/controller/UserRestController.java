@@ -114,6 +114,7 @@ public class UserRestController {
 			User user = userMapper.map(userDTO);
 			User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 			user.setCreator(loggedInUser);
+			System.err.println("user.getUsername():::" + user.getUsername());
 			boolean isExists = userServiceImpl.isUserExist(user.getUsername());
 			if (!isExists) {
 				User createdUser = userServiceImpl.saveNew(user, false);

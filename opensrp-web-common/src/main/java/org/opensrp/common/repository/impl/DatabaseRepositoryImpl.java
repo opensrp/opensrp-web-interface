@@ -216,7 +216,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		criteria.add(Restrictions.eq(fieldName, id));
 		result = criteria.list();
 		
-		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+		return result.size() > 0 ? (T) result.get(0) : null;
 	}
 	
 	@Override
@@ -229,9 +229,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Query query = session.createQuery(hql).setParameterList("ids", ids);
 		result = query.list();
 		
-		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
+		return result.size() > 0 ? (List<T>) result : null;
 	}
 	
+	@Override
 	@Transactional
 	public <T> T findByForeignKey(int id, String fieldName, String className) {
 		Session session = getSessionFactory();
@@ -241,9 +242,10 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		Query query = session.createQuery(hql).setInteger("id", id);
 		result = query.list();
 		
-		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+		return result.size() > 0 ? (T) result.get(0) : null;
 	}
 	
+	@Override
 	@Transactional
 	public <T> List<T> findAllByForeignKey(int id, String fieldName, String className) {
 		Session session = getSessionFactory();
@@ -279,7 +281,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		criteria.add(Restrictions.eq(fieldName, value));
 		result = criteria.list();
 		
-		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+		return result.size() > 0 ? (T) result.get(0) : null;
 	}
 	
 	/**
@@ -309,7 +311,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 		result = criteria.list();
 		
-		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+		return result.size() > 0 ? (T) result.get(0) : null;
 	}
 	
 	/**
@@ -340,7 +342,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		criteria.addOrder(Order.desc(orderByFieldName));
 		result = criteria.list();
 		
-		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+		return result.size() > 0 ? (T) result.get(0) : null;
 	}
 	
 	/**
@@ -377,7 +379,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		criteria.addOrder(Order.desc(orderByFieldName));
 		result = criteria.list();
 		
-		return (T) (result.size() > 0 ? (T) result.get(0) : null);
+		return result.size() > 0 ? (T) result.get(0) : null;
 	}
 	
 	/**
@@ -409,7 +411,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		//			@SuppressWarnings("unchecked")
 		result = criteria.list();
 		
-		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
+		return result.size() > 0 ? (List<T>) result : null;
 	}
 	
 	/**
@@ -446,7 +448,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		result = criteria.list();
 		
 		if (result != null) {
-			return (List<T>) (result.size() > 0 ? (List<T>) result : null);
+			return result.size() > 0 ? (List<T>) result : null;
 		}
 		
 		return null;
@@ -568,9 +570,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<T> result = null;
 		
 		Query query = session.createQuery("from " + tableClass + " t order by t.id desc");
-		result = (List<T>) query.list();
+		result = query.list();
 		
-		return (List<T>) result;
+		return result;
 	}
 	
 	@Override
@@ -591,9 +593,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		        .addScalar("locationTagName", StandardBasicTypes.STRING).addScalar("users", StandardBasicTypes.STRING)
 		        .setInteger("villageId", LocationTags.VILLAGE.getId()).setInteger("roleId", roleId)
 		        .setResultTransformer(new AliasToBeanResultTransformer(LocationDTO.class));
-		result = (List<T>) query.list();
+		result = query.list();
 		
-		return (List<T>) result;
+		return result;
 	}
 	
 	@Override
@@ -603,9 +605,9 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		List<T> result = null;
 		
 		Query query = session.createQuery("from " + tableClass + " t order by t.id asc");
-		result = (List<T>) query.list();
+		result = query.list();
 		
-		return (List<T>) result;
+		return result;
 	}
 	
 	/**
@@ -632,7 +634,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		@SuppressWarnings("unchecked")
 		List<T> result = criteria.list();
 		
-		return (List<T>) (result.size() > 0 ? (List<T>) result : null);
+		return result.size() > 0 ? (List<T>) result : null;
 	}
 	
 	@Override
@@ -709,7 +711,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		criteria.addOrder(Order.desc("created"));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		
-		data = (List<T>) criteria.list();
+		data = criteria.list();
 		
 		return data;
 	}
@@ -1274,6 +1276,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return skIds.get(0);
 	}
 	
+	@Override
 	@Transactional
 	public Integer updateParentForSS(Integer ssId, Integer parentId) {
 		Session session = getSessionFactory();
@@ -1465,6 +1468,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		}
 	}
 	
+	@Override
 	@Transactional
 	public List<Object[]> getClientInformation() {
 		Session session = getSessionFactory();
@@ -1764,6 +1768,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return result;
 	}
 	
+	@Override
 	@Transactional
 	public int deleteCatchmentAreas(List<Integer> ids) {
 		Session session = getSessionFactory();
@@ -2209,6 +2214,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return report;
 	}
 	
+	@Override
 	@Transactional
 	public <T> List<T> getForumReport(String startDate, String endDate, String sql) {
 		Session session = getSessionFactory();
@@ -2231,6 +2237,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return report;
 	}
 	
+	@Override
 	@Transactional
 	public <T> List<T> getForumIndividualReport(String startDate, String endDate, String sql) {
 		Session session = getSessionFactory();
@@ -2247,6 +2254,7 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		return report;
 	}
 	
+	@Override
 	@Transactional
 	public <T> List<T> getUniqueLocation(String village, String ward) {
 		List<T> locations = null;

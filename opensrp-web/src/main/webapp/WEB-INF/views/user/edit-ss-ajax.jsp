@@ -64,8 +64,8 @@
                                         readonly="true"	required="required"/>
 
                         </div>
-                        ${account.pkId}
-                        <div class="col-sm-4">
+                       
+                        <%-- <div class="col-sm-4">
                             <label class="control-label" for="username">Select PK<span class="required">* </span></label>
                             <select required="required" name="pkId" id="pkId" class="form-control">
 								<option value="">Please Select</option>
@@ -84,7 +84,7 @@
 		                        </c:forEach>
 							 </select>
 
-                        </div>
+                        </div> --%>
                    
 					</div>
                     <form:input path="id" name = "id" style="display: none;"/>

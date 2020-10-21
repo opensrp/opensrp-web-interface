@@ -128,6 +128,35 @@ public class BranchController {
 		return "user/sk-change-ajax";
 	}
 	
+	@RequestMapping(value = "/branches/change-pk", method = RequestMethod.GET)
+	public String getBranchListForChangePK(HttpServletRequest request, HttpSession session,
+	                                       @RequestParam("branchId") Integer branchId, @RequestParam("roleId") Integer roleId) {
+		String branchList = "";
+		String errorMessage = "";
+		List<Branch> branches = new ArrayList<>(userService.getLoggedInUser().getBranches());
+		if (branchId != 0)
+			branchList = branchId.toString();
+		else
+			branchList = branchService.commaSeparatedBranch(branches);
+		List<Object[]> sks = branchService.getUserByBranch(branchList, roleId);
+		session.setAttribute("data", sks);
+		return "/make-select-option-2";
+	}
+	
+	@RequestMapping(value = "/branches/pk-change", method = RequestMethod.GET)
+	public String pkChange(HttpServletRequest request, HttpSession session, @RequestParam("ssId") Integer ssId, Model model) {
+		User am = AuthenticationManagerUtil.getLoggedInUser();
+		User ss = databaseServiceImpl.findById(ssId, "id", User.class);
+		User sk = databaseServiceImpl.findById(ss.getParentUser().getId(), "id", User.class);
+		List<Branch> branches = branchService.getBranchByUser(am.getId());
+		String errorMessage = "";
+		model.addAttribute("ssInfo", ss);
+		model.addAttribute("skFullName", sk.getFullName());
+		model.addAttribute("skUsername", sk.getUsername());
+		model.addAttribute("branches", branches);
+		return "user/pk-change-ajax";
+	}
+	
 	@RequestMapping(value = "/branch-list-options", method = RequestMethod.GET)
 	public String getBranchLists(HttpServletRequest request, Model model, @RequestParam int id) {
 		List<Branch> branches = targetService.getLocationByLocationId(id);

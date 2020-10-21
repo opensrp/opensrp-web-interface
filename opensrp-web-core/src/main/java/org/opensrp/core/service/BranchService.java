@@ -125,4 +125,17 @@ public class BranchService {
 		}
 		return branches;
 	}
+	
+	@Transactional
+	public List<Object[]> getUserByBranch(String branchIds, int roleId) {
+		Session session = sessionFactory.getCurrentSession();
+		List<Object[]> skList = null;
+		
+		String hql = "select u.id, u.username, concat(u.first_name, ' ', u.last_name), ub.branch_id from core.users u join core.user_role ur on u.id = ur.user_id"
+		        + " join core.user_branch ub on u.id = ub.user_id where ur.role_id = :skId and ub.branch_id = any(array["
+		        + branchIds + "])";
+		skList = session.createSQLQuery(hql).setInteger("skId", roleId).list();
+		
+		return skList;
+	}
 }

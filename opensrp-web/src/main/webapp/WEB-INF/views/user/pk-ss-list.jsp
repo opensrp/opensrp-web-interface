@@ -55,7 +55,7 @@
 			<a href="${back }"><strong>My PK </strong></a> | 
 				<% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>
 				<a class="btn btn-primary"
-                       href="#" onclick="ssForm(${skId}, '${skUsername}')">
+                       href="#" onclick="PkssForm(${skId}, '${skUsername}')">
 		                <strong>
 		                    <spring:message code="lbl.addNew"/>
 		                    <spring:message code="lbl.ss"/>
@@ -209,7 +209,7 @@
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
                                 <a href="#" onclick="catchmentLoad(${ssId}, ${0})"><spring:message code="lbl.catchmentArea"/></a> | <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-                                <a href="#" onclick="changeSK(${ssId})"><spring:message code="lbl.changeSK"/></a> <%} %>
+                                <a href="#" onclick="changePK(${ssId})">PK chnage</a> <%} %>
                             </td>
                         </tr>
                         <%

@@ -936,7 +936,7 @@ public class UserController {
 		model.addAttribute("locale", locale);
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
-		List<UserDTO> users = userServiceImpl.getChildUserFromParent(skId, "SS");
+		List<UserDTO> users = userServiceImpl.getPKUserFromParent(skId, "SS");
 		List<UserDTO> ssWithoutCatchment = userServiceImpl.getSSWithoutCatchmentArea(skId);
 		User skOfSS = userServiceImpl.findById(skId, "id", User.class);
 		
@@ -989,6 +989,44 @@ public class UserController {
 		model.addAttribute("skFullName", skFullName);
 		//end: adding location and team
 		return new ModelAndView("user/add-ss-ajax", "command", account);
+	}
+	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_ADD_SS')")
+	@RequestMapping(value = "/user/add-pk-SS.html", method = RequestMethod.GET)
+	public ModelAndView addSSOFPK(Model model, HttpSession session, @RequestParam("skId") Integer skId,
+	                              @RequestParam("skUsername") String skUsername, Locale locale) throws JSONException {
+		int[] selectedRoles = null;
+		model.addAttribute("account", new User());
+		List<Role> roles = userServiceImpl.setRolesAttributes(selectedRoles, session);
+		//List<Branch> branches = branchService.findAll("Branch");
+		User skUser = userServiceImpl.findById(skId, "id", User.class);
+		String skFullName = skUser.getFullName();
+		List<Branch> branches = branchService.getBranchByUser(skUser.getId());
+		Role ss = roleServiceImpl.findByKey("SS", "name", Role.class);
+		
+		//for adding location and team
+		model.addAttribute("teamMember", new TeamMember());
+		model.addAttribute("branches", branches);
+		model.addAttribute("skId", skId);
+		
+		String personName = "";
+		model.addAttribute("locale", locale);
+		model.addAttribute("roles", roles);
+		//session.setAttribute("locationList", locationServiceImpl.list().toString());
+		//int[] locations = new int[0];
+		//teamMemberServiceImpl.setSessionAttribute(session, teamMember, personName, locations);
+		session.setAttribute("ss", ss);
+		session.setAttribute("skId", skId);
+		model.addAttribute("skId", skId);
+		
+		String redirectUrl = "redirect:/user/sk-list.html";
+		if (StringUtils.isBlank(skUsername)) {
+			return new ModelAndView(redirectUrl + "?lang=" + locale);
+		}
+		model.addAttribute("skUsername", skUsername);
+		model.addAttribute("skFullName", skFullName);
+		//end: adding location and team
+		return new ModelAndView("user/add-pk-ss-ajax", "command", account);
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_USER')")

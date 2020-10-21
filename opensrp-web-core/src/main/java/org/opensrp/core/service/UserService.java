@@ -22,8 +22,11 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.transform.AliasToBeanResultTransformer;
+import org.hibernate.type.StandardBasicTypes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -846,9 +849,28 @@ public class UserService {
 		        .getChildUserByParentUptoVillage(userId, roleName);
 	}
 	
+	@Transactional
 	public List<UserDTO> getPKUserFromParent(Integer userId, String roleName) {
-		return roleName.equalsIgnoreCase("PK") ? repository.getChildUserByParentUptoUnion(userId, roleName) : repository
-		        .getChildUserByParentUptoVillage(userId, roleName);
+		return roleName.equalsIgnoreCase("PK") ? repository.getChildUserByParentUptoUnion(userId, roleName)
+		        : getPKSSListUptoVillage(userId, roleName);
+	}
+	
+	@Transactional
+	public <T> List<T> getPKSSListUptoVillage(Integer userId, String roleName) {
+		Session session = sessionFactory.getCurrentSession();
+		List<T> users = new ArrayList<T>();
+		
+		String hql = "select * from core.get_ss_by_pk(:userId) order by locationList, firstName, lastName;";
+		
+		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.INTEGER)
+		        .addScalar("username", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
+		        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("mobile", StandardBasicTypes.STRING)
+		        .addScalar("branches", StandardBasicTypes.STRING).addScalar("locationList", StandardBasicTypes.STRING)
+		        .addScalar("unionList", StandardBasicTypes.STRING).setInteger("userId", userId)
+		        .setResultTransformer(new AliasToBeanResultTransformer(UserDTO.class));
+		users = query.list();
+		
+		return users;
 	}
 	
 	public List<UserDTO> getSSWithoutCatchmentArea(Integer userId) {

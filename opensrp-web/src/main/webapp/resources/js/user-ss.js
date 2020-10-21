@@ -310,6 +310,41 @@ function changeSK(ssId) {
     });
 }
 
+function changePK(ssId) {
+    currentSS = ssId;
+    console.log("Present value");
+    console.log(ssId);
+    $('#change-sk').modal({
+        escapeClose: false,
+        clickClose: false,
+        showClose: false,
+        show: true
+    });
+
+    var url = "/opensrp-dashboard/branches/pk-change?ssId="+currentSS;
+    $.ajax({
+        type : "GET",
+        contentType : "application/json",
+        url : url,
+        dataType : 'html',
+        timeout : 100000,
+        beforeSend: function() {},
+        success : function(e, data) {
+            $("#sk-change-body").html(e);
+            currentSS = ssId;
+        },
+        error : function(e) {
+            console.log("ERROR: ", e);
+            display(e);
+        },
+        done : function(e) {
+
+            console.log("DONE");
+            //enableSearchButton(true);
+        }
+    });
+}
+
 $('#branches').change(function (e) {
     e.preventDefault();
     var url = "/opensrp-dashboard/branches/change-sk?branchId="+$("#branches").val();
@@ -413,6 +448,41 @@ function ssForm(skId, skUsername) {
     });
 }
 
+
+function PkssForm(skId, skUsername) {
+	   
+    $('#add-ss').modal({
+        escapeClose: false,
+        clickClose: false,
+        showClose: false,
+        show: true
+    });
+    
+    var url = "/opensrp-dashboard/user/add-pk-SS.html?skId=" + skId + "&skUsername=" + skUsername;
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        url: url,
+        dataType: 'html',
+        timeout: 100000,
+        beforeSend: function () {
+        },
+        success: function (e, data) {
+        	
+            $("#add-ss-body").html(e);
+            
+        },
+        error: function (e) {
+            console.log("ERROR: ", e);
+            display(e);
+        },
+        done: function (e) {
+
+            console.log("DONE");
+            //enableSearchButton(true);
+        }
+    });
+}
 
 function ssEditForm(skId, skUsername, ssId, locale) {
     console.log("SK Username: " + locale);
@@ -543,7 +613,7 @@ $("#update-ss-information").submit(function(event) {
         'firstName': $('input[name=firstName]').val(),
         'lastName': $('input[name=lastName]').val(),
         'mobile': $('input[name=mobile]').val(),
-        'pkId':$("#pkId").val(),
+        /*'pkId':$("#pkId").val(),*/
         'id': ssId
     };
 
