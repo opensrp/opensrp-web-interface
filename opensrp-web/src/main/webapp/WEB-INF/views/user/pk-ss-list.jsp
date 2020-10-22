@@ -207,9 +207,9 @@
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
                                 <a href="#" onclick="ssEditForm(${skId}, '${skUsername}', ${ssId}, '${locale}')"><spring:message code="lbl.edit"/></a> |  <%} %>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-                                <a href="#" onclick="catchmentLoad(${ssId}, ${0})"><spring:message code="lbl.catchmentArea"/></a> | <%} %>
-                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
-                                <a href="#" onclick="changePK(${ssId})">PK chnage</a> <%} %>
+                                <a href="#" onclick="catchmentLoad(${ssId}, ${0})"><spring:message code="lbl.catchmentArea"/></a>  <%} %>
+                               <%--  <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER")){ %>
+                                 | <a href="#" onclick="changePK(${ssId})">PK chnage</a> <%} %> --%>
                             </td>
                         </tr>
                         <%

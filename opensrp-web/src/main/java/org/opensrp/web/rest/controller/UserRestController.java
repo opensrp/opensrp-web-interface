@@ -475,7 +475,7 @@ public class UserRestController {
 			account.setFirstName(userDTO.getFirstName());
 			account.setLastName(userDTO.getLastName());
 			account.setMobile(userDTO.getMobile());
-			account.setPkId(userDTO.getPkId());
+			
 			userServiceImpl.update(account);
 		}
 		catch (Exception e) {

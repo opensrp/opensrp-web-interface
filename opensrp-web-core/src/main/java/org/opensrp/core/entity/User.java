@@ -130,15 +130,6 @@ public class User implements UserDetails {
 	@Column(name = "app_version")
 	private String appVersion;
 	
-	@Column(name = "pk_id")
-	private Integer pkId;
-	
-	@Column(name = "sk_id")
-	private Integer skId;
-	
-	@Column(name = "pa_id")
-	private Integer paId;
-	
 	public User() {
 	}
 	
@@ -347,30 +338,6 @@ public class User implements UserDetails {
 	
 	public void setAppVersion(String appVersion) {
 		this.appVersion = appVersion;
-	}
-	
-	public Integer getPkId() {
-		return pkId;
-	}
-	
-	public void setPkId(Integer pkId) {
-		this.pkId = pkId;
-	}
-	
-	public Integer getSkId() {
-		return skId;
-	}
-	
-	public void setSkId(Integer skId) {
-		this.skId = skId;
-	}
-	
-	public Integer getPaId() {
-		return paId;
-	}
-	
-	public void setPaId(Integer paId) {
-		this.paId = paId;
 	}
 	
 	@Transient
