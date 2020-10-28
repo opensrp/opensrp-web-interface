@@ -1,8 +1,11 @@
 package org.opensrp.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.google.api.Http;
+import org.opensrp.common.dto.AMStockReportDTO;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.dto.RequisitionQueryDto;
 import org.opensrp.common.util.Roles;
@@ -26,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class InventoryAmController {
@@ -235,9 +240,22 @@ public class InventoryAmController {
 	}
 	
 	@RequestMapping(value = "inventoryam/stock-report.html", method = RequestMethod.GET)
-	public String stockReport(Model model, Locale locale) {
+	public String stockReport(Model model, Locale locale, HttpSession session) {
 		model.addAttribute("locale", locale);
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		return "inventoryAm/stock-report";
+	}
+
+	@RequestMapping(value = "inventoryam/stock-report-table", method = RequestMethod.GET)
+	public String stockReportTable(
+			@RequestParam(value="year") String year,
+			@RequestParam(value="month") String month,
+			@RequestParam(value="branchId", required = false) String branchId,
+			HttpSession session) {
+		List<AMStockReportDTO> report = stockService.getStockReportForAM(year, month, "01313049428");
+		session.setAttribute("amStockReport", report);
+		return "inventoryAm/stock-report-table";
 	}
 	
 	@RequestMapping(value = "inventoryam/stock-list/view/{id}.html", method = RequestMethod.GET)
