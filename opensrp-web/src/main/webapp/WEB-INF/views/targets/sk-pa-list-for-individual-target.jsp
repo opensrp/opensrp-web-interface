@@ -71,6 +71,7 @@
 									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
 									<th>Location name</th>
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
+									<th>View</th>
 								</tr>
 							</thead>
 							

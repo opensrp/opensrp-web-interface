@@ -255,10 +255,14 @@ public class TargetService extends CommonService {
 			patient.put(dto.getUsername());
 			patient.put(dto.getBranch());
 			patient.put(dto.getLocationName());
-			String view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"set-individual/" + dto.getBranchId() + "/"
+			String setTarget = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"set-individual/" + dto.getBranchId() + "/"
 			        + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
 			        + "\">Set target</a> </div>";
-			patient.put(view);
+			String viewTarget = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"view-individual/" + dto.getBranchId() + "/"
+					+ dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
+					+ "\">View target</a> </div>";
+			patient.put(setTarget);
+			patient.put(viewTarget);
 			array.put(patient);
 		}
 		response.put("data", array);
