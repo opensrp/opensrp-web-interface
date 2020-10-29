@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Branch  list</title>
+<title>Target by position</title>
 	
 	
 <c:url var="get_url" value="/rest/api/v1/target/branch-list-for-positional-target" />
@@ -29,7 +29,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>Branch list
+							<i class="fa fa-list"></i>Target By Position
 						</div>
 					</div>					
 					<div class="portlet-body">

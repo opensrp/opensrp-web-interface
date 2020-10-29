@@ -9,7 +9,7 @@
            uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>SK, PA  list</title>
+<title>View Target</title>
 
 <meta name="_csrf" content="${_csrf.token}"/>
 <!-- default header name is X-CSRF-TOKEN -->
@@ -30,7 +30,7 @@
                 <div class="portlet box blue-madison">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-list"></i>SK, PA  list
+                            <i class="fa fa-list"></i>View target
                         </div>
                     </div>
                     <div class="portlet-body">
@@ -163,6 +163,7 @@
     }
 
     jQuery(function() {
+        jQuery('#futureDate').hide();
         jQuery('.date-picker-year').datepicker({
             changeMonth: true,
             changeYear: true,
