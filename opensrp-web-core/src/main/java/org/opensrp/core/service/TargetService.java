@@ -68,6 +68,9 @@ public class TargetService extends CommonService {
 			
 			for (TargetDetailsDTO targetDetailsDTO : targetDetailsDTOs) {
 				Map<String, Object> fieldValues = new HashMap<>();
+				if (targetDetailsDTO.getDay() != 0) {
+					fieldValues.put("day", targetDetailsDTO.getDay());
+				}
 				fieldValues.put("year", targetDetailsDTO.getYear());
 				fieldValues.put("month", targetDetailsDTO.getMonth());
 				fieldValues.put("userId", targetTo.getUserId());
@@ -116,6 +119,9 @@ public class TargetService extends CommonService {
 			
 			for (TargetDetailsDTO targetDetailsDTO : targetDetailsDTOs) {
 				Map<String, Object> fieldValues = new HashMap<>();
+				if (targetDetailsDTO.getDay() != 0) {
+					fieldValues.put("day", targetDetailsDTO.getDay());
+				}
 				fieldValues.put("year", targetDetailsDTO.getYear());
 				fieldValues.put("month", targetDetailsDTO.getMonth());
 				fieldValues.put("userId", target.getUserId());
@@ -219,9 +225,9 @@ public class TargetService extends CommonService {
 		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
 		        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
 		        .addScalar("locationName", StandardBasicTypes.STRING).addScalar("population", StandardBasicTypes.INTEGER)
-		        .setInteger("locationId", locationId)
-		        .setInteger("branchId", branchId).setString("roleName", roleName).setInteger("length", length)
-		        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		        .setInteger("locationId", locationId).setInteger("branchId", branchId).setString("roleName", roleName)
+		        .setInteger("length", length).setInteger("start", start)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
 		dtos = query.list();
 		
 		return dtos;
@@ -255,15 +261,15 @@ public class TargetService extends CommonService {
 			patient.put(dto.getUsername());
 			patient.put(dto.getBranch());
 			patient.put(dto.getLocationName());
-			String setTarget = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"set-individual/" + dto.getBranchId() + "/"
-			        + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
+			String setTarget = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"set-individual/"
+			        + dto.getBranchId() + "/" + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
 			        + "\">Set target</a> </div>";
-			String viewTarget = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"view-individual/" + dto.getBranchId() + "/"
-					+ dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
-					+ "\">View target</a> </div>";
-			String editTarget = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"edit-individual/" + dto.getBranchId() + "/"
-					+ dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
-					+ "\">Edit target</a> </div>";
+			String viewTarget = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"view-individual/"
+			        + dto.getBranchId() + "/" + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
+			        + "\">View target</a> </div>";
+			String editTarget = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"edit-individual/"
+			        + dto.getBranchId() + "/" + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
+			        + "\">Edit target</a> </div>";
 			patient.put(setTarget);
 			patient.put(viewTarget);
 			patient.put(editTarget);
@@ -287,9 +293,9 @@ public class TargetService extends CommonService {
 			patient.put(dto.getUsername());
 			patient.put(dto.getLocationName());
 			patient.put(dto.getPopulation());
-			String view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"set-individual-target-pk/" + dto.getBranchId()
-			        + "/" + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName() + "&id="
-			        + dto.getUsername() + "&location=" + dto.getLocationName() + "&population=1200"
+			String view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"set-individual-target-pk/"
+			        + dto.getBranchId() + "/" + dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
+			        + "&id=" + dto.getUsername() + "&location=" + dto.getLocationName() + "&population=1200"
 			        + "\">Set target</a> </div>";
 			patient.put(view);
 			array.put(patient);
@@ -392,8 +398,8 @@ public class TargetService extends CommonService {
 		        + "       join core.union_wise_population wp " + "         ON l.id = wp.union_id " + "WHERE  r.role_id = "
 		        + roleId + " " + "       AND ltag.id = " + locationTagId + " " + "       AND td.\"month\" = " + month + " "
 		        + "       AND td.\"year\" = " + year + " " + "       AND p.status = 'ACTIVE'   AND td.percentage != '0' "
-		        + " GROUP  BY td.product_id, "
-		        + "          p.\"name\", " + "          td.quantity, " + "          td.percentage;";
+		        + " GROUP  BY td.product_id, " + "          p.\"name\", " + "          td.quantity, "
+		        + "          td.percentage;";
 		Query query = session.createSQLQuery(hql).addScalar("percentage", StandardBasicTypes.STRING)
 		        .addScalar("productId", StandardBasicTypes.INTEGER).addScalar("productName", StandardBasicTypes.STRING)
 		        .addScalar("quantity", StandardBasicTypes.INTEGER)

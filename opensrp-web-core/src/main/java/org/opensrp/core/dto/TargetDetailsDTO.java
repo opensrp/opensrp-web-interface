@@ -27,6 +27,8 @@ public class TargetDetailsDTO {
 	
 	private int year;
 	
+	private int day;
+	
 	private String percentage;
 	
 	private String status;
@@ -135,6 +137,14 @@ public class TargetDetailsDTO {
 	
 	public void setYear(int year) {
 		this.year = year;
+	}
+	
+	public int getDay() {
+		return day;
+	}
+	
+	public void setDay(int day) {
+		this.day = day;
 	}
 	
 }

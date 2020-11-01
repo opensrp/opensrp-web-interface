@@ -1,6 +1,5 @@
 package org.opensrp.core.mapper;
 
-import org.hamcrest.text.IsEmptyString;
 import org.opensrp.core.dto.TargetDetailsDTO;
 import org.opensrp.core.entity.TargetDetails;
 import org.opensrp.core.service.TargetService;
@@ -27,19 +26,20 @@ public class TargetMapper {
 		
 		targetDetails.setYear(targetDetailsDTO.getYear());
 		targetDetails.setMonth(targetDetailsDTO.getMonth());
+		targetDetails.setDay(targetDetailsDTO.getDay());
 		return targetDetails;
 	}
 	
-	public TargetDetails targetMapForUnionWiseTarget(TargetDetailsDTO targetDetailsDTO, TargetDetails targetDetails,Integer population) {
+	public TargetDetails targetMapForUnionWiseTarget(TargetDetailsDTO targetDetailsDTO, TargetDetails targetDetails,
+	                                                 Integer population) {
 		
 		targetDetails.setProductId(targetDetailsDTO.getProductId());
 		targetDetails.setPercentage(targetDetailsDTO.getPercentage());
-		if(!targetDetailsDTO.getPercentage().isEmpty()) {
+		if (!targetDetailsDTO.getPercentage().isEmpty()) {
 			float percentageTarget = Float.parseFloat(targetDetailsDTO.getPercentage());
-			Integer targetQuantityByPopulation = (int) Math.round((population*(percentageTarget/100.0f)));
+			Integer targetQuantityByPopulation = (int) Math.round((population * (percentageTarget / 100.0f)));
 			targetDetails.setQuantity(targetQuantityByPopulation);
-		}
-		else {
+		} else {
 			targetDetails.setQuantity(targetDetailsDTO.getQuantity());
 		}
 		targetDetails.setUnit(targetDetailsDTO.getUnit());
@@ -51,6 +51,7 @@ public class TargetMapper {
 		
 		targetDetails.setYear(targetDetailsDTO.getYear());
 		targetDetails.setMonth(targetDetailsDTO.getMonth());
+		targetDetails.setDay(targetDetailsDTO.getDay());
 		return targetDetails;
 	}
 }

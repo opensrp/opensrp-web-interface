@@ -59,6 +59,9 @@ public class TargetDetails implements Serializable {
 	@Column(name = "year")
 	private int year;
 	
+	@Column(name = "day")
+	private int day;
+	
 	private int quantity;
 	
 	private String percentage;
@@ -225,6 +228,14 @@ public class TargetDetails implements Serializable {
 	
 	public void setYear(int year) {
 		this.year = year;
+	}
+	
+	public int getDay() {
+		return day;
+	}
+	
+	public void setDay(int day) {
+		this.day = day;
 	}
 	
 }
