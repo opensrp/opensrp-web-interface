@@ -14,7 +14,7 @@
 %>
 
 
-<title>Add Training</title>
+<title>Add Web Notification</title>
 	
 	
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -236,9 +236,9 @@ $('#addWebNotification').submit(function(event) {
 		locationType="LOCATION";
 		
 	}
-   
+   var today = new Date();
    let dateTime = $("#date").val();
-   let sendDate="2020-09-01";
+   let sendDate= today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
    let hour = 0;
    let minute=0;
    if(dateTime != ""){

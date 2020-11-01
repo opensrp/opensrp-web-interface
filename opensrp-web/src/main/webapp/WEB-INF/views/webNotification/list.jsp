@@ -171,7 +171,7 @@ $(function() {
                 	data.branchId = 0;
                     data.locationId=0;                    
                     data.roleId=0;
-                    data.type="SEND";
+                    data.type="";
                     data.startDate="";
                     data.endDate="";
                     

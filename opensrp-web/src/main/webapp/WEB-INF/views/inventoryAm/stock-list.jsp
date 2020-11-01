@@ -227,7 +227,7 @@ function filter(){
 function navigateTodetails(stockId,branchName,branchCode) {
 	var locale = "${locale}";
 	var branchString= "${branchInfo[0][1]}"+"-"+"${branchInfo[0][2]}";
-	window.location.replace("/opensrp-dashboard/inventoryam/stock-list/view/"+stockId+".html?lang="+locale+"&branch="+branchString+"");
+	window.location.assign("/opensrp-dashboard/inventoryam/stock-list/view/"+stockId+".html?lang="+locale+"&branch="+branchString+"");
 }
 </script>
 

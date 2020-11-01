@@ -87,6 +87,32 @@ public class TargetController {
 		model.addAttribute("name", request.getParameter("name"));
 		return "targets/sk-pa-individual-target-set";
 	}
+
+	@RequestMapping(value = "/view-individual/{branch_id}/{role_id}/{user_id}.html", method = RequestMethod.GET)
+	public String viewTargetIndividually(HttpServletRequest request, HttpSession session, Model model, Locale locale,
+										@PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
+										@PathVariable("user_id") int userId) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("targets", targetService.allActiveTarget(roleId));
+		model.addAttribute("branchId", branchId);
+		model.addAttribute("userId", userId);
+		model.addAttribute("roleId", roleId);
+		model.addAttribute("name", request.getParameter("name"));
+		return "targets/view-sk-pa-individual-target";
+	}
+
+	@RequestMapping(value = "/edit-individual/{branch_id}/{role_id}/{user_id}.html", method = RequestMethod.GET)
+	public String editTargetIndividually(HttpServletRequest request, HttpSession session, Model model, Locale locale,
+										 @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
+										 @PathVariable("user_id") int userId) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("targets", targetService.allActiveTarget(roleId));
+		model.addAttribute("branchId", branchId);
+		model.addAttribute("userId", userId);
+		model.addAttribute("roleId", roleId);
+		model.addAttribute("name", request.getParameter("name"));
+		return "targets/edit-sk-pa-individual-target";
+	}
 	
 	@RequestMapping(value = "/get-target-info", method = RequestMethod.GET)
 	public String getTargetInfo(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
