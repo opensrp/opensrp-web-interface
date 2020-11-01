@@ -261,8 +261,12 @@ public class TargetService extends CommonService {
 			String viewTarget = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"view-individual/" + dto.getBranchId() + "/"
 					+ dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
 					+ "\">View target</a> </div>";
+			String editTarget = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"edit-individual/" + dto.getBranchId() + "/"
+					+ dto.getRoleId() + "/" + dto.getUserId() + ".html?name=" + dto.getFullName()
+					+ "\">Edit target</a> </div>";
 			patient.put(setTarget);
 			patient.put(viewTarget);
+			patient.put(editTarget);
 			array.put(patient);
 		}
 		response.put("data", array);

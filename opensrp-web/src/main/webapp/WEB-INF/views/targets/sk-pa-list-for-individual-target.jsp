@@ -72,6 +72,7 @@
 									<th>Location name</th>
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
 									<th>View</th>
+									<th>Edit</th>
 								</tr>
 							</thead>
 							
