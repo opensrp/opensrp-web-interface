@@ -163,7 +163,7 @@ function getTargetInfo(){
 	var date = d.getDate();
 	var month = (d.getMonth() + 1)-1;
 	var year = d.getFullYear();
-	
+	var day = 0;
 /* 	var monthYearString=$('input#startYear').val();
 	var splitingString = monthYearString.split("-");
 	var month = parseInt(splitingString[0])-1;
@@ -176,7 +176,7 @@ function getTargetInfo(){
 	
 	var url = '${get_target_url}';
 	
-    url = url+"?locationOrBranchOrUserId="+'${setTargetTo}'+"&role="+'${role}'+"&typeName="+'${type}'+"&locationTag="+'${locationTag}'+"&month="+month+"&year="+year;
+    url = url+"?locationOrBranchOrUserId="+'${setTargetTo}'+"&role="+'${role}'+"&typeName="+'${type}'+"&locationTag="+'${locationTag}'+"&month="+month+"&year="+year+"&day="+day;
 
 	$.ajax({
         contentType : "application/json",
