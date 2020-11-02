@@ -85,7 +85,7 @@ public class TargetService extends CommonService {
 					
 					targetDetails.setUpdatedBy(user.getId());
 				}
-				
+				targetDetails.setTargetType(dto.getType());
 				targetDetails = targetMapper.map(targetDetailsDTO, targetDetails);
 				targetDetails.setUserId(targetTo.getUserId());
 				targetDetails.setBranchId(targetTo.getBranchId());
@@ -136,7 +136,7 @@ public class TargetService extends CommonService {
 					
 					targetDetails.setUpdatedBy(user.getId());
 				}
-				
+				targetDetails.setTargetType(dto.getType());
 				targetDetails = targetMapper.targetMapForUnionWiseTarget(targetDetailsDTO, targetDetails,
 				    target.getPopulation());
 				targetDetails.setUserId(target.getUserId());
