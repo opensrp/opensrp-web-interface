@@ -39,6 +39,28 @@ function PKInfo(id) {
 
 }
 
+function PAInfo(id) {
+	
+	$.ajax({
+		type : "GET",
+		contentType : "application/json",
+		url : "/opensrp-dashboard/sk/"+id+"/edit-pa-ajax.html",
+		dataType : 'html',
+		timeout : 100000,
+		beforeSend: function() {},
+		success : function(data) {
+			$("#userInfo").html(data);
+		},
+		error : function(e) {			
+		},
+		done : function(e) {
+		}
+	});
+
+}
+
+
+
 function userForm() {
 	
 	$.ajax({
@@ -71,6 +93,26 @@ function PKForm() {
 		beforeSend: function() {},
 		success : function(data) {
 			$("#add-pk-form").html(data);
+		},
+		error : function(e) {			
+		},
+		done : function(e) {
+		}
+	});
+
+}
+
+function PAForm() {
+	
+	$.ajax({
+		type : "GET",
+		contentType : "application/json",
+		url : "/opensrp-dashboard/user/add-pa-ajax.html",
+		dataType : 'html',
+		timeout : 100000,
+		beforeSend: function() {},
+		success : function(data) {
+			$("#add-pa-form").html(data);
 		},
 		error : function(e) {			
 		},

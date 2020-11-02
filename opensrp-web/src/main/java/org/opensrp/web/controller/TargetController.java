@@ -9,6 +9,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.SearchBuilder;
@@ -48,7 +49,7 @@ public class TargetController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		List<Branch> branches = branchService.findAll("Branch");
-        model.addAttribute("branches", branches);
+		model.addAttribute("branches", branches);
 		return "targets/sk-pa-list-for-individual-target";
 	}
 	
@@ -57,7 +58,7 @@ public class TargetController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		List<Branch> branches = branchService.findAll("Branch");
-        model.addAttribute("branches", branches);
+		model.addAttribute("branches", branches);
 		return "targets/target-by-position-list";
 	}
 	
@@ -87,11 +88,11 @@ public class TargetController {
 		model.addAttribute("name", request.getParameter("name"));
 		return "targets/sk-pa-individual-target-set";
 	}
-
+	
 	@RequestMapping(value = "/view-individual/{branch_id}/{role_id}/{user_id}.html", method = RequestMethod.GET)
 	public String viewTargetIndividually(HttpServletRequest request, HttpSession session, Model model, Locale locale,
-										@PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
-										@PathVariable("user_id") int userId) {
+	                                     @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
+	                                     @PathVariable("user_id") int userId) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("targets", targetService.allActiveTarget(roleId));
 		model.addAttribute("branchId", branchId);
@@ -100,11 +101,11 @@ public class TargetController {
 		model.addAttribute("name", request.getParameter("name"));
 		return "targets/view-sk-pa-individual-target";
 	}
-
+	
 	@RequestMapping(value = "/edit-individual/{branch_id}/{role_id}/{user_id}.html", method = RequestMethod.GET)
 	public String editTargetIndividually(HttpServletRequest request, HttpSession session, Model model, Locale locale,
-										 @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
-										 @PathVariable("user_id") int userId) {
+	                                     @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
+	                                     @PathVariable("user_id") int userId) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("targets", targetService.allActiveTarget(roleId));
 		model.addAttribute("branchId", branchId);
@@ -117,15 +118,25 @@ public class TargetController {
 	@RequestMapping(value = "/get-target-info", method = RequestMethod.GET)
 	public String getTargetInfo(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
-		model.addAttribute("locale", locale);
-		int role = Integer.parseInt(request.getParameter("role"));
+		int roleId = 0;
+		String roleParam = request.getParameter("role");
+		
+		Role role = targetService.findByKey(roleParam, "name", Role.class);
+		if (role != null) {
+			roleId = role.getId();
+		} else {
+			roleId = Integer.parseInt(roleParam);
+		}
+		
 		String typeName = request.getParameter("typeName");
 		String locationTag = request.getParameter("locationTag");
 		int month = Integer.parseInt(request.getParameter("month"));
 		int year = Integer.parseInt(request.getParameter("year"));
 		int locationOrBranchOrUserId = Integer.parseInt(request.getParameter("locationOrBranchOrUserId"));
-		model.addAttribute("targets", targetService.getTargetInfoByBranchOrLocationOrUserByRoleByMonth(role,
-		    locationOrBranchOrUserId, typeName, locationTag, month, year));
+		List<TargetCommontDTO> targets = targetService.getTargetInfoByBranchOrLocationOrUserByRoleByMonth(roleId,
+		    locationOrBranchOrUserId, typeName, locationTag, month, year);
+		model.addAttribute("productList", targetService.allActiveTarget(roleId));
+		model.addAttribute("targets", targets);
 		
 		return "targets/get-target-info";
 	}
@@ -147,7 +158,7 @@ public class TargetController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		List<Branch> branches = branchService.findAll("Branch");
-        model.addAttribute("branches", branches);
+		model.addAttribute("branches", branches);
 		return "targets/target-by-population-list";
 	}
 	

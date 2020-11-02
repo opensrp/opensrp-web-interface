@@ -856,6 +856,12 @@ public class UserService {
 	}
 	
 	@Transactional
+	public List<UserDTO> getPAUserFromParent(Integer userId, String roleName) {
+		return roleName.equalsIgnoreCase("PA") ? repository.getChildUserByParentUptoUnion(userId, roleName)
+		        : getPKSSListUptoVillage(userId, roleName);
+	}
+	
+	@Transactional
 	public <T> List<T> getPKSSListUptoVillage(Integer userId, String roleName) {
 		Session session = sessionFactory.getCurrentSession();
 		List<T> users = new ArrayList<T>();

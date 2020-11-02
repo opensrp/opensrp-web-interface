@@ -604,6 +604,16 @@ public class UserController {
 		return new ModelAndView("user/pk-change-password-ajax");
 	}
 	
+	@PostAuthorize("hasPermission(returnObject, 'PERM_UPDATE_PASSWORD')")
+	@RequestMapping(value = "/user/{id}/pa-change-password-ajax.html", method = RequestMethod.GET)
+	public ModelAndView editPAPasswordAM(Model model, HttpSession session, @PathVariable("id") int id, Locale locale) {
+		model.addAttribute("locale", locale);
+		User account = userServiceImpl.findById(id, "id", User.class);
+		model.addAttribute("account", account);
+		session.setAttribute("username", account.getUsername());
+		return new ModelAndView("user/pa-change-password-ajax");
+	}
+	
 	/**
 	 * <p>
 	 * This method is a post request of corresponding of get request method #editPassword which
@@ -895,7 +905,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/user/pk-list.html", method = RequestMethod.GET)
-	public String getPKByPM(HttpSession session, Model model, Locale locale) {
+	public String getPKByAM(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		System.err.println("sk start: " + loggedInUser.getUsername() + ":  " + System.currentTimeMillis());
@@ -905,6 +915,19 @@ public class UserController {
 		session.setAttribute("fromRole", "PK");
 		System.err.println("sk end: " + loggedInUser.getUsername() + ":  " + System.currentTimeMillis());
 		return "user/pk-list";
+	}
+	
+	@RequestMapping(value = "/user/pa-list.html", method = RequestMethod.GET)
+	public String getPAByAM(HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		
+		List<UserDTO> users = userServiceImpl.getPAUserFromParent(loggedInUser.getId(), "PA");
+		System.err.println("users;" + users);
+		session.setAttribute("allSK", users);
+		session.setAttribute("fromRole", "PA");
+		
+		return "user/pa-list";
 	}
 	
 	@RequestMapping(value = "/user/{skId}/{skUsername}/my-ss.html", method = RequestMethod.GET)
@@ -1227,6 +1250,29 @@ public class UserController {
 		return new ModelAndView("user/edit-pk-ajax", "command", account);
 	}
 	
+	@RequestMapping(value = "/sk/{id}/edit-pa-ajax.html", method = RequestMethod.GET)
+	public ModelAndView getPAAjax(HttpSession session, @PathVariable("id") int id, Locale locale, Model model)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
+		User account = userServiceImpl.findById(id, "id", User.class);
+		model.addAttribute("account", account);
+		model.addAttribute("id", id);
+		
+		String parentUserName = "";
+		int parentUserId = 0;
+		
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		int amId = loggedInUser.getId();
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		model.addAttribute("branches", branches);
+		session.setAttribute("parentUserName", parentUserName);
+		session.setAttribute("parentUserId", parentUserId);
+		model.addAttribute("amId", amId);
+		session.setAttribute("selectedBranches", account.getBranches());
+		
+		return new ModelAndView("user/edit-pa-ajax", "command", account);
+	}
+	
 	@RequestMapping(value = "/user/add-SK-ajax.html", method = RequestMethod.GET)
 	public ModelAndView addSKAjax(Model model, HttpSession session, Locale locale) throws JSONException {
 		
@@ -1262,6 +1308,22 @@ public class UserController {
 		session.setAttribute("pk", pk);
 		
 		return new ModelAndView("user/add-pk-ajax", "command", account);
+	}
+	
+	@RequestMapping(value = "/user/add-pa-ajax.html", method = RequestMethod.GET)
+	public ModelAndView addPAAjax(Model model, HttpSession session, Locale locale) throws JSONException {
+		
+		model.addAttribute("account", new User());
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		
+		session.setAttribute("amId", loggedInUser.getId());
+		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
+		Role pk = roleServiceImpl.findByKey("PA", "name", Role.class);
+		model.addAttribute("locale", locale);
+		model.addAttribute("branches", branches);
+		session.setAttribute("pk", pk);
+		
+		return new ModelAndView("user/add-pa-ajax", "command", account);
 	}
 	
 	@RequestMapping(value = "/user/sk-list", method = RequestMethod.GET)
