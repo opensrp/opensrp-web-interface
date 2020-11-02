@@ -66,6 +66,9 @@ public class TargetDetails implements Serializable {
 	
 	private String percentage;
 	
+	@Column(name = "target_type")
+	private String targetType;
+	
 	private Long timestamp;
 	
 	private String status;
@@ -236,6 +239,14 @@ public class TargetDetails implements Serializable {
 	
 	public void setDay(int day) {
 		this.day = day;
+	}
+	
+	public String getTargetType() {
+		return targetType;
+	}
+	
+	public void setTargetType(String targetType) {
+		this.targetType = targetType;
 	}
 	
 }

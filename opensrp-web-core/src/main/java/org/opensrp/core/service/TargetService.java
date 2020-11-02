@@ -85,7 +85,7 @@ public class TargetService extends CommonService {
 					
 					targetDetails.setUpdatedBy(user.getId());
 				}
-				
+				targetDetails.setTargetType(dto.getType());
 				targetDetails = targetMapper.map(targetDetailsDTO, targetDetails);
 				targetDetails.setUserId(targetTo.getUserId());
 				targetDetails.setBranchId(targetTo.getBranchId());
@@ -136,7 +136,7 @@ public class TargetService extends CommonService {
 					
 					targetDetails.setUpdatedBy(user.getId());
 				}
-				
+				targetDetails.setTargetType(dto.getType());
 				targetDetails = targetMapper.targetMapForUnionWiseTarget(targetDetailsDTO, targetDetails,
 				    target.getPopulation());
 				targetDetails.setUserId(target.getUserId());
@@ -363,18 +363,19 @@ public class TargetService extends CommonService {
 	public List<TargetCommontDTO> getTargetInfoByBranchOrLocationOrUserByRoleByMonth(int roleId,
 	                                                                                 int locationOrBranchOrUserId,
 	                                                                                 String typeName, String locationTag,
-	                                                                                 int month, int year) {
+	                                                                                 int month, int year, int day) {
 		
 		Session session = getSessionFactory();
 		List<TargetCommontDTO> dtos = new ArrayList<>();
 		
-		String hql = "select percentage, id Id, product_id productId ,product_name productName,quantity from core.get_target_info_by_branch_or_location_or_user_by_role_by_month(:roleId,:locationOrBranchOrUserId,:typeName,:locationTag,:month,:year)";
+		String hql = "select percentage, id Id, product_id productId ,product_name productName,quantity from core.get_target_info_by_branch_or_location_or_user_by_role_by_month(:roleId,:locationOrBranchOrUserId,:typeName,:locationTag,:month,:year,:day)";
 		Query query = session.createSQLQuery(hql).addScalar("percentage", StandardBasicTypes.STRING)
 		        .addScalar("Id", StandardBasicTypes.LONG).addScalar("productId", StandardBasicTypes.INTEGER)
 		        .addScalar("productName", StandardBasicTypes.STRING).addScalar("quantity", StandardBasicTypes.INTEGER)
 		        .setInteger("roleId", roleId).setInteger("locationOrBranchOrUserId", locationOrBranchOrUserId)
 		        .setString("typeName", typeName).setString("locationTag", locationTag).setInteger("month", month)
-		        .setInteger("year", year).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		        .setInteger("year", year).setInteger("day", day)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
 		dtos = query.list();
 		
 		return dtos;

@@ -129,12 +129,16 @@ public class TargetController {
 		}
 		
 		String typeName = request.getParameter("typeName");
+		
 		String locationTag = request.getParameter("locationTag");
 		int month = Integer.parseInt(request.getParameter("month"));
 		int year = Integer.parseInt(request.getParameter("year"));
 		int locationOrBranchOrUserId = Integer.parseInt(request.getParameter("locationOrBranchOrUserId"));
+		int day = Integer.parseInt(request.getParameter("day"));
+		
 		List<TargetCommontDTO> targets = targetService.getTargetInfoByBranchOrLocationOrUserByRoleByMonth(roleId,
-		    locationOrBranchOrUserId, typeName, locationTag, month, year);
+		    locationOrBranchOrUserId, typeName, locationTag, month, year, day);
+		
 		model.addAttribute("productList", targetService.allActiveTarget(roleId));
 		model.addAttribute("targets", targets);
 		
