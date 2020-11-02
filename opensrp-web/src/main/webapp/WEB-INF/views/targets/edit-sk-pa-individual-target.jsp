@@ -138,7 +138,7 @@
         var date = d.getDate();
         var month = (d.getMonth() + 1);
         var year = d.getFullYear();
-
+        var day = 0;
 
         /* var monthYearString=$('input#startYear').val();
         var splitingString = monthYearString.split("-");
@@ -151,7 +151,7 @@
         }
         var url = '${get_target_url}';
 
-        url = url+"?locationOrBranchOrUserId="+'${userId}'+"&role="+'${roleId}'+"&typeName="+'USER'+"&locationTag="+'NA'+"&month="+month+"&year="+year;
+        url = url+"?locationOrBranchOrUserId="+'${userId}'+"&role="+'${roleId}'+"&typeName="+'USER'+"&locationTag="+'NA'+"&month="+month+"&year="+year+"&day="+day;
 
         $.ajax({
             contentType : "application/json",
