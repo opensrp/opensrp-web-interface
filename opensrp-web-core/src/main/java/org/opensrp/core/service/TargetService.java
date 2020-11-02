@@ -16,6 +16,7 @@ import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
@@ -99,6 +100,34 @@ public class TargetService extends CommonService {
 		returnValue = 1;
 		
 		return returnValue;
+	}
+
+	@Transactional
+	public Integer getTargetForIndividual(Integer userId, Integer year, Integer month, Integer day, Integer branchId) {
+		Session session = getSessionFactory();
+		String hql;
+
+		if(day == 0)
+			hql = "select * from core.target_details as td where td.user_id= :userId and td.year = :year and td.month = :month and td.branch_id= :branchId";
+		else
+			hql = "select * from core.target_details as td where td.user_id= :userId and td.year = :year and td.month = :month and td.branch_id= :branchId and td.day= :day";
+
+
+		Query query = session.createSQLQuery(hql)
+				.addScalar("id", StandardBasicTypes.LONG)
+				.setInteger("userId", userId)
+				.setInteger("year", year)
+				.setInteger("month", month)
+				.setInteger("branchId", branchId);
+		if(day != 0) {
+			query.setInteger("day", day);
+		}
+		query.setResultTransformer(new AliasToBeanResultTransformer(TargetDetailsDTO.class));
+		int targetCount = query.list().size();
+		System.out.println("==================>");
+		System.out.println(targetCount);
+
+		return targetCount;
 	}
 	
 	@Transactional

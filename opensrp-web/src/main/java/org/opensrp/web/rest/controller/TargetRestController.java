@@ -7,6 +7,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.google.api.client.json.Json;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.TargetCommontDTO;
@@ -16,10 +20,7 @@ import org.opensrp.core.service.TargetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.google.gson.Gson;
 
@@ -54,6 +55,19 @@ public class TargetRestController {
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
 		}
 		
+	}
+
+	@RequestMapping(value = "/target-availability", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String findTargetForIndividual(
+			@RequestParam(value = "userId") Integer userId,
+			@RequestParam(value = "year") Integer year,
+			@RequestParam(value = "month") Integer month,
+			@RequestParam(value = "branchId") Integer branchId,
+			@RequestParam(value = "day", required = false, defaultValue = "0") Integer day) {
+
+		JsonObject ob = new JsonObject();
+		ob.addProperty("exist", targetService.getTargetForIndividual(userId, year, month, day, branchId));
+		return ob.toString();
 	}
 	
 	@RequestMapping(value = "/population-wise-save-update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -57,6 +57,7 @@
 										</label>
 									</div>
 								</form>
+
 								<div class="col-lg-3 form-group" id="dateField">
 									<label >Date:</label> <span class="text-danger"> *</span>
 									<input type="text"	readonly name="date" id="dateFieldInput" class="form-control " />
@@ -67,13 +68,10 @@
 									<input type="text"	readonly name="startYear" id="monthFieldInput" class="form-control date-picker-year" />
 									<span  class="text-danger validationMessage"></span>
 								</div>
-								<div class="col-lg-7 form-group text-right">
+								<div class="col-lg-2" style="padding-top: 20px"><span id="targetValidationMsg"></span></div>
+								<div class="col-lg-5  form-group text-right">
 									<button type="submit" onclick="getTargetInfo()" class="btn btn-primary" value="confirm">Same as previous month</button>
-									
-									
 								</div>
-								
-								
 							</div>
 							
 						</div>
@@ -122,7 +120,7 @@
 				        <div class="col-md-12 form-group text-right">
 					    		<div class="row">
 							     	<div class="col-lg-12">
-										 <button class="bt btn btn-primary" id="approve" name="s" value="1" type="submit">Submit</button>
+										 <button class="bt btn btn-primary" id="submitTarget"  name="s" value="1" type="submit">Submit</button>
 									</div>
 					            </div>
 					      </div>
@@ -311,6 +309,7 @@ jQuery(function() {
 		onClose: function(dateText, inst) {
 			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
 			$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+			fetchTargetInfo();
 		}
 	});
 	jQuery(".date-picker-year").focus(function () {
@@ -321,15 +320,13 @@ jQuery(function() {
 
 jQuery(function() {
 	jQuery('#dateFieldInput').datepicker({
-		changeDay: true,
-		changeMonth: true,
-		changeYear: true,
 		showButtonPanel: true,
 		dateFormat: 'dd-MM-yy',
 		minDate: new Date,
 		onClose: function(dateText, inst) {
 			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-			$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+			$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+			fetchTargetInfo();
 		}
 	});
 	jQuery(".date-picker-year").focus(function () {
@@ -352,6 +349,49 @@ function enableTimeField() {
 		$('#monthField').hide();
 		$('#dateField').show();
 	}
+}
+
+function fetchTargetInfo() {
+
+	let token = $("meta[name='_csrf']").attr("content");
+	let header = $("meta[name='_csrf_header']").attr("content");
+	var date = new Date(getTargetTime());
+	var data = {
+		userId: '${userId}',
+		branchId: '${branchId}',
+		year: date.getFullYear(),
+		month: date.getMonth()+1,
+		day: timePeriod == 'monthly' ? 0 : date.getDate()
+	};
+	$.ajax({
+		contentType : "application/json",
+		type: "GET",
+		url: '/opensrp-dashboard/rest/api/v1/target/target-availability',
+		data: data,
+		dataType : 'json',
+		timeout : 100000,
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader(header, token);
+			$("#loading").show();
+		},
+		success : function(data) {
+			console.log("availability: ", data);
+			if(data.exist > 0) {
+				$('#targetValidationMsg').html('<p style="color: darkred">target has already set for this time period</p>');
+				$('#submitTarget').attr("disabled","disabled");
+			}
+			else {
+				$('#targetValidationMsg').html('');
+				$('#submitTarget').removeAttr('disabled');
+			}
+		},
+		error : function(e) {
+			console.log(e);
+		},
+		done : function(e) {
+			console.log("DONE");
+		}
+	});
 }
 
 </script>
