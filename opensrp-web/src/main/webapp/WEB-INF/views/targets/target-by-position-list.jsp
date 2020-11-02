@@ -145,7 +145,7 @@ function settTaretForAll(){
 		targetName +=", Role : "+role;
 	}
 	
-	var type="";
+	var type="ROLE";
 	var locationId="";
 	if(branch!=0){
 		locationId = branch;

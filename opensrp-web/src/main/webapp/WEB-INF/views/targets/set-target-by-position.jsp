@@ -11,9 +11,9 @@
 
 <title>Target By Position</title>
 	<style>
-	.ui-datepicker-calendar {
-    display:none;
-}
+/*	.ui-datepicker-calendar {*/
+/*    display:none;*/
+/*}*/
 	</style>
 <meta name="_csrf" content="${_csrf.token}"/>
 <!-- default header name is X-CSRF-TOKEN -->
@@ -149,7 +149,7 @@
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
-	enableTimeField();	
+	enableTimeField();
 });
 
 function getTargetTime() {
@@ -318,22 +318,29 @@ jQuery(function() {
 	});
 });
 
-jQuery(function() {
+// jQuery(function() {
+// 	jQuery('#dateFieldInput').datepicker({
+// 		showButtonPanel: true,
+// 		dateFormat: 'dd-MM-yy',
+// 		minDate: new Date,
+// 		onClose: function(dateText, inst) {
+// 			fetchTargetInfo();
+// 		}
+// 	});
+// });
+
+function forceCall() {
 	jQuery('#dateFieldInput').datepicker({
 		showButtonPanel: true,
 		dateFormat: 'dd-MM-yy',
 		minDate: new Date,
 		onClose: function(dateText, inst) {
-			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-			$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
 			fetchTargetInfo();
 		}
 	});
-	jQuery(".date-picker-year").focus(function () {
-		$(".ui-datepicker-calendar").hide();
-		$(".ui-datepicker-current").hide();
-	});
-});
+
+	$(".ui-datepicker-calendar").show();
+}
 
 function onTimeChange(value) {
 	timePeriod = value;
@@ -348,6 +355,7 @@ function enableTimeField() {
 	else {
 		$('#monthField').hide();
 		$('#dateField').show();
+		forceCall();
 	}
 }
 
