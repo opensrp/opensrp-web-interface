@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>SK, PA  list</title>
+<title>Individual Target</title>
 	
 <meta name="_csrf" content="${_csrf.token}"/>
 <!-- default header name is X-CSRF-TOKEN -->
@@ -32,7 +32,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>SK, PA  list
+							<i class="fa fa-list"></i>Individual Target
 						</div>
 					</div>					
 					<div class="portlet-body">
@@ -40,13 +40,29 @@
 							
 							
 							<div class="row">
-								
-								<div class="col-lg-3 form-group">
-									<label for="date">Date:</label> <span class="text-danger"> *</span>
-									<input type="text"	readonly name="startYear" id="startYear" class="form-control date-picker-year" />
-									<span id="validationMessage" class="text-danger"></span>
+								<form style="margin-top: 10px">
+									<div class="col-lg-1">
+										<label for="monthly" onclick="onTimeChange('monthly')">
+											<input type="radio" id="monthly" value="monthly" name="time-period"> <br>Monthly
+										</label>
+									</div>
+									<div class="col-lg-1">
+										<label for="daily" onclick="onTimeChange('daily')">
+											<input type="radio" id="daily" value="daily" name="time-period"> <br> Daily
+										</label>
+									</div>
+								</form>
+								<div class="col-lg-3 form-group" id="dateField">
+									<label >Date:</label> <span class="text-danger"> *</span>
+									<input type="text"	readonly name="date" id="dateFieldInput" class="form-control " />
+									<span  class="text-danger validationMessage"></span>
 								</div>
-								<div class="col-lg-9 form-group text-right">
+								<div class="col-lg-3 form-group" id="monthField">
+									<label>Month And Year:</label> <span class="text-danger"> *</span>
+									<input type="text"	readonly name="startYear" id="monthFieldInput" class="form-control date-picker-year" />
+									<span  class="text-danger validationMessage"></span>
+								</div>
+								<div class="col-lg-7 form-group text-right">
 									<button type="submit" onclick="getTargetInfo()" class="btn btn-primary" value="confirm">Same as previous month</button>
 									
 									
@@ -125,19 +141,26 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script>
+	var timePeriod = 'monthly';
+	//initial value for radio button
+	$("#monthly").attr('checked', 'checked');
 jQuery(document).ready(function() {       
-	 Metronic.init(); // init metronic core components
-		Layout.init(); // init current layout
-		
+	Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
+	enableTimeField();
 });
 
+function getTargetTime() {
+	return timePeriod == 'monthly' ? $('#monthFieldInput').val() : $('#dateFieldInput').val();
+}
+
 function getTargetInfo(){
-	var date = $("#startYear").val();
+	var date = getTargetTime();
 	if(date == "" || date ==null) {
-		$("#validationMessage").html("<strong>This field is required</strong>");
+		$(".validationMessage").html("<strong>This field is required</strong>");
 		return;
 	}
-	$("#validationMessage").html("");
+	$(".validationMessage").html("");
 	var d = new Date(date);
 	var date = d.getDate();
 	var month = (d.getMonth() + 1)-1;
@@ -191,9 +214,9 @@ $('#targetInfo').submit(function(event) {
 	var splitingString = monthYearString.split("-");
 	month = parseInt(splitingString[0]);
 	year = parseInt(splitingString[1]); */
-	var date = $("#startYear").val();
+	var date = getTargetTime();
 	if(date == "" || date ==null) {
-		$("#validationMessage").html("<strong>This field is required</strong>");
+		$(".validationMessage").html("<strong>This field is required</strong>");
 		return;
 	}
 	$("#validationMessage").html("");
@@ -220,6 +243,7 @@ $('#targetInfo').submit(function(event) {
     		"endDate":endDate,
     		"month":month,
     		"year":year,
+			"day": timePeriod == 'monthly' ? 0 : date,
     		"status":"ACTIVE"
     			
     	}
@@ -273,12 +297,12 @@ $('#targetInfo').submit(function(event) {
 
 
 jQuery(function() {
-	jQuery('.date-picker-year').datepicker({
+	jQuery('#monthFieldInput').datepicker({
         changeMonth: true,
         changeYear: true,
         showButtonPanel: true,
         dateFormat: 'MM yy',
-        maxDate: new Date,
+        minDate: new Date,
         onClose: function(dateText, inst) { 
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
             $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
@@ -289,6 +313,41 @@ jQuery(function() {
         $(".ui-datepicker-current").hide();
     });
 });
+
+jQuery(function() {
+	jQuery('#dateFieldInput').datepicker({
+		changeDay: true,
+		changeMonth: true,
+		changeYear: true,
+		showButtonPanel: true,
+		dateFormat: 'dd-MM-yy',
+		minDate: new Date,
+		onClose: function(dateText, inst) {
+			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+			$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+		}
+	});
+	jQuery(".date-picker-year").focus(function () {
+		$(".ui-datepicker-calendar").hide();
+		$(".ui-datepicker-current").hide();
+	});
+});
+
+function onTimeChange(value) {
+	timePeriod = value;
+	enableTimeField();
+}
+
+function enableTimeField() {
+	if(timePeriod == 'monthly') {
+		$('#dateField').hide();
+		$('#monthField').show();
+	}
+	else {
+		$('#monthField').hide();
+		$('#dateField').show();
+	}
+}
 
 </script>
 
