@@ -164,10 +164,9 @@ function getTargetInfo(){
 	}
 	$(".validationMessage").html("");
 	var d = new Date(date);
-	var date = d.getDate();
 	var month = (d.getMonth() + 1)-1;
 	var year = d.getFullYear();
-	var day = 0;
+	var day = timePeriod == 'monthly' ? 0 : d.getDate();
 /* 	var monthYearString=$('input#startYear').val();
 	var splitingString = monthYearString.split("-");
 	var month = parseInt(splitingString[0])-1;
@@ -309,6 +308,7 @@ jQuery(function() {
 		onClose: function(dateText, inst) {
 			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
 			$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+			$(".validationMessage").html("");
 			fetchTargetInfo();
 		}
 	});
@@ -336,6 +336,7 @@ function forceCall() {
 		minDate: new Date,
 		onClose: function(dateText, inst) {
 			fetchTargetInfo();
+			$(".validationMessage").html("");
 		}
 	});
 
