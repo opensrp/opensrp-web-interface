@@ -62,7 +62,7 @@ public class TargetService extends CommonService {
 		Set<TargetDetailsDTO> targetDetailsDTOs = dto.getTargetDetailsDTOs();
 		
 		List<TargetCommontDTO> targetTos = allTargetUser(dto.getRole(), TaregtSettingsType.valueOf(dto.getType()).name(),
-		    dto.getTargetTo());
+		    "3211,3215,2711");
 		
 		for (TargetCommontDTO targetTo : targetTos) {
 			
@@ -76,7 +76,7 @@ public class TargetService extends CommonService {
 				fieldValues.put("userId", targetTo.getUserId());
 				fieldValues.put("productId", targetDetailsDTO.getProductId());
 				TargetDetails targetDetails = findByKeys(fieldValues, TargetDetails.class);
-				System.err.println("targetDetails::" + targetTo.getUserId());
+				
 				if (targetDetails == null) {
 					targetDetails = new TargetDetails();
 					targetDetails.setUuid(UUID.randomUUID().toString());
@@ -196,14 +196,15 @@ public class TargetService extends CommonService {
 	
 	@Transactional
 	@SuppressWarnings("unchecked")
-	public List<TargetCommontDTO> allTargetUser(int roleId, String type, int id) {
+	public List<TargetCommontDTO> allTargetUser(int roleId, String type, String branchIds) {
 		Session session = getSessionFactory();
 		List<TargetCommontDTO> result = null;
 		
-		String hql = "select user_id userId, branch_id branchId from core.get_userid_by_branch_or_location(:roleId,:id,:type);";
+		String hql = "select user_id userId, branch_id branchId from core.get_userid_by_branch_or_location(:roleId,'{"
+		        + branchIds + "}',:type);";
 		Query query = session.createSQLQuery(hql).addScalar("userId", StandardBasicTypes.INTEGER)
 		        .addScalar("branchId", StandardBasicTypes.INTEGER).setInteger("roleId", roleId).setString("type", type)
-		        .setInteger("id", id).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
 		
 		result = query.list();
 		

@@ -69,9 +69,9 @@
 									<span  class="text-danger validationMessage"></span>
 								</div>
 								<div class="col-lg-2" style="padding-top: 20px"><span id="targetValidationMsg"></span></div>
-								<div class="col-lg-5  form-group text-right">
+								<!-- <div class="col-lg-5  form-group text-right">
 									<button type="submit" onclick="getTargetInfo()" class="btn btn-primary" value="confirm">Same as previous month</button>
-								</div>
+								</div> -->
 							</div>
 							
 						</div>

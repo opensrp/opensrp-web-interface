@@ -200,13 +200,13 @@ License: You must have a valid license purchased only from themeforest(the above
 					</a>
 				</li>
 				<% if (AuthenticationManagerUtil.isAM()) {%>
-				<li>
+				<%-- <li>
 					<a href="<c:url value="/user/pk-list.html" />">
 					<i class="fa fa-user"></i>
 					PK list
 					
 					</a>
-				</li>
+				</li> --%>
 				<li>
 					<a href="<c:url value="/user/pa-list.html" />">
 					<i class="fa fa-user"></i>
