@@ -103,31 +103,29 @@ public class TargetService extends CommonService {
 	}
 
 	@Transactional
-	public Integer getTargetForIndividual(Integer userId, Integer year, Integer month, Integer day, Integer branchId) {
+	public Integer getTargetForGivenTimePeriod(
+			int roleId,
+			int locationOrBranchOrUserId,
+			String typeName,
+			String locationTag,
+			int month,
+			int year,
+			int day) {
 		Session session = getSessionFactory();
-		String hql;
 
-		if(day == 0)
-			hql = "select * from core.target_details as td where td.user_id= :userId and td.year = :year and td.month = :month and td.branch_id= :branchId";
-		else
-			hql = "select * from core.target_details as td where td.user_id= :userId and td.year = :year and td.month = :month and td.branch_id= :branchId and td.day= :day";
-
-
+		String hql = "select id Id from core.get_target_info_by_branch_or_location_or_user_by_role_by_month(:roleId,:locationOrBranchOrUserId,:typeName,:locationTag,:month,:year,:day)";
 		Query query = session.createSQLQuery(hql)
-				.addScalar("id", StandardBasicTypes.LONG)
-				.setInteger("userId", userId)
-				.setInteger("year", year)
+				.addScalar("Id", StandardBasicTypes.LONG)
+				.setInteger("roleId", roleId)
+				.setInteger("locationOrBranchOrUserId", locationOrBranchOrUserId)
+				.setString("typeName", typeName)
+				.setString("locationTag", locationTag)
 				.setInteger("month", month)
-				.setInteger("branchId", branchId);
-		if(day != 0) {
-			query.setInteger("day", day);
-		}
-		query.setResultTransformer(new AliasToBeanResultTransformer(TargetDetailsDTO.class));
-		int targetCount = query.list().size();
-		System.out.println("==================>");
-		System.out.println(targetCount);
+				.setInteger("year", year)
+				.setInteger("day", day)
+				.setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		return query.list().size();
 
-		return targetCount;
 	}
 	
 	@Transactional

@@ -309,7 +309,7 @@ jQuery(function() {
 			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
 			$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
 			$(".validationMessage").html("");
-			fetchTargetInfo();
+			// fetchTargetInfo();
 		}
 	});
 	jQuery(".date-picker-year").focus(function () {
@@ -335,7 +335,7 @@ function forceCall() {
 		dateFormat: 'dd-MM-yy',
 		minDate: new Date,
 		onClose: function(dateText, inst) {
-			fetchTargetInfo();
+			// fetchTargetInfo();
 			$(".validationMessage").html("");
 		}
 	});
@@ -362,46 +362,48 @@ function enableTimeField() {
 
 function fetchTargetInfo() {
 
-	let token = $("meta[name='_csrf']").attr("content");
-	let header = $("meta[name='_csrf_header']").attr("content");
-	var date = new Date(getTargetTime());
-	var data = {
-		userId: '${userId}',
-		branchId: '${branchId}',
-		year: date.getFullYear(),
-		month: date.getMonth()+1,
-		day: timePeriod == 'monthly' ? 0 : date.getDate()
-	};
-	$.ajax({
-		contentType : "application/json",
-		type: "GET",
-		url: '/opensrp-dashboard/rest/api/v1/target/target-availability',
-		data: data,
-		dataType : 'json',
-		timeout : 100000,
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader(header, token);
-			$("#loading").show();
-		},
-		success : function(data) {
-			console.log("availability: ", data);
-			if(data.exist > 0) {
-				$('#targetValidationMsg').html('<p style="color: darkred">target has already set for this time period</p>');
-				$('#submitTarget').attr("disabled","disabled");
+	var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		var date = new Date(getTargetTime());
+		var data = {
+			locationOrBranchOrUserId: '${setTargetTo}',
+			locationTag: '${locationTag}',
+			roleId: '${role}',
+			year: date.getFullYear(),
+			month: date.getMonth()+1,
+			typeName: '${type}',
+			day: timePeriod == 'monthly' ? 0 : date.getDate()
+		};
+		$.ajax({
+			contentType : "application/json",
+			type: "GET",
+			url: '/opensrp-dashboard/rest/api/v1/target/target-availability',
+			data: data,
+			dataType : 'json',
+			timeout : 100000,
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader(header, token);
+				$("#loading").show();
+			},
+			success : function(data) {
+				console.log("availability: ", data);
+				if(data.exist > 0) {
+					$('#targetValidationMsg').html('<p style="color: darkred">target has already set for this time period</p>');
+					$('#submitTarget').attr("disabled","disabled");
+				}
+				else {
+					$('#targetValidationMsg').html('');
+					$('#submitTarget').removeAttr('disabled');
+				}
+			},
+			error : function(e) {
+				console.log(e);
+			},
+			done : function(e) {
+				console.log("DONE");
 			}
-			else {
-				$('#targetValidationMsg').html('');
-				$('#submitTarget').removeAttr('disabled');
-			}
-		},
-		error : function(e) {
-			console.log(e);
-		},
-		done : function(e) {
-			console.log("DONE");
-		}
-	});
-}
+		});
+	}
 
 </script>
 

@@ -59,14 +59,16 @@ public class TargetRestController {
 
 	@RequestMapping(value = "/target-availability", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String findTargetForIndividual(
-			@RequestParam(value = "userId") Integer userId,
+			@RequestParam(value = "locationOrBranchOrUserId") Integer locationOrBranchOrUserId,
+			@RequestParam(value = "roleId") Integer roleId,
 			@RequestParam(value = "year") Integer year,
 			@RequestParam(value = "month") Integer month,
-			@RequestParam(value = "branchId") Integer branchId,
+			@RequestParam(value = "locationTag", required= false, defaultValue = "NA") String locationTag,
+			@RequestParam(value = "typeName") String typeName,
 			@RequestParam(value = "day", required = false, defaultValue = "0") Integer day) {
 
 		JsonObject ob = new JsonObject();
-		ob.addProperty("exist", targetService.getTargetForIndividual(userId, year, month, day, branchId));
+		ob.addProperty("exist", targetService.getTargetForGivenTimePeriod(roleId, locationOrBranchOrUserId, typeName, locationTag, month, year, day));
 		return ob.toString();
 	}
 	

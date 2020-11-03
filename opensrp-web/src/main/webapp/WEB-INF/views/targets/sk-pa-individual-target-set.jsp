@@ -303,7 +303,7 @@ jQuery(function() {
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
             $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
 			$(".validationMessage").html("");
-            fetchTargetInfo();
+            // fetchTargetInfo();
         }
     });
 	jQuery(".date-picker-year").focus(function () {
@@ -321,7 +321,7 @@ jQuery(function() {
 			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
 			$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
 			$(".validationMessage").html("");
-			fetchTargetInfo();
+			// fetchTargetInfo();
 		}
 	});
 	jQuery(".date-picker-year").focus(function () {
@@ -348,14 +348,15 @@ function enableTimeField() {
 
 function fetchTargetInfo() {
 
-	let token = $("meta[name='_csrf']").attr("content");
-	let header = $("meta[name='_csrf_header']").attr("content");
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
 	var date = new Date(getTargetTime());
 	var data = {
-		userId: '${userId}',
-		branchId: '${branchId}',
+		locationOrBranchOrUserId: '${userId}',
+		roleId: '${roleId}',
 		year: date.getFullYear(),
 		month: date.getMonth()+1,
+		typeName: 'USER',
 		day: timePeriod == 'monthly' ? 0 : date.getDate()
 	};
 	$.ajax({
