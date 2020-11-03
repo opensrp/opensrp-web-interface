@@ -309,6 +309,7 @@ jQuery(function() {
 		onClose: function(dateText, inst) {
 			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
 			$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+			$(".validationMessage").html("");
 			fetchTargetInfo();
 		}
 	});
@@ -336,6 +337,7 @@ function forceCall() {
 		minDate: new Date,
 		onClose: function(dateText, inst) {
 			fetchTargetInfo();
+			$(".validationMessage").html("");
 		}
 	});
 

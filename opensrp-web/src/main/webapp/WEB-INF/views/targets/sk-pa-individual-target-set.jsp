@@ -303,6 +303,7 @@ jQuery(function() {
         onClose: function(dateText, inst) { 
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
             $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+			$(".validationMessage").html("");
             fetchTargetInfo();
         }
     });
@@ -320,6 +321,7 @@ jQuery(function() {
 		onClose: function(dateText, inst) {
 			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
 			$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+			$(".validationMessage").html("");
 			fetchTargetInfo();
 		}
 	});
