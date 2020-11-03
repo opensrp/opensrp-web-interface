@@ -896,11 +896,11 @@ public class UserController {
 	public String getSKByPM(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		System.err.println("sk start: " + loggedInUser.getUsername() + ":  " + System.currentTimeMillis());
+		
 		List<UserDTO> users = userServiceImpl.getChildUserFromParent(loggedInUser.getId(), "SK");
 		session.setAttribute("allSK", users);
 		session.setAttribute("fromRole", "SK");
-		System.err.println("sk end: " + loggedInUser.getUsername() + ":  " + System.currentTimeMillis());
+		
 		return "user/sk-list";
 	}
 	
@@ -908,12 +908,12 @@ public class UserController {
 	public String getPKByAM(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		System.err.println("sk start: " + loggedInUser.getUsername() + ":  " + System.currentTimeMillis());
+		
 		List<UserDTO> users = userServiceImpl.getPKUserFromParent(loggedInUser.getId(), "PK");
-		System.err.println("users;" + users);
+		
 		session.setAttribute("allSK", users);
 		session.setAttribute("fromRole", "PK");
-		System.err.println("sk end: " + loggedInUser.getUsername() + ":  " + System.currentTimeMillis());
+		
 		return "user/pk-list";
 	}
 	
@@ -923,7 +923,7 @@ public class UserController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		
 		List<UserDTO> users = userServiceImpl.getPAUserFromParent(loggedInUser.getId(), "PA");
-		System.err.println("users;" + users);
+		
 		session.setAttribute("allSK", users);
 		session.setAttribute("fromRole", "PA");
 		

@@ -16,7 +16,6 @@ import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
@@ -101,32 +100,27 @@ public class TargetService extends CommonService {
 		
 		return returnValue;
 	}
-
+	
 	@Transactional
 	public Integer getTargetForIndividual(Integer userId, Integer year, Integer month, Integer day, Integer branchId) {
 		Session session = getSessionFactory();
 		String hql;
-
-		if(day == 0)
+		
+		if (day == 0)
 			hql = "select * from core.target_details as td where td.user_id= :userId and td.year = :year and td.month = :month and td.branch_id= :branchId";
 		else
 			hql = "select * from core.target_details as td where td.user_id= :userId and td.year = :year and td.month = :month and td.branch_id= :branchId and td.day= :day";
-
-
-		Query query = session.createSQLQuery(hql)
-				.addScalar("id", StandardBasicTypes.LONG)
-				.setInteger("userId", userId)
-				.setInteger("year", year)
-				.setInteger("month", month)
-				.setInteger("branchId", branchId);
-		if(day != 0) {
+		
+		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG).setInteger("userId", userId)
+		        .setInteger("year", year).setInteger("month", month).setInteger("branchId", branchId);
+		if (day != 0) {
 			query.setInteger("day", day);
 		}
 		query.setResultTransformer(new AliasToBeanResultTransformer(TargetDetailsDTO.class));
 		int targetCount = query.list().size();
 		System.out.println("==================>");
 		System.out.println(targetCount);
-
+		
 		return targetCount;
 	}
 	
@@ -184,15 +178,16 @@ public class TargetService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<ProductDTO> allActiveTarget(int roleId) {
+	public List<ProductDTO> allActiveTarget(int roleId, String type) {
 		Session session = getSessionFactory();
 		List<ProductDTO> result = null;
 		
-		String hql = "select name,p.id from core.product p join core.product_role pr on p.id=pr.product_id  where status=:status and pr.role_id=:roleId ";
+		String hql = "select name,p.id from core.product p join core.product_role pr on p.id=pr.product_id  where status=:status and pr.role_id=:roleId and p.type=:type ";
 		
 		Query query = session.createSQLQuery(hql).addScalar("name", StandardBasicTypes.STRING)
 		        .addScalar("id", StandardBasicTypes.LONG).setString("status", Status.ACTIVE.name())
-		        .setInteger("roleId", roleId).setResultTransformer(new AliasToBeanResultTransformer(ProductDTO.class));
+		        .setInteger("roleId", roleId).setString("type", type)
+		        .setResultTransformer(new AliasToBeanResultTransformer(ProductDTO.class));
 		
 		result = query.list();
 		

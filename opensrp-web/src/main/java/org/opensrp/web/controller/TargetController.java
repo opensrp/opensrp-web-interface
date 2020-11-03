@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.util.LocationTags;
+import org.opensrp.common.util.ProductType;
 import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Branch;
@@ -67,7 +68,7 @@ public class TargetController {
 		model.addAttribute("locale", locale);
 		String roleName = request.getParameter("role");
 		Role role = targetService.findByKey(roleName, "name", Role.class);
-		model.addAttribute("targets", targetService.allActiveTarget(role.getId()));
+		model.addAttribute("targets", targetService.allActiveTarget(role.getId(), ProductType.TARGET.name()));
 		model.addAttribute("setTargetTo", request.getParameter("setTargetTo"));
 		model.addAttribute("role", role.getId());
 		model.addAttribute("type", request.getParameter("type"));
@@ -81,7 +82,7 @@ public class TargetController {
 	                                    @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
 	                                    @PathVariable("user_id") int userId) {
 		model.addAttribute("locale", locale);
-		model.addAttribute("targets", targetService.allActiveTarget(roleId));
+		model.addAttribute("targets", targetService.allActiveTarget(roleId, ProductType.TARGET.name()));
 		model.addAttribute("branchId", branchId);
 		model.addAttribute("userId", userId);
 		model.addAttribute("roleId", roleId);
@@ -94,7 +95,7 @@ public class TargetController {
 	                                     @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
 	                                     @PathVariable("user_id") int userId) {
 		model.addAttribute("locale", locale);
-		model.addAttribute("targets", targetService.allActiveTarget(roleId));
+		model.addAttribute("targets", targetService.allActiveTarget(roleId, ProductType.TARGET.name()));
 		model.addAttribute("branchId", branchId);
 		model.addAttribute("userId", userId);
 		model.addAttribute("roleId", roleId);
@@ -107,7 +108,7 @@ public class TargetController {
 	                                     @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
 	                                     @PathVariable("user_id") int userId) {
 		model.addAttribute("locale", locale);
-		model.addAttribute("targets", targetService.allActiveTarget(roleId));
+		model.addAttribute("targets", targetService.allActiveTarget(roleId, ProductType.TARGET.name()));
 		model.addAttribute("branchId", branchId);
 		model.addAttribute("userId", userId);
 		model.addAttribute("roleId", roleId);
@@ -139,7 +140,7 @@ public class TargetController {
 		List<TargetCommontDTO> targets = targetService.getTargetInfoByBranchOrLocationOrUserByRoleByMonth(roleId,
 		    locationOrBranchOrUserId, typeName, locationTag, month, year, day);
 		
-		model.addAttribute("productList", targetService.allActiveTarget(roleId));
+		model.addAttribute("productList", targetService.allActiveTarget(roleId, ProductType.TARGET.name()));
 		model.addAttribute("targets", targets);
 		
 		return "targets/get-target-info";
@@ -171,7 +172,7 @@ public class TargetController {
 	                                       @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
 	                                       @PathVariable("user_id") int userId) {
 		model.addAttribute("locale", locale);
-		model.addAttribute("targets", targetService.allActiveTarget(Roles.PK.getId()));
+		model.addAttribute("targets", targetService.allActiveTarget(Roles.PK.getId(), ProductType.TARGET.name()));
 		model.addAttribute("branchId", branchId);
 		model.addAttribute("userId", userId);
 		model.addAttribute("roleId", roleId);
@@ -185,7 +186,7 @@ public class TargetController {
 	@RequestMapping(value = "/population-wise-target-set", method = RequestMethod.GET)
 	public String populationWiseTargetSet(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
-		model.addAttribute("targets", targetService.allActiveTarget(Roles.PK.getId()));
+		model.addAttribute("targets", targetService.allActiveTarget(Roles.PK.getId(), ProductType.TARGET.name()));
 		return "targets/population-wise-target-set";
 	}
 	

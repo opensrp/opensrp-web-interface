@@ -25,10 +25,13 @@ public class PermissionService {
 	
 	public void addPermission() throws Exception {
 		for (PermissionName permission : PermissionName.values()) {
+			
 			if (findByKey(permission.name(), "name", org.opensrp.core.entity.Permission.class) == null) {
 				org.opensrp.core.entity.Permission perm = new org.opensrp.core.entity.Permission();
 				perm.setName(permission.name());
 				save(perm);
+			} else {
+				
 			}
 		}
 	}

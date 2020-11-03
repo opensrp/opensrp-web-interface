@@ -8,8 +8,11 @@
 <%@ taglib prefix="security"
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
+<%@page import="java.util.List"%>
+<%@page import="org.opensrp.core.entity.Role"%>
+<%@page import="org.opensrp.common.util.CheckboxHelperUtil"%>
 
-<title>Add Product</title>
+<title>Edit target</title>
 	
 	
 
@@ -23,7 +26,7 @@
 
 		<div class="portlet box blue-madison">
 			<div class="portlet-title">
-				<div class="center-caption">Add a Product</div>
+				<div class="center-caption">Edit target</div>
 
 
 			</div>
@@ -40,48 +43,46 @@
 				</div>
 				<form id = "addProduct">
 					<div class="form-group row">
-						<label for="productName" class="col-sm-3 col-form-label"><spring:message code="lbl.productName"></spring:message><span class="text-danger">*</span> :</label>
+						<label for="productName" class="col-sm-3 col-form-label">Target name<span class="text-danger">*</span> :</label>
 						<div class="col-sm-6">
 							<input type="text" class="form-control" id="productName" name ="productName"
-								placeholder="Product Name" required>
+								placeholder="Target Name" value="${product.getName() }" required>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="description" class="col-sm-3 col-form-label"><spring:message code="lbl.description"></spring:message> :</label>
 						<div class="col-sm-6">
 							<input type="text" class="form-control" id="description" name ="productDescription"
-								placeholder="Description">
+								placeholder="Description" value="${product.getDescription() }">
 						</div>
 					</div>
-					<div class="form-group row">
-						<label for="purchasePrice" class="col-sm-3 col-form-label"><spring:message code="lbl.purchasePrice"></spring:message> :</label>
-						<div class="col-sm-6">
-							<input type="number" step="any" class="form-control" id="purchasePrice" name = "purchasePrice"
-								placeholder="Purchase Price">
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="sellingPrice" class="col-sm-3 col-form-label"><spring:message code="lbl.sellingPrice"></spring:message><span class="text-danger">*</span> :</label>
-						<div class="col-sm-6">
-							<input type="number" step="any" class="form-control" id="sellingPrice" name ="sellingPrice"
-								placeholder="Selling Price" required>
-						</div>
-					</div>
+					
 					<div class="form-group row">
 						<label  class="col-sm-3 col-form-label"><spring:message code="lbl.seller"></spring:message><span class="text-danger">*</span> :</label>
 						
 						<div class="col-sm-6">
-							<c:forEach items="${roles}" var="role">
+						<%
+						List<Role> roles = (List<Role>) session.getAttribute("roles");
+						int[] selectedRoles = (int[]) session.getAttribute("selectRoles");
+						for (Role role : roles) {
+						%>
+							
 								<div class="form-check">
-									<input class="form-check-input" name="sellerName"
-										type="checkbox" value="${role.id}" id="skcheckbox1"> <label
-										class="form-check-label" for="skcheckbox1">${role.name}
-									</label>
+									<% if(CheckboxHelperUtil.checkCheckedBox(
+										selectedRoles, role.getId()).equalsIgnoreCase("checked")){ %>
+									<input class="form-check-input" name="sellerName" type="checkbox" value="<%=role.getId()%>" 
+									checked  id="skcheckbox1"> 
+									<label class="form-check-label" for="skcheckbox1"><%=role.getName()%></label>
+									<% } else { %>
+									<input class="form-check-input" name="sellerName" type="checkbox" value="<%=role.getId()%>" 
+									  id="skcheckbox1"> 
+									<label class="form-check-label" for="skcheckbox1"><%=role.getName()%></label>
+									<% } %>
+								
 								</div>
-							</c:forEach>
-							<p>
-	                          		 <span class="text-danger" id="checkBoxSelection"></span>
-	                        	</p>
+							
+						<% } %>
+							<p><span class="text-danger" id="checkBoxSelection"></span></p>
 						</div>
 					</div>
 					<div class="form-group row"></div>
@@ -116,7 +117,7 @@ jQuery(document).ready(function() {
 });
 
 $("#addProduct").submit(function(event) { 
-	debugger;
+	
 	$("#loading").show();
 	var url = "/opensrp-dashboard/rest/api/v1/product/save-update";			
 	var token = $("meta[name='_csrf']").attr("content");
@@ -130,12 +131,12 @@ $("#addProduct").submit(function(event) {
 		formData = {
 	            'name': $('input[name=productName]').val(),
 	            'description': $('input[name=productDescription]').val(),
-	            'id': 0,
-	            'purchasePrice': +$('input[name=purchasePrice]').val(),
-	            'sellingPrice': +$('input[name=sellingPrice]').val(),
+	            'id': '${product.id}',
+	            'purchasePrice': 0,
+	            'sellingPrice': 0,
 	            'sellTo': sellTo,
 	            'status': "ACTIVE",
-	            'type': "PRODUCT"
+	            'type': "TARGET"
 	        };
 	console.log(formData)
 	event.preventDefault();
@@ -160,7 +161,7 @@ $("#addProduct").submit(function(event) {
 
 		   if(response.status == "SUCCESS"){
            	setTimeout(function(){
-           			window.location.replace("/opensrp-dashboard/inventorydm/products-list.html");
+           			window.location.replace("/opensrp-dashboard/inventorydm/target-list.html");
                 }, 1000);
 		   }
 		},

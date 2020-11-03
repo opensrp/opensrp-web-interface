@@ -23,7 +23,7 @@
 
 		<div class="portlet box blue-madison">
 			<div class="portlet-title">
-				<div class="center-caption">Add a Product</div>
+				<div class="center-caption">Add a target</div>
 
 
 			</div>
@@ -40,10 +40,10 @@
 				</div>
 				<form id = "addProduct">
 					<div class="form-group row">
-						<label for="productName" class="col-sm-3 col-form-label"><spring:message code="lbl.productName"></spring:message><span class="text-danger">*</span> :</label>
+						<label for="productName" class="col-sm-3 col-form-label">Target name<span class="text-danger">*</span> :</label>
 						<div class="col-sm-6">
 							<input type="text" class="form-control" id="productName" name ="productName"
-								placeholder="Product Name" required>
+								placeholder="Target Name" required>
 						</div>
 					</div>
 					<div class="form-group row">
@@ -53,20 +53,7 @@
 								placeholder="Description">
 						</div>
 					</div>
-					<div class="form-group row">
-						<label for="purchasePrice" class="col-sm-3 col-form-label"><spring:message code="lbl.purchasePrice"></spring:message> :</label>
-						<div class="col-sm-6">
-							<input type="number" step="any" class="form-control" id="purchasePrice" name = "purchasePrice"
-								placeholder="Purchase Price">
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="sellingPrice" class="col-sm-3 col-form-label"><spring:message code="lbl.sellingPrice"></spring:message><span class="text-danger">*</span> :</label>
-						<div class="col-sm-6">
-							<input type="number" step="any" class="form-control" id="sellingPrice" name ="sellingPrice"
-								placeholder="Selling Price" required>
-						</div>
-					</div>
+					
 					<div class="form-group row">
 						<label  class="col-sm-3 col-form-label"><spring:message code="lbl.seller"></spring:message><span class="text-danger">*</span> :</label>
 						
@@ -131,11 +118,11 @@ $("#addProduct").submit(function(event) {
 	            'name': $('input[name=productName]').val(),
 	            'description': $('input[name=productDescription]').val(),
 	            'id': 0,
-	            'purchasePrice': +$('input[name=purchasePrice]').val(),
-	            'sellingPrice': +$('input[name=sellingPrice]').val(),
+	            'purchasePrice': 0,
+	            'sellingPrice': 0,
 	            'sellTo': sellTo,
 	            'status': "ACTIVE",
-	            'type': "PRODUCT"
+	            'type': "TARGET"
 	        };
 	console.log(formData)
 	event.preventDefault();
@@ -160,7 +147,7 @@ $("#addProduct").submit(function(event) {
 
 		   if(response.status == "SUCCESS"){
            	setTimeout(function(){
-           			window.location.replace("/opensrp-dashboard/inventorydm/products-list.html");
+           			window.location.replace("/opensrp-dashboard/inventorydm/target-list.html");
                 }, 1000);
 		   }
 		},

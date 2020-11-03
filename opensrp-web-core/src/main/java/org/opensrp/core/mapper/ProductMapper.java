@@ -26,7 +26,7 @@ public class ProductMapper {
 	public Product map(ProductDTO dto, Product product) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
-		product.setName(dto.getName());
+		product.setName(dto.getName().trim());
 		product.setDescription(dto.getDescription());
 		product.setPurchasePrice(dto.getPurchasePrice());
 		product.setSellingPrice(dto.getSellingPrice());

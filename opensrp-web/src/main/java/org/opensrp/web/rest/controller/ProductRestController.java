@@ -2,7 +2,11 @@ package org.opensrp.web.rest.controller;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONObject;
+import org.opensrp.common.util.ProductType;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.entity.Product;
 import org.opensrp.core.mapper.ProductMapper;
@@ -32,6 +36,19 @@ public class ProductRestController {
 		Product product = productService.findById(dto.getId(), "id", Product.class);
 		JSONObject response = new JSONObject();
 		try {
+			
+			if (dto.getId() == 0) {
+				Map<String, Object> fieldValues = new HashMap<String, Object>();
+				fieldValues.put("name", dto.getName().trim());
+				fieldValues.put("type", ProductType.valueOf(dto.getType()).name());
+				Product p = productService.findByKeys(fieldValues, Product.class);
+				if (p != null) {
+					response.put("status", "FAILED");
+					response.put("msg", dto.getName() + " already exists.");
+					return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
+				}
+				
+			}
 			if (product != null) {
 				product = productMapper.map(dto, product);
 			} else {
@@ -44,9 +61,8 @@ public class ProductRestController {
 				productService.save(product);
 			}
 			response.put("status", "SUCCESS");
-			response.put("msg", "you have successfully added the product");
+			response.put("msg", "you have successfully submitted");
 			
-			//System.err.println(productService.productListFortStockIn(3, 28));
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
 		}
 		catch (Exception e) {

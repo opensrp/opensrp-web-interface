@@ -73,7 +73,7 @@ public class ProductService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<ProductDTO> getAllProductListDetails() {
+	public List<ProductDTO> getAllProductListDetails(String type) {
 		Session session = getSessionFactory();
 		List<ProductDTO> result = null;
 		
@@ -81,13 +81,13 @@ public class ProductService extends CommonService {
 		        + "       p.purchase_price          AS purchasePrice, " + "       p.description, "
 		        + "       String_agg(r.\"name\", ',') buyers " + "FROM   core.product p "
 		        + "       JOIN core.product_role pr " + "         ON p.id = pr.product_id " + "       JOIN core.\"role\" r "
-		        + "         ON pr.role_id = r.id " + "GROUP  BY p.id, " + "          p.\"name\", "
+		        + "         ON pr.role_id = r.id " + " where p.type=:type GROUP  BY p.id, " + "          p.\"name\", "
 		        + "          p.selling_price, " + "          p.purchase_price, " + "          p.description "
-		        + "ORDER  BY p.id ASC";
+		        + "  ORDER  BY p.id ASC";
 		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
 		        .addScalar("name", StandardBasicTypes.STRING).addScalar("sellingPrice", StandardBasicTypes.FLOAT)
 		        .addScalar("purchasePrice", StandardBasicTypes.FLOAT).addScalar("description", StandardBasicTypes.STRING)
-		        .addScalar("buyers", StandardBasicTypes.STRING)
+		        .addScalar("buyers", StandardBasicTypes.STRING).setString("type", type)
 		        .setResultTransformer(new AliasToBeanResultTransformer(ProductDTO.class));
 		result = query.list();
 		

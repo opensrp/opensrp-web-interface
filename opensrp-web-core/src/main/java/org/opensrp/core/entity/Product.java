@@ -41,7 +41,7 @@ public class Product implements Serializable {
 	private Long id;
 	
 	@NotEmpty(message = "Product name can't be empty")
-	@Column(name = "name")
+	@Column(name = "name", unique = true, nullable = false)
 	private String name;
 	
 	@Column(name = "uuid")

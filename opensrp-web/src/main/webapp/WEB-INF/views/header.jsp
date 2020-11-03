@@ -88,7 +88,9 @@ License: You must have a valid license purchased only from themeforest(the above
 	boolean PERM_READ_WRITE_TRAINING = AuthenticationManagerUtil.isPermitted("PERM_READ_WRITE_TRAINING");
 	boolean PERM_READ_WRITE_TARGET = AuthenticationManagerUtil.isPermitted("PERM_READ_WRITE_TARGET");
 	boolean PERM_READ_WRITE_WEBNOTIFICATION = AuthenticationManagerUtil.isPermitted("PERM_READ_WRITE_WEBNOTIFICATION");
-	
+	boolean PERM_PRODUCT_LIST = AuthenticationManagerUtil.isPermitted("PRODUCT_LIST");
+	boolean PERM_TARGET_LIST = AuthenticationManagerUtil.isPermitted("TARGET_LIST");
+
    %>
   
 <body>
@@ -253,6 +255,27 @@ License: You must have a valid license purchased only from themeforest(the above
 						
 					</ul>
 				</li>
+					<%
+						if (PERM_PRODUCT_LIST) {
+					%>
+					<li><a href="<c:url value="/inventorydm/products-list.html?lang=${locale}"/>"><i
+							class="fa fa-tasks" aria-hidden="true"></i> <span class="title">
+								<spring:message code="lbl.productListDm" />
+						</span> </a></li>
+					<%
+						}
+					%>
+					<%
+						if (PERM_TARGET_LIST) {
+					%>
+					<li><a href="<c:url value="/inventorydm/target-list.html?lang=${locale}"/>"><i
+							class="fa fa-tasks" aria-hidden="true"></i> <span class="title">
+								Target List
+						</span> </a></li>
+					<%
+						}
+					%>
+					
 				
 					<% if(PERM_READ_WRITE_TARGET){ %>
 					<li><a href="javascript:;"> <i class="fa fa-bullseye"></i> <span

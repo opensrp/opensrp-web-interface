@@ -27,19 +27,17 @@
 			<div class="portlet-body">
 				<div class="col-lg-12 form-group requisition-add">
 					<a class="btn btn-primary" id="addRequisition"
-						href="<c:url value="/inventorydm/add-product.html?lang=${locale}"/>">
-						<strong> Add Product </strong>
+						href="<c:url value="/inventorydm/add-target.html?lang=${locale}"/>">
+						<strong> Add Target </strong>
 					</a>
 				</div>
 					<table class="table table-striped table-bordered" id="productListDm">
 						<thead>
 							<tr>
 								<th><spring:message code="lbl.serialNo"></spring:message></th>
-								<th><spring:message code="lbl.productName"></spring:message></th>
-								<th><spring:message code="lbl.description"></spring:message></th>
-								<th><spring:message code="lbl.purchasePrice"></spring:message></th>
-								<th><spring:message code="lbl.sellingPrice"></spring:message></th>
-								<th><spring:message code="lbl.seller"></spring:message></th>
+								<th>Target name</th>
+								<th><spring:message code="lbl.description"></spring:message></th>								
+								<th>Assigned role</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -48,11 +46,9 @@
 									<tr>
 										<td>${ product.id }</td>
 										<td>${ product.name }</td>
-										<td>${ product.description }</td>
-										<td>${ product.purchasePrice }</td>
-										<td>${ product.sellingPrice }</td>
+										<td>${ product.description }</td>										
 										<td>${ product.buyers }</td>
-										<td><a href="<c:url value="/inventorydm/${product.id}/edit-product.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a></td>
+										<td><a href="<c:url value="/inventorydm/${product.id}/edit-target.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a></td>
 									</tr>
 								</c:forEach>
 						</tbody>
