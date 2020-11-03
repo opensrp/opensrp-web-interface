@@ -164,10 +164,9 @@ function getTargetInfo(){
 	}
 	$(".validationMessage").html("");
 	var d = new Date(date);
-	var date = d.getDate();
 	var month = (d.getMonth() + 1)-1;
 	var year = d.getFullYear();
-	var day = 0;
+	var day = timePeriod == 'monthly' ? 0 : d.getDate();
 /* 	var monthYearString=$('input#startYear').val();
 	var splitingString = monthYearString.split("-");
 	var month = parseInt(splitingString[0])-1;
