@@ -70,7 +70,7 @@
 							
 							<div class="row">
 								
-								<div class="col-lg-3 form-group">
+								<div class="col-lg-3 form-group ">
 								    <label for="designation">Designation</label>
 									<select
 										name="roleList" class="form-control" id="roleList">
@@ -79,14 +79,14 @@
 										<option value="PA">PA</option>										
 									</select>
 								</div>
+								<div class="col-lg-9 form-group form-group text-right">
+								<br />
+								<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
+								</div>
 								
 								
 							</div>
-							<div class="row">
-								<div class="col-lg-12 form-group text-right">
-									<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
-								</div>
-     						</div>
+							
 						</div>
 						<h3>Target </h3>
 						<div class="table-scrollable">
@@ -182,7 +182,7 @@ jQuery(function() {
             ajax: {
                 url: "${urlForSKPAList}",
                 data: function(data){                	
-                    data.branchId = 0;
+                    data.branchId = '';
                     data.locationId=0;                    
                     data.roleName='SK';
                     
@@ -235,8 +235,13 @@ function filter(){
          ajax: {
              url: "${urlForSKPAList}",
              data: function(data){
-            	
-            	 data.branchId = $("#branchList").val().join();
+            	var branchIds =  $("#branchList").val();
+            	if( branchIds ==null || typeof branchIds == 'undefined'){
+            		branchIds = ''
+            	}else{
+            		branchIds = $("#branchList").val().join();
+            	}
+            	 data.branchId = branchIds;
                  data.locationId=locationId;                    
                  data.roleName=$("#roleList option:selected").val();
              },

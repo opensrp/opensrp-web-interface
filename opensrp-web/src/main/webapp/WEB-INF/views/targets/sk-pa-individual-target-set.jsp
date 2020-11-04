@@ -18,6 +18,7 @@
 <c:url var="redirect_url" value="/target/target-by-individual.html" />
 <c:url var="get_target_url" value="/target/get-target-info" />
 
+<c:url var="cancelUrl" value="/target/target-by-individual.html" />
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
@@ -25,6 +26,17 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="btn btn-primary" href="${cancelUrl }">Individual target list</a>
+					
+				</li>
+			
+			</ul>
 		<div class="row">
 			<div class="col-md-12">
 
@@ -66,6 +78,7 @@
 								<div class="col-lg-5 form-group text-right">
 									<button type="submit" onclick="getTargetInfo()" class="btn btn-primary" value="confirm">Same as previous month</button>
 								</div>
+								
 							</div>
 						</div>
 						<h3>${name }'s target </h3>
@@ -113,7 +126,9 @@
 				        <div class="col-md-12 form-group text-right">
 					    		<div class="row">
 							     	<div class="col-lg-12">
+							     	 <a class="btn btn-primary" href="${cancelUrl}">Cancel</a>
 										 <button class="bt btn btn-primary" id="submitTarget" name="s" value="1" type="submit">Submit</button>
+										
 									</div>
 					            </div>
 					      </div>
@@ -159,9 +174,11 @@ function getTargetInfo(){
 	}
 	$(".validationMessage").html("");
 	var d = new Date(date);
-	var month = (d.getMonth() + 1)-1;
+	
+	var month = timePeriod == "monthly" ? (d.getMonth() + 1)-1 : (d.getMonth() + 1);
+	
 	var year = d.getFullYear();
-	var day = timePeriod == "monthly" ? 0 : d.getDate();
+	var day = timePeriod == "monthly" ? 0 : d.getDate()-1;
 	
 	/* var monthYearString=$('input#startYear').val();
 	var splitingString = monthYearString.split("-");
@@ -267,6 +284,7 @@ $('#targetInfo').submit(function(event) {
         timeout : 100000,
         beforeSend: function(xhr) {
             xhr.setRequestHeader(header, token);
+            $("#errormessageContent").html("Please wait.........")  
             $("#loading").show();
         },
         success : function(data) {
@@ -357,7 +375,7 @@ function fetchTargetInfo() {
 		year: date.getFullYear(),
 		month: date.getMonth()+1,
 		typeName: 'USER',
-		day: timePeriod == 'monthly' ? 0 : date.getDate()
+		day: timePeriod == 'monthly' ? 0 : date.getDate()-1
 	};
 	$.ajax({
 		contentType : "application/json",

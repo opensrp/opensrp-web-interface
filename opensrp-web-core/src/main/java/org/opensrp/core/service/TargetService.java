@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
 import org.json.JSONArray;
@@ -42,6 +43,9 @@ import org.springframework.stereotype.Service;
 public class TargetService extends CommonService {
 	
 	private static final Logger logger = Logger.getLogger(TargetService.class);
+	
+	@Autowired
+	private SessionFactory sessionFactory;
 	
 	@Autowired
 	private TargetMapper targetMapper;

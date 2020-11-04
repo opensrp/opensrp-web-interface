@@ -12,7 +12,7 @@
 		          	<label><strong>${ target.getProductName() } </strong></label>
 		     </div>
 		     <div class="col-md-6">
-		        	<input type="number" value="${target.getQuantity() }" class="form-control" min="1" id="${target.getProductId() }" name ="qty[]">
+		        	<input type="number" value="${target.getQuantity() }" class="form-control" min="0" id="${target.getProductId() }" name ="qty[]">
 		      </div>
 		</div>
 	</c:forEach>
@@ -24,7 +24,7 @@
 	           	<label><strong>${ product.name } </strong></label>
 	           </div>
 	            <div class="col-md-6">
-	           	<input type="number" class="form-control" min="1" id="${product.id }" name ="qty[]">
+	           	<input type="number" class="form-control" min="0" id="${product.id }" name ="qty[]">
 	           </div>
 		</div>
 	</c:forEach>

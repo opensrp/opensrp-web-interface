@@ -21,7 +21,7 @@
 <c:url var="add_url" value="/rest/api/v1/target/save-update" />
 <c:url var="redirect_url" value="/target/target-by-position-list.html" />
 <c:url var="get_target_url" value="/target/get-target-info" />
-
+<c:url var="cancelUrl" value="/target/target-by-position-list.html" />
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -29,6 +29,17 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="btn btn-primary" href="${cancelUrl }">Target by position list</a>
+					
+				</li>
+			
+			</ul>
 		<div class="row">
 			<div class="col-md-12">
 
@@ -120,6 +131,7 @@
 				        <div class="col-md-12 form-group text-right">
 					    		<div class="row">
 							     	<div class="col-lg-12">
+							     	 <a class="btn btn-primary" href="${cancelUrl}">Cancel</a>
 										 <button class="bt btn btn-primary" id="submitTarget"  name="s" value="1" type="submit">Submit</button>
 									</div>
 					            </div>
@@ -274,6 +286,7 @@ $('#targetInfo').submit(function(event) {
         timeout : 100000,
         beforeSend: function(xhr) {
             xhr.setRequestHeader(header, token);
+            $("#errormessageContent").html("Please wait.........") 
             $("#loading").show();
         },
         success : function(data) {

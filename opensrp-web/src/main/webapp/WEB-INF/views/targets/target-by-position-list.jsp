@@ -79,30 +79,22 @@
 										<option value="PA">PA</option>										
 									</select>
 								</div>
+								<div class="col-lg-2 form-group form-group text-right">
+								<br />
+								<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
+								</div>
+								<div class="col-lg-2 form-group form-group text-right">
+								<br />
+								<button type="submit" onclick="settTaretForAll()" class="btn btn-primary" value="confirm">Set target for all</button>
+									
+								</div>
 								
 								
 							</div>
-							<div class="row">
-								<div class="col-lg-12 form-group text-right">
-									<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
-								</div>
-     						</div>
-     						
+							
      						
 						</div>
-						<div class="form-group">
-							<div class="row">
-								<div class="col-lg-3 form-group">
-									
-								</div>
-								<div class="col-lg-9 form-group text-right">
-									<button type="submit" onclick="settTaretForAll()" class="btn btn-primary" value="confirm">Set target for all</button>
-									
-									
-								</div>
-							</div>
 						
-						</div>
 						<div class="table-scrollable">
 						
 						<table class="table table-striped table-bordered " id="targetTable">
@@ -158,6 +150,7 @@ function settTaretForAll(){
 	let upazila = $("#upazilaList option:selected").val();
 	let upazilaText = $("#upazilaList option:selected").text();
 	var branch = $("#branchList option:selected").val();
+	
 	var branchText = $("#branchList option:selected").text();
 	var role = $("#roleList option:selected").val();
 	var targetName = "";
@@ -176,7 +169,7 @@ function settTaretForAll(){
 		locationTag="upazila";
 	} 
 	
-	if(branch !=0){
+	if(typeof branch !='undefined'){
 		targetName +=", Branch : "+branchText;
 	}
 	if(role !=0){
@@ -185,7 +178,8 @@ function settTaretForAll(){
 	
 	var type="ROLE";
 	var locationId="";
-	if(branch!=0){
+	if(typeof branch !='undefined'){
+		
 		locationId = $("#branchList").val();
 		type = "BRANCH"
 	}else if(upazila != 0){
@@ -241,7 +235,7 @@ jQuery(function() {
             ajax: {
                 url: "${get_url}",
                 data: function(data){                	
-                    data.branchId = 0;
+                    data.branchId = '';
                     data.locationId=0;                    
                     data.roleName='SK';
                     
@@ -292,8 +286,13 @@ function filter(){
          ajax: {
              url: "${get_url}",
              data: function(data){
-            	
-            	 data.branchId = $("#branchList").val().join();
+            	 var branchIds =  $("#branchList").val();
+             	if( branchIds ==null || typeof branchIds == 'undefined'){
+             		branchIds = ''
+             	}else{
+             		branchIds = $("#branchList").val().join();
+             	}
+             	 data.branchId = branchIds;
                  data.locationId=locationId;                    
                  data.roleName=$("#roleList option:selected").val();
              },

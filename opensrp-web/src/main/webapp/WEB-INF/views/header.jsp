@@ -292,9 +292,9 @@ License: You must have a valid license purchased only from themeforest(the above
 							<li><a href="<c:url value="/target/target-by-position-list.html"/>">
 									<spring:message code="lbl.setTargetByPosition" />
 							</a></li>
-							<li><a href="<c:url value="/target/target-by-population.html"/>">
+							<%-- <li><a href="<c:url value="/target/target-by-population.html"/>">
 									<spring:message code="lbl.setTargetByPopulation" />
-							</a></li>
+							</a></li> --%>
 							<%
 								}
 							%>
