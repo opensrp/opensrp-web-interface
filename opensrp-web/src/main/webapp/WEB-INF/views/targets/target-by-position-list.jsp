@@ -10,7 +10,37 @@
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <title>Target by position</title>
-	
+
+<style>
+	.select2-results__option .wrap:before {
+		font-family: fontAwesome;
+		color: #999;
+		content: "\f096";
+		width: 25px;
+		height: 25px;
+		padding-right: 10px;
+	}
+
+	.select2-results__option[aria-selected=true] .wrap:before {
+		content: "\f14a";
+	}
+
+
+	/* not required css */
+
+	.row {
+		padding: 10px;
+	}
+
+	.select2-multiple,
+	.select2-multiple2 {
+		width: 50%
+	}
+
+	.select2-results__group .wrap:before {
+		display: none;
+	}
+</style>
 	
 <c:url var="get_url" value="/rest/api/v1/target/branch-list-for-positional-target" />
 <c:url var="set_target_url" value="/target/set-target-by-position.html" />
@@ -103,88 +133,20 @@
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
-
+<script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 <script>
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
 
 
-	$.fn.select2.amd.define("CustomSelectionAdapter", [
-				"select2/utils",
-				"select2/selection/multiple",
-				"select2/selection/placeholder",
-				"select2/selection/eventRelay",
-				"select2/selection/single",
-			],
-			function(Utils, MultipleSelection, Placeholder, EventRelay, SingleSelection) {
-
-				// Decorates MultipleSelection with Placeholder
-				let adapter = Utils.Decorate(MultipleSelection, Placeholder);
-				// Decorates adapter with EventRelay - ensures events will continue to fire
-				// e.g. selected, changed
-				adapter = Utils.Decorate(adapter, EventRelay);
-
-				adapter.prototype.render = function() {
-					// Use selection-box from SingleSelection adapter
-					// This implementation overrides the default implementation
-					let $selection = SingleSelection.prototype.render.call(this);
-					return $selection;
-				};
-
-				adapter.prototype.update = function(data) {
-					// copy and modify SingleSelection adapter
-					this.clear();
-
-					let $rendered = this.$selection.find('.select2-selection__rendered');
-					let noItemsSelected = data.length === 0;
-					let formatted = "";
-
-					if (noItemsSelected) {
-						formatted = this.options.get("placeholder") || "";
-					} else {
-						let itemsData = {
-							selected: data || [],
-							all: this.$element.find("option") || []
-						};
-						// Pass selected and all items to display method
-						// which calls templateSelection
-						formatted = this.display(itemsData, $rendered);
-					}
-
-					$rendered.empty().append(formatted);
-					$rendered.prop('title', formatted);
-				};
-
-				return adapter;
-			});
-
-
-	$('#branchList').select2({
-			multiple: true,
-			dropdownAutoWidth : true,
-			closeOnSelect: false,
-			placeholder: 'please select',
-			selectionAdapter: $.fn.select2.amd.require("CustomSelectionAdapter"),
-			templateSelection: function(data) {
-				return 'Selected '+data.selected.length+' out of ' + data.all.length;
-			},
-			templateResult: function(state) {
-				console.log(state);
-				// var $state = $(
-				// 		'<span> <input type="checkbox" '+ (state.selected ? 'checked': '')+ ' >'+ state.text +'</span>'
-				// );
-				var $state = $(
-						'<span>'+ state.text +'</span>'
-				);
-				return $state;
-
+		$('#branchList').select2MultiCheckboxes({
+			placeholder: "Select branch",
+			width: "auto",
+			templateSelection: function(selected, total) {
+				return "Selected " + selected.length + " of " + total;
 			}
-
 		});
-
-	$("#branchList > option").prop("selected","selected");
-	$("#branchList").trigger("change");
 });
 
 function settTaretForAll(){
@@ -331,7 +293,7 @@ function filter(){
              url: "${get_url}",
              data: function(data){
             	
-            	 data.branchId = $("#branchList option:selected").val();
+            	 data.branchId = $("#branchList").val().join();
                  data.locationId=locationId;                    
                  data.roleName=$("#roleList option:selected").val();
              },

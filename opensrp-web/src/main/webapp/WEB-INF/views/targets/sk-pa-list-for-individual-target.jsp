@@ -10,7 +10,37 @@
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <title>Individual Target</title>
-	
+<style>
+	.select2-results__option .wrap:before {
+		font-family: fontAwesome;
+		color: #999;
+		content: "\f096";
+		width: 25px;
+		height: 25px;
+		padding-right: 10px;
+	}
+
+	.select2-results__option[aria-selected=true] .wrap:before {
+		content: "\f14a";
+	}
+
+
+	/* not required css */
+
+	.row {
+		padding: 10px;
+	}
+
+	.select2-multiple,
+	.select2-multiple2 {
+		width: 50%
+	}
+
+	.select2-results__group .wrap:before {
+		display: none;
+	}
+</style>
+
 	
 <c:url var="urlForSKPAList" value="/rest/api/v1/target/sk-pa-user-list-for-individual-target-setting" />
 
@@ -35,7 +65,7 @@
 					<div class="portlet-body">
 						<div class="form-group">
 							
-							<jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" />
+							<jsp:include page="/WEB-INF/views/search-option-for-target-by-position.jsp" />
 							
 							
 							<div class="row">
@@ -95,17 +125,20 @@
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
+<script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 <script>
 jQuery(document).ready(function() {       
-	 Metronic.init(); // init metronic core components
-		Layout.init(); // init current layout
-		$('#branchList').select2({dropdownAutoWidth : true});
-   //TableAdvanced.init();
-		//$('#StockSellHistory').DataTable();
-		//$('#sellToManySSList').DataTable();
-		//$('#sellToManySSProductList').DataTable();
-});
+	Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
 
+	$('#branchList').select2MultiCheckboxes({
+		placeholder: "Select branch",
+		width: "auto",
+		templateSelection: function(selected, total) {
+			return "Selected " + selected.length + " of " + total;
+		}
+	});
+});
 
 
 jQuery(function() {
@@ -203,7 +236,7 @@ function filter(){
              url: "${urlForSKPAList}",
              data: function(data){
             	
-            	 data.branchId = $("#branchList option:selected").val();
+            	 data.branchId = $("#branchList").val().join();
                  data.locationId=locationId;                    
                  data.roleName=$("#roleList option:selected").val();
              },
