@@ -115,14 +115,14 @@ public class TargetRestController {
 		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
 		
 		String name = request.getParameter("search");
-		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		String branchIds = request.getParameter("branchId");
 		String roleName = request.getParameter("roleName");
 		int locationId = Integer.parseInt(request.getParameter("locationId"));
 		
-		List<TargetCommontDTO> userList = targetService.getUserListForTargetSet(locationId, branchId, roleName, length,
+		List<TargetCommontDTO> userList = targetService.getUserListForTargetSet(locationId, branchIds, roleName, length,
 		    start, orderColumn, orderDirection);
 		
-		int userCount = targetService.getUserListForTargetSetCount(locationId, branchId, roleName);
+		int userCount = targetService.getUserListForTargetSetCount(locationId, branchIds, roleName);
 		
 		JSONObject response = targetService.getUserListForTargetSetOfDataTable(draw, userCount, userList);
 		return new ResponseEntity<>(response.toString(), OK);
@@ -140,14 +140,14 @@ public class TargetRestController {
 		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
 		
 		String name = request.getParameter("search");
-		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		String branchIds = request.getParameter("branchId");
 		String roleName = request.getParameter("roleName");
 		int locationId = Integer.parseInt(request.getParameter("locationId"));
 		
-		List<TargetCommontDTO> totalList = targetService.getBranchListForPositionalTarget(locationId, branchId, roleName,
+		List<TargetCommontDTO> totalList = targetService.getBranchListForPositionalTarget(locationId, branchIds, roleName,
 		    length, start, orderColumn, orderDirection);
 		
-		int total = targetService.getBranchListForPositionalTargetCount(locationId, branchId, roleName);
+		int total = targetService.getBranchListForPositionalTargetCount(locationId, branchIds, roleName);
 		
 		JSONObject response = targetService.getPositionalTargetDataOfDataTable(draw, total, totalList);
 		return new ResponseEntity<>(response.toString(), OK);
@@ -165,14 +165,14 @@ public class TargetRestController {
 		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
 		
 		String name = request.getParameter("search");
-		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		String branchIds = request.getParameter("branchId");
 		String roleName = request.getParameter("roleName");
 		int locationId = Integer.parseInt(request.getParameter("locationId"));
 		
-		List<TargetCommontDTO> userList = targetService.getUserListForTargetSet(locationId, branchId, roleName, length,
+		List<TargetCommontDTO> userList = targetService.getUserListForTargetSet(locationId, branchIds, roleName, length,
 		    start, orderColumn, orderDirection);
 		
-		int userCount = targetService.getUserListForTargetSetCount(locationId, branchId, roleName);
+		int userCount = targetService.getUserListForTargetSetCount(locationId, branchIds, roleName);
 		
 		JSONObject response = targetService.getUnionWisePopulationSetOfDataTable(draw, userCount, userList);
 		return new ResponseEntity<>(response.toString(), OK);

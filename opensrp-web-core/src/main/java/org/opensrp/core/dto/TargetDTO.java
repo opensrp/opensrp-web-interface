@@ -9,7 +9,7 @@ public class TargetDTO {
 	
 	private Long id;
 	
-	private int targetTo;
+	private String targetTo;
 	
 	private int role;
 	
@@ -25,11 +25,11 @@ public class TargetDTO {
 		this.id = id;
 	}
 	
-	public int getTargetTo() {
+	public String getTargetTo() {
 		return targetTo;
 	}
 	
-	public void setTargetTo(int targetTo) {
+	public void setTargetTo(String targetTo) {
 		this.targetTo = targetTo;
 	}
 	
