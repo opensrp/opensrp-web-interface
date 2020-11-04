@@ -36,7 +36,6 @@
 
 
 <script src="<c:url value='/resources/assets/global/js/select2.min.js'/>"></script>
-<script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 
 <script src="<c:url value='/resources/assets/global/plugins/js/jquery.validate.min.js'/>"></script>
 <script src="<c:url value='/resources/assets/global/plugins/js/additional-methods.min.js'/>"></script>
