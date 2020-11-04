@@ -10,7 +10,37 @@
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <title>Target by position</title>
-	
+
+<style>
+	.select2-results__option .wrap:before {
+		font-family: fontAwesome;
+		color: #999;
+		content: "\f096";
+		width: 25px;
+		height: 25px;
+		padding-right: 10px;
+	}
+
+	.select2-results__option[aria-selected=true] .wrap:before {
+		content: "\f14a";
+	}
+
+
+	/* not required css */
+
+	.row {
+		padding: 10px;
+	}
+
+	.select2-multiple,
+	.select2-multiple2 {
+		width: 50%
+	}
+
+	.select2-results__group .wrap:before {
+		display: none;
+	}
+</style>
 	
 <c:url var="get_url" value="/rest/api/v1/target/branch-list-for-positional-target" />
 <c:url var="set_target_url" value="/target/set-target-by-position.html" />
@@ -35,7 +65,7 @@
 					<div class="portlet-body">
 						<div class="form-group">
 							
-							<jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" />
+							<jsp:include page="/WEB-INF/views/search-option-for-target-by-position.jsp" />
 							
 							
 							<div class="row">
@@ -103,12 +133,20 @@
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
-
+<script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 <script>
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
-		$('#branchList').select2({dropdownAutoWidth : true});
+
+
+		$('#branchList').select2MultiCheckboxes({
+			placeholder: "Select branch",
+			width: "auto",
+			templateSelection: function(selected, total) {
+				return "Selected " + selected.length + " of " + total;
+			}
+		});
 });
 
 function settTaretForAll(){
@@ -148,7 +186,7 @@ function settTaretForAll(){
 	var type="ROLE";
 	var locationId="";
 	if(branch!=0){
-		locationId = branch;
+		locationId = $("#branchList").val();
 		type = "BRANCH"
 	}else if(upazila != 0){
 		locationId = upazila;
@@ -161,7 +199,7 @@ function settTaretForAll(){
 		type = "LOCATION"
 	}	
     url = url+"?setTargetTo="+locationId+"&role="+role+"&type="+type+"&text="+targetName+"&locationTag="+locationTag
-	window.location.replace(url);
+	window.location.assign(url);
 }
 
 jQuery(function() {
@@ -255,7 +293,7 @@ function filter(){
              url: "${get_url}",
              data: function(data){
             	
-            	 data.branchId = $("#branchList option:selected").val();
+            	 data.branchId = $("#branchList").val().join();
                  data.locationId=locationId;                    
                  data.roleName=$("#roleList option:selected").val();
              },

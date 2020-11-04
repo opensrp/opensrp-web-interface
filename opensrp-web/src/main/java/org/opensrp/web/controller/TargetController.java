@@ -58,8 +58,6 @@ public class TargetController {
 	public String targetByPosition(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
-		List<Branch> branches = branchService.findAll("Branch");
-		model.addAttribute("branches", branches);
 		return "targets/target-by-position-list";
 	}
 	
