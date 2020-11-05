@@ -55,19 +55,19 @@ public class TargetCommontDTO extends InventoryDTO {
 	public void setPercentage(String percentage) {
 		this.percentage = percentage;
 	}
-
+	
 	public int getPopulation() {
 		return population;
 	}
-
+	
 	public void setPopulation(int population) {
 		this.population = population;
 	}
-
+	
 	public int getLocationId() {
 		return locationId;
 	}
-
+	
 	public void setLocationId(int locationId) {
 		this.locationId = locationId;
 	}

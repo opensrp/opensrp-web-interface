@@ -271,6 +271,9 @@ $('#targetInfo').submit(function(event) {
         'targetTo':'${userId}',
         'type': 'USER',
         'role': '${roleId}',
+        "month":month,
+		"year":year,
+		"day": timePeriod == 'monthly' ? 0 : date,
         "targetDetailsDTOs":item
     };
     console.log(formData);

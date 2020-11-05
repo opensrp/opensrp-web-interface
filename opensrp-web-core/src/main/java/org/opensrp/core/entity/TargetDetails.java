@@ -76,6 +76,9 @@ public class TargetDetails implements Serializable {
 	@Column(name = "user_id")
 	private Integer userId;
 	
+	@Column(name = "role_id")
+	private Integer roleId;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
 	@CreationTimestamp
@@ -247,6 +250,14 @@ public class TargetDetails implements Serializable {
 	
 	public void setTargetType(String targetType) {
 		this.targetType = targetType;
+	}
+	
+	public Integer getRoleId() {
+		return roleId;
+	}
+	
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
 	
 }
