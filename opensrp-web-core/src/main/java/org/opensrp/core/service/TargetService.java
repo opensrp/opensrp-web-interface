@@ -59,7 +59,7 @@ public class TargetService extends CommonService {
 	public <T> Integer saveAll(TargetDTO dto) throws Exception {
 		Session session = getSessionFactory();
 		
-		Integer returnValue = null;
+		Integer returnValue = 0;
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
@@ -69,42 +69,66 @@ public class TargetService extends CommonService {
 		List<TargetCommontDTO> targetTos = allTargetUser(roleId, TaregtSettingsType.valueOf(dto.getType()).name(),
 		    dto.getTargetTo());
 		
-		deleteAllByKeys(TaregtSettingsType.valueOf(dto.getType()).name(), dto.getTargetTo(), roleId, dto.getYear(),
-		    dto.getMonth(), dto.getDay());
-		for (TargetCommontDTO targetTo : targetTos) {
-			
-			for (TargetDetailsDTO targetDetailsDTO : targetDetailsDTOs) {
-				Map<String, Object> fieldValues = new HashMap<>();
-				if (targetDetailsDTO.getDay() != 0) {
-					fieldValues.put("day", targetDetailsDTO.getDay());
+		boolean deleted = deleteAllByKeys(TaregtSettingsType.valueOf(dto.getType()).name(), dto.getTargetTo(), roleId,
+		    dto.getYear(), dto.getMonth(), dto.getDay());
+		if (deleted) {
+			for (TargetCommontDTO targetTo : targetTos) {
+				
+				for (TargetDetailsDTO targetDetailsDTO : targetDetailsDTOs) {
+					
+					TargetDetails targetDetails = new TargetDetails();
+					
+					targetDetails = new TargetDetails();
+					targetDetails.setUuid(UUID.randomUUID().toString());
+					targetDetails.setCreator(user.getId());
+					
+					targetDetails.setUpdatedBy(user.getId());
+					
+					targetDetails.setRoleId(roleId);
+					targetDetails.setTargetType(dto.getType());
+					targetDetails = targetMapper.map(targetDetailsDTO, targetDetails);
+					targetDetails.setUserId(targetTo.getUserId());
+					targetDetails.setBranchId(targetTo.getBranchId());
+					
+					session.saveOrUpdate(targetDetails);
+					
 				}
-				fieldValues.put("year", targetDetailsDTO.getYear());
-				fieldValues.put("month", targetDetailsDTO.getMonth());
-				fieldValues.put("userId", targetTo.getUserId());
-				fieldValues.put("productId", targetDetailsDTO.getProductId());
-				TargetDetails targetDetails = new TargetDetails();
-				
-				//if (targetDetails == null) {
-				targetDetails = new TargetDetails();
-				targetDetails.setUuid(UUID.randomUUID().toString());
-				targetDetails.setCreator(user.getId());
-				//} else {
-				
-				targetDetails.setUpdatedBy(user.getId());
-				//}
-				targetDetails.setRoleId(roleId);
-				targetDetails.setTargetType(dto.getType());
-				targetDetails = targetMapper.map(targetDetailsDTO, targetDetails);
-				targetDetails.setUserId(targetTo.getUserId());
-				targetDetails.setBranchId(targetTo.getBranchId());
-				
-				session.saveOrUpdate(targetDetails);
 				
 			}
 			
+			returnValue = 1;
+		} else {
+			returnValue = 0;
 		}
 		
-		returnValue = 1;
+		return returnValue;
+	}
+	
+	@Transactional
+	public <T> boolean deleteAllByKeys(String type, String userOrBranchIds, Integer roleId, int year, int month, int day) {
+		Session session = getSessionFactory();
+		boolean returnValue = false;
+		String hql = "";
+		
+		if (TaregtSettingsType.ROLE.name().equalsIgnoreCase(type)) {
+			hql = "delete from core.target_details where role_id =" + roleId + "  and year =" + year + " and month=" + month
+			        + " and day=" + day;
+		} else if (TaregtSettingsType.BRANCH.name().equalsIgnoreCase(type)) {
+			hql = "delete from core.target_details where role_id =" + roleId + "  and year =" + year + " and month=" + month
+			        + " and day=" + day + " and branch_id = any('{" + userOrBranchIds + "}')";
+		} else if (TaregtSettingsType.USER.name().equalsIgnoreCase(type)) {
+			hql = "delete from core.target_details where  year =" + year + " and month=" + month + " and day=" + day
+			        + " and user_id = any('{" + userOrBranchIds + "}')";
+		}
+		if (!StringUtils.isBlank(hql)) {
+			Query query = session.createSQLQuery(hql);
+			Integer flag = query.executeUpdate();
+			if (flag >= 0) {
+				returnValue = true;
+			} else {
+				returnValue = false;
+			}
+		}
 		
 		return returnValue;
 	}
@@ -411,32 +435,6 @@ public class TargetService extends CommonService {
 		dtos = query.list();
 		
 		return dtos;
-	}
-	
-	@Transactional
-	public <T> boolean deleteAllByKeys(String type, String userOrBranchIds, Integer roleId, int year, int month, int day) {
-		Session session = getSessionFactory();
-		boolean returnValue = false;
-		String hql = "";
-		System.err.println("type:" + type);
-		if (TaregtSettingsType.ROLE.name().equalsIgnoreCase(type)) {
-			hql = "delete from core.target_details where role_id =" + roleId + "  and year =" + year + " and month=" + month
-			        + " and day=" + day;
-		} else if (TaregtSettingsType.BRANCH.name().equalsIgnoreCase(type)) {
-			hql = "delete from core.target_details where role_id =" + roleId + "  and year =" + year + " and month=" + month
-			        + " and day=" + day + " and branch_id = any('{" + userOrBranchIds + "}')";
-		} else if (TaregtSettingsType.USER.name().equalsIgnoreCase(type)) {
-			hql = "delete from core.target_details where  year =" + year + " and month=" + month + " and day=" + day
-			        + " and user_id = any('{" + userOrBranchIds + "}')";
-		}
-		if (!StringUtils.isBlank(hql)) {
-			Query query = session.createSQLQuery(hql);
-			Integer flag = query.executeUpdate();
-			if (flag > 0)
-				returnValue = true;
-		}
-		
-		return returnValue;
 	}
 	
 	@SuppressWarnings("unchecked")

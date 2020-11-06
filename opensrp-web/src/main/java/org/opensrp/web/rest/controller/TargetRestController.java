@@ -40,7 +40,7 @@ public class TargetRestController {
 		
 		try {
 			Integer isSave = targetService.saveAll(dto);
-			if (isSave != null) {
+			if (isSave != null && isSave != 0) {
 				response.put("status", "SUCCESS");
 				response.put("msg", "You have submitted successfully.");
 			} else {
