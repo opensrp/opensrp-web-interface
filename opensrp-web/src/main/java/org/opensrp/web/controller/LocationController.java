@@ -273,4 +273,11 @@ public class LocationController {
 		model.addAttribute("locations", locations);
 		return "location-options";
 	}
+	
+	@RequestMapping(value = "/child-location-options-with-multiple", method = RequestMethod.GET)
+	public String getChildLocationWithCheckedLists(HttpServletRequest request, Model model, @RequestParam int id) {
+		List<Location> locations = targetService.getLocationByParentId(id);
+		model.addAttribute("locations", locations);
+		return "/location/location-options-multiple";
+	}
 }

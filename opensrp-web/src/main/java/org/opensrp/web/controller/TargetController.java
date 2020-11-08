@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author proshanto
  */
 @Controller
-@RequestMapping(value = "target")
 public class TargetController {
 	
 	@Autowired
@@ -45,7 +44,10 @@ public class TargetController {
 	@Value("#{opensrp['division.tag.id']}")
 	private int divisionTagId;
 	
-	@RequestMapping(value = "/target-by-individual.html", method = RequestMethod.GET)
+	@Value("#{opensrp['divm.role.id']}")
+	private String divMRoleId;
+	
+	@RequestMapping(value = "/target/target-by-individual.html", method = RequestMethod.GET)
 	public String targetByIndividual(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
@@ -54,14 +56,14 @@ public class TargetController {
 		return "targets/sk-pa-list-for-individual-target";
 	}
 	
-	@RequestMapping(value = "/target-by-position-list.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/target-by-position-list.html", method = RequestMethod.GET)
 	public String targetByPosition(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		return "targets/target-by-position-list";
 	}
 	
-	@RequestMapping(value = "/set-target-by-position.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/set-target-by-position.html", method = RequestMethod.GET)
 	public String seTtargetByPosition(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		String roleName = request.getParameter("role");
@@ -75,7 +77,7 @@ public class TargetController {
 		return "targets/set-target-by-position";
 	}
 	
-	@RequestMapping(value = "/set-individual/{branch_id}/{role_id}/{user_id}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/set-individual/{branch_id}/{role_id}/{user_id}.html", method = RequestMethod.GET)
 	public String targetSetIndividually(HttpServletRequest request, HttpSession session, Model model, Locale locale,
 	                                    @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
 	                                    @PathVariable("user_id") int userId) {
@@ -88,7 +90,7 @@ public class TargetController {
 		return "targets/sk-pa-individual-target-set";
 	}
 	
-	@RequestMapping(value = "/view-individual/{branch_id}/{role_id}/{user_id}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/view-individual/{branch_id}/{role_id}/{user_id}.html", method = RequestMethod.GET)
 	public String viewTargetIndividually(HttpServletRequest request, HttpSession session, Model model, Locale locale,
 	                                     @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
 	                                     @PathVariable("user_id") int userId) {
@@ -101,7 +103,7 @@ public class TargetController {
 		return "targets/view-sk-pa-individual-target";
 	}
 	
-	@RequestMapping(value = "/edit-individual/{branch_id}/{role_id}/{user_id}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/edit-individual/{branch_id}/{role_id}/{user_id}.html", method = RequestMethod.GET)
 	public String editTargetIndividually(HttpServletRequest request, HttpSession session, Model model, Locale locale,
 	                                     @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
 	                                     @PathVariable("user_id") int userId) {
@@ -114,7 +116,7 @@ public class TargetController {
 		return "targets/edit-sk-pa-individual-target";
 	}
 	
-	@RequestMapping(value = "/get-target-info", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/get-target-info", method = RequestMethod.GET)
 	public String getTargetInfo(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		int roleId = 0;
@@ -144,7 +146,7 @@ public class TargetController {
 		return "targets/get-target-info";
 	}
 	
-	@RequestMapping(value = "/get-population-wise-target-info", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/get-population-wise-target-info", method = RequestMethod.GET)
 	public String getTargetInfoPopulationWise(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		int role = Roles.PK.getId();
@@ -156,7 +158,7 @@ public class TargetController {
 		return "targets/get-target-info-for-populationwise-target";
 	}
 	
-	@RequestMapping(value = "/target-by-population.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/target-by-population.html", method = RequestMethod.GET)
 	public String targetByPopulation(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
@@ -165,7 +167,7 @@ public class TargetController {
 		return "targets/target-by-population-list";
 	}
 	
-	@RequestMapping(value = "/set-individual-target-pk/{branch_id}/{role_id}/{user_id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/set-individual-target-pk/{branch_id}/{role_id}/{user_id}", method = RequestMethod.GET)
 	public String indiviualTargetSetForPkB(HttpServletRequest request, HttpSession session, Model model, Locale locale,
 	                                       @PathVariable("branch_id") int branchId, @PathVariable("role_id") int roleId,
 	                                       @PathVariable("user_id") int userId) {
@@ -181,11 +183,33 @@ public class TargetController {
 		return "targets/individual-target-by-population-pk";
 	}
 	
-	@RequestMapping(value = "/population-wise-target-set", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/population-wise-target-set", method = RequestMethod.GET)
 	public String populationWiseTargetSet(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("targets", targetService.allActiveTarget(Roles.PK.getId(), ProductType.TARGET.name()));
 		return "targets/population-wise-target-set";
+	}
+	
+	@RequestMapping(value = "/target/target-vs-achievement-sk-visit-pm-report.html", method = RequestMethod.GET)
+	public String targetVsAchievementSKVisitPMReport(HttpServletRequest request, HttpSession session, Model model,
+	                                                 Locale locale) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+		model.addAttribute("branches", branches);
+		return "targets/target-vs-achievement-sk-visit-pm-report";
+	}
+	
+	@RequestMapping(value = "/target/target-vs-achievement-sk-service-pm-report.html", method = RequestMethod.GET)
+	public String targetVsAchievementSKServicePMReport(HttpServletRequest request, HttpSession session, Model model,
+	                                                   Locale locale) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("branches", branches);
+		return "targets/target-vs-achievement-sk-visit-pm-report";
 	}
 	
 }

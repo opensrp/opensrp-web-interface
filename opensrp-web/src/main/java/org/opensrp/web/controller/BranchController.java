@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
+import org.opensrp.core.dto.BranchDTO;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.BranchService;
@@ -162,5 +163,19 @@ public class BranchController {
 		List<Branch> branches = targetService.getLocationByLocationId(id);
 		model.addAttribute("branches", branches);
 		return "branch-options";
+	}
+	
+	@RequestMapping(value = "/all-branch-list-options", method = RequestMethod.GET)
+	public String getBranchAllLists(HttpServletRequest request, Model model) {
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("branches", branches);
+		return "branch-options";
+	}
+	
+	@RequestMapping(value = "/branch-list-options-by-user-ids", method = RequestMethod.GET)
+	public String getBranchListsByUserIds(HttpServletRequest request, Model model, @RequestParam String id) {
+		List<BranchDTO> branches = targetService.getBranchListByUserIds(id);
+		model.addAttribute("branches", branches);
+		return "/branch/branch-options-by-user-ids";
 	}
 }

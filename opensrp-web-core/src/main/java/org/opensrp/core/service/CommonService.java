@@ -20,7 +20,9 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
 import org.opensrp.common.dto.TargetCommontDTO;
+import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
+import org.opensrp.core.dto.BranchDTO;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Location;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -233,6 +235,72 @@ public abstract class CommonService {
 		Query query = session.createSQLQuery(hql).addScalar("userId", StandardBasicTypes.INTEGER)
 		        .addScalar("branchId", StandardBasicTypes.INTEGER).setString("type", locationType)
 		        .setInteger("id", locationId).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		
+		result = query.list();
+		
+		return result;
+	}
+	
+	/*****
+	 * @param Ids is a comma separated string
+	 * @param Ids
+	 * @return
+	 */
+	@Transactional
+	@SuppressWarnings("unchecked")
+	public List<UserDTO> getUserByRoles(String Ids) {
+		Session session = getSessionFactory();
+		List<UserDTO> result = new ArrayList<>();
+		String hql = "select id,u.first_name firstName,case when u.last_name ='.' then '' else u.last_name  end lastName "
+		        + "from core.users as u join core.user_role ur on u.id=ur.user_id where ur.role_id = any('{" + Ids + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.INTEGER)
+		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
+		        .setResultTransformer(new AliasToBeanResultTransformer(UserDTO.class));
+		
+		result = query.list();
+		
+		return result;
+	}
+	
+	/*****
+	 * @param Ids is a comma separated string
+	 * @param Ids
+	 * @return
+	 */
+	@Transactional
+	@SuppressWarnings("unchecked")
+	public List<UserDTO> getUserByUserIds(String Ids, int roleId) {
+		Session session = getSessionFactory();
+		List<UserDTO> result = new ArrayList<>();
+		String hql = "select id,u.first_name firstName,case when u.last_name ='.' then '' else u.last_name end lastName"
+		        + " from core.users as u join core.user_role ur on u.id=ur.user_id "
+		        + " join core.user_branch ub on u.id=ub.user_id  "
+		        + " where ur.role_id=:roleId and ub.branch_id=any(select branch_id from core.user_branch as ub where ub.user_id= any('{"
+		        + Ids + "}')) " + "group by id,u.first_name,u.last_name";
+		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.INTEGER)
+		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
+		        .setInteger("roleId", roleId).setResultTransformer(new AliasToBeanResultTransformer(UserDTO.class));
+		
+		result = query.list();
+		
+		return result;
+	}
+	
+	/*****
+	 * @param Ids is a comma separated string
+	 * @param Ids
+	 * @return
+	 */
+	@Transactional
+	@SuppressWarnings("unchecked")
+	public List<BranchDTO> getBranchListByUserIds(String Ids) {
+		Session session = getSessionFactory();
+		List<BranchDTO> result = new ArrayList<>();
+		String hql = "select b.id,b.name,b.code from core.branch as b join core.user_branch ub "
+		        + "on b.id=ub.branch_id where ub.user_id= any('{" + Ids + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.INTEGER)
+		        .addScalar("name", StandardBasicTypes.STRING).addScalar("code", StandardBasicTypes.STRING)
+		        .setResultTransformer(new AliasToBeanResultTransformer(BranchDTO.class));
 		
 		result = query.list();
 		

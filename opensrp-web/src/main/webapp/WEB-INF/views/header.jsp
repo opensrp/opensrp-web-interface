@@ -90,6 +90,9 @@ License: You must have a valid license purchased only from themeforest(the above
 	boolean PERM_READ_WRITE_WEBNOTIFICATION = AuthenticationManagerUtil.isPermitted("PERM_READ_WRITE_WEBNOTIFICATION");
 	boolean PERM_PRODUCT_LIST = AuthenticationManagerUtil.isPermitted("PRODUCT_LIST");
 	boolean PERM_TARGET_LIST = AuthenticationManagerUtil.isPermitted("TARGET_LIST");
+	
+	boolean SK_VISIT_TARGET_REPORT_PM = AuthenticationManagerUtil.isPermitted("SK_VISIT_TARGET_REPORT_PM");
+	boolean SK_SERVICE_TARGET_REPORT_PM = AuthenticationManagerUtil.isPermitted("SK_SERVICE_TARGET_REPORT_PM");
 
    %>
   
@@ -423,6 +426,8 @@ License: You must have a valid license purchased only from themeforest(the above
 				</li>
 				<%} %>
 				
+			
+				
 				<% if(PERM_READ_AGGREGATED_REPORT){ %>
 				<li>
 					<a href="javascript:;">
@@ -468,6 +473,17 @@ License: You must have a valid license purchased only from themeforest(the above
 							<spring:message code="lbl.individualBiometricReport"/>
 						</a>
 						</li>
+						<% if(SK_SERVICE_TARGET_REPORT_PM || SK_VISIT_TARGET_REPORT_PM){ %>
+						<li>
+							<a href="<c:url value="/target/target-vs-achievement-sk-visit-pm-report.html?lang=${locale}"/>">
+							Target vs achievement visit report
+							</a>
+						</li>
+						<li><a href="<c:url value="/target/target-vs-achievement-sk-service-pm-report.html?lang=${locale}"/>">
+							Target vs achievement service report
+							</a>
+						</li>
+						<% }%>
 						
 					</ul>
 				</li>

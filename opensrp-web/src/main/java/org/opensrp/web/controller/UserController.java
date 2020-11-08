@@ -47,6 +47,7 @@ import org.opensrp.core.service.FacilityService;
 import org.opensrp.core.service.FacilityWorkerService;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.RoleService;
+import org.opensrp.core.service.TargetService;
 import org.opensrp.core.service.TeamMemberService;
 import org.opensrp.core.service.UserService;
 import org.opensrp.core.service.UsersCatchmentAreaService;
@@ -153,6 +154,9 @@ public class UserController {
 	
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private TargetService targetService;
 	
 	/**
 	 * <p>
@@ -1339,5 +1343,13 @@ public class UserController {
 		session.setAttribute("catchmentAreaTable", catchmentAreaTable);
 		session.setAttribute("userIdFromCatchment", id);
 		return "location/assigned-location-table";
+	}
+	
+	@RequestMapping(value = "/user-list-options-by-parent-user-ids", method = RequestMethod.GET)
+	public String getBranchListsByUserIds(HttpServletRequest request, Model model, @RequestParam String id,
+	                                      @RequestParam int roleId) {
+		List<UserDTO> users = targetService.getUserByUserIds(id, roleId);
+		model.addAttribute("users", users);
+		return "/user/child-user-options";
 	}
 }
