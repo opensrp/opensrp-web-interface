@@ -68,8 +68,6 @@
 					<div class="portlet-body">
 						<div class="form-group">
 							<div class="col-lg-12 form-group">
-								
-								
 
 								<div  class="col-lg-3 form-group">
 								  <input type="radio"  id="managerWise"  onclick="reportType('manager')"  value="managerWise" name="managerOrLocation" 
