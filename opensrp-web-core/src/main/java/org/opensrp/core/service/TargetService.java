@@ -5,6 +5,7 @@
 package org.opensrp.core.service;
 
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.TargetCommontDTO;
+import org.opensrp.common.dto.TargetReportDTO;
 import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.Status;
@@ -379,6 +381,91 @@ public class TargetService extends CommonService {
 		dtos = query.list();
 		
 		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetReportDTO> getPMVisitReportByManager(JSONObject params) {
+		
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		TargetReportDTO targetReportDTO = new TargetReportDTO();
+		targetReportDTO.setFirstName("Arif");
+		targetReportDTO.setLastName("haque");
+		targetReportDTO.setNumberOfSK(23);
+		targetReportDTO.setNumberOfAm(12);
+		targetReportDTO.setNumberOfBranch(3);
+		targetReportDTO.setAchievementInPercentage(23.3f);
+		/*String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,'{"
+		        + branchIds + "}',:roleName,:start,:length)";
+		Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
+		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+		        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
+		        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
+		        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		dtos = query.list();*/
+		dtos.add(targetReportDTO);
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetReportDTO> getPMVisitReportByLocation(JSONObject params) {
+		
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		TargetReportDTO targetReportDTO = new TargetReportDTO();
+		targetReportDTO.setFirstName("Arif");
+		targetReportDTO.setLastName("haque");
+		targetReportDTO.setLocationName("Dhaka");
+		targetReportDTO.setNumberOfSK(23);
+		targetReportDTO.setNumberOfAm(12);
+		targetReportDTO.setNumberOfBranch(3);
+		targetReportDTO.setAchievementInPercentage(23.3f);
+		/*String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,'{"
+		        + branchIds + "}',:roleName,:start,:length)";
+		Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
+		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+		        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
+		        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
+		        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		dtos = query.list();*/
+		dtos.add(targetReportDTO);
+		return dtos;
+	}
+	
+	public JSONObject getPMVisitReportByManagerDataTable(Integer draw, int total, List<TargetReportDTO> dtos,
+	                                                     String managerOrLocation) throws JSONException {
+		JSONObject response = new JSONObject();
+		response.put("draw", draw + 1);
+		response.put("recordsTotal", total);
+		response.put("recordsFiltered", total);
+		JSONArray array = new JSONArray();
+		DecimalFormat df = new DecimalFormat("0.00");
+		System.err.println("managerOrLocation:" + managerOrLocation);
+		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
+			for (TargetReportDTO dto : dtos) {
+				JSONArray arrayData = new JSONArray();
+				arrayData.put(dto.getFullName());
+				arrayData.put(dto.getNumberOfAm());
+				arrayData.put(dto.getNumberOfBranch());
+				arrayData.put(dto.getNumberOfSK());
+				arrayData.put(df.format(dto.getAchievementInPercentage()));
+				array.put(arrayData);
+			}
+			return response.put("data", array);
+		} else {
+			for (TargetReportDTO dto : dtos) {
+				JSONArray arrayData = new JSONArray();
+				arrayData.put(dto.getLocationName());
+				arrayData.put(dto.getNumberOfBranch());
+				arrayData.put(dto.getNumberOfSK());
+				arrayData.put(df.format(dto.getAchievementInPercentage()));
+				array.put(arrayData);
+			}
+			return response.put("data", array);
+		}
+		
 	}
 	
 	@Transactional

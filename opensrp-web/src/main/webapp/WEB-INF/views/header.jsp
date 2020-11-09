@@ -473,13 +473,15 @@ License: You must have a valid license purchased only from themeforest(the above
 							<spring:message code="lbl.individualBiometricReport"/>
 						</a>
 						</li>
-						<% if(SK_SERVICE_TARGET_REPORT_PM || SK_VISIT_TARGET_REPORT_PM){ %>
+						<% if(SK_SERVICE_TARGET_REPORT_PM){ %>
 						<li>
-							<a href="<c:url value="/target/target-vs-achievement-sk-visit-pm-report.html?lang=${locale}"/>">
+							<a href="<c:url value="/target/target-vs-achievement-visit-report-pm.html?lang=${locale}"/>">
 							Target vs achievement visit report
 							</a>
 						</li>
-						<li><a href="<c:url value="/target/target-vs-achievement-sk-service-pm-report.html?lang=${locale}"/>">
+						<% }%>
+						<% if( SK_VISIT_TARGET_REPORT_PM){ %>
+						<li><a href="<c:url value="/target/target-vs-achievement-service-report-pm.html?lang=${locale}"/>">
 							Target vs achievement service report
 							</a>
 						</li>

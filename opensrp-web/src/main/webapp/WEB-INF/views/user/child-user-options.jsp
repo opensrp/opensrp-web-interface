@@ -3,7 +3,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<option value="">Please select</option>
+<option value="0">Please select</option>
 <c:forEach items="${users}" var="user">
 
 	<option value="${user.getId()}">${user.getFullName() }</option>

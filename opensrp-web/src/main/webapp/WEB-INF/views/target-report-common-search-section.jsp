@@ -59,13 +59,52 @@
 					id="endDateValidation"></span>
 			</div>
 		</div>
-								
+			<div class="col-lg-2 form-group "><br />
+									<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
+								</div>					
 	</div>
 <script>
       
 	
 	
-
+$(function() {
+	var dtPicker = $('#mfrom').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'MM yy',
+        maxDate: new Date,
+       
+        onClose: function(dateText, inst) { 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+        }
+    });
+	$(".date-picker-year").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $(".ui-datepicker-current").hide();
+    });
+	dtPicker.datepicker('setDate', new Date());
+	
+	
+	var dtPickerTo = $('#mto').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'MM yy',
+        maxDate: new Date,
+       
+        onClose: function(dateText, inst) { 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+        }
+    });
+	$(".date-picker-year").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $(".ui-datepicker-current").hide();
+    });
+	dtPickerTo.datepicker('setDate', new Date());
+});
 
 
  var dateToday = new Date();
@@ -80,28 +119,11 @@
             dates.not(this).datepicker("option", option, date);
         }
     });
-    
-    var months =$('#mfrom').datepicker( {
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'MM yy',
-        maxDate: dateToday,
-        onClose: function(dateText, inst) {
-           /*  var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); */
-            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-        }
+  	$(".date-picker-year").focus(function () {
+        $(".ui-datepicker-calendar").hide();
+        $(".ui-datepicker-current").hide();
     });
-    var months =$('#mto').datepicker( {
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'MM yy',
-        maxDate: dateToday,
-        onClose: function(dateText, inst) { 
-        	$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-        }
-    });
+  	dates.datepicker('setDate', new Date());  
     
     
    

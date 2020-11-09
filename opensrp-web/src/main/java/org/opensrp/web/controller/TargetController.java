@@ -3,13 +3,17 @@
  */
 package org.opensrp.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.opensrp.common.dto.TargetCommontDTO;
+import org.opensrp.common.dto.TargetReportDTO;
 import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.ProductType;
 import org.opensrp.common.util.Roles;
@@ -23,6 +27,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -190,7 +195,7 @@ public class TargetController {
 		return "targets/population-wise-target-set";
 	}
 	
-	@RequestMapping(value = "/target/target-vs-achievement-sk-visit-pm-report.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/target-vs-achievement-visit-report-pm.html", method = RequestMethod.GET)
 	public String targetVsAchievementSKVisitPMReport(HttpServletRequest request, HttpSession session, Model model,
 	                                                 Locale locale) {
 		model.addAttribute("locale", locale);
@@ -201,15 +206,33 @@ public class TargetController {
 		return "targets/target-vs-achievement-sk-visit-pm-report";
 	}
 	
-	@RequestMapping(value = "/target/target-vs-achievement-sk-service-pm-report.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/target-vs-achievement-service-report-pm.html", method = RequestMethod.GET)
 	public String targetVsAchievementSKServicePMReport(HttpServletRequest request, HttpSession session, Model model,
 	                                                   Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
-		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
 		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
 		model.addAttribute("branches", branches);
 		return "targets/target-vs-achievement-sk-visit-pm-report";
 	}
 	
+	@RequestMapping(value = "/target/report/pm-visit-target-report", method = RequestMethod.POST)
+	public String pmVisitTargetReportByManager(@RequestBody String dto, HttpServletRequest request, HttpSession session,
+	                                           Model model) throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		String managerOrLocation = params.getString("managerOrLocation");
+		System.err.println("managerOrLocation:" + managerOrLocation);
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
+			totalList = targetService.getPMVisitReportByManager(params);
+		} else {
+			totalList = targetService.getPMVisitReportByLocation(params);
+		}
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("type", managerOrLocation);
+		
+		return "targets/target-vs-achievement-visit-pm-report";
+	}
 }

@@ -177,4 +177,5 @@ public class TargetRestController {
 		JSONObject response = targetService.getUnionWisePopulationSetOfDataTable(draw, userCount, userList);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
+	
 }

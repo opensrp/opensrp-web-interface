@@ -286,7 +286,7 @@ function filter(){
          ajax: {
              url: "${get_url}",
              data: function(data){
-            	 var branchIds =  $("#branchList").val();
+            	var branchIds =  $("#branchList").val();
              	if( branchIds ==null || typeof branchIds == 'undefined'){
              		branchIds = ''
              	}else{

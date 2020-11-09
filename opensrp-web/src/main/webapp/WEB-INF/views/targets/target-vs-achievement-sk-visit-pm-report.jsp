@@ -16,7 +16,7 @@
 
 <c:url var="user_list_url" value="/user-list-options-by-parent-user-ids" />
 	
-<c:url var="urlForPKList" value="/rest/api/v1/target/pk-user-list-for-population-target-setting" />
+<c:url var="report_url" value="/target/report/pm-visit-target-report" />
 <style>
 	.select2-results__option .wrap:before {
 		font-family: fontAwesome;
@@ -67,22 +67,21 @@
 					</div>					
 					<div class="portlet-body">
 						<div class="form-group">
-							<div class="col-lg-12 form-group">
-
-								<div  class="col-lg-3 form-group">
-								  <input type="radio"  id="managerWise"  onclick="reportType('manager')"  value="managerWise" name="managerOrLocation" 
-								         checked>
-								  <label for="managerWise">Manager wise</label>
-								</div>
-								
-								<div  class="col-lg-3 form-group">
-								  <input type="radio"  id="locationWise" onclick="reportType('location')" value="locationWise" name="managerOrLocation">
-								  <label for="locationWise">Location wise</label>
-								</div>
-
-
-
-							</div>
+							
+								<div class="row col-lg-12 form-group">
+	
+									<div  class="col-lg-3 form-group">
+									  <input type="radio"  id="managerWise"  onclick="reportType('manager')"  value="managerWise" name="managerOrLocation" 
+									         checked>
+									  <label for="managerWise">Manager wise</label>
+									</div>
+									
+									<div  class=" col-lg-3 form-group">
+									  <input type="radio"  id="locationWise" onclick="reportType('location')" value="locationWise" name="managerOrLocation">
+									  <label for="locationWise">Location wise</label>
+									</div>
+								  </div>
+							
 							
 							<div class="row" id="manager">
 									<div class="col-lg-3 form-group">
@@ -109,6 +108,7 @@
 											</c:forEach> --%>
 								        </select>
 								    </div>
+								    
 														
 							</div>
 	
@@ -117,30 +117,47 @@
 							
 							<jsp:include page="/WEB-INF/views/target-report-common-search-section.jsp" />
 							
-							<div class="row">
-								<div class="col-lg-12 form-group text-right">
-									<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
-								</div>
-     						</div>
+							
 						</div>
+						 <div class="row" style="margin: 0px">
+		                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
+		                        <div id="report">dd</div>
+		                    </div>
+		                </div>
 						
+						<!-- <div class="table-scrollable" id="managerWiseDiv">
 						
-						<div class="table-scrollable">
-						
-						<table class="table table-striped table-bordered " id="targetByPopulationList">
+						<table class="table table-striped table-bordered " id="PMReportManagerWise">
 							<thead>
-								<tr>
+								<tr id="headerItems">
 								   
-									<th><spring:message code="lbl.name"></spring:message></th>
-									<th><spring:message code="lbl.designation"></spring:message></th>
-									<th><spring:message code="lbl.id"></spring:message></th>
-									<th><spring:message code="lbl.union"></spring:message></th>
-									<th><spring:message code="lbl.population"></spring:message></th>
-									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
+									<th>DM name</th>									
+									<th>Number of AM</th>
+									<th>Number of branch</th>
+									<th>Number of active SK</th>
+									<th>SK target vs achievement</th>
+									
 								</tr>
 							</thead>
 						</table>
+						
 						</div>
+						<div class="table-scrollable" id="locationWiseDiv">
+						<table class="table table-striped table-bordered " id="PMReportLocationWise">
+							<thead>
+								<tr id="headerItems">
+								   
+									<th>DM name</th>
+									<th>Number of branch</th>
+									<th>Number of active SK</th>
+									<th>SK target vs achievement</th>
+									
+								</tr>
+							</thead>
+						</table>
+						</div> -->
+						
+						
 						
 						
 					</div>
@@ -172,16 +189,53 @@ jQuery(document).ready(function() {
 				return "Selected " + selected.length + " of " + total;
 			}
 		});
-		
+	    var timePeriod = 'monthly';
 		reportType('manager');
-		//$("#managerWise").attr('checked', 'checked');
-   //TableAdvanced.init();
-		//$('#StockSellHistory').DataTable();
+		$('#locationWiseDiv').hide();
+		
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		getReportData();
+		 
 });
 
+function getReportData(){
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	$.ajax({
+        type : "POST",
+        contentType : "application/json",
+        url : '${report_url}',
+        dataType : 'html',
+        timeout : 100000,
+        data:  JSON.stringify(getParamsData()),
+       
+        beforeSend: function(xhr) {
+        	 xhr.setRequestHeader(header, token);
+            $('#loading').show();
+            $('#search-button').attr("disabled", true);
+        },
+        success : function(data) {
+            $('#loading').hide();
+            $("#report").html(data);
+            $('#search-button').attr("disabled", false);
+            $('#reportDataTable').DataTable({            	
+            	
+            });
+        },
+        error : function(e) {
+            $('#loading').hide();
+            $('#search-button').attr("disabled", false);
+        },
+        complete : function(e) {
+            $('#loading').hide();
+            $('#search-button').attr("disabled", false);
+        }
+    }); 
+}
 
-
-function reportType(value) {	
+function reportType(value) {
+	
 	if(value == 'manager') {
 		$('#location').hide();
 		$('#manager').show();
@@ -192,105 +246,106 @@ function reportType(value) {
 	}
 }
 
-jQuery(function() {
-	jQuery('.date-picker-year').datepicker({
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'MM yy',
-        maxDate: new Date,
-        onClose: function(dateText, inst) { 
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-        }
-    });
-	jQuery(".date-picker-year").focus(function () {
-        $(".ui-datepicker-calendar").hide();
-        $(".ui-datepicker-current").hide();
-    });
-});
+
 
 </script>
 <script>
-     let stockList;
-    $(document).ready(function() {
-    	
-    	
-    	stockList = $('#targetByPopulationList').DataTable({
-            bFilter: false,
-            serverSide: true,
-            processing: true,
-            columnDefs: [
-                { targets: [0, 1, 2, 3,4,5], orderable: false },
-                { width: "20%", targets: 0 },
-                { width: "5%", targets: 1 },
-                { width: "20%", targets: 2 },
-                { width: "20%", targets: 3 },
-                { width: "20%", targets: 4 },
-                { width: "20%", targets: 5 }
-                
-            ],
-            ajax: {
-                url: "${urlForPKList}",
-                data: function(data){                	
-                    data.branchId = 0;
-                    data.locationId=0;                    
-                    data.roleName='PK';
-                    
-                },
-                dataSrc: function(json){
-                    if(json.data){
-                        return json.data;
-                    }
-                    else {
-                        return [];
-                    }
-                },
-                complete: function() {
-                },
-                type: 'GET'
-            },
-            bInfo: true,
-            destroy: true,
-            language: {
-                searchPlaceholder: ""
-            }
-        });
-    });
 
-function filter(){
+  
+function getFromTime() {
 	
+  return timePeriod == 'monthly' ? $('#mfrom').val() : $('#from').val();
+}
+
+function getToTime() {
+	  return timePeriod == 'monthly' ? $('#mto').val() : $('#to').val();
+	}
+
+function getParamsData(){
 	let locationId = 0;
 	let district = $("#districtList option:selected").val();
 	let division = $("#divisionList option:selected").val();
 	let upazila = $("#upazilaList option:selected").val();
-	if(upazila != 0){
-		locationId = upazila;
-	}else if(district != 0){
-		locationId = upazila;
-	}else if(division != 0){
-		locationId =division; 
+	
+	let divM = $("#divM option:selected").val();
+	let AM = $("#AM option:selected").val();
+	
+	let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
+	let reportType =$("input[name='time-period']:checked").val(); 
+	if(managerOrLocation =='managerWise'){
+		district=0;
+		district=0;
+		district=0;
+	}else{
+		divM=0;
+		AM=0;
 	}
-	stockList = $('#targetByPopulationList').DataTable({
+	
+	var from = getFromTime();
+	var to = getToTime();
+	var fromDate = new Date(from);
+	var toDate = new Date(to);
+	
+	var formMonth = fromDate.getMonth() + 1;	
+	var fromYear = fromDate.getFullYear();
+	var fromDay = timePeriod == "monthly" ? 0 : fromDate.getDate()-1;
+	
+	var toMonth = toDate.getMonth() + 1;	
+	var toYear = toDate.getFullYear();
+	var toDay = timePeriod == "monthly" ? 0 : toDate.getDate()-1;
+	var branchIds =  $("#branchList").val();
+  	if( branchIds ==null || typeof branchIds == 'undefined'){
+  		branchIds = ''
+  	}else{
+  		branchIds = $("#branchList").val().join();
+  	}
+  	let formData = { 
+	 branchIds:branchIds,
+     district:district,
+     division:division,   
+     upazila:upazila, 
+     am:AM,
+     divM:divM,
+     reportType:reportType,
+     fromYear:fromYear,
+     toYear:toYear,
+     fromMonth:formMonth,
+     toMonth:toMonth,
+     fromDay:fromDay,
+     toDay:toDay,
+     managerOrLocation:managerOrLocation,
+     roleName:$("#roleList option:selected").val()
+  	}
+     return formData;
+}
+function filter(){
+	
+	getReportData();
+	/* let managerOrLocation =$("input[name='managerOrLocation']:checked").val();	
+	var id="PMReportLocationWise";
+	if(managerOrLocation =='managerWise'){		
+		id="PMReportManagerWise";
+		$('#locationWiseDiv').hide();
+		$('#managerWiseDiv').show();
+	}else{
+		id="PMReportLocationWise";
+		$('#managerWiseDiv').hide();
+		$('#locationWiseDiv').show();
+	}
+	
+	 $('#'+id).DataTable({
          bFilter: false,
          serverSide: true,
          processing: true,
-         columnDefs: [
-             { targets: [0, 1, 2, 3,4,5], orderable: false },
-             { width: "20%", targets: 0 },
-             { width: "5%", targets: 1 },
-             { width: "20%", targets: 2 },
-             { width: "20%", targets: 3 },
-             { width: "20%", targets: 4 },
-             { width: "20%", targets: 5 }
-         ],
+         ordering: false,
+         columnDefs: [ ],
          ajax: {
-             url: "${urlForPKList}",
+             url: "${report_by_manager_url}",
+             beforeSend: function(xhr) {
+                 xhr.setRequestHeader(header, token);                
+             },
              data: function(data){
-            	
-            	 data.branchId = $("#branchList option:selected").val();
-                 data.locationId=locationId;                    
-                 data.roleName=$("#roleList option:selected").val() == "0" ? "PK" : $("#roleList option:selected").val();
+            	 getParamsData(data);
              },
              dataSrc: function(json){
                  if(json.data){
@@ -302,14 +357,14 @@ function filter(){
              },
              complete: function() {
              },
-             type: 'GET'
+             type: 'POST'
          },
          bInfo: true,
          destroy: true,
          language: {
              searchPlaceholder: ""
          }
-     }); 
+     }); */  
 }
 </script>
 
@@ -317,34 +372,50 @@ function filter(){
 function getAm(userId,divId) {
 	
 	let url = '${user_list_url}';	
-	getBranchListByUserId(userId,'branchList');
-	$.ajax({
-		type : "GET",
-		contentType : "application/json",
-		url : url+"?id="+userId+"&roleId=32",
-		dataType : 'html',
-		timeout : 100000,
-		beforeSend: function() {},
-		success : function(data) {
-			$("#"+divId).html(data);
-		},
-		error : function(e) {
-			console.log("ERROR: ", e);
-			display(e);
-		},
-		done : function(e) {
-			console.log("DONE");			
-		}
-	});
+	if(userId != 0){
+		getBranchListByUserId(userId,'branchList');
+		$.ajax({
+			type : "GET",
+			contentType : "application/json",
+			url : url+"?id="+userId+"&roleId=32",
+			dataType : 'html',
+			timeout : 100000,
+			beforeSend: function() {},
+			success : function(data) {
+				$("#"+divId).html(data);
+			},
+			error : function(e) {
+				console.log("ERROR: ", e);
+				display(e);
+			},
+			done : function(e) {
+				console.log("DONE");			
+			}
+		});
+	}else{
+		getAllBranch();
+		$("#AM").html('<option value="0">Please select </option>');
+	}
 
 }
 
 
 function getBranchListByUserId(userId,divId) {
-    
-    console.log("---------->>>>  getBranchList method is getting called");
-    let url = '${branch_url}';
-    $.ajax({
+    if(userId!=0){
+    	getBranchByuserIds(userId);
+    }else{
+    	userId= $("#divM option:selected").val();
+    	if(userId!=0){
+    		getBranchByuserIds(userId);
+    	}else{
+    		getAllBranch();
+    	}
+    }
+}
+
+function getBranchByuserIds(userId){
+	 let url = '${branch_url}';
+	$.ajax({
         type : "GET",
         contentType : "application/json",
         url : url+"?id="+userId,
@@ -362,24 +433,18 @@ function getBranchListByUserId(userId,divId) {
             display(e);
         },
         done : function(e) {
-
             console.log("DONE");
             //enableSearchButton(true);
         }
     });
-
 }
 
-
-function getAllBranch(userId,divId) {
-    
-    console.log("---------->>>>  getBranchList method is getting called");
+function getAllBranch() {
     let url = '${all_branch_url}';
     $.ajax({
         type : "GET",
         contentType : "application/json",
         url : url,
-
         dataType : 'html',
         timeout : 100000,
         beforeSend: function() {},
@@ -395,7 +460,7 @@ function getAllBranch(userId,divId) {
         done : function(e) {
 
             console.log("DONE");
-            //enableSearchButton(true);
+           
         }
     });
 
