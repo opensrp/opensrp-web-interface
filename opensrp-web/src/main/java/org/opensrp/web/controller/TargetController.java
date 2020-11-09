@@ -237,8 +237,8 @@ public class TargetController {
 	}
 	
 	@RequestMapping(value = "/target/report/pm-service-target-report", method = RequestMethod.POST)
-	public String pmServiceTargetReportByManager(@RequestBody String dto, HttpServletRequest request, HttpSession session,
-	                                             Model model) throws JSONException {
+	public String pmServiceTargetReport(@RequestBody String dto, HttpServletRequest request, HttpSession session, Model model)
+	    throws JSONException {
 		
 		JSONObject params = new JSONObject(dto);
 		String managerOrLocation = params.getString("managerOrLocation");
@@ -254,4 +254,94 @@ public class TargetController {
 		
 		return "targets/target-vs-achievement-service-pm-report-table";
 	}
+	
+	@RequestMapping(value = "/target/target-vs-achievement-service-report-dm.html", method = RequestMethod.GET)
+	public String targetVsAchievementServiceDMReport(HttpServletRequest request, HttpSession session, Model model,
+	                                                 Locale locale) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+		model.addAttribute("branches", branches);
+		return "targets/target-vs-achievement-service-dm-report";
+	}
+	
+	@RequestMapping(value = "/target/report/dm-service-target-report", method = RequestMethod.POST)
+	public String dmServiceTargetReport(@RequestBody String dto, HttpServletRequest request, HttpSession session, Model model)
+	    throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		String managerOrLocation = params.getString("managerOrLocation");
+		
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
+			totalList = targetService.getDMServiceReportByManager(params);
+		} else {
+			totalList = targetService.getDMServiceReportByLocation(params);
+		}
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("type", managerOrLocation);
+		
+		return "targets/target-vs-achievement-service-dm-report-table";
+	}
+	
+	@RequestMapping(value = "/target/target-vs-achievement-visit-report-dm.html", method = RequestMethod.GET)
+	public String targetVsAchievementVisitDMReport(HttpServletRequest request, HttpSession session, Model model,
+	                                               Locale locale) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+		model.addAttribute("branches", branches);
+		return "targets/target-vs-achievement-visit-dm-report";
+	}
+	
+	@RequestMapping(value = "/target/report/dm-visit-target-report", method = RequestMethod.POST)
+	public String dmVisitTargetReport(@RequestBody String dto, HttpServletRequest request, HttpSession session, Model model)
+	    throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		String managerOrLocation = params.getString("managerOrLocation");
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
+			totalList = targetService.getDMVisitReportByManager(params);
+		} else {
+			totalList = targetService.getDMVisitReportByLocation(params);
+		}
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("type", managerOrLocation);
+		
+		return "targets/target-vs-achievement-visit-dm-report-table";
+	}
+	
+	@RequestMapping(value = "/target/target-vs-achievement-service-report-am-branch-wise.html", method = RequestMethod.GET)
+	public String targetVsAchievementServiceAMReport(HttpServletRequest request, HttpSession session, Model model,
+	                                                 Locale locale) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+		model.addAttribute("branches", branches);
+		return "targets/target-vs-achievement-service-am-branch-wise-report";
+	}
+	
+	@RequestMapping(value = "/target/report/am-branch-wise-service-target-report", method = RequestMethod.POST)
+	public String amServiceTargetReport(@RequestBody String dto, HttpServletRequest request, HttpSession session, Model model)
+	    throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		String managerOrLocation = params.getString("managerOrLocation");
+		
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
+			totalList = targetService.getAMServiceReportByManager(params);
+		} else {
+			totalList = targetService.getAMServiceReportByLocation(params);
+		}
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("type", managerOrLocation);
+		
+		return "targets/target-vs-achievement-service-am-branch-wise-report-table";
+	}
+	
 }

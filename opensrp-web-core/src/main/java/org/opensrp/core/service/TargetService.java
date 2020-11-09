@@ -435,48 +435,107 @@ public class TargetService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
+	public List<TargetReportDTO> getDMVisitReportByManager(JSONObject params) {
+		
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		for (int i = 0; i < 30; i++) {
+			
+			TargetReportDTO targetReportDTO = new TargetReportDTO();
+			targetReportDTO.setFirstName("Arif");
+			targetReportDTO.setLastName("haque");
+			targetReportDTO.setNumberOfSK(23);
+			targetReportDTO.setNumberOfAm(12);
+			targetReportDTO.setNumberOfBranch(3);
+			targetReportDTO.setAchievementInPercentage(23.3f);
+			/*String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,'{"
+			        + branchIds + "}',:roleName,:start,:length)";
+			Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
+			        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
+			        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+			dtos = query.list();*/
+			dtos.add(targetReportDTO);
+		}
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetReportDTO> getDMVisitReportByLocation(JSONObject params) {
+		
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		for (int i = 0; i < 30; i++) {
+			TargetReportDTO targetReportDTO = new TargetReportDTO();
+			targetReportDTO.setFirstName("Arif");
+			targetReportDTO.setLastName("haque");
+			targetReportDTO.setLocationName("Dhaka");
+			targetReportDTO.setNumberOfSK(23);
+			targetReportDTO.setNumberOfAm(12);
+			targetReportDTO.setNumberOfBranch(3);
+			targetReportDTO.setAchievementInPercentage(23.3f);
+			/*String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,'{"
+			        + branchIds + "}',:roleName,:start,:length)";
+			Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
+			        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
+			        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+			dtos = query.list();*/
+			dtos.add(targetReportDTO);
+		}
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<TargetReportDTO> getPMServiceReportByManager(JSONObject params) {
 		
 		Session session = getSessionFactory();
 		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
-		TargetReportDTO targetReportDTO = new TargetReportDTO();
-		targetReportDTO.setFirstName("Arif");
-		targetReportDTO.setLastName("haque");
-		targetReportDTO.setLocationName("Dhaka");
-		targetReportDTO.setNumberOfSK(23);
-		targetReportDTO.setNumberOfAm(12);
-		targetReportDTO.setNumberOfBranch(3);
-		
-		targetReportDTO.setAchievementInPercentage(23.3f);
-		targetReportDTO.setANCServiceAchievement(78.34f);
-		targetReportDTO.setANCServiceSell(34);
-		targetReportDTO.setANCServiceTarget(41);
-		
-		targetReportDTO.setPNCServiceAchievement(62.5f);
-		targetReportDTO.setPNCServiceSell(34);
-		targetReportDTO.setPNCServiceTarget(40);
-		
-		targetReportDTO.setNCDServiceAchievement(45.4f);
-		targetReportDTO.setNCDServiceSell(41);
-		targetReportDTO.setNCDServiceTarget(50);
-		
-		targetReportDTO.setWomenServiceAchievement(34.4f);
-		targetReportDTO.setWomenServiceSell(34);
-		targetReportDTO.setWomenServiceTarget(32);
-		
-		targetReportDTO.setIYCFServiceAchievement(45.4f);
-		targetReportDTO.setIYCFServiceSell(45);
-		targetReportDTO.setIYCFServiceTarget(43);
-		
-		/*String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,'{"
-		        + branchIds + "}',:roleName,:start,:length)";
-		Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
-		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
-		        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
-		        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
-		        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
-		dtos = query.list();*/
-		dtos.add(targetReportDTO);
+		for (int i = 0; i < 20; i++) {
+			
+			TargetReportDTO targetReportDTO = new TargetReportDTO();
+			targetReportDTO.setFirstName("Arif");
+			targetReportDTO.setLastName("haque");
+			targetReportDTO.setLocationName("Dhaka");
+			targetReportDTO.setNumberOfSK(23);
+			targetReportDTO.setNumberOfAm(12);
+			targetReportDTO.setNumberOfBranch(3);
+			
+			targetReportDTO.setAchievementInPercentage(23.3f);
+			targetReportDTO.setANCServiceAchievement(78.34f);
+			targetReportDTO.setANCServiceSell(34);
+			targetReportDTO.setANCServiceTarget(41);
+			
+			targetReportDTO.setPNCServiceAchievement(62.5f);
+			targetReportDTO.setPNCServiceSell(34);
+			targetReportDTO.setPNCServiceTarget(40);
+			
+			targetReportDTO.setNCDServiceAchievement(45.4f);
+			targetReportDTO.setNCDServiceSell(41);
+			targetReportDTO.setNCDServiceTarget(50);
+			
+			targetReportDTO.setWomenServiceAchievement(34.4f);
+			targetReportDTO.setWomenServiceSell(34);
+			targetReportDTO.setWomenServiceTarget(32);
+			
+			targetReportDTO.setIYCFServiceAchievement(45.4f);
+			targetReportDTO.setIYCFServiceSell(45);
+			targetReportDTO.setIYCFServiceTarget(43);
+			
+			/*String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,'{"
+			        + branchIds + "}',:roleName,:start,:length)";
+			Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
+			        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
+			        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+			dtos = query.list();*/
+			dtos.add(targetReportDTO);
+		}
 		return dtos;
 	}
 	
@@ -486,43 +545,242 @@ public class TargetService extends CommonService {
 		
 		Session session = getSessionFactory();
 		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
-		TargetReportDTO targetReportDTO = new TargetReportDTO();
-		targetReportDTO.setFirstName("Arif");
-		targetReportDTO.setLastName("haque");
-		targetReportDTO.setLocationName("Dhaka");
-		targetReportDTO.setNumberOfSK(23);
-		targetReportDTO.setNumberOfAm(12);
-		targetReportDTO.setNumberOfBranch(3);
-		targetReportDTO.setAchievementInPercentage(23.3f);
-		targetReportDTO.setAchievementInPercentage(23.3f);
-		targetReportDTO.setANCServiceAchievement(78.34f);
-		targetReportDTO.setANCServiceSell(34);
-		targetReportDTO.setANCServiceTarget(41);
+		for (int i = 0; i < 20; i++) {
+			TargetReportDTO targetReportDTO = new TargetReportDTO();
+			targetReportDTO.setFirstName("Arif");
+			targetReportDTO.setLastName("haque");
+			targetReportDTO.setLocationName("Dhaka");
+			targetReportDTO.setNumberOfSK(23);
+			targetReportDTO.setNumberOfAm(12);
+			targetReportDTO.setNumberOfBranch(3);
+			targetReportDTO.setAchievementInPercentage(23.3f);
+			targetReportDTO.setAchievementInPercentage(23.3f);
+			targetReportDTO.setANCServiceAchievement(78.34f);
+			targetReportDTO.setANCServiceSell(34);
+			targetReportDTO.setANCServiceTarget(41);
+			
+			targetReportDTO.setPNCServiceAchievement(62.5f);
+			targetReportDTO.setPNCServiceSell(34);
+			targetReportDTO.setPNCServiceTarget(40);
+			
+			targetReportDTO.setNCDServiceAchievement(45.4f);
+			targetReportDTO.setNCDServiceSell(41);
+			targetReportDTO.setNCDServiceTarget(50);
+			
+			targetReportDTO.setWomenServiceAchievement(34.4f);
+			targetReportDTO.setWomenServiceSell(34);
+			targetReportDTO.setWomenServiceTarget(32);
+			
+			targetReportDTO.setIYCFServiceAchievement(45.4f);
+			targetReportDTO.setIYCFServiceSell(45);
+			targetReportDTO.setIYCFServiceTarget(43);
+			/*String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,'{"
+			        + branchIds + "}',:roleName,:start,:length)";
+			Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
+			        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
+			        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+			dtos = query.list();*/
+			dtos.add(targetReportDTO);
+		}
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetReportDTO> getDMServiceReportByManager(JSONObject params) {
 		
-		targetReportDTO.setPNCServiceAchievement(62.5f);
-		targetReportDTO.setPNCServiceSell(34);
-		targetReportDTO.setPNCServiceTarget(40);
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		for (int i = 0; i < 20; i++) {
+			
+			TargetReportDTO targetReportDTO = new TargetReportDTO();
+			targetReportDTO.setFirstName("Arif");
+			targetReportDTO.setLastName("haque");
+			targetReportDTO.setLocationName("Dhaka");
+			targetReportDTO.setNumberOfSK(23);
+			targetReportDTO.setNumberOfAm(12);
+			targetReportDTO.setNumberOfBranch(3);
+			
+			targetReportDTO.setAchievementInPercentage(23.3f);
+			targetReportDTO.setANCServiceAchievement(78.34f);
+			targetReportDTO.setANCServiceSell(34);
+			targetReportDTO.setANCServiceTarget(41);
+			
+			targetReportDTO.setPNCServiceAchievement(62.5f);
+			targetReportDTO.setPNCServiceSell(34);
+			targetReportDTO.setPNCServiceTarget(40);
+			
+			targetReportDTO.setNCDServiceAchievement(45.4f);
+			targetReportDTO.setNCDServiceSell(41);
+			targetReportDTO.setNCDServiceTarget(50);
+			
+			targetReportDTO.setWomenServiceAchievement(34.4f);
+			targetReportDTO.setWomenServiceSell(34);
+			targetReportDTO.setWomenServiceTarget(32);
+			
+			targetReportDTO.setIYCFServiceAchievement(45.4f);
+			targetReportDTO.setIYCFServiceSell(45);
+			targetReportDTO.setIYCFServiceTarget(43);
+			
+			/*String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,'{"
+			        + branchIds + "}',:roleName,:start,:length)";
+			Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
+			        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
+			        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+			dtos = query.list();*/
+			dtos.add(targetReportDTO);
+		}
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetReportDTO> getDMServiceReportByLocation(JSONObject params) {
 		
-		targetReportDTO.setNCDServiceAchievement(45.4f);
-		targetReportDTO.setNCDServiceSell(41);
-		targetReportDTO.setNCDServiceTarget(50);
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		for (int i = 0; i < 20; i++) {
+			TargetReportDTO targetReportDTO = new TargetReportDTO();
+			targetReportDTO.setFirstName("Arif");
+			targetReportDTO.setLastName("haque");
+			targetReportDTO.setLocationName("Dhaka");
+			targetReportDTO.setNumberOfSK(23);
+			targetReportDTO.setNumberOfAm(12);
+			targetReportDTO.setNumberOfBranch(3);
+			targetReportDTO.setAchievementInPercentage(23.3f);
+			targetReportDTO.setAchievementInPercentage(23.3f);
+			targetReportDTO.setANCServiceAchievement(78.34f);
+			targetReportDTO.setANCServiceSell(34);
+			targetReportDTO.setANCServiceTarget(41);
+			
+			targetReportDTO.setPNCServiceAchievement(62.5f);
+			targetReportDTO.setPNCServiceSell(34);
+			targetReportDTO.setPNCServiceTarget(40);
+			
+			targetReportDTO.setNCDServiceAchievement(45.4f);
+			targetReportDTO.setNCDServiceSell(41);
+			targetReportDTO.setNCDServiceTarget(50);
+			
+			targetReportDTO.setWomenServiceAchievement(34.4f);
+			targetReportDTO.setWomenServiceSell(34);
+			targetReportDTO.setWomenServiceTarget(32);
+			
+			targetReportDTO.setIYCFServiceAchievement(45.4f);
+			targetReportDTO.setIYCFServiceSell(45);
+			targetReportDTO.setIYCFServiceTarget(43);
+			/*String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,'{"
+			        + branchIds + "}',:roleName,:start,:length)";
+			Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
+			        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
+			        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+			dtos = query.list();*/
+			dtos.add(targetReportDTO);
+		}
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetReportDTO> getAMServiceReportByManager(JSONObject params) {
 		
-		targetReportDTO.setWomenServiceAchievement(34.4f);
-		targetReportDTO.setWomenServiceSell(34);
-		targetReportDTO.setWomenServiceTarget(32);
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		for (int i = 0; i < 20; i++) {
+			
+			TargetReportDTO targetReportDTO = new TargetReportDTO();
+			targetReportDTO.setFirstName("Arif");
+			targetReportDTO.setLastName("haque");
+			targetReportDTO.setLocationName("Dhaka");
+			targetReportDTO.setNumberOfSK(23);
+			targetReportDTO.setNumberOfAm(12);
+			targetReportDTO.setNumberOfBranch(3);
+			targetReportDTO.setBranchName("Ratanpur");
+			targetReportDTO.setAchievementInPercentage(23.3f);
+			targetReportDTO.setANCServiceAchievement(78.34f);
+			targetReportDTO.setANCServiceSell(34);
+			targetReportDTO.setANCServiceTarget(41);
+			
+			targetReportDTO.setPNCServiceAchievement(62.5f);
+			targetReportDTO.setPNCServiceSell(34);
+			targetReportDTO.setPNCServiceTarget(40);
+			
+			targetReportDTO.setNCDServiceAchievement(45.4f);
+			targetReportDTO.setNCDServiceSell(41);
+			targetReportDTO.setNCDServiceTarget(50);
+			
+			targetReportDTO.setWomenServiceAchievement(34.4f);
+			targetReportDTO.setWomenServiceSell(34);
+			targetReportDTO.setWomenServiceTarget(32);
+			
+			targetReportDTO.setIYCFServiceAchievement(45.4f);
+			targetReportDTO.setIYCFServiceSell(45);
+			targetReportDTO.setIYCFServiceTarget(43);
+			
+			/*String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,'{"
+			        + branchIds + "}',:roleName,:start,:length)";
+			Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
+			        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
+			        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+			dtos = query.list();*/
+			dtos.add(targetReportDTO);
+		}
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetReportDTO> getAMServiceReportByLocation(JSONObject params) {
 		
-		targetReportDTO.setIYCFServiceAchievement(45.4f);
-		targetReportDTO.setIYCFServiceSell(45);
-		targetReportDTO.setIYCFServiceTarget(43);
-		/*String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,'{"
-		        + branchIds + "}',:roleName,:start,:length)";
-		Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
-		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
-		        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
-		        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
-		        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
-		dtos = query.list();*/
-		dtos.add(targetReportDTO);
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		for (int i = 0; i < 20; i++) {
+			TargetReportDTO targetReportDTO = new TargetReportDTO();
+			targetReportDTO.setFirstName("Arif");
+			targetReportDTO.setLastName("haque");
+			targetReportDTO.setLocationName("Dhaka");
+			targetReportDTO.setNumberOfSK(23);
+			targetReportDTO.setNumberOfAm(12);
+			targetReportDTO.setNumberOfBranch(3);
+			targetReportDTO.setBranchName("Ratanpur");
+			targetReportDTO.setAchievementInPercentage(23.3f);
+			targetReportDTO.setAchievementInPercentage(23.3f);
+			targetReportDTO.setANCServiceAchievement(78.34f);
+			targetReportDTO.setANCServiceSell(34);
+			targetReportDTO.setANCServiceTarget(41);
+			
+			targetReportDTO.setPNCServiceAchievement(62.5f);
+			targetReportDTO.setPNCServiceSell(34);
+			targetReportDTO.setPNCServiceTarget(40);
+			
+			targetReportDTO.setNCDServiceAchievement(45.4f);
+			targetReportDTO.setNCDServiceSell(41);
+			targetReportDTO.setNCDServiceTarget(50);
+			
+			targetReportDTO.setWomenServiceAchievement(34.4f);
+			targetReportDTO.setWomenServiceSell(34);
+			targetReportDTO.setWomenServiceTarget(32);
+			
+			targetReportDTO.setIYCFServiceAchievement(45.4f);
+			targetReportDTO.setIYCFServiceSell(45);
+			targetReportDTO.setIYCFServiceTarget(43);
+			/*String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,'{"
+			        + branchIds + "}',:roleName,:start,:length)";
+			Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
+			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+			        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
+			        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
+			        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+			dtos = query.list();*/
+			dtos.add(targetReportDTO);
+		}
 		return dtos;
 	}
 	

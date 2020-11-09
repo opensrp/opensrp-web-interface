@@ -93,6 +93,11 @@ License: You must have a valid license purchased only from themeforest(the above
 	
 	boolean SK_VISIT_TARGET_REPORT_PM = AuthenticationManagerUtil.isPermitted("SK_VISIT_TARGET_REPORT_PM");
 	boolean SK_SERVICE_TARGET_REPORT_PM = AuthenticationManagerUtil.isPermitted("SK_SERVICE_TARGET_REPORT_PM");
+	boolean SK_VISIT_TARGET_REPORT_DM = AuthenticationManagerUtil.isPermitted("SK_VISIT_TARGET_REPORT_DM");
+	boolean SK_SERVICE_TARGET_REPORT_DM = AuthenticationManagerUtil.isPermitted("SK_SERVICE_TARGET_REPORT_DM");
+
+	boolean SK_VISIT_TARGET_REPORT_AM = AuthenticationManagerUtil.isPermitted("SK_VISIT_TARGET_REPORT_AM");
+	boolean SK_SERVICE_TARGET_REPORT_AM = AuthenticationManagerUtil.isPermitted("SK_SERVICE_TARGET_REPORT_AM");
 
    %>
   
@@ -473,16 +478,51 @@ License: You must have a valid license purchased only from themeforest(the above
 							<spring:message code="lbl.individualBiometricReport"/>
 						</a>
 						</li>
-						<% if(SK_SERVICE_TARGET_REPORT_PM){ %>
+						<% if(SK_VISIT_TARGET_REPORT_PM){ %>
 						<li>
 							<a href="<c:url value="/target/target-vs-achievement-visit-report-pm.html?lang=${locale}"/>">
 							Target vs achievement visit report
 							</a>
 						</li>
 						<% }%>
-						<% if( SK_VISIT_TARGET_REPORT_PM){ %>
+						<% if( SK_SERVICE_TARGET_REPORT_PM){ %>
 						<li><a href="<c:url value="/target/target-vs-achievement-service-report-pm.html?lang=${locale}"/>">
 							Target vs achievement service report
+							</a>
+						</li>
+						<% }%>
+						
+						<% if(SK_VISIT_TARGET_REPORT_DM){ %>
+						<li>
+							<a href="<c:url value="/target/target-vs-achievement-visit-report-dm.html?lang=${locale}"/>">
+							Target vs achievement visit report
+							</a>
+						</li>
+						<% }%>
+						<% if( SK_SERVICE_TARGET_REPORT_DM){ %>
+						<li><a href="<c:url value="/target/target-vs-achievement-service-report-dm.html?lang=${locale}"/>">
+							Target vs achievement service report
+							</a>
+						</li>
+						<% }%>
+						
+						<% if(SK_VISIT_TARGET_REPORT_AM){ %>
+						<li>
+							<a href="<c:url value="/target/target-vs-achievement-visit-report-dm.html?lang=${locale}"/>">
+							Target vs achievement visit report
+							</a>
+							<a href="<c:url value="/target/target-vs-achievement-visit-report-dm.html?lang=${locale}"/>">
+							Target vs achievement visit report
+							</a>
+						</li>
+						<% }%>
+						<% if( SK_SERVICE_TARGET_REPORT_AM){ %>
+						<li><a href="<c:url value="/target/target-vs-achievement-service-report-am-branch-wise.html?lang=${locale}"/>">
+							Target vs achievement service report branch wise
+							</a>
+						</li>
+						<li><a href="<c:url value="/target/am-provider-wise-service-target-report?lang=${locale}"/>">
+							Target vs achievement service report sk wise
 							</a>
 						</li>
 						<% }%>

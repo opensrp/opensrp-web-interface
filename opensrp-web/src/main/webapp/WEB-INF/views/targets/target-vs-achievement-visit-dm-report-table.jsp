@@ -31,8 +31,7 @@
     <c:choose>
 		<c:when test="${type =='managerWise'}">
 		    <tr>
-				<th>DM name</th>									
-				<th>Number of AM</th>
+				<th>AM name</th>
 				<th>Number of branch</th>
 				<th>Number of active SK</th>
 				<th>SK target vs achievement</th>
@@ -42,7 +41,7 @@
 	 		 <tr>
 				<th>Location name</th>
 				<th>Number of branch</th>
-				<th>Number of SK</th>
+				<th>Number of  SK</th>
 				<th>SK target vs achievement</th>
 		    </tr>
 	 	</c:otherwise>
@@ -56,8 +55,7 @@
    		<tr>
    			<c:choose>
 				<c:when test="${type =='managerWise'}">
-		   			<td> ${reportData.getFullName() }</td>
-		   			<td> ${reportData.getNumberOfAm() }</td>
+		   			<td> ${reportData.getFullName() }</td>		   			
 		   			<td> ${reportData.getNumberOfBranch() }</td>
 		   			<td> ${reportData.getNumberOfSK() }</td>
 		   			<td> ${reportData.getAchievementInPercentage() }</td>
