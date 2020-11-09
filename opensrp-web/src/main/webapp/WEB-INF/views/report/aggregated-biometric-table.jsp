@@ -57,7 +57,7 @@
         <th><spring:message code="lbl.servicesProvidedByPassingValidation"/></th>
     </tr>
     </thead>
-    </thead>
+   
     <tbody id="t-body">
     <% for (AggregatedBiometricDTO report: aggregateBiometricdReports) { %>
         <tr>

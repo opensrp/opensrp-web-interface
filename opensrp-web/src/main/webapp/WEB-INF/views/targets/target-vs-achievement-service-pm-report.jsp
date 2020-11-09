@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Target vs achievement visit pm report</title>
+<title>Target vs achievement service pm report</title>
 
 <c:url var="branch_url" value="/branch-list-options-by-user-ids" />
 <c:url var="all_branch_url" value="/all-branch-list-options" />
@@ -50,7 +50,6 @@
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
-<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 	
 
 <div class="page-content-wrapper">
@@ -62,11 +61,11 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>Target vs achievement visit report
+							<i class="fa fa-list"></i>Target vs achievement service report
 						</div>
 					</div>					
 					<div class="portlet-body">
-						<div class="form-group">
+						<div class="row">
 							
 								<div class="row col-lg-12 form-group">
 	
@@ -136,14 +135,13 @@
 					
 			</div>
 		</div>
-		</br>
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>
 	</div>
 	<!-- END CONTENT -->
+	
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
-<script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 
 

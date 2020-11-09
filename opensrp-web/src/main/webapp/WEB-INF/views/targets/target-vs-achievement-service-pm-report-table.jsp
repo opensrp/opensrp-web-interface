@@ -88,8 +88,9 @@
     </thead>
    
     <tbody id="t-body">
-    
-   		<c:forEach items="${reportDatas}" var="reportData"> <tr>
+    	
+   		<c:forEach items="${reportDatas}" var="reportData"> 
+   			<tr>
    			<c:choose>
 				<c:when test="${type =='managerWise'}">
 		   			<td> ${reportData.getFullName() }</td>
@@ -104,9 +105,6 @@
 		   			<td> ${reportData.getNCDServiceTarget() }/${reportData.getNCDServiceSell() }</td>
 		   			<td> ${reportData.getNCDServiceAchievement() }</td>
 		   			
-		   			<%-- <td> ${reportData.getNCDServiceTarget() }/${reportData.getNCDServiceSell() }</td>
-		   			<td> ${reportData.getNCDServiceAchievement() }</td> --%>
-		   			
 		   			<td> ${reportData.getIYCFServiceTarget() }/${reportData.getIYCFServiceSell() }</td>
 		   			<td> ${reportData.getIYCFServiceAchievement() }</td>
 		   			
@@ -118,12 +116,25 @@
 	 		
 	 		<c:otherwise>
 	 				<td> ${reportData.getLocationName() }</td>		   			
-		   			<td> ${reportData.getNumberOfBranch() }</td>
-		   			<td> ${reportData.getNumberOfSK() }</td>
-		   			<td> ${reportData.getAchievementInPercentage() }</td>
+		   			<td> ${reportData.getNumberOfAm() }</td>
+		   			
+		   			<td> ${reportData.getANCServiceTarget() }/${reportData.getANCServiceSell() }</td>
+		   			<td> ${reportData.getANCServiceAchievement() }</td>
+		   			
+		   			<td> ${reportData.getPNCServiceTarget() }/${reportData.getPNCServiceSell() }</td>
+		   			<td> ${reportData.getPNCServiceAchievement() }</td>
+		   			
+		   			<td> ${reportData.getNCDServiceTarget() }/${reportData.getNCDServiceSell() }</td>
+		   			<td> ${reportData.getNCDServiceAchievement() }</td>
+		   			
+		   			<td> ${reportData.getIYCFServiceTarget() }/${reportData.getIYCFServiceSell() }</td>
+		   			<td> ${reportData.getIYCFServiceAchievement() }</td>
+		   			
+		   			<td> ${reportData.getWomenServiceTarget() }/${reportData.getWomenServiceSell() }</td>
+		   			<td> ${reportData.getWomenServiceAchievement() }</td>
 	 		</c:otherwise>
 	 		</c:choose>
-	 		 </tr>
+	 		</tr>
 		</c:forEach>
     </tbody>
 </table>
