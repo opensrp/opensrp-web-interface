@@ -50,7 +50,7 @@
 	 </c:choose>
     </thead>
    
-    <tbody id="t-body">
+    <tbody>
     
    		<c:forEach items="${reportDatas}" var="reportData">
    			<c:choose>

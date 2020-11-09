@@ -206,24 +206,13 @@ public class TargetController {
 		return "targets/target-vs-achievement-sk-visit-pm-report";
 	}
 	
-	@RequestMapping(value = "/target/target-vs-achievement-service-report-pm.html", method = RequestMethod.GET)
-	public String targetVsAchievementSKServicePMReport(HttpServletRequest request, HttpSession session, Model model,
-	                                                   Locale locale) {
-		model.addAttribute("locale", locale);
-		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
-		List<Branch> branches = branchService.findAll("Branch");
-		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
-		model.addAttribute("branches", branches);
-		return "targets/target-vs-achievement-sk-visit-pm-report";
-	}
-	
 	@RequestMapping(value = "/target/report/pm-visit-target-report", method = RequestMethod.POST)
 	public String pmVisitTargetReportByManager(@RequestBody String dto, HttpServletRequest request, HttpSession session,
 	                                           Model model) throws JSONException {
 		
 		JSONObject params = new JSONObject(dto);
 		String managerOrLocation = params.getString("managerOrLocation");
-		System.err.println("managerOrLocation:" + managerOrLocation);
+		
 		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
 		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
 			totalList = targetService.getPMVisitReportByManager(params);
@@ -234,5 +223,35 @@ public class TargetController {
 		model.addAttribute("type", managerOrLocation);
 		
 		return "targets/target-vs-achievement-visit-pm-report";
+	}
+	
+	@RequestMapping(value = "/target/target-vs-achievement-service-report-pm.html", method = RequestMethod.GET)
+	public String targetVsAchievementSKServicePMReport(HttpServletRequest request, HttpSession session, Model model,
+	                                                   Locale locale) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+		model.addAttribute("branches", branches);
+		return "targets/target-vs-achievement-service-pm-report";
+	}
+	
+	@RequestMapping(value = "/target/report/pm-service-target-report", method = RequestMethod.POST)
+	public String pmServiceTargetReportByManager(@RequestBody String dto, HttpServletRequest request, HttpSession session,
+	                                             Model model) throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		String managerOrLocation = params.getString("managerOrLocation");
+		
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
+			totalList = targetService.getPMServiceReportByManager(params);
+		} else {
+			totalList = targetService.getPMServiceReportByLocation(params);
+		}
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("type", managerOrLocation);
+		
+		return "targets/target-vs-achievement-service-pm-report-table";
 	}
 }

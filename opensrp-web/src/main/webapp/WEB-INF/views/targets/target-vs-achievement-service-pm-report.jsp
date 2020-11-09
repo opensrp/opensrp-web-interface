@@ -16,7 +16,7 @@
 
 <c:url var="user_list_url" value="/user-list-options-by-parent-user-ids" />
 	
-<c:url var="report_url" value="/target/report/pm-visit-target-report" />
+<c:url var="report_url" value="/target/report/pm-service-target-report" />
 <style>
 	.select2-results__option .wrap:before {
 		font-family: fontAwesome;
