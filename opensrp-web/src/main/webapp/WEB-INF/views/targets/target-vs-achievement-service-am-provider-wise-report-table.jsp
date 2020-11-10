@@ -29,7 +29,8 @@
     
 		    <tr>
 		        <th rowspan="2">Branch name</th>		        
-		        <th rowspan="2">Number of sk</th>
+		        <th rowspan="2">SK name</th>
+		        <th rowspan="2">ID</th>
 		        <th colspan="2">ANC package</th>
 		        <th colspan="2">PNC package</th>
 		        <th colspan="2">NCD package</th>
@@ -61,8 +62,8 @@
    			<tr>
    			
 		   			<td> ${reportData.getBranchName() }</td>		   			
-		   			<td> ${reportData.getNumberOfSK() }</td>
-		   			
+		   			<td> ${reportData.getFullName() }</td>
+		   			<td> ${reportData.getMobile() }</td>
 		   			<td> ${reportData.getANCServiceTarget() }/${reportData.getANCServiceSell() }</td>
 		   			<td> ${reportData.getANCServiceAchievement() }</td>
 		   			

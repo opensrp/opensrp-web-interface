@@ -68,7 +68,7 @@
 					<div class="portlet-body">
 						<div class="form-group">
 							
-								<div class="row col-lg-12 form-group">
+								<!-- <div class="row col-lg-12 form-group">
 	
 									<div  class="col-lg-3 form-group">
 									  <input type="radio"  id="managerWise"  onclick="reportType('manager')"  value="managerWise" name="managerOrLocation" 
@@ -80,7 +80,7 @@
 									  <input type="radio"  id="locationWise" onclick="reportType('location')" value="locationWise" name="managerOrLocation">
 									  <label for="locationWise">Location wise</label>
 									</div>
-								  </div>
+								  </div> -->
 							
 							
 							<div class="row" id="manager">
@@ -112,8 +112,8 @@
 														
 							</div>
 	
-							<jsp:include page="/WEB-INF/views/location-search-options.jsp" />
-							
+							<%-- <jsp:include page="/WEB-INF/views/location-search-options.jsp" />
+							 --%>
 							
 							<jsp:include page="/WEB-INF/views/target-report-common-search-section.jsp" />
 							
@@ -122,7 +122,7 @@
 						
 		                <div class="row" style="margin: 0px">
 		                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
-		                    <h3 id="reportTile" style="font-weight: bold;">Manager Wise report</h3>
+		                    <h3 id="reportTile" style="font-weight: bold;">Manager Wise visit report</h3>
 		                        <div id="report"></div>
 		                        
 		                    </div>
@@ -186,14 +186,15 @@ function getReportData(){
             $('#search-button').attr("disabled", true);
         },
         success : function(data) {
-        	let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
+        	//let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
+        	let managerOrLocation ="managerWise";
         	
             $('#loading').hide();
             $("#report").html(data);
             $('#search-button').attr("disabled", false);
             let reportType =$("input[name='time-period']:checked").val(); 
         	if(managerOrLocation =='managerWise'){
-        		$("#reportTile").html("Manager Wise report");
+        		$("#reportTile").html("Manager Wise visit report");
         	}else{
         		$("#reportTile").html("Location Wise report");
         	}
@@ -249,16 +250,17 @@ function getParamsData(){
 	let divM = $("#divM option:selected").val();
 	let AM = $("#AM option:selected").val();
 	
-	let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
+	//let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
+	let managerOrLocation ="managerWise";
 	let reportType =$("input[name='time-period']:checked").val(); 
-	if(managerOrLocation =='managerWise'){
+	/* if(managerOrLocation =='managerWise'){
 		district=0;
-		district=0;
-		district=0;
+		division=0;
+		upazila=0;
 	}else{
 		divM=0;
 		AM=0;
-	}
+	} */
 	
 	var from = getFromTime();
 	var to = getToTime();

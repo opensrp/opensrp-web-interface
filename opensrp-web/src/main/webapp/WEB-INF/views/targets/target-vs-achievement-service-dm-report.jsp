@@ -65,9 +65,9 @@
 						</div>
 					</div>					
 					<div class="portlet-body">
-						<div class="row">
+						<div class="form-group">
 							
-								<div class="row col-lg-12 form-group">
+								<!-- <div class="row col-lg-12 form-group">
 	
 									<div  class="col-lg-3 form-group">
 									  <input type="radio"  id="managerWise"  onclick="reportType('manager')"  value="managerWise" name="managerOrLocation" 
@@ -79,23 +79,18 @@
 									  <input type="radio"  id="locationWise" onclick="reportType('location')" value="locationWise" name="managerOrLocation">
 									  <label for="locationWise">Location wise</label>
 									</div>
-								  </div>
+								  </div> -->
 							
 							
 							<div class="row" id="manager">
-									<div class="col-lg-3 form-group">
-									    <label for="cars">Divisional manager </label> 
-									    <select	onclick="getAm(this.value,'AM')" name="divM" class="form-control" id="divM">
-											<option value="0">Please select</option>
-											<c:forEach items="${divms}" var="divm">
-											<option value="${divm.getId()}">${divm.getFullName()}</option>
-											</c:forEach>
-										</select>
-									</div>
+									
 									<div class="col-lg-3 form-group">
 									    <label for="cars">Area manager </label>
 									    <select	onclick="getBranchListByUserId(this.value,'branchList')" name="AM"  id="AM" class="form-control">
 											<option value="0">Please select </option>
+											<c:forEach items="${users}" var="user">
+											<option value="${user.getId()}">${user.getFullName()}</option>
+											</c:forEach>
 										</select>
 									</div>
 									
@@ -111,8 +106,8 @@
 														
 							</div>
 	
-							<jsp:include page="/WEB-INF/views/location-search-options.jsp" />
-							
+							<%-- <jsp:include page="/WEB-INF/views/location-search-options.jsp" />
+							 --%>
 							
 							<jsp:include page="/WEB-INF/views/target-report-common-search-section.jsp" />
 							
@@ -135,13 +130,14 @@
 					
 			</div>
 		</div>
+		</br>
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>
 	</div>
 	<!-- END CONTENT -->
-	
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
+<script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 
 
@@ -149,7 +145,7 @@
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
-		getAllBranch();
+		getBranchByuserIds('${userIds}')
 		$('#branchList').select2MultiCheckboxes({
 			placeholder: "Select branch",
 			width: "auto",
@@ -184,14 +180,14 @@ function getReportData(){
             $('#search-button').attr("disabled", true);
         },
         success : function(data) {
-        	let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
-        	
+        	//let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
+        	let managerOrLocation ='managerWise';
             $('#loading').hide();
             $("#report").html(data);
             $('#search-button').attr("disabled", false);
             let reportType =$("input[name='time-period']:checked").val(); 
         	if(managerOrLocation =='managerWise'){
-        		$("#reportTile").html("Manager Wise report");
+        		$("#reportTile").html("Manager wise service report");
         	}else{
         		$("#reportTile").html("Location Wise report");
         	}
@@ -244,19 +240,20 @@ function getParamsData(){
 	let division = $("#divisionList option:selected").val();
 	let upazila = $("#upazilaList option:selected").val();
 	
-	let divM = $("#divM option:selected").val();
+	let divM = '${userIds}';
 	let AM = $("#AM option:selected").val();
 	
-	let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
+	//let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
+	let managerOrLocation ='managerWise';
 	let reportType =$("input[name='time-period']:checked").val(); 
-	if(managerOrLocation =='managerWise'){
+	/* if(managerOrLocation =='managerWise'){
+		division=0;
 		district=0;
-		district=0;
-		district=0;
+		upazila=0;
 	}else{
 		divM=0;
 		AM=0;
-	}
+	} */
 	
 	var from = getFromTime();
 	var to = getToTime();

@@ -507,22 +507,24 @@ License: You must have a valid license purchased only from themeforest(the above
 						<% }%>
 						
 						<% if(SK_VISIT_TARGET_REPORT_AM){ %>
-						<li>
-							<a href="<c:url value="/target/target-vs-achievement-visit-report-dm.html?lang=${locale}"/>">
-							Target vs achievement visit report
+							<li>
+							<a href="<c:url value="/target/target-vs-achievement-visit-report-am-branch-wise.html?lang=${locale}"/>">
+							Target vs achievement visit report branch wise
 							</a>
-							<a href="<c:url value="/target/target-vs-achievement-visit-report-dm.html?lang=${locale}"/>">
-							Target vs achievement visit report
+							</li>
+							<li>
+							<a href="<c:url value="/target/target-vs-achievement-visit-report-am-provider-wise.html?lang=${locale}"/>">
+							Target vs achievement visit report provider wise
 							</a>
-						</li>
+							</li>
 						<% }%>
 						<% if( SK_SERVICE_TARGET_REPORT_AM){ %>
 						<li><a href="<c:url value="/target/target-vs-achievement-service-report-am-branch-wise.html?lang=${locale}"/>">
 							Target vs achievement service report branch wise
 							</a>
 						</li>
-						<li><a href="<c:url value="/target/am-provider-wise-service-target-report?lang=${locale}"/>">
-							Target vs achievement service report sk wise
+						<li><a href="<c:url value="/target/target-vs-achievement-service-report-am-provider-wise.html?lang=${locale}"/>">
+							Target vs achievement service report provider wise
 							</a>
 						</li>
 						<% }%>

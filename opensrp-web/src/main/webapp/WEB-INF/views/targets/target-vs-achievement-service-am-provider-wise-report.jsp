@@ -9,14 +9,14 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Target vs achievement visit pm report</title>
+<title>Target vs achievement service am report branch wise</title>
 
 <c:url var="branch_url" value="/branch-list-options-by-user-ids" />
 <c:url var="all_branch_url" value="/all-branch-list-options" />
 
 <c:url var="user_list_url" value="/user-list-options-by-parent-user-ids" />
 	
-<c:url var="report_url" value="/target/report/dm-visit-target-report" />
+<c:url var="report_url" value="/target/report/am-provider-wise-service-target-report" />
 <style>
 	.select2-results__option .wrap:before {
 		font-family: fontAwesome;
@@ -50,7 +50,6 @@
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
-<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 	
 
 <div class="page-content-wrapper">
@@ -62,45 +61,18 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>Target vs achievement visit report
+							<i class="fa fa-list"></i>Target vs achievement service report by provider
 						</div>
 					</div>					
 					<div class="portlet-body">
-						<div class="form-group">
-							
-								<!-- <div class="row col-lg-12 form-group">
-	
-									<div  class="col-lg-3 form-group">
-									  <input type="radio"  id="managerWise"  onclick="reportType('manager')"  value="managerWise" name="managerOrLocation" 
-									         checked>
-									  <label for="managerWise">Manager wise</label>
-									</div>
-									
-									<div  class=" col-lg-3 form-group">
-									  <input type="radio"  id="locationWise" onclick="reportType('location')" value="locationWise" name="managerOrLocation">
-									  <label for="locationWise">Location wise</label>
-									</div>
-								  </div> -->
-							
-							
+						<div class="row">
 							<div class="row" id="manager">
 									
-									<div class="col-lg-3 form-group">
-									    <label for="cars">Area manager </label>
-									    <select	onclick="getBranchListByUserId(this.value,'branchList')" name="AM"  id="AM" class="form-control">
-											<option value="0">Please select </option>
-											<c:forEach items="${users}" var="user">
-											<option value="${user.getId()}">${user.getFullName()}</option>
-											</c:forEach>
-										</select>
-									</div>
 									
 									 <div class="col-lg-3 form-group">
 								        <label ><spring:message code="lbl.branch"></spring:message></label>
 								        <select	name="branchList" class="form-control" id="branchList">
-											<%-- <c:forEach items="${branches}" var="branch">
-												<option value="${branch.id}" selected>${branch.name}</option>
-											</c:forEach> --%>
+											
 								        </select>
 								    </div>
 								    
@@ -117,7 +89,7 @@
 						
 		                <div class="row" style="margin: 0px">
 		                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
-		                    <h3 id="reportTile" style="font-weight: bold;">Manager Wise report</h3>
+		                    <h3 id="reportTile" style="font-weight: bold;">Provider wise service report</h3>
 		                        <div id="report"></div>
 		                        
 		                    </div>
@@ -131,14 +103,13 @@
 					
 			</div>
 		</div>
-		</br>
 		<jsp:include page="/WEB-INF/views/footer.jsp" />
 		</div>
 	</div>
 	<!-- END CONTENT -->
+	
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
-<script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 
 
@@ -155,8 +126,6 @@ jQuery(document).ready(function() {
 			}
 		});
 	    var timePeriod = 'monthly';
-		reportType('manager');
-		$('#locationWiseDiv').hide();
 		
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
@@ -181,17 +150,13 @@ function getReportData(){
             $('#search-button').attr("disabled", true);
         },
         success : function(data) {
-        	//let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
-        	let managerOrLocation ='managerWise';
+        	let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
+        	
             $('#loading').hide();
             $("#report").html(data);
             $('#search-button').attr("disabled", false);
             let reportType =$("input[name='time-period']:checked").val(); 
-        	if(managerOrLocation =='managerWise'){
-        		$("#reportTile").html("Manager Wise visit report");
-        	}else{
-        		$("#reportTile").html("Location Wise report");
-        	}
+        	
             
             $('#reportDataTable').DataTable({            	
             	
@@ -241,20 +206,12 @@ function getParamsData(){
 	let division = $("#divisionList option:selected").val();
 	let upazila = $("#upazilaList option:selected").val();
 	
-	let divM = '${userIds}';
-	let AM = $("#AM option:selected").val();
+	let divM = $("#divM option:selected").val();
+	let AM = '${userIds}';
 	
-	//let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
-	let managerOrLocation ='managerWise';
+	let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
 	let reportType =$("input[name='time-period']:checked").val(); 
-	/* if(managerOrLocation =='managerWise'){
-		division=0;
-		district=0;
-		upazila=0;
-	}else{
-		divM=0;
-		AM=0;
-	} */
+	
 	
 	var from = getFromTime();
 	var to = getToTime();
@@ -301,52 +258,9 @@ function filter(){
 </script>
 
 <script>
-function getAm(userId,divId) {
-	
-	let url = '${user_list_url}';	
-	if(userId != 0){
-		getBranchListByUserId(userId,'branchList');
-		$.ajax({
-			type : "GET",
-			contentType : "application/json",
-			url : url+"?id="+userId+"&roleId=32",
-			dataType : 'html',
-			timeout : 100000,
-			beforeSend: function() {},
-			success : function(data) {
-				$("#"+divId).html(data);
-			},
-			error : function(e) {
-				console.log("ERROR: ", e);
-				display(e);
-			},
-			done : function(e) {
-				console.log("DONE");			
-			}
-		});
-	}else{
-		getAllBranch();
-		$("#AM").html('<option value="0">Please select </option>');
-	}
-
-}
-
-
-function getBranchListByUserId(userId,divId) {
-    if(userId!=0){
-    	getBranchByuserIds(userId);
-    }else{
-    	userId= $("#divM option:selected").val();
-    	if(userId!=0){
-    		getBranchByuserIds(userId);
-    	}else{
-    		getAllBranch();
-    	}
-    }
-}
 
 function getBranchByuserIds(userId){
-	 let url = '${branch_url}';
+	let url = '${branch_url}';
 	$.ajax({
         type : "GET",
         contentType : "application/json",
@@ -400,6 +314,7 @@ function getAllBranch() {
 
 
 </script>
+
 
 
 

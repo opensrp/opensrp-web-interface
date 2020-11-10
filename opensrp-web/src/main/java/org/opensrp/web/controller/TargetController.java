@@ -14,14 +14,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.dto.TargetReportDTO;
+import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.ProductType;
 import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Role;
+import org.opensrp.core.entity.User;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.TargetService;
+import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -259,10 +262,16 @@ public class TargetController {
 	public String targetVsAchievementServiceDMReport(HttpServletRequest request, HttpSession session, Model model,
 	                                                 Locale locale) {
 		model.addAttribute("locale", locale);
-		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		/*model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
-		model.addAttribute("branches", branches);
+		model.addAttribute("branches", branches);*/
+		
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
+		model.addAttribute("users", users);
 		return "targets/target-vs-achievement-service-dm-report";
 	}
 	
@@ -289,10 +298,16 @@ public class TargetController {
 	public String targetVsAchievementVisitDMReport(HttpServletRequest request, HttpSession session, Model model,
 	                                               Locale locale) {
 		model.addAttribute("locale", locale);
-		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		/*model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
-		model.addAttribute("branches", branches);
+		model.addAttribute("branches", branches);*/
+		
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
+		model.addAttribute("users", users);
 		return "targets/target-vs-achievement-visit-dm-report";
 	}
 	
@@ -318,10 +333,9 @@ public class TargetController {
 	public String targetVsAchievementServiceAMReport(HttpServletRequest request, HttpSession session, Model model,
 	                                                 Locale locale) {
 		model.addAttribute("locale", locale);
-		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
-		List<Branch> branches = branchService.findAll("Branch");
-		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
-		model.addAttribute("branches", branches);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
 		return "targets/target-vs-achievement-service-am-branch-wise-report";
 	}
 	
@@ -330,18 +344,89 @@ public class TargetController {
 	    throws JSONException {
 		
 		JSONObject params = new JSONObject(dto);
-		String managerOrLocation = params.getString("managerOrLocation");
 		
 		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
-		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
-			totalList = targetService.getAMServiceReportByManager(params);
-		} else {
-			totalList = targetService.getAMServiceReportByLocation(params);
-		}
+		
+		totalList = targetService.getAMServiceReportByBranch(params);
+		
 		model.addAttribute("reportDatas", totalList);
-		model.addAttribute("type", managerOrLocation);
 		
 		return "targets/target-vs-achievement-service-am-branch-wise-report-table";
+	}
+	
+	@RequestMapping(value = "/target/target-vs-achievement-service-report-am-provider-wise.html", method = RequestMethod.GET)
+	public String targetVsAchievementServiceProviderWiseAMReport(HttpServletRequest request, HttpSession session,
+	                                                             Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		return "targets/target-vs-achievement-service-am-provider-wise-report";
+	}
+	
+	@RequestMapping(value = "/target/report/am-provider-wise-service-target-report", method = RequestMethod.POST)
+	public String providerWiseAMServiceTargetReport(@RequestBody String dto, HttpServletRequest request,
+	                                                HttpSession session, Model model) throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		
+		totalList = targetService.getAMServiceReportByProvider(params);
+		
+		model.addAttribute("reportDatas", totalList);
+		
+		return "targets/target-vs-achievement-service-am-provider-wise-report-table";
+	}
+	
+	@RequestMapping(value = "/target/target-vs-achievement-visit-report-am-branch-wise.html", method = RequestMethod.GET)
+	public String targetVsAchievementVisitAMReport(HttpServletRequest request, HttpSession session, Model model,
+	                                               Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		return "targets/target-vs-achievement-visit-am-report-branch-wise";
+	}
+	
+	@RequestMapping(value = "/target/report/am-visit-target-branch-wise-report", method = RequestMethod.POST)
+	public String amVisitTargetReport(@RequestBody String dto, HttpServletRequest request, HttpSession session, Model model)
+	    throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		
+		totalList = targetService.getAMVisitReportByBranch(params);
+		
+		model.addAttribute("reportDatas", totalList);
+		
+		return "targets/target-vs-achievement-visit-am-report-branch-wise-table";
+	}
+	
+	@RequestMapping(value = "/target/target-vs-achievement-visit-report-am-provider-wise.html", method = RequestMethod.GET)
+	public String targetVsAchievementVisitProviderWiseAMReport(HttpServletRequest request, HttpSession session, Model model,
+	                                                           Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		return "targets/target-vs-achievement-visit-am-provider-wise-report";
+	}
+	
+	@RequestMapping(value = "/target/report/am-provider-wise-visit-target-report", method = RequestMethod.POST)
+	public String providerWiseAMvisitTargetReport(@RequestBody String dto, HttpServletRequest request, HttpSession session,
+	                                              Model model) throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		
+		totalList = targetService.getAMVisitReportByProvider(params);
+		
+		model.addAttribute("reportDatas", totalList);
+		
+		return "targets/target-vs-achievement-visit-am-provider-wise-report-table";
 	}
 	
 }
