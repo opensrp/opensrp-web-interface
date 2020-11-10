@@ -158,8 +158,15 @@ function getReportData(){
             let reportType =$("input[name='time-period']:checked").val(); 
         	
             
-            $('#reportDataTable').DataTable({            	
-            	
+            $('#reportDataTable').DataTable({ 
+            	scrollY:        "300px",
+                scrollX:        true,
+                scrollCollapse: true,
+                
+            	 fixedColumns:   {
+                     leftColumns: 1,
+                     rightColumns: 1
+                 }
             });
         },
         error : function(e) {
