@@ -31,11 +31,22 @@
 		        <th rowspan="2">Branch name</th>		        
 		        <th rowspan="2">SK name</th>
 		        <th rowspan="2">ID</th>
-		        <th colspan="2">ANC package</th>
-		        <th colspan="2">PNC package</th>
-		        <th colspan="2">NCD package</th>
-		        <th colspan="2">IYCF package</th>
-		        <th colspan="2">Women package</th>
+		        <th colspan="2">Household Visit</th>
+		        <th colspan="2">ELCO Visit</th>
+		        <th colspan="2">Methods Users</th>
+		        <th colspan="2">Adolescent Methods Users</th>
+		        <th colspan="2">Pregnancy Identified</th>
+		        <th colspan="2">Delivery</th>
+		        
+		        <th colspan="2">Institutionalized Delivery</th>
+		        <th colspan="2">Child Visit(0-6 months)</th>
+		        <th colspan="2">Child Visit(7-24 months)</th>
+		        
+		        <th colspan="2">Child Visit(18-36 months)</th>
+		        <th colspan="2">Immunization(0-59 months)</th>
+		        <th colspan="2">Pregnant Visit</th>
+		        
+		        
 		    </tr>
 		    <tr>
 		        <th>TvA (#)</th>
@@ -52,6 +63,30 @@
 		        
 		         <th>TvA (#)</th>
 		        <th>TvA(%)</th>
+		        
+		        <th>TvA (#)</th>
+		        <th>TvA(%)</th>
+		        
+		        <th>TvA (#)</th>
+		        <th>TvA(%)</th>
+		        
+		        <th>TvA (#)</th>
+		        <th>TvA(%)</th>
+		        
+		        <th>TvA (#)</th>
+		        <th>TvA(%)</th>
+		        
+		        <th>TvA (#)</th>
+		        <th>TvA(%)</th>
+		        
+		        <th>TvA (#)</th>
+		        <th>TvA(%)</th>
+		        
+		        <th>TvA (#)</th>
+		        <th>TvA(%)</th>
+		        
+		        
+		        
 		    </tr>
 	 	
     </thead>
@@ -64,21 +99,41 @@
 		   			<td> ${reportData.getBranchName() }</td>		   			
 		   			<td> ${reportData.getFullName() }</td>
 		   			<td> ${reportData.getMobile() }</td>
-		   			<td> ${reportData.getANCServiceTarget() }/${reportData.getANCServiceSell() }</td>
-		   			<td> ${reportData.getANCServiceAchievement() }</td>
+		   			<td> ${reportData.getHhVisitTarget() }/${reportData.getHhVisitAchievement() }</td>
+		   			<td> ${reportData.getHhVisitAchievementInPercentage() }</td>
 		   			
-		   			<td> ${reportData.getPNCServiceTarget() }/${reportData.getPNCServiceSell() }</td>
-		   			<td> ${reportData.getPNCServiceAchievement() }</td>
+		   			<td> ${reportData.getElcoVisitTarget() }/${reportData.getElcoVisitAchievement() }</td>
+		   			<td> ${reportData.getElcoVisitAchievementInPercentage() }</td>
 		   			
-		   			<td> ${reportData.getNCDServiceTarget() }/${reportData.getNCDServiceSell() }</td>
-		   			<td> ${reportData.getNCDServiceAchievement() }</td>
+		   			<td> ${reportData.getMethodsUsersVisitTarget() }/${reportData.getMethodsUsersVisitAchievement() }</td>
+		   			<td> ${reportData.getMethodsUsersVisitAchievementInPercentage() }</td>
 		   			
-		   			<td> ${reportData.getIYCFServiceTarget() }/${reportData.getIYCFServiceSell() }</td>
-		   			<td> ${reportData.getIYCFServiceAchievement() }</td>
+		   			<td> ${reportData.getAdolescentMethodsUsersVisitTarget() }/${reportData.getAdolescentMethodsUsersVisitAchievement() }</td>
+		   			<td> ${reportData.getAdolescentMethodsUsersVisitAchievementInPercentage() }</td>
 		   			
-		   			<td> ${reportData.getWomenServiceTarget() }/${reportData.getWomenServiceSell() }</td>
-		   			<td> ${reportData.getWomenServiceAchievement() }</td>
+		   			<td> ${reportData.getPregnancydentifiedVisitTarget() }/${reportData.getPregnancydentifiedVisitAchievement() }</td>
+		   			<td> ${reportData.getPregnancydentifiedVisitAchievementInPercentage() }</td>
 		   			
+		   			<td> ${reportData.getDeliveryVisitTarget() }/${reportData.getDeliveryVisitAchievement() }</td>
+		   			<td> ${reportData.getDeliveryVisitAchievementInPercentage() }</td>
+		   			
+		   			<td> ${reportData.getInstitutionalizedDeliveryVisitTarget() }/${reportData.getInstitutionalizedDeliveryVisitAchievement() }</td>
+		   			<td> ${reportData.getInstitutionalizedDeliveryVisitAchievementInPercentage() }</td>
+		   			
+		   			<td> ${reportData.getChild06VisitTarget() }/${reportData.getChild06VisitAchievement() }</td>
+		   			<td> ${reportData.getChild06VisitAchievementInPercentage() }</td>
+		   			
+		   			<td> ${reportData.getChild724VisitTarget() }/${reportData.getChild724VisitAchievement() }</td>
+		   			<td> ${reportData.getChild724VisitAchievementInPercentage() }</td>
+		   			
+		   			<td> ${reportData.getChild1836VisitTarget() }/${reportData.getChild1836VisitAchievement() }</td>
+		   			<td> ${reportData.getChild1836VisitAchievementInPercentage() }</td>
+		   			
+		   			<td> ${reportData.getImmunizationVisitTarget() }/${reportData.getImmunizationVisitAchievement() }</td>
+		   			<td> ${reportData.getImmunizationVisitAchievementInPercentage() }</td>
+		   			<td> ${reportData.getPregnantVisitTarget() }/${reportData.getPregnantVisitAchievement() }</td>
+		   			<td> ${reportData.getPregnantVisitAchievementInPercentage() }</td>
+	   			
 	   			
 	 		</tr>
 		</c:forEach>
