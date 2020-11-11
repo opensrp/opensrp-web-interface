@@ -171,7 +171,7 @@ function getReportData(){
                 scrollX:        true,
                 scrollCollapse: true,                
             	 fixedColumns:   {
-                     leftColumns: 1/* ,
+                     leftColumns: 2/* ,
                      rightColumns: 1 */
                  }
             });

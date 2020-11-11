@@ -84,7 +84,7 @@ public class TargetReportDTO {
 	
 	private Integer Child724VisitAchievement;
 	
-	private Integer Child724VisitAchievementInPercentage;
+	private Float Child724VisitAchievementInPercentage;
 	
 	private Integer Child1836VisitTarget;
 	
@@ -141,7 +141,7 @@ public class TargetReportDTO {
 	private Integer NCDServiceSell;
 	
 	public String getFullName() {
-		return fullName;
+		return this.firstName + " " + (this.lastName.equalsIgnoreCase(".") ? "" : this.lastName);
 	}
 	
 	public void setFullName(String fullName) {
@@ -468,11 +468,11 @@ public class TargetReportDTO {
 		Child724VisitAchievement = child724VisitAchievement;
 	}
 	
-	public Integer getChild724VisitAchievementInPercentage() {
+	public Float getChild724VisitAchievementInPercentage() {
 		return Child724VisitAchievementInPercentage;
 	}
 	
-	public void setChild724VisitAchievementInPercentage(Integer child724VisitAchievementInPercentage) {
+	public void setChild724VisitAchievementInPercentage(Float child724VisitAchievementInPercentage) {
 		Child724VisitAchievementInPercentage = child724VisitAchievementInPercentage;
 	}
 	
