@@ -239,8 +239,10 @@ $('#targetInfo').submit(function(event) {
 	var year = d.getFullYear();
 
 	var todayDate = new Date(), y = todayDate.getFullYear(), m = todayDate.getMonth();
-	var startDate = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
-	var endDate =  $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));
+	
+	var startDate = timePeriod == 'monthly' ?$.datepicker.formatDate('yy-mm-dd', new Date(d.getFullYear(), d.getMonth(), 1)):$.datepicker.formatDate('yy-mm-dd', d);
+	var endDate =  timePeriod == 'monthly' ?$.datepicker.formatDate('yy-mm-dd', new Date(d.getFullYear(), d.getMonth() + 1, 0)):$.datepicker.formatDate('yy-mm-dd', d);
+	
     var item=[];
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");

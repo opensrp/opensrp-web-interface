@@ -885,50 +885,63 @@ public class TargetService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<TargetReportDTO> getAMVisitReportByProvider(JSONObject params) {
+	public List<TargetReportDTO> getAMVisitReportByProvider(JSONObject params) throws JSONException {
 		
 		Session session = getSessionFactory();
+		
 		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
-		for (int i = 0; i < 20; i++) {
-			TargetReportDTO targetReportDTO = new TargetReportDTO();
-			targetReportDTO.setFirstName("Arif");
-			targetReportDTO.setLastName("haque");
-			targetReportDTO.setLocationName("Dhaka");
-			targetReportDTO.setNumberOfSK(23);
-			targetReportDTO.setNumberOfAm(12);
-			targetReportDTO.setNumberOfBranch(3);
-			targetReportDTO.setBranchName("Ratanpur");
-			targetReportDTO.setAchievementInPercentage(23.3f);
-			targetReportDTO.setAchievementInPercentage(23.3f);
-			targetReportDTO.setANCServiceAchievement(78.34f);
-			targetReportDTO.setANCServiceSell(34);
-			targetReportDTO.setANCServiceTarget(41);
-			targetReportDTO.setMobile("01923445667");
-			targetReportDTO.setPNCServiceAchievement(62.5f);
-			targetReportDTO.setPNCServiceSell(34);
-			targetReportDTO.setPNCServiceTarget(40);
-			
-			targetReportDTO.setNCDServiceAchievement(45.4f);
-			targetReportDTO.setNCDServiceSell(41);
-			targetReportDTO.setNCDServiceTarget(50);
-			
-			targetReportDTO.setWomenServiceAchievement(34.4f);
-			targetReportDTO.setWomenServiceSell(34);
-			targetReportDTO.setWomenServiceTarget(32);
-			
-			targetReportDTO.setIYCFServiceAchievement(45.4f);
-			targetReportDTO.setIYCFServiceSell(45);
-			targetReportDTO.setIYCFServiceTarget(43);
-			/*String hql = "select id branchId,branch_code branchCode,branch_name branchName,upazila_name upazilaName,total userCount from core.branch_list_by_location_with_user_list(:locationId,'{"
-			        + branchIds + "}',:roleName,:start,:length)";
-			Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
-			        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
-			        .addScalar("upazilaName", StandardBasicTypes.STRING).addScalar("userCount", StandardBasicTypes.INTEGER)
-			        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
-			        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
-			dtos = query.list();*/
-			dtos.add(targetReportDTO);
-		}
+		
+		String hql = "select branch_name branchName ,user_name userName,mobile mobile,first_name firstName,last_name lastName,hh_visit_target hhVisitTarget,hh_visit_ach hhVisitAchievement ,hh_visit_target_vs_achv hhVisitAchievementInPercentage "
+		        + " ,elco_target elcoVisitTarget,elco_achv elcoVisitAchievement,elco_targte_vs_achv elcoVisitAchievementInPercentage "
+		        + " ,  methods_users_target methodsUsersVisitTarget,methods_users_target_achv methodsUsersVisitAchievement,methods_users_target_vsachv methodsUsersVisitAchievementInPercentage "
+		        + " ,adolescent_target adolescentMethodsUsersVisitTarget,adolescent_target_achv adolescentMethodsUsersVisitAchievement,adolescent_target_vs_achv adolescentMethodsUsersVisitAchievementInPercentage "
+		        + " , pregnancy_identified_target pregnancydentifiedVisitTarget,pregnancy_identified_achv pregnancydentifiedVisitAchievement,pregnancy_identified_target_vs_achv pregnancydentifiedVisitAchievementInPercentage "
+		        + " , delivery_target deliveryVisitTarget,delivery_achv deliveryVisitAchievement,delivery_target_vs_achv deliveryVisitAchievementInPercentage "
+		        + " , institutionalized_target institutionalizedDeliveryVisitTarget,institutionalized_achv institutionalizedDeliveryVisitAchievement,institutionalized_target_vs_achv institutionalizedDeliveryVisitAchievementInPercentage "
+		        + " , child_0_6_months_target Child06VisitTarget,child_0_6_months_achv Child06VisitAchievement,child_0_6_months_target_vs_achv Child06VisitAchievementInPercentage  "
+		        + " , child_7_24_months_target Child724VisitTarget,child_7_24_months_achv Child724VisitAchievement,child_7_24_months_target_vs_achv Child724VisitAchievementInPercentage "
+		        + " , child_18_36_months_target Child1836VisitTarget,child_18_36_months_achv Child1836VisitAchievement,child_18_36_months_target_vs_achv Child1836VisitAchievementInPercentage "
+		        + " , pregnant_target pregnantVisitTarget ,pregnant_achv pregnantVisitAchievement,pregnant_target_vs_achv pregnantVisitAchievementInPercentage from report.am_visit_report_sk_wise('"
+		        + params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("branchName", StandardBasicTypes.STRING)
+		        .addScalar("userName", StandardBasicTypes.STRING).addScalar("mobile", StandardBasicTypes.STRING)
+		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
+		        .addScalar("hhVisitTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("hhVisitAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("hhVisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+		        .addScalar("elcoVisitTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("elcoVisitAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("elcoVisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+		        .addScalar("methodsUsersVisitTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("methodsUsersVisitAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("methodsUsersVisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+		        .addScalar("adolescentMethodsUsersVisitTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentMethodsUsersVisitAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentMethodsUsersVisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+		        .addScalar("pregnancydentifiedVisitTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("pregnancydentifiedVisitAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("pregnancydentifiedVisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+		        .addScalar("deliveryVisitTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("deliveryVisitAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("deliveryVisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+		        .addScalar("institutionalizedDeliveryVisitTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("institutionalizedDeliveryVisitAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("institutionalizedDeliveryVisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+		        .addScalar("Child06VisitTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("Child06VisitAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("Child06VisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+		        .addScalar("Child724VisitTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("Child724VisitAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("Child724VisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+		        .addScalar("Child1836VisitTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("Child1836VisitAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("Child1836VisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+		        .addScalar("pregnantVisitTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("pregnantVisitAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("pregnantVisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetReportDTO.class));
+		dtos = query.list();
+		
 		return dtos;
 	}
 	

@@ -23,13 +23,14 @@
 </head>
 <body>
 
-<table class="display table table-bordered table-striped" id="reportDataTable"
+<table class="stripe display table table-bordered table-striped" id="reportDataTable"
        style="width: 100%;">
     <thead>
     
 		    <tr>
+		     <th rowspan="2">SK name</th>
 		        <th rowspan="2">Branch name</th>		        
-		        <th rowspan="2">SK name</th>
+		       
 		        <th rowspan="2">ID</th>
 		        <th colspan="2">Household Visit</th>
 		        <th colspan="2">ELCO Visit</th>
@@ -95,9 +96,9 @@
     	
    		<c:forEach items="${reportDatas}" var="reportData"> 
    			<tr>
-   			
+   					<td> ${reportData.getFullName() }</td>
 		   			<td> ${reportData.getBranchName() }</td>		   			
-		   			<td> ${reportData.getFullName() }</td>
+		   			
 		   			<td> ${reportData.getMobile() }</td>
 		   			<td> ${reportData.getHhVisitTarget() }/${reportData.getHhVisitAchievement() }</td>
 		   			<td> ${reportData.getHhVisitAchievementInPercentage() }</td>

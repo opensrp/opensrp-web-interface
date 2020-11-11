@@ -55,6 +55,9 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
+            <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+        </div>
 		<div class="row">
 			<div class="col-md-12">
 
@@ -264,16 +267,13 @@ function getParamsData(){
 	
 	var from = getFromTime();
 	var to = getToTime();
+	
+	
 	var fromDate = new Date(from);
 	var toDate = new Date(to);
+	var startDate = timePeriod == 'monthly' ?$.datepicker.formatDate('yy-mm-dd', new Date(fromDate.getFullYear(), fromDate.getMonth(), 1)):$.datepicker.formatDate('yy-mm-dd', fromDate);
+	var endDate =  timePeriod == 'monthly' ?$.datepicker.formatDate('yy-mm-dd', new Date(toDate.getFullYear(), toDate.getMonth() + 1, 0)):$.datepicker.formatDate('yy-mm-dd', toDate);
 	
-	var formMonth = fromDate.getMonth() + 1;	
-	var fromYear = fromDate.getFullYear();
-	var fromDay = timePeriod == "monthly" ? 0 : fromDate.getDate()-1;
-	
-	var toMonth = toDate.getMonth() + 1;	
-	var toYear = toDate.getFullYear();
-	var toDay = timePeriod == "monthly" ? 0 : toDate.getDate()-1;
 	var branchIds =  $("#branchList").val();
   	if( branchIds ==null || typeof branchIds == 'undefined'){
   		branchIds = ''
@@ -288,12 +288,8 @@ function getParamsData(){
      am:AM,
      divM:divM,
      reportType:reportType,
-     fromYear:fromYear,
-     toYear:toYear,
-     fromMonth:formMonth,
-     toMonth:toMonth,
-     fromDay:fromDay,
-     toDay:toDay,
+     startDate:startDate,
+     endDate:endDate,
      managerOrLocation:managerOrLocation,
      roleName:$("#roleList option:selected").val()
   	}
