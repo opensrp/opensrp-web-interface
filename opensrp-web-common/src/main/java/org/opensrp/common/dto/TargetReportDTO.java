@@ -14,636 +14,138 @@ public class TargetReportDTO {
 	
 	private String userName;
 	
-	private int id;
+	private Integer id;
 	
-	private int numberOfSK;
+	private Integer numberOfSK;
 	
-	private int numberOfBranch;
+	private Integer numberOfPA;
 	
-	private int numberOfAm;
+	private Integer numberOfBranch;
 	
-	private int target;
+	private Integer numberOfAm;
 	
-	private float achievementInPercentage;
+	private Integer target;
 	
-	private int achievementInQuantity;
+	private Float achievementInPercentage;
+	
+	private Integer achievementInQuantity;
 	
 	private String mobile;
 	
-	private int hhVisitTarget;
+	private Integer hhVisitTarget;
 	
-	private int hhVisitAchievement;
+	private Integer hhVisitAchievement;
 	
-	private float hhVisitAchievementInPercentage;
+	private Float hhVisitAchievementInPercentage;
 	
-	private int elcoVisitTarget;
+	private Integer elcoVisitTarget;
 	
-	private int elcoVisitAchievement;
+	private Integer elcoVisitAchievement;
 	
-	private float elcoVisitAchievementInPercentage;
+	private Float elcoVisitAchievementInPercentage;
 	
-	private int methodsUsersVisitTarget;
+	private Integer methodsUsersVisitTarget;
 	
-	private int methodsUsersVisitAchievement;
+	private Integer methodsUsersVisitAchievement;
 	
-	private float methodsUsersVisitAchievementInPercentage;
+	private Float methodsUsersVisitAchievementInPercentage;
 	
-	private int adolescentMethodsUsersVisitTarget;
+	private Integer adolescentMethodsUsersVisitTarget;
 	
-	private int adolescentMethodsUsersVisitAchievement;
+	private Integer adolescentMethodsUsersVisitAchievement;
 	
-	private float adolescentMethodsUsersVisitAchievementInPercentage;
+	private Float adolescentMethodsUsersVisitAchievementInPercentage;
 	
-	private int pregnancydentifiedVisitTarget;
+	private Integer pregnancydentifiedVisitTarget;
 	
-	private int pregnancydentifiedVisitAchievement;
+	private Integer pregnancydentifiedVisitAchievement;
 	
-	private float pregnancydentifiedVisitAchievementInPercentage;
+	private Float pregnancydentifiedVisitAchievementInPercentage;
 	
-	private int deliveryVisitTarget;
+	private Integer deliveryVisitTarget;
 	
-	private int deliveryVisitAchievement;
+	private Integer deliveryVisitAchievement;
 	
-	private float deliveryVisitAchievementInPercentage;
+	private Float deliveryVisitAchievementInPercentage;
 	
-	private int institutionalizedDeliveryVisitTarget;
+	private Integer institutionalizedDeliveryVisitTarget;
 	
-	private int institutionalizedDeliveryVisitAchievement;
+	private Integer institutionalizedDeliveryVisitAchievement;
 	
-	private float institutionalizedDeliveryVisitAchievementInPercentage;
+	private Float institutionalizedDeliveryVisitAchievementInPercentage;
 	
-	private int Child06VisitTarget;
+	private Integer Child06VisitTarget;
 	
-	private int Child06VisitAchievement;
+	private Integer Child06VisitAchievement;
 	
-	private float Child06VisitAchievementInPercentage;
+	private Float Child06VisitAchievementInPercentage;
 	
-	private int Child724VisitTarget;
+	private Integer Child724VisitTarget;
 	
-	private int Child724VisitAchievement;
+	private Integer Child724VisitAchievement;
 	
-	private float Child724VisitAchievementInPercentage;
+	private Integer Child724VisitAchievementInPercentage;
 	
-	private int Child1836VisitTarget;
+	private Integer Child1836VisitTarget;
 	
-	private int Child1836VisitAchievement;
+	private Integer Child1836VisitAchievement;
 	
-	private float Child1836VisitAchievementInPercentage;
+	private Float Child1836VisitAchievementInPercentage;
 	
-	private int immunizationVisitTarget;
+	private Integer immunizationVisitTarget;
 	
-	private int immunizationVisitAchievement;
+	private Integer immunizationVisitAchievement;
 	
-	private float immunizationVisitAchievementInPercentage;
+	private Float immunizationVisitAchievementInPercentage;
 	
-	private int pregnantVisitTarget;
+	private Integer pregnantVisitTarget;
 	
-	private int pregnantVisitAchievement;
+	private Integer pregnantVisitAchievement;
 	
-	private float pregnantVisitAchievementInPercentage;
+	private Float pregnantVisitAchievementInPercentage;
 	
-	private int ANCServiceTarget;
+	private Integer ANCServiceTarget;
 	
-	private float ANCServiceAchievement;
+	private Float ANCServiceAchievement;
 	
-	private int ANCServiceSell;
+	private Integer ANCServiceSell;
 	
-	private int PNCServiceTarget;
+	private Integer PNCServiceTarget;
 	
-	private float PNCServiceAchievement;
+	private Float PNCServiceAchievement;
 	
-	private int PNCServiceSell;
+	private Integer PNCServiceSell;
 	
-	private int AdolescentServiceTarget;
+	private Integer AdolescentServiceTarget;
 	
-	private float AdolescentServiceAchievement;
+	private Float AdolescentServiceAchievement;
 	
-	private int AdolescentServiceSell;
+	private Integer AdolescentServiceSell;
 	
-	private int WomenServiceTarget;
+	private Integer WomenServiceTarget;
 	
-	private float WomenServiceAchievement;
+	private Float WomenServiceAchievement;
 	
-	private int WomenServiceSell;
+	private Integer WomenServiceSell;
 	
-	private int IYCFServiceTarget;
+	private Integer IYCFServiceTarget;
 	
-	private float IYCFServiceAchievement;
+	private Float IYCFServiceAchievement;
 	
-	private int IYCFServiceSell;
+	private Integer IYCFServiceSell;
 	
-	private int NCDServiceTarget;
+	private Integer NCDServiceTarget;
 	
-	private float NCDServiceAchievement;
+	private Float NCDServiceAchievement;
 	
-	private int NCDServiceSell;
+	private Integer NCDServiceSell;
+	
+	public String getFullName() {
+		return fullName;
+	}
 	
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
-	}
-	
-	public String getLocationName() {
-		return locationName;
-	}
-	
-	public void setLocationName(String locationName) {
-		this.locationName = locationName;
-	}
-	
-	public String getBranchName() {
-		return branchName;
-	}
-	
-	public void setBranchName(String branchName) {
-		this.branchName = branchName;
-	}
-	
-	public int getNumberOfSK() {
-		return numberOfSK;
-	}
-	
-	public void setNumberOfSK(int numberOfSK) {
-		this.numberOfSK = numberOfSK;
-	}
-	
-	public int getNumberOfBranch() {
-		return numberOfBranch;
-	}
-	
-	public void setNumberOfBranch(int numberOfBranch) {
-		this.numberOfBranch = numberOfBranch;
-	}
-	
-	public int getNumberOfAm() {
-		return numberOfAm;
-	}
-	
-	public void setNumberOfAm(int numberOfAm) {
-		this.numberOfAm = numberOfAm;
-	}
-	
-	public int getTarget() {
-		return target;
-	}
-	
-	public void setTarget(int target) {
-		this.target = target;
-	}
-	
-	public float getAchievementInPercentage() {
-		return achievementInPercentage;
-	}
-	
-	public void setAchievementInPercentage(float achievementInPercentage) {
-		this.achievementInPercentage = achievementInPercentage;
-	}
-	
-	public int getAchievementInQuantity() {
-		return achievementInQuantity;
-	}
-	
-	public void setAchievementInQuantity(int achievementInQuantity) {
-		this.achievementInQuantity = achievementInQuantity;
-	}
-	
-	public String getMobile() {
-		return mobile;
-	}
-	
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
-	
-	public int getHhVisitTarget() {
-		return hhVisitTarget;
-	}
-	
-	public void setHhVisitTarget(int hhVisitTarget) {
-		this.hhVisitTarget = hhVisitTarget;
-	}
-	
-	public int getHhVisitAchievement() {
-		return hhVisitAchievement;
-	}
-	
-	public void setHhVisitAchievement(int hhVisitAchievement) {
-		this.hhVisitAchievement = hhVisitAchievement;
-	}
-	
-	public float getHhVisitAchievementInPercentage() {
-		return hhVisitAchievementInPercentage;
-	}
-	
-	public void setHhVisitAchievementInPercentage(float hhVisitAchievementInPercentage) {
-		this.hhVisitAchievementInPercentage = hhVisitAchievementInPercentage;
-	}
-	
-	public int getElcoVisitTarget() {
-		return elcoVisitTarget;
-	}
-	
-	public void setElcoVisitTarget(int elcoVisitTarget) {
-		this.elcoVisitTarget = elcoVisitTarget;
-	}
-	
-	public int getElcoVisitAchievement() {
-		return elcoVisitAchievement;
-	}
-	
-	public void setElcoVisitAchievement(int elcoVisitAchievement) {
-		this.elcoVisitAchievement = elcoVisitAchievement;
-	}
-	
-	public float getElcoVisitAchievementInPercentage() {
-		return elcoVisitAchievementInPercentage;
-	}
-	
-	public void setElcoVisitAchievementInPercentage(float elcoVisitAchievementInPercentage) {
-		this.elcoVisitAchievementInPercentage = elcoVisitAchievementInPercentage;
-	}
-	
-	public int getMethodsUsersVisitTarget() {
-		return methodsUsersVisitTarget;
-	}
-	
-	public void setMethodsUsersVisitTarget(int methodsUsersVisitTarget) {
-		this.methodsUsersVisitTarget = methodsUsersVisitTarget;
-	}
-	
-	public int getMethodsUsersVisitAchievement() {
-		return methodsUsersVisitAchievement;
-	}
-	
-	public void setMethodsUsersVisitAchievement(int methodsUsersVisitAchievement) {
-		this.methodsUsersVisitAchievement = methodsUsersVisitAchievement;
-	}
-	
-	public float getMethodsUsersVisitAchievementInPercentage() {
-		return methodsUsersVisitAchievementInPercentage;
-	}
-	
-	public void setMethodsUsersVisitAchievementInPercentage(float methodsUsersVisitAchievementInPercentage) {
-		this.methodsUsersVisitAchievementInPercentage = methodsUsersVisitAchievementInPercentage;
-	}
-	
-	public int getAdolescentMethodsUsersVisitTarget() {
-		return adolescentMethodsUsersVisitTarget;
-	}
-	
-	public void setAdolescentMethodsUsersVisitTarget(int adolescentMethodsUsersVisitTarget) {
-		this.adolescentMethodsUsersVisitTarget = adolescentMethodsUsersVisitTarget;
-	}
-	
-	public int getAdolescentMethodsUsersVisitAchievement() {
-		return adolescentMethodsUsersVisitAchievement;
-	}
-	
-	public void setAdolescentMethodsUsersVisitAchievement(int adolescentMethodsUsersVisitAchievement) {
-		this.adolescentMethodsUsersVisitAchievement = adolescentMethodsUsersVisitAchievement;
-	}
-	
-	public float getAdolescentMethodsUsersVisitAchievementInPercentage() {
-		return adolescentMethodsUsersVisitAchievementInPercentage;
-	}
-	
-	public void setAdolescentMethodsUsersVisitAchievementInPercentage(float adolescentMethodsUsersVisitAchievementInPercentage) {
-		this.adolescentMethodsUsersVisitAchievementInPercentage = adolescentMethodsUsersVisitAchievementInPercentage;
-	}
-	
-	public int getPregnancydentifiedVisitTarget() {
-		return pregnancydentifiedVisitTarget;
-	}
-	
-	public void setPregnancydentifiedVisitTarget(int pregnancydentifiedVisitTarget) {
-		this.pregnancydentifiedVisitTarget = pregnancydentifiedVisitTarget;
-	}
-	
-	public int getPregnancydentifiedVisitAchievement() {
-		return pregnancydentifiedVisitAchievement;
-	}
-	
-	public void setPregnancydentifiedVisitAchievement(int pregnancydentifiedVisitAchievement) {
-		this.pregnancydentifiedVisitAchievement = pregnancydentifiedVisitAchievement;
-	}
-	
-	public float getPregnancydentifiedVisitAchievementInPercentage() {
-		return pregnancydentifiedVisitAchievementInPercentage;
-	}
-	
-	public void setPregnancydentifiedVisitAchievementInPercentage(float pregnancydentifiedVisitAchievementInPercentage) {
-		this.pregnancydentifiedVisitAchievementInPercentage = pregnancydentifiedVisitAchievementInPercentage;
-	}
-	
-	public int getDeliveryVisitTarget() {
-		return deliveryVisitTarget;
-	}
-	
-	public void setDeliveryVisitTarget(int deliveryVisitTarget) {
-		this.deliveryVisitTarget = deliveryVisitTarget;
-	}
-	
-	public int getDeliveryVisitAchievement() {
-		return deliveryVisitAchievement;
-	}
-	
-	public void setDeliveryVisitAchievement(int deliveryVisitAchievement) {
-		this.deliveryVisitAchievement = deliveryVisitAchievement;
-	}
-	
-	public float getDeliveryVisitAchievementInPercentage() {
-		return deliveryVisitAchievementInPercentage;
-	}
-	
-	public void setDeliveryVisitAchievementInPercentage(float deliveryVisitAchievementInPercentage) {
-		this.deliveryVisitAchievementInPercentage = deliveryVisitAchievementInPercentage;
-	}
-	
-	public int getInstitutionalizedDeliveryVisitTarget() {
-		return institutionalizedDeliveryVisitTarget;
-	}
-	
-	public void setInstitutionalizedDeliveryVisitTarget(int institutionalizedDeliveryVisitTarget) {
-		this.institutionalizedDeliveryVisitTarget = institutionalizedDeliveryVisitTarget;
-	}
-	
-	public int getInstitutionalizedDeliveryVisitAchievement() {
-		return institutionalizedDeliveryVisitAchievement;
-	}
-	
-	public void setInstitutionalizedDeliveryVisitAchievement(int institutionalizedDeliveryVisitAchievement) {
-		this.institutionalizedDeliveryVisitAchievement = institutionalizedDeliveryVisitAchievement;
-	}
-	
-	public float getInstitutionalizedDeliveryVisitAchievementInPercentage() {
-		return institutionalizedDeliveryVisitAchievementInPercentage;
-	}
-	
-	public void setInstitutionalizedDeliveryVisitAchievementInPercentage(float institutionalizedDeliveryVisitAchievementInPercentage) {
-		this.institutionalizedDeliveryVisitAchievementInPercentage = institutionalizedDeliveryVisitAchievementInPercentage;
-	}
-	
-	public int getChild06VisitTarget() {
-		return Child06VisitTarget;
-	}
-	
-	public void setChild06VisitTarget(int child06VisitTarget) {
-		Child06VisitTarget = child06VisitTarget;
-	}
-	
-	public int getChild06VisitAchievement() {
-		return Child06VisitAchievement;
-	}
-	
-	public void setChild06VisitAchievement(int child06VisitAchievement) {
-		Child06VisitAchievement = child06VisitAchievement;
-	}
-	
-	public float getChild06VisitAchievementInPercentage() {
-		return Child06VisitAchievementInPercentage;
-	}
-	
-	public void setChild06VisitAchievementInPercentage(float child06VisitAchievementInPercentage) {
-		Child06VisitAchievementInPercentage = child06VisitAchievementInPercentage;
-	}
-	
-	public int getChild724VisitTarget() {
-		return Child724VisitTarget;
-	}
-	
-	public void setChild724VisitTarget(int child724VisitTarget) {
-		Child724VisitTarget = child724VisitTarget;
-	}
-	
-	public int getChild724VisitAchievement() {
-		return Child724VisitAchievement;
-	}
-	
-	public void setChild724VisitAchievement(int child724VisitAchievement) {
-		Child724VisitAchievement = child724VisitAchievement;
-	}
-	
-	public float getChild724VisitAchievementInPercentage() {
-		return Child724VisitAchievementInPercentage;
-	}
-	
-	public void setChild724VisitAchievementInPercentage(float child724VisitAchievementInPercentage) {
-		Child724VisitAchievementInPercentage = child724VisitAchievementInPercentage;
-	}
-	
-	public int getChild1836VisitTarget() {
-		return Child1836VisitTarget;
-	}
-	
-	public void setChild1836VisitTarget(int child1836VisitTarget) {
-		Child1836VisitTarget = child1836VisitTarget;
-	}
-	
-	public int getChild1836VisitAchievement() {
-		return Child1836VisitAchievement;
-	}
-	
-	public void setChild1836VisitAchievement(int child1836VisitAchievement) {
-		Child1836VisitAchievement = child1836VisitAchievement;
-	}
-	
-	public float getChild1836VisitAchievementInPercentage() {
-		return Child1836VisitAchievementInPercentage;
-	}
-	
-	public void setChild1836VisitAchievementInPercentage(float child1836VisitAchievementInPercentage) {
-		Child1836VisitAchievementInPercentage = child1836VisitAchievementInPercentage;
-	}
-	
-	public int getImmunizationVisitTarget() {
-		return immunizationVisitTarget;
-	}
-	
-	public void setImmunizationVisitTarget(int immunizationVisitTarget) {
-		this.immunizationVisitTarget = immunizationVisitTarget;
-	}
-	
-	public int getImmunizationVisitAchievement() {
-		return immunizationVisitAchievement;
-	}
-	
-	public void setImmunizationVisitAchievement(int immunizationVisitAchievement) {
-		this.immunizationVisitAchievement = immunizationVisitAchievement;
-	}
-	
-	public float getImmunizationVisitAchievementInPercentage() {
-		return immunizationVisitAchievementInPercentage;
-	}
-	
-	public void setImmunizationVisitAchievementInPercentage(float immunizationVisitAchievementInPercentage) {
-		this.immunizationVisitAchievementInPercentage = immunizationVisitAchievementInPercentage;
-	}
-	
-	public int getPregnantVisitTarget() {
-		return pregnantVisitTarget;
-	}
-	
-	public void setPregnantVisitTarget(int pregnantVisitTarget) {
-		this.pregnantVisitTarget = pregnantVisitTarget;
-	}
-	
-	public int getPregnantVisitAchievement() {
-		return pregnantVisitAchievement;
-	}
-	
-	public void setPregnantVisitAchievement(int pregnantVisitAchievement) {
-		this.pregnantVisitAchievement = pregnantVisitAchievement;
-	}
-	
-	public float getPregnantVisitAchievementInPercentage() {
-		return pregnantVisitAchievementInPercentage;
-	}
-	
-	public void setPregnantVisitAchievementInPercentage(float pregnantVisitAchievementInPercentage) {
-		this.pregnantVisitAchievementInPercentage = pregnantVisitAchievementInPercentage;
-	}
-	
-	public int getANCServiceTarget() {
-		return ANCServiceTarget;
-	}
-	
-	public void setANCServiceTarget(int aNCServiceTarget) {
-		ANCServiceTarget = aNCServiceTarget;
-	}
-	
-	public float getANCServiceAchievement() {
-		return ANCServiceAchievement;
-	}
-	
-	public void setANCServiceAchievement(float aNCServiceAchievement) {
-		ANCServiceAchievement = aNCServiceAchievement;
-	}
-	
-	public int getANCServiceSell() {
-		return ANCServiceSell;
-	}
-	
-	public void setANCServiceSell(int aNCServiceSell) {
-		ANCServiceSell = aNCServiceSell;
-	}
-	
-	public int getPNCServiceTarget() {
-		return PNCServiceTarget;
-	}
-	
-	public void setPNCServiceTarget(int pNCServiceTarget) {
-		PNCServiceTarget = pNCServiceTarget;
-	}
-	
-	public float getPNCServiceAchievement() {
-		return PNCServiceAchievement;
-	}
-	
-	public void setPNCServiceAchievement(float pNCServiceAchievement) {
-		PNCServiceAchievement = pNCServiceAchievement;
-	}
-	
-	public int getPNCServiceSell() {
-		return PNCServiceSell;
-	}
-	
-	public void setPNCServiceSell(int pNCServiceSell) {
-		PNCServiceSell = pNCServiceSell;
-	}
-	
-	public int getAdolescentServiceTarget() {
-		return AdolescentServiceTarget;
-	}
-	
-	public void setAdolescentServiceTarget(int adolescentServiceTarget) {
-		AdolescentServiceTarget = adolescentServiceTarget;
-	}
-	
-	public float getAdolescentServiceAchievement() {
-		return AdolescentServiceAchievement;
-	}
-	
-	public void setAdolescentServiceAchievement(float adolescentServiceAchievement) {
-		AdolescentServiceAchievement = adolescentServiceAchievement;
-	}
-	
-	public int getAdolescentServiceSell() {
-		return AdolescentServiceSell;
-	}
-	
-	public void setAdolescentServiceSell(int adolescentServiceSell) {
-		AdolescentServiceSell = adolescentServiceSell;
-	}
-	
-	public int getWomenServiceTarget() {
-		return WomenServiceTarget;
-	}
-	
-	public void setWomenServiceTarget(int womenServiceTarget) {
-		WomenServiceTarget = womenServiceTarget;
-	}
-	
-	public float getWomenServiceAchievement() {
-		return WomenServiceAchievement;
-	}
-	
-	public void setWomenServiceAchievement(float womenServiceAchievement) {
-		WomenServiceAchievement = womenServiceAchievement;
-	}
-	
-	public int getWomenServiceSell() {
-		return WomenServiceSell;
-	}
-	
-	public void setWomenServiceSell(int womenServiceSell) {
-		WomenServiceSell = womenServiceSell;
-	}
-	
-	public int getIYCFServiceTarget() {
-		return IYCFServiceTarget;
-	}
-	
-	public void setIYCFServiceTarget(int iYCFServiceTarget) {
-		IYCFServiceTarget = iYCFServiceTarget;
-	}
-	
-	public float getIYCFServiceAchievement() {
-		return IYCFServiceAchievement;
-	}
-	
-	public void setIYCFServiceAchievement(float iYCFServiceAchievement) {
-		IYCFServiceAchievement = iYCFServiceAchievement;
-	}
-	
-	public int getIYCFServiceSell() {
-		return IYCFServiceSell;
-	}
-	
-	public void setIYCFServiceSell(int iYCFServiceSell) {
-		IYCFServiceSell = iYCFServiceSell;
-	}
-	
-	public int getNCDServiceTarget() {
-		return NCDServiceTarget;
-	}
-	
-	public void setNCDServiceTarget(int nCDServiceTarget) {
-		NCDServiceTarget = nCDServiceTarget;
-	}
-	
-	public float getNCDServiceAchievement() {
-		return NCDServiceAchievement;
-	}
-	
-	public void setNCDServiceAchievement(float nCDServiceAchievement) {
-		NCDServiceAchievement = nCDServiceAchievement;
-	}
-	
-	public int getNCDServiceSell() {
-		return NCDServiceSell;
-	}
-	
-	public void setNCDServiceSell(int nCDServiceSell) {
-		NCDServiceSell = nCDServiceSell;
 	}
 	
 	public String getFirstName() {
@@ -662,6 +164,22 @@ public class TargetReportDTO {
 		this.lastName = lastName;
 	}
 	
+	public String getLocationName() {
+		return locationName;
+	}
+	
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
+	}
+	
+	public String getBranchName() {
+		return branchName;
+	}
+	
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
+	}
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -670,15 +188,508 @@ public class TargetReportDTO {
 		this.userName = userName;
 	}
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	
-	public String getFullName() {
-		return this.firstName + " " + (this.lastName.equalsIgnoreCase(".") ? "" : this.lastName);
+	public Integer getNumberOfSK() {
+		return numberOfSK;
 	}
+	
+	public void setNumberOfSK(Integer numberOfSK) {
+		this.numberOfSK = numberOfSK;
+	}
+	
+	public Integer getNumberOfPA() {
+		return numberOfPA;
+	}
+	
+	public void setNumberOfPA(Integer numberOfPA) {
+		this.numberOfPA = numberOfPA;
+	}
+	
+	public Integer getNumberOfBranch() {
+		return numberOfBranch;
+	}
+	
+	public void setNumberOfBranch(Integer numberOfBranch) {
+		this.numberOfBranch = numberOfBranch;
+	}
+	
+	public Integer getNumberOfAm() {
+		return numberOfAm;
+	}
+	
+	public void setNumberOfAm(Integer numberOfAm) {
+		this.numberOfAm = numberOfAm;
+	}
+	
+	public Integer getTarget() {
+		return target;
+	}
+	
+	public void setTarget(Integer target) {
+		this.target = target;
+	}
+	
+	public Float getAchievementInPercentage() {
+		return achievementInPercentage;
+	}
+	
+	public void setAchievementInPercentage(Float achievementInPercentage) {
+		this.achievementInPercentage = achievementInPercentage;
+	}
+	
+	public Integer getAchievementInQuantity() {
+		return achievementInQuantity;
+	}
+	
+	public void setAchievementInQuantity(Integer achievementInQuantity) {
+		this.achievementInQuantity = achievementInQuantity;
+	}
+	
+	public String getMobile() {
+		return mobile;
+	}
+	
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+	
+	public Integer getHhVisitTarget() {
+		return hhVisitTarget;
+	}
+	
+	public void setHhVisitTarget(Integer hhVisitTarget) {
+		this.hhVisitTarget = hhVisitTarget;
+	}
+	
+	public Integer getHhVisitAchievement() {
+		return hhVisitAchievement;
+	}
+	
+	public void setHhVisitAchievement(Integer hhVisitAchievement) {
+		this.hhVisitAchievement = hhVisitAchievement;
+	}
+	
+	public Float getHhVisitAchievementInPercentage() {
+		return hhVisitAchievementInPercentage;
+	}
+	
+	public void setHhVisitAchievementInPercentage(Float hhVisitAchievementInPercentage) {
+		this.hhVisitAchievementInPercentage = hhVisitAchievementInPercentage;
+	}
+	
+	public Integer getElcoVisitTarget() {
+		return elcoVisitTarget;
+	}
+	
+	public void setElcoVisitTarget(Integer elcoVisitTarget) {
+		this.elcoVisitTarget = elcoVisitTarget;
+	}
+	
+	public Integer getElcoVisitAchievement() {
+		return elcoVisitAchievement;
+	}
+	
+	public void setElcoVisitAchievement(Integer elcoVisitAchievement) {
+		this.elcoVisitAchievement = elcoVisitAchievement;
+	}
+	
+	public Float getElcoVisitAchievementInPercentage() {
+		return elcoVisitAchievementInPercentage;
+	}
+	
+	public void setElcoVisitAchievementInPercentage(Float elcoVisitAchievementInPercentage) {
+		this.elcoVisitAchievementInPercentage = elcoVisitAchievementInPercentage;
+	}
+	
+	public Integer getMethodsUsersVisitTarget() {
+		return methodsUsersVisitTarget;
+	}
+	
+	public void setMethodsUsersVisitTarget(Integer methodsUsersVisitTarget) {
+		this.methodsUsersVisitTarget = methodsUsersVisitTarget;
+	}
+	
+	public Integer getMethodsUsersVisitAchievement() {
+		return methodsUsersVisitAchievement;
+	}
+	
+	public void setMethodsUsersVisitAchievement(Integer methodsUsersVisitAchievement) {
+		this.methodsUsersVisitAchievement = methodsUsersVisitAchievement;
+	}
+	
+	public Float getMethodsUsersVisitAchievementInPercentage() {
+		return methodsUsersVisitAchievementInPercentage;
+	}
+	
+	public void setMethodsUsersVisitAchievementInPercentage(Float methodsUsersVisitAchievementInPercentage) {
+		this.methodsUsersVisitAchievementInPercentage = methodsUsersVisitAchievementInPercentage;
+	}
+	
+	public Integer getAdolescentMethodsUsersVisitTarget() {
+		return adolescentMethodsUsersVisitTarget;
+	}
+	
+	public void setAdolescentMethodsUsersVisitTarget(Integer adolescentMethodsUsersVisitTarget) {
+		this.adolescentMethodsUsersVisitTarget = adolescentMethodsUsersVisitTarget;
+	}
+	
+	public Integer getAdolescentMethodsUsersVisitAchievement() {
+		return adolescentMethodsUsersVisitAchievement;
+	}
+	
+	public void setAdolescentMethodsUsersVisitAchievement(Integer adolescentMethodsUsersVisitAchievement) {
+		this.adolescentMethodsUsersVisitAchievement = adolescentMethodsUsersVisitAchievement;
+	}
+	
+	public Float getAdolescentMethodsUsersVisitAchievementInPercentage() {
+		return adolescentMethodsUsersVisitAchievementInPercentage;
+	}
+	
+	public void setAdolescentMethodsUsersVisitAchievementInPercentage(Float adolescentMethodsUsersVisitAchievementInPercentage) {
+		this.adolescentMethodsUsersVisitAchievementInPercentage = adolescentMethodsUsersVisitAchievementInPercentage;
+	}
+	
+	public Integer getPregnancydentifiedVisitTarget() {
+		return pregnancydentifiedVisitTarget;
+	}
+	
+	public void setPregnancydentifiedVisitTarget(Integer pregnancydentifiedVisitTarget) {
+		this.pregnancydentifiedVisitTarget = pregnancydentifiedVisitTarget;
+	}
+	
+	public Integer getPregnancydentifiedVisitAchievement() {
+		return pregnancydentifiedVisitAchievement;
+	}
+	
+	public void setPregnancydentifiedVisitAchievement(Integer pregnancydentifiedVisitAchievement) {
+		this.pregnancydentifiedVisitAchievement = pregnancydentifiedVisitAchievement;
+	}
+	
+	public Float getPregnancydentifiedVisitAchievementInPercentage() {
+		return pregnancydentifiedVisitAchievementInPercentage;
+	}
+	
+	public void setPregnancydentifiedVisitAchievementInPercentage(Float pregnancydentifiedVisitAchievementInPercentage) {
+		this.pregnancydentifiedVisitAchievementInPercentage = pregnancydentifiedVisitAchievementInPercentage;
+	}
+	
+	public Integer getDeliveryVisitTarget() {
+		return deliveryVisitTarget;
+	}
+	
+	public void setDeliveryVisitTarget(Integer deliveryVisitTarget) {
+		this.deliveryVisitTarget = deliveryVisitTarget;
+	}
+	
+	public Integer getDeliveryVisitAchievement() {
+		return deliveryVisitAchievement;
+	}
+	
+	public void setDeliveryVisitAchievement(Integer deliveryVisitAchievement) {
+		this.deliveryVisitAchievement = deliveryVisitAchievement;
+	}
+	
+	public Float getDeliveryVisitAchievementInPercentage() {
+		return deliveryVisitAchievementInPercentage;
+	}
+	
+	public void setDeliveryVisitAchievementInPercentage(Float deliveryVisitAchievementInPercentage) {
+		this.deliveryVisitAchievementInPercentage = deliveryVisitAchievementInPercentage;
+	}
+	
+	public Integer getInstitutionalizedDeliveryVisitTarget() {
+		return institutionalizedDeliveryVisitTarget;
+	}
+	
+	public void setInstitutionalizedDeliveryVisitTarget(Integer institutionalizedDeliveryVisitTarget) {
+		this.institutionalizedDeliveryVisitTarget = institutionalizedDeliveryVisitTarget;
+	}
+	
+	public Integer getInstitutionalizedDeliveryVisitAchievement() {
+		return institutionalizedDeliveryVisitAchievement;
+	}
+	
+	public void setInstitutionalizedDeliveryVisitAchievement(Integer institutionalizedDeliveryVisitAchievement) {
+		this.institutionalizedDeliveryVisitAchievement = institutionalizedDeliveryVisitAchievement;
+	}
+	
+	public Float getInstitutionalizedDeliveryVisitAchievementInPercentage() {
+		return institutionalizedDeliveryVisitAchievementInPercentage;
+	}
+	
+	public void setInstitutionalizedDeliveryVisitAchievementInPercentage(Float institutionalizedDeliveryVisitAchievementInPercentage) {
+		this.institutionalizedDeliveryVisitAchievementInPercentage = institutionalizedDeliveryVisitAchievementInPercentage;
+	}
+	
+	public Integer getChild06VisitTarget() {
+		return Child06VisitTarget;
+	}
+	
+	public void setChild06VisitTarget(Integer child06VisitTarget) {
+		Child06VisitTarget = child06VisitTarget;
+	}
+	
+	public Integer getChild06VisitAchievement() {
+		return Child06VisitAchievement;
+	}
+	
+	public void setChild06VisitAchievement(Integer child06VisitAchievement) {
+		Child06VisitAchievement = child06VisitAchievement;
+	}
+	
+	public Float getChild06VisitAchievementInPercentage() {
+		return Child06VisitAchievementInPercentage;
+	}
+	
+	public void setChild06VisitAchievementInPercentage(Float child06VisitAchievementInPercentage) {
+		Child06VisitAchievementInPercentage = child06VisitAchievementInPercentage;
+	}
+	
+	public Integer getChild724VisitTarget() {
+		return Child724VisitTarget;
+	}
+	
+	public void setChild724VisitTarget(Integer child724VisitTarget) {
+		Child724VisitTarget = child724VisitTarget;
+	}
+	
+	public Integer getChild724VisitAchievement() {
+		return Child724VisitAchievement;
+	}
+	
+	public void setChild724VisitAchievement(Integer child724VisitAchievement) {
+		Child724VisitAchievement = child724VisitAchievement;
+	}
+	
+	public Integer getChild724VisitAchievementInPercentage() {
+		return Child724VisitAchievementInPercentage;
+	}
+	
+	public void setChild724VisitAchievementInPercentage(Integer child724VisitAchievementInPercentage) {
+		Child724VisitAchievementInPercentage = child724VisitAchievementInPercentage;
+	}
+	
+	public Integer getChild1836VisitTarget() {
+		return Child1836VisitTarget;
+	}
+	
+	public void setChild1836VisitTarget(Integer child1836VisitTarget) {
+		Child1836VisitTarget = child1836VisitTarget;
+	}
+	
+	public Integer getChild1836VisitAchievement() {
+		return Child1836VisitAchievement;
+	}
+	
+	public void setChild1836VisitAchievement(Integer child1836VisitAchievement) {
+		Child1836VisitAchievement = child1836VisitAchievement;
+	}
+	
+	public Float getChild1836VisitAchievementInPercentage() {
+		return Child1836VisitAchievementInPercentage;
+	}
+	
+	public void setChild1836VisitAchievementInPercentage(Float child1836VisitAchievementInPercentage) {
+		Child1836VisitAchievementInPercentage = child1836VisitAchievementInPercentage;
+	}
+	
+	public Integer getImmunizationVisitTarget() {
+		return immunizationVisitTarget;
+	}
+	
+	public void setImmunizationVisitTarget(Integer immunizationVisitTarget) {
+		this.immunizationVisitTarget = immunizationVisitTarget;
+	}
+	
+	public Integer getImmunizationVisitAchievement() {
+		return immunizationVisitAchievement;
+	}
+	
+	public void setImmunizationVisitAchievement(Integer immunizationVisitAchievement) {
+		this.immunizationVisitAchievement = immunizationVisitAchievement;
+	}
+	
+	public Float getImmunizationVisitAchievementInPercentage() {
+		return immunizationVisitAchievementInPercentage;
+	}
+	
+	public void setImmunizationVisitAchievementInPercentage(Float immunizationVisitAchievementInPercentage) {
+		this.immunizationVisitAchievementInPercentage = immunizationVisitAchievementInPercentage;
+	}
+	
+	public Integer getPregnantVisitTarget() {
+		return pregnantVisitTarget;
+	}
+	
+	public void setPregnantVisitTarget(Integer pregnantVisitTarget) {
+		this.pregnantVisitTarget = pregnantVisitTarget;
+	}
+	
+	public Integer getPregnantVisitAchievement() {
+		return pregnantVisitAchievement;
+	}
+	
+	public void setPregnantVisitAchievement(Integer pregnantVisitAchievement) {
+		this.pregnantVisitAchievement = pregnantVisitAchievement;
+	}
+	
+	public Float getPregnantVisitAchievementInPercentage() {
+		return pregnantVisitAchievementInPercentage;
+	}
+	
+	public void setPregnantVisitAchievementInPercentage(Float pregnantVisitAchievementInPercentage) {
+		this.pregnantVisitAchievementInPercentage = pregnantVisitAchievementInPercentage;
+	}
+	
+	public Integer getANCServiceTarget() {
+		return ANCServiceTarget;
+	}
+	
+	public void setANCServiceTarget(Integer aNCServiceTarget) {
+		ANCServiceTarget = aNCServiceTarget;
+	}
+	
+	public Float getANCServiceAchievement() {
+		return ANCServiceAchievement;
+	}
+	
+	public void setANCServiceAchievement(Float aNCServiceAchievement) {
+		ANCServiceAchievement = aNCServiceAchievement;
+	}
+	
+	public Integer getANCServiceSell() {
+		return ANCServiceSell;
+	}
+	
+	public void setANCServiceSell(Integer aNCServiceSell) {
+		ANCServiceSell = aNCServiceSell;
+	}
+	
+	public Integer getPNCServiceTarget() {
+		return PNCServiceTarget;
+	}
+	
+	public void setPNCServiceTarget(Integer pNCServiceTarget) {
+		PNCServiceTarget = pNCServiceTarget;
+	}
+	
+	public Float getPNCServiceAchievement() {
+		return PNCServiceAchievement;
+	}
+	
+	public void setPNCServiceAchievement(Float pNCServiceAchievement) {
+		PNCServiceAchievement = pNCServiceAchievement;
+	}
+	
+	public Integer getPNCServiceSell() {
+		return PNCServiceSell;
+	}
+	
+	public void setPNCServiceSell(Integer pNCServiceSell) {
+		PNCServiceSell = pNCServiceSell;
+	}
+	
+	public Integer getAdolescentServiceTarget() {
+		return AdolescentServiceTarget;
+	}
+	
+	public void setAdolescentServiceTarget(Integer adolescentServiceTarget) {
+		AdolescentServiceTarget = adolescentServiceTarget;
+	}
+	
+	public Float getAdolescentServiceAchievement() {
+		return AdolescentServiceAchievement;
+	}
+	
+	public void setAdolescentServiceAchievement(Float adolescentServiceAchievement) {
+		AdolescentServiceAchievement = adolescentServiceAchievement;
+	}
+	
+	public Integer getAdolescentServiceSell() {
+		return AdolescentServiceSell;
+	}
+	
+	public void setAdolescentServiceSell(Integer adolescentServiceSell) {
+		AdolescentServiceSell = adolescentServiceSell;
+	}
+	
+	public Integer getWomenServiceTarget() {
+		return WomenServiceTarget;
+	}
+	
+	public void setWomenServiceTarget(Integer womenServiceTarget) {
+		WomenServiceTarget = womenServiceTarget;
+	}
+	
+	public Float getWomenServiceAchievement() {
+		return WomenServiceAchievement;
+	}
+	
+	public void setWomenServiceAchievement(Float womenServiceAchievement) {
+		WomenServiceAchievement = womenServiceAchievement;
+	}
+	
+	public Integer getWomenServiceSell() {
+		return WomenServiceSell;
+	}
+	
+	public void setWomenServiceSell(Integer womenServiceSell) {
+		WomenServiceSell = womenServiceSell;
+	}
+	
+	public Integer getIYCFServiceTarget() {
+		return IYCFServiceTarget;
+	}
+	
+	public void setIYCFServiceTarget(Integer iYCFServiceTarget) {
+		IYCFServiceTarget = iYCFServiceTarget;
+	}
+	
+	public Float getIYCFServiceAchievement() {
+		return IYCFServiceAchievement;
+	}
+	
+	public void setIYCFServiceAchievement(Float iYCFServiceAchievement) {
+		IYCFServiceAchievement = iYCFServiceAchievement;
+	}
+	
+	public Integer getIYCFServiceSell() {
+		return IYCFServiceSell;
+	}
+	
+	public void setIYCFServiceSell(Integer iYCFServiceSell) {
+		IYCFServiceSell = iYCFServiceSell;
+	}
+	
+	public Integer getNCDServiceTarget() {
+		return NCDServiceTarget;
+	}
+	
+	public void setNCDServiceTarget(Integer nCDServiceTarget) {
+		NCDServiceTarget = nCDServiceTarget;
+	}
+	
+	public Float getNCDServiceAchievement() {
+		return NCDServiceAchievement;
+	}
+	
+	public void setNCDServiceAchievement(Float nCDServiceAchievement) {
+		NCDServiceAchievement = nCDServiceAchievement;
+	}
+	
+	public Integer getNCDServiceSell() {
+		return NCDServiceSell;
+	}
+	
+	public void setNCDServiceSell(Integer nCDServiceSell) {
+		NCDServiceSell = nCDServiceSell;
+	}
+	
 }

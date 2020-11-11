@@ -30,8 +30,7 @@
     <thead>
     
 	 		 <tr>
-				<th>AM name</th>
-				
+				<th>Branch name</th>
 				<th>Number of  SK</th>
 				<th>SK target vs achievement</th>
 		    </tr>
@@ -42,9 +41,7 @@
     
    		<c:forEach items="${reportDatas}" var="reportData">
 	   		<tr>
-	   			
-			   	<td> ${reportData.getFullName() }</td>		   			
-			   
+			   	<td> ${reportData.getBranchName() }</td>
 			   	<td> ${reportData.getNumberOfSK() }</td>
 			   	<td> ${reportData.getAchievementInPercentage() }</td>
 		   			
