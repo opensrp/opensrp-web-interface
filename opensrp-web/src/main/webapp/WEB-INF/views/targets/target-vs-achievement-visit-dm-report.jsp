@@ -17,6 +17,11 @@
 <c:url var="user_list_url" value="/user-list-options-by-parent-user-ids" />
 	
 <c:url var="report_url" value="/target/report/dm-visit-target-report" />
+
+<c:url var="branch_wise_am_report_url" value="/target/report/am-visit-target-branch-wise-report" />
+
+<c:url var="sk_wise_am_visit_report_url" value="/target/report/am-provider-wise-visit-target-report" />
+
 <style>
 	.select2-results__option .wrap:before {
 		font-family: fontAwesome;
@@ -163,17 +168,17 @@ jQuery(document).ready(function() {
 		
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		getReportData();
+		getReportData('${report_url}');
 		 
 });
 
-function getReportData(){
+function getReportData(url){
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	$.ajax({
         type : "POST",
         contentType : "application/json",
-        url : '${report_url}',
+        url : url,
         dataType : 'html',
         timeout : 100000,
         data:  JSON.stringify(getParamsData()),
@@ -291,7 +296,23 @@ function getParamsData(){
 }
 function filter(){
 	
-	getReportData();
+	
+	let AM = $("#AM option:selected").val();
+	var branchIds =  $("#branchList").val();
+	let url = '${report_url}';
+  	if( branchIds ==null || typeof branchIds == 'undefined'){
+  		branchIds = ''
+  	}else{
+  		branchIds = $("#branchList").val().join();
+  	}
+  	
+  
+  	if( AM !=0 && branchIds==''){
+  		 url = '${branch_wise_am_report_url}';
+  	}else if(AM!=0 && branchIds!='' ){
+  		 url = '${sk_wise_am_visit_report_url}';
+  	}
+  	getReportData(url);
 	 
 }
 </script>
@@ -353,8 +374,8 @@ function getBranchByuserIds(userId){
         beforeSend: function() {},
         success : function(data) {
             $("#branchList").html(data);
-            $("#branchList > option").prop("selected","selected");
-            $("#branchList").trigger("change");
+            /* $("#branchList > option").prop("selected","selected");
+            $("#branchList").trigger("change"); */
         },
         error : function(e) {
             console.log("ERROR: ", e);
@@ -378,8 +399,8 @@ function getAllBranch() {
         beforeSend: function() {},
         success : function(data) {
             $("#branchList").html(data);
-            $("#branchList > option").prop("selected","selected");
-            $("#branchList").trigger("change");
+            /* $("#branchList > option").prop("selected","selected");
+            $("#branchList").trigger("change"); */
         },
         error : function(e) {
             console.log("ERROR: ", e);

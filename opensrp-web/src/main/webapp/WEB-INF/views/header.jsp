@@ -507,14 +507,10 @@ License: You must have a valid license purchased only from themeforest(the above
 						<% }%>
 						
 						<% if(SK_VISIT_TARGET_REPORT_AM){ %>
-							<li>
-							<a href="<c:url value="/target/target-vs-achievement-visit-report-am-branch-wise.html?lang=${locale}"/>">
-							Target vs achievement visit report branch wise
-							</a>
-							</li>
+							
 							<li>
 							<a href="<c:url value="/target/target-vs-achievement-visit-report-am-provider-wise.html?lang=${locale}"/>">
-							Target vs achievement visit report provider wise
+							Target vs achievement visit report
 							</a>
 							</li>
 						<% }%>

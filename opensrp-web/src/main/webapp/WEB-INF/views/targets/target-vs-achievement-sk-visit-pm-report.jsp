@@ -177,148 +177,19 @@ jQuery(document).ready(function() {
 		
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		getReportData();
+		getReportData('${report_url}');
 		 
 });
 
-function getSkWiseAMVisitReportData(){
+
+
+function getReportData(url){
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	$.ajax({
         type : "POST",
         contentType : "application/json",
-        url : '${sk_wise_am_visit_report_url}',
-        dataType : 'html',
-        timeout : 100000,
-        data:  JSON.stringify(getParamsData()),
-       
-        beforeSend: function(xhr) {
-        	 xhr.setRequestHeader(header, token);
-            $('#loading').show();
-            $('#search-button').attr("disabled", true);
-        },
-        success : function(data) {
-        	let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
-        	
-            $('#loading').hide();
-            $("#report").html(data);
-            $('#search-button').attr("disabled", false);
-            let reportType =$("input[name='time-period']:checked").val(); 
-        	
-            
-            $('#reportDataTable').DataTable({ 
-            	scrollY:        "300px",
-                scrollX:        true,
-                scrollCollapse: true,                
-            	 fixedColumns:   {
-                     leftColumns: 2/* ,
-                     rightColumns: 1 */
-                 }
-            });
-        },
-        error : function(e) {
-            $('#loading').hide();
-            $('#search-button').attr("disabled", false);
-        },
-        complete : function(e) {
-            $('#loading').hide();
-            $('#search-button').attr("disabled", false);
-        }
-    }); 
-}
-
-function getBranchWiseAMVisitReportData(){
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
-	$.ajax({
-        type : "POST",
-        contentType : "application/json",
-        url : '${branch_wise_am_report_url}',
-        dataType : 'html',
-        timeout : 100000,
-        data:  JSON.stringify(getParamsData()),
-       
-        beforeSend: function(xhr) {
-        	 xhr.setRequestHeader(header, token);
-            $('#loading').show();
-            $('#search-button').attr("disabled", true);
-        },
-        success : function(data) {
-        	let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
-        	
-            $('#loading').hide();
-            $("#report").html(data);
-            $('#search-button').attr("disabled", false);
-            let reportType =$("input[name='time-period']:checked").val(); 
-        	
-            
-            $('#reportDataTable').DataTable({            	
-            	
-            });
-        },
-        error : function(e) {
-            $('#loading').hide();
-            $('#search-button').attr("disabled", false);
-        },
-        complete : function(e) {
-            $('#loading').hide();
-            $('#search-button').attr("disabled", false);
-        }
-    }); 
-}
-
-function getDMBranchWiseVisitReportData(){
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
-	$.ajax({
-        type : "POST",
-        contentType : "application/json",
-        url : '${branch_wise_dm_visit_report_url}',
-        dataType : 'html',
-        timeout : 100000,
-        data:  JSON.stringify(getParamsData()),
-       
-        beforeSend: function(xhr) {
-        	 xhr.setRequestHeader(header, token);
-            $('#loading').show();
-            $('#search-button').attr("disabled", true);
-        },
-        success : function(data) {
-        	//let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
-        	let managerOrLocation ='managerWise';
-            $('#loading').hide();
-            $("#report").html(data);
-            $('#search-button').attr("disabled", false);
-            let reportType =$("input[name='time-period']:checked").val(); 
-        	if(managerOrLocation =='managerWise'){
-        		$("#reportTile").html("Manager Wise visit report");
-        	}else{
-        		$("#reportTile").html("Location Wise report");
-        	}
-            
-            $('#reportDataTable').DataTable({            	
-            	
-            });
-        },
-        error : function(e) {
-            $('#loading').hide();
-            $('#search-button').attr("disabled", false);
-        },
-        complete : function(e) {
-            $('#loading').hide();
-            $('#search-button').attr("disabled", false);
-        }
-    }); 
-}
-
-
-function getReportData(){
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
-	$.ajax({
-        type : "POST",
-        contentType : "application/json",
-        url : '${report_url}',
+        url : url,
         dataType : 'html',
         timeout : 100000,
         data:  JSON.stringify(getParamsData()),
@@ -439,6 +310,7 @@ function filter(){
 	let divM = $("#divM option:selected").val();
 	let AM = $("#AM option:selected").val();
 	var branchIds =  $("#branchList").val();
+	let url = '${report_url}';
   	if( branchIds ==null || typeof branchIds == 'undefined'){
   		branchIds = ''
   	}else{
@@ -447,15 +319,14 @@ function filter(){
   	
   
   	if(divM !=0 && AM==0 && branchIds=='' ){
-  		alert(divM);
-  		getDMBranchWiseVisitReportData();
+  		 url = '${branch_wise_dm_visit_report_url}';
   	}else if(divM!=0 && AM!=0 && branchIds==''){
-  		getBranchWiseAMVisitReportData();
+  		 url = '${branch_wise_am_report_url}';
   	}else if(divM!=0 && AM!=0 && branchIds!='' ){
-  		getSkWiseAMVisitReportData();
-  	}else{
-  		getReportData();
+  		 url = '${sk_wise_am_visit_report_url}';
   	}
+  		getReportData(url);
+  	
 	
 	 
 }

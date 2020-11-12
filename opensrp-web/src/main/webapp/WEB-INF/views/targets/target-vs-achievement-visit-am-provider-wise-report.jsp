@@ -16,6 +16,7 @@
 
 <c:url var="user_list_url" value="/user-list-options-by-parent-user-ids" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
+<c:url var="branch_wise_report_url" value="/target/report/am-visit-target-branch-wise-report" />
 	
 <c:url var="report_url" value="/target/report/am-provider-wise-visit-target-report" />
 <style>
@@ -137,17 +138,17 @@ jQuery(document).ready(function() {
 		
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		getReportData();
+		getReportData('${branch_wise_report_url}');
 		 
 });
 
-function getReportData(){
+function getReportData(url){
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	$.ajax({
         type : "POST",
         contentType : "application/json",
-        url : '${report_url}',
+        url : url,
         dataType : 'html',
         timeout : 100000,
         data:  JSON.stringify(getParamsData()),
@@ -259,8 +260,19 @@ function getParamsData(){
      return formData;
 }
 function filter(){
-	
-	getReportData();
+	let url = '${branch_wise_report_url}'
+		
+	var branchIds =  $("#branchList").val();
+  	if( branchIds ==null || typeof branchIds == 'undefined'){
+  		branchIds = ''
+  	}else{
+  		branchIds = $("#branchList").val().join();
+  	}
+  	if(branchIds !=''){
+  		url= '${report_url}'
+  		alert(url);
+  	}
+	getReportData(url);
 	 
 }
 </script>
@@ -279,8 +291,8 @@ function getBranchByuserIds(userId){
         beforeSend: function() {},
         success : function(data) {
             $("#branchList").html(data);
-            $("#branchList > option").prop("selected","selected");
-            $("#branchList").trigger("change");
+           /*  $("#branchList > option").prop("selected","selected");
+            $("#branchList").trigger("change"); */
         },
         error : function(e) {
             console.log("ERROR: ", e);
@@ -304,8 +316,8 @@ function getAllBranch() {
         beforeSend: function() {},
         success : function(data) {
             $("#branchList").html(data);
-            $("#branchList > option").prop("selected","selected");
-            $("#branchList").trigger("change");
+           /*  $("#branchList > option").prop("selected","selected");
+            $("#branchList").trigger("change"); */
         },
         error : function(e) {
             console.log("ERROR: ", e);

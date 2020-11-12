@@ -308,14 +308,11 @@ function filter(){
   	}else{
   		branchIds = $("#branchList").val().join();
   	}
-  	if(branchIds =='' || branchIds ==null || typeof branchIds == 'undefined'){
-  		
+  	if(branchIds ==''){
   		getReportDataBranchWise();
   	}else{
 		getReportData();
 	}
-	
-	
 	 
 }
 </script>
