@@ -15,7 +15,8 @@
 <c:url var="all_branch_url" value="/all-branch-list-options" />
 
 <c:url var="user_list_url" value="/user-list-options-by-parent-user-ids" />
-	
+	<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
+<c:url var="barnch_report_url" value="/target/report/am-branch-wise-service-target-report" />	
 <c:url var="report_url" value="/target/report/am-provider-wise-service-target-report" />
 <style>
 	.select2-results__option .wrap:before {
@@ -114,6 +115,8 @@
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
+
 
 
 <script>
@@ -132,7 +135,7 @@ jQuery(document).ready(function() {
 		
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		getReportData();
+		getReportDataBranchWise();
 		 
 });
 
@@ -151,6 +154,7 @@ function getReportData(){
         	 xhr.setRequestHeader(header, token);
             $('#loading').show();
             $('#search-button').attr("disabled", true);
+            $("#reportTile").html("SK Wise service report");
         },
         success : function(data) {
         	let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
@@ -161,9 +165,60 @@ function getReportData(){
             let reportType =$("input[name='time-period']:checked").val(); 
         	
             
-            $('#reportDataTable').DataTable({            	
-            	
-            });
+            $('#reportDataTable').DataTable({ 
+             	scrollY:        "300px",
+                 scrollX:        true,
+                 scrollCollapse: true,                
+             	 fixedColumns:   {
+                      leftColumns: 2
+                  }
+             });
+        },
+        error : function(e) {
+            $('#loading').hide();
+            $('#search-button').attr("disabled", false);
+        },
+        complete : function(e) {
+            $('#loading').hide();
+            $('#search-button').attr("disabled", false);
+        }
+    }); 
+}
+
+function getReportDataBranchWise(){
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	$.ajax({
+        type : "POST",
+        contentType : "application/json",
+        url : '${barnch_report_url}',
+        dataType : 'html',
+        timeout : 100000,
+        data:  JSON.stringify(getParamsData()),
+       
+        beforeSend: function(xhr) {
+        	 xhr.setRequestHeader(header, token);
+            $('#loading').show();
+            $('#search-button').attr("disabled", true);
+            $("#reportTile").html("Branch wise service report");
+        },
+        success : function(data) {
+        	let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
+        	
+            $('#loading').hide();
+            $("#report").html(data);
+            $('#search-button').attr("disabled", false);
+            let reportType =$("input[name='time-period']:checked").val(); 
+        	
+            
+            $('#reportDataTable').DataTable({ 
+             	scrollY:        "300px",
+                 scrollX:        true,
+                 scrollCollapse: true,                
+             	 fixedColumns:   {
+                      leftColumns: 2
+                  }
+             });
         },
         error : function(e) {
             $('#loading').hide();
@@ -247,8 +302,20 @@ function getParamsData(){
      return formData;
 }
 function filter(){
+	var branchIds =  $("#branchList").val();
+  	if( branchIds ==null || typeof branchIds == 'undefined'){
+  		branchIds = ''
+  	}else{
+  		branchIds = $("#branchList").val().join();
+  	}
+  	if(branchIds =='' || branchIds ==null || typeof branchIds == 'undefined'){
+  		
+  		getReportDataBranchWise();
+  	}else{
+		getReportData();
+	}
 	
-	getReportData();
+	
 	 
 }
 </script>
@@ -266,9 +333,9 @@ function getBranchByuserIds(userId){
         timeout : 100000,
         beforeSend: function() {},
         success : function(data) {
-            $("#branchList").html(data);
-            $("#branchList > option").prop("selected","selected");
-            $("#branchList").trigger("change");
+           $("#branchList").html(data);
+           /*  $("#branchList > option").prop("selected","selected");
+            $("#branchList").trigger("change");  */
         },
         error : function(e) {
             console.log("ERROR: ", e);

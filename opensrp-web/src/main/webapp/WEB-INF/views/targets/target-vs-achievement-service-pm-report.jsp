@@ -17,6 +17,12 @@
 <c:url var="user_list_url" value="/user-list-options-by-parent-user-ids" />
 	
 <c:url var="report_url" value="/target/report/pm-service-target-report" />
+<c:url var="am_branch_wise_service_report_url" value="/target/report/am-branch-wise-service-target-report" />
+<c:url var="am_sk_wise_service_report_url" value="/target/report/am-provider-wise-service-target-report" />
+<c:url var="dm_service_report_url" value="/target/report/dm-service-target-report" />
+<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
+
+
 <style>
 	.select2-results__option .wrap:before {
 		font-family: fontAwesome;
@@ -147,6 +153,7 @@
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
 
 
 <script>
@@ -167,17 +174,102 @@ jQuery(document).ready(function() {
 		
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		getReportData();
+		getReportData('${report_url}');
 		 
 });
 
-function getReportData(){
+function getAMSKWiseServiceReportData(){
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	$.ajax({
         type : "POST",
         contentType : "application/json",
         url : '${report_url}',
+        dataType : 'html',
+        timeout : 100000,
+        data:  JSON.stringify(getParamsData()),
+       
+        beforeSend: function(xhr) {
+        	 xhr.setRequestHeader(header, token);
+            $('#loading').show();
+            $('#search-button').attr("disabled", true);
+            $("#reportTile").html("SK Wise service report");
+        },
+        success : function(data) {
+        	let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
+        	
+            $('#loading').hide();
+            $("#report").html(data);
+            $('#search-button').attr("disabled", false);
+            let reportType =$("input[name='time-period']:checked").val(); 
+        	
+            
+            $('#reportDataTable').DataTable({ 
+             	scrollY:        "300px",
+                 scrollX:        true,
+                 scrollCollapse: true,                
+             	 fixedColumns:   {
+                      leftColumns: 2
+                  }
+             });
+        },
+        error : function(e) {
+            $('#loading').hide();
+            $('#search-button').attr("disabled", false);
+        },
+        complete : function(e) {
+            $('#loading').hide();
+            $('#search-button').attr("disabled", false);
+        }
+    }); 
+}
+function getAMBranchWiseServiceReportData(){
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	$.ajax({
+        type : "POST",
+        contentType : "application/json",
+        url : '${am_branch_wise_service_report_url}',
+        dataType : 'html',
+        timeout : 100000,
+        data:  JSON.stringify(getParamsData()),
+       
+        beforeSend: function(xhr) {
+        	 xhr.setRequestHeader(header, token);
+            $('#loading').show();
+            $('#search-button').attr("disabled", true);
+        },
+        success : function(data) {
+        	let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
+        	
+            $('#loading').hide();
+            $("#report").html(data);
+            $('#search-button').attr("disabled", false);
+            let reportType =$("input[name='time-period']:checked").val(); 
+        	
+            
+            $('#reportDataTable').DataTable({            	
+            	
+            });
+        },
+        error : function(e) {
+            $('#loading').hide();
+            $('#search-button').attr("disabled", false);
+        },
+        complete : function(e) {
+            $('#loading').hide();
+            $('#search-button').attr("disabled", false);
+        }
+    }); 
+}
+
+function getReportData(url){
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	$.ajax({
+        type : "POST",
+        contentType : "application/json",
+        url : url,
         dataType : 'html',
         timeout : 100000,
         data:  JSON.stringify(getParamsData()),
@@ -201,9 +293,14 @@ function getReportData(){
         		$("#reportTile").html("Location Wise report");
         	}
             
-            $('#reportDataTable').DataTable({            	
-            	
-            });
+        	 $('#reportDataTable').DataTable({ 
+             	scrollY:        "300px",
+                 scrollX:        true,
+                 scrollCollapse: true,                
+             	 fixedColumns:   {
+                      leftColumns: 2
+                  }
+             });
         },
         error : function(e) {
             $('#loading').hide();
@@ -285,7 +382,7 @@ function getParamsData(){
      division:division,   
      upazila:upazila, 
      am:AM,
-     divM:divM,
+     dm:divM,
      reportType:reportType,
      startDate:startDate,
      endDate:endDate,
@@ -295,9 +392,25 @@ function getParamsData(){
      return formData;
 }
 function filter(){
-	
-	getReportData();
-	 
+	let divM = $("#divM option:selected").val();
+	let url = '${report_url}';
+	let AM = $("#AM option:selected").val();
+	var branchIds =  $("#branchList").val();
+  	if( branchIds ==null || typeof branchIds == 'undefined'){
+  		branchIds = '';
+  	}else{
+  		branchIds = $("#branchList").val().join();
+  	}
+  	
+	if(divM !=0 && AM==0 && branchIds=='' ){
+		url = '${dm_service_report_url}'
+		alert("OK");
+  	}else if(divM!=0 && AM!=0 && branchIds==''){
+  		url = '${am_branch_wise_service_report_url}'
+  	}else if(divM!=0 && AM!=0 && branchIds!='' ){
+  		url = '${am_sk_wise_service_report_url}'
+  	}
+  	getReportData(url);
 }
 </script>
 
@@ -358,8 +471,8 @@ function getBranchByuserIds(userId){
         beforeSend: function() {},
         success : function(data) {
             $("#branchList").html(data);
-            $("#branchList > option").prop("selected","selected");
-            $("#branchList").trigger("change");
+            /* $("#branchList > option").prop("selected","selected");
+            $("#branchList").trigger("change"); */
         },
         error : function(e) {
             console.log("ERROR: ", e);
@@ -383,8 +496,8 @@ function getAllBranch() {
         beforeSend: function() {},
         success : function(data) {
             $("#branchList").html(data);
-            $("#branchList > option").prop("selected","selected");
-            $("#branchList").trigger("change");
+           /*  $("#branchList > option").prop("selected","selected");
+            $("#branchList").trigger("change"); */
         },
         error : function(e) {
             console.log("ERROR: ", e);

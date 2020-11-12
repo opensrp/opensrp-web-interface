@@ -33,9 +33,11 @@
 		        <th rowspan="2">ID</th>
 		        <th colspan="2">ANC package</th>
 		        <th colspan="2">PNC package</th>
+		        
 		        <th colspan="2">NCD package</th>
 		        <th colspan="2">IYCF package</th>
 		        <th colspan="2">Women package</th>
+		        <th colspan="2">Adolescent package</th>
 		    </tr>
 		    <tr>
 		        <th>TvA (#)</th>
@@ -50,7 +52,9 @@
 		         <th>TvA (#)</th>
 		        <th>TvA(%)</th>
 		        
-		         <th>TvA (#)</th>
+		        <th>TvA (#)</th>
+		        <th>TvA(%)</th>
+		        <th>TvA (#)</th>
 		        <th>TvA(%)</th>
 		    </tr>
 	 	
@@ -78,6 +82,8 @@
 		   			
 		   			<td> ${reportData.getWomenServiceTarget() }/${reportData.getWomenServiceSell() }</td>
 		   			<td> ${reportData.getWomenServiceAchievement() }</td>
+		   			<td> ${reportData.getAdolescentServiceTarget() }/${reportData.getAdolescentServiceSell() }</td>
+		   			<td> ${reportData.getAdolescentServiceAchievement() }</td>
 		   			
 	   			
 	 		</tr>

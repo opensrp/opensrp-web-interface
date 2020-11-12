@@ -280,7 +280,7 @@ function getParamsData(){
      division:division,   
      upazila:upazila, 
      am:AM,
-     divM:divM,
+     dm:divM,
      reportType:reportType,
      startDate:startDate,
      endDate:endDate,

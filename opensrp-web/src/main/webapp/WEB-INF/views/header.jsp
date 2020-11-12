@@ -519,12 +519,9 @@ License: You must have a valid license purchased only from themeforest(the above
 							</li>
 						<% }%>
 						<% if( SK_SERVICE_TARGET_REPORT_AM){ %>
-						<li><a href="<c:url value="/target/target-vs-achievement-service-report-am-branch-wise.html?lang=${locale}"/>">
-							Target vs achievement service report branch wise
-							</a>
-						</li>
+						
 						<li><a href="<c:url value="/target/target-vs-achievement-service-report-am-provider-wise.html?lang=${locale}"/>">
-							Target vs achievement service report provider wise
+							Target vs achievement service report
 							</a>
 						</li>
 						<% }%>

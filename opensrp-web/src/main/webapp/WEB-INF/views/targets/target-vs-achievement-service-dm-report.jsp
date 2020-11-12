@@ -195,9 +195,14 @@ function getReportData(){
         		$("#reportTile").html("Location Wise report");
         	}
             
-            $('#reportDataTable').DataTable({            	
-            	
-            });
+        	$('#reportDataTable').DataTable({ 
+             	scrollY:        "300px",
+                 scrollX:        true,
+                 scrollCollapse: true,                
+             	 fixedColumns:   {
+                      leftColumns: 2
+                  }
+             });
         },
         error : function(e) {
             $('#loading').hide();
@@ -279,7 +284,7 @@ function getParamsData(){
      division:division,   
      upazila:upazila, 
      am:AM,
-     divM:divM,
+     dm:divM,
      reportType:reportType,
      startDate:startDate,
      endDate:endDate,
