@@ -270,7 +270,7 @@ function filter(){
   	}
   	if(branchIds !=''){
   		url= '${report_url}'
-  		alert(url);
+  		
   	}
 	getReportData(url);
 	 

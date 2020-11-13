@@ -17,6 +17,7 @@
 <c:url var="user_list_url" value="/user-list-options-by-parent-user-ids" />
 	
 <c:url var="report_url" value="/target/report/dm-service-target-report" />
+<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 
 <c:url var="am_branch_wise_service_report_url" value="/target/report/am-branch-wise-service-target-report" />
 <c:url var="am_sk_wise_service_report_url" value="/target/report/am-provider-wise-service-target-report" />
@@ -146,6 +147,7 @@
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
 
 
 <script>

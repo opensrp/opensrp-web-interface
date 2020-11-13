@@ -58,7 +58,9 @@
 		   			<td> ${reportData.getFullName() }</td>		   			
 		   			<td> ${reportData.getNumberOfBranch() }</td>
 		   			<td> ${reportData.getNumberOfSK() }</td>
-		   			<td> ${reportData.getAchievementInPercentage() }</td>
+		   			
+		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getAchievementInPercentage() }" /> %</td>
+		   		
 	   			</c:when>
 	 
 	 		
@@ -66,7 +68,8 @@
 	 				<td> ${reportData.getLocationName() }</td>		   			
 		   			<td> ${reportData.getNumberOfBranch() }</td>
 		   			<td> ${reportData.getNumberOfSK() }</td>
-		   			<td> ${reportData.getAchievementInPercentage() }</td>
+		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getAchievementInPercentage() }" /> %</td>
+		   		
 	 		</c:otherwise>
 	 		</c:choose>
 	 		</tr>

@@ -148,7 +148,8 @@
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
-
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
+<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 
 <script>
 jQuery(document).ready(function() {       
@@ -201,9 +202,14 @@ function getReportData(url){
         		$("#reportTile").html("Location Wise report");
         	}
             
-            $('#reportDataTable').DataTable({            	
-            	
-            });
+        	$('#reportDataTable').DataTable({ 
+             	scrollY:        "300px",
+                 scrollX:        true,
+                 scrollCollapse: true,                
+             	 fixedColumns:   {
+                      leftColumns: 1
+                  }
+             });
         },
         error : function(e) {
             $('#loading').hide();

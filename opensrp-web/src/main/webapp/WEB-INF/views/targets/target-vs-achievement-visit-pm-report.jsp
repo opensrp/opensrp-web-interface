@@ -9,9 +9,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
            uri="http://www.springframework.org/security/tags"%>
-<%
-    List<AggregatedBiometricDTO> aggregateBiometricdReports = (List<AggregatedBiometricDTO>) session.getAttribute("aggregatedBiometricReport");
-%>
+
 
 <head>
     <style>
@@ -60,7 +58,9 @@
 		   			<td> ${reportData.getNumberOfAm() }</td>
 		   			<td> ${reportData.getNumberOfBranch() }</td>
 		   			<td> ${reportData.getNumberOfSK() }</td>
-		   			<td> ${reportData.getAchievementInPercentage() }</td>
+		   			
+		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getAchievementInPercentage() }" /> %</td>
+		   			
 	   			</c:when>
 	 
 	 		
@@ -68,7 +68,9 @@
 	 				<td> ${reportData.getLocationName() }</td>		   			
 		   			<td> ${reportData.getNumberOfBranch() }</td>
 		   			<td> ${reportData.getNumberOfSK() }</td>
-		   			<td> ${reportData.getAchievementInPercentage() }</td>
+		   			
+		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getAchievementInPercentage() }" /> %</td>
+		   			
 	 		</c:otherwise>
 	 		</c:choose>
 	 		</tr>

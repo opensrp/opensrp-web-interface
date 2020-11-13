@@ -321,7 +321,7 @@ function filter(){
   	
 	if(divM !=0 && AM==0 && branchIds=='' ){
 		url = '${dm_service_report_url}'
-		alert("OK");
+		
   	}else if(divM!=0 && AM!=0 && branchIds==''){
   		url = '${am_branch_wise_service_report_url}'
   	}else if(divM!=0 && AM!=0 && branchIds!='' ){

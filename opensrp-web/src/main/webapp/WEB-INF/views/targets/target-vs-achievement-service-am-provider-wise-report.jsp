@@ -356,8 +356,8 @@ function getAllBranch() {
         beforeSend: function() {},
         success : function(data) {
             $("#branchList").html(data);
-            $("#branchList > option").prop("selected","selected");
-            $("#branchList").trigger("change");
+           /*  $("#branchList > option").prop("selected","selected");
+            $("#branchList").trigger("change"); */
         },
         error : function(e) {
             console.log("ERROR: ", e);

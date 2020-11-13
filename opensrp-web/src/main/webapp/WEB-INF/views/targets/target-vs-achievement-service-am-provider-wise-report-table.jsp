@@ -69,21 +69,29 @@
 		   			<td> ${reportData.getFullName() }</td>
 		   			<td> ${reportData.getMobile() }</td>
 		   			<td> ${reportData.getANCServiceTarget() }/${reportData.getANCServiceSell() }</td>
-		   			<td> ${reportData.getANCServiceAchievement() }</td>
+		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getANCServiceSell()*100/reportData.getANCServiceTarget() }" /> %</td>
 		   			
 		   			<td> ${reportData.getPNCServiceTarget() }/${reportData.getPNCServiceSell() }</td>
-		   			<td> ${reportData.getPNCServiceAchievement() }</td>
+		   			
+		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getPNCServiceSell()*100/reportData.getPNCServiceTarget() }" /> %</td>
 		   			
 		   			<td> ${reportData.getNCDServiceTarget() }/${reportData.getNCDServiceSell() }</td>
-		   			<td> ${reportData.getNCDServiceAchievement() }</td>
+		   			
+		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getNCDServiceSell()*100/reportData.getNCDServiceTarget() }" /> %</td>
 		   			
 		   			<td> ${reportData.getIYCFServiceTarget() }/${reportData.getIYCFServiceSell() }</td>
-		   			<td> ${reportData.getIYCFServiceAchievement() }</td>
+		   			
+		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getIYCFServiceSell()*100/reportData.getIYCFServiceTarget() }" /> %</td>
+		   			
 		   			
 		   			<td> ${reportData.getWomenServiceTarget() }/${reportData.getWomenServiceSell() }</td>
-		   			<td> ${reportData.getWomenServiceAchievement() }</td>
+		   			
+		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getWomenServiceSell()*100/reportData.getWomenServiceTarget() }" /> %</td>
+		   			
+		   			
 		   			<td> ${reportData.getAdolescentServiceTarget() }/${reportData.getAdolescentServiceSell() }</td>
-		   			<td> ${reportData.getAdolescentServiceAchievement() }</td>
+		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getAdolescentServiceSell()*100/reportData.getAdolescentServiceTarget() }" /> %</td>
+		   			
 		   			
 	   			
 	 		</tr>

@@ -43,7 +43,7 @@
 	   		<tr>
 			   	<td> ${reportData.getBranchName() }</td>
 			   	<td> ${reportData.getNumberOfSK() }</td>
-			   	<td> ${reportData.getAchievementInPercentage() }</td>
+			   	<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getAchievementInPercentage() }" /> %</td>
 		   			
 		 	</tr>
 		</c:forEach>
