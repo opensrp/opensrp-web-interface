@@ -3,7 +3,6 @@
  */
 package org.opensrp.core.dto;
 
-import java.util.Date;
 
 public class TargetDetailsDTO {
 	
@@ -15,9 +14,9 @@ public class TargetDetailsDTO {
 	
 	private int branchId;
 	
-	private Date endDate;
+	private String endDate;
 	
-	private Date startDate;
+	private String startDate;
 	
 	private String unit;
 	
@@ -107,19 +106,19 @@ public class TargetDetailsDTO {
 		this.productId = productId;
 	}
 	
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 	
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 	
-	public Date getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
 	
-	public void setStartDate(Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 	

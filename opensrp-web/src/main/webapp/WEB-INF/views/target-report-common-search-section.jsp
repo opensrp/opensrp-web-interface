@@ -94,8 +94,7 @@ $(function() {
         dateFormat: 'MM yy',
         maxDate: new Date,
        
-        onClose: function(dateText, inst) { 
-        	
+        onClose: function(dateText, inst) {
         	$('#mto').datepicker('option', {minDate: new Date(inst.selectedYear, inst.selectedMonth, 1)});
         	$('#mto').datepicker('setDate', new Date());
         	var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
@@ -135,8 +134,6 @@ $(function() {
         $(".ui-datepicker-current").hide();
     });
   	dates.datepicker('setDate', new Date()); 
-   
-  	
     var timePeriod = 'monthly';	
 	$("#monthly").attr('checked', 'checked');
 	enableTimeField();
