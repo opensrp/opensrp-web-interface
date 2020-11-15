@@ -819,7 +819,8 @@ public class TargetService extends CommonService {
 		        + " , child_0_6_months_target Child06VisitTarget,child_0_6_months_achv Child06VisitAchievement,child_0_6_months_target_vs_achv Child06VisitAchievementInPercentage  "
 		        + " , child_7_24_months_target Child724VisitTarget,child_7_24_months_achv Child724VisitAchievement,child_7_24_months_target_vs_achv Child724VisitAchievementInPercentage "
 		        + " , child_18_36_months_target Child1836VisitTarget,child_18_36_months_achv Child1836VisitAchievement,child_18_36_months_target_vs_achv Child1836VisitAchievementInPercentage "
-		        + " , pregnant_target pregnantVisitTarget ,pregnant_achv pregnantVisitAchievement,pregnant_target_vs_achv pregnantVisitAchievementInPercentage from report.am_visit_report_sk_wise('"
+		        + " , pregnant_target pregnantVisitTarget ,pregnant_achv pregnantVisitAchievement,pregnant_target_vs_achv pregnantVisitAchievementInPercentage "
+				+ " , immu_0_59_months_target immunizationVisitTarget, immu_0_59_months_achv immunizationVisitAchievement, sk_immu_0_59_months_target_vs_achv immunizationVisitAchievementInPercentage from report.am_visit_report_sk_wise('"
 		        + params + "','{" + params.getString("branchIds") + "}')";
 		Query query = session.createSQLQuery(hql).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("userName", StandardBasicTypes.STRING).addScalar("mobile", StandardBasicTypes.STRING)
@@ -857,6 +858,9 @@ public class TargetService extends CommonService {
 		        .addScalar("pregnantVisitTarget", StandardBasicTypes.INTEGER)
 		        .addScalar("pregnantVisitAchievement", StandardBasicTypes.INTEGER)
 		        .addScalar("pregnantVisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+				.addScalar("immunizationVisitTarget", StandardBasicTypes.INTEGER)
+				.addScalar("immunizationVisitAchievement", StandardBasicTypes.INTEGER)
+				.addScalar("immunizationVisitAchievementInPercentage", StandardBasicTypes.FLOAT)
 		        .setResultTransformer(new AliasToBeanResultTransformer(TargetReportDTO.class));
 		dtos = query.list();
 		
