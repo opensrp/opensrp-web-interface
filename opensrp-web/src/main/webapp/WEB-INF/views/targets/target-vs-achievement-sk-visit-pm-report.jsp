@@ -133,7 +133,7 @@
 						
 		                <div class="row" style="margin: 0px">
 		                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
-		                    <h3 id="reportTile" style="font-weight: bold;">Manager Wise visit report</h3>
+		                    <h3 id="reportTile" style="font-weight: bold;">Divisional manager wise visit report</h3>
 		                        <div id="report"></div>
 		                        
 		                    </div>
@@ -177,13 +177,14 @@ jQuery(document).ready(function() {
 		
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		getReportData('${report_url}');
+		
+		getReportData('${report_url}',"Divisional manager wise visit report");
 		 
 });
 
 
 
-function getReportData(url){
+function getReportData(url,title){
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	$.ajax({
@@ -207,11 +208,13 @@ function getReportData(url){
             $("#report").html(data);
             $('#search-button').attr("disabled", false);
             let reportType =$("input[name='time-period']:checked").val(); 
-        	if(managerOrLocation =='managerWise'){
-        		$("#reportTile").html("Manager Wise visit report");
+            if(managerOrLocation =='managerWise'){
+        		
+        		$("#reportTile").html(title);
         	}else{
         		$("#reportTile").html("Location Wise report");
         	}
+           
             
         	$('#reportDataTable').DataTable({ 
              	scrollY:        "300px",
@@ -315,22 +318,30 @@ function filter(){
 	let divM = $("#divM option:selected").val();
 	let AM = $("#AM option:selected").val();
 	var branchIds =  $("#branchList").val();
+	var title = "Divisional manager wise visit report";
 	let url = '${report_url}';
   	if( branchIds ==null || typeof branchIds == 'undefined'){
   		branchIds = ''
   	}else{
   		branchIds = $("#branchList").val().join();
   	}
-  	
+  	/* if(managerOrLocation =='managerWise'){
+		$("#reportTile").html("Manager Wise visit report");
+	}else{
+		$("#reportTile").html("Location Wise report");
+	} */
   
   	if(divM !=0 && AM==0 && branchIds=='' ){
-  		 url = '${branch_wise_dm_visit_report_url}';
+  		url = '${branch_wise_dm_visit_report_url}';
+  		title= "Area manager Wise visit report";
   	}else if(divM!=0 && AM!=0 && branchIds==''){
   		 url = '${branch_wise_am_report_url}';
+  		title ="Branch wise visit report";
   	}else if(divM!=0 && AM!=0 && branchIds!='' ){
   		 url = '${sk_wise_am_visit_report_url}';
+  		title ="SK wise visit report";
   	}
-  		getReportData(url);
+  	getReportData(url,title);
   	
 	
 	 

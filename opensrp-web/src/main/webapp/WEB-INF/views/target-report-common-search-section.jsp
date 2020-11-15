@@ -60,14 +60,33 @@
 			</div>
 		</div>
 			<div class="col-lg-2 form-group "><br />
-									<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
-								</div>					
+				<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
+			</div>					
 	</div>
 <script>
       
 	
 	
 $(function() {
+	
+	var dtPickerTo = $('#mto').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'MM yy',
+        maxDate: new Date,         
+        onClose: function(dateText, inst) {         	
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();           
+            $('#mto').datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+            $(".date-picker-year").focus(function () {
+                $(".ui-datepicker-calendar").hide();
+                $(".ui-datepicker-current").hide();
+            });
+        	
+        }
+    });
+	
+	dtPickerTo.datepicker('setDate', new Date());
 	var dtPicker = $('#mfrom').datepicker({
         changeMonth: true,
         changeYear: true,
@@ -76,42 +95,34 @@ $(function() {
         maxDate: new Date,
        
         onClose: function(dateText, inst) { 
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+        	
+        	$('#mto').datepicker('option', {minDate: new Date(inst.selectedYear, inst.selectedMonth, 1)});
+        	$('#mto').datepicker('setDate', new Date());
+        	var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
             $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+            $(".date-picker-year").focus(function () {
+                $(".ui-datepicker-calendar").hide();
+                $(".ui-datepicker-current").hide();
+            });
+        	
         }
     });
-	$(".date-picker-year").focus(function () {
-        $(".ui-datepicker-calendar").hide();
-        $(".ui-datepicker-current").hide();
-    });
+	
 	dtPicker.datepicker('setDate', new Date());
 	
-	
-	var dtPickerTo = $('#mto').datepicker({
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'MM yy',
-        maxDate: new Date,
-       
-        onClose: function(dateText, inst) { 
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-        }
-    });
 	$(".date-picker-year").focus(function () {
         $(".ui-datepicker-calendar").hide();
         $(".ui-datepicker-current").hide();
     });
-	dtPickerTo.datepicker('setDate', new Date());
+	
+	
 });
 
 
- var dateToday = new Date();
+ 	var dateToday = new Date();
   	var dates = $(".date").datepicker({
         dateFormat: 'yy-mm-dd',
         maxDate: dateToday,
-        
         onSelect: function(selectedDate) {
             var option = this.id == "from" ? "minDate" : "maxDate",
                 instance = $(this).data("datepicker"),
@@ -123,10 +134,9 @@ $(function() {
         $(".ui-datepicker-calendar").hide();
         $(".ui-datepicker-current").hide();
     });
-  	dates.datepicker('setDate', new Date());  
-    
-    
+  	dates.datepicker('setDate', new Date()); 
    
+  	
     var timePeriod = 'monthly';	
 	$("#monthly").attr('checked', 'checked');
 	enableTimeField();
@@ -145,4 +155,6 @@ $(function() {
 			$('#dateField').show();
 		}
 	}
+	
+	
 </script>

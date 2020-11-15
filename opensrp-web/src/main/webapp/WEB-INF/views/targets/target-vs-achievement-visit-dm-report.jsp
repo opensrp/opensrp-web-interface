@@ -125,7 +125,7 @@
 						
 		                <div class="row" style="margin: 0px">
 		                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
-		                    <h3 id="reportTile" style="font-weight: bold;">Manager Wise report</h3>
+		                    <h3 id="reportTile" style="font-weight: bold;">Area manager wise report</h3>
 		                        <div id="report"></div>
 		                        
 		                    </div>
@@ -169,11 +169,11 @@ jQuery(document).ready(function() {
 		
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		getReportData('${report_url}');
+		getReportData('${report_url}',"Area manager wise visit report");
 		 
 });
 
-function getReportData(url){
+function getReportData(url,title){
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	$.ajax({
@@ -197,7 +197,7 @@ function getReportData(url){
             $('#search-button').attr("disabled", false);
             let reportType =$("input[name='time-period']:checked").val(); 
         	if(managerOrLocation =='managerWise'){
-        		$("#reportTile").html("Manager Wise visit report");
+        		$("#reportTile").html(title);
         	}else{
         		$("#reportTile").html("Location Wise report");
         	}
@@ -311,14 +311,16 @@ function filter(){
   	}else{
   		branchIds = $("#branchList").val().join();
   	}
-  	
+  	var title = "Area manager wise visit report";
   
   	if( AM !=0 && branchIds==''){
   		 url = '${branch_wise_am_report_url}';
+  		title ="Branch wise visit report";
   	}else if(AM!=0 && branchIds!='' ){
-  		 url = '${sk_wise_am_visit_report_url}';
+  		url = '${sk_wise_am_visit_report_url}';
+  		title ="SK wise visit report";
   	}
-  	getReportData(url);
+  	getReportData(url,title);
 	 
 }
 </script>

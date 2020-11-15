@@ -130,7 +130,7 @@
 						
 		                <div class="row" style="margin: 0px">
 		                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
-		                    <h3 id="reportTile" style="font-weight: bold;">Manager Wise visit report</h3>
+		                    <h3 id="reportTile" style="font-weight: bold;">Divisional manager Wise visit report</h3>
 		                        <div id="report"></div>
 		                        
 		                    </div>
@@ -174,13 +174,13 @@ jQuery(document).ready(function() {
 		
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		getReportData('${report_url}');
+		getReportData('${report_url}',"Divisional manager wise service report");
 		 
 });
 
 
 
-function getReportData(url){
+function getReportData(url,title){
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	$.ajax({
@@ -205,7 +205,7 @@ function getReportData(url){
             $('#search-button').attr("disabled", false);
             let reportType =$("input[name='time-period']:checked").val(); 
         	if(managerOrLocation =='managerWise'){
-        		$("#reportTile").html("Manager Wise service report");
+        		$("#reportTile").html(title);
         	}else{
         		$("#reportTile").html("Location Wise report");
         	}
@@ -313,6 +313,7 @@ function filter(){
 	let url = '${report_url}';
 	let AM = $("#AM option:selected").val();
 	var branchIds =  $("#branchList").val();
+	var title = "Divisional manager wise service report";
   	if( branchIds ==null || typeof branchIds == 'undefined'){
   		branchIds = '';
   	}else{
@@ -321,13 +322,15 @@ function filter(){
   	
 	if(divM !=0 && AM==0 && branchIds=='' ){
 		url = '${dm_service_report_url}'
-		
+		title= "Area manager service visit report";
   	}else if(divM!=0 && AM!=0 && branchIds==''){
-  		url = '${am_branch_wise_service_report_url}'
+  		url = '${am_branch_wise_service_report_url}';
+  		title ="Branch wise service report";
   	}else if(divM!=0 && AM!=0 && branchIds!='' ){
-  		url = '${am_sk_wise_service_report_url}'
+  		url = '${am_sk_wise_service_report_url}';
+  		title ="SK wise service report";
   	}
-  	getReportData(url);
+  	getReportData(url,title);
 }
 </script>
 
