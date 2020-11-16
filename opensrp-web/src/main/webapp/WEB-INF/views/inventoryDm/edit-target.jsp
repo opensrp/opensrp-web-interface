@@ -46,7 +46,7 @@
 						<label for="productName" class="col-sm-3 col-form-label">Target name<span class="text-danger">*</span> :</label>
 						<div class="col-sm-6">
 							<input type="text" class="form-control" id="productName" name ="productName"
-								placeholder="Target Name" value="${product.getName() }" required>
+								placeholder="Target Name" readonly="readonly" value="${product.getName() }" required>
 						</div>
 					</div>
 					<div class="form-group row">

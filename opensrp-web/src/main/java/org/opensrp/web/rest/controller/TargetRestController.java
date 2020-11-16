@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.util.ProductType;
+import org.opensrp.common.util.TaregtSettingsType;
 import org.opensrp.common.util.UserColumn;
 import org.opensrp.core.dto.TargetDTO;
 import org.opensrp.core.service.TargetService;
@@ -37,15 +38,23 @@ public class TargetRestController {
 	public ResponseEntity<String> newPatient(@RequestBody TargetDTO dto) throws Exception {
 		
 		JSONObject response = new JSONObject();
+		String typeName = TaregtSettingsType.valueOf(dto.getType()).name();
 		
 		try {
 			Integer isSave = targetService.saveAll(dto);
+			if (typeName.equalsIgnoreCase("LOCATION")) {
+				
+				response.put("status", "FAILED");
+				response.put("msg", "No branch found.");
+				return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
+				
+			}
 			if (isSave != null && isSave != 0) {
 				response.put("status", "SUCCESS");
 				response.put("msg", "You have submitted successfully.");
 			} else {
 				response.put("status", "FAILED");
-				response.put("msg", "Something went worng please contact with admin .");
+				response.put("msg", "Something went wrong, please contact with admin .");
 				
 			}
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
@@ -83,7 +92,7 @@ public class TargetRestController {
 				response.put("msg", "You have submitted successfully.");
 			} else {
 				response.put("status", "FAILED");
-				response.put("msg", "Something went worng please contact with admin .");
+				response.put("msg", "Something went wrong please contact with admin .");
 				
 			}
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
@@ -112,7 +121,8 @@ public class TargetRestController {
 		Integer draw = Integer.valueOf(request.getParameter("draw"));
 		String orderColumn = request.getParameter("order[0][column]");
 		String orderDirection = request.getParameter("order[0][dir]");
-		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
+		orderColumn = "";
+		//UserColumn.valueOf("_" + orderColumn).getValue();
 		
 		String name = request.getParameter("search");
 		String branchIds = request.getParameter("branchId");

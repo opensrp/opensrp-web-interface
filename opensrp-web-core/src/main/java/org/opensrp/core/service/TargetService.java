@@ -69,6 +69,7 @@ public class TargetService extends CommonService {
 		int roleId = dto.getRole();
 		/*List<TargetCommontDTO> targetTos = allTargetUser(roleId, TaregtSettingsType.valueOf(dto.getType()).name(),
 		    dto.getTargetTo());*/
+		
 		String typeName = TaregtSettingsType.valueOf(dto.getType()).name();
 		boolean deleted = deleteAllByKeys(TaregtSettingsType.valueOf(dto.getType()).name(), dto.getTargetTo(), roleId,
 		    dto.getYear(), dto.getMonth(), dto.getDay());
@@ -78,13 +79,15 @@ public class TargetService extends CommonService {
 			
 			int i = 1;
 			for (TargetDetailsDTO targetDetailsDTO : targetDetailsDTOs) {
-				sql += " select TO_DATE('" + targetDetailsDTO.getEndDate() + "','YYYYMMDD') end_date, TO_DATE('"
-				        + targetDetailsDTO.getStartDate() + "','YYYYMMDD')  start_date," + "" + targetDetailsDTO.getYear()
+				
+				sql += " select TO_DATE('" + targetDetailsDTO.getEndDate() + "','YYYY-MM-DD') end_date, TO_DATE('"
+				        + targetDetailsDTO.getStartDate() + "','YYYY-MM-DD')  start_date," + "" + targetDetailsDTO.getYear()
 				        + " \"year\", " + targetDetailsDTO.getMonth() + " \"month\" , " + " " + targetDetailsDTO.getDay()
 				        + " \"day\",'" + targetDetailsDTO.getPercentage() + "'  percentage, " + " "
 				        + targetDetailsDTO.getProductId() + " product_id, " + targetDetailsDTO.getQuantity() + " quantity, "
 				        + " 'ACTIVE' status," + System.currentTimeMillis() + " \"timestamp\"," + " 'quantity' unit,'"
-				        + UUID.randomUUID() + "' uuid ,'" + dto.getType() + "' target_type";
+				        + UUID.randomUUID() + "' uuid ,'" + dto.getType() + "' target_type , " + user.getId()
+				        + " creator, current_timestamp	 created_date";
 				if (i < size) {
 					
 					sql += " \n union";
@@ -93,23 +96,21 @@ public class TargetService extends CommonService {
 			}
 			if (typeName.equalsIgnoreCase("BRANCH")) {
 				sql += "),t2 as( select ub.user_id id,ub.branch_id branchid,ur.role_id role_id from core.user_branch as ub join core.user_role ur "
-				        + "on ub.user_id = ur.user_id where ur.role_id = "
-				        + roleId
-				        + "  and ub.branch_id= any('{"
-				        + dto.getTargetTo() + "}'))";
+				        + "on ub.user_id = ur.user_id join core.users u on u.id=ub.user_id where  u.enabled= true and ur.role_id = "
+				        + roleId + "  and ub.branch_id= any('{" + dto.getTargetTo() + "}'))";
 			} else if (typeName.equalsIgnoreCase("ROLE")) {
 				sql += "),t2 as( select id,ub.branch_id branchid,ur.role_id from  core.users u join core.user_role ur on u.id=ur.user_id"
-				        + "	join core.user_branch ub on u.id=ub.user_id where ur.role_id =" + roleId + ")";
+				        + "	join core.user_branch ub on u.id=ub.user_id where  u.enabled= true  and ur.role_id ="
+				        + roleId
+				        + ")";
 			} else {
 				sql += "),t2 as( select ub.user_id id,ub.branch_id branchid,ur.role_id from core.user_branch as ub join core.user_role ur"
-				        + "  on ub.user_id = ur.user_id where ur.role_id = "
-				        + roleId
-				        + " and ub.user_id= any('{"
-				        + dto.getTargetTo() + "}'))";
+				        + "  on ub.user_id = ur.user_id join core.users u on u.id=ub.user_id where u.enabled= true and ur.role_id = "
+				        + roleId + " and ub.user_id= any('{" + dto.getTargetTo() + "}'))";
 			}
 			sql += "insert into core.target_details(user_id,branch_id,role_id,end_date,"
 			        + " start_date,\"year\",\"month\",\"day\",percentage,product_id,quantity,status,\"timestamp\",unit,uuid"
-			        + ",target_type) select  t2.id,t2.branchid,t2.role_id,t.* from t, t2 order by t2.id";
+			        + ",target_type,creator,created_date) select  t2.id,t2.branchid,t2.role_id,t.* from t, t2 order by t2.id";
 			
 			Query query = session.createSQLQuery(sql);
 			Integer flag = query.executeUpdate();
