@@ -16,6 +16,7 @@
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
+<c:url var="save_stock_pass_url" value="/rest/api/v1/stock/save-update" />
 	
 
 <div class="page-content-wrapper">
@@ -75,7 +76,7 @@
 										<td>${ passStock.stock }</td>
 										<td><input type="number" min="1" oninput="this.value = Math.abs(this.value)" id="passAmount" name ="passAmount"><p class="text-danger" id="amountSelection"></p><span class="text-danger" id="negativeValue"></span></td>
 									</tr>
-								</c:forEach>
+							</c:forEach>
 								</tbody>
 						</table>
 						<div class="text-center">
@@ -196,7 +197,7 @@ function saveStockData() {
 	var branchId = parseInt("${id}");
 	var branchCode = "${branchInfo[0][2]}";
 	var sellToId = parseInt("${skid}");
-	var url = "/opensrp-dashboard/rest/api/v1/stock/save-update";			
+	var url =save_stock_pass_url  "/opensrp-dashboard/rest/api/v1/stock/save-update";			
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	var formData;

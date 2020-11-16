@@ -116,21 +116,21 @@ public class StockService extends CommonService {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		StockAdjust stock = findById(dto.getId(), "id", StockAdjust.class);
-			if (stock == null) {
-				stock = new StockAdjust();
-			}
-			stock.setProductId(dto.getProductId());
-			stock.setMonth(dto.getMonth());
-			stock.setYear(dto.getYear());
-			stock.setBranchId(dto.getBranchId());
-			stock.setAdjustDate(dto.getAdjustDate());
-			stock.setCurrentStock(dto.getCurrentStock());
-			stock.setChangedStock(dto.getChangedStock());
-			stock.setAdjustReason(dto.getAdjustReason());
-			stock.setCreator(user.getId());
-			session.saveOrUpdate(stock);
-
-			returnValue = 1;
+		if (stock == null) {
+			stock = new StockAdjust();
+		}
+		stock.setProductId(dto.getProductId());
+		stock.setMonth(dto.getMonth());
+		stock.setYear(dto.getYear());
+		stock.setBranchId(dto.getBranchId());
+		stock.setAdjustDate(dto.getAdjustDate());
+		stock.setCurrentStock(dto.getCurrentStock());
+		stock.setChangedStock(dto.getChangedStock());
+		stock.setAdjustReason(dto.getAdjustReason());
+		stock.setCreator(user.getId());
+		session.saveOrUpdate(stock);
+		
+		returnValue = 1;
 		
 		return returnValue;
 	}
@@ -348,8 +348,8 @@ public class StockService extends CommonService {
 				
 				patient.put(view);
 			} else {
-				String view = "<div class='col-sm-12 form-group'><a \" href=\"/opensrp-dashboard/inventory/ss-sales/view/" + branchId + "/" + dto.getId()
-				        + ".html\"><strong>View details </strong></a> </div>";
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"/opensrp-dashboard/inventory/ss-sales/view/"
+				        + branchId + "/" + dto.getId() + ".html\"><strong>View details </strong></a> </div>";
 				patient.put(view);
 			}
 			array.put(patient);
@@ -441,8 +441,8 @@ public class StockService extends CommonService {
 		Session session = getSessionFactory();
 		List<ProductDTO> result = null;
 		
-		String productSql = "" + "SELECT p.NAME, " + "       p.id " + "FROM   core.product AS p " + "GROUP  BY p.id "
-		        + "ORDER  BY p.id ASC";
+		String productSql = "" + "SELECT p.NAME, " + "       p.id "
+		        + "FROM   core.product AS p  where p.type='PRODUCT' GROUP  BY p.id " + "ORDER  BY p.id ASC";
 		Query query = session.createSQLQuery(productSql).addScalar("id", StandardBasicTypes.LONG)
 		        .addScalar("name", StandardBasicTypes.STRING)
 		        .setResultTransformer(new AliasToBeanResultTransformer(ProductDTO.class));
@@ -501,7 +501,7 @@ public class StockService extends CommonService {
 		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
 		        .addScalar("roleId", StandardBasicTypes.INTEGER).setInteger("userId", userId)
 		        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
-		dtos =  query.list();
+		dtos = query.list();
 		
 		return dtos.get(0);
 		
@@ -566,7 +566,8 @@ public class StockService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<StockAdjustDTO> getAdjustHistoryList(long adjustId,int branchId,String fromDate,String toDate,Integer start, Integer length) {
+	public List<StockAdjustDTO> getAdjustHistoryList(long adjustId, int branchId, String fromDate, String toDate,
+	                                                 Integer start, Integer length) {
 		
 		Session session = getSessionFactory();
 		List<StockAdjustDTO> dtos = new ArrayList<>();
@@ -576,8 +577,9 @@ public class StockService extends CommonService {
 		        .addScalar("productName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("productId", StandardBasicTypes.LONG).addScalar("currentStock", StandardBasicTypes.INTEGER)
 		        .addScalar("changedStock", StandardBasicTypes.INTEGER).addScalar("adjustDate", StandardBasicTypes.DATE)
-		        .addScalar("adjustReason", StandardBasicTypes.STRING).setLong("adjustId", adjustId).setInteger("branchId", branchId)
-		        .setString("fromDate", fromDate).setString("toDate", toDate).setInteger("start", start).setInteger("length", length)
+		        .addScalar("adjustReason", StandardBasicTypes.STRING).setLong("adjustId", adjustId)
+		        .setInteger("branchId", branchId).setString("fromDate", fromDate).setString("toDate", toDate)
+		        .setInteger("start", start).setInteger("length", length)
 		        .setResultTransformer(new AliasToBeanResultTransformer(StockAdjustDTO.class));
 		dtos = query.list();
 		
@@ -585,7 +587,7 @@ public class StockService extends CommonService {
 	}
 	
 	@Transactional
-	public int getAdjustStockListCount(int branchId,String fromDate,String toDate) {
+	public int getAdjustStockListCount(int branchId, String fromDate, String toDate) {
 		
 		Session session = getSessionFactory();
 		BigInteger total = null;
@@ -598,8 +600,8 @@ public class StockService extends CommonService {
 		return total.intValue();
 	}
 	
-	
-	public JSONObject getAdjustStockListDataOfDataTable(Integer draw, int adjustStockCount, List<StockAdjustDTO> dtos) throws JSONException {
+	public JSONObject getAdjustStockListDataOfDataTable(Integer draw, int adjustStockCount, List<StockAdjustDTO> dtos)
+	    throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", adjustStockCount);
@@ -613,12 +615,11 @@ public class StockService extends CommonService {
 			stockAdjust.put(dto.getBranchName());
 			stockAdjust.put(dto.getCurrentStock());
 			stockAdjust.put(dto.getChangedStock());
-			stockAdjust.put(dto.getCurrentStock()- dto.getChangedStock());
+			stockAdjust.put(dto.getCurrentStock() - dto.getChangedStock());
 			stockAdjust.put(dto.getAdjustReason());
 			
-			
-			String view = "<div class='col-sm-12 form-group'><a class='text-primary'  href=\"/opensrp-dashboard/inventory/adjust-history/" + dto.getId()
-			        + ".html\"><strong>View details </strong></a> </div>";
+			String view = "<div class='col-sm-12 form-group'><a class='text-primary'  href=\"/opensrp-dashboard/inventory/adjust-history/"
+			        + dto.getId() + ".html\"><strong>View details </strong></a> </div>";
 			stockAdjust.put(view);
 			
 			array.put(stockAdjust);

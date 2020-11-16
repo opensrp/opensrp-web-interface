@@ -32,11 +32,18 @@
 		</div>
 		<div class="form-group">
 			<div class="row">								 	
-				<div class="col-lg-4 form-group">
-			 		<label class="control-label">Date range </label> 
-		            <input  type="text" id="dateRange" name="dateRange" class="form-control"/>
-		                         
+				<div class="col-lg-2 form-group">
+				<label for="from"><spring:message code="lbl.from"></spring:message><span
+					class="text-danger"> *</span> </label> <input type="text"
+					class="form-control date" id="from" readonly="readonly"> <span class="text-danger"
+					id="startDateValidation"></span>
 				</div>
+			<div class="col-lg-2 form-group">
+				<label for="to"><spring:message code="lbl.to"></spring:message><span
+					class="text-danger"> *</span> </label> <input type="text" readonly="readonly"
+					class="form-control date" id="to"> <span class="text-danger"
+					id="endDateValidation"></span>
+			</div> 
 				<div class="col-lg-4 form-group ">
 					<label class="control-label">Invoice number </label> 
 				 		<input class="form-control" type="text" id="invoiceNumber" placeholder="Invoice number"> 
@@ -113,6 +120,22 @@ $(function() {
   });
 
 });
+var dateToday = new Date();
+	var dates = $(".date").datepicker({
+    dateFormat: 'yy-mm-dd',
+    maxDate: dateToday,
+    onSelect: function(selectedDate) {
+        var option = this.id == "from" ? "minDate" : "maxDate",
+            instance = $(this).data("datepicker"),
+            date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+        dates.not(this).datepicker("option", option, date);
+    }
+});
+	$(".date-picker-year").focus(function () {
+    $(".ui-datepicker-calendar").hide();
+    $(".ui-datepicker-current").hide();
+});
+dates.datepicker('setDate', new Date()); 
 </script>
 <script>
 
@@ -135,8 +158,10 @@ $(function() {
             ajax: {
                 url: "${stock_in_list}",
                 data: function(data){
-                	data.startDate = '';
-                    data.endDate ='';
+                	let startDate = $("#from").val();   
+                	let endDate = $("#to").val(); 
+                	data.startDate = startDate;
+                    data.endDate =endDate;
                     data.branchId =  ${id};
                     data.invoiceNumber='';
                     data.stockInId='';
@@ -186,15 +211,17 @@ function filter(){
              url: "${stock_in_list}",
              data: function(data){
             	
-            	let dateFieldvalue = $("#dateRange").val();            	
+            	let startDate = $("#from").val();   
+            	let endDate = $("#to").val(); 
+            	
      	      	data.search = $('#search').val();            	
-            	if(dateFieldvalue != '' && dateFieldvalue != undefined){
+            	/* if(dateFieldvalue != '' && dateFieldvalue != undefined){
 	     	        data.startDate = $("#dateRange").data('daterangepicker').startDate.format('YYYY-MM-DD');
 	                data.endDate =$("#dateRange").data('daterangepicker').endDate.format('YYYY-MM-DD');
             	}else{
             		data.startDate = '';
                     data.endDate ='';
-            	}
+            	} */
             	
                 data.branchId =  ${id};
                 data.invoiceNumber=$('#invoiceNumber').val();
