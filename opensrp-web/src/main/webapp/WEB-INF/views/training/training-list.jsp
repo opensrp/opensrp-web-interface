@@ -15,6 +15,9 @@
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 	
+<c:url var="get_url" value="/rest/api/v1/training/training-list" />
+<c:url var="get_branch" value="/inventorydm/user-by-branch" />
+<c:url var="redirect_url" value="/inventory/requisition-details" />
 
 <div class="page-content-wrapper">
 		<div class="page-content">
@@ -34,7 +37,7 @@
 						<jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" />
 							<div class="row">
 							<div class="col-lg-3 form-group">
-								    <label for="from"><spring:message code="lbl.trainingTopic"></spring:message> :</label>
+								    <label for="from"><spring:message code="lbl.trainingTopic"></spring:message> </label>
 										<select id="trainingTitle" class="form-control" name="trainingTitle" required >
 										<option value=""><spring:message
 												code="lbl.pleaseSelect" /></option>
@@ -44,7 +47,7 @@
 									</select>
 								</div> 
 								<div class="col-lg-3 form-group">
-								    <label for="from"><spring:message code="lbl.trainingAudience"></spring:message>:</label>
+								    <label for="from"><spring:message code="lbl.trainingAudience"></spring:message></label>
 										<select class="form-control js-example-basic-multiple" id="multipleRle"   name="selectRole" >
 											<option value="0"><spring:message
 													code="lbl.pleaseSelect" /></option>
@@ -53,28 +56,31 @@
 											</c:forEach>
 										</select>
 								</div> 
-								<div class="col-lg-3 form-group">
-								    <label for="from"><spring:message code="lbl.from"></spring:message><span class="text-danger">*</span> :</label>
-									<input type="date" class="form-control" id="from">
-									<span class="text-danger" id="startDateValidation"></span>
+								<div class="col-lg-2 form-group">
+								<label for="from"><spring:message code="lbl.from"></spring:message><span
+									class="text-danger"> </span> </label> <input type="text"
+									class="form-control date" id="from" readonly="readonly"> <span class="text-danger"
+									id="startDateValidation"></span>
+								</div>
+								<div class="col-lg-2 form-group">
+									<label for="to"><spring:message code="lbl.to"></spring:message><span
+										class="text-danger"> </span> </label>
+										 <input type="text" readonly="readonly"
+										class="form-control date" id="to"> <span class="text-danger"
+										id="endDateValidation"></span>
 								</div> 
-								<div class="col-lg-3 form-group">
-									<label for="to"><spring:message code="lbl.to"></spring:message><span class="text-danger">*</span> :</label>
-									<input type="date" class="form-control" id="to">
-									<span class="text-danger" id="endDateValidation"></span>
+								<br />
+								<div class="col-lg-2 form-group text-right">
+									<button type="button" onclick="filter()"  class="btn btn-primary">Search</button>
 								</div>
 								
 							</div>
 							
-							<div class="row">
-								<div class="col-lg-12 form-group text-right">
-									<button type="button" onclick="filter()"  class="btn btn-primary">Search</button>
-								</div>
-     							</div>
-							<br/>
+							
 						
 						<div class="row">
-								<div class="col-lg-12 form-group text-left">
+								<div class="col-lg-12 form-group text-right">
+								
 									<a class="btn btn-primary" id="addNewTraining"
 										href="<c:url value="/training/add-training.html?lang=${locale}"/>">
 										<strong> Add New Training </strong>
@@ -111,6 +117,23 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script>
+
+var dateToday = new Date();
+var dates = $(".date").datepicker({
+dateFormat: 'yy-mm-dd',
+maxDate: dateToday,
+onSelect: function(selectedDate) {
+    var option = this.id == "from" ? "minDate" : "maxDate",
+        instance = $(this).data("datepicker"),
+        date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+    dates.not(this).datepicker("option", option, date);
+}
+});
+$(".date-picker-year").focus(function () {
+$(".ui-datepicker-calendar").hide();
+$(".ui-datepicker-current").hide();
+});
+dates.datepicker('setDate', new Date()); 
 let trainingList;
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
@@ -120,6 +143,8 @@ jQuery(document).ready(function() {
 	var date = new Date(), y = date.getFullYear(), m = date.getMonth();
 	var startDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
 	var endDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));
+	let startDate = $("#from").val();   
+	let endDate = $("#to").val(); 
 	trainingList = $('#trainingList').DataTable({
            bFilter: false,
            serverSide: true,
@@ -135,14 +160,14 @@ jQuery(document).ready(function() {
                { width: "15%", targets: 6 }
            ],
            ajax: {
-               url: "/opensrp-dashboard/rest/api/v1/training/training-list",
+               url: '${get_url}',
                data: function(data){
 					data.locationId = 0;
 					data.branchId = 0;
 					data.roleId = 0;
 					data.trainingTitle = '';
-					data.startDate = startDateDm,
-					data.endDate = endDateDm
+					data.startDate = startDate,
+					data.endDate = startDate
 					
                },
                dataSrc: function(json){
@@ -190,18 +215,7 @@ function filter(){
 	var branch = +$('#branchList').val();
 	var startDate = $('#from').val();
 	var endDate = $('#to').val();
-	if(startDate == "") {
-		//startDate = $.datepicker.formatDate('yy-mm-dd', new Date());
-		$("#startDateValidation").html("<strong>Please fill out this field</strong>");
-		return;
-	}
-	$("#startDateValidation").html("");
-	if(endDate == "") {
-		//endDate = $.datepicker.formatDate('yy-mm-dd', new Date());
-		$("#endDateValidation").html("<strong>Please fill out this field</strong>");
-		return;
-	}
-	$("#endDateValidation").html("");
+	
 	
 	trainingList = $('#trainingList').DataTable({
         bFilter: false,
@@ -218,7 +232,7 @@ function filter(){
             { width: "15%", targets: 6 }
         ],
         ajax: {
-            url: "/opensrp-dashboard/rest/api/v1/training/training-list",
+            url: '${get_url}',
             data: function(data){
 					data.locationId = locationId;
 					data.branchId = branch;
@@ -250,7 +264,7 @@ function filter(){
 
 $("#branchList").change(function (event) {
 	let branchId = +$('#branchList').val();
-	var url = "/opensrp-dashboard/inventorydm/user-by-branch/"+branchId;
+	var url = '${get_branch}'+"/"+branchId;
 	$("#selectRequisitionBy").html("");
 	$.ajax({
 		type : "GET",
@@ -278,7 +292,7 @@ $("#branchList").change(function (event) {
 function navigateTodetails(requisitionId,branchName,branchCode) {
 var locale = "${locale}";
 var branchString= branchName+"-"+branchCode;
-window.location.replace("/opensrp-dashboard/inventory/requisition-details/"+requisitionId+".html?lang="+locale+"&branch="+branchString+"");
+window.location.replace('${redirect_url}'+"/"+requisitionId+".html?lang="+locale+"&branch="+branchString+"");
 }
 
 </script>

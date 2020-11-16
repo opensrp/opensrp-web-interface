@@ -22,12 +22,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping(value = "training")
-
 public class TrainingManagementController {
 	
 	@Autowired
 	private TargetService targetService;
-
+	
 	@Autowired
 	private TrainingService trainingService;
 	
@@ -43,13 +42,13 @@ public class TrainingManagementController {
 		model.addAttribute("roles", trainingService.getRoleFOrTraining("excludeRoles"));
 		model.addAttribute("trainingTitleList", trainingService.getAllTrainingTitle());
 		List<Branch> branches = branchService.findAll("Branch");
-        model.addAttribute("branches", branches);
+		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		return "training/training-list";
 	}
 	
 	@RequestMapping(value = "/add-training.html", method = RequestMethod.GET)
-	public String addTraining(Model model, Locale locale,HttpSession session) {
+	public String addTraining(Model model, Locale locale, HttpSession session) {
 		//model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
 		model.addAttribute("roles", trainingService.getRoleFOrTraining("excludeRoles"));
 		model.addAttribute("blcList", trainingService.getAllBlcList());
@@ -65,11 +64,13 @@ public class TrainingManagementController {
 	}
 	
 	@RequestMapping(value = "/view-training/{id}.html", method = RequestMethod.GET)
-	public String myInventoryList(Model model, Locale locale, @PathVariable("id") int id) {
+	public String myInventoryList(Model model, Locale locale, @PathVariable("id") long id) {
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
 		TrainingDTO trainingList = trainingService.getTrainingDetailsListById(id);
+		
 		model.addAttribute("trainingObj", trainingList);
+		model.addAttribute("users", trainingService.getTrainingUserListById(id));
 		return "training/view-training-details";
 	}
 	

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.InventoryDTO;
-import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.UserColumn;
 import org.opensrp.core.dto.TrainingDTO;
@@ -44,7 +43,7 @@ public class TrainingRestController {
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			
 			response.put("status", "FAILED");
 			response.put("msg", e.getMessage());
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
@@ -69,9 +68,9 @@ public class TrainingRestController {
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
 		String trainingTitle = request.getParameter("trainingTitle");
-
 		
-		List<TrainingDTO> trainingList = trainingService.getTrainingList(locationId, branchId, roleId,trainingTitle, startDate, endDate, length, start, orderColumn, orderDirection);
+		List<TrainingDTO> trainingList = trainingService.getTrainingList(locationId, branchId, roleId, trainingTitle,
+		    startDate, endDate, length, start, orderColumn, orderDirection);
 		
 		int trainingListCount = trainingService.getTrainingListCount(locationId, branchId, roleId, startDate, endDate);
 		
@@ -79,9 +78,9 @@ public class TrainingRestController {
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	
-	
 	@RequestMapping(value = "/training-attendance-list", method = RequestMethod.GET)
-	public ResponseEntity<String> getTrainingAttendanceList(HttpServletRequest request, HttpSession session) throws JSONException {
+	public ResponseEntity<String> getTrainingAttendanceList(HttpServletRequest request, HttpSession session)
+	    throws JSONException {
 		Integer start = Integer.valueOf(request.getParameter("start"));
 		Integer length = Integer.valueOf(request.getParameter("length"));
 		//String name = request.getParameter("search[value]");
@@ -93,13 +92,15 @@ public class TrainingRestController {
 		String name = request.getParameter("search");
 		int branchId = Integer.parseInt(request.getParameter("branchId"));
 		int roleId = Integer.parseInt(request.getParameter("roleId"));
-
 		
-		List<InventoryDTO> trainingList = trainingService.getTrainingAttendanceList(branchId, roleId, Roles.SS.getId(), Roles.ADMIN.getId(), start, length);
+		List<InventoryDTO> trainingList = trainingService.getTrainingAttendanceList(branchId, roleId, Roles.SS.getId(),
+		    Roles.ADMIN.getId(), start, length);
 		
-		int trainingAttendanceListCount = trainingService.getTrainingAttendanceListCount(branchId, roleId, Roles.SS.getId(), Roles.ADMIN.getId());
+		int trainingAttendanceListCount = trainingService.getTrainingAttendanceListCount(branchId, roleId, Roles.SS.getId(),
+		    Roles.ADMIN.getId());
 		
-		JSONObject response = trainingService.geTrainingAttendanceListSetOfDataTable(draw, trainingAttendanceListCount, trainingList);
+		JSONObject response = trainingService.geTrainingAttendanceListSetOfDataTable(draw, trainingAttendanceListCount,
+		    trainingList);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	
