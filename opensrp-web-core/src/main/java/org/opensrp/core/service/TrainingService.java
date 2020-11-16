@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.sql.CommonDataSource;
 import javax.transaction.Transactional;
 
 import org.apache.log4j.Logger;
@@ -22,7 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.InventoryDTO;
-import org.opensrp.common.dto.TargetCommontDTO;
+import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.util.TrainingLocationType;
 import org.opensrp.core.dto.TrainingDTO;
 import org.opensrp.core.entity.BLC;
@@ -54,7 +53,9 @@ public class TrainingService extends CommonService {
 			Map<String, Object> map = new HashMap<>();
 			map.put("id", dto.getBranch());
 			Branch branch = findByKeys(map, Branch.class);
-			
+			if (branch.getDivision() == null) {
+				throw new NullPointerException("Please update branch with location information. ");
+			}
 			dto.setDivision(branch.getDivision());
 			dto.setDistrict(branch.getDistrict());
 			dto.setUpazila(branch.getUpazila());
@@ -90,18 +91,18 @@ public class TrainingService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<InventoryDTO> getTrainingAttendanceList(int branchId, int roleId, int ssRoledId,int adminRoleId,int start,int length) {
+	public List<InventoryDTO> getTrainingAttendanceList(int branchId, int roleId, int ssRoledId, int adminRoleId, int start,
+	                                                    int length) {
 		
 		Session session = getSessionFactory();
 		List<InventoryDTO> dtos = new ArrayList<>();
-		String hql = " select id,username,role_id roleId, role_name roleName,branch_name branchName,full_name as firstName  from core.training_attendance_list_user(:branchId,:roleId,:ssId,:adminId,:start,:length)";
-		Query query = session.createSQLQuery(hql)
-		        .addScalar("id", StandardBasicTypes.LONG).addScalar("username", StandardBasicTypes.STRING)
-		        .addScalar("roleId", StandardBasicTypes.INTEGER).addScalar("roleName", StandardBasicTypes.STRING)
-		        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
+		String hql = " select id,username,role_id roleId, role_name roleName,first_name firstName,last_name lastName, branch_name branchName  from core.training_attendance_list_user(:branchId,:roleId,:ssId,:adminId,:start,:length)";
+		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
+		        .addScalar("username", StandardBasicTypes.STRING).addScalar("roleId", StandardBasicTypes.INTEGER)
+		        .addScalar("roleName", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
+		        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
 		        .setInteger("branchId", branchId).setInteger("roleId", roleId).setInteger("ssId", ssRoledId)
-		        .setInteger("adminId", adminRoleId)
-		        .setInteger("start", start).setInteger("length", length)
+		        .setInteger("adminId", adminRoleId).setInteger("start", start).setInteger("length", length)
 		        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
 		dtos = query.list();
 		
@@ -109,7 +110,7 @@ public class TrainingService extends CommonService {
 	}
 	
 	@Transactional
-	public int getTrainingAttendanceListCount(int branchId, int roleId,int ssRoledId,int adminRoleId) {
+	public int getTrainingAttendanceListCount(int branchId, int roleId, int ssRoledId, int adminRoleId) {
 		
 		Session session = getSessionFactory();
 		BigInteger total = null;
@@ -123,29 +124,33 @@ public class TrainingService extends CommonService {
 	}
 	
 	public JSONObject geTrainingAttendanceListSetOfDataTable(Integer draw, int attendanceListCount, List<InventoryDTO> dtos)
-		    throws JSONException {
-			JSONObject response = new JSONObject();
-			response.put("draw", draw + 1);
-			response.put("recordsTotal", attendanceListCount);
-			response.put("recordsFiltered", attendanceListCount);
-			JSONArray array = new JSONArray();
-			for (InventoryDTO dto : dtos) {
-				JSONArray training = new JSONArray();
-				String checkBox = "<input type=\"checkbox\" class=\"select-checkbox\" id=" + dto.getId() + "\" value="
-				        + dto.getId() +"_"+dto.getRoleId()+ ">";
-				training.put(checkBox);
-				training.put(dto.getFirstName());
-				training.put(dto.getUsername());
-				training.put(dto.getRoleName());
+	    throws JSONException {
+		JSONObject response = new JSONObject();
+		response.put("draw", draw + 1);
+		response.put("recordsTotal", attendanceListCount);
+		response.put("recordsFiltered", attendanceListCount);
+		JSONArray array = new JSONArray();
+		for (InventoryDTO dto : dtos) {
+			JSONArray training = new JSONArray();
+			String checkBox = "<input type=\"checkbox\" class=\"select-checkbox\" id=" + dto.getId() + "\" value="
+			        + dto.getId() + "_" + dto.getRoleId() + ">";
+			training.put(checkBox);
+			training.put(dto.getFullName());
+			training.put(dto.getUsername());
+			training.put(dto.getRoleName());
+			if (dto.getRoleName().equals("DivM")) {
+				training.put("");
+			} else {
 				training.put(dto.getBranchName());
-				array.put(training);
 			}
-			response.put("data", array);
-			return response;
+			array.put(training);
 		}
+		response.put("data", array);
+		return response;
+	}
 	
 	@Transactional
-	public int getTrainingListCount(int locationId, int branchId, int roleId,String startDate,String endDate) {
+	public int getTrainingListCount(int locationId, int branchId, int roleId, String startDate, String endDate) {
 		
 		Session session = getSessionFactory();
 		BigInteger total = null;
@@ -159,29 +164,29 @@ public class TrainingService extends CommonService {
 	}
 	
 	public JSONObject geTrainingListSetOfDataTable(Integer draw, int trainingListCount, List<TrainingDTO> dtos)
-		    throws JSONException {
-			JSONObject response = new JSONObject();
-			response.put("draw", draw + 1);
-			response.put("recordsTotal", trainingListCount);
-			response.put("recordsFiltered", trainingListCount);
-			JSONArray array = new JSONArray();
-			for (TrainingDTO dto : dtos) {
-				JSONArray training = new JSONArray();
-				training.put(dto.getId());
-				training.put(dto.getTitle());
-				training.put(dto.getStartDate());
-				training.put(dto.getAudience());
-				training.put(dto.getNameOfTrainer());
-				training.put(dto.getLocationName());
-				//String view = "<div class='col-sm-12 form-group'><a \" href=\"view-training/" + dto.getId()+">View Details</a> </div>";
-				String view = "<div class='col-sm-12 form-group'><a class=\"text-primary\" href=\"view-training/"  + dto.getId()
-				        + ".html\"><strong>View details </strong></a> </div>";
-				training.put(view);
-				array.put(training);
-			}
-			response.put("data", array);
-			return response;
+	    throws JSONException {
+		JSONObject response = new JSONObject();
+		response.put("draw", draw + 1);
+		response.put("recordsTotal", trainingListCount);
+		response.put("recordsFiltered", trainingListCount);
+		JSONArray array = new JSONArray();
+		for (TrainingDTO dto : dtos) {
+			JSONArray training = new JSONArray();
+			training.put(dto.getId());
+			training.put(dto.getTitle());
+			training.put(dto.getStartDate());
+			training.put(dto.getAudience());
+			training.put(dto.getNameOfTrainer());
+			training.put(dto.getLocationName());
+			//String view = "<div class='col-sm-12 form-group'><a \" href=\"view-training/" + dto.getId()+">View Details</a> </div>";
+			String view = "<div class='col-sm-12 form-group'><a class=\"text-primary\" href=\"view-training/" + dto.getId()
+			        + ".html\"><strong>View details </strong></a> </div>";
+			training.put(view);
+			array.put(training);
 		}
+		response.put("data", array);
+		return response;
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
@@ -201,9 +206,9 @@ public class TrainingService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<TrainingDTO> getTrainingList(int locationId, int branchId, int roledId,String trainingTitle, String startDate,String endDate,
-	                                                               Integer length, Integer start, String orderColumn,
-	                                                               String orderDirection) {
+	public List<TrainingDTO> getTrainingList(int locationId, int branchId, int roledId, String trainingTitle,
+	                                         String startDate, String endDate, Integer length, Integer start,
+	                                         String orderColumn, String orderDirection) {
 		
 		Session session = getSessionFactory();
 		List<TrainingDTO> dtos = new ArrayList<>();
@@ -211,11 +216,10 @@ public class TrainingService extends CommonService {
 		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
 		        .addScalar("title", StandardBasicTypes.STRING).addScalar("startDate", StandardBasicTypes.DATE)
 		        .addScalar("nameOfTrainer", StandardBasicTypes.STRING).addScalar("audience", StandardBasicTypes.STRING)
-		        .addScalar("locationName", StandardBasicTypes.STRING)
-		        .setInteger("locationId", locationId).setInteger("branchId", branchId).setInteger("roleId", roledId).setString("trainingTitle", trainingTitle)
-		        .setString("startDate", startDate).setString("endDate", endDate)
-		        .setInteger("length", length).setInteger("start", start)
-		        .setResultTransformer(new AliasToBeanResultTransformer(TrainingDTO.class));
+		        .addScalar("locationName", StandardBasicTypes.STRING).setInteger("locationId", locationId)
+		        .setInteger("branchId", branchId).setInteger("roleId", roledId).setString("trainingTitle", trainingTitle)
+		        .setString("startDate", startDate).setString("endDate", endDate).setInteger("length", length)
+		        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TrainingDTO.class));
 		dtos = query.list();
 		
 		return dtos;
@@ -251,75 +255,81 @@ public class TrainingService extends CommonService {
 		return dtos;
 	}
 	
-	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public TrainingDTO getTrainingDetailsListById(int trainingId) {
+	public TrainingDTO getTrainingDetailsListById(long trainingId) {
 		
 		Session session = getSessionFactory();
 		List<TrainingDTO> dtos = new ArrayList<>();
-		String hql 	= ""
-					+ "WITH training_details "
-					+ "     AS (SELECT tr.id, "
-					+ "                l.\"name\"  AS division, "
-					+ "                ld.\"name\" AS district, "
-					+ "                lu.\"name\" AS upazilla, "
-					+ "                tr.\"name\" AS title, "
-					+ "                tr.description, "
-					+ "                tr.designation_of_trainer, "
-					+ "                tr.name_of_trainer, "
-					+ "                tr.start_date, "
-					+ "                tr.duration, "
-					+ "                tr.participant_number "
-					+ "         FROM   core.training tr "
-					+ "                JOIN core.\"location\" l "
-					+ "                  ON tr.division_id = l.id "
-					+ "                JOIN core.\"location\" ld "
-					+ "                  ON tr.district_id = ld.id "
-					+ "                JOIN core.\"location\" lu "
-					+ "                  ON tr.upazila_id = lu.id), "
-					+ "     user_audience "
-					+ "     AS (SELECT String_agg(r.\"name\", ',')audience, "
-					+ "                tr.id "
-					+ "         FROM   core.training tr "
-					+ "                JOIN core.training_role trole "
-					+ "                  ON trole.training_id = tr.id "
-					+ "                JOIN core.\"role\" r "
-					+ "                  ON r.id = trole.role_id "
-					+ "         GROUP  BY tr.id) "
-					+ "SELECT td.id, "
-					+ "       td.title, "
-					+ "       concat(td.division,' ,',td.district,' ,',td.upazilla) as locationName, "
-					+ "       ua.audience, "
-					+ "       td.description, "
-					+ "       td.designation_of_trainer AS designationOfTrainer, "
-					+ "       td.name_of_trainer        AS nameOfTrainer, "
-					+ "       td.start_date             AS startDate, "
-					+ "       td.duration, " 
-					+ "		  td.participant_number AS participantNumber "
-					+ "FROM   training_details td "
-					+ "       JOIN user_audience ua "
-					+ "         ON td.id = ua.id "
-					+ "WHERE  td.id = "+trainingId+"";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("id", StandardBasicTypes.LONG)
-		        .addScalar("title", StandardBasicTypes.STRING)
-		        .addScalar("locationName", StandardBasicTypes.STRING)
-		        .addScalar("audience", StandardBasicTypes.STRING)
-		        .addScalar("description", StandardBasicTypes.STRING)
+		String hql = ""
+		        + "WITH training_details "
+		        + "     AS (SELECT tr.id, "
+		        + "                l.\"name\"  AS division, "
+		        + "                ld.\"name\" AS district, "
+		        + "                lu.\"name\" AS upazilla, "
+		        + "                tr.\"name\" AS title, "
+		        + "                tr.description, "
+		        + "                tr.designation_of_trainer, "
+		        + "                tr.name_of_trainer, "
+		        + "                tr.start_date, "
+		        + "                tr.duration, "
+		        + "                tr.participant_number "
+		        + "         FROM   core.training tr "
+		        + "                JOIN core.\"location\" l "
+		        + "                  ON tr.division_id = l.id "
+		        + "                JOIN core.\"location\" ld "
+		        + "                  ON tr.district_id = ld.id "
+		        + "                JOIN core.\"location\" lu "
+		        + "                  ON tr.upazila_id = lu.id), "
+		        + "     user_audience "
+		        + "     AS (SELECT String_agg(r.\"name\", ',')audience, "
+		        + "                tr.id "
+		        + "         FROM   core.training tr "
+		        + "                JOIN core.training_role trole "
+		        + "                  ON trole.training_id = tr.id "
+		        + "                JOIN core.\"role\" r "
+		        + "                  ON r.id = trole.role_id "
+		        + "         GROUP  BY tr.id) "
+		        + "SELECT td.id, "
+		        + "       td.title, "
+		        + "       concat(split_part(td.division, ':', 1) ,' ,',split_part(td.district, ':', 1) ,' ,',split_part(td.upazilla, ':', 1)) as locationName, "
+		        + "       ua.audience, " + "       td.description, "
+		        + "       td.designation_of_trainer AS designationOfTrainer, "
+		        + "       td.name_of_trainer        AS nameOfTrainer, " + "       td.start_date             AS startDate, "
+		        + "       td.duration, " + "		  td.participant_number AS participantNumber " + "FROM   training_details td "
+		        + "       JOIN user_audience ua " + "         ON td.id = ua.id " + "WHERE  td.id = " + trainingId + "";
+		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
+		        .addScalar("title", StandardBasicTypes.STRING).addScalar("locationName", StandardBasicTypes.STRING)
+		        .addScalar("audience", StandardBasicTypes.STRING).addScalar("description", StandardBasicTypes.STRING)
 		        .addScalar("designationOfTrainer", StandardBasicTypes.STRING)
-		        .addScalar("nameOfTrainer", StandardBasicTypes.STRING)
-		        .addScalar("startDate", StandardBasicTypes.DATE)
-		        .addScalar("duration", StandardBasicTypes.STRING)
-		        .addScalar("participantNumber", StandardBasicTypes.INTEGER)
+		        .addScalar("nameOfTrainer", StandardBasicTypes.STRING).addScalar("startDate", StandardBasicTypes.DATE)
+		        .addScalar("duration", StandardBasicTypes.STRING).addScalar("participantNumber", StandardBasicTypes.INTEGER)
 		        .setResultTransformer(new AliasToBeanResultTransformer(TrainingDTO.class));
 		dtos = query.list();
-		if(dtos.size() < 1) {
+		if (dtos.size() < 1) {
 			return null;
-		}
-		else return dtos.get(0);
+		} else
+			return dtos.get(0);
 	}
 	
-	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<UserDTO> getTrainingUserListById(long trainingId) {
+		
+		Session session = getSessionFactory();
+		List<UserDTO> dtos = new ArrayList<>();
+		String hql = "select u.id,u.mobile ,u.username,u.first_name firstName, u.last_name lastName,STRING_AGG(b.name || ' ' ||b.code,', ') branches ,r.name roles from core.training_user as tu join core.users u "
+		        + " on tu.user_id=u.id  join core.user_role ur on u.id=ur.user_id join core.role r "
+		        + " on ur.role_id=r.id join core.user_branch ub on ub.user_id=u.id join core.branch b "
+		        + " on ub.branch_id=b.id where tu.training_id=:trainingId group by u.id, u.first_name,u.mobile,u.username, u.last_name,r.name ";
+		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.INTEGER)
+		        .addScalar("mobile", StandardBasicTypes.STRING).addScalar("username", StandardBasicTypes.STRING)
+		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
+		        .addScalar("branches", StandardBasicTypes.STRING).addScalar("roles", StandardBasicTypes.STRING)
+		        .setLong("trainingId", trainingId).setResultTransformer(new AliasToBeanResultTransformer(UserDTO.class));
+		dtos = query.list();
+		
+		return dtos;
+	}
 	
 }

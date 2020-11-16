@@ -41,6 +41,8 @@
 	margin-left: -7px !important;
 }
 </style>	
+<c:url var="attendencae_list_url" value="/rest/api/v1/training/training-attendance-list" />
+<c:url var="save_url" value="/rest/api/v1/training/save-update" />
 
 <div class="page-content-wrapper">
 		<div class="page-content">
@@ -91,7 +93,8 @@
 					<div class="form-group row">
 						<label for="trainingStartDate" class="col-sm-4 col-form-label"><spring:message code="lbl.trainingStartDate"></spring:message><span class="text-danger">*</span> :</label>
 						<div class="col-sm-6">
-							<input type="date" class="form-control" id="trainingStartDate" name = "trainingStartDate" required>
+						 <input type="text" readonly="readonly" name="trainingStartDate" class="form-control date" id="trainingStartDate" required>
+							
 						</div>
 					</div>
 					<div class="form-group row">
@@ -478,6 +481,15 @@ jQuery(document).ready(function() {
 		$('.search-dropdownn').select2({dropdownAutoWidth : true}); */
 
 		//$('#addAttendanceList').DataTable();
+		
+		var dateToday = new Date();
+		var dates = $(".date").datepicker({
+		dateFormat: 'yy-mm-dd',
+		maxDate: dateToday
+		});
+		
+		dates.datepicker('setDate', new Date()); 
+		let trainingList;
 });
 
 function openAttendaceModal() {
@@ -502,7 +514,7 @@ function openAttendaceModal() {
             { width: "25%", targets: 4 }
         ],
         ajax: {
-            url: "/opensrp-dashboard/rest/api/v1/training/training-attendance-list",
+            url: '${attendencae_list_url}',
             data: function(data){
 					data.branchId = 0;
 					data.roleId = 0;
@@ -643,7 +655,7 @@ $('#addAttendanceList tbody input[type=checkbox]:checked').each(function(index, 
 	            { width: "25%", targets: 4 }
 	        ],
 	        ajax: {
-	            url: "/opensrp-dashboard/rest/api/v1/training/training-attendance-list",
+	            url: '${attendencae_list_url}',
 	            data: function(data){
 						data.branchId = branchId;
 						data.roleId = roleId;
@@ -670,7 +682,7 @@ $('#addAttendanceList tbody input[type=checkbox]:checked').each(function(index, 
 
 $("#addTraining").submit(function(event) {
 	$("#loading").show();
-	var url = "/opensrp-dashboard/rest/api/v1/training/save-update";
+	var url = '${save_url}';
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	var branchId = +$("#checkboxBranch").val();
