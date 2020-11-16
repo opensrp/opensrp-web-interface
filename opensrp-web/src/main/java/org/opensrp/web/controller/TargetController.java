@@ -430,5 +430,103 @@ public class TargetController {
 		
 		return "targets/target-vs-achievement-visit-am-provider-wise-report-table";
 	}
+
+	@RequestMapping(value = "/target/report/pm-wise-forum-report.html", method = RequestMethod.GET)
+	public String pmWiseForumReport(Model model, Locale locale) {
+
+		model.addAttribute("locale", locale);
+		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+		model.addAttribute("branches", branches);
+
+		return "targets/target_vs_achv_forum_report_pm";
+	}
+
+	@RequestMapping(value = "/target/report/pm-wise-forum-report", method = RequestMethod.POST)
+	public String forumReportTableForPM(@RequestBody String dto, Model model) throws JSONException {
+		JSONObject params = new JSONObject(dto);
+		String managerOrLocation = params.getString("managerOrLocation");
+
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
+			totalList = targetService.getPMServiceReportByManager(params);
+		} else {
+			totalList = targetService.getPMServiceReportByLocation(params);
+		}
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("type", managerOrLocation);
+
+		return "targets/target-vs-achv-forum-report-table-pm";
+	}
+
+	@RequestMapping(value = "/target/target-vs-achv-forum-report-dm.html", method = RequestMethod.GET)
+	public String targetVsAchievementForumDMReport(Model model,
+													 Locale locale) {
+		model.addAttribute("locale", locale);
+
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
+		model.addAttribute("users", users);
+		return "targets/target-vs-achievement-service-dm-report";
+	}
+
+	@RequestMapping(value = "/target/target-vs-achv-forum-report-dm", method = RequestMethod.POST)
+	public String targetVsAchievementForumDMReportTable(Model model, Locale locale){
+		model.addAttribute("locale", locale);
+		/*model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+		model.addAttribute("branches", branches);*/
+
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
+		model.addAttribute("users", users);
+		return "targets/target-vs-achv-forum-report-table-dm";
+	}
+
+	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-by-branch.html", method = RequestMethod.GET)
+	public String targetVsAchievementForumAMReportForBranch( Model model,
+												   Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		return "targets/target-vs-achv-forum-am-report-by-branch";
+	}
+
+	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-by-branch", method = RequestMethod.POST)
+	public String targetVsAchievementForumAMReportForBranchTable( Model model,
+															 Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		return "targets/target-vs-achv-forum-report-table-am-by-branch";
+	}
+
+	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-by-provider.html", method = RequestMethod.GET)
+	public String targetVsAchievementForumAMReportForSK( Model model,
+													Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		return "targets/target-vs-achv-forum-am-report-by-provider";
+	}
+
+	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-by-provider", method = RequestMethod.GET)
+	public String targetVsAchievementForumAMReportForSKTable( Model model,
+														 Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		return "targets/target-vs-achv-forum-report-table-am-by-sk";
+	}
 	
 }
