@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.common.dto.ForumTargetReportDTO;
 import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.dto.TargetReportDTO;
 import org.opensrp.common.dto.UserDTO;
@@ -443,17 +444,17 @@ public class TargetController {
 
 	@RequestMapping(value = "/target/report/pm-wise-forum-report", method = RequestMethod.POST)
 	public String forumReportTableForPM(@RequestBody String dto, Model model) throws JSONException {
-		JSONObject params = new JSONObject(dto);
-		String managerOrLocation = params.getString("managerOrLocation");
+        JSONObject params = new JSONObject(dto);
+        String managerOrLocation = params.getString("managerOrLocation");
 
-		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
-		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
-			totalList = targetService.getPMServiceReportByManager(params);
-		} else {
-			totalList = targetService.getPMServiceReportByLocation(params);
-		}
-		model.addAttribute("reportDatas", totalList);
-		model.addAttribute("type", managerOrLocation);
+        List<ForumTargetReportDTO> totalList;
+        if (managerOrLocation.equalsIgnoreCase("managerWise")) {
+            totalList = targetService.getForumReportForPMByManager(params);
+        } else {
+            totalList = targetService.getForumReportForPMByManager(params);
+        }
+        model.addAttribute("reportDatas", totalList);
+        model.addAttribute("type", managerOrLocation);
 
 		return "targets/target-vs-achv-forum-report-table-pm";
 	}
@@ -517,7 +518,7 @@ public class TargetController {
 		return "targets/target-vs-achv-forum-am-report-by-provider";
 	}
 
-	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-by-provider", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-by-provider", method = RequestMethod.POST)
 	public String targetVsAchievementForumAMReportForSKTable( Model model,
 														 Locale locale) {
 		model.addAttribute("locale", locale);
