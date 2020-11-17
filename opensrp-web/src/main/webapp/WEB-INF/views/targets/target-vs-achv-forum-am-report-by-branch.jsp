@@ -16,7 +16,7 @@
 
 <c:url var="user_list_url" value="/user-list-options-by-parent-user-ids" />
 
-<c:url var="report_url" value="/target/report/am-visit-target-branch-wise-report" />
+<c:url var="report_url" value="/target/target-vs-achv-forum-report-am-by-branch" />
 <style>
     .select2-results__option .wrap:before {
         font-family: fontAwesome;

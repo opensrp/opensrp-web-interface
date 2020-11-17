@@ -473,18 +473,18 @@ public class TargetController {
 	}
 
 	@RequestMapping(value = "/target/target-vs-achv-forum-report-dm", method = RequestMethod.POST)
-	public String targetVsAchievementForumDMReportTable(Model model, Locale locale){
-		model.addAttribute("locale", locale);
-		/*model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
-		List<Branch> branches = branchService.findAll("Branch");
-		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
-		model.addAttribute("branches", branches);*/
+	public String targetVsAchievementForumDMReportTable(@RequestBody String dto, Model model) throws JSONException {
+        JSONObject params = new JSONObject(dto);
+        String managerOrLocation = params.getString("managerOrLocation");
 
-		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		String userIds = loggedInUser.getId() + "";
-		model.addAttribute("userIds", userIds);
-		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
-		model.addAttribute("users", users);
+        List<ForumTargetReportDTO> totalList = new ArrayList<>();
+        if (managerOrLocation.equalsIgnoreCase("managerWise")) {
+            totalList = targetService.getForumReportForDMByAM(params);
+        } else {
+
+        }
+        model.addAttribute("reportDatas", totalList);
+        model.addAttribute("type", managerOrLocation);
 		return "targets/target-vs-achv-forum-report-table-dm";
 	}
 
@@ -499,12 +499,14 @@ public class TargetController {
 	}
 
 	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-by-branch", method = RequestMethod.POST)
-	public String targetVsAchievementForumAMReportForBranchTable( Model model,
-															 Locale locale) {
-		model.addAttribute("locale", locale);
-		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		String userIds = loggedInUser.getId() + "";
-		model.addAttribute("userIds", userIds);
+	public String targetVsAchievementForumAMReportForBranchTable( @RequestBody String dto, Model model) throws JSONException {
+        JSONObject params = new JSONObject(dto);
+
+        List<ForumTargetReportDTO> totalList = new ArrayList<>();
+
+        totalList = targetService.getForumReportForAMByBranch(params);
+
+        model.addAttribute("reportDatas", totalList);
 		return "targets/target-vs-achv-forum-report-table-am-by-branch";
 	}
 
@@ -519,12 +521,15 @@ public class TargetController {
 	}
 
 	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-by-provider", method = RequestMethod.POST)
-	public String targetVsAchievementForumAMReportForSKTable( Model model,
-														 Locale locale) {
-		model.addAttribute("locale", locale);
-		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		String userIds = loggedInUser.getId() + "";
-		model.addAttribute("userIds", userIds);
+	public String targetVsAchievementForumAMReportForSKTable( @RequestBody String dto, Model model) throws JSONException {
+        JSONObject params = new JSONObject(dto);
+
+        List<ForumTargetReportDTO> totalList;
+
+        totalList = targetService.getForumReportForAMBySK(params);
+
+        System.out.println(" sk list ====>"+ totalList.size());
+        model.addAttribute("reportDatas", totalList);
 		return "targets/target-vs-achv-forum-report-table-am-by-sk";
 	}
 	
