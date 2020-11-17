@@ -26,8 +26,7 @@
 <table class="display table table-bordered table-striped" id="reportDataTable"
        style="width: 100%;">
     <thead>
-    <c:choose>
-        <c:when test="${type =='managerWise'}">
+
             <tr>
                 <th rowspan="2">Branch name</th>
                 <th rowspan="2">SK </th>
@@ -53,27 +52,27 @@
                 <th>Achievement/Target (#)</th>
                 <th>Avg articipant/Target avg participant</th>
             </tr>
-        </c:when>
-        <c:otherwise>
-        </c:otherwise>
 
-    </c:choose>
     </thead>
 
     <tbody id="t-body">
 
     <c:forEach items="${reportDatas}" var="reportData">
         <tr>
-            <c:choose>
-                <c:when test="${type =='managerWise'}">
-
-                </c:when>
 
 
-                <c:otherwise>
-
-                </c:otherwise>
-            </c:choose>
+                    <td> ${reportData.getBranchName() }</td>
+                    <td> ${reportData.getFullName() }</td>
+                    <td> ${reportData.getAdolescentAchv() } / ${reportData.getAdolescentTarget()} </td>
+                    <td> ${reportData.getAdolescnetAvgParticipantAchv() } / ${reportData.getAdolescnetAvgParticipantTarget()} </td>
+                    <td> ${reportData.getNcdAchv() } / ${reportData.getNcdTarget()} </td>
+                    <td> ${reportData.getNcdAvgParticipantAchv() } / ${reportData.getNcdAvgParticipantTarget()} </td>
+                    <td> ${reportData.getIycfAchv() } / ${reportData.getIycfTarget()} </td>
+                    <td> ${reportData.getIycfAvgParticipantAchv() } / ${reportData.getIycfAvgParticipantTarget()} </td>
+                    <td> ${reportData.getWomenAchv() } / ${reportData.getWomenTarget()} </td>
+                    <td> ${reportData.getWomenAvgParticipantAchv() } / ${reportData.getWomenAvgParticipantTarget()} </td>
+                    <td> ${reportData.getAdultAchv() } / ${reportData.getAdultTarget()} </td>
+                    <td> ${reportData.getAdultAvgParticipantAchv() } / ${reportData.getAdultAvgParticipantTarget()} </td>
         </tr>
     </c:forEach>
     </tbody>

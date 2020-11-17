@@ -67,6 +67,19 @@
         <tr>
             <c:choose>
                 <c:when test="${type =='managerWise'}">
+                    <td> ${reportData.getFullName() }</td>
+                    <td> ${reportData.getNumberOfBranch() }</td>
+                    <td> ${reportData.getNumberOfSK() }</td>
+                    <td> ${reportData.getAdolescentAchv() } / ${reportData.getAdolescentTarget()} </td>
+                    <td> ${reportData.getAdolescnetAvgParticipantAchv() } / ${reportData.getAdolescnetAvgParticipantTarget()} </td>
+                    <td> ${reportData.getNcdAchv() } / ${reportData.getNcdTarget()} </td>
+                    <td> ${reportData.getNcdAvgParticipantAchv() } / ${reportData.getNcdAvgParticipantTarget()} </td>
+                    <td> ${reportData.getIycfAchv() } / ${reportData.getIycfTarget()} </td>
+                    <td> ${reportData.getIycfAvgParticipantAchv() } / ${reportData.getIycfAvgParticipantTarget()} </td>
+                    <td> ${reportData.getWomenAchv() } / ${reportData.getWomenTarget()} </td>
+                    <td> ${reportData.getWomenAvgParticipantAchv() } / ${reportData.getWomenAvgParticipantTarget()} </td>
+                    <td> ${reportData.getAdultAchv() } / ${reportData.getAdultTarget()} </td>
+                    <td> ${reportData.getAdultAvgParticipantAchv() } / ${reportData.getAdultAvgParticipantTarget()} </td>
 
                 </c:when>
 

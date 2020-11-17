@@ -16,9 +16,9 @@
 
 <c:url var="user_list_url" value="/user-list-options-by-parent-user-ids" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
-<c:url var="branch_wise_report_url" value="/target/report/am-visit-target-branch-wise-report" />
+<c:url var="branch_wise_report_url" value="/target/target-vs-achv-forum-report-am-by-branch" />
 
-<c:url var="report_url" value="/target/report/am-provider-wise-visit-target-report" />
+<c:url var="report_url" value="/target/target-vs-achv-forum-report-am-by-provider" />
 <style>
     .select2-results__option .wrap:before {
         font-family: fontAwesome;

@@ -6,6 +6,8 @@ public class ForumTargetReportDTO {
 
     private String fullName;
 
+    private String branchName;
+
     private Integer numberOfAM;
 
     private Integer numberOfSK;
@@ -252,4 +254,11 @@ public class ForumTargetReportDTO {
         this.adultAvgParticipantTarget = adultAvgParticipantTarget;
     }
 
+    public String getBranchName() {
+        return branchName;
+    }
+
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
+    }
 }

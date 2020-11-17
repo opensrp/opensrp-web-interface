@@ -16,11 +16,11 @@
 
 <c:url var="user_list_url" value="/user-list-options-by-parent-user-ids" />
 	
-<c:url var="report_url" value="/target/report/dm-service-target-report" />
+<c:url var="report_url" value="/target/target-vs-achv-forum-report-dm" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 
-<c:url var="am_branch_wise_service_report_url" value="/target/report/am-branch-wise-service-target-report" />
-<c:url var="am_sk_wise_service_report_url" value="/target/report/am-provider-wise-service-target-report" />
+<c:url var="am_branch_wise_service_report_url" value="/target/target-vs-achv-forum-report-am-by-branch" />
+<c:url var="am_sk_wise_service_report_url" value="/target/target-vs-achv-forum-report-am-by-provider" />
 
 <style>
 	.select2-results__option .wrap:before {
