@@ -312,14 +312,14 @@ function filter(){
   		branchIds = $("#branchList").val().join();
   	}
   	var title = "Area manager wise visit report";
-  
-  	if( AM !=0 && branchIds==''){
-  		 url = '${branch_wise_am_report_url}';
-  		title ="Branch wise visit report";
-  	}else if(AM!=0 && branchIds!='' ){
+  	if(branchIds!='' ){
   		url = '${sk_wise_am_visit_report_url}';
   		title ="SK wise visit report";
+  	}else if(AM !=0 && branchIds==''){
+  		 url = '${branch_wise_am_report_url}';
+   		title ="Branch wise visit report";
   	}
+  	
   	getReportData(url,title);
 	 
 }
@@ -361,11 +361,11 @@ function getBranchListByUserId(userId,divId) {
     if(userId!=0){
     	getBranchByuserIds(userId);
     }else{
-    	userId= $("#divM option:selected").val();
+    	userId= $("#AM option:selected").val();
     	if(userId!=0){
     		getBranchByuserIds(userId);
     	}else{
-    		getAllBranch();
+    		getBranchByuserIds('${userIds}')
     	}
     }
 }

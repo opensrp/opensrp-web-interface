@@ -84,12 +84,12 @@
 							<!-- <input type="text" class="form-control" id="trainingTitle" name ="trainingTitle" required> -->
 						</div>
 					</div>
-					<div class="form-group row">
+					<%-- <div class="form-group row">
 						<label for="trainingId" class="col-sm-4 col-form-label"><spring:message code="lbl.trainingId"></spring:message> :</label>
 						<div class="col-sm-6">
 							<input type="text" class="form-control" id="trainingId" name ="trainingId">
 						</div>
-					</div>
+					</div> --%>
 					<div class="form-group row">
 						<label for="trainingStartDate" class="col-sm-4 col-form-label"><spring:message code="lbl.trainingStartDate"></spring:message><span class="text-danger">*</span> :</label>
 						<div class="col-sm-6">
@@ -728,7 +728,7 @@ $("#addTraining").submit(function(event) {
 		formData = {
 			"title" : $('#trainingTitle').val(),
 			"id" : 0,
-			"trainingId" : $('input[name=trainingId]').val(),
+			"trainingId" :'', //$('input[name=trainingId]').val(),
 			"startDate" : $("#trainingStartDate").val(),
 			"duration" : $('input[name=trainingDuration]').val(),
 			"participantNumber" : +$('input[name=participantNumber]').val(),

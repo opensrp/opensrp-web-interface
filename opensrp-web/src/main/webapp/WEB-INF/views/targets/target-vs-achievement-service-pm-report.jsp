@@ -320,16 +320,17 @@ function filter(){
   		branchIds = $("#branchList").val().join();
   	}
   	
-	if(divM !=0 && AM==0 && branchIds=='' ){
-		url = '${dm_service_report_url}'
-		title= "Area manager service visit report";
-  	}else if(divM!=0 && AM!=0 && branchIds==''){
-  		url = '${am_branch_wise_service_report_url}';
-  		title ="Branch wise service report";
-  	}else if(divM!=0 && AM!=0 && branchIds!='' ){
+  	if( branchIds !=''){
   		url = '${am_sk_wise_service_report_url}';
   		title ="SK wise service report";
+  	} else if(AM!=0 && branchIds==''){
+  		url = '${am_branch_wise_service_report_url}';
+  		title ="Branch wise service report";
+  	}else if(divM !=0 && AM==0 && branchIds=='' ){
+		url = '${dm_service_report_url}'
+		title= "Area manager service visit report";
   	}
+	
   	getReportData(url,title);
 }
 </script>

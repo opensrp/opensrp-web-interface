@@ -9,6 +9,7 @@ import org.opensrp.common.util.DefaultHeadQuarter;
 import org.opensrp.common.util.LocationTags;
 import org.opensrp.core.dto.TrainingDTO;
 import org.opensrp.core.entity.Branch;
+import org.opensrp.core.entity.TrainingTitle;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.TargetService;
 import org.opensrp.core.service.TrainingService;
@@ -47,6 +48,14 @@ public class TrainingManagementController {
 		return "training/training-list";
 	}
 	
+	@RequestMapping(value = "/training-title-list.html", method = RequestMethod.GET)
+	public String trainingTitleList(Model model, Locale locale) {
+		
+		model.addAttribute("titles", trainingService.getAllTrainingTitle());
+		model.addAttribute("locale", locale);
+		return "training/title-list";
+	}
+	
 	@RequestMapping(value = "/add-training.html", method = RequestMethod.GET)
 	public String addTraining(Model model, Locale locale, HttpSession session) {
 		//model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
@@ -61,6 +70,20 @@ public class TrainingManagementController {
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		return "training/add-training";
+	}
+	
+	@RequestMapping(value = "/add-training-title.html", method = RequestMethod.GET)
+	public String addTrainingtitle(Model model, Locale locale, HttpSession session) {
+		model.addAttribute("locale", locale);
+		return "training/add-title";
+	}
+	
+	@RequestMapping(value = "/{id}/edit-training.html", method = RequestMethod.GET)
+	public String editTrainingtitle(Model model, Locale locale, HttpSession session, @PathVariable("id") long id) {
+		model.addAttribute("locale", locale);
+		
+		model.addAttribute("trainingTitle", trainingService.findById(id, "id", TrainingTitle.class));
+		return "training/edit-title";
 	}
 	
 	@RequestMapping(value = "/view-training/{id}.html", method = RequestMethod.GET)

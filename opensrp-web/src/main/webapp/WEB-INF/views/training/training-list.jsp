@@ -166,8 +166,8 @@ jQuery(document).ready(function() {
 					data.branchId = 0;
 					data.roleId = 0;
 					data.trainingTitle = '';
-					data.startDate = startDate,
-					data.endDate = startDate
+					data.startDate = '',
+					data.endDate = ''
 					
                },
                dataSrc: function(json){

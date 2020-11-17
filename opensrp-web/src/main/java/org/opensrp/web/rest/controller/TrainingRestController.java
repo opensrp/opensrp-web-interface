@@ -39,7 +39,27 @@ public class TrainingRestController {
 		try {
 			trainingService.save(dto);
 			response.put("status", "SUCCESS");
-			response.put("msg", "you have created successfully");
+			response.put("msg", "you have submitted successfully");
+			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
+		}
+		catch (Exception e) {
+			
+			response.put("status", "FAILED");
+			response.put("msg", e.getMessage());
+			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
+		}
+		
+	}
+	
+	@RequestMapping(value = "/save-update-title", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> trainingTitle(@RequestBody TrainingDTO dto) throws Exception {
+		
+		JSONObject response = new JSONObject();
+		
+		try {
+			trainingService.saveTainingTitle(dto);
+			response.put("status", "SUCCESS");
+			response.put("msg", "you have submitted successfully");
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
 		}
 		catch (Exception e) {

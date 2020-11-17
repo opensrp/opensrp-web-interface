@@ -103,7 +103,7 @@ jQuery(document).ready(function() {
 });
 
 $("#addProduct").submit(function(event) { 
-	debugger;
+	
 	$("#loading").show();
 	var url = "/opensrp-dashboard/rest/api/v1/product/save-update";			
 	var token = $("meta[name='_csrf']").attr("content");
@@ -139,7 +139,7 @@ $("#addProduct").submit(function(event) {
 			 xhr.setRequestHeader(header, token);
 		},
 		success : function(data) {
-			debugger;
+			
 		   var response = JSON.parse(data);
 		   $("#loading").hide();
 		   $("#serverResponseMessage").show();

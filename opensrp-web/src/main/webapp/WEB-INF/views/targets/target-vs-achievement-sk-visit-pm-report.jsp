@@ -331,16 +331,18 @@ function filter(){
 		$("#reportTile").html("Location Wise report");
 	} */
   
-  	if(divM !=0 && AM==0 && branchIds=='' ){
+  	if( branchIds !=''){
+  		 url = '${sk_wise_am_visit_report_url}';
+   		title ="SK wise visit report";
+  	} else if(AM!=0 && branchIds==''){
+  		url = '${branch_wise_am_report_url}';
+  		title ="Branch wise visit report";
+  	}else if(divM !=0 && AM==0 && branchIds=='' ){
   		url = '${branch_wise_dm_visit_report_url}';
   		title= "Area manager Wise visit report";
-  	}else if(divM!=0 && AM!=0 && branchIds==''){
-  		 url = '${branch_wise_am_report_url}';
-  		title ="Branch wise visit report";
-  	}else if(divM!=0 && AM!=0 && branchIds!='' ){
-  		 url = '${sk_wise_am_visit_report_url}';
-  		title ="SK wise visit report";
   	}
+	
+  	
   	getReportData(url,title);
   	
 	
