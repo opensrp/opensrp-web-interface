@@ -67,6 +67,7 @@
 				<value>org.opensrp.core.entity.TrainingRole</value>
 				<value>org.opensrp.core.entity.StockAdjust</value>
 				<value>org.opensrp.core.entity.DataViewConfiguration</value>
+				<value>org.opensrp.core.entity.TrainingTitle</value>
 
 			</list>
 		</property>

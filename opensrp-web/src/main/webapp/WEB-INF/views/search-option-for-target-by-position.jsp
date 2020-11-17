@@ -42,6 +42,9 @@
 <script>
     function getChildLocation(locationId,divId) {
         $("#"+divId).html("");
+        if(locationId==0){
+        	locationId=-1;
+        }
         if(divId=='districtList'){
             $("#districtList").html('<option value="0">Please select </option>');
             $("#upazilaList").html('<option value="0">Please select </option>');
