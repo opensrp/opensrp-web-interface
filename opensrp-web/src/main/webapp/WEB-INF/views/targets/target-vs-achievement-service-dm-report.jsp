@@ -256,7 +256,7 @@ function getParamsData(){
 	
 	let divM = '${userIds}';
 	let AM = $("#AM option:selected").val();
-	
+
 	//let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
 	let managerOrLocation ='managerWise';
 	let reportType =$("input[name='time-period']:checked").val(); 
@@ -311,13 +311,14 @@ function filter(){
   		branchIds = $("#branchList").val().join();
   	}
   	var title = "Area manager wise service report";
-	if(AM!=0 && branchIds==''){
-  		url = '${am_branch_wise_service_report_url}';
-  		title ="Branch wise service report";
-  	}else if(AM !=0 && branchIds!='' ){
+  	if( branchIds!=''){
   		url = '${am_sk_wise_service_report_url}';
   		title ="SK wise service report";
+  	}else if(AM !=0 && branchIds ==''){
+  		url = '${am_branch_wise_service_report_url}';
+  		title ="Branch wise service report";
   	}
+	
   	getReportData(url,title);
 	 
 }
@@ -356,14 +357,16 @@ function getAm(userId,divId) {
 
 
 function getBranchListByUserId(userId,divId) {
+	
     if(userId!=0){
     	getBranchByuserIds(userId);
     }else{
-    	userId= $("#divM option:selected").val();
+    	userId= $("#AM option:selected").val();
+    	
     	if(userId!=0){
     		getBranchByuserIds(userId);
     	}else{
-    		getAllBranch();
+    		getBranchByuserIds('${userIds}')
     	}
     }
 }

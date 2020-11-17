@@ -28,6 +28,7 @@ import org.opensrp.core.entity.BLC;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.Training;
+import org.opensrp.core.entity.TrainingTitle;
 import org.opensrp.core.mapper.TrainingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,6 +87,24 @@ public class TrainingService extends CommonService {
 		logger.info("training saved successfully: ");
 		
 		return training;
+		
+	}
+	
+	@Transactional
+	public TrainingTitle saveTainingTitle(TrainingDTO dto) throws Exception {
+		
+		Session session = getSessionFactory();
+		
+		TrainingTitle taTrainingTitle = findById(dto.getId(), "id", TrainingTitle.class);
+		if (taTrainingTitle != null) {
+			taTrainingTitle.setName(dto.getTitle());
+		} else {
+			taTrainingTitle = new TrainingTitle();
+			taTrainingTitle.setName(dto.getTitle());
+		}
+		session.saveOrUpdate(taTrainingTitle);
+		
+		return taTrainingTitle;
 		
 	}
 	

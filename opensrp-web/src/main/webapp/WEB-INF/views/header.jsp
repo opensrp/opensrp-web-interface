@@ -98,7 +98,9 @@ License: You must have a valid license purchased only from themeforest(the above
 
 	boolean SK_VISIT_TARGET_REPORT_AM = AuthenticationManagerUtil.isPermitted("SK_VISIT_TARGET_REPORT_AM");
 	boolean SK_SERVICE_TARGET_REPORT_AM = AuthenticationManagerUtil.isPermitted("SK_SERVICE_TARGET_REPORT_AM");
+	boolean TRAINING_TITLE = AuthenticationManagerUtil.isPermitted("TRAINING_TITLE");
 
+	
    %>
   
 <body>
@@ -376,13 +378,42 @@ License: You must have a valid license purchased only from themeforest(the above
 						}
 					%>
 
-					<%
-						if (PERM_READ_WRITE_TRAINING) {
-					%>
-					<li><a href="<c:url value="/training/training-list.html?lang=${locale}"/>"><i
-							class="fa fa-tasks" aria-hidden="true"></i> <span class="title">
+					
+					
+					<% if(PERM_READ_WRITE_TRAINING || TRAINING_TITLE){ %>
+					<li><a href="javascript:;"> <i class="fa fa-certificate"></i> <span
+							class="title"> Training</span> <span class="arrow "></span>
+					</a>
+						<ul class="sub-menu">
+						<%
+							if (TRAINING_TITLE) {
+							%>
+							
+							<li><a href="<c:url value="/training/training-title-list.html?lang=${locale}"/>"><i
+								class="fa fa-tasks" aria-hidden="true"></i> <span class="title">
+								Training title
+								</span> </a></li>
+							<%
+								}
+							%>
+							
+							<%
+							if (PERM_READ_WRITE_TRAINING) {
+							%>
+							
+							<li><a href="<c:url value="/training/training-list.html?lang=${locale}"/>"><i
+								class="fa fa-tasks" aria-hidden="true"></i> <span class="title">
 								<spring:message code="lbl.trainingManagement" />
-						</span> </a></li>
+								</span> </a></li>
+							<%
+								}
+							%>
+							
+							
+							
+						</ul>
+						
+						</li>
 					<%
 						}
 					%>
@@ -401,7 +432,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				%>
 				
 				<%
-									if (AuthenticationManagerUtil.isPermitted("PERM_USER_UPLOAD")) {
+				if (AuthenticationManagerUtil.isPermitted("PERM_USER_UPLOAD")) {
 								%>
 				<li>
 					<a href="<c:url value="/user/upload.html"/>">

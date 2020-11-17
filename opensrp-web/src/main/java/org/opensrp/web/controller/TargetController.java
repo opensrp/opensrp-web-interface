@@ -219,6 +219,7 @@ public class TargetController {
 		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
 		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
 			totalList = targetService.getPMVisitReportByManager(params);
+			
 		} else {
 			totalList = targetService.getPMVisitReportByLocation(params);
 		}
@@ -249,6 +250,7 @@ public class TargetController {
 		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
 		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
 			totalList = targetService.getPMServiceReportByManager(params);
+			System.err.println("totalList::" + totalList);
 		} else {
 			totalList = targetService.getPMServiceReportByLocation(params);
 		}

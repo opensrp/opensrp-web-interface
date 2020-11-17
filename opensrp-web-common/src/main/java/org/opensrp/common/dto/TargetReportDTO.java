@@ -692,4 +692,50 @@ public class TargetReportDTO {
 		NCDServiceSell = nCDServiceSell;
 	}
 	
+	@Override
+	public String toString() {
+		return "TargetReportDTO [fullName=" + fullName + ", firstName=" + firstName + ", lastName=" + lastName
+		        + ", locationName=" + locationName + ", branchName=" + branchName + ", userName=" + userName + ", id=" + id
+		        + ", numberOfSK=" + numberOfSK + ", numberOfPA=" + numberOfPA + ", numberOfBranch=" + numberOfBranch
+		        + ", numberOfAm=" + numberOfAm + ", target=" + target + ", achievementInPercentage="
+		        + achievementInPercentage + ", achievementInQuantity=" + achievementInQuantity + ", mobile=" + mobile
+		        + ", hhVisitTarget=" + hhVisitTarget + ", hhVisitAchievement=" + hhVisitAchievement
+		        + ", hhVisitAchievementInPercentage=" + hhVisitAchievementInPercentage + ", elcoVisitTarget="
+		        + elcoVisitTarget + ", elcoVisitAchievement=" + elcoVisitAchievement + ", elcoVisitAchievementInPercentage="
+		        + elcoVisitAchievementInPercentage + ", methodsUsersVisitTarget=" + methodsUsersVisitTarget
+		        + ", methodsUsersVisitAchievement=" + methodsUsersVisitAchievement
+		        + ", methodsUsersVisitAchievementInPercentage=" + methodsUsersVisitAchievementInPercentage
+		        + ", adolescentMethodsUsersVisitTarget=" + adolescentMethodsUsersVisitTarget
+		        + ", adolescentMethodsUsersVisitAchievement=" + adolescentMethodsUsersVisitAchievement
+		        + ", adolescentMethodsUsersVisitAchievementInPercentage="
+		        + adolescentMethodsUsersVisitAchievementInPercentage + ", pregnancydentifiedVisitTarget="
+		        + pregnancydentifiedVisitTarget + ", pregnancydentifiedVisitAchievement="
+		        + pregnancydentifiedVisitAchievement + ", pregnancydentifiedVisitAchievementInPercentage="
+		        + pregnancydentifiedVisitAchievementInPercentage + ", deliveryVisitTarget=" + deliveryVisitTarget
+		        + ", deliveryVisitAchievement=" + deliveryVisitAchievement + ", deliveryVisitAchievementInPercentage="
+		        + deliveryVisitAchievementInPercentage + ", institutionalizedDeliveryVisitTarget="
+		        + institutionalizedDeliveryVisitTarget + ", institutionalizedDeliveryVisitAchievement="
+		        + institutionalizedDeliveryVisitAchievement + ", institutionalizedDeliveryVisitAchievementInPercentage="
+		        + institutionalizedDeliveryVisitAchievementInPercentage + ", Child06VisitTarget=" + Child06VisitTarget
+		        + ", Child06VisitAchievement=" + Child06VisitAchievement + ", Child06VisitAchievementInPercentage="
+		        + Child06VisitAchievementInPercentage + ", Child724VisitTarget=" + Child724VisitTarget
+		        + ", Child724VisitAchievement=" + Child724VisitAchievement + ", Child724VisitAchievementInPercentage="
+		        + Child724VisitAchievementInPercentage + ", Child1836VisitTarget=" + Child1836VisitTarget
+		        + ", Child1836VisitAchievement=" + Child1836VisitAchievement + ", Child1836VisitAchievementInPercentage="
+		        + Child1836VisitAchievementInPercentage + ", immunizationVisitTarget=" + immunizationVisitTarget
+		        + ", immunizationVisitAchievement=" + immunizationVisitAchievement
+		        + ", immunizationVisitAchievementInPercentage=" + immunizationVisitAchievementInPercentage
+		        + ", pregnantVisitTarget=" + pregnantVisitTarget + ", pregnantVisitAchievement=" + pregnantVisitAchievement
+		        + ", pregnantVisitAchievementInPercentage=" + pregnantVisitAchievementInPercentage + ", ANCServiceTarget="
+		        + ANCServiceTarget + ", ANCServiceAchievement=" + ANCServiceAchievement + ", ANCServiceSell="
+		        + ANCServiceSell + ", PNCServiceTarget=" + PNCServiceTarget + ", PNCServiceAchievement="
+		        + PNCServiceAchievement + ", PNCServiceSell=" + PNCServiceSell + ", AdolescentServiceTarget="
+		        + AdolescentServiceTarget + ", AdolescentServiceAchievement=" + AdolescentServiceAchievement
+		        + ", AdolescentServiceSell=" + AdolescentServiceSell + ", WomenServiceTarget=" + WomenServiceTarget
+		        + ", WomenServiceAchievement=" + WomenServiceAchievement + ", WomenServiceSell=" + WomenServiceSell
+		        + ", IYCFServiceTarget=" + IYCFServiceTarget + ", IYCFServiceAchievement=" + IYCFServiceAchievement
+		        + ", IYCFServiceSell=" + IYCFServiceSell + ", NCDServiceTarget=" + NCDServiceTarget
+		        + ", NCDServiceAchievement=" + NCDServiceAchievement + ", NCDServiceSell=" + NCDServiceSell + "]";
+	}
+	
 }

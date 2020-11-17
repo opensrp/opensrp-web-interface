@@ -67,31 +67,99 @@
 		   			<td> ${reportData.getNumberOfSK() }</td>
 		   			
 		   			<td> ${reportData.getANCServiceTarget() }/${reportData.getANCServiceSell() }</td>
-		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getANCServiceSell()*100/reportData.getANCServiceTarget() }" /> %</td>
+		   			<td> 
+		   			<c:choose>
+		   				<c:when test="${reportData.getANCServiceTarget()==0}">
+		   				
+		   				N/A
+		   				</c:when>
+		   				<c:otherwise>		   				
+		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getANCServiceSell()*100/reportData.getANCServiceTarget() }" />  
+		   				</c:otherwise>
+		   			</c:choose>
+		   			
+		   			 </td>
 		   			
 		   			<td> ${reportData.getPNCServiceTarget() }/${reportData.getPNCServiceSell() }</td>
 		   			
-		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getPNCServiceSell()*100/reportData.getPNCServiceTarget() }" /> %</td>
+		   			<td> 
+		   			<c:choose>
+		   				<c:when test="${reportData.getPNCServiceTarget()==0}">
+		   				
+		   				N/A
+		   				</c:when>
+		   				<c:otherwise>		   				
+		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getPNCServiceSell()*100/reportData.getPNCServiceTarget() }" /> 
+		   			
+		   				</c:otherwise>
+		   			</c:choose>
+		   			</td>
 		   			
 		   			<td> ${reportData.getNCDServiceTarget() }/${reportData.getNCDServiceSell() }</td>
 		   			
-		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getNCDServiceSell()*100/reportData.getNCDServiceTarget() }" /> %</td>
+		   			<td> 
+		   			<c:choose>
+		   				<c:when test="${reportData.getPNCServiceTarget()==0}">
+		   				
+		   				N/A
+		   				</c:when>
+		   				<c:otherwise>		   				
+		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getNCDServiceSell()*100/reportData.getNCDServiceTarget() }" /> 
+		   			
+		   				</c:otherwise>
+		   			</c:choose>
+		   			 </td>
+		   			
 		   			
 		   			<td> ${reportData.getIYCFServiceTarget() }/${reportData.getIYCFServiceSell() }</td>
 		   			
-		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getIYCFServiceSell()*100/reportData.getIYCFServiceTarget() }" /> %</td>
+		   			<td> 
+		   			
+		   			<c:choose>
+		   				<c:when test="${reportData.getPNCServiceTarget()==0}">
+		   				
+		   				N/A
+		   				</c:when>
+		   				<c:otherwise>		   				
+		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getIYCFServiceSell()*100/reportData.getIYCFServiceTarget() }" /> 
+		   			
+		   				</c:otherwise>
+		   			</c:choose>
+		   			 </td>
+		   			
+		   			
 		   			
 		   			
 		   			<td> ${reportData.getWomenServiceTarget() }/${reportData.getWomenServiceSell() }</td>
 		   			
-		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getWomenServiceSell()*100/reportData.getWomenServiceTarget() }" /> %</td>
+		   			<td> 
+		   			
+		   			<c:choose>
+		   				<c:when test="${reportData.getPNCServiceTarget()==0}">
+		   				
+		   				N/A
+		   				</c:when>
+		   				<c:otherwise>		   				
+		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getWomenServiceSell()*100/reportData.getWomenServiceTarget() }" /> 
+		   				</c:otherwise>
+		   			</c:choose>
+		   			 </td>
 		   			
 		   			
 		   			<td> ${reportData.getAdolescentServiceTarget() }/${reportData.getAdolescentServiceSell() }</td>
-		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getAdolescentServiceSell()*100/reportData.getAdolescentServiceTarget() }" /> %</td>
+		   			<td> 
+		   			<c:choose>
+		   				<c:when test="${reportData.getPNCServiceTarget()==0}">
+		   				
+		   				N/A
+		   				</c:when>
+		   				<c:otherwise>		   				
+		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getAdolescentServiceSell()*100/reportData.getAdolescentServiceTarget() }" /> 
+		   				 
+		   				</c:otherwise>
+		   			</c:choose>
 		   			
-		   			
-	   			
+		   			 </td>
 	 		</tr>
 		</c:forEach>
     </tbody>

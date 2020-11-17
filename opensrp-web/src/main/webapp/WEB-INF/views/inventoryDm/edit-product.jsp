@@ -166,7 +166,7 @@ $("#addProduct").submit(function(event) {
 			 xhr.setRequestHeader(header, token);
 		},
 		success : function(data) {
-			debugger;
+			
 		   var response = JSON.parse(data);
 		   $("#loading").hide();
 		   $("#serverResponseMessage").show();
