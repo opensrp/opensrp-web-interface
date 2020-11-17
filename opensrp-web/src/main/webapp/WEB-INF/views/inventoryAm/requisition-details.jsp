@@ -13,13 +13,22 @@
 	
 	
 
-
+<c:url var="backUrl" value="/inventoryam/requisition-list/${branchid }.html" />
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 	
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="btn btn-primary" href="${backUrl }">Back</a>
+				</li>
+		</ul>
 		<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class=center-caption>${branchInfo}</div>

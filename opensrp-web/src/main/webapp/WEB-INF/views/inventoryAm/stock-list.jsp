@@ -9,10 +9,13 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Stock History</title>
+<title>Stock list</title>
 	
 	
 <c:url var="stock_in_list" value="/rest/api/v1/stock/in-list" />
+
+<c:url var="backUrl" value="/inventoryam/stock-in.html" />
+<c:url var="viewUrl" value="/inventoryam/stock-list/view" />
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -25,6 +28,15 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="btn btn-primary" href="${backUrl }">Back</a>
+				</li>
+		</ul>
 		<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class=center-caption> ${branchInfo[0][1]} - ${branchInfo[0][2]}</div>
@@ -254,7 +266,7 @@ function filter(){
 function navigateTodetails(stockId,branchName,branchCode) {
 	var locale = "${locale}";
 	var branchString= "${branchInfo[0][1]}"+"-"+"${branchInfo[0][2]}";
-	window.location.assign("/opensrp-dashboard/inventoryam/stock-list/view/"+stockId+".html?lang="+locale+"&branch="+branchString+"");
+	window.location.assign("${viewUrl}/"+stockId+".html?lang="+locale+"&branch="+branchString+"&branchid=${id}");
 }
 </script>
 

@@ -12,6 +12,8 @@
 <title>Add Requisition</title>
 	
 	
+<c:url var="backUrl" value="/inventoryam/requisition-list/${branchInfo[0][0]}.html" />
+<c:url var="save_url" value="/rest/api/v1/requisition/save-update" />
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -20,13 +22,15 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
-		<%-- <div class="portlet-title">
-						<div class="center-caption">
-							<spring:message code="lbl.addRequisition"/>
-						</div>
-
-
-					</div> --%>
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="btn btn-primary" href="${backUrl }">Back</a>
+				</li>
+		</ul>
 		<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="center-caption">
@@ -66,13 +70,19 @@
 								</c:forEach>
 								</tbody>
 						</table>
-				<div class="text-center">
-					<button onclick="submitRequisition()" class="btn btn-primary"
-						value="confirm">Confirm All</button>
-
+						<div class=row>
+							<div class="col-md-12 form-group text-right">
+						    		<div class="row">
+								     	<div class="col-lg-12 ">
+								     	 <a class="btn btn-primary" href="${backUrl}">Cancel</a>
+											 <button  onclick="submitRequisition()" class="btn btn-primary" value="confirm">Confirm All</button>
+										</div>
+						            </div>
+						      </div>
+				
+						</div>
+					</div>
 				</div>
-			</div>
-							</div>
 				<!-- <div class="col-lg-12 form-group text-right">
 				<button onclick="submitRequisition()" class="btn btn-primary" value="confirm">Confirm All</button>
 			
@@ -184,7 +194,7 @@ function mapRowData() {
 			 $("#amountSelection").html("");
 			var requisitionId = $("#branchCode").text().trim();
 			var branchId = +$("#branchId").text();
-			var url = "/opensrp-dashboard/rest/api/v1/requisition/save-update";			
+			var url = '${save_url}';			
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			var formData;
@@ -217,7 +227,7 @@ function mapRowData() {
 				   
  				   if(response.status == "SUCCESS"){
  		            	setTimeout(function(){
- 		            		window.location.replace("/opensrp-dashboard/inventoryam/requisition-list/"+branchId+".html");
+ 		            		window.location.replace("${backUrl}");
  		                 }, 1000);
 				   }
 				   

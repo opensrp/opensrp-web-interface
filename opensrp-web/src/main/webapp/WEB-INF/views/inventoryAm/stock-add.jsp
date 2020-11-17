@@ -246,7 +246,7 @@ function createStockArray() {
 				stockObject["productId"] = +$(this).find('option:selected').val();
 			}
 			if(colIndex == 2) {
-				stockObject["debit"] = +$(this).find('input[type="text"]').val();
+				//stockObject["debit"] = +$(this).find('input[type="text"]').val();
 			}
 			
 			if(colIndex == 3) {
@@ -350,6 +350,7 @@ function saveStockData() {
 	            'stockDetailsDTOs': stockListArray
 	        };
 	console.log(formData)
+	
 	$(window).scrollTop(0);
 	event.preventDefault();
 	$.ajax({

@@ -17,10 +17,21 @@
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 <c:url var="save_stock_pass_url" value="/rest/api/v1/stock/save-update" />
+<c:url var="redirect_url" value="/inventoryam/pass-stock-inventory/${id }.html" />
+
 	
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="btn btn-primary" href="${redirect_url }">Back</a>
+				</li>
+		</ul>
 		<div class="row">
 			<div class="col-md-12">
 
@@ -79,10 +90,21 @@
 							</c:forEach>
 								</tbody>
 						</table>
-						<div class="text-center">
+						<div class=row>
+							<div class="col-md-12 form-group text-right">
+						    		<div class="row">
+								     	<div class="col-lg-12 ">
+								     	 <a class="btn btn-primary" href="${redirect_url}">Cancel</a>
+											 <button  onclick="saveStockData()" class="btn btn-primary" value="confirm">Save All</button>
+										</div>
+						            </div>
+						      </div>
+				
+						</div>
+						<!-- <div class="text-center">
 							<button type="submit" onclick="saveStockData()"
 								class="btn btn-primary" value="confirm">Save All</button>
-						</div>
+						</div> -->
 					</div>
 					
 				</div>		
@@ -197,7 +219,7 @@ function saveStockData() {
 	var branchId = parseInt("${id}");
 	var branchCode = "${branchInfo[0][2]}";
 	var sellToId = parseInt("${skid}");
-	var url =save_stock_pass_url  "/opensrp-dashboard/rest/api/v1/stock/save-update";			
+	var url ='${save_stock_pass_url}';			
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	var formData;
@@ -229,7 +251,7 @@ function saveStockData() {
 		   $("#serverResponseMessage").html(response.msg);
 			   if(response.status == "SUCCESS"){
 	            	setTimeout(function(){
-	            		window.location.replace("/opensrp-dashboard/inventoryam/pass-stock-inventory/"+branchId+".html");
+	            		window.location.replace('${redirect_url}');
 		                 }, 1000);
 		   }
 		   
