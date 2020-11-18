@@ -150,7 +150,7 @@
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 <script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
-
+<script src="<c:url value='/resources/chart/highcharts.js'/>"></script>
 <script>
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components

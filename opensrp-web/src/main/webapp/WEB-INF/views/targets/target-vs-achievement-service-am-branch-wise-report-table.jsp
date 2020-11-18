@@ -22,6 +22,23 @@
     </style>
 </head>
 <body>
+<% Object targets = request.getAttribute("jsonReportData"); %>
+
+<div class="row">
+	<div class="col-sm-offset-10 col-sm-2">
+		<select class="custom-select" id="visitCategory" style="width: 95%" onclick="reloadSkChart()">
+			<option value="initial">Please Select </option>
+			<option value="ANCService">ANC Package</option>
+			<option value="PNCService">PNC Package</option>
+			<option value="NCDService">NCD Package</option>
+			<option value="IYCFService">IYCF Package</option>
+			<option value="WOMENService">Women Package</option>
+			<option value="AdolescentService">Adolescent Package</option>
+		</select>
+	</div>
+</div>
+
+<div id="column-chart"></div>
 
 <table class="display table table-bordered table-striped" id="reportDataTable"
        style="width: 100%;">
@@ -164,4 +181,102 @@
 		</c:forEach>
     </tbody>
 </table>
+
+<script>
+
+	initialLoad();
+
+	function initialLoad() {
+		var reportData = <%= targets%>;
+		console.log(reportData);
+		var managers = [];
+		var percentages = [];
+		var totalTarget = 0, totalAchv = 0, result = 0;
+		for(var i=0; i < reportData.length; i++) {
+			managers.push(reportData[i].branchName);
+			totalTarget = reportData[i].ANCServiceTarget
+					+ reportData[i].AdolescentServiceTarget
+					+ reportData[i].IYCFServiceTarget
+					+ reportData[i].NCDServiceTarget
+					+ reportData[i].PNCServiceTarget
+					+ reportData[i].WomenServiceTarget;
+
+			totalSell = reportData[i].ANCServiceSell
+					+ reportData[i].AdolescentServiceSell
+					+ reportData[i].IYCFServiceSell
+					+ reportData[i].NCDServiceSell
+					+ reportData[i].PNCServiceSell
+					+ reportData[i].WomenServiceSell;
+
+			result = totalTarget === 0 ? 0 : (totalSell * 100) / totalTarget;
+
+			percentages.push(result);
+		}
+		reloadChart(managers, percentages);
+	}
+
+
+	function reloadChart(managers, percentages) {
+		Highcharts.chart('column-chart', {
+			chart: {
+				type: 'column'
+			},
+			title: {
+				text: 'Target vs Achievement'
+			},
+			subtitle: {
+				text: ''
+			},
+			xAxis: {
+				categories: managers,
+				crosshair: true
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: 'Average Achievement'
+				}
+			},
+			tooltip: {
+				headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+				pointFormat: '<tr><td style="color:{series.color};padding:0"> </td>' +
+						'<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
+				footerFormat: '</table>',
+				shared: true,
+				useHTML: true
+			},
+			plotOptions: {
+				column: {
+					pointPadding: 0.2,
+					borderWidth: 0
+				}
+			},
+			series: [{name:'', data: percentages}],
+		});
+
+	}
+
+	function reloadSkChart() {
+		var category =  $('#visitCategory').val();
+		var reportData = <%= targets %>;
+		var managers = [];
+		var percentages = [], result = 0;
+
+		if(category === 'initial') {
+			initialLoad();
+			return;
+		}
+
+		for(var i=0; i < reportData.length; i++) {
+			managers.push(reportData[i].branchName);
+			result = reportData[i][category+'Target'] === 0 ? 0 : (reportData[i][category+'Sell'] * 100) / reportData[i][category+'Target'];
+			console.log(reportData[category+'Sell'], '-----',reportData[category+'Target'] );
+			percentages.push(parseFloat(result.toFixed(2)));
+		}
+		console.log("percentages", percentages, " managers", managers);
+		reloadChart(managers, percentages);
+	}
+
+</script>
+
 </body>
