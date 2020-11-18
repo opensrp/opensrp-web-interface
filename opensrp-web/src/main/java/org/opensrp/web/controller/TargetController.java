@@ -259,6 +259,7 @@ public class TargetController {
 			totalList = targetService.getPMServiceReportByLocation(params);
 		}
 		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
 		model.addAttribute("type", managerOrLocation);
 		
 		return "targets/target-vs-achievement-service-pm-report-table";
@@ -295,6 +296,7 @@ public class TargetController {
 			totalList = targetService.getDMServiceReportByLocation(params);
 		}
 		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
 		model.addAttribute("type", managerOrLocation);
 		
 		return "targets/target-vs-achievement-service-dm-report-table";
@@ -355,7 +357,7 @@ public class TargetController {
 		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
 		
 		totalList = targetService.getAMServiceReportByBranch(params);
-		
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
 		model.addAttribute("reportDatas", totalList);
 		
 		return "targets/target-vs-achievement-service-am-branch-wise-report-table";
@@ -382,7 +384,7 @@ public class TargetController {
 		totalList = targetService.getAMServiceReportByProvider(params);
 		
 		model.addAttribute("reportDatas", totalList);
-		
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
 		return "targets/target-vs-achievement-service-am-provider-wise-report-table";
 	}
 	
@@ -460,6 +462,7 @@ public class TargetController {
             totalList = targetService.getForumReportForPMByManager(params);
         }
         model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
         model.addAttribute("type", managerOrLocation);
 
 		return "targets/target-vs-achv-forum-report-table-pm";
@@ -490,6 +493,7 @@ public class TargetController {
 
         }
         model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
         model.addAttribute("type", managerOrLocation);
 		return "targets/target-vs-achv-forum-report-table-dm";
 	}
@@ -513,6 +517,7 @@ public class TargetController {
         totalList = targetService.getForumReportForAMByBranch(params);
 
         model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
 		return "targets/target-vs-achv-forum-report-table-am-by-branch";
 	}
 
@@ -534,8 +539,8 @@ public class TargetController {
 
         totalList = targetService.getForumReportForAMBySK(params);
 
-        System.out.println(" sk list ====>"+ totalList.size());
         model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
 		return "targets/target-vs-achv-forum-report-table-am-by-sk";
 	}
 
@@ -543,6 +548,15 @@ public class TargetController {
 
 		Gson gson = new Gson();
 		JsonElement element = gson.toJsonTree(targetList, new TypeToken<List<TargetReportDTO>>() {}.getType());
+		System.out.println(element.getAsJsonArray());
+		return element.getAsJsonArray();
+
+	}
+
+	private JsonArray getTargetForumsAsJson(List<ForumTargetReportDTO> targetList){
+
+		Gson gson = new Gson();
+		JsonElement element = gson.toJsonTree(targetList, new TypeToken<List<ForumTargetReportDTO>>() {}.getType());
 		System.out.println(element.getAsJsonArray());
 		return element.getAsJsonArray();
 

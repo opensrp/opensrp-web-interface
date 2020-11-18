@@ -115,7 +115,7 @@
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
-
+<script src="<c:url value='/resources/chart/highcharts.js'/>"></script>
 
 <script>
     jQuery(document).ready(function() {
