@@ -28,7 +28,7 @@
     <div class="col-sm-offset-10 col-sm-2">
         <select class="custom-select" id="visitCategory" style="width: 95%" onclick="reloadSkChart()">
             <option value="">Please Select </option>
-            <option value="pnc">Adult Forum</option>
+            <option value="adult">Adult Forum</option>
             <option value="ncd">NCD Forum</option>
             <option value="iycf">IYCF Forum</option>
             <option value="women">Women Forum</option>
@@ -108,54 +108,100 @@
     </c:forEach>
     </tbody>
 </table>
+
 <script>
 
-    var reportData = <%= targets%>;
-    console.log(reportData);
-    var managers = [];
-    var percentages = []
-    for(var i=0; i < reportData.length; i++) {
-        managers.push(reportData[i].firstName + ' '+ reportData[i].lastName);
-        percentages.push(reportData[i].achievementInPercentage);
+    initialLoad();
+
+    function initialLoad() {
+        var reportData = <%= targets%>;
+        console.log(reportData);
+        var managers = [];
+        var percentages = [];
+        var totalTarget = 0, totalAchv = 0, result = 0;
+        for(var i=0; i < reportData.length; i++) {
+            managers.push(reportData[i].fullName);
+            totalTarget = reportData[i].adolescentTarget
+                + reportData[i].adultTarget
+                + reportData[i].iycfTarget
+                + reportData[i].ncdTarget
+                + reportData[i].womenTarget;
+
+            totalAchv = reportData[i].adolescentAchv
+                + reportData[i].adultAchv
+                + reportData[i].iycfAchv
+                + reportData[i].ncdAchv
+                + reportData[i].womenAchv;
+
+            result = totalTarget === 0 ? 0 : (totalAchv * 100) / totalTarget;
+            console.log("result: ", result, "  totalTarget: ", totalTarget,  " totalAchv: ", totalAchv);
+            percentages.push(result);
+        }
+        reloadChart(managers, percentages);
     }
 
-    Highcharts.chart('column-chart', {
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: 'Target vs Achievement'
-        },
-        subtitle: {
-            text: ''
-        },
-        xAxis: {
-            categories: managers,
-            crosshair: true
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: 'Average Achievement'
-            }
-        },
-        tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0"> </td>' +
-                '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
-        },
-        plotOptions: {
-            column: {
-                pointPadding: 0.2,
-                borderWidth: 0
-            }
-        },
-        series: [{name:'', data: percentages}],
-    });
 
+    function reloadChart(managers, percentages) {
+        Highcharts.chart('column-chart', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Target vs Achievement'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: managers,
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Average Achievement'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0"> </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{name:'', data: percentages}],
+        });
+
+    }
+
+    function reloadSkChart() {
+        var category =  $('#visitCategory').val();
+        var reportData = <%= targets %>;
+        var managers = [];
+        var percentages = [], result = 0;
+
+        if(category === '') {
+            initialLoad();
+            return;
+        }
+
+        for(var i=0; i < reportData.length; i++) {
+            managers.push(reportData[i].fullName);
+            result = reportData[i][category+'Target'] === 0 ? 0 : (reportData[i][category+'Achv'] * 100) / reportData[i][category+'Target'];
+            console.log(reportData[i][category+'Achv'], '-----',reportData[i][category+'Target'] );
+            percentages.push(parseFloat(result.toFixed(2)));
+        }
+        console.log("percentages", percentages, " managers", managers);
+        reloadChart(managers, percentages);
+    }
 
 </script>
+
 </body>
