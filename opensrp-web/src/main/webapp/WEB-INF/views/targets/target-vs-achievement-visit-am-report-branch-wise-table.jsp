@@ -9,9 +9,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="security"
            uri="http://www.springframework.org/security/tags"%>
-<%
-    List<AggregatedBiometricDTO> aggregateBiometricdReports = (List<AggregatedBiometricDTO>) session.getAttribute("aggregatedBiometricReport");
-%>
 
 <head>
     <style>
@@ -24,6 +21,10 @@
     </style>
 </head>
 <body>
+
+<% Object targets = request.getAttribute("jsonReportData"); %>
+
+<div id="column-chart"></div>
 
 <table class="display table table-bordered table-striped" id="reportDataTable"
        style="width: 100%;">
@@ -49,4 +50,54 @@
 		</c:forEach>
     </tbody>
 </table>
+
+<script>
+
+	var reportData = <%= targets%>;
+	console.log(reportData);
+	var branches = [];
+	var percentages = []
+	for(var i=0; i < reportData.length; i++) {
+		branches.push(reportData[i].branchName );
+		percentages.push(reportData[i].achievementInPercentage);
+	}
+
+	Highcharts.chart('column-chart', {
+		chart: {
+			type: 'column'
+		},
+		title: {
+			text: 'Target vs Achievement'
+		},
+		subtitle: {
+			text: ''
+		},
+		xAxis: {
+			categories: branches,
+			crosshair: true
+		},
+		yAxis: {
+			min: 0,
+			title: {
+				text: 'Average Achievement'
+			}
+		},
+		tooltip: {
+			headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+			pointFormat: '<tr><td style="color:{series.color};padding:0"> </td>' +
+					'<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
+			footerFormat: '</table>',
+			shared: true,
+			useHTML: true
+		},
+		plotOptions: {
+			column: {
+				pointPadding: 0.2,
+				borderWidth: 0
+			}
+		},
+		series: [{name:'', data: percentages}],
+	});
+
+</script>
 </body>

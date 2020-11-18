@@ -23,6 +23,29 @@
 </head>
 <body>
 
+<% Object targets = request.getAttribute("jsonReportData"); %>
+
+<div class="row">
+	<div class="col-sm-offset-10 col-sm-2">
+		<select class="custom-select" id="visitCategory" style="width: 95%" onclick="reloadSkChart()">
+			<option value="">Please Select </option>
+			<option value="hhVisitAchievementInPercentage">Household Visit</option>
+			<option value="elcoVisitAchievementInPercentage">ELCO Visit</option>
+			<option value="methodsUsersVisitAchievementInPercentage">Methods Users</option>
+			<option value="adolescentMethodsUsersVisitAchievementInPercentage">Adolescent Methods Users</option>
+			<option value="pregnancydentifiedVisitAchievementInPercentage">Pregnancy Identified</option>
+			<option value="deliveryVisitAchievementInPercentage">Delivery</option>
+			<option value="institutionalizedDeliveryVisitAchievementInPercentage">Institutionalized Delivery</option>
+			<option value="Child06VisitAchievementInPercentage">Child Visit(0-6 months)</option>
+			<option value="Child724VisitAchievementInPercentage">Child Visit(7-24 months)</option>
+			<option value="Child1836VisitAchievementInPercentage">Child Visit(18-36 months)</option>
+			<option value="immunizationVisitAchievementInPercentage">Immunization(0-59 months)</option>
+			<option value="pregnantVisitAchievementInPercentage">Pregnant Visit</option>
+		</select>
+	</div>
+</div>
+<div id="column-chart"></div>
+
 <table class="stripe display table table-bordered table-striped" id="reportDataTable"
        style="width: 100%;">
     <thead>
@@ -140,4 +163,65 @@
 		</c:forEach>
     </tbody>
 </table>
+
+<script>
+
+	function reloadChart(visitCategory, reportData) {
+
+		console.log("visit category", visitCategory);
+		var branches = [];
+		var percentages = [];
+		for (var i = 0; i < reportData.length; i++) {
+			branches.push(reportData[i].firstName + ' ' + reportData[i].lastName);
+			percentages.push(reportData[i][visitCategory]);
+		}
+
+		Highcharts.chart('column-chart', {
+			chart: {
+				type: 'column'
+			},
+			title: {
+				text: 'Target vs Achievement'
+			},
+			subtitle: {
+				text: ''
+			},
+			xAxis: {
+				categories: branches,
+				crosshair: true
+			},
+			yAxis: {
+				min: 0,
+				title: {
+					text: 'Average Achievement'
+				}
+			},
+			tooltip: {
+				headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+				pointFormat: '<tr><td style="color:{series.color};padding:0"> </td>' +
+						'<td style="padding:0"><b>{point.y:.1f} </b></td></tr>',
+				footerFormat: '</table>',
+				shared: true,
+				useHTML: true
+			},
+			plotOptions: {
+				column: {
+					pointPadding: 0.2,
+					borderWidth: 0
+				}
+			},
+			series: [{name: '', data: percentages}],
+		});
+	}
+
+
+	function reloadSkChart() {
+
+		var reportData = <%= targets%>;
+		console.log(reportData);
+		reloadChart($('#visitCategory').val(), reportData);
+	}
+
+	reloadChart("",[]);
+</script>
 </body>
