@@ -8,6 +8,8 @@ public class InventoryDTO {
 	
 	private Long id;
 	
+	private Integer branchId;
+	
 	private String name;
 	
 	private String branchName;
@@ -50,6 +52,14 @@ public class InventoryDTO {
 	
 	public Long getId() {
 		return id;
+	}
+	
+	public Integer getBranchId() {
+		return branchId;
+	}
+	
+	public void setBranchId(Integer branchId) {
+		this.branchId = branchId;
 	}
 	
 	public void setId(Long id) {

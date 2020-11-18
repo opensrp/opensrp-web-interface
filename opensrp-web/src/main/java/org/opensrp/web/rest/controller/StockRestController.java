@@ -42,7 +42,7 @@ public class StockRestController {
 	public ResponseEntity<String> newPatient(@RequestBody StockDTO dto) throws Exception {
 		
 		JSONObject response = new JSONObject();
-		System.err.println("DDD;" + dto);
+		
 		try {
 			
 			Integer isSave = stockService.saveAll(dto);
@@ -83,7 +83,7 @@ public class StockRestController {
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
 		}
 		catch (Exception e) {
-			e.printStackTrace();	
+			e.printStackTrace();
 			response.put("msg", e.getMessage());
 			return new ResponseEntity<>(new Gson().toJson(response.toString()), OK);
 		}
@@ -137,7 +137,7 @@ public class StockRestController {
 			name = "%" + name + "%";
 		}
 		int roleId = Integer.parseInt(request.getParameter("roleId"));
-		if(roleId == 0 && StringUtils.isBlank(name)) {
+		if (roleId == 0 && StringUtils.isBlank(name)) {
 			roleId = Roles.SK.getId();
 		}
 		List<InventoryDTO> stockPassUserList = stockService.getPassStockUserList(branchId, name, roleId, length, start,
@@ -169,11 +169,13 @@ public class StockRestController {
 		int skId = Integer.parseInt(request.getParameter("skId"));
 		int year = Integer.parseInt(request.getParameter("year"));
 		int month = Integer.parseInt(request.getParameter("month"));
+		int managerId = Integer.parseInt(request.getParameter("manager"));
 		
-		List<InventoryDTO> stockInList = stockService.getsellToSSList(branchId, skId, division, district, upazila, year,
-		    month, length, start, orderColumn, orderDirection);
+		List<InventoryDTO> stockInList = stockService.getsellToSSList(managerId, branchId, skId, division, district,
+		    upazila, year, month, length, start, orderColumn, orderDirection);
 		
-		int stockInListCount = stockService.getsellToSSListCount(branchId, skId, division, district, upazila, year, month);
+		int stockInListCount = stockService.getsellToSSListCount(managerId, branchId, skId, division, district, upazila,
+		    year, month);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		
@@ -219,7 +221,6 @@ public class StockRestController {
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	
-	
 	@RequestMapping(value = "/stock-adjust-history-list", method = RequestMethod.GET)
 	public ResponseEntity<String> getStockAdjustHistoryList(HttpServletRequest request) throws JSONException {
 		Integer start = Integer.valueOf(request.getParameter("start"));
@@ -234,7 +235,8 @@ public class StockRestController {
 		String search = request.getParameter("search");
 		int branchId = Integer.parseInt(request.getParameter("branchId"));
 		
-		List<StockAdjustDTO> stockAdjustList = stockService.getAdjustHistoryList(0, branchId, startDate, endDate, start, length);
+		List<StockAdjustDTO> stockAdjustList = stockService.getAdjustHistoryList(0, branchId, startDate, endDate, start,
+		    length);
 		
 		int stockAdjustListCount = stockService.getAdjustStockListCount(branchId, startDate, endDate);
 		

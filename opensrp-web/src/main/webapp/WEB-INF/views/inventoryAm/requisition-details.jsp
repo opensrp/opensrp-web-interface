@@ -9,11 +9,11 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Requistion Details</title>
+<title>Requisition Details</title>
 	
 	
 
-<c:url var="backUrl" value="/inventoryam/requisition-list/${branchid }.html" />
+<c:url var="backUrl" value="${header.referer}" />
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 	

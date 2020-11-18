@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <c:url var="location_url" value="/child-location-options" />
-<c:url var="branch_url" value="/branch-list-options" />
+<c:url var="branch_url" value="/branch-list-options-inventoy" />
 <div class="row">
     <div class="col-lg-3 form-group">
         <label ><spring:message code="lbl.division"></spring:message> </label>
@@ -95,8 +95,8 @@
             beforeSend: function() {},
             success : function(data) {
                 $("#branchList").html(data);
-                $("#branchList > option").prop("selected","selected");
-                $("#branchList").trigger("change");
+               /*  $("#branchList > option").prop("selected","selected");
+                $("#branchList").trigger("change"); */
             },
             error : function(e) {
                 console.log("ERROR: ", e);

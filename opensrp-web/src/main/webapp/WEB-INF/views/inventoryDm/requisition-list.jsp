@@ -9,14 +9,15 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<%
-    List<Object[]> divisions = (List<Object[]>) session.getAttribute("divisions");
-%>
 
-<title>Requisition</title>
+
+<title>Requisition list</title>
 	
 	
+<c:url var="requisition_list_url" value="/rest/api/v1/requisition/list" />
+<c:url var="branch_list_url" value="/inventorydm/user-by-branch/" />
 
+<c:url var="viewURL" value="/inventory/requisition-details" />
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
@@ -31,7 +32,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="center-caption">
-							Requisition(AM)
+							Requisition list
 						</div>
 					</div>				
 					<div class="portlet-body">
@@ -97,16 +98,18 @@
 									</select>
 								</div>
 								
-								<div class="col-lg-3 form-group">
-								    <label for="from"><spring:message code="lbl.from"></spring:message><span class="text-danger">*</span> :</label>
-									<input type="date" class="form-control" id="from">
-									<span class="text-danger" id="startDateValidation"></span>
-								</div> 
-								<div class="col-lg-3 form-group">
-									<label for="to"><spring:message code="lbl.to"></spring:message><span class="text-danger">*</span> :</label>
-									<input type="date" class="form-control" id="to">
-									<span class="text-danger" id="endDateValidation"></span>
-								</div>
+								<div class="col-lg-2 form-group">
+								<label for="from"><spring:message code="lbl.from"></spring:message><span
+									class="text-danger"> </span> </label> <input readonly="readonly" type="text"
+									class="form-control date" id="from"> <span class="text-danger"
+									id="startDateValidation"></span>
+							</div>
+							<div class="col-lg-2 form-group">
+								<label for="to"><spring:message code="lbl.to"></spring:message><span
+									class="text-danger"> </span> </label> <input readonly="readonly" type="text"
+									class="form-control date" id="to"> <span class="text-danger"
+									id="endDateValidation"></span>
+							</div> 
 								
 							</div>
 							<div class="row">
@@ -152,9 +155,25 @@ jQuery(document).ready(function() {
    //TableAdvanced.init();
 	//$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
 	$('#branchList').select2({dropdownAutoWidth : true});
-	var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-	var startDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
-	var endDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));
+	var dateToday = new Date();
+	var dates = $(".date").datepicker({
+	    dateFormat: 'yy-mm-dd',
+	    maxDate: dateToday,
+	    onSelect: function(selectedDate) {
+	        var option = this.id == "from" ? "minDate" : "maxDate",
+	            instance = $(this).data("datepicker"),
+	            date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+	        dates.not(this).datepicker("option", option, date);
+	    }
+	});
+	dates.datepicker('setDate', new Date()); 
+	$(".date-picker-year").focus(function () {
+	    $(".ui-datepicker-calendar").hide();
+	    $(".ui-datepicker-current").hide();
+	});
+	
+	var startDate = $('#from').val();
+	var endDate = $('#to').val();
 	requisitionList = $('#requisitionListForAm').DataTable({
            bFilter: false,
            serverSide: true,
@@ -169,15 +188,15 @@ jQuery(document).ready(function() {
                { width: "20%", targets: 5 }
            ],
            ajax: {
-               url: "/opensrp-dashboard/rest/api/v1/requisition/list",
+               url: "${requisition_list_url}",
                data: function(data){
 					data.division = 0;
 					data.district = 0;
 					data.upazila = 0;
 					data.branch = 0;
 					data.requisitor = 0;
-					data.startDate = startDateDm,
-					data.endDate = endDateDm
+					data.startDate = startDate,
+					data.endDate = endDate
 					
                },
                dataSrc: function(json){
@@ -235,7 +254,7 @@ function filter(){
             { width: "20%", targets: 5 }
         ],
         ajax: {
-            url: "/opensrp-dashboard/rest/api/v1/requisition/list",
+            url: "${requisition_list_url}",
             data: function(data){
 					data.division = division;
 					data.district = district;
@@ -268,7 +287,7 @@ function filter(){
 
 $("#branchList").change(function (event) {
 	let branchId = +$('#branchList').val();
-	var url = "/opensrp-dashboard/inventorydm/user-by-branch/"+branchId;
+	var url = "${branch_list_url}/"+branchId;
 	$("#selectRequisitionBy").html("");
 	$.ajax({
 		type : "GET",
@@ -296,7 +315,7 @@ $("#branchList").change(function (event) {
 function navigateTodetails(requisitionId,branchName,branchCode) {
 	var locale = "${locale}";
 	var branchString= branchName+"-"+branchCode;
-	window.location.assign("/opensrp-dashboard/inventory/requisition-details/"+requisitionId+".html?lang="+locale+"&branch="+branchString+"");
+	window.location.assign("${viewURL}/"+requisitionId+".html?lang="+locale+"&branch="+branchString+"&branchid=${branchInfo[0][0]}");
 }
 
 

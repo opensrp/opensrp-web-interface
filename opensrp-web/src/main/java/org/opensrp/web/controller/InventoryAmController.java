@@ -210,6 +210,7 @@ public class InventoryAmController {
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
+		model.addAttribute("manager", loggedInUser.getId());
 		return "inventoryAm/sell-to-ss-list";
 	}
 	
@@ -262,7 +263,7 @@ public class InventoryAmController {
 		return "inventoryAm/user-wise-stock-pass-sell";
 	}
 	
-	@RequestMapping(value = "inventory/ss-sales/view/{branch_id}/{id}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "inventoryam/ss-sales/view/{branch_id}/{id}.html", method = RequestMethod.GET)
 	public String selltoSSDetails(Model model, Locale locale, @PathVariable("branch_id") int branchId,
 	                              @PathVariable("id") int userId) {
 		model.addAttribute("branchId", branchId);

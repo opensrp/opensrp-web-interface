@@ -191,8 +191,8 @@ function openAdjustStockModal(id,currentStock,productName) {
 function filter(){
 
 var branch = +$('#branchSelect').val();
-var startDate = $('#startDate').val();
-var endDate = $('#endDate').val();
+var startDate = $('#from').val();
+var endDate = $('#to').val();
 if(startDate == "") {
 	//startDate = $.datepicker.formatDate('yy-mm-dd', new Date());
 	$("#startDateValidation").html("<strong>Please fill out this field</strong>");

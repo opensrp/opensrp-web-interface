@@ -269,19 +269,20 @@ public class StockService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<InventoryDTO> getsellToSSList(int branchId, int skId, int division, int district, int upazila, int year,
-	                                          int month, Integer length, Integer start, String orderColumn,
-	                                          String orderDirection) {
+	public List<InventoryDTO> getsellToSSList(int managerId, int branchId, int skId, int division, int district,
+	                                          int upazila, int year, int month, Integer length, Integer start,
+	                                          String orderColumn, String orderDirection) {
 		
 		Session session = getSessionFactory();
 		List<InventoryDTO> dtos = new ArrayList<>();
 		
-		String hql = "select ss_id id,sell_amount salesPrice, purchase_amount purchasePrice, sk_name SKName,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName from core.sell_report(:branchId,:skId,:division,:district,:upazila,:year,:month,:start,:length)";
-		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
-		        .addScalar("salesPrice", StandardBasicTypes.FLOAT).addScalar("purchasePrice", StandardBasicTypes.FLOAT)
-		        .addScalar("SKName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
-		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
-		        .addScalar("lastName", StandardBasicTypes.STRING).setInteger("branchId", branchId).setInteger("skId", skId)
+		String hql = "select branch_id branchId, ss_id id,sell_amount salesPrice, purchase_amount purchasePrice, sk_name SKName,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName from core.sell_report(:manager,:branchId,:skId,:division,:district,:upazila,:year,:month,:start,:length)";
+		Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
+		        .addScalar("id", StandardBasicTypes.LONG).addScalar("salesPrice", StandardBasicTypes.FLOAT)
+		        .addScalar("purchasePrice", StandardBasicTypes.FLOAT).addScalar("SKName", StandardBasicTypes.STRING)
+		        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("branchCode", StandardBasicTypes.STRING)
+		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
+		        .setInteger("manager", managerId).setInteger("branchId", branchId).setInteger("skId", skId)
 		        .setInteger("division", division).setInteger("district", district).setInteger("upazila", upazila)
 		        .setInteger("year", year).setInteger("month", month).setInteger("length", length).setInteger("start", start)
 		        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
@@ -291,15 +292,16 @@ public class StockService extends CommonService {
 	}
 	
 	@Transactional
-	public int getsellToSSListCount(int branchId, int skId, int division, int district, int upazila, int year, int month) {
+	public int getsellToSSListCount(int managerId, int branchId, int skId, int division, int district, int upazila,
+	                                int year, int month) {
 		
 		Session session = getSessionFactory();
 		BigInteger total = null;
 		
-		String hql = "select * from core.sell_report_count(:branchId,:skId,:division,:district,:upazila,:year,:month)";
-		Query query = session.createSQLQuery(hql).setInteger("branchId", branchId).setInteger("skId", skId)
-		        .setInteger("division", division).setInteger("district", district).setInteger("upazila", upazila)
-		        .setInteger("year", year).setInteger("month", month);
+		String hql = "select * from core.sell_report_count(:manager,:branchId,:skId,:division,:district,:upazila,:year,:month)";
+		Query query = session.createSQLQuery(hql).setInteger("manager", managerId).setInteger("branchId", branchId)
+		        .setInteger("skId", skId).setInteger("division", division).setInteger("district", district)
+		        .setInteger("upazila", upazila).setInteger("year", year).setInteger("month", month);
 		
 		total = (BigInteger) query.uniqueResult();
 		
@@ -327,29 +329,22 @@ public class StockService extends CommonService {
 			}
 			patient.put(dto.getSKName());
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
-			if (roleId != 32) {
+			/*if (roleId != 32) {
 				patient.put("0"); // target amount for DIvM
-			}
+			}*/
 			patient.put(dto.getSalesPrice());
 			if (roleId != 32) {
 				patient.put(dto.getPurchasePrice()); // for DIvM
 			}
 			if (roleId == 32) {
-				String view = "<div class='col-sm-12 form-group'><a \" href=\"/opensrp-dashboard/inventoryam/individual-ss-sell/"
-				        + branchId
-				        + "/"
-				        + dto.getId()
-				        + ".html\"><strong>Sell Products </strong></a>  | "
-				        + "<a \" href=\"/opensrp-dashboard/inventory/ss-sales/view/"
-				        + branchId
-				        + "/"
-				        + dto.getId()
-				        + ".html\"><strong>View Details </strong></a> " + "</div>";
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"individual-ss-sell/" + branchId + "/"
+				        + dto.getId() + ".html\"><strong>Sell Products </strong></a>  | " + "<a \" href=\"/ss-sales/view/"
+				        + branchId + "/" + dto.getId() + ".html\"><strong>View Details </strong></a> " + "</div>";
 				
 				patient.put(view);
 			} else {
-				String view = "<div class='col-sm-12 form-group'><a \" href=\"/opensrp-dashboard/inventory/ss-sales/view/"
-				        + branchId + "/" + dto.getId() + ".html\"><strong>View details </strong></a> </div>";
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"ss-sales/view/" + dto.getBranchId() + "/"
+				        + dto.getId() + ".html\"><strong>View details </strong></a> </div>";
 				patient.put(view);
 			}
 			array.put(patient);

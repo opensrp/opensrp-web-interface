@@ -11,7 +11,6 @@ import org.opensrp.common.util.ProductType;
 import org.opensrp.common.util.Roles;
 import org.opensrp.core.dto.BranchDTO;
 import org.opensrp.core.dto.ProductDTO;
-import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Product;
 import org.opensrp.core.entity.ProductRole;
 import org.opensrp.core.entity.Role;
@@ -155,10 +154,25 @@ public class InventoryDmController {
 	@RequestMapping(value = "inventorydm/ss-sales-report.html", method = RequestMethod.GET)
 	public String ssSellReportForDm(Model model, HttpSession session, Locale locale) {
 		model.addAttribute("locale", locale);
-		List<Branch> branches = branchService.findAll("Branch");
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<BranchDTO> branches = targetService.getBranchListByUserIds(loggedInUser.getId() + "");
 		model.addAttribute("branches", branches);
 		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
+		model.addAttribute("manager", loggedInUser.getId());
+		
 		return "inventoryDm/ss-sales-report";
+	}
+	
+	@RequestMapping(value = "inventorydm/ss-sales/view/{branch_id}/{id}.html", method = RequestMethod.GET)
+	public String selltoSSDetails(Model model, Locale locale, @PathVariable("branch_id") int branchId,
+	                              @PathVariable("id") int userId) {
+		model.addAttribute("branchId", branchId);
+		model.addAttribute("userId", userId);
+		model.addAttribute("titleType", "Sell");
+		model.addAttribute("type", "'SELL'");
+		model.addAttribute("user", stockService.getUserAndBrachByuserId(userId));
+		model.addAttribute("locale", locale);
+		return "inventoryDm/user-wise-stock-pass-sell";
 	}
 	
 }

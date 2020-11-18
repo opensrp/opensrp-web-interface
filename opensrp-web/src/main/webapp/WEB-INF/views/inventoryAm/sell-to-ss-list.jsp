@@ -462,14 +462,14 @@
 			serverSide : true,
 			processing : true,
 			columnDefs : [ {
-				targets : [ 0, 1, 2, 3, 4, 5, 6 ],orderable : false}, 
+				/* targets : [ 0, 1, 2, 3, 4, 5, 6 ],orderable : false}, 
 				{width : "5%",targets : 0,"visible" : false}, 
 				{width : "20%",targets : 1}, 
 				{width : "20%",targets : 2}, 
 				{width : "20%",targets : 3},
 				{width : "5%",targets : 4}, 
 				{width : "5%",targets : 5},
-				{width : "25%",targets : 6
+				{width : "25%",targets : 6 */
 			}],
 			ajax : {
 				url : "${sell_to_ss_list}",
@@ -481,6 +481,7 @@
 					data.district = 0;
 					data.upazila = 0;
 					data.skId = 0;
+					 data.manager="${manager}";
 
 				},
 				dataSrc : function(json) {
@@ -520,14 +521,14 @@
 			serverSide : true,
 			processing : true,
 			columnDefs : [ {
-				targets : [ 0, 1, 2, 3, 4, 5, 6 ],orderable : false}, 
+				/* targets : [ 0, 1, 2, 3, 4, 5, 6 ],orderable : false}, 
 				{width : "5%",targets : 0,"visible" : false}, 
 				{width : "20%",targets : 1}, 
 				{width : "20%",targets : 2}, 
 				{width : "20%",targets : 3},
 				{width : "5%",targets : 4}, 
 				{width : "5%",targets : 5},
-				{width : "25%",targets : 6
+				{width : "25%",targets : 6 */
 			}],
 			ajax : {
 				url : "${sell_to_ss_list}",
@@ -542,6 +543,7 @@
 					data.district = 0;
 					data.upazila = 0;
 					data.skId = skId;
+					 data.manager=0;
 				},
 				dataSrc : function(json) {
 					if (json.data) {
