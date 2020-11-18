@@ -10,6 +10,10 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.ForumTargetReportDTO;
@@ -224,6 +228,7 @@ public class TargetController {
 			totalList = targetService.getPMVisitReportByLocation(params);
 		}
 		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
 		model.addAttribute("type", managerOrLocation);
 		
 		return "targets/target-vs-achievement-visit-pm-report";
@@ -325,6 +330,7 @@ public class TargetController {
 			totalList = targetService.getDMVisitReportByLocation(params);
 		}
 		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
 		model.addAttribute("type", managerOrLocation);
 		
 		return "targets/target-vs-achievement-visit-dm-report-table";
@@ -401,7 +407,7 @@ public class TargetController {
 		totalList = targetService.getAMVisitReportByBranch(params);
 		
 		model.addAttribute("reportDatas", totalList);
-		
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
 		return "targets/target-vs-achievement-visit-am-report-branch-wise-table";
 	}
 	
@@ -426,7 +432,7 @@ public class TargetController {
 		totalList = targetService.getAMVisitReportByProvider(params);
 		
 		model.addAttribute("reportDatas", totalList);
-		
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
 		return "targets/target-vs-achievement-visit-am-provider-wise-report-table";
 	}
 
@@ -531,6 +537,15 @@ public class TargetController {
         System.out.println(" sk list ====>"+ totalList.size());
         model.addAttribute("reportDatas", totalList);
 		return "targets/target-vs-achv-forum-report-table-am-by-sk";
+	}
+
+	private JsonArray getTargetsAsJson(List<TargetReportDTO> targetList){
+
+		Gson gson = new Gson();
+		JsonElement element = gson.toJsonTree(targetList, new TypeToken<List<TargetReportDTO>>() {}.getType());
+		System.out.println(element.getAsJsonArray());
+		return element.getAsJsonArray();
+
 	}
 	
 }
