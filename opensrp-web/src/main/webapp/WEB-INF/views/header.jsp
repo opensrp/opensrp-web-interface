@@ -265,7 +265,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						
 					</ul>
 				</li>
-					<%
+					<%-- <%
 						if (PERM_PRODUCT_LIST) {
 					%>
 					<li><a href="<c:url value="/inventorydm/products-list.html?lang=${locale}"/>"><i
@@ -274,7 +274,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						</span> </a></li>
 					<%
 						}
-					%>
+					%> --%>
 					<%
 						if (PERM_TARGET_LIST) {
 					%>

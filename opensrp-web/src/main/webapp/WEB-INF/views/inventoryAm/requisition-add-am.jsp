@@ -67,7 +67,7 @@
 										<td>${ product.stock }</td>
 										<td><input type="number"  min="1" oninput="this.value = Math.abs(this.value)" id="requisitionAmount" name ="requisitionAmount"><span class="text-danger" id="amountSelection"></span></td>
 									</tr>
-								</c:forEach>
+							</c:forEach>
 								</tbody>
 						</table>
 						<div class=row>

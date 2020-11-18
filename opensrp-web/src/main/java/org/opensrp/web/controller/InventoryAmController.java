@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.dto.RequisitionQueryDto;
 import org.opensrp.common.util.Roles;
+import org.opensrp.core.dto.BranchDTO;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.dto.StockAdjustDTO;
 import org.opensrp.core.entity.Branch;
@@ -15,6 +16,7 @@ import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.ProductService;
 import org.opensrp.core.service.RequisitionService;
 import org.opensrp.core.service.StockService;
+import org.opensrp.core.service.TargetService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +41,9 @@ public class InventoryAmController {
 	
 	@Autowired
 	private StockService stockService;
+	
+	@Autowired
+	private TargetService targetService;
 	
 	@RequestMapping(value = "inventoryam/myinventory.html", method = RequestMethod.GET)
 	public String myInventory(Model model, Locale locale) {
@@ -277,7 +282,8 @@ public class InventoryAmController {
 				model.addAttribute("isShowBranch", true);
 			}
 		}
-		List<Branch> branches = branchService.findAll("Branch");
+		/*List<Branch> branches = branchService.findAll("Branch");*/
+		List<BranchDTO> branches = targetService.getBranchListByUserIds(loggedInUser.getId() + "");
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		return "inventoryAm/adjust-history-list";

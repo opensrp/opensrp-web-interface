@@ -15,12 +15,16 @@
 
 <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
 
+<c:url var="adjust_list_url" value="/rest/api/v1/stock/stock-adjust-history-list" />
+
+
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		
 		<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="center-caption">
@@ -31,21 +35,23 @@
 					</div>
 		
 					<div class="portlet-body">
-					<div class="row">
-					<div class="col-lg-3 form-group">
-								    <label for="from"><spring:message code="lbl.from"></spring:message><span class="text-danger">*</span> :</label>
-									<input type="date" onkeydown="return false" class="form-control" id="startDate">
-									<span class="text-danger" id="startDateValidation"></span>
-								</div> 
-								<div class="col-lg-3 form-group">
-									<label for="to"><spring:message code="lbl.to"></spring:message><span class="text-danger">*</span> :</label>
-									<input type="date" onkeydown="return false" class="form-control" id="endDate">
-									<span class="text-danger" id="endDateValidation"></span>
-								</div>
+							<div class="row">
+								<div class="col-lg-2 form-group">
+								<label for="from"><spring:message code="lbl.from"></spring:message><span
+									class="text-danger"> </span> </label> <input readonly="readonly" type="text"
+									class="form-control date" id="from"> <span class="text-danger"
+									id="startDateValidation"></span>
+							</div>
+							<div class="col-lg-2 form-group">
+								<label for="to"><spring:message code="lbl.to"></spring:message><span
+									class="text-danger"> </span> </label> <input readonly="readonly" type="text"
+									class="form-control date" id="to"> <span class="text-danger"
+									id="endDateValidation"></span>
+							</div> 
 								
-								<c:if test="${isShowBranch}">
+								
 									<div class="col-lg-3 form-group">
-									<label for="to"><spring:message code="lbl.branch"></spring:message> :</label>
+									<label for="to"><spring:message code="lbl.branch"></spring:message> </label>
 									<select id=branchSelect class="form-control" name="branchSelect" required>
 										<option value="0"><spring:message
 												code="lbl.pleaseSelect" /></option>
@@ -57,13 +63,13 @@
 										<span class="text-danger" id="branchSelectionValidation"></span>
 									</p>
 								</div>
-								</c:if>
+								
 							
 								<div class="col-lg-12 form-group text-right">
 									<button type="button" onclick="filter()"  class="btn btn-primary">Search</button>
 								</div>
 
-					</div>
+							</div>
 					
 						<table class="table table-striped table-bordered" id="adjustHistoryList">
 							<thead>
@@ -92,6 +98,22 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script>
+
+var dateToday = new Date();
+	var dates = $(".date").datepicker({
+    dateFormat: 'yy-mm-dd',
+    maxDate: dateToday,
+    onSelect: function(selectedDate) {
+        var option = this.id == "from" ? "minDate" : "maxDate",
+            instance = $(this).data("datepicker"),
+            date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+        dates.not(this).datepicker("option", option, date);
+    }
+});
+	$(".date-picker-year").focus(function () {
+    $(".ui-datepicker-calendar").hide();
+    $(".ui-datepicker-current").hide();
+});
 let stockAdjustList;
 
 jQuery(document).ready(function() {       
@@ -118,7 +140,7 @@ jQuery(document).ready(function() {
 	               { width: "15%", targets: 8 }
 		       ],
 		       ajax: {
-		           url: "/opensrp-dashboard/rest/api/v1/stock/stock-adjust-history-list",
+		           url: "${adjust_list_url}",
 		           data: function(data){
 						data.branchId = 0;
 						data.startDate = '',
@@ -201,7 +223,7 @@ $("#endDateValidation").html("");
         { width: "15%", targets: 8 }
     ],
     ajax: {
-    	url: "/opensrp-dashboard/rest/api/v1/stock/stock-adjust-history-list",
+    	url: "${adjust_list_url}",
         data: function(data){
 			data.branchId = branch;
 			data.startDate = startDate,

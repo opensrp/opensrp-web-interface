@@ -147,7 +147,7 @@ var dateToday = new Date();
     $(".ui-datepicker-calendar").hide();
     $(".ui-datepicker-current").hide();
 });
-dates.datepicker('setDate', new Date()); 
+
 </script>
 <script>
 

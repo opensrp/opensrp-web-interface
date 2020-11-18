@@ -37,7 +37,9 @@
 					<div class="portlet-body">
 					
 						<div class="form-group">
-						<jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" />
+						
+						<jsp:include page="/WEB-INF/views/search-option-for-inventory.jsp" />
+						<%-- <jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" /> --%>
 						<%-- <div class="row">
 								<div class="col-lg-3 form-group">
 								    <label for="cars"><spring:message code="lbl.division"></spring:message> :</label> <select class="form-control" id="division" name="division">
@@ -138,6 +140,7 @@
 	</div>
 	<!-- END CONTENT -->
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
+<script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 

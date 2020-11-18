@@ -13,7 +13,9 @@
 
 
 <c:url var="sell_to_ss_list" value="/rest/api/v1/stock/sell_to_ss_list" />
-
+<c:url var="save_url" value="/rest/api/v1/stock/save-update" />
+<c:url var="backUrl" value="/inventoryam/sell-to-ss.html" />
+<c:url var="redirect_url" value="/inventoryam/sell-to-ss-list" />
 <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -37,6 +39,15 @@
 
 <div class="page-content-wrapper">
 	<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="btn btn-primary" href="${backUrl }">Back</a>
+				</li>
+		</ul>
 		<div class="row">
 			<div class="col-md-12">
 
@@ -198,7 +209,8 @@
 													<th style="display: none"><spring:message code="lbl.serialNo"></spring:message></th>
 													<th><spring:message code="lbl.productName"></spring:message></th>
 													<th><spring:message code="lbl.productUnitPrice"></spring:message></th>
-													<th><spring:message code="lbl.currentStock"></spring:message></th>
+													<%-- <th><spring:message code="lbl.currentStock"></spring:message></th> --%>
+													<th>Available product</th>
 													<th><spring:message code="lbl.perPersonProduct"></spring:message><span class="text-danger"> *</span><p style="display: none" class="text-danger" id="validationMessage"></p></th>
 													<th><spring:message code="lbl.perPersonAmount"></spring:message></th>
 													<th><spring:message code="lbl.ssSelectedNumber"></spring:message></th>
@@ -673,6 +685,7 @@ $('#sellToManySSList th input:checkbox').click(
 		var va = $(this).val();
 		if($(this).val() !="") {
 			var quantity = +$(this).val();
+			
 			if(quantity < 1) {
 				$row.find('span:first').html("<strong>* Quantity Can not be less than 1</strong>");
 				$("#sellButton").hide();
@@ -680,14 +693,15 @@ $('#sellToManySSList th input:checkbox').click(
 			}
 			else $row.find('span:first').html("");
 			var productUnitPrice = parseFloat($row.find('td').eq(2).text());
+			var totalSelected = sellToArray.length;
 			var currentStock = parseInt($row.find('td').eq(3).text());
-			if(quantity > currentStock) {
+			if(quantity*totalSelected > currentStock) {
 				$row.find('span:first').html("<strong>* Not available Stock</strong>");
 				return;
 			}
 			else $row.find('span:first').html("");
 			//var totalSelected = parseInt($row.find('td').eq(5).val());
-			var totalSelected = sellToArray.length;
+			//var totalSelected = sellToArray.length;
 			var perPersonAmount = quantity * productUnitPrice;
 			var totalAmount = totalSelected * perPersonAmount;
 			$row.find('td').eq(5).text(perPersonAmount);
@@ -808,7 +822,7 @@ $('#sellToManySSList th input:checkbox').click(
 		var branchId = parseInt("${id}");
 		var branchCode = "${branchInfo[0][2]}";
 		var sellToId = parseInt("${ssid}");
-		var url = "/opensrp-dashboard/rest/api/v1/stock/save-update";			
+		var url = "${save_url}";			
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		var formData;
@@ -837,7 +851,7 @@ $('#sellToManySSList th input:checkbox').click(
 			   $("#serverResponseMessage").show();
 			   $("#serverResponseMessage").html(response.msg);
 				   if(response.status == "SUCCESS"){					   
-				   window.location.replace("/opensrp-dashboard/inventoryam/sell-to-ss-list/"+branchId+".html?lang=${locale}");
+				   window.location.replace("${redirect_url}/"+branchId+".html?lang=${locale}");
 				   
 			   }
 			   
