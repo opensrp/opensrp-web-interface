@@ -21,9 +21,21 @@
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 
+<c:url var="cancelUrl" value="/target/target-by-individual.html" />
 
 <div class="page-content-wrapper">
     <div class="page-content">
+    <ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="btn btn-primary" href="${cancelUrl }">Back</a>
+					
+				</li>
+			
+			</ul>
         <div class="row">
             <div class="col-md-12">
 
@@ -40,30 +52,30 @@
 
                             <div class="row">
                                 <form style="margin-top: 10px">
-                                    <div class="col-lg-1">
-                                        <label for="monthly" onclick="onTimeChange('monthly')">
-                                            <input type="radio" id="monthly" value="monthly" name="time-period"> <br>Monthly
-                                        </label>
-                                    </div>
-                                    <div class="col-lg-1">
-                                        <label for="daily" onclick="onTimeChange('daily')">
-                                            <input type="radio" id="daily" value="daily" name="time-period"> <br> Daily
-                                        </label>
-                                    </div>
-                                </form>
-
-                                <div class="col-lg-3 form-group" id="dateField">
-                                    <label >Date:</label> <span class="text-danger"> *</span>
-                                    <input type="text"	readonly name="date" id="dateFieldInput" class="form-control " />
-                                    <span  class="text-danger validationMessage"></span>
-                                </div>
-                                <div class="col-lg-3 form-group" id="monthField">
-                                    <label>Month And Year:</label> <span class="text-danger"> *</span>
-                                    <input type="text"	readonly name="startYear" id="monthFieldInput" class="form-control date-picker-year" />
-                                    <span  class="text-danger validationMessage"></span>
-                                </div>
-
-                                <div class="col-lg-7 form-group text-right">
+                                   
+									<div class="col-lg-1">
+										<label for="monthly" onclick="onTimeChange('monthly')">
+											<input type="radio" id="monthly" value="monthly" name="time-period"> <br>Monthly
+										</label>
+									</div>
+									<div class="col-lg-1">
+										<label for="daily" onclick="onTimeChange('daily')">
+											<input type="radio" id="daily" value="daily" name="time-period"> <br> Daily
+										</label>
+									</div>
+								</form>
+								<div class="col-lg-3 form-group" id="dateField">
+									<label >Date:</label> <span class="text-danger"> *</span>
+									<input type="text"	readonly name="date" id="dateFieldInput" class="form-control " />
+									<span  class="text-danger validationMessage"></span>
+								</div>
+								<div class="col-lg-3 form-group" id="monthField">
+									<label>Month And Year:</label> <span class="text-danger"> *</span>
+									<input type="text"	readonly name="startYear" id="monthFieldInput" class="form-control date-picker-year" />
+									<span  class="text-danger validationMessage"></span>
+								</div>
+								
+                                <div class="col-lg-3 form-group text-left" style="padding-top: 22px">
                                     <button type="submit" onclick="getTargetInfo()" class="btn btn-primary" value="confirm">Submit</button>
                                 </div>
                             </div>
@@ -114,6 +126,7 @@
                                 <div class="col-md-12 form-group text-right">
                                     <div class="row">
                                         <div class="col-lg-12">
+                                        <a class="btn btn-primary" href="${cancelUrl}">Cancel</a>
                                             <button class="bt btn btn-primary" id="approve" name="s" value="1" type="submit">Update</button>
                                         </div>
                                     </div>
@@ -223,8 +236,9 @@
         var year = d.getFullYear();
 
         var todayDate = new Date(), y = todayDate.getFullYear(), m = todayDate.getMonth();
-        var startDate = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
-        var endDate =  $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));
+        var startDate = timePeriod == 'monthly' ?$.datepicker.formatDate('yy-mm-dd', new Date(d.getFullYear(), d.getMonth(), 1)):$.datepicker.formatDate('yy-mm-dd', d);
+    	var endDate =  timePeriod == 'monthly' ?$.datepicker.formatDate('yy-mm-dd', new Date(d.getFullYear(), d.getMonth() + 1, 0)):$.datepicker.formatDate('yy-mm-dd', d);
+    	
         var item=[];
         let token = $("meta[name='_csrf']").attr("content");
         let header = $("meta[name='_csrf_header']").attr("content");
@@ -240,7 +254,8 @@
                 "endDate":endDate,
                 "month":month,
                 "year":year,
-                "status":"ACTIVE"
+                "status":"ACTIVE",
+                "day": timePeriod == 'monthly' ? 0 : date
 
             }
             item.push(details);
@@ -250,11 +265,14 @@
 
 
         formData = {
-            'id': 0,
-            'targetTo':'${userId}',
-            'type': 'USER',
-            'role': '${roleId}',
-            "targetDetailsDTOs":item
+        		'id': 0,
+                'targetTo':'${userId}',
+                'type': 'USER',
+                'role': '${roleId}',
+                "month":month,
+        		"year":year,
+        		"day": timePeriod == 'monthly' ? 0 : date,
+                "targetDetailsDTOs":item
         };
         console.log(formData);
         $.ajax({
@@ -292,42 +310,44 @@
 
 
 
+
     jQuery(function() {
-        jQuery('#monthFieldInput').datepicker({
+    	jQuery('#monthFieldInput').datepicker({
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
             dateFormat: 'MM yy',
             minDate: new Date,
-            onClose: function(dateText, inst) {
+            onClose: function(dateText, inst) { 
                 var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
                 $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-                $(".validationMessage").html("");
+    			$(".validationMessage").html("");
+                // fetchTargetInfo();
             }
         });
-        jQuery(".date-picker-year").focus(function () {
+    	jQuery(".date-picker-year").focus(function () {
             $(".ui-datepicker-calendar").hide();
             $(".ui-datepicker-current").hide();
         });
     });
-
     jQuery(function() {
-        jQuery('#dateFieldInput').datepicker({
-            showButtonPanel: true,
-            dateFormat: 'dd-MM-yy',
-            minDate: new Date,
-            onClose: function(dateText, inst) {
-                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-                $(".validationMessage").html("");
-
-            }
-        });
-        jQuery(".date-picker-year").focus(function () {
-            $(".ui-datepicker-calendar").hide();
-            $(".ui-datepicker-current").hide();
-        });
+    	jQuery('#dateFieldInput').datepicker({
+    		showButtonPanel: true,
+    		dateFormat: 'dd-MM-yy',
+    		minDate: new Date,
+    		onClose: function(dateText, inst) {
+    			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+    			$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+    			$(".validationMessage").html("");
+    			// fetchTargetInfo();
+    		}
+    	});
+    	jQuery(".date-picker-year").focus(function () {
+    		$(".ui-datepicker-calendar").hide();
+    		$(".ui-datepicker-current").hide();
+    	});
     });
+
 
     function onTimeChange(value) {
         timePeriod = value;

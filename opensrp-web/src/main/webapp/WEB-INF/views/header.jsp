@@ -271,26 +271,6 @@ License: You must have a valid license purchased only from themeforest(the above
 						
 					</ul>
 				</li>
-					<%-- <%
-						if (PERM_PRODUCT_LIST) {
-					%>
-					<li><a href="<c:url value="/inventorydm/products-list.html?lang=${locale}"/>"><i
-							class="fa fa-tasks" aria-hidden="true"></i> <span class="title">
-								<spring:message code="lbl.productListDm" />
-						</span> </a></li>
-					<%
-						}
-					%> --%>
-					<%
-						if (PERM_TARGET_LIST) {
-					%>
-					<li><a href="<c:url value="/inventorydm/target-list.html?lang=${locale}"/>"><i
-							class="fa fa-tasks" aria-hidden="true"></i> <span class="title">
-								Target List
-						</span> </a></li>
-					<%
-						}
-					%>
 					
 				
 					<% if(PERM_READ_WRITE_TARGET){ %>
@@ -298,6 +278,16 @@ License: You must have a valid license purchased only from themeforest(the above
 							class="title"> Set Target</span> <span class="arrow "></span>
 					</a>
 						<ul class="sub-menu">
+						<%
+						if (PERM_TARGET_LIST) {
+						%>
+						<li><a href="<c:url value="/inventorydm/target-list.html?lang=${locale}"/>"><i
+								 aria-hidden="true"></i> <span class="title">
+									Target Item List
+							</span> </a></li>
+						<%
+							}
+						%>
 							<%
 								if (PERM_READ_WRITE_TARGET) {
 							%>
