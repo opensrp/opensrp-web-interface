@@ -28,7 +28,7 @@
 <div class="row">
 	<div class="col-sm-offset-10 col-sm-2">
 		<select class="custom-select" id="visitCategory" style="width: 95%" onclick="reloadSkChart()">
-			<option value="">Please Select </option>
+			<option value="avg_visit">Average Visit</option>
 			<option value="hhVisitAchievementInPercentage">Household Visit</option>
 			<option value="elcoVisitAchievementInPercentage">ELCO Visit</option>
 			<option value="methodsUsersVisitAchievementInPercentage">Methods Users</option>
@@ -169,13 +169,35 @@
 	function reloadChart(visitCategory, reportData) {
 
 		console.log("visit category", visitCategory);
-		var branches = [];
+		var skList = [];
 		var percentages = [];
 		for (var i = 0; i < reportData.length; i++) {
-			branches.push(reportData[i].firstName + ' ' + reportData[i].lastName);
+			skList.push(reportData[i].firstName + ' ' + reportData[i].lastName);
 			percentages.push(reportData[i][visitCategory]);
 		}
+		loadChart(skList, percentages);
+	}
 
+	function loadAvgVisitChart(reportData) {
+		var skList = [];
+		var percentages = [], cnt = 0, sum = 0, result;
+		var avgFields = ['hhVisitAchievementInPercentage','elcoVisitAchievementInPercentage','methodsUsersVisitAchievementInPercentage','adolescentMethodsUsersVisitAchievementInPercentage','pregnancydentifiedVisitAchievementInPercentage','deliveryVisitAchievementInPercentage','institutionalizedDeliveryVisitAchievementInPercentage','Child06VisitAchievementInPercentage','Child724VisitAchievementInPercentage','Child1836VisitAchievementInPercentage','immunizationVisitAchievementInPercentage','pregnantVisitAchievementInPercentage'];
+		for (var i = 0; i < reportData.length; i++) {
+			skList.push(reportData[i].firstName + ' ' + reportData[i].lastName);
+
+			cnt=0;
+			sum = 0;
+			for(var j=0; j< avgFields.length; j++) {
+				if(reportData[i][avgFields[i]] > 0) cnt++;
+				sum += reportData[i][avgFields[i]];
+			}
+			result = cnt === 0 ? 0 : parseFloat((sum / cnt).toFixed(2));
+			percentages.push(result);
+		}
+		loadChart(skList, percentages);
+	}
+
+	function loadChart(skList,  percentages){
 		Highcharts.chart('column-chart', {
 			chart: {
 				type: 'column'
@@ -187,7 +209,7 @@
 				text: ''
 			},
 			xAxis: {
-				categories: branches,
+				categories: skList,
 				crosshair: true
 			},
 			yAxis: {
@@ -219,9 +241,15 @@
 
 		var reportData = <%= targets%>;
 		console.log(reportData);
-		reloadChart($('#visitCategory').val(), reportData);
+		var category = $('#visitCategory').val();
+		if(category === 'avg_visit') {
+			loadAvgVisitChart(reportData);
+			return;
+		}
+		reloadChart(category, reportData);
 	}
 
-	reloadChart("",[]);
+	loadAvgVisitChart(<%= targets%>);
+
 </script>
 </body>
