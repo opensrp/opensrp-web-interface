@@ -99,6 +99,12 @@ License: You must have a valid license purchased only from themeforest(the above
 	boolean SK_VISIT_TARGET_REPORT_AM = AuthenticationManagerUtil.isPermitted("SK_VISIT_TARGET_REPORT_AM");
 	boolean SK_SERVICE_TARGET_REPORT_AM = AuthenticationManagerUtil.isPermitted("SK_SERVICE_TARGET_REPORT_AM");
 	boolean TRAINING_TITLE = AuthenticationManagerUtil.isPermitted("TRAINING_TITLE");
+	boolean REQUISITION_LIST = AuthenticationManagerUtil.isPermitted("REQUISITION_LIST");
+	boolean STOCK_REPORT = AuthenticationManagerUtil.isPermitted("STOCK_REPORT");
+	boolean SELLS_REPORT = AuthenticationManagerUtil.isPermitted("SELLS_REPORT");
+	boolean ADJUST_HISTORY = AuthenticationManagerUtil.isPermitted("ADJUST_HISTORY");
+	boolean PRODUCT_LIST = AuthenticationManagerUtil.isPermitted("PRODUCT_LIST");
+
 
 	
    %>
@@ -346,17 +352,35 @@ License: You must have a valid license purchased only from themeforest(the above
 							%>
 							
 							<%
-								if (PERM_READ_WRITE_INVENTORY_DM) {
+							if (PRODUCT_LIST) {
 							%>
 							<li><a href="<c:url value="/inventorydm/products-list.html?lang=${locale}"/>">
 									<spring:message code="lbl.productListDm" />
 							</a></li>
+							<%
+								}
+							%>
+							<%
+							if (REQUISITION_LIST) {
+							%>
 							<li><a href="<c:url value="/inventorydm/requisition-list.html?lang=${locale}"/>">
 									<spring:message code="lbl.requisitionAm" />
 							</a></li>
+							<%
+								}
+							%>
+							<%
+							if (STOCK_REPORT) {
+							%>
 							<li><a href="<c:url value="/inventorydm/stock-report.html?lang=${locale}"/>">
 									<spring:message code="lbl.stockReport" />
 							</a></li>
+							<%
+								}
+							%>
+							<%
+							if (SELLS_REPORT) {
+							%>
 							<li><a href="<c:url value="/inventorydm/ss-sales-report.html?lang=${locale}"/>">
 									<spring:message code="lbl.ssSalesReport" />
 							</a></li>
@@ -364,7 +388,7 @@ License: You must have a valid license purchased only from themeforest(the above
 								}
 							%>
 							<%
-								if (PERM_READ_WRITE_INVENTORY_DM || PERM_READ_WRITE_INVENTORY_AM) {
+								if (ADJUST_HISTORY) {
 							%>
 							<li><a href="<c:url value="/inventory/adjust-history-list.html?lang=${locale}"/>">
 									<spring:message code="lbl.adjustHistory" />

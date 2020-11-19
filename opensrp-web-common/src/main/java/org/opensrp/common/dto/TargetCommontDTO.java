@@ -4,8 +4,6 @@ public class TargetCommontDTO extends InventoryDTO {
 	
 	private int productId;
 	
-	private int branchId;
-	
 	private int userId;
 	
 	private int userCount;
@@ -22,14 +20,6 @@ public class TargetCommontDTO extends InventoryDTO {
 	
 	public void setProductId(int productId) {
 		this.productId = productId;
-	}
-	
-	public int getBranchId() {
-		return branchId;
-	}
-	
-	public void setBranchId(int branchId) {
-		this.branchId = branchId;
 	}
 	
 	public int getUserId() {

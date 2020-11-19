@@ -6,7 +6,6 @@ import java.util.Locale;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.dto.RequisitionQueryDto;
 import org.opensrp.common.util.Roles;
-import org.opensrp.core.dto.BranchDTO;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.dto.StockAdjustDTO;
 import org.opensrp.core.entity.Branch;
@@ -18,6 +17,7 @@ import org.opensrp.core.service.RequisitionService;
 import org.opensrp.core.service.StockService;
 import org.opensrp.core.service.TargetService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
+import org.opensrp.web.util.BranchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,6 +44,9 @@ public class InventoryAmController {
 	
 	@Autowired
 	private TargetService targetService;
+	
+	@Autowired
+	public BranchUtil branchUtil;
 	
 	@RequestMapping(value = "inventoryam/myinventory.html", method = RequestMethod.GET)
 	public String myInventory(Model model, Locale locale) {
@@ -277,15 +280,8 @@ public class InventoryAmController {
 	
 	@RequestMapping(value = "inventory/adjust-history-list.html", method = RequestMethod.GET)
 	public String adjustHistoryList(Model model, Locale locale) {
-		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		for (Role role : loggedInUser.getRoles()) {
-			if (role.getId() == Roles.DIV_M.getId()) {
-				model.addAttribute("isShowBranch", true);
-			}
-		}
-		/*List<Branch> branches = branchService.findAll("Branch");*/
-		List<BranchDTO> branches = targetService.getBranchListByUserIds(loggedInUser.getId() + "");
-		model.addAttribute("branches", branches);
+		
+		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("locale", locale);
 		return "inventoryAm/adjust-history-list";
 	}

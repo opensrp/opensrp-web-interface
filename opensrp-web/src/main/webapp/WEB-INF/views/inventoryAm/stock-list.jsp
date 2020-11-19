@@ -113,25 +113,7 @@ jQuery(document).ready(function() {
 
 <script type="text/javascript">
 var dateToday = new Date();
-$(function() {
 
-  $('input[name="dateRange"]').daterangepicker({
-      autoUpdateInput: false,
-      maxDate: dateToday,
-      locale: {
-          cancelLabel: 'Clear'
-      }
-  });
-
-  $('input[name="dateRange"]').on('apply.daterangepicker', function(ev, picker) {
-      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-  });
-
-  $('input[name="dateRange"]').on('cancel.daterangepicker', function(ev, picker) {
-      $(this).val('');
-  });
-
-});
 var dateToday = new Date();
 	var dates = $(".date").datepicker({
     dateFormat: 'yy-mm-dd',
@@ -147,7 +129,11 @@ var dateToday = new Date();
     $(".ui-datepicker-calendar").hide();
     $(".ui-datepicker-current").hide();
 });
-
+	var d = new Date();
+	var startDate =  $.datepicker.formatDate('yy-mm-dd', new Date(d.getFullYear(), d.getMonth(), 1));
+	
+	$("#from").datepicker('setDate', startDate); 
+	$("#to").datepicker('setDate', new Date()); 
 </script>
 <script>
 

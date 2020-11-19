@@ -5,6 +5,7 @@
 package org.opensrp.core.service;
 
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -315,7 +316,8 @@ public class StockService extends CommonService {
 		response.put("recordsTotal", sellToSSCount);
 		response.put("recordsFiltered", sellToSSCount);
 		JSONArray array = new JSONArray();
-		
+		DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(2);
 		for (InventoryDTO dto : dtos) {
 			JSONArray patient = new JSONArray();
 			if (roleId == 32) {
@@ -332,9 +334,9 @@ public class StockService extends CommonService {
 			/*if (roleId != 32) {
 				patient.put("0"); // target amount for DIvM
 			}*/
-			patient.put(dto.getSalesPrice());
+			patient.put(df.format(dto.getSalesPrice()));
 			if (roleId != 32) {
-				patient.put(dto.getPurchasePrice()); // for DIvM
+				patient.put(df.format(dto.getPurchasePrice())); // for DIvM
 			}
 			if (roleId == 32) {
 				String view = "<div class='col-sm-12 form-group'><a \" href=\"individual-ss-sell/" + branchId + "/"

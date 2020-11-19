@@ -166,11 +166,13 @@ jQuery(document).ready(function() {
 	        dates.not(this).datepicker("option", option, date);
 	    }
 	});
-	dates.datepicker('setDate', new Date()); 
-	$(".date-picker-year").focus(function () {
-	    $(".ui-datepicker-calendar").hide();
-	    $(".ui-datepicker-current").hide();
-	});
+	
+	var d = new Date();
+	var startDate =  $.datepicker.formatDate('yy-mm-dd', new Date(d.getFullYear(), d.getMonth(), 1));
+	
+	$("#from").datepicker('setDate', startDate); 
+	$("#to").datepicker('setDate', new Date()); 
+	
 	
 	var startDate = $('#from').val();
 	var endDate = $('#to').val();

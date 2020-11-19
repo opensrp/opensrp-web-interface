@@ -12,7 +12,10 @@
 <title>New Invoice</title>
 	
 	
-
+<c:url var="backUrl" value="/inventoryam/stock-list/${branchInfo[0][0]}.html" />
+<c:url var="saveURL" value="/rest/api/v1/stock/save-update" />
+<c:url var="productByIdURL" value="/inventoryam/product-by-id" />
+<c:url var="redirectURL" value="/inventoryam/stock-list" />
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
@@ -20,7 +23,15 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
-
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="btn btn-primary" href="${backUrl }">Back</a>
+				</li>
+		</ul>
 		<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="center-caption">
@@ -40,8 +51,8 @@
 							<span id="invoiceNoValidation" class="text-danger"></span>
 					</div>
 					<div class="col-lg-3 form-group">
-						<label for="receiveDate">Receive Date:</label><span class="text-danger"> *</span>  <input type="date"
-							class="form-control" onkeydown="return false" id="receiveDate">
+						<label for="receiveDate">Receive Date:</label><span class="text-danger"> *</span>  <input type="text"
+							class="form-control" readonly="readonly" onkeydown="return false" id="receiveDate">
 							<span id="receiveDateValidation" class="text-danger"></span>
 					</div>
 				</div>
@@ -87,7 +98,7 @@
 								</select></td>
 							<td><input type="text" class="form-control" id="currentStock" placeholder="Stock" readonly></td>
 							<td><input type="number" class="form-control" min="1" oninput="this.value = Math.abs(this.value)" id="quantity" placeholder="Quantity"><p class="text-danger" id="amountSelection"></p></td>
-							<td><input type="date" class="form-control" id="expiryDate" onkeydown="return false" placeholder="Expiry Date"></td>
+							<td><input type="text" readonly="readonly" class="form-control expiryDate"  id="expiryDate" onkeydown="return false" placeholder="Expiry Date"></td>
 							<td></td>
 						</tr>
 					</tbody>
@@ -109,16 +120,28 @@
 								</select></td>
 							<td><input type="text" class="form-control" id="currentStock" placeholder="Stock" readonly></td>
 							<td><input type="number" class="form-control" min="1" oninput="this.value = Math.abs(this.value)" id="quantity" placeholder="Quantity"><p class="text-danger" id="amountSelection"></p></td>
-							<td><input type="date" class="form-control" id="expiryDate" onkeydown="return false" placeholder="Expiry Date"></td>
+							<td><input type="text"  class="form-control expiryDate" id="expiryDate" onkeydown="return false" placeholder="Expiry Date"></td>
 							<td><a class="btn btn-xs delete-record" data-id="1"><i
 									class="glyphicon glyphicon-trash"></i></a></td>
 						</tr>
 					</table>
 					
 				</div>
-				<div class="text-center">
+				
+				<div class=row>
+							<div class="col-md-12 form-group text-right">
+						    		<div class="row">
+								     	<div class="col-lg-12 ">
+								     	 <a class="btn btn-primary" href="${backUrl}">Cancel</a>
+											 <button  onclick="saveStockData()" class="btn btn-primary" value="confirm">Confirm All</button>
+										</div>
+						            </div>
+						      </div>
+				
+						</div>
+				<!-- <div class="text-center">
 	                <button type="submit" onclick="saveStockData()" class="btn btn-primary" value="confirm">Confirm All</button>
-	            </div>
+	            </div> -->
 				<!-- <div class="modal fade" id="addProductToStock" role="dialog">
 							<div class="modal-dialog">
 
@@ -186,6 +209,32 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script>
+var dateToday = new Date();
+
+
+$('body').on('focus',".expiryDate", function(){
+    $(this).datepicker({
+        dateFormat: 'yy-mm-dd',
+        minDate: dateToday,
+        onSelect: function(selectedDate) {
+            var option = this.id == "from" ? "minDate" : "maxDate",
+                instance = $(this).data("datepicker"),
+                date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+            $(this).datepicker("setDate", selectedDate);
+        }
+       
+    });
+    
+});
+/* $(".expiryDate").attr("max", dateToday); */
+//$(".expiryDate").setAttribute("max", dateToday);
+var dates = $("#receiveDate").datepicker({
+    dateFormat: 'yy-mm-dd',
+    maxDate: dateToday,
+   
+});
+
+
 var tableData = [];
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
@@ -257,7 +306,7 @@ function createStockArray() {
 			}
 			
 			if(colIndex == 4) {
-				stockObject["expireyDate"] = $(this).find('input[type="date"]').val();
+				stockObject["expireyDate"] = $(this).find('input[type="text"]').val();
 			}
 
 		});
@@ -288,7 +337,7 @@ $('#addProductTemporaryList').delegate('select', 'change', function() {
 	var productId = $(this).val();
 	let branchId = "${branchIdHidden}";
 	var inputContext = $(this).parents('td').next().find('input[type="text"]');
-	var url = "/opensrp-dashboard/inventoryam/product-by-id/"+branchId+ "/" +productId;
+	var url = "${productByIdURL}/"+branchId+ "/" +productId;
 	$.ajax({
 		type : "GET",
 		contentType : "application/json",
@@ -339,7 +388,7 @@ function saveStockData() {
 	 $("#validationMessage").html("");
 	var branchId = "${branchIdHidden}";
 	var branchCode = "${branchCode}";
-	var url = "/opensrp-dashboard/rest/api/v1/stock/save-update";			
+	var url = "${saveURL}";			
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	var formData;
@@ -372,7 +421,7 @@ function saveStockData() {
 		   
 			   if(response.status == "SUCCESS"){
 	            	setTimeout(function(){
-	            		window.location.replace("/opensrp-dashboard/inventoryam/stock-list/"+branchId+".html");
+	            		window.location.replace("${redirectURL}/"+branchId+".html");
 		                 }, 1000);			   	   
 		   }
 		   

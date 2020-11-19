@@ -68,8 +68,8 @@
 									<th><spring:message code="lbl.skName"></spring:message></th>
 									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
 									<%-- <th><spring:message code="lbl.targetAmount"></spring:message></th> --%>
-									<th><spring:message code="lbl.projectedSalesAmount"></spring:message></th>
-									<th><spring:message code="lbl.purchaseAmount"></spring:message></th>
+									<th><spring:message code="lbl.projectedSalesAmount"></spring:message> (BDT)</th>
+									<th><spring:message code="lbl.purchaseAmount"></spring:message> (BDT)</th>
 									
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
 								</tr>
@@ -112,6 +112,7 @@ jQuery(function() {
             $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
         }
     });
+	$("#yearMonth").datepicker('setDate', new Date()); 
 	jQuery(".date-picker-year").focus(function () {
         $(".ui-datepicker-calendar").hide();
         $(".ui-datepicker-current").hide();
@@ -222,7 +223,11 @@ function filter(){
                 data.district = district;
                 data.upazila = upazila;
                 data.skId = skId;
+                if(branch==0 && division==0 && division==0 && upazila==0 && skId==0){
+                	data.manager="${manager}";
+                }else{
                 data.manager=0;
+                }
              },
              dataSrc: function(json){
                  if(json.data){
