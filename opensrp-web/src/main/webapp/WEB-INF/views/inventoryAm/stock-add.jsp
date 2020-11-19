@@ -98,7 +98,7 @@
 								</select></td>
 							<td><input type="text" class="form-control" id="currentStock" placeholder="Stock" readonly></td>
 							<td><input type="number" class="form-control" min="1" oninput="this.value = Math.abs(this.value)" id="quantity" placeholder="Quantity"><p class="text-danger" id="amountSelection"></p></td>
-							<td><input type="text" readonly="readonly" class="form-control expiryDate"  id="expiryDate" onkeydown="return false" placeholder="Expiry Date"></td>
+							<td><input type="text" readonly="readonly" class="form-control jqdate"  id="expiryDate" onkeydown="return false" placeholder="Expiry Date"></td>
 							<td></td>
 						</tr>
 					</tbody>
@@ -120,7 +120,7 @@
 								</select></td>
 							<td><input type="text" class="form-control" id="currentStock" placeholder="Stock" readonly></td>
 							<td><input type="number" class="form-control" min="1" oninput="this.value = Math.abs(this.value)" id="quantity" placeholder="Quantity"><p class="text-danger" id="amountSelection"></p></td>
-							<td><input type="text"  class="form-control expiryDate" id="expiryDate" onkeydown="return false" placeholder="Expiry Date"></td>
+							<td><input type="text"  class="form-control jqdate"  onkeydown="return false" placeholder="Expiry Date"></td>
 							<td><a class="btn btn-xs delete-record" data-id="1"><i
 									class="glyphicon glyphicon-trash"></i></a></td>
 						</tr>
@@ -212,22 +212,14 @@
 var dateToday = new Date();
 
 
-$('body').on('focus',".expiryDate", function(){
+$(document).on('focus','.jqdate', function(){    
     $(this).datepicker({
         dateFormat: 'yy-mm-dd',
         minDate: dateToday,
-        onSelect: function(selectedDate) {
-            var option = this.id == "from" ? "minDate" : "maxDate",
-                instance = $(this).data("datepicker"),
-                date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
-            $(this).datepicker("setDate", selectedDate);
-        }
-       
-    });
-    
-});
-/* $(".expiryDate").attr("max", dateToday); */
-//$(".expiryDate").setAttribute("max", dateToday);
+    } );
+ });
+
+
 var dates = $("#receiveDate").datepicker({
     dateFormat: 'yy-mm-dd',
     maxDate: dateToday,
