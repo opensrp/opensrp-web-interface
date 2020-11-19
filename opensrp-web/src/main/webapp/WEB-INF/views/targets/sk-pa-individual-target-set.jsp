@@ -32,7 +32,7 @@
 					<i class="fa fa-arrow-right"></i>
 				</li>
 				<li>
-					<a class="btn btn-primary" href="${cancelUrl }">Individual target list</a>
+					<a class="btn btn-primary" href="${cancelUrl }">Back</a>
 					
 				</li>
 			
