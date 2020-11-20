@@ -38,15 +38,11 @@
 					<div class="portlet-body">
 						<div class="form-group">
 							
-							<jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" />
+							<jsp:include page="/WEB-INF/views/search-option-for-inventory.jsp" />
 							
 							
 							<div class="row">
-								<div class="col-lg-4 form-group">
-							 		<label class="control-label">Date range </label> 
-						            <input  type="text" id="dateRange" name="dateRange" class="form-control"/>
-						                         
-								</div>
+								
 								<div class="col-lg-3 form-group">
 								    <label for="designation">Designation</label>
 									<select name="roleList" class="form-control" id="roleList">
@@ -58,7 +54,7 @@
 									</select>
 								</div>
 								
-								<div class="col-lg-3 form-group">
+								<div class="col-lg-2 form-group">
 								    <label for="designation">Notification type</label>
 									<select name="nType" class="form-control" id="nType">
 									<option value="">Please Select</option>
@@ -68,16 +64,33 @@
 																			
 									</select>
 								</div>
+								<div class="col-lg-2 form-group">
+								<label for="from"><spring:message code="lbl.from"></spring:message><span
+									class="text-danger"> </span> </label> <input readonly="readonly" type="text"
+									class="form-control date" id="from"> <span class="text-danger"
+									id="startDateValidation"></span>
+								</div>
+								<div class="col-lg-2 form-group">
+									<label for="to"><spring:message code="lbl.to"></spring:message><span
+										class="text-danger"> </span> </label> <input readonly="readonly" type="text"
+										class="form-control date" id="to"> <span class="text-danger"
+										id="endDateValidation"></span>
+								</div> 
+								<div class="col-lg-3 form-group text-left" style="padding-top: 24px">
+									<button type="submit" onclick="filter()" class="btn btn-primary btn-sm" value="confirm">Search</button>
+									<a  href="${add_page}" class="btn btn-primary btn-sm" id="back">Add new </a> 
+						            		
+								</div>
 								
 								
 							</div>
-							<div class="row">
+							<%-- <div class="row">
 								<div class="col-lg-12 form-group text-right">
 									<button type="submit" onclick="filter()" class="btn btn-primary btn-sm" value="confirm">View</button>
 									<a  href="${add_page}" class="btn btn-primary btn-sm" id="back">Add new </a> 
 						            		
 								</div>
-     						</div>
+     						</div> --%>
      						
      						
 						</div>
@@ -128,25 +141,21 @@ jQuery(document).ready(function() {
 
 <script type="text/javascript">
 var dateToday = new Date();
-$(function() {
-
-  $('input[name="dateRange"]').daterangepicker({
-      autoUpdateInput: false,
-      maxDate: dateToday,
-      locale: {
-          cancelLabel: 'Clear'
-      }
-  });
-
-  $('input[name="dateRange"]').on('apply.daterangepicker', function(ev, picker) {
-      $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-  });
-
-  $('input[name="dateRange"]').on('cancel.daterangepicker', function(ev, picker) {
-      $(this).val('');
-  });
-
+var dates = $(".date").datepicker({
+dateFormat: 'yy-mm-dd',
+/* maxDate: dateToday,
+onSelect: function(selectedDate) {
+    var option = this.id == "from" ? "minDate" : "maxDate",
+        instance = $(this).data("datepicker"),
+        date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+    dates.not(this).datepicker("option", option, date);
+} */
 });
+var d = new Date();
+var startDate =  $.datepicker.formatDate('yy-mm-dd', new Date(d.getFullYear(), d.getMonth(), 1));
+
+$("#from").datepicker('setDate', startDate); 
+$("#to").datepicker('setDate', new Date()); 
 </script>
 <script>
     let stockList;
@@ -172,8 +181,8 @@ $(function() {
                     data.locationId=0;                    
                     data.roleId=0;
                     data.type="";
-                    data.startDate="";
-                    data.endDate="";
+                    data.startDate = $('#from').val();
+                    data.endDate =$('#to').val();
                     
                 },
                 dataSrc: function(json){
@@ -233,14 +242,10 @@ function filter(){
          ajax: {
              url: "${get_url}",
              data: function(data){
-            	 let dateFieldvalue = $("#dateRange").val();   
-            	 if(dateFieldvalue != '' && dateFieldvalue != undefined){
- 	     	        data.startDate = $("#dateRange").data('daterangepicker').startDate.format('YYYY-MM-DD');
- 	                data.endDate =$("#dateRange").data('daterangepicker').endDate.format('YYYY-MM-DD');
-             	}else{
-             		data.startDate = '';
-                    data.endDate ='';
-             	}
+            	 
+          		 data.startDate = $('#from').val();
+                 data.endDate =$('#to').val();
+             	
             	 data.branchId = $("#branchList").val();
                  data.locationId=locationId;                    
                  data.roleId=$("#roleList").val();

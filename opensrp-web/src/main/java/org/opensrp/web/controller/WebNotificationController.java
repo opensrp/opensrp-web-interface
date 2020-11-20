@@ -19,6 +19,7 @@ import org.opensrp.core.entity.WebNotification;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.WebNotificationService;
+import org.opensrp.web.util.BranchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -52,6 +53,9 @@ public class WebNotificationController {
 	
 	@Autowired
 	private BranchService branchService;
+	
+	@Autowired
+	public BranchUtil branchUtil;
 	
 	@RequestMapping(value = "/list.html", method = RequestMethod.GET)
 	public String targetByIndividual(HttpServletRequest request, HttpSession session, Model model, Locale locale)
@@ -95,8 +99,9 @@ public class WebNotificationController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("roles", webNotificationService.getWebNotificationRoles());
 		List<Branch> branches = branchService.findAll("Branch");
-		model.addAttribute("branches", branches);
+		//model.addAttribute("branches", branches);
 		model.addAttribute("divisions", webNotificationService.getLocationByTagId(divisionTagId));
+		model.addAttribute("branches", branchUtil.getBranches());
 		return "webNotification/add";
 	}
 	
@@ -120,10 +125,11 @@ public class WebNotificationController {
 	}
 	
 	@RequestMapping(value = "/details/{id}.html", method = RequestMethod.GET)
-	public String viewDetails(HttpServletRequest request, HttpSession session, Model model, Locale locale, @PathVariable("id") long id) {
+	public String viewDetails(HttpServletRequest request, HttpSession session, Model model, Locale locale,
+	                          @PathVariable("id") long id) {
 		model.addAttribute("locale", locale);
 		List<WebNotificationCommonDTO> webNotification = webNotificationService.getWebNotificationDetailsById(id);
-
+		
 		model.addAttribute("notificationDetails", webNotification.get(0));
 		return "webNotification/notificationDetails";
 	}

@@ -217,7 +217,7 @@ public abstract class CommonService {
 	
 	@Transactional
 	@SuppressWarnings("unchecked")
-	public List<TargetCommontDTO> getAllUser(Set<Integer> roleIds, String locationType, int locationId) {
+	public List<TargetCommontDTO> getAllUser(Set<Integer> roleIds, String branchIds) {
 		String prefix = "";
 		StringBuffer sb = new StringBuffer();
 		for (Integer roleId : roleIds) {
@@ -228,13 +228,13 @@ public abstract class CommonService {
 		}
 		String roles = "'{" + sb + "}'";
 		Session session = getSessionFactory();
-		List<TargetCommontDTO> result = null;
+		List<TargetCommontDTO> result = new ArrayList<>();
 		
-		String hql = "select user_id userId, branch_id branchId from core.get_userid_brancid_by_branch_location_multi_role("
-		        + roles + ",:id,:type);";
+		String hql = "select user_id userId, branch_id branchId from core.get_userid_for_web_notification(" + roles + ",'{"
+		        + branchIds + "}');";
 		Query query = session.createSQLQuery(hql).addScalar("userId", StandardBasicTypes.INTEGER)
-		        .addScalar("branchId", StandardBasicTypes.INTEGER).setString("type", locationType)
-		        .setInteger("id", locationId).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		        .addScalar("branchId", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
 		
 		result = query.list();
 		

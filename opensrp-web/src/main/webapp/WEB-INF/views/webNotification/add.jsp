@@ -9,13 +9,40 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<%
-    List<Object[]> divisions = (List<Object[]>) session.getAttribute("divisions");
-%>
+
 
 
 <title>Add Web Notification</title>
-	
+	<style>
+	.select2-results__option .wrap:before {
+		font-family: fontAwesome;
+		color: #999;
+		content: "\f096";
+		width: 25px;
+		height: 25px;
+		padding-right: 10px;
+	}
+
+	.select2-results__option[aria-selected=true] .wrap:before {
+		content: "\f14a";
+	}
+
+
+	/* not required css */
+
+	.row {
+		padding: 10px;
+	}
+
+	.select2-multiple,
+	.select2-multiple2 {
+		width: 50%
+	}
+
+	.select2-results__group .wrap:before {
+		display: none;
+	}
+</style>
 	
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
@@ -58,6 +85,17 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="" href="${back}">Back</a>
+					
+				</li>
+			
+			</ul>
 
 		<div class="portlet box blue-madison">
 			<div class="portlet-title">
@@ -110,15 +148,13 @@
 					</div>
 					<div class="col-lg-12">
 						<div class="form-group">
-						<jsp:include page="/WEB-INF/views/select-options-with-branch.jsp" />
-						</div>
-					</div>
-					
-					<div class="col-lg-12">
-						<div class="form-group text-right" id="errorText">
+						<%-- <jsp:include page="/WEB-INF/views/select-options-with-branch.jsp" /> --%>
+						<jsp:include page="/WEB-INF/views/search-option-for-notification.jsp" />
 						
 						</div>
 					</div>
+					
+					
 					
 					
 					<div class="form-group row"></div>
@@ -142,21 +178,32 @@
 		</div>
 	</div>
 	
-	<script>
-jQuery(document).ready(function() {       
-	 Metronic.init(); // init metronic core components
-		Layout.init(); // init current layout
+	
+	<!-- END CONTENT -->
+<%-- <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
+ --%>
+<script src="<c:url value='/resources/js/jquery.simple-dtpicker.js' />"></script>
+<script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
+<script>
+jQuery(document).ready(function() { 
+	$('#branchList').select2MultiCheckboxes({
+		placeholder: "Select branch",
+		width: "auto",
+		templateSelection: function(selected, total) {
+			return "Selected " + selected.length + " of " + total;
+		}
+	});
+	$("#branchList > option").prop("selected","selected");
+    $("#branchList").trigger("change");
+	Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
    
 });
 
 
 </script>
-	<!-- END CONTENT -->
-<%-- <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
- --%>
-<script src="<c:url value='/resources/js/jquery.simple-dtpicker.js' />"></script>
-
 <script>
+
 $('#roles').magicSuggest({
 	placeholder: 'Select recipients type',
 	data : '${roles}',
@@ -217,25 +264,8 @@ $('#addWebNotification').submit(function(event) {
     let districtId = $('#districtList').val();
     let upazilaId = $('#upazilaList').val();
    
-    let branchId = $('#branchList').val();
-    let locationId = 0;
-    let locationType="LOCATION";
-    if(branchId !=0){
-		locationId = branchId;
-		locationType="BRANCH";
-	}else if(upazilaId !=0){
-		locationId = upazilaId;
-		locationType="LOCATION";
-		
-	}else if(districtId != 0){
-		locationId = districtId;
-		locationType="LOCATION";
-		
-	}else if(divisionId != 0){
-		locationId =divisionId; 
-		locationType="LOCATION";
-		
-	}
+    
+    
    var today = new Date();
    let dateTime = $("#date").val();
    let sendDate= today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -250,6 +280,17 @@ $('#addWebNotification').submit(function(event) {
    }else{
 	   dateTime = dateTime;
    }
+   
+   var branchIds =  $("#branchList").val();
+   var branchAsString = "";
+	if( branchIds ==null || typeof branchIds == 'undefined'){
+ 		branchIds = []; 
+ 		branchAsString = "";
+ 	}else{
+ 		branchIds = $("#branchList").val();
+ 		branchAsString= $("#branchList").val().join();
+ 	}
+ 	console.log(branchIds);
     formData = {
         'id': 0,
         'notificationTitle': $('#notificationTitle').val(),
@@ -263,10 +304,12 @@ $('#addWebNotification').submit(function(event) {
         "division":divisionId,
         "district":districtId,
         "upazila":upazilaId,
-        "branch":branchId,
-        "locationType":locationType,
-        "locationTypeId":locationId,
-		"sendDateAndTime":dateTime
+        "branch":0,
+        "locationType":'',
+        "locationTypeId":0,
+		"sendDateAndTime":dateTime,
+		"branches":branchIds,
+		"branchAsString":branchAsString
 
     };
     console.log(formData);

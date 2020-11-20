@@ -9,9 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<%
-    List<Object[]> divisions = (List<Object[]>) session.getAttribute("divisions");
-%>
+
 
 
 <title>Notification Details</title>
@@ -20,11 +18,22 @@
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <link type="text/css" href="<c:url value="/resources/css/jquery.simple-dtpicker.css"/>" rel="stylesheet">
 
+<c:url var="back" value="/web-notification/list.html" />/
 
 
 <div class="page-content-wrapper">
 		<div class="page-content">
-
+			<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="" href="${back}">Back</a>
+					
+				</li>
+			
+			</ul>
 		<div class="portlet box blue-madison">
 			<div class="portlet-title">
 				<div class="center-caption">Web Notification Details</div>

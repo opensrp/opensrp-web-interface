@@ -98,7 +98,6 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script>
-
 var dateToday = new Date();
 	var dates = $(".date").datepicker({
     dateFormat: 'yy-mm-dd',
@@ -110,11 +109,11 @@ var dateToday = new Date();
         dates.not(this).datepicker("option", option, date);
     }
 });
-	var d = new Date();
-	var startDate =  $.datepicker.formatDate('yy-mm-dd', new Date(d.getFullYear(), d.getMonth(), 1));
-	
-	$("#from").datepicker('setDate', startDate); 
-	$("#to").datepicker('setDate', new Date()); 
+var d = new Date();
+var startDate =  $.datepicker.formatDate('yy-mm-dd', new Date(d.getFullYear(), d.getMonth(), 1));
+
+$("#from").datepicker('setDate', startDate); 
+$("#to").datepicker('setDate', new Date()); 
 let stockAdjustList;
 
 jQuery(document).ready(function() {       

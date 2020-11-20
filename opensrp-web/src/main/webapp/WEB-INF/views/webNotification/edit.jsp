@@ -9,12 +9,39 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<%
-    List<Object[]> divisions = (List<Object[]>) session.getAttribute("divisions");
-%>
+<style>
+	.select2-results__option .wrap:before {
+		font-family: fontAwesome;
+		color: #999;
+		content: "\f096";
+		width: 25px;
+		height: 25px;
+		padding-right: 10px;
+	}
+
+	.select2-results__option[aria-selected=true] .wrap:before {
+		content: "\f14a";
+	}
 
 
-<title>Add Training</title>
+	/* not required css */
+
+	.row {
+		padding: 10px;
+	}
+
+	.select2-multiple,
+	.select2-multiple2 {
+		width: 50%
+	}
+
+	.select2-results__group .wrap:before {
+		display: none;
+	}
+</style>
+
+
+<title>Edit web notification</title>
 	
 	
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -110,7 +137,7 @@
 					</div>
 					<div class="col-lg-12">
 						<div class="form-group">
-						<jsp:include page="/WEB-INF/views/select-options-with-branch.jsp" />
+						<jsp:include page="/WEB-INF/views/search-option-for-notification.jsp" />
 						</div>
 					</div>
 					
@@ -145,11 +172,21 @@
 <%-- <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
  --%>
 <script src="<c:url value='/resources/js/jquery.simple-dtpicker.js' />"></script>
+<script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 
 <script>
-jQuery(document).ready(function() {       
-	 Metronic.init(); // init metronic core components
-		Layout.init(); // init current layout
+jQuery(document).ready(function() { 
+	$('#branchList').select2MultiCheckboxes({
+		placeholder: "Select branch",
+		width: "auto",
+		templateSelection: function(selected, total) {
+			return "Selected " + selected.length + " of " + total;
+		}
+	});
+	$(".5").prop("selected","selected");
+    $(".5").trigger("change");
+	Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
   
 });
 var rolesArray = [];
@@ -203,112 +240,106 @@ $(".webNotificationClass").on('click', function() {
   
 
 $('#addWebNotification').submit(function(event) {
-    event.preventDefault();
-   
-    let validation = Validate();
-    if(validation == false){
-    	return false;
-    }
-    let url = '${add}';
-    let token = $("meta[name='_csrf']").attr("content");
-    let header = $("meta[name='_csrf_header']").attr("content");
-    let formData;
-    let enableSimPrint = false;
-    var roles = [];
-    $('input[name^="roles"]').each(function() {           
-    	roles.push($(this).val());
-    }); 
-    let divisionId = $('#divisionList').val();
-    let districtId = $('#districtList').val();
-    let upazilaId = $('#upazilaList').val();
-   
-    let branchId = $('#branchList').val();
-   
-    let locationId = 0;
-    let locationType="LOCATION";
-    if(branchId !=0){
-		locationId = branchId;
-		locationType="BRANCH";
-	}else if(upazilaId !=0){
-		locationId = upazilaId;
-		locationType="LOCATION";
-		
-	}else if(districtId != 0){
-		locationId = districtId;
-		locationType="LOCATION";
-		
-	}else if(divisionId != 0){
-		locationId =divisionId; 
-		locationType="LOCATION";
-		
-	}
-   
-    
-    let dateTime = $("#date").val();
-    let sendDate="2020-09-01";
-    let hour = 0;
-    let minute=0;
-    if(dateTime != ""){
-	    let dateTimeInArray = dateTime.split(" ");
-	    let timeInArray = dateTimeInArray[1].split(":");
-	     sendDate = dateTimeInArray[0];
-	     hour = timeInArray[0];
-	     minute=timeInArray[1];
-    }else{
- 	   dateTime = '${webNotification.getSendDateAndTime()}';
-    }
-    formData = {
-        'id': '${id}',
-        'notificationTitle': $('#notificationTitle').val(),
-        'notification': $('#notification').val(),
-        'roles': roles,
-        'status': 'ACTIVE',
-        'sendDate': sendDate,       
-        "sendTimeMinute":minute,
-        "sendTimeHour":hour,
-        "type":type, 
-        "division":divisionId,
-        "district":districtId,
-        "upazila":upazilaId,
-        "branch":branchId,
-        "locationType":locationType,
-        "locationTypeId":locationId,
-        "sendDateAndTime":dateTime
+	 event.preventDefault();
+	   
+	    let validation = Validate();
+	    if(validation == false){
+	    	return false;
+	    }
+	    let url = '${add}';
+	    let token = $("meta[name='_csrf']").attr("content");
+	    let header = $("meta[name='_csrf_header']").attr("content");
+	    let formData;
+	    let enableSimPrint = false;
+	    var roles = [];
+	    $('input[name^="roles"]').each(function() {           
+	    	roles.push($(this).val());
+	    }); 
+	    let divisionId = $('#divisionList').val();
+	    let districtId = $('#districtList').val();
+	    let upazilaId = $('#upazilaList').val();
+	   
+	    
+	    
+	   var today = new Date();
+	   let dateTime = $("#date").val();
+	   let sendDate= today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+	   let hour = 0;
+	   let minute=0;
+	   if(dateTime != ""){
+	   let dateTimeInArray = dateTime.split(" ");
+	   let timeInArray = dateTimeInArray[1].split(":");
+	    sendDate = dateTimeInArray[0];
+	    hour = timeInArray[0];
+	    minute=timeInArray[1];
+	   }else{
+		   dateTime = dateTime;
+	   }
+	   
+	   var branchIds =  $("#branchList").val();
+	   var branchAsString = "";
+		if( branchIds ==null || typeof branchIds == 'undefined'){
+	 		branchIds = []; 
+	 		branchAsString = "";
+	 	}else{
+	 		branchIds = $("#branchList").val();
+	 		branchAsString= $("#branchList").val().join();
+	 	}
+	 	console.log(branchIds);
+	    formData = {
+	    	'id': '${id}',
+	        'notificationTitle': $('#notificationTitle').val(),
+	        'notification': $('#notification').val(),
+	        'roles': roles,
+	        'status': 'ACTIVE',
+	        'sendDate': sendDate,       
+	        "sendTimeMinute":minute,
+	        "sendTimeHour":hour,
+	        "type":type, 
+	        "division":divisionId,
+	        "district":districtId,
+	        "upazila":upazilaId,
+	        "branch":0,
+	        "locationType":'',
+	        "locationTypeId":0,
+			"sendDateAndTime":dateTime,
+			"branches":branchIds,
+			"branchAsString":branchAsString
 
-    };
-   // alert(branchId);
-    console.log(formData);
-  //return false;
-    $.ajax({
-        contentType : "application/json",
-        type: "POST",
-        url: url,
-        data: JSON.stringify(formData),
-        dataType : 'json',
-        timeout : 100000,
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader(header, token);
-            $("#loading").show();
-        },
-        success : function(data) {
-        	let response = JSON.parse(data);
-    		console.log(response);
-    		$("#errorMessage").show();            	  
-            $("#errormessageContent").html(response.msg)  
-            if(response.status == 'SUCCESS'){
-            	setTimeout(function(){
-            		 window.location.replace("${back}");
-                 }, 2000);
+	    };
+	    console.log(formData);
+	  
+	    $.ajax({
+	        contentType : "application/json",
+	        type: "POST",
+	        url: url,
+	        data: JSON.stringify(formData),
+	        dataType : 'json',
 
-            }
-        },
-        error : function(e) {
-            console.log(e);
-        },
-        done : function(e) {
-            console.log("DONE");
-        }
-    });
+	        timeout : 100000,
+	        beforeSend: function(xhr) {
+	            xhr.setRequestHeader(header, token);
+	            $("#loading").show();
+	        },
+	        success : function(data) {
+	        	let response = JSON.parse(data);
+	    		console.log(response);
+	    		$("#errorMessage").show();            	  
+	            $("#errormessageContent").html(response.msg)  
+	            if(response.status == 'SUCCESS'){
+	            	setTimeout(function(){
+	            		 window.location.replace("${back}");
+	                 }, 2000);
+
+	            }
+	        },
+	        error : function(e) {
+	            console.log(e);
+	        },
+	        done : function(e) {
+	            console.log("DONE");
+	        }
+	    });
 });
 
 

@@ -23,11 +23,11 @@ import org.json.JSONObject;
 import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.dto.WebNotificationCommonDTO;
 import org.opensrp.common.util.DateUtil;
-import org.opensrp.common.util.TaregtSettingsType;
 import org.opensrp.common.util.WebNotificationType;
 import org.opensrp.core.dto.WebNotificationDTO;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.WebNotification;
+import org.opensrp.core.entity.WebNotificationBranch;
 import org.opensrp.core.entity.WebNotificationUser;
 import org.opensrp.core.mapper.WebNotificationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,17 +58,22 @@ public class WebNotificationService extends CommonService {
 		} else {
 			boolean isDelete = deleteAllByPrimaryKey(dto.getId(), "web_notification_user", "web_notification_id");
 			boolean isdeleteRole = deleteAllByPrimaryKey(dto.getId(), "web_notification_role", "web_notification_id");
+			boolean isdeleteBranch = deleteAllByPrimaryKey(dto.getId(), "web_notification_branch", "web_notification_id");
 			if (!isDelete) {
 				return null;
 			}
-			if(!isdeleteRole) {
+			if (!isdeleteRole) {
+				return null;
+			}
+			if (!isdeleteBranch) {
 				return null;
 			}
 		}
-		
-		List<TargetCommontDTO> targetTos = getAllUser(dto.getRoles(), TaregtSettingsType.valueOf(dto.getLocationType())
-		        .name(), dto.getLocationTypeId());
-		
+		List<TargetCommontDTO> targetTos = new ArrayList<>();
+		if (!dto.getRoles().isEmpty() || !dto.getBranches().isEmpty()) {
+			targetTos = getAllUser(dto.getRoles(), dto.getBranchAsString());
+			
+		}
 		Set<WebNotificationUser> _webNotificationUsers = new HashSet<>();
 		for (TargetCommontDTO webNotificationUser : targetTos) {
 			WebNotificationUser _webNotificationUser = new WebNotificationUser();
@@ -77,6 +82,14 @@ public class WebNotificationService extends CommonService {
 			_webNotificationUsers.add(_webNotificationUser);
 		}
 		
+		Set<WebNotificationBranch> _webNotificationBranchs = new HashSet<>();
+		for (Integer branchId : dto.getBranches()) {
+			WebNotificationBranch webNotificationBranch = new WebNotificationBranch();
+			webNotificationBranch.setBranch(branchId);
+			webNotificationBranch.setWebNotification(webNotification);
+			_webNotificationBranchs.add(webNotificationBranch);
+		}
+		webNotification.setWebNotificationBranchs(_webNotificationBranchs);
 		webNotification.setWebNotifications(_webNotificationUsers);
 		webNotification = webNotificationMapper.map(dto, webNotification);
 		session.saveOrUpdate(webNotification);
@@ -143,8 +156,9 @@ public class WebNotificationService extends CommonService {
 				String date = dto.getSendDate() + " " + dto.getSendTimeHour() + ":" + dto.getSendTimeMinute();
 				if (DateUtil.getTimestamp(date) > System.currentTimeMillis()) {
 					
-					view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId() + ".html\">Details</a> "
-					        + " | <a class='text-primary' \" href=\"edit/" + dto.getId() + ".html\">Edit</a> " + "</div>";
+					view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId()
+					        + ".html\">Details</a> " + " | <a class='text-primary' \" href=\"edit/" + dto.getId()
+					        + ".html\">Edit</a> " + "</div>";
 					
 				} else {
 					
@@ -153,8 +167,9 @@ public class WebNotificationService extends CommonService {
 				}
 			} else if (dto.getType().equalsIgnoreCase(WebNotificationType.DRAFT.name())) {
 				patient.put(dto.getCreatedTime());
-				view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId() + ".html\">Details</a> "
-				        + " | <a class='text-primary' \" href=\"edit/" + dto.getId() + ".html\">Edit</a> " + "</div>";
+				view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId()
+				        + ".html\">Details</a> " + " | <a class='text-primary' \" href=\"edit/" + dto.getId()
+				        + ".html\">Edit</a> " + "</div>";
 			} else {
 				patient.put(dto.getCreatedTime());
 				view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId()
@@ -195,16 +210,11 @@ public class WebNotificationService extends CommonService {
 		
 		String hql = "select title,notification,status,notification_type as type,send_date_and_time createdTime,branch_name as branchName,division_name divisionName,district_name districtName,upazilla_name upazillaName,role_name as roleName from core.web_notification_details(:notificationId)";
 		Query query = session.createSQLQuery(hql).addScalar("title", StandardBasicTypes.STRING)
-		        .addScalar("notification", StandardBasicTypes.STRING)
-		        .addScalar("status", StandardBasicTypes.STRING)
-		        .addScalar("type", StandardBasicTypes.STRING)
-		        .addScalar("createdTime", StandardBasicTypes.STRING)
-		        .addScalar("branchName", StandardBasicTypes.STRING)
-		        .addScalar("roleName", StandardBasicTypes.STRING)
-		        .addScalar("divisionName", StandardBasicTypes.STRING)
-		        .addScalar("districtName", StandardBasicTypes.STRING)
-		        .addScalar("upazillaName", StandardBasicTypes.STRING)
-		        .addScalar("roleName", StandardBasicTypes.STRING)
+		        .addScalar("notification", StandardBasicTypes.STRING).addScalar("status", StandardBasicTypes.STRING)
+		        .addScalar("type", StandardBasicTypes.STRING).addScalar("createdTime", StandardBasicTypes.STRING)
+		        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
+		        .addScalar("divisionName", StandardBasicTypes.STRING).addScalar("districtName", StandardBasicTypes.STRING)
+		        .addScalar("upazillaName", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
 		        .setLong("notificationId", notificationId)
 		        
 		        .setResultTransformer(new AliasToBeanResultTransformer(WebNotificationCommonDTO.class));

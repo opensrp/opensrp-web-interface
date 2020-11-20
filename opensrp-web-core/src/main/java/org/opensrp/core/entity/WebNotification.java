@@ -103,6 +103,9 @@ public class WebNotification implements Serializable {
 	@OneToMany(mappedBy = "webNotification", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<WebNotificationRole> webNotificationRoles = new HashSet<WebNotificationRole>();
 	
+	@OneToMany(mappedBy = "webNotification", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<WebNotificationBranch> webNotificationBranchs = new HashSet<WebNotificationBranch>();
+	
 	public Long getId() {
 		return id;
 		
@@ -278,6 +281,14 @@ public class WebNotification implements Serializable {
 	
 	public void setSendDateAndTime(String sendDateAndTime) {
 		this.sendDateAndTime = sendDateAndTime;
+	}
+	
+	public Set<WebNotificationBranch> getWebNotificationBranchs() {
+		return webNotificationBranchs;
+	}
+	
+	public void setWebNotificationBranchs(Set<WebNotificationBranch> webNotificationBranchs) {
+		this.webNotificationBranchs = webNotificationBranchs;
 	}
 	
 }
