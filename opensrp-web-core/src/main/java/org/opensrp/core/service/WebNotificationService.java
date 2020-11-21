@@ -99,24 +99,22 @@ public class WebNotificationService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<WebNotificationCommonDTO> getWebNotificationList(int locationId, int branchId, int roleId, String startDate,
-	                                                             String endDate, String type, Integer length, Integer start,
-	                                                             String orderColumn, String orderDirection) {
+	public List<WebNotificationCommonDTO> getWebNotificationList(int locationId, String branchIds, int roleId,
+	                                                             String startDate, String endDate, String type,
+	                                                             Integer length, Integer start, String orderColumn,
+	                                                             String orderDirection) {
 		
 		Session session = getSessionFactory();
 		List<WebNotificationCommonDTO> dtos = new ArrayList<>();
 		
-		String hql = "select created createdTime, id,title,notification,start_date sendDate,send_time_hour sendTimeHour,send_time_minute sendTimeMinute,branch_name branchName,branch_code branchCode,role_name roleName,type from core.web_notification_list( :locationId,:branchId ,:roleId,:startDate ,:endDate, :type, :start, :length)";
-		Query query = session.createSQLQuery(hql).addScalar("createdTime", StandardBasicTypes.STRING)
-		        .addScalar("id", StandardBasicTypes.LONG).addScalar("title", StandardBasicTypes.STRING)
-		        .addScalar("notification", StandardBasicTypes.STRING).addScalar("sendDate", StandardBasicTypes.DATE)
-		        .addScalar("sendTimeHour", StandardBasicTypes.INTEGER)
-		        .addScalar("sendTimeMinute", StandardBasicTypes.INTEGER).addScalar("branchName", StandardBasicTypes.STRING)
-		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
-		        .addScalar("type", StandardBasicTypes.STRING).setInteger("locationId", locationId)
-		        .setInteger("branchId", branchId).setInteger("roleId", roleId).setString("startDate", startDate)
-		        .setString("endDate", endDate).setString("type", type).setInteger("start", start)
-		        .setInteger("length", length)
+		String hql = "select sending_time sendTime, id,type,title,notification,role_name roleName from core.web_notification_list( :locationId,'{"
+		        + branchIds + "}' ,:roleId,:startDate ,:endDate, :type, :start, :length)";
+		Query query = session.createSQLQuery(hql).addScalar("sendTime", StandardBasicTypes.STRING)
+		        .addScalar("id", StandardBasicTypes.LONG).addScalar("type", StandardBasicTypes.STRING)
+		        .addScalar("title", StandardBasicTypes.STRING).addScalar("notification", StandardBasicTypes.STRING)
+		        .addScalar("roleName", StandardBasicTypes.STRING).setInteger("locationId", locationId)
+		        .setInteger("roleId", roleId).setString("startDate", startDate).setString("endDate", endDate)
+		        .setString("type", type).setInteger("start", start).setInteger("length", length)
 		        
 		        .setResultTransformer(new AliasToBeanResultTransformer(WebNotificationCommonDTO.class));
 		dtos = query.list();
@@ -125,16 +123,16 @@ public class WebNotificationService extends CommonService {
 	}
 	
 	@Transactional
-	public int getWebNotificationListCount(int locationId, int branchId, int roleId, String startDate, String endDate,
+	public int getWebNotificationListCount(int locationId, String branchIds, int roleId, String startDate, String endDate,
 	                                       String type) {
 		
 		Session session = getSessionFactory();
 		BigInteger total = null;
 		
-		String hql = "select * from core.web_notification_list_count( :locationId,:branchId,:roleId,:startDate,:endDate,:type)";
-		Query query = session.createSQLQuery(hql).setInteger("locationId", locationId).setInteger("branchId", branchId)
-		        .setInteger("roleId", roleId).setString("startDate", startDate).setString("endDate", endDate)
-		        .setString("type", type);
+		String hql = "select * from core.web_notification_list_count( :locationId,'{" + branchIds
+		        + "}',:roleId,:startDate,:endDate,:type)";
+		Query query = session.createSQLQuery(hql).setInteger("locationId", locationId).setInteger("roleId", roleId)
+		        .setString("startDate", startDate).setString("endDate", endDate).setString("type", type);
 		total = (BigInteger) query.uniqueResult();
 		
 		return total.intValue();

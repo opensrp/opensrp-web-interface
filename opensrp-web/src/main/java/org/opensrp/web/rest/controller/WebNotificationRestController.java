@@ -76,7 +76,7 @@ public class WebNotificationRestController {
 		
 		String name = request.getParameter("search");
 		
-		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		String branchId = request.getParameter("branchId");
 		int roleId = Integer.parseInt(request.getParameter("roleId"));
 		int locationId = Integer.parseInt(request.getParameter("locationId"));
 		String startDate = request.getParameter("startDate");

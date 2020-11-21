@@ -11,7 +11,36 @@
 
 <title>Web notification list</title>
 	
-	
+<style>
+	.select2-results__option .wrap:before {
+		font-family: fontAwesome;
+		color: #999;
+		content: "\f096";
+		width: 25px;
+		height: 25px;
+		padding-right: 10px;
+	}
+
+	.select2-results__option[aria-selected=true] .wrap:before {
+		content: "\f14a";
+	}
+
+
+	/* not required css */
+
+	.row {
+		padding: 10px;
+	}
+
+	.select2-multiple,
+	.select2-multiple2 {
+		width: 50%
+	}
+
+	.select2-results__group .wrap:before {
+		display: none;
+	}
+</style>
 <c:url var="get_url" value="/rest/api/v1/web-notfication/list" />
 <c:url var="add_page" value="/web-notification/add-new.html" />
 
@@ -127,12 +156,21 @@
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script src="<c:url value='/resources/js/moment.min.js' />"></script>
- 
+ <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 <script src="<c:url value='/resources/js/daterangepicker.min.js' />"></script>
 <script>
-jQuery(document).ready(function() {       
+jQuery(document).ready(function() { 
+	$('#branchList').select2MultiCheckboxes({
+		placeholder: "Select branch",
+		width: "auto",
+		templateSelection: function(selected, total) {
+			return "Selected " + selected.length + " of " + total;
+		}
+	});
 	 Metronic.init(); // init metronic core components
-		Layout.init(); // init current layout
+	Layout.init(); // init current layout
+	$("#branchList > option").prop("selected","selected");
+    $("#branchList").trigger("change");
    
 });
 
@@ -176,8 +214,15 @@ $("#to").datepicker('setDate', new Date());
             ],
             ajax: {
                 url: "${get_url}",
-                data: function(data){                	
-                	data.branchId = 0;
+                data: function(data){  
+                	var branchIds =  $("#branchList").val();
+                  	if( branchIds ==null || typeof branchIds == 'undefined'){
+                  		branchIds = ''
+                  	}else{
+                  		branchIds = $("#branchList").val().join();
+                  	}
+                  	
+                	data.branchId = branchIds;
                     data.locationId=0;                    
                     data.roleId=0;
                     data.type="";
@@ -226,6 +271,14 @@ function filter(){
 	}else if(_nType=='SCHEDULE'){
 		_nType="Schedule";
 	}
+	
+	var branchIds =  $("#branchList").val();
+  	if( branchIds ==null || typeof branchIds == 'undefined'){
+  		branchIds = ''
+  	}else{
+  		branchIds = $("#branchList").val().join();
+  	}
+  	
 	var dateTimeHeader = _nType+" date & time";
 	stockList = $('#webNotificationTable').DataTable({
          bFilter: false,
@@ -246,7 +299,7 @@ function filter(){
           		 data.startDate = $('#from').val();
                  data.endDate =$('#to').val();
              	
-            	 data.branchId = $("#branchList").val();
+            	 data.branchId = branchIds;
                  data.locationId=locationId;                    
                  data.roleId=$("#roleList").val();
                  data.type=$("#nType").val();

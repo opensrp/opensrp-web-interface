@@ -183,8 +183,14 @@ jQuery(document).ready(function() {
 			return "Selected " + selected.length + " of " + total;
 		}
 	});
-	$(".5").prop("selected","selected");
-    $(".5").trigger("change");
+	'<c:forEach items="${branchlist}" var="itm">'
+		$(".${itm}").prop("selected","selected");
+		$(".${itm}").trigger("change");
+	'</c:forEach>'
+
+	
+   // $(".5").trigger("change");
+   // $("#branchList").trigger("change");
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
   

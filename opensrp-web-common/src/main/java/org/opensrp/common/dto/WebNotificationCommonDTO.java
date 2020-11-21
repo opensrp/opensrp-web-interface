@@ -32,6 +32,8 @@ public class WebNotificationCommonDTO {
 	
 	private String upazillaName;
 	
+	private String sendTime;
+	
 	private String status;
 	
 	public long getId() {
@@ -121,37 +123,45 @@ public class WebNotificationCommonDTO {
 	public void setCreatedTime(String createdTime) {
 		this.createdTime = createdTime;
 	}
-
+	
 	public String getDivisionName() {
 		return divisionName;
 	}
-
+	
 	public void setDivisionName(String divisionName) {
 		this.divisionName = divisionName;
 	}
-
+	
 	public String getDistrictName() {
 		return districtName;
 	}
-
+	
 	public void setDistrictName(String districtName) {
 		this.districtName = districtName;
 	}
-
+	
 	public String getUpazillaName() {
 		return upazillaName;
 	}
-
+	
 	public void setUpazillaName(String upazillaName) {
 		this.upazillaName = upazillaName;
 	}
-
+	
 	public String getStatus() {
 		return status;
 	}
-
+	
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	
+	public String getSendTime() {
+		return sendTime;
+	}
+	
+	public void setSendTime(String sendTime) {
+		this.sendTime = sendTime;
 	}
 	
 }

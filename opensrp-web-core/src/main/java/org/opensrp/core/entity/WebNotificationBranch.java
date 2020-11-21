@@ -62,4 +62,9 @@ public class WebNotificationBranch implements Serializable {
 		this.webNotification = webNotification;
 	}
 	
+	@Override
+	public String toString() {
+		return "WebNotificationBranch [id=" + id + ", webNotification=" + webNotification + ", branch=" + branch + "]";
+	}
+	
 }

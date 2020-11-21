@@ -35,7 +35,7 @@
         <select	name="branchList" class="form-control" id="branchList">
 		 	
             <c:forEach items="${branches}" var="branch">
-                <option class="${branch.id}" value="${branch.id}">${branch.name}</option>
+                <option id="${branch.id}" class="${branch.id}" value="${branch.id}">${branch.name}</option>
             </c:forEach>
         </select>
     </div>
