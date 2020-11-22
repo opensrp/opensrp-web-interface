@@ -107,9 +107,11 @@ public class WebNotificationService extends CommonService {
 		Session session = getSessionFactory();
 		List<WebNotificationCommonDTO> dtos = new ArrayList<>();
 		
-		String hql = "select sending_time sendTime, id,type,title,notification,role_name roleName from core.web_notification_list( :locationId,'{"
+		String hql = "select created createdTime, _send_date sendDate,send_time_hour sendTimeHour,send_time_minute sendTimeMinute, sending_time sendTime, id,type,title,notification,role_name roleName from core.web_notification_list( :locationId,'{"
 		        + branchIds + "}' ,:roleId,:startDate ,:endDate, :type, :start, :length)";
-		Query query = session.createSQLQuery(hql).addScalar("sendTime", StandardBasicTypes.STRING)
+		Query query = session.createSQLQuery(hql).addScalar("createdTime", StandardBasicTypes.STRING)
+		        .addScalar("sendDate", StandardBasicTypes.DATE).addScalar("sendTimeHour", StandardBasicTypes.INTEGER)
+		        .addScalar("sendTimeMinute", StandardBasicTypes.INTEGER).addScalar("sendTime", StandardBasicTypes.STRING)
 		        .addScalar("id", StandardBasicTypes.LONG).addScalar("type", StandardBasicTypes.STRING)
 		        .addScalar("title", StandardBasicTypes.STRING).addScalar("notification", StandardBasicTypes.STRING)
 		        .addScalar("roleName", StandardBasicTypes.STRING).setInteger("locationId", locationId)
@@ -164,7 +166,8 @@ public class WebNotificationService extends CommonService {
 					        + ".html\">Details</a> </div>";
 				}
 			} else if (dto.getType().equalsIgnoreCase(WebNotificationType.DRAFT.name())) {
-				patient.put(dto.getCreatedTime());
+				//patient.put(dto.getCreatedTime());
+				patient.put("");
 				view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId()
 				        + ".html\">Details</a> " + " | <a class='text-primary' \" href=\"edit/" + dto.getId()
 				        + ".html\">Edit</a> " + "</div>";

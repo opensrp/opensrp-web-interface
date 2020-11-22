@@ -2,6 +2,7 @@ package org.opensrp.etl.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import junit.framework.Test;
@@ -38,9 +39,13 @@ public class AppTest extends TestCase {
 	public void testApp() {
 		assertTrue(true);
 		try {
-			Date d = getYYYYMMDDHHMMSSFormat.parse("2020-09-14 14:30");
+			Date d = getYYYYMMDDHHMMSSFormat.parse("2020-11-30 14:30");
 			
 			System.err.println(d.getTime() + ":" + System.currentTimeMillis());
+			
+			LocalDateTime now = LocalDateTime.now();
+			System.err.println(now.getMinute());
+			System.err.println(now.getHour());
 		}
 		catch (ParseException e) {
 			// TODO Auto-generated catch block

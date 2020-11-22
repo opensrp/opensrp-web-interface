@@ -306,4 +306,17 @@ public abstract class CommonService {
 		
 		return result;
 	}
+	
+	@Transactional
+	public int getUserRole(int id) {
+		Session session = getSessionFactory();
+		UserDTO result = new UserDTO();
+		String hql = "select  role_id roleId from core.user_role as ur where ur.user_id=:id";
+		Query query = session.createSQLQuery(hql).addScalar("roleId", StandardBasicTypes.INTEGER).setInteger("id", id)
+		        .setResultTransformer(new AliasToBeanResultTransformer(UserDTO.class));
+		
+		result = (UserDTO) query.uniqueResult();
+		
+		return result.getRoleId();
+	}
 }

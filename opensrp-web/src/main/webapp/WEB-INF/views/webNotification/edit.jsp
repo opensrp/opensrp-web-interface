@@ -145,6 +145,11 @@
 						<div class="form-group text-right" id="errorText">
 						
 						</div>
+						<div id="errorMessage">
+	                         <div class="alert-message warn">
+	                             <div id="errormessageContent" class="alert alert-successs text-right"> </div>
+	                         </div>
+                    	</div>
 					</div>
 					
 					
@@ -272,15 +277,19 @@ $('#addWebNotification').submit(function(event) {
 	   let sendDate= today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 	   let hour = 0;
 	   let minute=0;
-	   if(dateTime != ""){
-	   let dateTimeInArray = dateTime.split(" ");
-	   let timeInArray = dateTimeInArray[1].split(":");
-	    sendDate = dateTimeInArray[0];
-	    hour = timeInArray[0];
-	    minute=timeInArray[1];
+	   if(dateTime == ""){   
+		    hour = today.getHours();
+		    minute=today.getMinutes();
+		    dateTime=sendDate+" "+hour+":"+minute;
 	   }else{
-		   dateTime = dateTime;
+		   let dateTimeInArray = dateTime.split(" ");
+		   let timeInArray = dateTimeInArray[1].split(":");
+		    sendDate = dateTimeInArray[0];
+		    hour = timeInArray[0];
+		    minute=timeInArray[1];
+		   	dateTime = dateTime;
 	   }
+	   
 	   
 	   var branchIds =  $("#branchList").val();
 	   var branchAsString = "";
@@ -325,7 +334,8 @@ $('#addWebNotification').submit(function(event) {
 	        timeout : 100000,
 	        beforeSend: function(xhr) {
 	            xhr.setRequestHeader(header, token);
-	            $("#loading").show();
+	            $("#errorMessage").show();    
+	            $("#errormessageContent").html("Please wait.........")  
 	        },
 	        success : function(data) {
 	        	let response = JSON.parse(data);
@@ -335,7 +345,7 @@ $('#addWebNotification').submit(function(event) {
 	            if(response.status == 'SUCCESS'){
 	            	setTimeout(function(){
 	            		 window.location.replace("${back}");
-	                 }, 2000);
+	                 }, 1000);
 
 	            }
 	        },
@@ -372,28 +382,28 @@ function Validate() {
     }); 
     
     if(roles.length==0){
+    	
     	$("#errorText").append("<p style='color:red'>Please select Recipient types</p>");
     	retValue = false;
     }
+    let _dateTime = $("#date").val();
+    console.log($('#date').val());
+    console.log(type);
+    if(_dateTime == "" && type=="SCHEDULE"){
     
-    if($('#date').val() == "" && type=="SCHEDULE"){
 		$("#errorText").append("<p style='color:red'>Date & time  will not empty</p>");
 		retValue = false;
 	}
-    
-
     var divisionId = $('#divisionList').val();
     var branchId = $('#branchList').val();
     
-    if($('#divisionList').val() == 0 && branchId==0){
+    if(divisionId == 0 && branchId==0){
 		$("#errorText").append("<p style='color:red'>Division or branch will not empty</p>");
 		retValue = false;
 	}
-    let _dateTime = $("#date").val();
-    if(type=='SCHEDULE' && _dateTime==''){
-    	$("#errorText").append("<p style='color:red'>Date and time will not empty</p>");
-		retValue = false;
-	}
+    
+   
+    
     
     return retValue;
 }

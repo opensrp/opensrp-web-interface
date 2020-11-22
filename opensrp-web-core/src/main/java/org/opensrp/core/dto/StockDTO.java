@@ -13,6 +13,8 @@ public class StockDTO {
 	
 	private Set<Integer> sellTo;
 	
+	private String referenceType;
+	
 	private String stockId;
 	
 	public Long getId() {
@@ -45,6 +47,14 @@ public class StockDTO {
 	
 	public void setStockId(String stockId) {
 		this.stockId = stockId;
+	}
+	
+	public String getReferenceType() {
+		return referenceType;
+	}
+	
+	public void setReferenceType(String referenceType) {
+		this.referenceType = referenceType;
 	}
 	
 }

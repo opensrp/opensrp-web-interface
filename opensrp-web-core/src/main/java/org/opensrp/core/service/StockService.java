@@ -6,7 +6,9 @@ package org.opensrp.core.service;
 
 import java.math.BigInteger;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -30,10 +32,15 @@ import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.dto.StockAdjustDTO;
 import org.opensrp.core.dto.StockDTO;
 import org.opensrp.core.dto.StockDetailsDTO;
+import org.opensrp.core.entity.Product;
 import org.opensrp.core.entity.Stock;
 import org.opensrp.core.entity.StockAdjust;
 import org.opensrp.core.entity.StockDetails;
 import org.opensrp.core.entity.User;
+import org.opensrp.core.entity.WebNotification;
+import org.opensrp.core.entity.WebNotificationBranch;
+import org.opensrp.core.entity.WebNotificationRole;
+import org.opensrp.core.entity.WebNotificationUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -59,6 +66,7 @@ public class StockService extends CommonService {
 		Set<Integer> sellTos = dto.getSellTo();
 		int number = new Random().nextInt(999999);
 		String stockId = dto.getStockId() + String.format("%06d", number);
+		int branchId = 0;
 		for (Integer sellTo : sellTos) {
 			Stock stock = findById(dto.getId(), "id", Stock.class);
 			if (stock == null) {
@@ -76,15 +84,21 @@ public class StockService extends CommonService {
 				stock.setUuid(UUID.randomUUID().toString());
 			}
 			Set<StockDetails> _stockDetails = new HashSet<>();
+			String refType = "";
+			String msg = "";
 			for (StockDetailsDTO stockDetailsDTO : stockDetailsDTOs) {
 				StockDetails stockDetails = new StockDetails();
 				stockDetails.setBranchId(stockDetailsDTO.getBranchId());
+				branchId = stockDetailsDTO.getBranchId();
 				stockDetails.setCredit(stockDetailsDTO.getCredit());
 				stockDetails.setDebit(stockDetailsDTO.getDebit());
 				stockDetails.setExpireyDate(stockDetailsDTO.getExpireyDate());
 				stockDetails.setReceiveDate(stockDetailsDTO.getReceiveDate());
+				
 				stockDetails.setProductId(stockDetailsDTO.getProductId());
 				stockDetails.setReferenceType(ReferenceType.valueOf(stockDetailsDTO.getReferenceType()).name());
+				
+				refType = ReferenceType.valueOf(stockDetailsDTO.getReferenceType()).name();
 				stockDetails.setSellOrPassTo(sellTo);
 				stockDetails.setTimestamp(System.currentTimeMillis());
 				stockDetails.setStatus(Status.valueOf(stockDetailsDTO.getStatus()).name());
@@ -92,14 +106,56 @@ public class StockService extends CommonService {
 				stockDetails.setStock(stock);
 				stockDetails.setMonth(stockDetailsDTO.getMonth());
 				stockDetails.setYear(stockDetailsDTO.getYear());
+				
 				stockDetails.setStockInId(stockId);
 				stockDetails.setStartDate(stockDetailsDTO.getStartDate());
 				stockDetails.setCreator(user);
 				_stockDetails.add(stockDetails);
+				if (refType.equalsIgnoreCase("PASS")) {
+					Product product = findById(stockDetailsDTO.getProductId(), "id", Product.class);
+					msg += " " + product.getName() + ":" + stockDetailsDTO.getDebit() + "\n";
+				}
 				
 			}
 			stock.setStockDetails(_stockDetails);
 			session.saveOrUpdate(stock);
+			if (refType.equalsIgnoreCase("PASS") && !stockDetailsDTOs.isEmpty()) {
+				WebNotification webNotification = new WebNotification();
+				webNotification.setNotificationTitle("আপনার কাছে নতুন প্রোডাক্ট এসেছে.");
+				webNotification.setNotificationType("STOCK");
+				webNotification.setStockDetailsId(stock.getId());
+				webNotification.setNotification(msg);
+				LocalDateTime now = LocalDateTime.now();
+				webNotification.setSendDate(new Date());
+				webNotification.setSendTimeHour(now.getHour());
+				webNotification.setSendTimeMinute(now.getMinute());
+				webNotification.setType("STOCK");
+				Set<WebNotificationRole> _webNotificationRoles = new HashSet<>();
+				WebNotificationRole _webNotificationRole = new WebNotificationRole();
+				webNotification.setTimestamp(System.currentTimeMillis());
+				_webNotificationRole.setWebNotification(webNotification);
+				_webNotificationRoles.add(_webNotificationRole);
+				webNotification.setWebNotificationRoles(_webNotificationRoles);
+				Set<WebNotificationBranch> _webNotificationBranchs = new HashSet<>();
+				
+				WebNotificationBranch webNotificationBranch = new WebNotificationBranch();
+				webNotificationBranch.setBranch(branchId);
+				webNotificationBranch.setWebNotification(webNotification);
+				_webNotificationBranchs.add(webNotificationBranch);
+				webNotification.setWebNotificationBranchs(_webNotificationBranchs);
+				
+				Set<WebNotificationUser> _webNotificationUsers = new HashSet<>();
+				for (Integer userId : sellTos) {
+					WebNotificationUser _webNotificationUser = new WebNotificationUser();
+					_webNotificationUser.setUserId(userId);
+					_webNotificationUser.setWebNotification(webNotification);
+					_webNotificationUsers.add(_webNotificationUser);
+					_webNotificationRole.setRole(getUserRole(userId));
+				}
+				webNotification.setWebNotifications(_webNotificationUsers);
+				session.saveOrUpdate(webNotification);
+				
+			}
 			
 		}
 		
