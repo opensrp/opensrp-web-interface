@@ -458,6 +458,7 @@ public class UserRestController {
 			account.setEnableSimPrint(userDTO.getEnableSimPrint());
 			account.setEnabled(userDTO.isStatus());
 			account.setBranches(userServiceImpl.setBranch(userDTO.getBranches()));
+			account.setOnMaternityLeave(userDTO.isOnMaternityLeave());
 			userServiceImpl.update(account);
 		}
 		catch (Exception e) {

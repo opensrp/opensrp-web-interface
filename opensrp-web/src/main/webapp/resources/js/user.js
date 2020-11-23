@@ -153,7 +153,7 @@ $("#update-sk-information").submit(function(event) {
     var buttonpressed ;  
    
     var formData;
-    var enableSimPrint = false;   
+    var enableSimPrint = false, onMaternityLeave = false;
     if ($('#enableSimPrint1').is(":checked"))
     {
     	enableSimPrint = true;
@@ -163,7 +163,10 @@ $("#update-sk-information").submit(function(event) {
     {
     	status = true;
     }
-  
+	if ($('#onMaternityLeave1').is(":checked"))
+	{
+		onMaternityLeave = true;
+	}
    
    /// catchmentLoad(1086,0);
     var amId = $('input[name=am]').val();
@@ -180,7 +183,8 @@ $("#update-sk-information").submit(function(event) {
         'branches': getBranch(),
         'enableSimPrint': enableSimPrint,
         'status': status,
-        'id': skId
+        'id': skId,
+		'onMaternityLeave': onMaternityLeave,
     };
     
    event.preventDefault();
@@ -233,11 +237,16 @@ $("#AddSk").submit(function(event) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
     var formData;
-    var enableSimPrint = false;
+    var enableSimPrint = false, onMaternityLeave = false;
     if ($('#enableSimPrint1').is(":checked"))
     {
     	enableSimPrint = true;
     }
+
+	if ($('#onMaternityLeave1').is(":checked"))
+	{
+		enableSimPrint = true;
+	}
     /*var skRole = <%=sk.getId()%>;
     var amId = <%=amId%>;*/
    
@@ -254,7 +263,8 @@ $("#AddSk").submit(function(event) {
         'team': "",
         'teamMember': false,
         'branches': getBranch(),
-        'enableSimPrint': enableSimPrint
+        'enableSimPrint': enableSimPrint,
+		'onMaternityLeave': onMaternityLeave
     };
     event.preventDefault(); 
 

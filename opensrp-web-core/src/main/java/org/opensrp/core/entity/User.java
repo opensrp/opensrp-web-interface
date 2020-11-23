@@ -129,7 +129,10 @@ public class User implements UserDetails {
 	
 	@Column(name = "app_version")
 	private String appVersion;
-	
+
+	@Column(name = "on_maternity_leave")
+	private boolean onMaternityLeave;
+
 	public User() {
 	}
 	
@@ -357,5 +360,12 @@ public class User implements UserDetails {
 		authorities.addAll(getPermissions());
 		return authorities;
 	}
-	
+
+	public boolean isOnMaternityLeave() {
+		return onMaternityLeave;
+	}
+
+	public void setOnMaternityLeave(boolean onMaternityLeave) {
+		this.onMaternityLeave = onMaternityLeave;
+	}
 }

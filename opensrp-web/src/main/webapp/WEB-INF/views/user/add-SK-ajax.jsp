@@ -126,6 +126,13 @@
                                                     path="enableSimPrint" />
 			                   </div>
 			                </div>
+<%--                            <div class="form-group row" id="_onMaternityLeave">--%>
+<%--                                <div class="col-sm-6">--%>
+<%--                                    <label class="control-label" for="_onMaternityLeave"><spring:message code="lbl.onMaternityLeave"/></label>--%>
+<%--                                    <form:checkbox class="checkBoxClass form-check-input"--%>
+<%--                                                   path="onMaternityLeave" />--%>
+<%--                                </div>--%>
+<%--                            </div>--%>
 
                             <hr class="dotted">
                             <div class="form-group text-right">

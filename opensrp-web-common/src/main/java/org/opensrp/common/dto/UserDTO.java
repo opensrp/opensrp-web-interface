@@ -45,6 +45,8 @@ public class UserDTO {
 	private Integer parentUserId;
 	
 	private int pkId;
+
+	private boolean onMaternityLeave;
 	
 	public boolean isStatus() {
 		return status;
@@ -225,7 +227,15 @@ public class UserDTO {
 	public void setPkId(int pkId) {
 		this.pkId = pkId;
 	}
-	
+
+	public boolean isOnMaternityLeave() {
+		return onMaternityLeave;
+	}
+
+	public void setOnMaternityLeave(boolean onMaternityLeave) {
+		this.onMaternityLeave = onMaternityLeave;
+	}
+
 	@Override
 	public String toString() {
 		return "UserDTO{" + "firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\''

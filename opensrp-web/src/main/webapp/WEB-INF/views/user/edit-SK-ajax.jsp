@@ -144,6 +144,14 @@
 								<div id="inactivity-message" style="margin-left: 150px;display: none; color: red; font-weight: bold;">Inactivating the user will completely remove the catchment area assigned to the user</div>
 							</div>
 
+                            <div class="form-group row" >
+                                <div class="col-sm-6">
+                                    <label class="label-width" ><spring:message code="lbl.onMaternityLeave"/></label>
+                                    <form:checkbox class="checkBoxClass form-check-input" onclick="buttonUpdate(${account.isOnMaternityLeave()})"
+                                                   path="onMaternityLeave" value="${account.isOnMaternityLeave()}"/>
+                                </div>
+                            </div>
+
                             <hr class="dotted">
                             <div class="form-group text-right row" style="margin-top: 50px">
                                 <input type="submit" id="updateContinue" name="updateContinue" value="Update & Continue To Edit Catchment Area"

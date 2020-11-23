@@ -28,6 +28,7 @@ public class UserMapper {
         user.setEmail(userDTO.getEmail());
         user.setEnabled(true);
         user.setEnableSimPrint(userDTO.getEnableSimPrint());
+        user.setOnMaternityLeave(userDTO.isOnMaternityLeave());
 
         user.setLastName(userDTO.getLastName());
         user.setMobile(userDTO.getMobile());
