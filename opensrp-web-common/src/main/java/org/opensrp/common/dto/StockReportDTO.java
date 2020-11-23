@@ -1,6 +1,6 @@
 package org.opensrp.common.dto;
 
-public class AMStockReportDTO {
+public class StockReportDTO {
     private String skusername;
     private String skname;
     private Integer iycfStartingBalance;
@@ -15,6 +15,20 @@ public class AMStockReportDTO {
     private Integer adolescentPackageMonthlySupply;
     private Integer adolescentPackageMonthlySell;
     private Integer adolescentPackageEndingBalance;
+    private Integer ncdPackageStartingBalance;
+    private Integer ncdPackageMonthlySupply;
+    private Integer ncdPackageMonthlySell;
+    private Integer ncdPackageEndingBalance;
+
+    private Integer ancPackageStartingBalance;
+    private Integer ancPackageMonthlySupply;
+    private Integer ancPackageMonthlySell;
+    private Integer ancPackageEndingBalance;
+
+    private Integer pncPackageStartingBalance;
+    private Integer pncPackageMonthlySupply;
+    private Integer pncPackageMonthlySell;
+    private Integer pncPackageEndingBalance;
 
 
     public Integer getIycfStartingBalance() {
@@ -127,5 +141,101 @@ public class AMStockReportDTO {
 
     public void setAdolescentPackageEndingBalance(Integer adolescentPackageEndingBalance) {
         this.adolescentPackageEndingBalance = adolescentPackageEndingBalance;
+    }
+
+    public Integer getNcdPackageStartingBalance() {
+        return ncdPackageStartingBalance;
+    }
+
+    public void setNcdPackageStartingBalance(Integer ncdPackageStartingBalance) {
+        this.ncdPackageStartingBalance = ncdPackageStartingBalance;
+    }
+
+    public Integer getNcdPackageMonthlySupply() {
+        return ncdPackageMonthlySupply;
+    }
+
+    public void setNcdPackageMonthlySupply(Integer ncdPackageMonthlySupply) {
+        this.ncdPackageMonthlySupply = ncdPackageMonthlySupply;
+    }
+
+    public Integer getNcdPackageMonthlySell() {
+        return ncdPackageMonthlySell;
+    }
+
+    public void setNcdPackageMonthlySell(Integer ncdPackageMonthlySell) {
+        this.ncdPackageMonthlySell = ncdPackageMonthlySell;
+    }
+
+    public Integer getNcdPackageEndingBalance() {
+        return ncdPackageEndingBalance;
+    }
+
+    public void setNcdPackageEndingBalance(Integer ncdPackageEndingBalance) {
+        this.ncdPackageEndingBalance = ncdPackageEndingBalance;
+    }
+
+    public Integer getAncPackageStartingBalance() {
+        return ancPackageStartingBalance;
+    }
+
+    public void setAncPackageStartingBalance(Integer ancPackageStartingBalance) {
+        this.ancPackageStartingBalance = ancPackageStartingBalance;
+    }
+
+    public Integer getAncPackageMonthlySupply() {
+        return ancPackageMonthlySupply;
+    }
+
+    public void setAncPackageMonthlySupply(Integer ancPackageMonthlySupply) {
+        this.ancPackageMonthlySupply = ancPackageMonthlySupply;
+    }
+
+    public Integer getAncPackageMonthlySell() {
+        return ancPackageMonthlySell;
+    }
+
+    public void setAncPackageMonthlySell(Integer ancPackageMonthlySell) {
+        this.ancPackageMonthlySell = ancPackageMonthlySell;
+    }
+
+    public Integer getAncPackageEndingBalance() {
+        return ancPackageEndingBalance;
+    }
+
+    public void setAncPackageEndingBalance(Integer ancPackageEndingBalance) {
+        this.ancPackageEndingBalance = ancPackageEndingBalance;
+    }
+
+    public Integer getPncPackageStartingBalance() {
+        return pncPackageStartingBalance;
+    }
+
+    public void setPncPackageStartingBalance(Integer pncPackageStartingBalance) {
+        this.pncPackageStartingBalance = pncPackageStartingBalance;
+    }
+
+    public Integer getPncPackageMonthlySupply() {
+        return pncPackageMonthlySupply;
+    }
+
+    public void setPncPackageMonthlySupply(Integer pncPackageMonthlySupply) {
+        this.pncPackageMonthlySupply = pncPackageMonthlySupply;
+    }
+
+    public Integer getPncPackageMonthlySell() {
+        return pncPackageMonthlySell;
+    }
+
+    public void setPncPackageMonthlySell(Integer pncPackageMonthlySell) {
+        this.pncPackageMonthlySell = pncPackageMonthlySell;
+    }
+
+    public Integer getPncPackageEndingBalance() {
+        return pncPackageEndingBalance;
+    }
+
+    public void setPncPackageEndingBalance(Integer pncPackageEndingBalance) {
+        this.pncPackageEndingBalance = pncPackageEndingBalance;
     }
 }

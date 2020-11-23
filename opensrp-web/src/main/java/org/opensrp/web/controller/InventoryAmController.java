@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.api.Http;
 import org.apache.commons.lang.StringUtils;
-import org.opensrp.common.dto.AMStockReportDTO;
+import org.opensrp.common.dto.StockReportDTO;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.dto.RequisitionQueryDto;
 import org.opensrp.common.util.Roles;
@@ -251,17 +250,18 @@ public class InventoryAmController {
 	public String stockReportTable(
 			@RequestParam(value="year") String year,
 			@RequestParam(value="month") String month,
-			@RequestParam(value="branchId", required = false) String branchId,
+			@RequestParam(value="branchIds", required = false) String branchIds,
 			HttpSession session) {
 		String skIds;
 
-		if (StringUtils.isBlank(branchId)) {
+		System.out.println("branchIds: "+ branchIds);
+		if (StringUtils.isBlank(branchIds)) {
 			String branches = branchService.commaSeparatedBranch(new ArrayList<>(AuthenticationManagerUtil.getLoggedInUser().getBranches()));
 			skIds = userService.findSKByBranchSeparatedByComma("'{" + branches + "}'");
 		} else {
-			skIds = userService.findSKByBranchSeparatedByComma("'{" + branchId + "}'");
+			skIds = userService.findSKByBranchSeparatedByComma("'{" + branchIds + "}'");
 		}
-		List<AMStockReportDTO> report = stockService.getStockReportForAM(year, month, skIds);
+		List<StockReportDTO> report = stockService.getStockReportForAM(year, month, skIds);
 		session.setAttribute("amStockReport", report);
 		return "inventoryAm/stock-report-table";
 	}

@@ -25,7 +25,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.common.dto.AMStockReportDTO;
+import org.opensrp.common.dto.StockReportDTO;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.util.ReferenceType;
 import org.opensrp.common.util.Status;
@@ -523,11 +523,11 @@ public class StockService extends CommonService {
 	}
 
 	@Transactional
-	public List<AMStockReportDTO> getStockReportForAM(String year, String month, String skList) {
+	public List<StockReportDTO> getStockReportForAM(String year, String month, String skList) {
 		Session session = getSessionFactory();
-		List<AMStockReportDTO> result = null;
+		List<StockReportDTO> result = null;
 
-		String rawSql = "select * from report.get_am_stock_report('"+month+"', '"+year+"', '{"+skList+"}')";
+		String rawSql = "select * from report.get_stock_report('"+month+"', '"+year+"', '{"+skList+"}')";
 		Query query = session.createSQLQuery(rawSql)
 				.addScalar("skusername", StandardBasicTypes.STRING)
 				.addScalar("skname", StandardBasicTypes.STRING)
@@ -543,7 +543,20 @@ public class StockService extends CommonService {
 				.addScalar("adolescentPackageMonthlySupply", StandardBasicTypes.INTEGER)
 				.addScalar("adolescentPackageMonthlySell", StandardBasicTypes.INTEGER)
 				.addScalar("adolescentPackageEndingBalance",  StandardBasicTypes.INTEGER)
-				.setResultTransformer(new AliasToBeanResultTransformer(AMStockReportDTO.class));
+				.addScalar("ncdPackageStartingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("ncdPackageMonthlySupply", StandardBasicTypes.INTEGER)
+				.addScalar("ncdPackageMonthlySell", StandardBasicTypes.INTEGER)
+				.addScalar("ncdPackageEndingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("ancPackageStartingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("ancPackageMonthlySupply", StandardBasicTypes.INTEGER)
+				.addScalar("ancPackageMonthlySell", StandardBasicTypes.INTEGER)
+				.addScalar("ancPackageEndingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("pncPackageStartingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("pncPackageMonthlySupply", StandardBasicTypes.INTEGER)
+				.addScalar("pncPackageMonthlySell", StandardBasicTypes.INTEGER)
+				.addScalar("pncPackageEndingBalance", StandardBasicTypes.INTEGER)
+
+				.setResultTransformer(new AliasToBeanResultTransformer(StockReportDTO.class));
 		result = query.list();
 		return result;
 	}
