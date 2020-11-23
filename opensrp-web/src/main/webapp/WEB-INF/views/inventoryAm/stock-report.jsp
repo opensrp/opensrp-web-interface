@@ -11,6 +11,38 @@
 <%@ page import="org.opensrp.core.entity.Branch" %>
 <%@ page import="java.util.List" %>
 
+
+<style>
+	.select2-results__option .wrap:before {
+		font-family: fontAwesome;
+		color: #999;
+		content: "\f096";
+		width: 25px;
+		height: 25px;
+		padding-right: 10px;
+	}
+
+	.select2-results__option[aria-selected=true] .wrap:before {
+		content: "\f14a";
+	}
+
+
+	/* not required css */
+
+	.row {
+		padding: 10px;
+	}
+
+	.select2-multiple,
+	.select2-multiple2 {
+		width: 50%
+	}
+
+	.select2-results__group .wrap:before {
+		display: none;
+	}
+
+</style>
 <title>Stock Report</title>
 	
 	
@@ -36,8 +68,8 @@
 								<div class="col-lg-3 form-group">
 								    <label for="branchList">Branch :</label>
 								    <select
-										name="branch" class="form-control" id="branchList">
-										<option value="">All Branch</option>
+										name="branch" class="form-control" id="branchList" >
+
 										<%
 											List<Branch> ret = (List<Branch>) session.getAttribute("branchList");
 											for (Branch str : ret) {
@@ -46,44 +78,24 @@
 										<%}%>
 									</select>
 								</div>
-								<div class="col-lg-3 form-group">
-								    <label for="month">Month</label>
 
-									<select class="form-control" id="month">
-										<option value="">Select Month</option>
-										<option value="1">January</option>
-										<option value="2">February</option>
-										<option value="3">March</option>
-										<option value="4">April</option>
-										<option value="5">May</option>
-										<option value="6">June</option>
-										<option value="7">July</option>
-										<option value="8">August</option>
-										<option value="9">September</option>
-										<option value="10">October</option>
-										<option value="11">November</option>
-										<option value="12">December</option>
-									</select>
-								</div>
 								<div class="col-lg-3 form-group">
-									<label for="year">Year:</label>
-									<select id="year" class="form-control" >
-										<option value="">Select Year</option>
-										<option value="2020">2020</option>
-										<option value="2021">2021</option>
-									</select>
+									<label >Month & Year:</label>
+									<input type="text"
+										   class="form-control date-picker-year" id="monthlyDate">
 								</div>
 								
 							</div>
 							<div class="row">
 								<div class="col-lg-12 form-group text-right">
-									<button type="submit" onclick="getStockReportForAm()" class="btn btn-primary" value="confirm">Submit</button>
+									<span id="validationMessage"></span>
+									<button type="submit" onclick="getStockReport()" class="btn btn-primary" value="confirm">Submit</button>
 								</div>
 							</div>
 							<br/>
 						<h3>Stock Report : </h3>
-						<table class="table table-striped table-bordered " id="stockReportforAm">
-						</table>
+						<div id="stockReportTable">
+						</div>
 					</div>
 					
 				</div>		
@@ -98,17 +110,62 @@
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
+<script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 
 <script>
-jQuery(document).ready(function() {       
+
+
+	$(function(){
+		$('.date-picker-year').datepicker({
+			changeMonth: true,
+			changeYear: true,
+			showButtonPanel: true,
+			dateFormat: 'MM yy',
+			maxDate: new Date,
+
+			onClose: function(dateText, inst) {
+				var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+				$('#monthlyDate').datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+				$(".date-picker-year").focus(function () {
+					$(".ui-datepicker-calendar").hide();
+					$(".ui-datepicker-current").hide();
+				});
+
+			}
+		});
+
+		$(".date-picker-year").focus(function () {
+			$(".ui-datepicker-calendar").hide();
+			$(".ui-datepicker-current").hide();
+		});
+	});
+
+
+
+	jQuery(document).ready(function() {
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
 
-	getStockReportForAm();
+	$('#branchList').select2MultiCheckboxes({
+		placeholder: "Select branch",
+		width: "auto",
+		templateSelection: function(selected, total) {
+			return "Selected " + selected.length + " of " + total;
+		}
+	});
 
 });
 
-function getStockReportForAm() {
+function getStockReport() {
+
+	if($('#monthlyDate').val() == "") {
+		$('#validationMessage').html("please select a month");
+		return;
+	}
+
+
+	$('#validationMessage').html("");
 	var url = "/opensrp-dashboard/inventoryam/stock-report-table";
 	$.ajax({
 		type : "GET",
@@ -117,15 +174,26 @@ function getStockReportForAm() {
 		dataType : 'html',
 		timeout : 100000,
 		data: {
-			month: '09',
-			year: '2020'
+			branchIds: ($('#branchList').val() || []).join(','),
+			month: new Date($('#monthlyDate').val()).getMonth() + 1,
+			year: new Date($('#monthlyDate').val()).getFullYear(),
 		},
 		beforeSend: function() {
 			$('#loading').show();
 			$('#search-button').attr("disabled", true);
 		},
 		success : function(data) {
-			$("#stockReportforAm").html(data);
+			$("#stockReportTable").html(data);
+			$('#stockReport').DataTable({
+				scrollY:        "300px",
+				scrollX:        true,
+				scrollCollapse: true,
+				fixedColumns:   {
+					leftColumns: 1
+				}
+			});
+
+
 		},
 		error : function(e) {
 			$('#loading').hide();
@@ -136,6 +204,7 @@ function getStockReportForAm() {
 			$('#search-button').attr("disabled", false);
 		}
 	});
+
 }
 
 </script>

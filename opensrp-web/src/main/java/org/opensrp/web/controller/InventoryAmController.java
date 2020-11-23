@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.opensrp.common.dto.AMStockReportDTO;
+import org.opensrp.common.dto.StockReportDTO;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.dto.RequisitionQueryDto;
 import org.opensrp.common.util.Roles;
@@ -54,7 +54,7 @@ public class InventoryAmController {
 	
 	@Autowired
 	public BranchUtil branchUtil;
-	
+
 	@Autowired
 	private UserService userService;
 	
@@ -219,7 +219,7 @@ public class InventoryAmController {
 		List<InventoryDTO> getSkList = stockService.getUserListByBranchWithRole(id, Roles.SK.getId());
 		List<InventoryDTO> getProductList = stockService.getProductListByBranchWithRole(id, Roles.SS.getId(), 0);
 		model.addAttribute("skList", getSkList);
-		
+
 		model.addAttribute("ssLists", stockService.getsellToSSList(0, id, 0, 0, 0, 0, 0, 0, 200, 0, "", ""));
 		model.addAttribute("productList", getProductList);
 		model.addAttribute("branchInfo", branchInfo);
@@ -253,20 +253,23 @@ public class InventoryAmController {
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		return "inventoryAm/stock-report";
 	}
-	
+
 	@RequestMapping(value = "inventoryam/stock-report-table", method = RequestMethod.GET)
-	public String stockReportTable(@RequestParam(value = "year") String year, @RequestParam(value = "month") String month,
-	                               @RequestParam(value = "branchId", required = false) String branchId, HttpSession session) {
+	public String stockReportTable(
+			@RequestParam(value="year") String year,
+			@RequestParam(value="month") String month,
+			@RequestParam(value="branchIds", required = false) String branchIds,
+			HttpSession session) {
 		String skIds;
-		
-		if (StringUtils.isBlank(branchId)) {
-			String branches = branchService.commaSeparatedBranch(new ArrayList<>(AuthenticationManagerUtil.getLoggedInUser()
-			        .getBranches()));
+
+		System.out.println("branchIds: "+ branchIds);
+		if (StringUtils.isBlank(branchIds)) {
+			String branches = branchService.commaSeparatedBranch(new ArrayList<>(AuthenticationManagerUtil.getLoggedInUser().getBranches()));
 			skIds = userService.findSKByBranchSeparatedByComma("'{" + branches + "}'");
 		} else {
-			skIds = userService.findSKByBranchSeparatedByComma("'{" + branchId + "}'");
+			skIds = userService.findSKByBranchSeparatedByComma("'{" + branchIds + "}'");
 		}
-		List<AMStockReportDTO> report = stockService.getStockReportForAM(year, month, skIds);
+		List<StockReportDTO> report = stockService.getStockReportForAM(year, month, skIds);
 		session.setAttribute("amStockReport", report);
 		return "inventoryAm/stock-report-table";
 	}
