@@ -3,8 +3,10 @@ package org.opensrp.web.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
-import com.google.api.Http;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang.StringUtils;
 import org.opensrp.common.dto.AMStockReportDTO;
 import org.opensrp.common.dto.InventoryDTO;
@@ -15,7 +17,12 @@ import org.opensrp.core.dto.StockAdjustDTO;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
-import org.opensrp.core.service.*;
+import org.opensrp.core.service.BranchService;
+import org.opensrp.core.service.ProductService;
+import org.opensrp.core.service.RequisitionService;
+import org.opensrp.core.service.StockService;
+import org.opensrp.core.service.TargetService;
+import org.opensrp.core.service.UserService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.BranchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +33,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class InventoryAmController {
@@ -49,7 +54,7 @@ public class InventoryAmController {
 	
 	@Autowired
 	public BranchUtil branchUtil;
-
+	
 	@Autowired
 	private UserService userService;
 	
@@ -214,6 +219,8 @@ public class InventoryAmController {
 		List<InventoryDTO> getSkList = stockService.getUserListByBranchWithRole(id, Roles.SK.getId());
 		List<InventoryDTO> getProductList = stockService.getProductListByBranchWithRole(id, Roles.SS.getId(), 0);
 		model.addAttribute("skList", getSkList);
+		
+		model.addAttribute("ssLists", stockService.getsellToSSList(0, id, 0, 0, 0, 0, 0, 0, 200, 0, "", ""));
 		model.addAttribute("productList", getProductList);
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("id", id);
@@ -246,17 +253,15 @@ public class InventoryAmController {
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		return "inventoryAm/stock-report";
 	}
-
+	
 	@RequestMapping(value = "inventoryam/stock-report-table", method = RequestMethod.GET)
-	public String stockReportTable(
-			@RequestParam(value="year") String year,
-			@RequestParam(value="month") String month,
-			@RequestParam(value="branchId", required = false) String branchId,
-			HttpSession session) {
+	public String stockReportTable(@RequestParam(value = "year") String year, @RequestParam(value = "month") String month,
+	                               @RequestParam(value = "branchId", required = false) String branchId, HttpSession session) {
 		String skIds;
-
+		
 		if (StringUtils.isBlank(branchId)) {
-			String branches = branchService.commaSeparatedBranch(new ArrayList<>(AuthenticationManagerUtil.getLoggedInUser().getBranches()));
+			String branches = branchService.commaSeparatedBranch(new ArrayList<>(AuthenticationManagerUtil.getLoggedInUser()
+			        .getBranches()));
 			skIds = userService.findSKByBranchSeparatedByComma("'{" + branches + "}'");
 		} else {
 			skIds = userService.findSKByBranchSeparatedByComma("'{" + branchId + "}'");
@@ -310,6 +315,13 @@ public class InventoryAmController {
 	public String adjustHistoryList(Model model, Locale locale) {
 		
 		model.addAttribute("branches", branchUtil.getBranches());
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		Set<Role> roles = loggedInUser.getRoles();
+		String roleName = "";
+		for (Role role : roles) {
+			roleName = role.getName();
+		}
+		model.addAttribute("roleName", roleName);
 		model.addAttribute("locale", locale);
 		return "inventoryAm/adjust-history-list";
 	}
@@ -317,7 +329,7 @@ public class InventoryAmController {
 	@RequestMapping(value = "inventory/adjust-history/{id}.html", method = RequestMethod.GET)
 	public String adjustHistoryDetailsById(Model model, Locale locale, @PathVariable("id") int id) {
 		
-		List<StockAdjustDTO> stockAdjustList = stockService.getAdjustHistoryList(id, 0, "", "", 0, 10);
+		List<StockAdjustDTO> stockAdjustList = stockService.getAdjustHistoryList(id, "", "", "", 0, 10);
 		model.addAttribute("stockAdjustObj", stockAdjustList.get(0));
 		model.addAttribute("locale", locale);
 		return "inventoryAm/adjust-history-details";

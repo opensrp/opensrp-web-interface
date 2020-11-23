@@ -6,30 +6,39 @@
 <c:url var="location_url" value="/child-location-options" />
 <c:url var="branch_url" value="/branch-list-options-inventoy" />
 <div class="row">
-    <div class="col-lg-3 form-group">
-        <label ><spring:message code="lbl.division"></spring:message> </label>
-        <select	onclick="getChildLocation(this.value,'districtList')" name="division" class="form-control" id="divisionList">
-            <option value="0">Please select</option>
-            <c:forEach items="${divisions}" var="division">
-                <option value="${division.id}">${division.name}</option>
-            </c:forEach>
-        </select>
-    </div>
-    <div class="col-lg-3 form-group">
-        <label ><spring:message code="lbl.district"></spring:message> </label>
 
-        <select	name="districtList" onclick="getChildLocation(this.value,'upazilaList')" id="districtList" class="form-control">
-            <option value="0">Please select </option>
-
-        </select>
-    </div>
-    <div class="col-lg-3 form-group">
-        <label ><spring:message code="lbl.upazila"></spring:message> </label>
-        <select	name="upazilaList"  onclick="getBranchList(this.value, '')" id="upazilaList" class="form-control">
-            <option value="0">Please select </option>
-
-        </select>
-    </div>
+    <c:choose>
+	    <c:when test="${roleName =='AM' || roleName =='DivM'}">
+	   	</c:when>
+	   	
+	   	<c:otherwise>
+		    <div class="col-lg-3 form-group">
+		        <label ><spring:message code="lbl.division"></spring:message> </label>
+		        <select	onclick="getChildLocation(this.value,'districtList')" name="division" class="form-control" id="divisionList">
+		            <option value="0">Please select</option>
+		            <c:forEach items="${divisions}" var="division">
+		                <option value="${division.id}">${division.name}</option>
+		            </c:forEach>
+		        </select>
+		    </div>
+		    <div class="col-lg-3 form-group">
+		        <label ><spring:message code="lbl.district"></spring:message> </label>
+		
+		        <select	name="districtList" onclick="getChildLocation(this.value,'upazilaList')" id="districtList" class="form-control">
+		            <option value="0">Please select </option>
+		
+		        </select>
+		    </div>
+		    <div class="col-lg-3 form-group">
+		        <label ><spring:message code="lbl.upazila"></spring:message> </label>
+		        <select	name="upazilaList"  onclick="getBranchList(this.value, '')" id="upazilaList" class="form-control">
+		            <option value="0">Please select </option>
+		
+		        </select>
+		    </div>
+		   </c:otherwise> 
+	    
+    </c:choose>
     <div class="col-lg-3 form-group">
         <label ><spring:message code="lbl.branch"></spring:message></label>
         <select	name="branchList" class="form-control" id="branchList">

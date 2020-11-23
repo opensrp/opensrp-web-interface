@@ -16,11 +16,14 @@ import org.opensrp.common.dto.WebNotificationCommonDTO;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.common.util.WebNotificationType;
 import org.opensrp.core.entity.Location;
+import org.opensrp.core.entity.Role;
+import org.opensrp.core.entity.User;
 import org.opensrp.core.entity.WebNotification;
 import org.opensrp.core.entity.WebNotificationBranch;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.WebNotificationService;
+import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.BranchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,9 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
 
 /**
  * @author proshanto
@@ -66,19 +67,28 @@ public class WebNotificationController {
 		model.addAttribute("roles", webNotificationService.getWebNotificationRoles());
 		model.addAttribute("divisions", webNotificationService.getLocationByTagId(divisionTagId));
 		List<WebNotificationType> types = Arrays.asList(WebNotificationType.values());
-		model.addAttribute("branches", branchUtil.getBranches());
-		model.addAttribute("types", types);
 		
+		model.addAttribute("types", types);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		Set<Role> roles = loggedInUser.getRoles();
+		String roleName = "";
+		for (Role role : roles) {
+			roleName = role.getName();
+		}
+		
+		model.addAttribute("branches", branchUtil.getBranches());
+		
+		model.addAttribute("roleName", roleName);
 		// The topic name can be optionally prefixed with "/topics/".
 		String topic = "highScores";
 		
 		// See documentation on defining a message payload.
-		Message message = Message.builder().putData("score", "850").putData("time", "2:45").setTopic(topic).build();
+		//Message message = Message.builder().putData("score", "850").putData("time", "2:45").setTopic(topic).build();
 		
 		// Send a message to the devices subscribed to the provided topic.
-		String response = FirebaseMessaging.getInstance().send(message);
+		//String response = FirebaseMessaging.getInstance().send(message);
 		// Response is a message ID string.
-		System.out.println("Successfully sent message: " + response);
+		//System.out.println("Successfully sent message: " + response);
 		/*// This registration token comes from the client FCM SDKs.
 		String registrationToken = "errr";
 		

@@ -528,29 +528,27 @@ public class StockService extends CommonService {
 		
 		return result;
 	}
-
+	
 	@Transactional
 	public List<AMStockReportDTO> getStockReportForAM(String year, String month, String skList) {
 		Session session = getSessionFactory();
 		List<AMStockReportDTO> result = null;
-
-		String rawSql = "select * from report.get_am_stock_report('"+month+"', '"+year+"', '{"+skList+"}')";
-		Query query = session.createSQLQuery(rawSql)
-				.addScalar("skusername", StandardBasicTypes.STRING)
-				.addScalar("skname", StandardBasicTypes.STRING)
-				.addScalar("iycfStartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("iycfMonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("iycfMonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("iycfEndingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("womenPackageStartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("womenPackageMonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("womenPackageMonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("womenPackageEndingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentPackageStartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentPackageMonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentPackageMonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentPackageEndingBalance",  StandardBasicTypes.INTEGER)
-				.setResultTransformer(new AliasToBeanResultTransformer(AMStockReportDTO.class));
+		
+		String rawSql = "select * from report.get_am_stock_report('" + month + "', '" + year + "', '{" + skList + "}')";
+		Query query = session.createSQLQuery(rawSql).addScalar("skusername", StandardBasicTypes.STRING)
+		        .addScalar("skname", StandardBasicTypes.STRING).addScalar("iycfStartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfMonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfMonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfEndingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("womenPackageStartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("womenPackageMonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("womenPackageMonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("womenPackageEndingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentPackageStartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentPackageMonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentPackageMonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentPackageEndingBalance", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(AMStockReportDTO.class));
 		result = query.list();
 		return result;
 	}
@@ -653,42 +651,41 @@ public class StockService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<StockAdjustDTO> getAdjustHistoryList(long adjustId, int branchId, String fromDate, String toDate,
+	public List<StockAdjustDTO> getAdjustHistoryList(long adjustId, String branchIds, String fromDate, String toDate,
 	                                                 Integer start, Integer length) {
 		
 		Session session = getSessionFactory();
 		List<StockAdjustDTO> dtos = new ArrayList<>();
 		
-		String hql = "select id,product_name productName,branch_name branchName,product_id productId,current_stock currentStock,changed_stock changedStock,adjust_date adjustDate,adjust_reason adjustReason from core.stock_adjust_list(:adjustId,:branchId,:fromDate,:toDate,:start,:length)";
+		String hql = "select id,product_name productName,branch_name branchName,product_id productId,current_stock currentStock,changed_stock changedStock,adjust_date adjustDate,adjust_reason adjustReason from core.stock_adjust_list(:adjustId,'{"
+		        + branchIds + "}',:fromDate,:toDate,:start,:length)";
 		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
 		        .addScalar("productName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("productId", StandardBasicTypes.LONG).addScalar("currentStock", StandardBasicTypes.INTEGER)
 		        .addScalar("changedStock", StandardBasicTypes.INTEGER).addScalar("adjustDate", StandardBasicTypes.DATE)
 		        .addScalar("adjustReason", StandardBasicTypes.STRING).setLong("adjustId", adjustId)
-		        .setInteger("branchId", branchId).setString("fromDate", fromDate).setString("toDate", toDate)
-		        .setInteger("start", start).setInteger("length", length)
-		        .setResultTransformer(new AliasToBeanResultTransformer(StockAdjustDTO.class));
+		        .setString("fromDate", fromDate).setString("toDate", toDate).setInteger("start", start)
+		        .setInteger("length", length).setResultTransformer(new AliasToBeanResultTransformer(StockAdjustDTO.class));
 		dtos = query.list();
 		
 		return dtos;
 	}
 	
 	@Transactional
-	public int getAdjustStockListCount(int branchId, String fromDate, String toDate) {
+	public int getAdjustStockListCount(String branchIds, String fromDate, String toDate) {
 		
 		Session session = getSessionFactory();
 		BigInteger total = null;
 		
-		String hql = "select *  from core.stock_adjust_list_count(:branchId,:fromDate,:toDate)";
-		Query query = session.createSQLQuery(hql).setInteger("branchId", branchId).setString("fromDate", fromDate)
-		        .setString("toDate", toDate);
+		String hql = "select *  from core.stock_adjust_list_count('{" + branchIds + "}',:fromDate,:toDate)";
+		Query query = session.createSQLQuery(hql).setString("fromDate", fromDate).setString("toDate", toDate);
 		total = (BigInteger) query.uniqueResult();
 		
 		return total.intValue();
 	}
-
+	
 	public void getStockReport() {
-
+		
 	}
 	
 	public JSONObject getAdjustStockListDataOfDataTable(Integer draw, int adjustStockCount, List<StockAdjustDTO> dtos)

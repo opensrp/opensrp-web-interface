@@ -125,15 +125,27 @@
 											id="sellToManySSList">
 											<thead>
 												<tr>
-													<th><input type="checkbox" class="remove-checkbox" value="selectall"></th>
+													<th><!-- <input type="checkbox"  name="select_all" value="1" id="select-all"> --></th>
 													<th><spring:message code="lbl.name"></spring:message></th>
 													<th><spring:message code="lbl.designation"></spring:message></th>
 													<th><spring:message code="lbl.skname"></spring:message></th>
 													<th><spring:message code="lbl.branchNameCode"></spring:message></th>
-													<th><spring:message code="lbl.saleinMonth"></spring:message></th>
-													<th><spring:message code="lbl.actionRequisition"></spring:message></th>
+													
 												</tr>
 											</thead>
+											
+											<tbody>
+											<c:forEach items="${ssLists}" var="ssList">
+													<tr>
+														<td> <input type="checkbox"  name="manuf[]" class="sub_chk" 
+														id="ss${ssList.getId() }" value="${ssList.getId()}"> </td>
+														<td> SS</td>
+														<td> ${ssList.getFullName() }</td>
+														<td> ${ssList.getSKName() }</td>
+														<td> ${ssList.getBranchName() } ${ssList.getBranchCode() }</td>
+													</tr>
+												</c:forEach>
+											</tbody>
 										</table>
 							<div class="text-center" id="proceedDiv">
 								<button id="proceeddProductButton" type="button"
@@ -579,78 +591,40 @@
 		var month = d.getMonth() + 1;
 		var year = d.getFullYear();
 		
-		selltoMany = $('#sellToManySSList').DataTable({
-			bFilter : false,
-			serverSide : true,
-			processing : true,
-			columnDefs : [ {
-				targets : [ 0, 1, 2, 3, 4, 5, 6 ],orderable : false,"searchable" : false}, 
-				{width : "5%",targets : 0,"searchable" : false,orderable : false}, 
-				{width : "20%",targets : 1}, 
-				{width : "20%",targets : 2}, 
-				{width : "20%",targets : 3}, 
-				{width : "5%",targets : 4}, 
-				{width : "5%",targets : 5,"visible" : false}, 
-				{width : "25%",targets : 6,"visible" : false
-			}],
-			ajax : {
-				url : "${sell_to_ss_list}",
-				data : function(data) {
-
-					//let dateFieldvalue = $("#dateRange").val();            	
-					data.search = $('#search').val();
-
-					data.year = year;
-					data.month = month;
-					data.branchId = ${id};
-					data.division = 0;
-					data.district = 0;
-					data.upazila = 0;
-					data.skId = 0;
-					data.manager="${manager}";
-				},
-				dataSrc : function(json) {
-					
-
-			       // $(".close-modal").hide();
-					if (json.data) {
-						return json.data;
-					} else {
-						return [];
-					}
-				},
-				complete : function() {
-				},
-				type : 'GET'
-			},
-			bInfo : true,
-			destroy : true,
-			language : {
-				searchPlaceholder : ""
-			}
-		});
-	
+		selltoMany = $('#sellToManySSList').DataTable(
+				{"sPaginationType": "full_numbers",
+                    "aoColumnDefs": [
+                      { 'bSortable': false, 'aTargets': [0] }
+                    ]
+                   }
+		);
+		
 		
 	}
-
+	
 $('#sellToManySSList th input:checkbox').click(
 		function(e) {
 			$('tbody tr td input[type="checkbox"]').prop('checked',$(this).prop('checked'));
 });
 
-/* 	$('#sellToManySSList').delegate('input.select-checkbox', 'change', function() {
-		var productId = $(this).val();
-		var inputContext = $(this).parents('td').next().find('input[type="text"]');
-	}); */
+
 
 	function proceedToChooseProduct() {
 		sellToArray = [];
-		$('#sellToManySSList tbody input[type=checkbox]:checked').each(
+		oTable = $('#sellToManySSList').DataTable();
+		var rowcollection =  oTable.$(".sub_chk:checked", {"page": "all"});
+		rowcollection.each(function(index, tr){
+			var ssId = +$(this).val();
+			sellToArray.push(ssId);
+	    });
+		/* $('#sellToManySSList tbody input[type=checkbox]:checked').each(
 				function(index, tr) {
 					var ssId = +$(this).val();
 					sellToArray.push(ssId);
-				});
-
+		}); */
+		
+		
+	
 		$('#sellToManySSProductList > tbody > tr').each(function(index, tr) {
 
 			var $row = $(this).closest('tr'); //get the current row
