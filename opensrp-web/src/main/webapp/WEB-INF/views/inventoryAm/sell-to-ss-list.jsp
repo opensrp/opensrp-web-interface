@@ -41,11 +41,11 @@
 	<div class="page-content">
 		<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<a  href="<c:url value="/"/>">Home</a>
 					<i class="fa fa-arrow-right"></i>
 				</li>
 				<li>
-					<a class="btn btn-primary" href="${backUrl }">Back</a>
+					<a  href="${backUrl }">Back</a>
 				</li>
 		</ul>
 		<div class="row">
@@ -97,7 +97,7 @@
 							id="StockSellHistory">
 							<thead>
 								<tr>
-									<th><input type="checkbox" value=""></th>
+									<th></th>
 									<th><spring:message code="lbl.name"></spring:message></th>
 									<th><spring:message code="lbl.designation"></spring:message></th>
 									<th><spring:message code="lbl.skname"></spring:message></th>
@@ -481,7 +481,7 @@
 					data.district = 0;
 					data.upazila = 0;
 					data.skId = 0;
-					 data.manager="${manager}";
+					data.manager="${manager}";
 
 				},
 				dataSrc : function(json) {
@@ -543,7 +543,7 @@
 					data.district = 0;
 					data.upazila = 0;
 					data.skId = skId;
-					 data.manager=0;
+					data.manager="${manager}";
 				},
 				dataSrc : function(json) {
 					if (json.data) {
@@ -607,6 +607,7 @@
 					data.district = 0;
 					data.upazila = 0;
 					data.skId = 0;
+					data.manager="${manager}";
 				},
 				dataSrc : function(json) {
 					

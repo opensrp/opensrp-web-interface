@@ -275,6 +275,8 @@ public class InventoryAmController {
 		model.addAttribute("type", "'SELL'");
 		model.addAttribute("user", stockService.getUserAndBrachByuserId(userId));
 		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		model.addAttribute("manager", loggedInUser.getId());
 		return "inventoryAm/user-wise-stock-pass-sell";
 	}
 	

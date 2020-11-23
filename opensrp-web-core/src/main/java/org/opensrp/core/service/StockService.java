@@ -395,13 +395,20 @@ public class StockService extends CommonService {
 				patient.put(df.format(dto.getPurchasePrice())); // for DIvM
 			}
 			if (roleId == 32) {
-				String view = "<div class='col-sm-12 form-group'><a \" href=\"individual-ss-sell/" + branchId + "/"
-				        + dto.getId() + ".html\"><strong>Sell Products </strong></a>  | " + "<a \" href=\"/ss-sales/view/"
-				        + branchId + "/" + dto.getId() + ".html\"><strong>View Details </strong></a> " + "</div>";
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"/opensrp-dashboard/inventoryam/individual-ss-sell/"
+				        + branchId
+				        + "/"
+				        + dto.getId()
+				        + ".html\"><strong>Sell Products </strong></a>  | "
+				        + "<a \" href=\"/opensrp-dashboard/inventoryam/ss-sales/view/"
+				        + branchId
+				        + "/"
+				        + dto.getId()
+				        + ".html\"><strong>View Details </strong></a> " + "</div>";
 				
 				patient.put(view);
 			} else {
-				String view = "<div class='col-sm-12 form-group'><a \" href=\"ss-sales/view/" + dto.getBranchId() + "/"
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"view-sales-report/" + branchId + "/"
 				        + dto.getId() + ".html\"><strong>View details </strong></a> </div>";
 				patient.put(view);
 			}

@@ -163,7 +163,7 @@ public class InventoryDmController {
 		return "inventoryDm/ss-sales-report";
 	}
 	
-	@RequestMapping(value = "inventorydm/ss-sales/view/{branch_id}/{id}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "inventorydm/view-sales-report/{branch_id}/{id}.html", method = RequestMethod.GET)
 	public String selltoSSDetails(Model model, Locale locale, @PathVariable("branch_id") int branchId,
 	                              @PathVariable("id") int userId) {
 		model.addAttribute("branchId", branchId);
