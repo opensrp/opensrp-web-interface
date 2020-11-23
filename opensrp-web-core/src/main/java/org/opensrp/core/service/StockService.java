@@ -25,6 +25,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.common.dto.AMStockReportDTO;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.util.ReferenceType;
 import org.opensrp.common.util.Status;
@@ -527,6 +528,32 @@ public class StockService extends CommonService {
 		
 		return result;
 	}
+
+	@Transactional
+	public List<AMStockReportDTO> getStockReportForAM(String year, String month, String skList) {
+		Session session = getSessionFactory();
+		List<AMStockReportDTO> result = null;
+
+		String rawSql = "select * from report.get_am_stock_report('"+month+"', '"+year+"', '{"+skList+"}')";
+		Query query = session.createSQLQuery(rawSql)
+				.addScalar("skusername", StandardBasicTypes.STRING)
+				.addScalar("skname", StandardBasicTypes.STRING)
+				.addScalar("iycfStartingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("iycfMonthlySupply", StandardBasicTypes.INTEGER)
+				.addScalar("iycfMonthlySell", StandardBasicTypes.INTEGER)
+				.addScalar("iycfEndingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("womenPackageStartingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("womenPackageMonthlySupply", StandardBasicTypes.INTEGER)
+				.addScalar("womenPackageMonthlySell", StandardBasicTypes.INTEGER)
+				.addScalar("womenPackageEndingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("adolescentPackageStartingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("adolescentPackageMonthlySupply", StandardBasicTypes.INTEGER)
+				.addScalar("adolescentPackageMonthlySell", StandardBasicTypes.INTEGER)
+				.addScalar("adolescentPackageEndingBalance",  StandardBasicTypes.INTEGER)
+				.setResultTransformer(new AliasToBeanResultTransformer(AMStockReportDTO.class));
+		result = query.list();
+		return result;
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
@@ -658,6 +685,10 @@ public class StockService extends CommonService {
 		total = (BigInteger) query.uniqueResult();
 		
 		return total.intValue();
+	}
+
+	public void getStockReport() {
+
 	}
 	
 	public JSONObject getAdjustStockListDataOfDataTable(Integer draw, int adjustStockCount, List<StockAdjustDTO> dtos)

@@ -1,8 +1,12 @@
 package org.opensrp.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.google.api.Http;
+import org.apache.commons.lang.StringUtils;
+import org.opensrp.common.dto.AMStockReportDTO;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.dto.RequisitionQueryDto;
 import org.opensrp.common.util.Roles;
@@ -11,11 +15,7 @@ import org.opensrp.core.dto.StockAdjustDTO;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
-import org.opensrp.core.service.BranchService;
-import org.opensrp.core.service.ProductService;
-import org.opensrp.core.service.RequisitionService;
-import org.opensrp.core.service.StockService;
-import org.opensrp.core.service.TargetService;
+import org.opensrp.core.service.*;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.BranchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class InventoryAmController {
@@ -47,6 +49,9 @@ public class InventoryAmController {
 	
 	@Autowired
 	public BranchUtil branchUtil;
+
+	@Autowired
+	private UserService userService;
 	
 	@RequestMapping(value = "inventoryam/myinventory.html", method = RequestMethod.GET)
 	public String myInventory(Model model, Locale locale) {
@@ -235,9 +240,30 @@ public class InventoryAmController {
 	}
 	
 	@RequestMapping(value = "inventoryam/stock-report.html", method = RequestMethod.GET)
-	public String stockReport(Model model, Locale locale) {
+	public String stockReport(Model model, Locale locale, HttpSession session) {
 		model.addAttribute("locale", locale);
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		return "inventoryAm/stock-report";
+	}
+
+	@RequestMapping(value = "inventoryam/stock-report-table", method = RequestMethod.GET)
+	public String stockReportTable(
+			@RequestParam(value="year") String year,
+			@RequestParam(value="month") String month,
+			@RequestParam(value="branchId", required = false) String branchId,
+			HttpSession session) {
+		String skIds;
+
+		if (StringUtils.isBlank(branchId)) {
+			String branches = branchService.commaSeparatedBranch(new ArrayList<>(AuthenticationManagerUtil.getLoggedInUser().getBranches()));
+			skIds = userService.findSKByBranchSeparatedByComma("'{" + branches + "}'");
+		} else {
+			skIds = userService.findSKByBranchSeparatedByComma("'{" + branchId + "}'");
+		}
+		List<AMStockReportDTO> report = stockService.getStockReportForAM(year, month, skIds);
+		session.setAttribute("amStockReport", report);
+		return "inventoryAm/stock-report-table";
 	}
 	
 	@RequestMapping(value = "inventoryam/stock-list/view/{id}.html", method = RequestMethod.GET)

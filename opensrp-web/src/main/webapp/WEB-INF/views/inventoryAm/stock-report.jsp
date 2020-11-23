@@ -8,6 +8,8 @@
 <%@ taglib prefix="security"
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
+<%@ page import="org.opensrp.core.entity.Branch" %>
+<%@ page import="java.util.List" %>
 
 <title>Stock Report</title>
 	
@@ -32,54 +34,55 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-lg-3 form-group">
-								    <label for="cars">Branch :</label> 
+								    <label for="branchList">Branch :</label>
 								    <select
-										name="cars" class="form-control" id="cars">
-										<option selected="selected">Select Branch</option>
-										<option value="volvo">Volvo</option>
-										<option value="saab">Saab</option>
-										<option value="mercedes">Mercedes</option>
-										<option value="audi">Audi</option>
+										name="branch" class="form-control" id="branchList">
+										<option value="">All Branch</option>
+										<%
+											List<Branch> ret = (List<Branch>) session.getAttribute("branchList");
+											for (Branch str : ret) {
+										%>
+										<option value="<%=str.getId()%>"><%=str.getName()%></option>
+										<%}%>
 									</select>
 								</div>
 								<div class="col-lg-3 form-group">
-								    <label for="designation">Designation</label>
-									<input type="text" class="form-control" id="designation">
+								    <label for="month">Month</label>
+
+									<select class="form-control" id="month">
+										<option value="">Select Month</option>
+										<option value="1">January</option>
+										<option value="2">February</option>
+										<option value="3">March</option>
+										<option value="4">April</option>
+										<option value="5">May</option>
+										<option value="6">June</option>
+										<option value="7">July</option>
+										<option value="8">August</option>
+										<option value="9">September</option>
+										<option value="10">October</option>
+										<option value="11">November</option>
+										<option value="12">December</option>
+									</select>
 								</div>
 								<div class="col-lg-3 form-group">
-									<label for="date">Date:</label>
-									<input type="text"	readonly name="startYear" id="startYear" class="form-control date-picker-year" />
+									<label for="year">Year:</label>
+									<select id="year" class="form-control" >
+										<option value="">Select Year</option>
+										<option value="2020">2020</option>
+										<option value="2021">2021</option>
+									</select>
 								</div>
 								
 							</div>
 							<div class="row">
 								<div class="col-lg-12 form-group text-right">
-									<button type="submit" onclick="" class="btn btn-primary" value="confirm">View SS List</button>
+									<button type="submit" onclick="getStockReportForAm()" class="btn btn-primary" value="confirm">Submit</button>
 								</div>
-     							</div>
+							</div>
 							<br/>
 						<h3>Stock Report : </h3>
-						<table class="table table-striped table-bordered " id="stockReportOfAm">
-							<thead>
-								<tr>
-								    <th><spring:message code="lbl.serialNo"></spring:message></th>
-									<th><spring:message code="lbl.name"></spring:message></th>
-									<th><spring:message code="lbl.designation"></spring:message></th>
-									<th><spring:message code="lbl.skname"></spring:message></th>
-									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
-									<th><spring:message code="lbl.saleinMonth"></spring:message></th>
-									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
-								</tr>
-							</thead>
-							<tbody>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							</tbody>
+						<table class="table table-striped table-bordered " id="stockReportforAm">
 						</table>
 					</div>
 					
@@ -100,26 +103,40 @@
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
-   //TableAdvanced.init();
-		$("#stockReportOfAm").DataTable();
+
+	getStockReportForAm();
+
 });
-jQuery(function() {
-	jQuery('.date-picker-year').datepicker({
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'MM yy',
-        maxDate: new Date,
-        onClose: function(dateText, inst) { 
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
-        }
-    });
-	jQuery(".date-picker-year").focus(function () {
-        $(".ui-datepicker-calendar").hide();
-        $(".ui-datepicker-current").hide();
-    });
-});
+
+function getStockReportForAm() {
+	var url = "/opensrp-dashboard/inventoryam/stock-report-table";
+	$.ajax({
+		type : "GET",
+		contentType : "application/json",
+		url : url,
+		dataType : 'html',
+		timeout : 100000,
+		data: {
+			month: '09',
+			year: '2020'
+		},
+		beforeSend: function() {
+			$('#loading').show();
+			$('#search-button').attr("disabled", true);
+		},
+		success : function(data) {
+			$("#stockReportforAm").html(data);
+		},
+		error : function(e) {
+			$('#loading').hide();
+			$('#search-button').attr("disabled", false);
+		},
+		complete : function(e) {
+			$('#loading').hide();
+			$('#search-button').attr("disabled", false);
+		}
+	});
+}
 
 </script>
 
