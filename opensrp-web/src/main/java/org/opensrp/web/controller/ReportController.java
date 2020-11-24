@@ -14,17 +14,15 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
-import org.opensrp.common.dto.AggregatedBiometricDTO;
-import org.opensrp.common.dto.AggregatedReportDTO;
-import org.opensrp.common.dto.COVID19ReportDTO;
-import org.opensrp.common.dto.ChildNutritionReportDTO;
-import org.opensrp.common.dto.ElcoReportDTO;
-import org.opensrp.common.dto.ForumIndividualReportDTO;
-import org.opensrp.common.dto.ForumReportDTO;
-import org.opensrp.common.dto.IndividualBiometricReportDTO;
-import org.opensrp.common.dto.PregnancyReportDTO;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.opensrp.common.dto.*;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.Roles;
@@ -33,11 +31,7 @@ import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.User;
-import org.opensrp.core.service.BranchService;
-import org.opensrp.core.service.FacilityService;
-import org.opensrp.core.service.LocationService;
-import org.opensrp.core.service.ReportService;
-import org.opensrp.core.service.UserService;
+import org.opensrp.core.service.*;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.ModelConverter;
@@ -45,9 +39,11 @@ import org.opensrp.web.util.PaginationHelperUtil;
 import org.opensrp.web.util.PaginationUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -92,6 +88,15 @@ public class ReportController {
 	
 	@Autowired
 	private LocationService locationService;
+
+	@Value("#{opensrp['division.tag.id']}")
+	private int divisionTagId;
+
+	@Value("#{opensrp['divm.role.id']}")
+	private String divMRoleId;
+
+	@Autowired
+	private TargetService targetService;
 	
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_REPORT')")
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
@@ -777,6 +782,94 @@ public class ReportController {
 		
 		session.setAttribute("individualBiometricReport", report);
 		return "report/individual-biometric-table";
+	}
+
+	@RequestMapping(value = "/pm-hr-report", method = RequestMethod.GET)
+	public String hrReportForPm(Model model, Locale locale) {
+
+		model.addAttribute("locale", locale);
+		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+		model.addAttribute("branches", branches);
+		return "report/hr-report/by-dm-for-pm";
+	}
+
+	@RequestMapping(value = "/dm-table", method = RequestMethod.POST)
+	public String hrReportDmTable(@RequestBody String dto, Model model, Locale locale) throws JSONException {
+
+		JSONObject params = new JSONObject(dto);
+
+		List<HrReportDTO> totalList = new ArrayList<>();
+
+		totalList = targetService.getHRReportDMWise(params);
+
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getHrReportAsJson(totalList).toString());
+		return "report/hr-report/dm-table.js";
+	}
+
+
+
+	@RequestMapping(value = "/dm-hr-report", method = RequestMethod.GET)
+	public String hrReportForDm(Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
+		model.addAttribute("users", users);
+
+
+		return "report/hr-report/by-am-for-dm";
+	}
+
+	@RequestMapping(value = "/am-table", method = RequestMethod.POST)
+	public String hrReportAmTable(@RequestBody  String dto, Model model, Locale locale) throws JSONException {
+
+        JSONObject params = new JSONObject(dto);
+
+        List<HrReportDTO> totalList = new ArrayList<>();
+
+        totalList = targetService.getHRReportAMWise(params);
+
+        model.addAttribute("reportDatas", totalList);
+        model.addAttribute("jsonReportData", getHrReportAsJson(totalList).toString());
+		return "report/hr-report/am-table";
+	}
+
+	@RequestMapping(value = "/am-hr-report", method = RequestMethod.GET)
+	public String hrReportForAm(Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		return "report/hr-report/by-branch-for-am";
+	}
+
+	@RequestMapping(value = "/branch-table", method = RequestMethod.POST)
+	public String hrReportBranchTable(@RequestBody String dto, Model model, Locale locale) throws JSONException {
+
+        JSONObject params = new JSONObject(dto);
+
+        List<HrReportDTO> totalList = new ArrayList<>();
+
+        totalList = targetService.getHRReportBranchWise(params);
+
+        model.addAttribute("reportDatas", totalList);
+        model.addAttribute("jsonReportData", getHrReportAsJson(totalList).toString());
+
+		return "report/hr-report/branch-table";
+	}
+
+	private JsonArray getHrReportAsJson(List<HrReportDTO> targetList){
+
+		Gson gson = new Gson();
+		JsonElement element = gson.toJsonTree(targetList, new TypeToken<List<HrReportDTO>>() {}.getType());
+		System.out.println(element.getAsJsonArray());
+		return element.getAsJsonArray();
+
 	}
 	
 }

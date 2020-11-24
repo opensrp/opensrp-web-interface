@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.ForumTargetReportDTO;
+import org.opensrp.common.dto.HrReportDTO;
 import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.dto.TargetReportDTO;
 import org.opensrp.common.util.LocationTags;
@@ -1122,6 +1123,63 @@ public class TargetService extends CommonService {
 				.addScalar("adultAvgParticipantTarget", StandardBasicTypes.INTEGER)
 
 				.setResultTransformer(new AliasToBeanResultTransformer(ForumTargetReportDTO.class));
+		dtos = query.list();
+
+		return dtos;
+	}
+
+	@Transactional
+	public List<HrReportDTO> getHRReportDMWise(JSONObject params) throws JSONException {
+
+		Session session = getSessionFactory();
+		List<HrReportDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.pm_hr_report_dm_wise('"+  params + "')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("dmName", StandardBasicTypes.STRING)
+				.addScalar("totalAm", StandardBasicTypes.INTEGER)
+				.addScalar("totalBranch", StandardBasicTypes.INTEGER)
+				.addScalar("positions", StandardBasicTypes.INTEGER)
+				.addScalar("activeUsers", StandardBasicTypes.INTEGER)
+				.addScalar("onLeaveUsers", StandardBasicTypes.INTEGER)
+				.setResultTransformer(new AliasToBeanResultTransformer(HrReportDTO.class));
+		dtos = query.list();
+
+		return dtos;
+	}
+
+	@Transactional
+	public List<HrReportDTO> getHRReportAMWise(JSONObject params) throws JSONException {
+
+		Session session = getSessionFactory();
+		List<HrReportDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.dm_hr_report_am_wise('"+  params + "')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("amName", StandardBasicTypes.STRING)
+				.addScalar("totalBranch", StandardBasicTypes.INTEGER)
+				.addScalar("positions", StandardBasicTypes.INTEGER)
+				.addScalar("activeUsers", StandardBasicTypes.INTEGER)
+				.addScalar("onLeaveUsers", StandardBasicTypes.INTEGER)
+				.setResultTransformer(new AliasToBeanResultTransformer(HrReportDTO.class));
+		dtos = query.list();
+
+		return dtos;
+	}
+
+	@Transactional
+	public List<HrReportDTO> getHRReportBranchWise(JSONObject params) throws JSONException {
+
+		Session session = getSessionFactory();
+		List<HrReportDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.am_hr_report_branch_wise('"+  params + "')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("branchName", StandardBasicTypes.STRING)
+				.addScalar("positions", StandardBasicTypes.INTEGER)
+				.addScalar("activeUsers", StandardBasicTypes.INTEGER)
+				.addScalar("onLeaveUsers", StandardBasicTypes.INTEGER)
+				.setResultTransformer(new AliasToBeanResultTransformer(HrReportDTO.class));
 		dtos = query.list();
 
 		return dtos;
