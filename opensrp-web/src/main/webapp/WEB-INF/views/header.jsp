@@ -594,7 +594,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						<% }%>
 						<% if( FORUM_TARGET_REPORT_AM){ %>
 
-						<li><a href="<c:url value="/target/target-vs-achv-forum-report-am-branch-wise.html?lang=${locale}"/>">
+						<li><a href="<c:url value="/target/target-vs-achv-forum-report-am-provider-wise.html?lang=${locale}"/>">
 							Target vs achievement forum report
 						</a>
 						</li>
@@ -603,25 +603,46 @@ License: You must have a valid license purchased only from themeforest(the above
 						<% if( HR_REPORT_PM){ %>
 
 						<li><a href="<c:url value="/report/pm-hr-report?lang=${locale}"/>">
-							HR report
+							HR Report
 						</a>
 						</li>
 						<% }%>
 						<% if( HR_REPORT_DM){ %>
 
 						<li><a href="<c:url value="/report/dm-hr-report?lang=${locale}"/>">
-							HR report
+							HR Report
 						</a>
 						</li>
 						<% }%>
 						<% if( HR_REPORT_AM){ %>
 
 						<li><a href="<c:url value="/report/am-hr-report?lang=${locale}"/>">
-							HR report
+							HR Report
+						</a>
+						</li>
+						<% }%>
+						<% if( STOCK_REPORT_PM){ %>
+
+						<li><a href="<c:url value="/inventorypm/stock-report.html?lang=${locale}"/>">
+							Stock Report
 						</a>
 						</li>
 						<% }%>
 
+						<% if( STOCK_REPORT_DM){ %>
+
+						<li><a href="<c:url value="/inventory/stock-report.html?lang=${locale}"/>">
+							Stock Report
+						</a>
+						</li>
+						<% }%>
+						<% if( STOCK_REPORT_AM){ %>
+
+						<li><a href="<c:url value="/inventory/stock-report.html?lang=${locale}"/>">
+							Stock Report
+						</a>
+						</li>
+						<% }%>
 
 
 						

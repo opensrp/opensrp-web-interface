@@ -238,7 +238,7 @@ public class InventoryAmController {
 		return "inventoryAm/sell-to-ss-individual";
 	}
 	
-	@RequestMapping(value = "inventoryam/stock-report.html", method = RequestMethod.GET)
+	@RequestMapping(value = "inventory/stock-report.html", method = RequestMethod.GET)
 	public String stockReport(Model model, Locale locale, HttpSession session) {
 		model.addAttribute("locale", locale);
 		User user = AuthenticationManagerUtil.getLoggedInUser();

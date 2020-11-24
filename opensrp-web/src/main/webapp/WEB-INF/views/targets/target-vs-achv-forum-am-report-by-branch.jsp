@@ -9,7 +9,7 @@
            uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Target vs achievement visit am report branch wise</title>
+<title>Target vs achievement forum am report branch wise</title>
 
 <c:url var="branch_url" value="/branch-list-options-by-user-ids" />
 <c:url var="all_branch_url" value="/all-branch-list-options" />
@@ -123,7 +123,7 @@
 
                         <div class="row" style="margin: 0px">
                             <div class="col-sm-12" id="content" style="overflow-x: auto;">
-                                <h3 id="reportTile" style="font-weight: bold;">Branch wise visit report</h3>
+                                <h3 id="reportTile" style="font-weight: bold;">Branch wise forum report</h3>
                                 <div id="report"></div>
 
                             </div>

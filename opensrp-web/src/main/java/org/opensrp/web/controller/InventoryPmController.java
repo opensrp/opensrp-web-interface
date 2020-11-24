@@ -35,7 +35,7 @@ public class InventoryPmController {
     private int divisionTagId;
 
 
-    @RequestMapping(value = "inventory/stock-report.html", method = RequestMethod.GET)
+    @RequestMapping(value = "inventorypm/stock-report.html", method = RequestMethod.GET)
     public String stockReport(Model model, Locale locale, HttpSession session) {
         model.addAttribute("locale", locale);
 
