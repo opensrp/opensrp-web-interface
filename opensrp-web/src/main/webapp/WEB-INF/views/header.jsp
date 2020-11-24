@@ -100,6 +100,18 @@ License: You must have a valid license purchased only from themeforest(the above
 	boolean SK_SERVICE_TARGET_REPORT_AM = AuthenticationManagerUtil.isPermitted("SK_SERVICE_TARGET_REPORT_AM");
 	boolean TRAINING_TITLE = AuthenticationManagerUtil.isPermitted("TRAINING_TITLE");
 
+	boolean FORUM_TARGET_REPORT_PM = AuthenticationManagerUtil.isPermitted("FORUM_TARGET_REPORT_PM");
+	boolean FORUM_TARGET_REPORT_DM = AuthenticationManagerUtil.isPermitted("FORUM_TARGET_REPORT_DM");
+	boolean FORUM_TARGET_REPORT_AM = AuthenticationManagerUtil.isPermitted("FORUM_TARGET_REPORT_AM");
+
+	boolean STOCK_REPORT_PM = AuthenticationManagerUtil.isPermitted("STOCK_REPORT_PM");
+	boolean STOCK_REPORT_DM = AuthenticationManagerUtil.isPermitted("STOCK_REPORT_DM");
+	boolean STOCK_REPORT_AM = AuthenticationManagerUtil.isPermitted("STOCK_REPORT_AM");
+
+	boolean HR_REPORT_PM = AuthenticationManagerUtil.isPermitted("HR_REPORT_PM");
+	boolean HR_REPORT_DM = AuthenticationManagerUtil.isPermitted("HR_REPORT_DM");
+	boolean HR_REPORT_AM = AuthenticationManagerUtil.isPermitted("HR_REPORT_AM");
+
 	
    %>
   
@@ -553,6 +565,52 @@ License: You must have a valid license purchased only from themeforest(the above
 							</a>
 						</li>
 						<% }%>
+						<% if( FORUM_TARGET_REPORT_PM){ %>
+
+						<li><a href="<c:url value="/target/target-vs-achv-forum-report-pm.html?lang=${locale}"/>">
+							Target vs achievement forum report
+						</a>
+						</li>
+						<% }%>
+						<% if( FORUM_TARGET_REPORT_DM){ %>
+
+						<li><a href="<c:url value="/target/target-vs-achv-forum-report-dm.html?lang=${locale}"/>">
+							Target vs achievement forum report
+						</a>
+						</li>
+						<% }%>
+						<% if( FORUM_TARGET_REPORT_AM){ %>
+
+						<li><a href="<c:url value="/target/target-vs-achv-forum-report-am-branch-wise.html?lang=${locale}"/>">
+							Target vs achievement forum report
+						</a>
+						</li>
+						<% }%>
+
+						<% if( HR_REPORT_PM){ %>
+
+						<li><a href="<c:url value="/report/pm-hr-report?lang=${locale}"/>">
+							HR report
+						</a>
+						</li>
+						<% }%>
+						<% if( HR_REPORT_DM){ %>
+
+						<li><a href="<c:url value="/report/dm-hr-report?lang=${locale}"/>">
+							HR report
+						</a>
+						</li>
+						<% }%>
+						<% if( HR_REPORT_AM){ %>
+
+						<li><a href="<c:url value="/report/am-hr-report?lang=${locale}"/>">
+							HR report
+						</a>
+						</li>
+						<% }%>
+
+
+
 						
 					</ul>
 				</li>

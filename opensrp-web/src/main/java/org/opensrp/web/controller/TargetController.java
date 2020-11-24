@@ -440,7 +440,7 @@ public class TargetController {
 		return "targets/target-vs-achievement-visit-am-provider-wise-report-table";
 	}
 
-	@RequestMapping(value = "/target/report/pm-wise-forum-report.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/target-vs-achv-forum-report-pm.html", method = RequestMethod.GET)
 	public String pmWiseForumReport(Model model, Locale locale) {
 
 		model.addAttribute("locale", locale);
@@ -498,7 +498,7 @@ public class TargetController {
 		return "targets/target-vs-achv-forum-report-table-dm";
 	}
 
-	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-by-branch.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-branch-wise.html", method = RequestMethod.GET)
 	public String targetVsAchievementForumAMReportForBranch( Model model,
 												   Locale locale) {
 		model.addAttribute("locale", locale);
@@ -521,7 +521,7 @@ public class TargetController {
 		return "targets/target-vs-achv-forum-report-table-am-by-branch";
 	}
 
-	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-by-provider.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-provider-wise.html", method = RequestMethod.GET)
 	public String targetVsAchievementForumAMReportForSK( Model model,
 													Locale locale) {
 		model.addAttribute("locale", locale);
