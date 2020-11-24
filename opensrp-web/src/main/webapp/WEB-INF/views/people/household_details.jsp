@@ -27,7 +27,7 @@
 		<ul class="page-breadcrumb breadcrumb">
 			<li><a href="<c:url value="/"/>">Home</a> <i
 				class="fa fa-circle"></i></li>
-			<li><a href="<c:url value="/people/households.html"/>">Households</a>
+			<li><a href="<c:url value="/people/households.html"/>">Back</a>
 
 			</li>
 
@@ -101,7 +101,7 @@
 																<tr>
 																	<th>Member name</th>
 																	<th>Member ID</th>
-																	<th>Household ID</th>
+																	
 																	<th>Relation with <br />household head
 																	</th>
 																	<th>Age</th>
@@ -119,7 +119,7 @@
 																	<tr>
 																		<td>${member.getMemberName() }</td>
 																		<td>${member.getMemberId() }</td>
-																		<td>${member.getHouseholdId() }</td>
+																		
 																		<td>${member.getRelationWithHousehold() }</td>
 																		<td>${member.getAge() }</td>
 																		<td>${member.getGender() }</td>
@@ -181,61 +181,7 @@
 		stockList = $('#memberTable').DataTable({
 			bFilter : false,
 
-			columnDefs : [
-
-			{
-				orderable : false,
-				className : 'reorder',
-				width : "10%",
-				targets : 0
-			}, {
-				orderable : false,
-				className : 'reorder',
-				width : "10%",
-				targets : 1
-			}, {
-				orderable : false,
-				className : 'reorder',
-				width : "10%",
-				targets : 2
-			}, {
-				orderable : false,
-				className : 'reorder',
-				width : "10%",
-				targets : 3
-			}, {
-				orderable : false,
-				className : 'reorder',
-				width : "10%",
-				targets : 4
-			}, {
-				orderable : false,
-				className : 'reorder',
-				width : "10%",
-				targets : 5
-			}, {
-				orderable : false,
-				className : 'reorder',
-				width : "10%",
-				targets : 6
-			}, {
-				orderable : false,
-				className : 'reorder',
-				width : "10%",
-				targets : 7
-			}, {
-				orderable : false,
-				className : 'reorder',
-				width : "10%",
-				targets : 8
-			}, {
-				orderable : false,
-				className : 'reorder',
-				width : "10%",
-				targets : 9
-			}
-
-			],
+			
 
 			bInfo : true,
 			destroy : true,

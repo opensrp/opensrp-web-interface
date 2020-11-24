@@ -2,7 +2,9 @@ package org.opensrp.common.dto;
 
 public class ClientListDTO {
 	
-	private long id;
+	private Long id;
+	
+	private Long vid;
 	
 	private String baseEntityId;
 	
@@ -30,6 +32,8 @@ public class ClientListDTO {
 	
 	private String eventDate;
 	
+	private String status;
+	
 	private String relationWithHousehold;
 	
 	private String age;
@@ -40,12 +44,26 @@ public class ClientListDTO {
 	
 	private String memberType;
 	
-	public long getId() {
+	private String serviceName;
+	
+	private String tableName;
+	
+	private String formSubmissionId;
+	
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Long getVid() {
+		return vid;
+	}
+	
+	public void setVid(Long vid) {
+		this.vid = vid;
 	}
 	
 	public String getBaseEntityId() {
@@ -194,6 +212,38 @@ public class ClientListDTO {
 	
 	public void setEventDate(String eventDate) {
 		this.eventDate = eventDate;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public String getServiceName() {
+		return serviceName;
+	}
+	
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+	
+	public String getTableName() {
+		return tableName;
+	}
+	
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+	
+	public String getFormSubmissionId() {
+		return formSubmissionId;
+	}
+	
+	public void setFormSubmissionId(String formSubmissionId) {
+		this.formSubmissionId = formSubmissionId;
 	}
 	
 }

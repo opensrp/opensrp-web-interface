@@ -1,23 +1,9 @@
 package org.opensrp.web.rest.controller;
 
-import static org.springframework.http.HttpStatus.OK;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.opensrp.common.dto.ClientCommonDTO;
-import org.opensrp.common.util.HouseholdColumn;
-import org.opensrp.common.util.MemberColumn;
 import org.opensrp.core.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RequestMapping("rest/api/v1/people")
 @RestController
@@ -26,6 +12,7 @@ public class PeopleRestController {
 	@Autowired
 	private PeopleService peopleService;
 	
+	/*
 	@RequestMapping(value = "/household/list", method = RequestMethod.GET)
 	public ResponseEntity<String> householdList(HttpServletRequest request, HttpSession session) throws JSONException {
 		Integer start = Integer.valueOf(request.getParameter("start"));
@@ -41,22 +28,25 @@ public class PeopleRestController {
 		int branchId = Integer.parseInt(request.getParameter("branchId"));
 		
 		String location = request.getParameter("locationId");
-		
-		JSONObject households = null;
+		JSONObject jo = new JSONObject();
+		jo.put("branch_id", 2);
+		jo.put("division", "DHAKA");
+		jo.put("offset", 0);
+		jo.put("limit", 10);
+		ClientCommonDTO households = new ClientCommonDTO();
 		try {
-			households = peopleService.getHouseholdData(searchKey, location, branchId, length, start, orderColumn,
-			    orderDirection);
+			households = peopleService.getHouseholdData(jo);
 		}
 		catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		JSONObject response = peopleService.drawHouseholdDataTable(draw, 0, households);
+		//JSONObject response = peopleService.drawHouseholdDataTable(draw, 0, households);
 		return new ResponseEntity<>(response.toString(), OK);
-	}
+	}*/
 	
-	@RequestMapping(value = "/member/list", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/member/list", method = RequestMethod.GET)
 	public ResponseEntity<String> memberList(HttpServletRequest request, HttpSession session) throws JSONException {
 		Integer start = Integer.valueOf(request.getParameter("start"));
 		Integer length = Integer.valueOf(request.getParameter("length"));
@@ -73,11 +63,10 @@ public class PeopleRestController {
 		
 		String location = request.getParameter("locationId");
 		
-		ClientCommonDTO data = peopleService.getMemberData(baseEntityId, searchKey, location, branchId, length, start,
-		    orderColumn, orderDirection);
+		List<ClientListDTO> data = peopleService.getMemberData(baseEntityId);
 		
 		JSONObject response = peopleService.drawMemberDataTable(draw, 0, data);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
-	
+	*/
 }

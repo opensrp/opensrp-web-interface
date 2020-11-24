@@ -56,12 +56,14 @@
      						
 						</div>
 						
-						<div class="table-scrollable">
-						
-						<table class="table table-striped table-bordered " id="householdTable">
+						<div class="row" style="margin: 0px">
+		                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
+		                   
+		                        <div id="report">
+		                        	<table class="table table-striped table-bordered " id="householdTable" style="width: 100%;">
 							<thead>
 								<tr>
-								 <th>HH ID</th>
+								 	<th>HH ID</th>
 									<th>HH head name</th>
 									<th>#Members</th>
 									<th>Registration date</th>
@@ -71,10 +73,36 @@
 									<th>Contact</th>
 									<th>Action</th>
 								</tr>
+								
 							</thead>
+							<tbody>
+								<c:forEach items="${households}" var="household">
+									<tr>
+										<%-- <c:forEach items='${households.get("exampleMap ").entrySet()}' var="category">
+										      <a:dropdownOption value="${category.key}">${category.key} </a:dropdownOption>
+										</c:forEach> --%>
+										<td> ${household.getHouseholdId() }</td>
+										<td> ${household.getHouseholdHead() }</td>
+										<td> ${household.getNumberOfMember() }</td>
+										<td> ${household.getRegistrationDate() }</td>
+										<td> ${household.getLastVisitDate() }</td>
+										<td> ${household.getVillage() }</td>
+										<td> ${household.getBranchName() }(${ household.getBranchCode()})</td>
+										<td> ${household.getContact() }</td>
+										<td> <a href="<c:url value="/people/household-details/${household.getBaseEntityId()}/${household.getId() }.html?lang=${locale}"/>">Details</a></td>
+									</tr>
+								</c:forEach>
+							</tbody>
 							
 						</table>
-						</div>
+		                        </div>
+		                        
+		                    </div>
+		                </div>
+						
+						
+						
+						
 						
 						
 					</div>
@@ -91,6 +119,7 @@
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
 
 <script>
 jQuery(document).ready(function() {       
@@ -105,109 +134,19 @@ jQuery(document).ready(function() {
 </script>
 <script>
     let stockList;
+    
     $(document).ready(function() {
-    	
-    	
-    	stockList = $('#householdTable').DataTable({
-            bFilter: false,
-            serverSide: true,
-            processing: true,
-            columnDefs: [
-                
-                { orderable: false, className: 'reorder', width: "10%", targets: 0 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 1 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 2 },
-                { width: "10%", targets: 3 },
-                { width: "10%", targets: 4 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 5},
-                { orderable: false, className: 'reorder', width: "10%", targets: 6},
-                { orderable: false, className: 'reorder', width: "10%", targets: 7},
-                { orderable: false, className: 'reorder', width: "10%", targets: 8}
-                
-            ],
-            ajax: {
-                url: "${get_url}",
-                data: function(data){                	
-                    data.branchId = 0;
-                    data.locationId=0;                    
-                    data.roleName='SK';
-                    
-                },
-                dataSrc: function(json){
-                    if(json.data){
-                        return json.data;
-                    }
-                    else {
-                        return [];
-                    }
-                },
-                complete: function() {
-                },
-                type: 'GET'
-            },
-            bInfo: true,
-            destroy: true,
-            language: {
-                searchPlaceholder: ""
-            }
-        });
+    	$('#householdTable').DataTable({
+    		scrollY:        "300px",
+    	    scrollX:        true,
+    	    scrollCollapse: true,                
+    		 fixedColumns:   {
+    	         leftColumns: 2
+    	     }
+    	})
     });
 
-function filter(){
-	let locationId = 0;
-	let district = $("#districtList option:selected").val();
-	let division = $("#divisionList option:selected").val();
-	let upazila = $("#upazilaList option:selected").val();
-	if(upazila != 0){
-		locationId = upazila;
-	}else if(district != 0){
-		locationId = district;
-	}else if(division != 0){
-		locationId =division; 
-	}
-	stockList = $('#householdTable').DataTable({
-         bFilter: false,
-         serverSide: true,
-         processing: true,
-         columnDefs: [
-             
-                { orderable: false, className: 'reorder', width: "10%", targets: 0 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 1 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 2 },
-                { width: "10%", targets: 3 },
-                { width: "10%", targets: 4 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 5},
-                { orderable: false, className: 'reorder', width: "10%", targets: 6},
-                { orderable: false, className: 'reorder', width: "10%", targets: 7},
-                { orderable: false, className: 'reorder', width: "10%", targets: 8}
-         ],
-         ajax: {
-             url: "${get_url}",
-             data: function(data){
-            	
-            	 data.branchId = $("#branchList option:selected").val();
-                 data.locationId=locationId;                    
-                 data.roleName=$("#roleList option:selected").val();
-             },
-             dataSrc: function(json){
-                 if(json.data){
-                     return json.data;
-                 }
-                 else {
-                     return [];
-                 }
-             },
-             complete: function() {
-             },
-             type: 'GET'
-         },
-         bInfo: true,
-         destroy: true,
-         language: {
-             searchPlaceholder: ""
-         }
-     });
-}
+
 </script>
 
 

@@ -104,8 +104,8 @@ License: You must have a valid license purchased only from themeforest(the above
 	boolean SELLS_REPORT = AuthenticationManagerUtil.isPermitted("SELLS_REPORT");
 	boolean ADJUST_HISTORY = AuthenticationManagerUtil.isPermitted("ADJUST_HISTORY");
 	boolean PRODUCT_LIST = AuthenticationManagerUtil.isPermitted("PRODUCT_LIST");
-
-
+	boolean PEOPLE = AuthenticationManagerUtil.isPermitted("PEOPLE");
+	 
 	
    %>
   
@@ -580,7 +580,26 @@ License: You must have a valid license purchased only from themeforest(the above
 					<%
 						}
 					%>
-				
+				<% if(PEOPLE){ %>
+					<li><a href="javascript:;"> <i class="fa fa-bullseye"></i> <span
+							class="title">People</span> <span class="arrow "></span>
+					</a>
+						<ul class="sub-menu">
+						
+							
+							
+							<li><a href="<c:url value="/people/households.html"/>">
+									Household
+							</a></li>
+							<li><a href="<c:url value="/people/members.html"/>">
+									Member
+							</a></li>
+							
+							
+						</ul></li>
+					<%
+						}
+					%>
 				<!-- <li>
 					<a href="javascript:;">
 					<i class="icon-diamond"></i>
