@@ -23,11 +23,11 @@ import org.json.JSONObject;
 import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.dto.WebNotificationCommonDTO;
 import org.opensrp.common.util.DateUtil;
-import org.opensrp.common.util.TaregtSettingsType;
 import org.opensrp.common.util.WebNotificationType;
 import org.opensrp.core.dto.WebNotificationDTO;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.WebNotification;
+import org.opensrp.core.entity.WebNotificationBranch;
 import org.opensrp.core.entity.WebNotificationUser;
 import org.opensrp.core.mapper.WebNotificationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,17 +58,22 @@ public class WebNotificationService extends CommonService {
 		} else {
 			boolean isDelete = deleteAllByPrimaryKey(dto.getId(), "web_notification_user", "web_notification_id");
 			boolean isdeleteRole = deleteAllByPrimaryKey(dto.getId(), "web_notification_role", "web_notification_id");
+			boolean isdeleteBranch = deleteAllByPrimaryKey(dto.getId(), "web_notification_branch", "web_notification_id");
 			if (!isDelete) {
 				return null;
 			}
-			if(!isdeleteRole) {
+			if (!isdeleteRole) {
+				return null;
+			}
+			if (!isdeleteBranch) {
 				return null;
 			}
 		}
-		
-		List<TargetCommontDTO> targetTos = getAllUser(dto.getRoles(), TaregtSettingsType.valueOf(dto.getLocationType())
-		        .name(), dto.getLocationTypeId());
-		
+		List<TargetCommontDTO> targetTos = new ArrayList<>();
+		if (!dto.getRoles().isEmpty() || !dto.getBranches().isEmpty()) {
+			targetTos = getAllUser(dto.getRoles(), dto.getBranchAsString());
+			
+		}
 		Set<WebNotificationUser> _webNotificationUsers = new HashSet<>();
 		for (TargetCommontDTO webNotificationUser : targetTos) {
 			WebNotificationUser _webNotificationUser = new WebNotificationUser();
@@ -77,6 +82,14 @@ public class WebNotificationService extends CommonService {
 			_webNotificationUsers.add(_webNotificationUser);
 		}
 		
+		Set<WebNotificationBranch> _webNotificationBranchs = new HashSet<>();
+		for (Integer branchId : dto.getBranches()) {
+			WebNotificationBranch webNotificationBranch = new WebNotificationBranch();
+			webNotificationBranch.setBranch(branchId);
+			webNotificationBranch.setWebNotification(webNotification);
+			_webNotificationBranchs.add(webNotificationBranch);
+		}
+		webNotification.setWebNotificationBranchs(_webNotificationBranchs);
 		webNotification.setWebNotifications(_webNotificationUsers);
 		webNotification = webNotificationMapper.map(dto, webNotification);
 		session.saveOrUpdate(webNotification);
@@ -86,24 +99,24 @@ public class WebNotificationService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<WebNotificationCommonDTO> getWebNotificationList(int locationId, int branchId, int roleId, String startDate,
-	                                                             String endDate, String type, Integer length, Integer start,
-	                                                             String orderColumn, String orderDirection) {
+	public List<WebNotificationCommonDTO> getWebNotificationList(int locationId, String branchIds, int roleId,
+	                                                             String startDate, String endDate, String type,
+	                                                             Integer length, Integer start, String orderColumn,
+	                                                             String orderDirection) {
 		
 		Session session = getSessionFactory();
 		List<WebNotificationCommonDTO> dtos = new ArrayList<>();
 		
-		String hql = "select created createdTime, id,title,notification,start_date sendDate,send_time_hour sendTimeHour,send_time_minute sendTimeMinute,branch_name branchName,branch_code branchCode,role_name roleName,type from core.web_notification_list( :locationId,:branchId ,:roleId,:startDate ,:endDate, :type, :start, :length)";
+		String hql = "select created createdTime, _send_date sendDate,send_time_hour sendTimeHour,send_time_minute sendTimeMinute, sending_time sendTime, id,type,title,notification,role_name roleName from core.web_notification_list( :locationId,'{"
+		        + branchIds + "}' ,:roleId,:startDate ,:endDate, :type, :start, :length)";
 		Query query = session.createSQLQuery(hql).addScalar("createdTime", StandardBasicTypes.STRING)
-		        .addScalar("id", StandardBasicTypes.LONG).addScalar("title", StandardBasicTypes.STRING)
-		        .addScalar("notification", StandardBasicTypes.STRING).addScalar("sendDate", StandardBasicTypes.DATE)
-		        .addScalar("sendTimeHour", StandardBasicTypes.INTEGER)
-		        .addScalar("sendTimeMinute", StandardBasicTypes.INTEGER).addScalar("branchName", StandardBasicTypes.STRING)
-		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
-		        .addScalar("type", StandardBasicTypes.STRING).setInteger("locationId", locationId)
-		        .setInteger("branchId", branchId).setInteger("roleId", roleId).setString("startDate", startDate)
-		        .setString("endDate", endDate).setString("type", type).setInteger("start", start)
-		        .setInteger("length", length)
+		        .addScalar("sendDate", StandardBasicTypes.DATE).addScalar("sendTimeHour", StandardBasicTypes.INTEGER)
+		        .addScalar("sendTimeMinute", StandardBasicTypes.INTEGER).addScalar("sendTime", StandardBasicTypes.STRING)
+		        .addScalar("id", StandardBasicTypes.LONG).addScalar("type", StandardBasicTypes.STRING)
+		        .addScalar("title", StandardBasicTypes.STRING).addScalar("notification", StandardBasicTypes.STRING)
+		        .addScalar("roleName", StandardBasicTypes.STRING).setInteger("locationId", locationId)
+		        .setInteger("roleId", roleId).setString("startDate", startDate).setString("endDate", endDate)
+		        .setString("type", type).setInteger("start", start).setInteger("length", length)
 		        
 		        .setResultTransformer(new AliasToBeanResultTransformer(WebNotificationCommonDTO.class));
 		dtos = query.list();
@@ -112,16 +125,16 @@ public class WebNotificationService extends CommonService {
 	}
 	
 	@Transactional
-	public int getWebNotificationListCount(int locationId, int branchId, int roleId, String startDate, String endDate,
+	public int getWebNotificationListCount(int locationId, String branchIds, int roleId, String startDate, String endDate,
 	                                       String type) {
 		
 		Session session = getSessionFactory();
 		BigInteger total = null;
 		
-		String hql = "select * from core.web_notification_list_count( :locationId,:branchId,:roleId,:startDate,:endDate,:type)";
-		Query query = session.createSQLQuery(hql).setInteger("locationId", locationId).setInteger("branchId", branchId)
-		        .setInteger("roleId", roleId).setString("startDate", startDate).setString("endDate", endDate)
-		        .setString("type", type);
+		String hql = "select * from core.web_notification_list_count( :locationId,'{" + branchIds
+		        + "}',:roleId,:startDate,:endDate,:type)";
+		Query query = session.createSQLQuery(hql).setInteger("locationId", locationId).setInteger("roleId", roleId)
+		        .setString("startDate", startDate).setString("endDate", endDate).setString("type", type);
 		total = (BigInteger) query.uniqueResult();
 		
 		return total.intValue();
@@ -143,8 +156,9 @@ public class WebNotificationService extends CommonService {
 				String date = dto.getSendDate() + " " + dto.getSendTimeHour() + ":" + dto.getSendTimeMinute();
 				if (DateUtil.getTimestamp(date) > System.currentTimeMillis()) {
 					
-					view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId() + ".html\">Details</a> "
-					        + " | <a class='text-primary' \" href=\"edit/" + dto.getId() + ".html\">Edit</a> " + "</div>";
+					view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId()
+					        + ".html\">Details</a> " + " | <a class='text-primary' \" href=\"edit/" + dto.getId()
+					        + ".html\">Edit</a> " + "</div>";
 					
 				} else {
 					
@@ -152,9 +166,11 @@ public class WebNotificationService extends CommonService {
 					        + ".html\">Details</a> </div>";
 				}
 			} else if (dto.getType().equalsIgnoreCase(WebNotificationType.DRAFT.name())) {
-				patient.put(dto.getCreatedTime());
-				view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId() + ".html\">Details</a> "
-				        + " | <a class='text-primary' \" href=\"edit/" + dto.getId() + ".html\">Edit</a> " + "</div>";
+				//patient.put(dto.getCreatedTime());
+				patient.put("");
+				view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId()
+				        + ".html\">Details</a> " + " | <a class='text-primary' \" href=\"edit/" + dto.getId()
+				        + ".html\">Edit</a> " + "</div>";
 			} else {
 				patient.put(dto.getCreatedTime());
 				view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId()
@@ -195,16 +211,11 @@ public class WebNotificationService extends CommonService {
 		
 		String hql = "select title,notification,status,notification_type as type,send_date_and_time createdTime,branch_name as branchName,division_name divisionName,district_name districtName,upazilla_name upazillaName,role_name as roleName from core.web_notification_details(:notificationId)";
 		Query query = session.createSQLQuery(hql).addScalar("title", StandardBasicTypes.STRING)
-		        .addScalar("notification", StandardBasicTypes.STRING)
-		        .addScalar("status", StandardBasicTypes.STRING)
-		        .addScalar("type", StandardBasicTypes.STRING)
-		        .addScalar("createdTime", StandardBasicTypes.STRING)
-		        .addScalar("branchName", StandardBasicTypes.STRING)
-		        .addScalar("roleName", StandardBasicTypes.STRING)
-		        .addScalar("divisionName", StandardBasicTypes.STRING)
-		        .addScalar("districtName", StandardBasicTypes.STRING)
-		        .addScalar("upazillaName", StandardBasicTypes.STRING)
-		        .addScalar("roleName", StandardBasicTypes.STRING)
+		        .addScalar("notification", StandardBasicTypes.STRING).addScalar("status", StandardBasicTypes.STRING)
+		        .addScalar("type", StandardBasicTypes.STRING).addScalar("createdTime", StandardBasicTypes.STRING)
+		        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
+		        .addScalar("divisionName", StandardBasicTypes.STRING).addScalar("districtName", StandardBasicTypes.STRING)
+		        .addScalar("upazillaName", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
 		        .setLong("notificationId", notificationId)
 		        
 		        .setResultTransformer(new AliasToBeanResultTransformer(WebNotificationCommonDTO.class));

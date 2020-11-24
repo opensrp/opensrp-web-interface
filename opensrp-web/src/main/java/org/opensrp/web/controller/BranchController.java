@@ -165,6 +165,13 @@ public class BranchController {
 		return "branch-options";
 	}
 	
+	@RequestMapping(value = "/branch-list-options-inventoy", method = RequestMethod.GET)
+	public String getBranchListsInventory(HttpServletRequest request, Model model, @RequestParam int id) {
+		List<Branch> branches = targetService.getLocationByLocationId(id);
+		model.addAttribute("branches", branches);
+		return "branch-options-inventory";
+	}
+	
 	@RequestMapping(value = "/all-branch-list-options", method = RequestMethod.GET)
 	public String getBranchAllLists(HttpServletRequest request, Model model) {
 		List<Branch> branches = branchService.findAll("Branch");

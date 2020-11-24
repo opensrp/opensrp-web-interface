@@ -9,16 +9,19 @@ import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.ProductType;
 import org.opensrp.common.util.Roles;
+import org.opensrp.core.dto.BranchDTO;
 import org.opensrp.core.dto.ProductDTO;
-import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Product;
 import org.opensrp.core.entity.ProductRole;
 import org.opensrp.core.entity.Role;
+import org.opensrp.core.entity.User;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.ProductService;
 import org.opensrp.core.service.RequisitionService;
 import org.opensrp.core.service.StockService;
 import org.opensrp.core.service.TargetService;
+import org.opensrp.web.util.AuthenticationManagerUtil;
+import org.opensrp.web.util.BranchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +46,9 @@ public class InventoryDmController {
 	
 	@Autowired
 	private BranchService branchService;
+	
+	@Autowired
+	public BranchUtil branchUtil;
 	
 	@RequestMapping(value = "inventorydm/products-list.html", method = RequestMethod.GET)
 	public String productsList(Model model, Locale locale) {
@@ -119,8 +125,7 @@ public class InventoryDmController {
 	@RequestMapping(value = "inventorydm/requisition-list.html", method = RequestMethod.GET)
 	public String requisitonListForDm(Model model, Locale locale, HttpSession session) {
 		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
-		List<Branch> branches = branchService.findAll("Branch");
-		model.addAttribute("branches", branches);
+		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("locale", locale);
 		return "inventoryDm/requisition-list";
 	}
@@ -149,10 +154,25 @@ public class InventoryDmController {
 	@RequestMapping(value = "inventorydm/ss-sales-report.html", method = RequestMethod.GET)
 	public String ssSellReportForDm(Model model, HttpSession session, Locale locale) {
 		model.addAttribute("locale", locale);
-		List<Branch> branches = branchService.findAll("Branch");
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<BranchDTO> branches = targetService.getBranchListByUserIds(loggedInUser.getId() + "");
 		model.addAttribute("branches", branches);
 		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
+		model.addAttribute("manager", loggedInUser.getId());
+		
 		return "inventoryDm/ss-sales-report";
+	}
+	
+	@RequestMapping(value = "inventorydm/ss-sales/view/{branch_id}/{id}.html", method = RequestMethod.GET)
+	public String selltoSSDetails(Model model, Locale locale, @PathVariable("branch_id") int branchId,
+	                              @PathVariable("id") int userId) {
+		model.addAttribute("branchId", branchId);
+		model.addAttribute("userId", userId);
+		model.addAttribute("titleType", "Sell");
+		model.addAttribute("type", "'SELL'");
+		model.addAttribute("user", stockService.getUserAndBrachByuserId(userId));
+		model.addAttribute("locale", locale);
+		return "inventoryDm/user-wise-stock-pass-sell";
 	}
 	
 }

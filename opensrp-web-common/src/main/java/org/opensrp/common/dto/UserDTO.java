@@ -20,6 +20,8 @@ public class UserDTO {
 	
 	private String roles;
 	
+	private int roleId;
+
 	private String branches;
 	
 	private int parentUser;
@@ -47,7 +49,7 @@ public class UserDTO {
 	private int pkId;
 
 	private boolean onMaternityLeave;
-	
+
 	public boolean isStatus() {
 		return status;
 	}
@@ -234,6 +236,15 @@ public class UserDTO {
 
 	public void setOnMaternityLeave(boolean onMaternityLeave) {
 		this.onMaternityLeave = onMaternityLeave;
+	}
+
+
+	public int getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
 	}
 
 	@Override

@@ -12,7 +12,8 @@
 <title>Individual Sell To SS</title>
 	
 	
-
+<c:url var="backUrl" value="/inventoryam/sell-to-ss-list/${branchInfo[0][0]}.html" />
+<c:url var="saveURL" value="/rest/api/v1/stock/save-update" />
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
@@ -20,6 +21,15 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="btn btn-primary" href="${backUrl }">Back</a>
+				</li>
+		</ul>
 		<div class="row">
 			<div class="col-md-12">
 
@@ -59,14 +69,14 @@
 								</div>
 							</div>
 						</div>
-						<h3>Sell To ${ssName} : </h3>
+						<h3>Sell To ${ssName} </h3>
 						<br>
 						<table class="table table-striped table-bordered " id="individualSellListToSS">
 							<thead>
 								<tr>
 									<th style="display: none"><spring:message code="lbl.serialNo"></spring:message></th>
 									<th><spring:message code="lbl.productName"></spring:message></th>
-									<th>${ssName}'s <spring:message code="lbl.currentStock"></spring:message></th>
+									<%-- <th>${ssName}'s <spring:message code="lbl.currentStock"></spring:message></th> --%>
 									<th><spring:message code="lbl.availableProduct"></spring:message></th>
 									<th><spring:message code="lbl.sellProduct"></spring:message><span class="text-danger"> *</span><p style="display: none" class="text-danger" id="validationMessage"></p></th>
 								</tr>
@@ -76,16 +86,29 @@
 									<tr>
 										<td style="display: none">${ product.id }</td>
 										<td>${ product.name }</td>
-										<td>${ product.available }</td>
+										<%-- <td>${ product.available }</td> --%>
 										<td>${ product.stock }</td>
 										<td><input type="number"  min="1" oninput="this.value = Math.abs(this.value)" id="sellAmount" name ="sellAmount"><p class="text-danger" id="sellAmountSelection"></p><span class="text-danger" id="negativeValue"></span></td>
 									</tr>
 								</c:forEach>
 								</tbody>
 						</table>
-						<div class="text-center">
-						<button type="submit" onclick="saveStockData()" class="btn btn-primary" value="confirm">Confirm All</button>
+						
+						<div class=row>
+							<div class="col-md-12 form-group text-right">
+						    		<div class="row">
+								     	<div class="col-lg-12 ">
+								     	 <a class="btn btn-primary" href="${backUrl}">Cancel</a>
+											 <button  onclick="saveStockData()" class="btn btn-primary" value="confirm">Confirm All</button>
+										</div>
+						            </div>
+						      </div>
+				
 						</div>
+						
+						<!-- <div class="text-center">
+						<button type="submit" onclick="saveStockData()" class="btn btn-primary" value="confirm">Confirm All</button>
+						</div> -->
 					</div>
 					
 				</div>		
@@ -138,10 +161,10 @@ function createStockArray() {
 			if(colIndex == 0) {
 				stockObject["productId"] = parseInt(c.textContent);
 			}
-			if(colIndex == 3) {
+			if(colIndex == 2) {
 				avilableStock = parseInt(c.textContent);
 			}
-			if(colIndex == 4) {
+			if(colIndex == 3) {
     		 	if(parseInt($(this).find('input[type="number"]').val()) == 0) {
     		 		$(this).find('input[type="number"]').val('');
     		 	}
@@ -198,7 +221,7 @@ function saveStockData() {
 	var branchId = parseInt("${id}");
 	var branchCode = "${branchInfo[0][2]}";
 	var sellToId = parseInt("${ssid}");
-	var url = "/opensrp-dashboard/rest/api/v1/stock/save-update";			
+	var url = "${saveURL}";			
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	var formData;
@@ -231,7 +254,7 @@ function saveStockData() {
 		   
 			   if(response.status == "SUCCESS"){
 	            	setTimeout(function(){
-	            		window.location.replace("/opensrp-dashboard/inventoryam/sell-to-ss-list/"+branchId+".html?lang=${locale}");
+	            		window.location.replace("${backUrl}");
 		                }, 1000);
 		   }
 		   

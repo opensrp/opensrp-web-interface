@@ -13,7 +13,7 @@
 	
 	
 <c:url var="stock_in_list" value="/rest/api/v1/stock/pass-stock-or-sell-to-ss-list" />
-<c:url var="backUrl" value="/inventoryam/sell-to-ss-list/${branchId }.html" />
+<c:url var="backUrl" value="/inventorydm/ss-sales-report.html" />
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />

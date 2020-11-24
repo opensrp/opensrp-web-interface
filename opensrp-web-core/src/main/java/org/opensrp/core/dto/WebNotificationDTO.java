@@ -42,6 +42,10 @@ public class WebNotificationDTO {
 	
 	private Set<Integer> roles;
 	
+	private Set<Integer> branches;
+	
+	private String branchAsString;
+	
 	private String sendDateAndTime;
 	
 	public Long getId() {
@@ -186,6 +190,22 @@ public class WebNotificationDTO {
 	
 	public void setSendDateAndTime(String sendDateAndTime) {
 		this.sendDateAndTime = sendDateAndTime;
+	}
+	
+	public Set<Integer> getBranches() {
+		return branches;
+	}
+	
+	public void setBranches(Set<Integer> branches) {
+		this.branches = branches;
+	}
+	
+	public String getBranchAsString() {
+		return branchAsString;
+	}
+	
+	public void setBranchAsString(String branchAsString) {
+		this.branchAsString = branchAsString;
 	}
 	
 }

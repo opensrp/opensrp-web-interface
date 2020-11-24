@@ -11,6 +11,7 @@
 
 <title>My Inventory</title>
 	
+<c:url var="backUrl" value="/inventoryam/myinventory.html" />
 	
 
 <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
@@ -35,6 +36,15 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="btn btn-primary" href="${backUrl }">Back</a>
+				</li>
+		</ul>
 		<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="center-caption">

@@ -47,6 +47,8 @@ public class Product implements Serializable {
 	@Column(name = "uuid")
 	private String uuid;
 	
+	private String code;
+	
 	@Column(name = "description")
 	private String description;
 	
@@ -216,6 +218,14 @@ public class Product implements Serializable {
 	
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public String getCode() {
+		return code;
+	}
+	
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 }

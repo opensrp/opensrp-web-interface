@@ -5,7 +5,10 @@
 package org.opensrp.core.service;
 
 import java.math.BigInteger;
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -22,6 +25,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.common.dto.StockReportDTO;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.util.ReferenceType;
 import org.opensrp.common.util.Status;
@@ -29,10 +33,15 @@ import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.dto.StockAdjustDTO;
 import org.opensrp.core.dto.StockDTO;
 import org.opensrp.core.dto.StockDetailsDTO;
+import org.opensrp.core.entity.Product;
 import org.opensrp.core.entity.Stock;
 import org.opensrp.core.entity.StockAdjust;
 import org.opensrp.core.entity.StockDetails;
 import org.opensrp.core.entity.User;
+import org.opensrp.core.entity.WebNotification;
+import org.opensrp.core.entity.WebNotificationBranch;
+import org.opensrp.core.entity.WebNotificationRole;
+import org.opensrp.core.entity.WebNotificationUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -58,6 +67,7 @@ public class StockService extends CommonService {
 		Set<Integer> sellTos = dto.getSellTo();
 		int number = new Random().nextInt(999999);
 		String stockId = dto.getStockId() + String.format("%06d", number);
+		int branchId = 0;
 		for (Integer sellTo : sellTos) {
 			Stock stock = findById(dto.getId(), "id", Stock.class);
 			if (stock == null) {
@@ -75,15 +85,21 @@ public class StockService extends CommonService {
 				stock.setUuid(UUID.randomUUID().toString());
 			}
 			Set<StockDetails> _stockDetails = new HashSet<>();
+			String refType = "";
+			String msg = "";
 			for (StockDetailsDTO stockDetailsDTO : stockDetailsDTOs) {
 				StockDetails stockDetails = new StockDetails();
 				stockDetails.setBranchId(stockDetailsDTO.getBranchId());
+				branchId = stockDetailsDTO.getBranchId();
 				stockDetails.setCredit(stockDetailsDTO.getCredit());
 				stockDetails.setDebit(stockDetailsDTO.getDebit());
 				stockDetails.setExpireyDate(stockDetailsDTO.getExpireyDate());
 				stockDetails.setReceiveDate(stockDetailsDTO.getReceiveDate());
+				
 				stockDetails.setProductId(stockDetailsDTO.getProductId());
 				stockDetails.setReferenceType(ReferenceType.valueOf(stockDetailsDTO.getReferenceType()).name());
+				
+				refType = ReferenceType.valueOf(stockDetailsDTO.getReferenceType()).name();
 				stockDetails.setSellOrPassTo(sellTo);
 				stockDetails.setTimestamp(System.currentTimeMillis());
 				stockDetails.setStatus(Status.valueOf(stockDetailsDTO.getStatus()).name());
@@ -91,14 +107,56 @@ public class StockService extends CommonService {
 				stockDetails.setStock(stock);
 				stockDetails.setMonth(stockDetailsDTO.getMonth());
 				stockDetails.setYear(stockDetailsDTO.getYear());
+				
 				stockDetails.setStockInId(stockId);
 				stockDetails.setStartDate(stockDetailsDTO.getStartDate());
 				stockDetails.setCreator(user);
 				_stockDetails.add(stockDetails);
+				if (refType.equalsIgnoreCase("PASS")) {
+					Product product = findById(stockDetailsDTO.getProductId(), "id", Product.class);
+					msg += " " + product.getName() + ":" + stockDetailsDTO.getDebit() + "\n";
+				}
 				
 			}
 			stock.setStockDetails(_stockDetails);
 			session.saveOrUpdate(stock);
+			if (refType.equalsIgnoreCase("PASS") && !stockDetailsDTOs.isEmpty()) {
+				WebNotification webNotification = new WebNotification();
+				webNotification.setNotificationTitle("আপনার কাছে নতুন প্রোডাক্ট এসেছে.");
+				webNotification.setNotificationType("STOCK");
+				webNotification.setStockDetailsId(stock.getId());
+				webNotification.setNotification(msg);
+				LocalDateTime now = LocalDateTime.now();
+				webNotification.setSendDate(new Date());
+				webNotification.setSendTimeHour(now.getHour());
+				webNotification.setSendTimeMinute(now.getMinute());
+				webNotification.setType("STOCK");
+				Set<WebNotificationRole> _webNotificationRoles = new HashSet<>();
+				WebNotificationRole _webNotificationRole = new WebNotificationRole();
+				webNotification.setTimestamp(System.currentTimeMillis());
+				_webNotificationRole.setWebNotification(webNotification);
+				_webNotificationRoles.add(_webNotificationRole);
+				webNotification.setWebNotificationRoles(_webNotificationRoles);
+				Set<WebNotificationBranch> _webNotificationBranchs = new HashSet<>();
+				
+				WebNotificationBranch webNotificationBranch = new WebNotificationBranch();
+				webNotificationBranch.setBranch(branchId);
+				webNotificationBranch.setWebNotification(webNotification);
+				_webNotificationBranchs.add(webNotificationBranch);
+				webNotification.setWebNotificationBranchs(_webNotificationBranchs);
+				
+				Set<WebNotificationUser> _webNotificationUsers = new HashSet<>();
+				for (Integer userId : sellTos) {
+					WebNotificationUser _webNotificationUser = new WebNotificationUser();
+					_webNotificationUser.setUserId(userId);
+					_webNotificationUser.setWebNotification(webNotification);
+					_webNotificationUsers.add(_webNotificationUser);
+					_webNotificationRole.setRole(getUserRole(userId));
+				}
+				webNotification.setWebNotifications(_webNotificationUsers);
+				session.saveOrUpdate(webNotification);
+				
+			}
 			
 		}
 		
@@ -116,21 +174,21 @@ public class StockService extends CommonService {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		StockAdjust stock = findById(dto.getId(), "id", StockAdjust.class);
-			if (stock == null) {
-				stock = new StockAdjust();
-			}
-			stock.setProductId(dto.getProductId());
-			stock.setMonth(dto.getMonth());
-			stock.setYear(dto.getYear());
-			stock.setBranchId(dto.getBranchId());
-			stock.setAdjustDate(dto.getAdjustDate());
-			stock.setCurrentStock(dto.getCurrentStock());
-			stock.setChangedStock(dto.getChangedStock());
-			stock.setAdjustReason(dto.getAdjustReason());
-			stock.setCreator(user.getId());
-			session.saveOrUpdate(stock);
-
-			returnValue = 1;
+		if (stock == null) {
+			stock = new StockAdjust();
+		}
+		stock.setProductId(dto.getProductId());
+		stock.setMonth(dto.getMonth());
+		stock.setYear(dto.getYear());
+		stock.setBranchId(dto.getBranchId());
+		stock.setAdjustDate(dto.getAdjustDate());
+		stock.setCurrentStock(dto.getCurrentStock());
+		stock.setChangedStock(dto.getChangedStock());
+		stock.setAdjustReason(dto.getAdjustReason());
+		stock.setCreator(user.getId());
+		session.saveOrUpdate(stock);
+		
+		returnValue = 1;
 		
 		return returnValue;
 	}
@@ -269,19 +327,20 @@ public class StockService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<InventoryDTO> getsellToSSList(int branchId, int skId, int division, int district, int upazila, int year,
-	                                          int month, Integer length, Integer start, String orderColumn,
-	                                          String orderDirection) {
+	public List<InventoryDTO> getsellToSSList(int managerId, int branchId, int skId, int division, int district,
+	                                          int upazila, int year, int month, Integer length, Integer start,
+	                                          String orderColumn, String orderDirection) {
 		
 		Session session = getSessionFactory();
 		List<InventoryDTO> dtos = new ArrayList<>();
 		
-		String hql = "select ss_id id,sell_amount salesPrice, purchase_amount purchasePrice, sk_name SKName,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName from core.sell_report(:branchId,:skId,:division,:district,:upazila,:year,:month,:start,:length)";
-		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
-		        .addScalar("salesPrice", StandardBasicTypes.FLOAT).addScalar("purchasePrice", StandardBasicTypes.FLOAT)
-		        .addScalar("SKName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
-		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
-		        .addScalar("lastName", StandardBasicTypes.STRING).setInteger("branchId", branchId).setInteger("skId", skId)
+		String hql = "select branch_id branchId, ss_id id,sell_amount salesPrice, purchase_amount purchasePrice, sk_name SKName,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName from core.sell_report(:manager,:branchId,:skId,:division,:district,:upazila,:year,:month,:start,:length)";
+		Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
+		        .addScalar("id", StandardBasicTypes.LONG).addScalar("salesPrice", StandardBasicTypes.FLOAT)
+		        .addScalar("purchasePrice", StandardBasicTypes.FLOAT).addScalar("SKName", StandardBasicTypes.STRING)
+		        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("branchCode", StandardBasicTypes.STRING)
+		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
+		        .setInteger("manager", managerId).setInteger("branchId", branchId).setInteger("skId", skId)
 		        .setInteger("division", division).setInteger("district", district).setInteger("upazila", upazila)
 		        .setInteger("year", year).setInteger("month", month).setInteger("length", length).setInteger("start", start)
 		        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
@@ -291,15 +350,16 @@ public class StockService extends CommonService {
 	}
 	
 	@Transactional
-	public int getsellToSSListCount(int branchId, int skId, int division, int district, int upazila, int year, int month) {
+	public int getsellToSSListCount(int managerId, int branchId, int skId, int division, int district, int upazila,
+	                                int year, int month) {
 		
 		Session session = getSessionFactory();
 		BigInteger total = null;
 		
-		String hql = "select * from core.sell_report_count(:branchId,:skId,:division,:district,:upazila,:year,:month)";
-		Query query = session.createSQLQuery(hql).setInteger("branchId", branchId).setInteger("skId", skId)
-		        .setInteger("division", division).setInteger("district", district).setInteger("upazila", upazila)
-		        .setInteger("year", year).setInteger("month", month);
+		String hql = "select * from core.sell_report_count(:manager,:branchId,:skId,:division,:district,:upazila,:year,:month)";
+		Query query = session.createSQLQuery(hql).setInteger("manager", managerId).setInteger("branchId", branchId)
+		        .setInteger("skId", skId).setInteger("division", division).setInteger("district", district)
+		        .setInteger("upazila", upazila).setInteger("year", year).setInteger("month", month);
 		
 		total = (BigInteger) query.uniqueResult();
 		
@@ -313,7 +373,8 @@ public class StockService extends CommonService {
 		response.put("recordsTotal", sellToSSCount);
 		response.put("recordsFiltered", sellToSSCount);
 		JSONArray array = new JSONArray();
-		
+		DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(2);
 		for (InventoryDTO dto : dtos) {
 			JSONArray patient = new JSONArray();
 			if (roleId == 32) {
@@ -327,29 +388,22 @@ public class StockService extends CommonService {
 			}
 			patient.put(dto.getSKName());
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
-			if (roleId != 32) {
+			/*if (roleId != 32) {
 				patient.put("0"); // target amount for DIvM
-			}
-			patient.put(dto.getSalesPrice());
+			}*/
+			patient.put(df.format(dto.getSalesPrice()));
 			if (roleId != 32) {
-				patient.put(dto.getPurchasePrice()); // for DIvM
+				patient.put(df.format(dto.getPurchasePrice())); // for DIvM
 			}
 			if (roleId == 32) {
-				String view = "<div class='col-sm-12 form-group'><a \" href=\"/opensrp-dashboard/inventoryam/individual-ss-sell/"
-				        + branchId
-				        + "/"
-				        + dto.getId()
-				        + ".html\"><strong>Sell Products </strong></a>  | "
-				        + "<a \" href=\"/opensrp-dashboard/inventory/ss-sales/view/"
-				        + branchId
-				        + "/"
-				        + dto.getId()
-				        + ".html\"><strong>View Details </strong></a> " + "</div>";
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"individual-ss-sell/" + branchId + "/"
+				        + dto.getId() + ".html\"><strong>Sell Products </strong></a>  | " + "<a \" href=\"/ss-sales/view/"
+				        + branchId + "/" + dto.getId() + ".html\"><strong>View Details </strong></a> " + "</div>";
 				
 				patient.put(view);
 			} else {
-				String view = "<div class='col-sm-12 form-group'><a \" href=\"/opensrp-dashboard/inventory/ss-sales/view/" + branchId + "/" + dto.getId()
-				        + ".html\"><strong>View details </strong></a> </div>";
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"ss-sales/view/" + dto.getBranchId() + "/"
+				        + dto.getId() + ".html\"><strong>View details </strong></a> </div>";
 				patient.put(view);
 			}
 			array.put(patient);
@@ -441,8 +495,8 @@ public class StockService extends CommonService {
 		Session session = getSessionFactory();
 		List<ProductDTO> result = null;
 		
-		String productSql = "" + "SELECT p.NAME, " + "       p.id " + "FROM   core.product AS p " + "GROUP  BY p.id "
-		        + "ORDER  BY p.id ASC";
+		String productSql = "" + "SELECT p.NAME, " + "       p.id "
+		        + "FROM   core.product AS p  where p.type='PRODUCT' GROUP  BY p.id " + "ORDER  BY p.id ASC";
 		Query query = session.createSQLQuery(productSql).addScalar("id", StandardBasicTypes.LONG)
 		        .addScalar("name", StandardBasicTypes.STRING)
 		        .setResultTransformer(new AliasToBeanResultTransformer(ProductDTO.class));
@@ -465,6 +519,45 @@ public class StockService extends CommonService {
 		        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
 		result = query.list();
 		
+		return result;
+	}
+
+	@Transactional
+	public List<StockReportDTO> getStockReportForAM(String year, String month, String skList) {
+		Session session = getSessionFactory();
+		List<StockReportDTO> result = null;
+
+		String rawSql = "select * from report.get_stock_report('"+month+"', '"+year+"', '{"+skList+"}')";
+		Query query = session.createSQLQuery(rawSql)
+				.addScalar("skusername", StandardBasicTypes.STRING)
+				.addScalar("skname", StandardBasicTypes.STRING)
+				.addScalar("iycfStartingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("iycfMonthlySupply", StandardBasicTypes.INTEGER)
+				.addScalar("iycfMonthlySell", StandardBasicTypes.INTEGER)
+				.addScalar("iycfEndingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("womenPackageStartingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("womenPackageMonthlySupply", StandardBasicTypes.INTEGER)
+				.addScalar("womenPackageMonthlySell", StandardBasicTypes.INTEGER)
+				.addScalar("womenPackageEndingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("adolescentPackageStartingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("adolescentPackageMonthlySupply", StandardBasicTypes.INTEGER)
+				.addScalar("adolescentPackageMonthlySell", StandardBasicTypes.INTEGER)
+				.addScalar("adolescentPackageEndingBalance",  StandardBasicTypes.INTEGER)
+				.addScalar("ncdPackageStartingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("ncdPackageMonthlySupply", StandardBasicTypes.INTEGER)
+				.addScalar("ncdPackageMonthlySell", StandardBasicTypes.INTEGER)
+				.addScalar("ncdPackageEndingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("ancPackageStartingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("ancPackageMonthlySupply", StandardBasicTypes.INTEGER)
+				.addScalar("ancPackageMonthlySell", StandardBasicTypes.INTEGER)
+				.addScalar("ancPackageEndingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("pncPackageStartingBalance", StandardBasicTypes.INTEGER)
+				.addScalar("pncPackageMonthlySupply", StandardBasicTypes.INTEGER)
+				.addScalar("pncPackageMonthlySell", StandardBasicTypes.INTEGER)
+				.addScalar("pncPackageEndingBalance", StandardBasicTypes.INTEGER)
+
+				.setResultTransformer(new AliasToBeanResultTransformer(StockReportDTO.class));
+		result = query.list();
 		return result;
 	}
 	
@@ -501,7 +594,7 @@ public class StockService extends CommonService {
 		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
 		        .addScalar("roleId", StandardBasicTypes.INTEGER).setInteger("userId", userId)
 		        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
-		dtos =  query.list();
+		dtos = query.list();
 		
 		return dtos.get(0);
 		
@@ -566,7 +659,8 @@ public class StockService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<StockAdjustDTO> getAdjustHistoryList(long adjustId,int branchId,String fromDate,String toDate,Integer start, Integer length) {
+	public List<StockAdjustDTO> getAdjustHistoryList(long adjustId, int branchId, String fromDate, String toDate,
+	                                                 Integer start, Integer length) {
 		
 		Session session = getSessionFactory();
 		List<StockAdjustDTO> dtos = new ArrayList<>();
@@ -576,8 +670,9 @@ public class StockService extends CommonService {
 		        .addScalar("productName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("productId", StandardBasicTypes.LONG).addScalar("currentStock", StandardBasicTypes.INTEGER)
 		        .addScalar("changedStock", StandardBasicTypes.INTEGER).addScalar("adjustDate", StandardBasicTypes.DATE)
-		        .addScalar("adjustReason", StandardBasicTypes.STRING).setLong("adjustId", adjustId).setInteger("branchId", branchId)
-		        .setString("fromDate", fromDate).setString("toDate", toDate).setInteger("start", start).setInteger("length", length)
+		        .addScalar("adjustReason", StandardBasicTypes.STRING).setLong("adjustId", adjustId)
+		        .setInteger("branchId", branchId).setString("fromDate", fromDate).setString("toDate", toDate)
+		        .setInteger("start", start).setInteger("length", length)
 		        .setResultTransformer(new AliasToBeanResultTransformer(StockAdjustDTO.class));
 		dtos = query.list();
 		
@@ -585,7 +680,7 @@ public class StockService extends CommonService {
 	}
 	
 	@Transactional
-	public int getAdjustStockListCount(int branchId,String fromDate,String toDate) {
+	public int getAdjustStockListCount(int branchId, String fromDate, String toDate) {
 		
 		Session session = getSessionFactory();
 		BigInteger total = null;
@@ -597,9 +692,13 @@ public class StockService extends CommonService {
 		
 		return total.intValue();
 	}
+
+	public void getStockReport() {
+
+	}
 	
-	
-	public JSONObject getAdjustStockListDataOfDataTable(Integer draw, int adjustStockCount, List<StockAdjustDTO> dtos) throws JSONException {
+	public JSONObject getAdjustStockListDataOfDataTable(Integer draw, int adjustStockCount, List<StockAdjustDTO> dtos)
+	    throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", adjustStockCount);
@@ -613,12 +712,11 @@ public class StockService extends CommonService {
 			stockAdjust.put(dto.getBranchName());
 			stockAdjust.put(dto.getCurrentStock());
 			stockAdjust.put(dto.getChangedStock());
-			stockAdjust.put(dto.getCurrentStock()- dto.getChangedStock());
+			stockAdjust.put(dto.getCurrentStock() - dto.getChangedStock());
 			stockAdjust.put(dto.getAdjustReason());
 			
-			
-			String view = "<div class='col-sm-12 form-group'><a class='text-primary'  href=\"/opensrp-dashboard/inventory/adjust-history/" + dto.getId()
-			        + ".html\"><strong>View details </strong></a> </div>";
+			String view = "<div class='col-sm-12 form-group'><a class='text-primary'  href=\"/opensrp-dashboard/inventory/adjust-history/"
+			        + dto.getId() + ".html\"><strong>View details </strong></a> </div>";
 			stockAdjust.put(view);
 			
 			array.put(stockAdjust);

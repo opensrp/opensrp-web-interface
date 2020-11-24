@@ -78,6 +78,12 @@ public class WebNotification implements Serializable {
 	
 	private String type;
 	
+	@Column(name = "notification_type")
+	private String notificationType;
+	
+	@Column(name = "stock_details_id")
+	private Long stockDetailsId;
+	
 	@Column(name = "send_date_and_time")
 	private String sendDateAndTime;
 	
@@ -102,6 +108,9 @@ public class WebNotification implements Serializable {
 	
 	@OneToMany(mappedBy = "webNotification", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<WebNotificationRole> webNotificationRoles = new HashSet<WebNotificationRole>();
+	
+	@OneToMany(mappedBy = "webNotification", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<WebNotificationBranch> webNotificationBranchs = new HashSet<WebNotificationBranch>();
 	
 	public Long getId() {
 		return id;
@@ -278,6 +287,30 @@ public class WebNotification implements Serializable {
 	
 	public void setSendDateAndTime(String sendDateAndTime) {
 		this.sendDateAndTime = sendDateAndTime;
+	}
+	
+	public Set<WebNotificationBranch> getWebNotificationBranchs() {
+		return webNotificationBranchs;
+	}
+	
+	public void setWebNotificationBranchs(Set<WebNotificationBranch> webNotificationBranchs) {
+		this.webNotificationBranchs = webNotificationBranchs;
+	}
+	
+	public Long getStockDetailsId() {
+		return stockDetailsId;
+	}
+	
+	public void setStockDetailsId(Long stockDetailsId) {
+		this.stockDetailsId = stockDetailsId;
+	}
+	
+	public String getNotificationType() {
+		return notificationType;
+	}
+	
+	public void setNotificationType(String notificationType) {
+		this.notificationType = notificationType;
 	}
 	
 }

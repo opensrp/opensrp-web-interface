@@ -3,9 +3,11 @@
  */
 package org.opensrp.web.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,12 +15,13 @@ import javax.servlet.http.HttpSession;
 import org.opensrp.common.dto.WebNotificationCommonDTO;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.common.util.WebNotificationType;
-import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.WebNotification;
+import org.opensrp.core.entity.WebNotificationBranch;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.WebNotificationService;
+import org.opensrp.web.util.BranchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -53,6 +56,9 @@ public class WebNotificationController {
 	@Autowired
 	private BranchService branchService;
 	
+	@Autowired
+	public BranchUtil branchUtil;
+	
 	@RequestMapping(value = "/list.html", method = RequestMethod.GET)
 	public String targetByIndividual(HttpServletRequest request, HttpSession session, Model model, Locale locale)
 	    throws FirebaseMessagingException {
@@ -60,8 +66,7 @@ public class WebNotificationController {
 		model.addAttribute("roles", webNotificationService.getWebNotificationRoles());
 		model.addAttribute("divisions", webNotificationService.getLocationByTagId(divisionTagId));
 		List<WebNotificationType> types = Arrays.asList(WebNotificationType.values());
-		List<Branch> branches = branchService.findAll("Branch");
-		model.addAttribute("branches", branches);
+		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("types", types);
 		
 		// The topic name can be optionally prefixed with "/topics/".
@@ -94,9 +99,8 @@ public class WebNotificationController {
 	public String addNew(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("roles", webNotificationService.getWebNotificationRoles());
-		List<Branch> branches = branchService.findAll("Branch");
-		model.addAttribute("branches", branches);
 		model.addAttribute("divisions", webNotificationService.getLocationByTagId(divisionTagId));
+		model.addAttribute("branches", branchUtil.getBranches());
 		return "webNotification/add";
 	}
 	
@@ -111,8 +115,15 @@ public class WebNotificationController {
 		model.addAttribute("Upazilas", Upazilas);
 		model.addAttribute("id", id);
 		String dateTime = "";
-		List<Branch> branches = branchService.findAll("Branch");
-		model.addAttribute("branches", branches);
+		List<Integer> branchIds = new ArrayList<Integer>();
+		Set<WebNotificationBranch> branchlist = webNotification.getWebNotificationBranchs();
+		
+		branchlist.forEach(branch -> {
+			branchIds.add(branch.getBranch());
+		});
+		model.addAttribute("branchlist", branchIds);
+		
+		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("dateTime", dateTime);
 		model.addAttribute("webNotification", webNotification);
 		model.addAttribute("divisions", webNotificationService.getLocationByTagId(divisionTagId));
@@ -120,10 +131,11 @@ public class WebNotificationController {
 	}
 	
 	@RequestMapping(value = "/details/{id}.html", method = RequestMethod.GET)
-	public String viewDetails(HttpServletRequest request, HttpSession session, Model model, Locale locale, @PathVariable("id") long id) {
+	public String viewDetails(HttpServletRequest request, HttpSession session, Model model, Locale locale,
+	                          @PathVariable("id") long id) {
 		model.addAttribute("locale", locale);
 		List<WebNotificationCommonDTO> webNotification = webNotificationService.getWebNotificationDetailsById(id);
-
+		
 		model.addAttribute("notificationDetails", webNotification.get(0));
 		return "webNotification/notificationDetails";
 	}

@@ -1,5 +1,8 @@
 package org.opensrp.core.mapper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -22,7 +25,9 @@ public class WebNotificationMapper {
 	@Autowired
 	private TrainingService trainingService;
 	
-	public WebNotification map(WebNotificationDTO dto, WebNotification webNotification) {
+	private final static SimpleDateFormat getYYYYMMDDHHMMSSFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	
+	public WebNotification map(WebNotificationDTO dto, WebNotification webNotification) throws ParseException {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		
@@ -30,11 +35,16 @@ public class WebNotificationMapper {
 		webNotification.setNotification(dto.getNotification());
 		
 		webNotification.setBranch(dto.getBranch());
+		if (dto.getType().equalsIgnoreCase(WebNotificationType.DRAFT.name())) {
+			webNotification.setTimestamp(System.currentTimeMillis());
+		} else {
+			Date date = getYYYYMMDDHHMMSSFormat.parse(dto.getSendDateAndTime());
+			webNotification.setTimestamp(date.getTime());
+		}
 		
-		webNotification.setTimestamp(System.currentTimeMillis());
 		webNotification.setStatus(Status.valueOf(dto.getStatus()).name());
 		webNotification.setType(WebNotificationType.valueOf(dto.getType()).name());
-		
+		webNotification.setNotificationType("general");
 		webNotification.setType(dto.getType());
 		webNotification.setDistrict(dto.getDistrict());
 		webNotification.setDivision(dto.getDivision());
@@ -44,6 +54,7 @@ public class WebNotificationMapper {
 		webNotification.setSendTimeHour(dto.getSendTimeHour());
 		webNotification.setSendTimeMinute(dto.getSendTimeMinute());
 		webNotification.setSendDateAndTime(dto.getSendDateAndTime());
+		
 		Set<WebNotificationRole> _webNotificationRoles = new HashSet<>();
 		
 		for (Integer roleId : dto.getRoles()) {

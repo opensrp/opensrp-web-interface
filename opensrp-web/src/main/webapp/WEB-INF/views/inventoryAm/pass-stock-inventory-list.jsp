@@ -9,11 +9,14 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Current Inventory List</title>
+<title>Pass stock List</title>
 	
 	
 
 <c:url var="pass_stock_list" value="/rest/api/v1/stock/pass-user-list" />
+<c:url var="backUrl" value="/inventoryam/pass-stock.html" />
+<c:url var="pass_stock_url" value="/inventoryam/individual-stock" />
+
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
@@ -21,6 +24,15 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="btn btn-primary" href="${backUrl }">Back</a>
+				</li>
+		</ul>
 		<div class="row">
 			<div class="col-md-12">
 
@@ -196,7 +208,7 @@ function navigateToPassStock(skId) {
 	var locale = "${locale}";
 	var branchId= ${branchInfo[0][0]};
 	//window.location.replace("/opensrp-dashboard/inventoryam/individual-stock/"+branchId+"/"+skId+".html?lang="+locale);
-	window.location.assign("/opensrp-dashboard/inventoryam/individual-stock/"+branchId+"/"+skId+".html?lang="+locale);
+	window.location.assign("${pass_stock_url}/"+branchId+"/"+skId+".html?lang="+locale);
 }
 </script>
 

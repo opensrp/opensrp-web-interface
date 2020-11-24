@@ -86,6 +86,11 @@ public class DateUtil {
 		return date;
 	}
 	
+	public static Date getDateTime() throws ParseException, JSONException {
+		Date date = new Date();
+		return getYYYYMMDDFormat.parse(getYYYYMMDDFormat.format(date));
+	}
+	
 	public static Date getDateFromGMTString(JSONObject doc, String key) throws ParseException, JSONException {
 		Date date = null;
 		

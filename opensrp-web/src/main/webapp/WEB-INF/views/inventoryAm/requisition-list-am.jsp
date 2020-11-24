@@ -13,6 +13,11 @@
 	
 	
 
+<c:url var="backUrl" value="/inventoryam/requisition.html" />
+<c:url var="searchUrl" value="/rest/api/v1/requisition/list" />
+<c:url var="viewURL" value="/inventory/requisition-details" />
+
+
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
@@ -20,6 +25,15 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<i class="fa fa-arrow-right"></i>
+				</li>
+				<li>
+					<a class="btn btn-primary" href="${backUrl }">Back</a>
+				</li>
+		</ul>
 		<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class=center-caption>${branchInfo[0][1]} - ${branchInfo[0][2]}</div>
@@ -37,16 +51,16 @@
 
 					<div class="col-lg-3 form-group">
 						<label for="from"><spring:message code="lbl.from"></spring:message><span
-							class="text-danger">*</span> :</label> <input type="date"
-							class="form-control" id="from"> <span class="text-danger"
+							class="text-danger"> *</span> </label> <input readonly="readonly" type="text"
+							class="form-control date" id="from"> <span class="text-danger"
 							id="startDateValidation"></span>
 					</div>
 					<div class="col-lg-3 form-group">
 						<label for="to"><spring:message code="lbl.to"></spring:message><span
-							class="text-danger">*</span> :</label> <input type="date"
-							class="form-control" id="to"> <span class="text-danger"
+							class="text-danger"> *</span> </label> <input readonly="readonly" type="text"
+							class="form-control date" id="to"> <span class="text-danger"
 							id="endDateValidation"></span>
-					</div>
+					</div> 
 
 				</div>
 				<div class="row">
@@ -78,6 +92,24 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script>
+
+var dateToday = new Date();
+	var dates = $(".date").datepicker({
+    dateFormat: 'yy-mm-dd',
+    maxDate: dateToday,
+    onSelect: function(selectedDate) {
+        var option = this.id == "from" ? "minDate" : "maxDate",
+            instance = $(this).data("datepicker"),
+            date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+        dates.not(this).datepicker("option", option, date);
+    }
+});
+	$(".date-picker-year").focus(function () {
+    $(".ui-datepicker-calendar").hide();
+    $(".ui-datepicker-current").hide();
+});
+
+	
 let requisitionList;
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
@@ -102,7 +134,7 @@ jQuery(document).ready(function() {
                { width: "20%", targets: 5 }
            ],
            ajax: {
-               url: "/opensrp-dashboard/rest/api/v1/requisition/list",
+               url: "${searchUrl}",
                data: function(data){
 					data.division = 0;
 					data.district = 0;
@@ -168,7 +200,7 @@ function filter(){
              { width: "20%", targets: 5 }
         ],
         ajax: {
-            url: "/opensrp-dashboard/rest/api/v1/requisition/list",
+            url: "${searchUrl}",
             data: function(data){
 					data.division = 0;
 					data.district = 0;
@@ -202,7 +234,7 @@ function filter(){
 function navigateTodetails(requisitionId,branchName,branchCode) {
 	var locale = "${locale}";
 	var branchString= "${branchInfo[0][1]}"+"-"+"${branchInfo[0][2]}";
-	window.location.assign("/opensrp-dashboard/inventory/requisition-details/"+requisitionId+".html?lang="+locale+"&branch="+branchString+"");
+	window.location.assign("${viewURL}/"+requisitionId+".html?lang="+locale+"&branch="+branchString+"&branchid="+'${branchInfo[0][0]}');
 }
 
 </script>

@@ -35,54 +35,8 @@
 					</div>				
 					<div class="portlet-body">
 						<div class="form-group">
-						<jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" />
-<%-- 						<div class="row">
-								<div class="col-lg-3 form-group">
-								    <label for="cars"><spring:message code="lbl.division"></spring:message> :</label> 
-								    <select
-										name="cars" class="form-control" id="cars">
-										<option selected="selected">Select Branch</option>
-										<option value="volvo">Volvo</option>
-										<option value="saab">Saab</option>
-										<option value="mercedes">Mercedes</option>
-										<option value="audi">Audi</option>
-									</select>
-								</div>
-								<div class="col-lg-3 form-group">
-								    <label for="cars"><spring:message code="lbl.district"></spring:message> :</label> 
-								    <select
-										name="cars" class="form-control" id="cars">
-										<option selected="selected">Select Branch</option>
-										<option value="volvo">Volvo</option>
-										<option value="saab">Saab</option>
-										<option value="mercedes">Mercedes</option>
-										<option value="audi">Audi</option>
-									</select>
-								</div>
-								<div class="col-lg-3 form-group">
-								    <label for="cars"><spring:message code="lbl.upazila"></spring:message> :</label> 
-								    <select
-										name="cars" class="form-control" id="cars">
-										<option selected="selected">Select Branch</option>
-										<option value="volvo">Volvo</option>
-										<option value="saab">Saab</option>
-										<option value="mercedes">Mercedes</option>
-										<option value="audi">Audi</option>
-									</select>
-								</div>
-								<div class="col-lg-3 form-group">
-								    <label for="cars"><spring:message code="lbl.union"></spring:message> :</label> 
-								    <select
-										name="cars" class="form-control" id="cars">
-										<option selected="selected">Select Branch</option>
-										<option value="volvo">Volvo</option>
-										<option value="saab">Saab</option>
-										<option value="mercedes">Mercedes</option>
-										<option value="audi">Audi</option>
-									</select>
-								</div>
-								
-							</div> --%>
+						<%-- <jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" /> --%>
+						<jsp:include page="/WEB-INF/views/search-option-for-inventory.jsp" />
 							 <div class="row">
 								<div class="col-lg-3 form-group">
 								    <label for="designation"><spring:message code="lbl.selectSk"></spring:message> :</label>
@@ -113,9 +67,10 @@
 									<%-- <th><spring:message code="lbl.ssId"></spring:message></th> --%>
 									<th><spring:message code="lbl.skName"></spring:message></th>
 									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
-									<th><spring:message code="lbl.targetAmount"></spring:message></th>
-									<th><spring:message code="lbl.purchaseAmount"></spring:message></th>
-									<th><spring:message code="lbl.projectedSalesAmount"></spring:message></th>
+									<%-- <th><spring:message code="lbl.targetAmount"></spring:message></th> --%>
+									<th><spring:message code="lbl.projectedSalesAmount"></spring:message> (BDT)</th>
+									<th><spring:message code="lbl.purchaseAmount"></spring:message> (BDT)</th>
+									
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
 								</tr>
 							</thead>
@@ -157,6 +112,7 @@ jQuery(function() {
             $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
         }
     });
+	$("#yearMonth").datepicker('setDate', new Date()); 
 	jQuery(".date-picker-year").focus(function () {
         $(".ui-datepicker-calendar").hide();
         $(".ui-datepicker-current").hide();
@@ -177,14 +133,14 @@ jQuery(function() {
             serverSide: true,
             processing: true,
             columnDefs: [
-                { targets: [0, 1, 2, 3, 4,5,6], orderable: false },
+                /* { targets: [0, 1, 2, 3, 4,5,6], orderable: false },
                 { width: "20%", targets: 0 },
                 { width: "20%", targets: 1 },
                 { width: "20%", targets: 2 },
                 { width: "20%", targets: 3 },
                 { width: "20%", targets: 4 },
                 { width: "20%", targets: 5 },
-                { width: "20%", targets: 6 }
+                { width: "20%", targets: 6 } */
                 
             ],
             ajax: {
@@ -197,6 +153,7 @@ jQuery(function() {
                     data.district=0;
                     data.upazila=0;
                     data.skId=0;
+                    data.manager="${manager}";
                     
                 },
                 dataSrc: function(json){
@@ -242,14 +199,14 @@ function filter(){
          serverSide: true,
          processing: true,
          columnDefs: [
-             { targets: [0, 1, 2, 3, 4,5,6], orderable: false },
+            /*  { targets: [0, 1, 2, 3, 4,5,6], orderable: false },
              { width: "20%", targets: 0 },
              { width: "20%", targets: 1 },
              { width: "20%", targets: 2 },
              { width: "20%", targets: 3 },
              { width0: "20%", targets: 4 },
              { width: "20%", targets: 5 },
-             { width: "20%", targets: 6 }
+             { width: "20%", targets: 6 } */
          ],
          ajax: {
              url: "${sell_to_ss_list}",
@@ -266,6 +223,11 @@ function filter(){
                 data.district = district;
                 data.upazila = upazila;
                 data.skId = skId;
+                if(branch==0 && division==0 && division==0 && upazila==0 && skId==0){
+                	data.manager="${manager}";
+                }else{
+                data.manager=0;
+                }
              },
              dataSrc: function(json){
                  if(json.data){
