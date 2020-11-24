@@ -18,8 +18,8 @@ public class TargetMapper {
 		targetDetails.setPercentage(targetDetailsDTO.getPercentage());
 		targetDetails.setQuantity(targetDetailsDTO.getQuantity());
 		targetDetails.setUnit(targetDetailsDTO.getUnit());
-		/*targetDetails.setStartDate(targetDetailsDTO.getStartDate());
-		targetDetails.setEndDate(targetDetailsDTO.getEndDate());*/
+//		targetDetails.setStartDate(targetDetailsDTO.getStartDate());
+//		targetDetails.setEndDate(targetDetailsDTO.getEndDate());
 		
 		targetDetails.setTimestamp(System.currentTimeMillis());
 		targetDetails.setStatus(targetDetailsDTO.getStatus());
@@ -43,8 +43,8 @@ public class TargetMapper {
 			targetDetails.setQuantity(targetDetailsDTO.getQuantity());
 		}
 		targetDetails.setUnit(targetDetailsDTO.getUnit());
-		/*targetDetails.setStartDate(targetDetailsDTO.getStartDate());
-		targetDetails.setEndDate(targetDetailsDTO.getEndDate());*/
+//		targetDetails.setStartDate(targetDetailsDTO.getStartDate());
+//		targetDetails.setEndDate(targetDetailsDTO.getEndDate());
 		
 		targetDetails.setTimestamp(System.currentTimeMillis());
 		targetDetails.setStatus(targetDetailsDTO.getStatus());
