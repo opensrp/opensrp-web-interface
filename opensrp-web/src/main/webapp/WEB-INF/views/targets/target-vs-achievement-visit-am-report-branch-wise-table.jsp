@@ -56,10 +56,17 @@
 	var reportData = <%= targets%>;
 	console.log(reportData);
 	var branches = [];
-	var percentages = []
+	var percentages = [];
+	var totalSk = 0, totalPa, skTva = 0, skAchvAvailable = 0;
 	for(var i=0; i < reportData.length; i++) {
 		branches.push(reportData[i].branchName );
 		percentages.push(reportData[i].achievementInPercentage);
+
+		totalSk+=reportData[i].numberOfSK;
+		if(reportData[i].achievementInPercentage > 0) {
+			skAchvAvailable++;
+			skTva+= parseInt(reportData[i].achievementInPercentage);
+		}
 	}
 
 	Highcharts.chart('column-chart', {
@@ -98,6 +105,9 @@
 		},
 		series: [{name:'', data: percentages}],
 	});
+
+	$('#totalSK').html(totalSk);
+	$('#skAvgTva').html( skAchvAvailable === 0 ? 0 : (skTva / skAchvAvailable).toFixed(2));
 
 </script>
 </body>

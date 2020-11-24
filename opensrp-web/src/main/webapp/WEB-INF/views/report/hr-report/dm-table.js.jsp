@@ -67,6 +67,7 @@
 
 <script>
 
+    var totalSk = 0, totalPosition = 0;
    initialLoad();
 
     function initialLoad() {
@@ -79,6 +80,9 @@
             positions.push(reportData[i].positions );
             activeUsers.push(reportData[i].activeUsers);
             onLeaves.push(reportData[i].onLeaveUsers );
+
+            totalSk+=reportData[i].activeUsers;
+            totalPosition+=reportData[i].positions;
         }
         reloadChart(managers, positions, activeUsers, onLeaves);
     }
@@ -128,7 +132,8 @@
 
     }
 
-
+   $('#totalSK').html(totalSk);
+   $('#skPosition').html( totalPosition);
 
 </script>
 

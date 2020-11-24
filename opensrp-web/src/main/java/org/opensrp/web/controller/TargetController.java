@@ -480,7 +480,7 @@ public class TargetController {
 		model.addAttribute("userIds", userIds);
 		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
 		model.addAttribute("users", users);
-		return "targets/target-vs-achievement-service-dm-report";
+		return "targets/target_vs_achv_forum_report_dm";
 	}
 
 	@RequestMapping(value = "/target/target-vs-achv-forum-report-dm", method = RequestMethod.POST)
@@ -491,8 +491,6 @@ public class TargetController {
         List<ForumTargetReportDTO> totalList = new ArrayList<>();
         if (managerOrLocation.equalsIgnoreCase("managerWise")) {
             totalList = targetService.getForumReportForDMByAM(params);
-        } else {
-
         }
         model.addAttribute("reportDatas", totalList);
 		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());

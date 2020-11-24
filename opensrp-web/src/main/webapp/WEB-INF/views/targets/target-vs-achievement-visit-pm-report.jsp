@@ -24,7 +24,9 @@
     </style>
 </head>
 <body>
-<% Object targets = request.getAttribute("jsonReportData"); %>
+<% Object targets = request.getAttribute("jsonReportData");
+	Integer totalSk = 0;
+%>
 
 <div id="column-chart"></div>
 
@@ -65,7 +67,6 @@
 		   			<td> ${reportData.getNumberOfSK() }</td>
 		   			
 		   			<td> <fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getAchievementInPercentage() }" /> %</td>
-		   			
 	   			</c:when>
 	 
 	 		
@@ -82,16 +83,23 @@
 		</c:forEach>
     </tbody>
 </table>
+
 <%--<script src="<c:url value='/resources/chart/highcharts.js'/>"></script>--%>
 <script>
 
 	var reportData = <%= targets%>;
 	console.log(reportData);
 	var managers = [];
-	var percentages = []
+	var percentages = [];
+	var totalSk = 0, totalPa, skTva = 0, skAchvAvailable = 0;
 	for(var i=0; i < reportData.length; i++) {
 		managers.push(reportData[i].firstName + ' '+ reportData[i].lastName);
 		percentages.push(reportData[i].achievementInPercentage);
+		totalSk+=reportData[i].numberOfSK;
+		if(reportData[i].achievementInPercentage > 0) {
+			skAchvAvailable++;
+			skTva+= parseInt(reportData[i].achievementInPercentage);
+		}
 	}
 
 	Highcharts.chart('column-chart', {
@@ -131,6 +139,8 @@
 		series: [{name:'', data: percentages}],
 	});
 
+	$('#totalSK').html(totalSk);
+	$('#skAvgTva').html( skAchvAvailable === 0 ? 0 : (skTva / skAchvAvailable).toFixed(2));
 
 </script>
 </body>

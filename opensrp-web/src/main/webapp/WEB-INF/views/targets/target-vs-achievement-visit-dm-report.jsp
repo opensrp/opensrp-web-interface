@@ -63,7 +63,37 @@
 		<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
             <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
         </div>
-		<div class="row">
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="dashboard-stat blue-madison">
+						<div class="visual">
+						</div>
+						<div class="details">
+							<div class="number" id="totalSK">
+								0
+							</div>
+							<div class="desc">
+								Active SK
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="dashboard-stat blue-madison">
+						<div class="visual">
+						</div>
+						<div class="details">
+							<div class="number" id="skAvgTva">
+								0
+							</div>
+							<div class="desc">
+								SK Avg. Target vs Achievement
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
 			<div class="col-md-12">
 
 				<!-- BEGIN EXAMPLE TABLE PORTLET-->

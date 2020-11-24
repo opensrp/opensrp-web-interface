@@ -63,8 +63,39 @@
 		<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
             <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
         </div>
+
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="dashboard-stat blue-madison">
+						<div class="visual">
+						</div>
+						<div class="details">
+							<div class="number" id="totalSK">
+								0
+							</div>
+							<div class="desc">
+								Active SK
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="dashboard-stat blue-madison">
+						<div class="visual">
+						</div>
+						<div class="details">
+							<div class="number" id="skAvgTva">
+								0
+							</div>
+							<div class="desc">
+								SK Aggregated Perfomance
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		<div class="row">
-			<div class="col-md-12">
+				<div class="col-md-12">
 
 				<!-- BEGIN EXAMPLE TABLE PORTLET-->
 				<div class="portlet box blue-madison">
@@ -130,7 +161,7 @@
 						
 		                <div class="row" style="margin: 0px">
 		                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
-		                    <h3 id="reportTile" style="font-weight: bold;">Divisional manager Wise visit report</h3>
+		                    <h3 id="reportTile" style="font-weight: bold;">Divisional manager Wise service report</h3>
 		                        <div id="report"></div>
 		                        
 		                    </div>
@@ -328,7 +359,7 @@ function filter(){
   		title ="Branch wise service report";
   	}else if(divM !=0 && AM==0 && branchIds=='' ){
 		url = '${dm_service_report_url}'
-		title= "Area manager service visit report";
+		title= "Area manager service report";
   	}
 	
   	getReportData(url,title);

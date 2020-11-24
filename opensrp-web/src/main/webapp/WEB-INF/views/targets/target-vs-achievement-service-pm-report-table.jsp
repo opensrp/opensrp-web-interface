@@ -327,15 +327,17 @@
 <script>
 
 	initialLoad();
+	var totalSk = 0;
 
 	function initialLoad() {
 		var reportData = <%= targets%>;
 		console.log(reportData);
 		var managers = [];
 		var percentages = [];
-		var totalTarget = 0, totalAchv = 0, result = 0;
+		var totalTarget = 0, totalAchv = 0, result = 0 ;
 		for(var i=0; i < reportData.length; i++) {
 			managers.push(reportData[i].firstName + ' '+ reportData[i].lastName);
+			totalSk+=reportData[i].numberOfSK;
 			totalTarget = reportData[i].ANCServiceTarget
 					+ reportData[i].AdolescentServiceTarget
 					+ reportData[i].IYCFServiceTarget
@@ -419,6 +421,8 @@
 		reloadChart(managers, percentages);
 	}
 
+	$('#totalSK').html(totalSk);
+	// $('#skAvgTva').html( skAchvAvailable === 0 ? 0 : (skTva / skAchvAvailable).toFixed(2));
 </script>
 
 </body>

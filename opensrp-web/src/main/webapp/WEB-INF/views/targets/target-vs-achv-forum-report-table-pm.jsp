@@ -115,6 +115,7 @@
 </table>
 <script>
 
+    var totalSk = 0;
     initialLoad();
 
     function initialLoad() {
@@ -124,6 +125,7 @@
         var percentages = [];
         var totalTarget = 0, totalAchv = 0, result = 0;
         for(var i=0; i < reportData.length; i++) {
+            totalSk+=reportData[i].numberOfSK;
             managers.push(reportData[i].fullName);
             totalTarget = reportData[i].adolescentTarget
                 + reportData[i].adultTarget
@@ -205,7 +207,7 @@
         console.log("percentages", percentages, " managers", managers);
         reloadChart(managers, percentages);
     }
-
+    $('#totalSK').html(totalSk);
 </script>
 
 </body>

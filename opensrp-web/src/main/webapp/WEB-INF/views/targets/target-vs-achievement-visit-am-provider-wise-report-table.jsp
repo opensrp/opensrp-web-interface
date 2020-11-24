@@ -250,6 +250,8 @@
 	}
 
 	loadAvgVisitChart(<%= targets%>);
+	$('#totalSK').html(reportData.length);
+	// $('#skAvgTva').html( skAchvAvailable === 0 ? 0 : (skTva / skAchvAvailable).toFixed(2));
 
 </script>
 </body>

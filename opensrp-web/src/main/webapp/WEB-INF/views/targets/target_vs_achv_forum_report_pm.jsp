@@ -9,7 +9,7 @@
            uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Target vs achievement visit pm report</title>
+<title>Target vs achievement forum pm report</title>
 
 <c:url var="branch_url" value="/branch-list-options-by-user-ids" />
 <c:url var="all_branch_url" value="/all-branch-list-options" />
@@ -67,13 +67,44 @@
             <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
         </div>
         <div class="row">
+            <div class="col-sm-6">
+                <div class="dashboard-stat blue-madison">
+                    <div class="visual">
+                    </div>
+                    <div class="details">
+                        <div class="number" id="totalSK">
+                            0
+                        </div>
+                        <div class="desc">
+                            Active SK
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="dashboard-stat blue-madison">
+                    <div class="visual">
+                    </div>
+                    <div class="details">
+                        <div class="number" id="skAvgTva">
+                            0
+                        </div>
+                        <div class="desc">
+                            SK Aggregated Performance
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-md-12">
 
                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
                 <div class="portlet box blue-madison">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-list"></i>Target vs achievement visit report
+                            <i class="fa fa-list"></i>Target vs achievement forum report
                         </div>
                     </div>
                     <div class="portlet-body">
@@ -133,7 +164,7 @@
 
                         <div class="row" style="margin: 0px">
                             <div class="col-sm-12" id="content" style="overflow-x: auto;">
-                                <h3 id="reportTile" style="font-weight: bold;">Divisional manager wise visit report</h3>
+                                <h3 id="reportTile" style="font-weight: bold;">Divisional manager wise forum report</h3>
                                 <div id="report"></div>
 
                             </div>
@@ -178,7 +209,7 @@
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
 
-        getReportData('${report_url}',"Divisional manager wise visit report");
+        getReportData('${report_url}',"Divisional manager wise forum report");
 
     });
 
@@ -318,7 +349,7 @@
         let divM = $("#divM option:selected").val();
         let AM = $("#AM option:selected").val();
         var branchIds =  $("#branchList").val();
-        var title = "Divisional manager wise visit report";
+        var title = "Divisional manager wise forum report";
         let url = '${report_url}';
         if( branchIds ==null || typeof branchIds == 'undefined'){
             branchIds = ''
@@ -333,13 +364,13 @@
 
         if(divM !=0 && AM==0 && branchIds=='' ){
             url = '${branch_wise_dm_visit_report_url}';
-            title= "Area manager Wise visit report";
+            title= "Area manager Wise forum report";
         }else if(divM!=0 && AM!=0 && branchIds==''){
             url = '${branch_wise_am_report_url}';
-            title ="Branch wise visit report";
+            title ="Branch wise forum report";
         }else if(divM!=0 && AM!=0 && branchIds!='' ){
             url = '${sk_wise_am_visit_report_url}';
-            title ="SK wise visit report";
+            title ="SK wise forum report";
         }
         getReportData(url,title);
 
