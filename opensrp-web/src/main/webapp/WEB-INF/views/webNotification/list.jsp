@@ -67,7 +67,7 @@
 					<div class="portlet-body">
 						<div class="form-group">
 							
-							<jsp:include page="/WEB-INF/views/search-option-for-inventory.jsp" />
+							<jsp:include page="/WEB-INF/views/search-option-for-notification.jsp" />
 							
 							
 							<div class="row">
@@ -123,7 +123,11 @@
      						
      						
 						</div>
-						
+						<div class="row">
+							<div class="col-lg-3 form-group">
+								<span style="color: red" id="errMsg"></span>
+							</div>
+						</div>
 						<div class="table-scrollable">
 						
 						<table class="table table-striped table-bordered " id="webNotificationTable">
@@ -253,8 +257,21 @@ $("#to").datepicker('setDate', new Date());
 function filter(){
 	let locationId = 0;
 	let district = $("#districtList option:selected").val();
+	if(typeof district =='undefined'){
+		district=0;
+	}
 	let division = $("#divisionList option:selected").val();
+	if(typeof division =='undefined'){
+		division=0;
+	}
 	let upazila = $("#upazilaList option:selected").val();
+	
+	if( typeof upazila =='undefined'){
+		
+		upazila=0;
+	}
+	
+	
 	if(upazila != 0){
 		locationId = upazila;
 	}else if(district != 0){
@@ -278,6 +295,13 @@ function filter(){
   	}else{
   		branchIds = $("#branchList").val().join();
   	}
+  	
+  	if( branchIds =="" || typeof branchIds == 'undefined'){
+		$("#errMsg").html("Please select branch");
+		return false;
+	}else{
+		$("#errMsg").html("");
+	}
   	
 	var dateTimeHeader = _nType+" date & time";
 	stockList = $('#webNotificationTable').DataTable({

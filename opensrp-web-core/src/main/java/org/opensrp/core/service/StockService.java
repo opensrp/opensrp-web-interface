@@ -396,13 +396,20 @@ public class StockService extends CommonService {
 				patient.put(df.format(dto.getPurchasePrice())); // for DIvM
 			}
 			if (roleId == 32) {
-				String view = "<div class='col-sm-12 form-group'><a \" href=\"individual-ss-sell/" + branchId + "/"
-				        + dto.getId() + ".html\"><strong>Sell Products </strong></a>  | " + "<a \" href=\"/ss-sales/view/"
-				        + branchId + "/" + dto.getId() + ".html\"><strong>View Details </strong></a> " + "</div>";
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"/opensrp-dashboard/inventoryam/individual-ss-sell/"
+				        + branchId
+				        + "/"
+				        + dto.getId()
+				        + ".html\"><strong>Sell Products </strong></a>  | "
+				        + "<a \" href=\"/opensrp-dashboard/inventoryam/ss-sales/view/"
+				        + branchId
+				        + "/"
+				        + dto.getId()
+				        + ".html\"><strong>View Details </strong></a> " + "</div>";
 				
 				patient.put(view);
 			} else {
-				String view = "<div class='col-sm-12 form-group'><a \" href=\"ss-sales/view/" + dto.getBranchId() + "/"
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"view-sales-report/" + branchId + "/"
 				        + dto.getId() + ".html\"><strong>View details </strong></a> </div>";
 				patient.put(view);
 			}
@@ -659,35 +666,34 @@ public class StockService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<StockAdjustDTO> getAdjustHistoryList(long adjustId, int branchId, String fromDate, String toDate,
+	public List<StockAdjustDTO> getAdjustHistoryList(long adjustId, String branchIds, String fromDate, String toDate,
 	                                                 Integer start, Integer length) {
 		
 		Session session = getSessionFactory();
 		List<StockAdjustDTO> dtos = new ArrayList<>();
 		
-		String hql = "select id,product_name productName,branch_name branchName,product_id productId,current_stock currentStock,changed_stock changedStock,adjust_date adjustDate,adjust_reason adjustReason from core.stock_adjust_list(:adjustId,:branchId,:fromDate,:toDate,:start,:length)";
+		String hql = "select id,product_name productName,branch_name branchName,product_id productId,current_stock currentStock,changed_stock changedStock,adjust_date adjustDate,adjust_reason adjustReason from core.stock_adjust_list(:adjustId,'{"
+		        + branchIds + "}',:fromDate,:toDate,:start,:length)";
 		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
 		        .addScalar("productName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("productId", StandardBasicTypes.LONG).addScalar("currentStock", StandardBasicTypes.INTEGER)
 		        .addScalar("changedStock", StandardBasicTypes.INTEGER).addScalar("adjustDate", StandardBasicTypes.DATE)
 		        .addScalar("adjustReason", StandardBasicTypes.STRING).setLong("adjustId", adjustId)
-		        .setInteger("branchId", branchId).setString("fromDate", fromDate).setString("toDate", toDate)
-		        .setInteger("start", start).setInteger("length", length)
-		        .setResultTransformer(new AliasToBeanResultTransformer(StockAdjustDTO.class));
+		        .setString("fromDate", fromDate).setString("toDate", toDate).setInteger("start", start)
+		        .setInteger("length", length).setResultTransformer(new AliasToBeanResultTransformer(StockAdjustDTO.class));
 		dtos = query.list();
 		
 		return dtos;
 	}
 	
 	@Transactional
-	public int getAdjustStockListCount(int branchId, String fromDate, String toDate) {
+	public int getAdjustStockListCount(String branchIds, String fromDate, String toDate) {
 		
 		Session session = getSessionFactory();
 		BigInteger total = null;
 		
-		String hql = "select *  from core.stock_adjust_list_count(:branchId,:fromDate,:toDate)";
-		Query query = session.createSQLQuery(hql).setInteger("branchId", branchId).setString("fromDate", fromDate)
-		        .setString("toDate", toDate);
+		String hql = "select *  from core.stock_adjust_list_count('{" + branchIds + "}',:fromDate,:toDate)";
+		Query query = session.createSQLQuery(hql).setString("fromDate", fromDate).setString("toDate", toDate);
 		total = (BigInteger) query.uniqueResult();
 		
 		return total.intValue();

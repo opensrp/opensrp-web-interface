@@ -233,7 +233,7 @@ public class StockRestController {
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
 		String search = request.getParameter("search");
-		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		String branchId = request.getParameter("branchId");
 		
 		List<StockAdjustDTO> stockAdjustList = stockService.getAdjustHistoryList(0, branchId, startDate, endDate, start,
 		    length);

@@ -130,7 +130,7 @@
 					<div class="form-group row">
 						<label for="notification" class="col-sm-4 col-form-label">Date & time<span class="text-danger"> </span> </label>
 						<div class="col-sm-12">
-							<input name="date"  id="date" type="text" class="form-control" value="${dateTime }">
+							<input readonly="readonly" name="date"  id="date" type="text" class="form-control" value="${dateTime }">
 						</div>
 					</div>
 						
@@ -142,13 +142,11 @@
 					</div>
 					
 					<div class="col-lg-12">
-						<div class="form-group text-right" id="errorText">
+						<div class="form-group text-right" id="errorText" style="display: none;">
 						
 						</div>
-						<div id="errorMessage">
-	                         <div class="alert-message warn">
-	                             <div id="errormessageContent" class="alert alert-successs text-right"> </div>
-	                         </div>
+						<div id="errorMessage" style="display: none;">
+	                        <div id="errormessageContent" class="text-right"> </div>	                        
                     	</div>
 					</div>
 					
@@ -255,8 +253,10 @@ $('#addWebNotification').submit(function(event) {
 	   
 	    let validation = Validate();
 	    if(validation == false){
+	    	$("#errorText").show();   
 	    	return false;
 	    }
+	    $("#errorText").hide(); 
 	    let url = '${add}';
 	    let token = $("meta[name='_csrf']").attr("content");
 	    let header = $("meta[name='_csrf_header']").attr("content");

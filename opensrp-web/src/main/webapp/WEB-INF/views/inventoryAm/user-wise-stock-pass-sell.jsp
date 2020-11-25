@@ -26,11 +26,11 @@
 		<div class="page-content">
 		<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<a  href="<c:url value="/"/>">Home</a>
 					<i class="fa fa-arrow-right"></i>
 				</li>
 				<li>
-					<a class="btn btn-primary" href="${backUrl }">Back</a>
+					<a  href="${backUrl }">Back</a>
 				</li>
 		</ul>
 		<div class="portlet box blue-madison">

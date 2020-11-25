@@ -20,10 +20,10 @@
 
 			<c:forEach var="service" items="${services}" varStatus="loop">
 				<tr>
-					<td>${service.getDate() }</td>
-					<td>${service.getFormName() }</td>
+					<td>${service.getEventDate() }</td>
+					<td>${service.getServiceName() }</td>
 					<td><div class="btn btn-primary"
-						onclick="loadContent('${service.getId()}','${service.getFormName()}','${get_service_url}')">Details</div>
+						onclick="loadContent('${service.getId()}','${service.getServiceName()}','${get_service_url}')">Details</div>
 
 
 					</td>

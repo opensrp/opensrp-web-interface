@@ -16,7 +16,36 @@
 <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
 
 <c:url var="adjust_list_url" value="/rest/api/v1/stock/stock-adjust-history-list" />
+<style>
+	.select2-results__option .wrap:before {
+		font-family: fontAwesome;
+		color: #999;
+		content: "\f096";
+		width: 25px;
+		height: 25px;
+		padding-right: 10px;
+	}
 
+	.select2-results__option[aria-selected=true] .wrap:before {
+		content: "\f14a";
+	}
+
+
+	/* not required css */
+
+	.row {
+		padding: 10px;
+	}
+
+	.select2-multiple,
+	.select2-multiple2 {
+		width: 50%
+	}
+
+	.select2-results__group .wrap:before {
+		display: none;
+	}
+</style>
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
@@ -50,11 +79,10 @@
 							</div> 
 								
 								
-									<div class="col-lg-3 form-group">
-									<label for="to"><spring:message code="lbl.branch"></spring:message> </label>
+								<div class="col-lg-3 form-group">
+									<label for="to"><spring:message code="lbl.branch"></spring:message>  </label>
 									<select id=branchSelect class="form-control" name="branchSelect" required>
-										<option value="0"><spring:message
-												code="lbl.pleaseSelect" /></option>
+										
 										<c:forEach items="${branches}" var="branch">
 											<option value="${branch.id}">${branch.name}</option>
 										</c:forEach>
@@ -64,9 +92,14 @@
 									</p>
 								</div>
 								
+								
 							
-								<div class="col-lg-12 form-group text-right">
+								<div class="col-lg-2 form-group text-left" style="padding-top: 22px;">
 									<button type="button" onclick="filter()"  class="btn btn-primary">Search</button>
+								</div>
+								
+								<div class="col-lg-3 form-group" style="padding-top: 24px;">
+									<span style="color: red" id="errMsg"></span>
 								</div>
 
 							</div>
@@ -94,20 +127,26 @@
 	</div>
 	<!-- END CONTENT -->
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
+ <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script>
+
+
+
+jQuery(document).ready(function() { 
+	
 var dateToday = new Date();
-	var dates = $(".date").datepicker({
-    dateFormat: 'yy-mm-dd',
-    maxDate: dateToday,
-    onSelect: function(selectedDate) {
-        var option = this.id == "from" ? "minDate" : "maxDate",
-            instance = $(this).data("datepicker"),
-            date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
-        dates.not(this).datepicker("option", option, date);
-    }
+var dates = $(".date").datepicker({
+   dateFormat: 'yy-mm-dd',
+   maxDate: dateToday,
+   onSelect: function(selectedDate) {
+       var option = this.id == "from" ? "minDate" : "maxDate",
+           instance = $(this).data("datepicker"),
+           date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+       dates.not(this).datepicker("option", option, date);
+   }
 });
 var d = new Date();
 var startDate =  $.datepicker.formatDate('yy-mm-dd', new Date(d.getFullYear(), d.getMonth(), 1));
@@ -115,14 +154,18 @@ var startDate =  $.datepicker.formatDate('yy-mm-dd', new Date(d.getFullYear(), d
 $("#from").datepicker('setDate', startDate); 
 $("#to").datepicker('setDate', new Date()); 
 let stockAdjustList;
-
-jQuery(document).ready(function() {       
+	$('#branchSelect').select2MultiCheckboxes({
+		placeholder: "Select branch",
+		width: "auto",
+		templateSelection: function(selected, total) {
+			return "Selected " + selected.length + " of " + total;
+		}
+	});
+	$("#branchSelect > option").prop("selected","selected");
+	$("#branchSelect").trigger("change");
 	 Metronic.init(); // init metronic core components
-		Layout.init(); // init current layout
-		$('#branchSelect').select2({dropdownAutoWidth : true});
-		//var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-		//var startDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m, 1));
-		//var endDateDm = $.datepicker.formatDate('yy-mm-dd', new Date(y, m + 1, 0));
+		Layout.init(); // init current layout	
+		
 		stockAdjustList = $('#adjustHistoryList').DataTable({
 		       bFilter: false,
 		       serverSide: true,
@@ -142,7 +185,13 @@ jQuery(document).ready(function() {
 		       ajax: {
 		           url: "${adjust_list_url}",
 		           data: function(data){
-						data.branchId = 0;
+		        	   var branchIds =  $("#branchSelect").val();
+	                  	if( branchIds ==null || typeof branchIds == 'undefined'){
+	                  		branchIds = ''
+	                  	}else{
+	                  		branchIds = $("#branchSelect").val().join();
+	                  	}
+						data.branchId = branchIds;
 						data.startDate = '',
 						data.endDate = ''
 						
@@ -190,21 +239,21 @@ function openAdjustStockModal(id,currentStock,productName) {
 
 function filter(){
 
-var branch = +$('#branchSelect').val();
-var startDate = $('#from').val();
-var endDate = $('#to').val();
-if(startDate == "") {
-	//startDate = $.datepicker.formatDate('yy-mm-dd', new Date());
-	$("#startDateValidation").html("<strong>Please fill out this field</strong>");
-	return;
-}
-$("#startDateValidation").html("");
-if(endDate == "") {
-	//endDate = $.datepicker.formatDate('yy-mm-dd', new Date());
-	$("#endDateValidation").html("<strong>Please fill out this field</strong>");
-	return;
-}
-$("#endDateValidation").html("");
+	var branchIds =  $("#branchSelect").val();
+  	if( branchIds ==null || typeof branchIds == 'undefined'){
+  		branchIds = ''
+  	}else{
+  		branchIds = $("#branchSelect").val().join();
+  	}
+	if( branchIds =="" || typeof branchIds == 'undefined'){
+		$("#errMsg").html("Please select branch");
+		return false;
+	}else{
+		$("#errMsg").html("");
+	}
+	var startDate = $('#from').val();
+	var endDate = $('#to').val();
+	
 
 	stockAdjustList = $('#adjustHistoryList').DataTable({
     bFilter: false,
@@ -225,7 +274,8 @@ $("#endDateValidation").html("");
     ajax: {
     	url: "${adjust_list_url}",
         data: function(data){
-			data.branchId = branch;
+        	
+			data.branchId = branchIds;
 			data.startDate = startDate,
 			data.endDate = endDate
 				
