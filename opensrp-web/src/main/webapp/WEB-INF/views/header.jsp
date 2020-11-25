@@ -346,9 +346,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<li><a href="<c:url value="/inventoryam/sell-to-ss.html?lang=${locale}"/>">
 									<spring:message code="lbl.sellToSs" />
 							</a></li>
-							<li><a href="<c:url value="/inventoryam/stock-report.html?lang=${locale}"/>">
-									<spring:message code="lbl.stockReport" />
-							</a></li>
+
 							
 							<%
 							
@@ -373,15 +371,29 @@ License: You must have a valid license purchased only from themeforest(the above
 							<%
 								}
 							%>
-							<%
-							if (STOCK_REPORT) {
-							%>
-							<li><a href="<c:url value="/inventorydm/stock-report.html?lang=${locale}"/>">
-									<spring:message code="lbl.stockReport" />
-							</a></li>
-							<%
-								}
-							%>
+
+							<% if( STOCK_REPORT_PM){ %>
+
+							<li><a href="<c:url value="/inventorypm/stock-report.html?lang=${locale}"/>">
+								Stock Report
+							</a>
+							</li>
+							<% }%>
+
+							<% if( STOCK_REPORT_DM){ %>
+
+							<li><a href="<c:url value="/inventory/stock-report.html?lang=${locale}"/>">
+								Stock Report
+							</a>
+							</li>
+							<% }%>
+							<% if( STOCK_REPORT_AM){ %>
+
+							<li><a href="<c:url value="/inventory/stock-report.html?lang=${locale}"/>">
+								Stock Report
+							</a>
+							</li>
+							<% }%>
 							<%
 							if (SELLS_REPORT) {
 							%>
@@ -623,28 +635,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						</a>
 						</li>
 						<% }%>
-						<% if( STOCK_REPORT_PM){ %>
 
-						<li><a href="<c:url value="/inventorypm/stock-report.html?lang=${locale}"/>">
-							Stock Report
-						</a>
-						</li>
-						<% }%>
-
-						<% if( STOCK_REPORT_DM){ %>
-
-						<li><a href="<c:url value="/inventory/stock-report.html?lang=${locale}"/>">
-							Stock Report
-						</a>
-						</li>
-						<% }%>
-						<% if( STOCK_REPORT_AM){ %>
-
-						<li><a href="<c:url value="/inventory/stock-report.html?lang=${locale}"/>">
-							Stock Report
-						</a>
-						</li>
-						<% }%>
 
 
 
