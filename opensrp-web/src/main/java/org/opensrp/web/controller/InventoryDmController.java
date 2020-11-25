@@ -2,6 +2,7 @@ package org.opensrp.web.controller;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -9,7 +10,6 @@ import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.ProductType;
 import org.opensrp.common.util.Roles;
-import org.opensrp.core.dto.BranchDTO;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.entity.Product;
 import org.opensrp.core.entity.ProductRole;
@@ -155,8 +155,16 @@ public class InventoryDmController {
 	public String ssSellReportForDm(Model model, HttpSession session, Locale locale) {
 		model.addAttribute("locale", locale);
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		List<BranchDTO> branches = targetService.getBranchListByUserIds(loggedInUser.getId() + "");
-		model.addAttribute("branches", branches);
+		
+		Set<Role> roles = loggedInUser.getRoles();
+		String roleName = "";
+		for (Role role : roles) {
+			roleName = role.getName();
+		}
+		
+		model.addAttribute("branches", branchUtil.getBranches());
+		
+		model.addAttribute("roleName", roleName);
 		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
 		model.addAttribute("manager", loggedInUser.getId());
 		

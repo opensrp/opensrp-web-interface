@@ -78,31 +78,36 @@
 										name="startYear" id="startYear"
 										class="form-control date-picker-year" />
 								</div>
+								<div class="col-lg-6 form-group" style="padding: 22px">
+										
+										<div class="col-lg-3 form-group">
+										<button type="submit" onclick="filter()"
+										class="btn btn-primary" value="confirm">View SS List</button>
+										</div>
+										<div class="col-lg-3 form-group">
+											<button type="button" onclick="sellToMany()"
+											class="btn btn-primary">Sell To Many</button>
+										</div>
+								</div>
+								
 
 							</div>
-							<br />
-							<div class="row">
-								<div class="col-lg-8 form-group text-right">
-									<button type="button" onclick="sellToMany()"
-										class="btn btn-primary">Sell To Many</button>
-								</div>
-								<div class="col-lg-2 form-group text-right">
-									<button type="submit" onclick="filter()"
-										class="btn btn-primary" value="confirm">View SS List</button>
-								</div>
-							</div>
+							
 						</div>
 						<h3>Inventory :</h3>
 						<table class="table table-striped table-bordered "
 							id="StockSellHistory">
 							<thead>
 								<tr>
-									<th></th>
-									<th><spring:message code="lbl.name"></spring:message></th>
-									<th><spring:message code="lbl.designation"></spring:message></th>
-									<th><spring:message code="lbl.skname"></spring:message></th>
+									 <%--  <th><spring:message code="lbl.serialNo"></spring:message></th> --%>
+									<th><spring:message code="lbl.ssName"></spring:message></th>
+									<%-- <th><spring:message code="lbl.ssId"></spring:message></th> --%>
+									<th><spring:message code="lbl.skName"></spring:message></th>
 									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
-									<th><spring:message code="lbl.saleinMonth"></spring:message></th>
+									<%-- <th><spring:message code="lbl.targetAmount"></spring:message></th> --%>
+									<th><spring:message code="lbl.projectedSalesAmount"></spring:message> (BDT)</th>
+									<th><spring:message code="lbl.purchaseAmount"></spring:message> (BDT)</th>
+									
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
 								</tr>
 							</thead>
@@ -450,6 +455,7 @@
 												inst.selectedMonth, 1));
 							}
 						});
+		$("#startYear").datepicker('setDate', new Date());
 		jQuery(".date-picker-year").focus(function() {
 			$(".ui-datepicker-calendar").hide();
 			$(".ui-datepicker-current").hide();

@@ -51,12 +51,11 @@
 									<label for="yearMonth">Date:</label>
 									<input type="text"	readonly name="yearMonth" id="yearMonth" class="form-control date-picker-year" />
 								</div>
-							</div> 
-							<div class="row">
-								<div class="col-lg-12 form-group text-right">
-									<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
+								<div class="col-lg-3 form-group" style="padding-top: 22px">
+									<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">Search</button>
 								</div>
-     							</div>
+							</div> 
+							
 							<br/>
 						<h3>Monthly SS Sales Report </h3>
 						<table class="table table-striped table-bordered " id="ssSalesReportForDm">
@@ -132,17 +131,7 @@ jQuery(function() {
             bFilter: false,
             serverSide: true,
             processing: true,
-            columnDefs: [
-                /* { targets: [0, 1, 2, 3, 4,5,6], orderable: false },
-                { width: "20%", targets: 0 },
-                { width: "20%", targets: 1 },
-                { width: "20%", targets: 2 },
-                { width: "20%", targets: 3 },
-                { width: "20%", targets: 4 },
-                { width: "20%", targets: 5 },
-                { width: "20%", targets: 6 } */
-                
-            ],
+            columnDefs: [ ],
             ajax: {
                 url: "${sell_to_ss_list}",
                 data: function(data){
@@ -153,7 +142,12 @@ jQuery(function() {
                     data.district=0;
                     data.upazila=0;
                     data.skId=0;
-                    data.manager="${manager}";
+                    if('${roleName}'=='AM' || '${roleName}'=='DivM' ){
+                    	data.manager="${manager}";
+                    }else{
+                    data.manager=0;
+                    }
+                   
                     
                 },
                 dataSrc: function(json){
@@ -177,9 +171,20 @@ jQuery(function() {
     });
 
 function filter(){
-	var division = +$('#divisionList').val();
-	var district = +$('#districtList').val();
-	var upazila = +$('#upazilaList').val();
+	let district = $("#districtList option:selected").val();
+	if(typeof district =='undefined'){
+		district=0;
+	}
+	let division = $("#divisionList option:selected").val();
+	if(typeof division =='undefined'){
+		division=0;
+	}
+	let upazila = $("#upazilaList option:selected").val();
+	
+	if( typeof upazila =='undefined'){
+		
+		upazila=0;
+	}
 	var skId = +$('#selectsk').val();
 	var branch = +$('#branchList').val();
 	var date = $("#yearMonth").val();
@@ -199,14 +204,7 @@ function filter(){
          serverSide: true,
          processing: true,
          columnDefs: [
-            /*  { targets: [0, 1, 2, 3, 4,5,6], orderable: false },
-             { width: "20%", targets: 0 },
-             { width: "20%", targets: 1 },
-             { width: "20%", targets: 2 },
-             { width: "20%", targets: 3 },
-             { width0: "20%", targets: 4 },
-             { width: "20%", targets: 5 },
-             { width: "20%", targets: 6 } */
+           
          ],
          ajax: {
              url: "${sell_to_ss_list}",

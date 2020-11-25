@@ -25,8 +25,8 @@ import org.hibernate.type.StandardBasicTypes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.common.dto.StockReportDTO;
 import org.opensrp.common.dto.InventoryDTO;
+import org.opensrp.common.dto.StockReportDTO;
 import org.opensrp.common.util.ReferenceType;
 import org.opensrp.common.util.Status;
 import org.opensrp.core.dto.ProductDTO;
@@ -380,11 +380,11 @@ public class StockService extends CommonService {
 			if (roleId == 32) {
 				String checkBox = "<input type=\"checkbox\" class=\"select-checkbox\" id=\"ss" + dto.getId() + "\" value="
 				        + dto.getId() + ">";
-				patient.put(checkBox);
+				//patient.put("");
 			}
 			patient.put(dto.getFullName());
 			if (roleId == 32) {
-				patient.put("SS"); // for am
+				//patient.put("SS"); // for am
 			}
 			patient.put(dto.getSKName());
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
@@ -392,24 +392,23 @@ public class StockService extends CommonService {
 				patient.put("0"); // target amount for DIvM
 			}*/
 			patient.put(df.format(dto.getSalesPrice()));
-			if (roleId != 32) {
-				patient.put(df.format(dto.getPurchasePrice())); // for DIvM
-			}
+			/*if (roleId != 32) {*/
+			patient.put(df.format(dto.getPurchasePrice())); // for DIvM
+			//}
 			if (roleId == 32) {
 				String view = "<div class='col-sm-12 form-group'><a \" href=\"/opensrp-dashboard/inventoryam/individual-ss-sell/"
-				        + branchId
+				        + dto.getBranchId()
 				        + "/"
 				        + dto.getId()
 				        + ".html\"><strong>Sell Products </strong></a>  | "
 				        + "<a \" href=\"/opensrp-dashboard/inventoryam/ss-sales/view/"
-				        + branchId
+				        + dto.getBranchId()
 				        + "/"
-				        + dto.getId()
-				        + ".html\"><strong>View Details </strong></a> " + "</div>";
+				        + dto.getId() + ".html\"><strong>View Details </strong></a> " + "</div>";
 				
 				patient.put(view);
 			} else {
-				String view = "<div class='col-sm-12 form-group'><a \" href=\"view-sales-report/" + branchId + "/"
+				String view = "<div class='col-sm-12 form-group'><a \" href=\"view-sales-report/" + dto.getBranchId() + "/"
 				        + dto.getId() + ".html\"><strong>View details </strong></a> </div>";
 				patient.put(view);
 			}
@@ -528,42 +527,40 @@ public class StockService extends CommonService {
 		
 		return result;
 	}
-
+	
 	@Transactional
 	public List<StockReportDTO> getStockReportForAM(String year, String month, String skList) {
 		Session session = getSessionFactory();
 		List<StockReportDTO> result = null;
-
-		String rawSql = "select * from report.get_stock_report('"+month+"', '"+year+"', '{"+skList+"}')";
-		Query query = session.createSQLQuery(rawSql)
-				.addScalar("skusername", StandardBasicTypes.STRING)
-				.addScalar("skname", StandardBasicTypes.STRING)
-				.addScalar("iycfStartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("iycfMonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("iycfMonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("iycfEndingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("womenPackageStartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("womenPackageMonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("womenPackageMonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("womenPackageEndingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentPackageStartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentPackageMonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentPackageMonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentPackageEndingBalance",  StandardBasicTypes.INTEGER)
-				.addScalar("ncdPackageStartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("ncdPackageMonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("ncdPackageMonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("ncdPackageEndingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("ancPackageStartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("ancPackageMonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("ancPackageMonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("ancPackageEndingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("pncPackageStartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("pncPackageMonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("pncPackageMonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("pncPackageEndingBalance", StandardBasicTypes.INTEGER)
-
-				.setResultTransformer(new AliasToBeanResultTransformer(StockReportDTO.class));
+		
+		String rawSql = "select * from report.get_stock_report('" + month + "', '" + year + "', '{" + skList + "}')";
+		Query query = session.createSQLQuery(rawSql).addScalar("skusername", StandardBasicTypes.STRING)
+		        .addScalar("skname", StandardBasicTypes.STRING).addScalar("iycfStartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfMonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfMonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfEndingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("womenPackageStartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("womenPackageMonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("womenPackageMonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("womenPackageEndingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentPackageStartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentPackageMonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentPackageMonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentPackageEndingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdPackageStartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdPackageMonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdPackageMonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdPackageEndingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("ancPackageStartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("ancPackageMonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("ancPackageMonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("ancPackageEndingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("pncPackageStartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("pncPackageMonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("pncPackageMonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("pncPackageEndingBalance", StandardBasicTypes.INTEGER)
+		        
+		        .setResultTransformer(new AliasToBeanResultTransformer(StockReportDTO.class));
 		result = query.list();
 		return result;
 	}
@@ -698,9 +695,9 @@ public class StockService extends CommonService {
 		
 		return total.intValue();
 	}
-
+	
 	public void getStockReport() {
-
+		
 	}
 	
 	public JSONObject getAdjustStockListDataOfDataTable(Integer draw, int adjustStockCount, List<StockAdjustDTO> dtos)
