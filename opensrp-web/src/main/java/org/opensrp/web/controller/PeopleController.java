@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -75,8 +76,19 @@ public class PeopleController {
 			e.printStackTrace();
 		}
 		model.addAttribute("households", households);
-		
+		model.addAttribute("isHousehold", true);
 		return "people/households";
+	}
+	
+	@RequestMapping(value = "/households-datatable.html", method = RequestMethod.POST)
+	public String householdsDataTable(@RequestBody String dto, HttpSession session, Model model, Locale locale)
+	    throws JSONException, JsonProcessingException {
+		model.addAttribute("locale", locale);
+		JSONObject jo = new JSONObject(dto);
+		
+		List<ClientListDTO> data = peopleService.getHouseholdData(jo);
+		model.addAttribute("households", data);
+		return "people/household-list-table";
 	}
 	
 	@RequestMapping(value = "/household-details/{baseEntityId}/{id}.html", method = RequestMethod.GET)
@@ -84,8 +96,9 @@ public class PeopleController {
 	                               @PathVariable("id") Long id, HttpSession session, Model model, Locale locale)
 	    throws JSONException {
 		model.addAttribute("locale", locale);
-		
-		List<ClientListDTO> data = peopleService.getMemberData(baseEntityId);
+		JSONObject jo = new JSONObject();
+		jo.put("relation_id", baseEntityId);
+		List<ClientListDTO> data = peopleService.getMemberList(jo, 404, 404);
 		JSONObject dataInfos = peopleService.getHouseholdInfor(baseEntityId, id, "household");
 		model.addAttribute("reg_info", dataInfos.get("data"));
 		
@@ -119,6 +132,17 @@ public class PeopleController {
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
 		return "people/members";
+	}
+	
+	@RequestMapping(value = "/members-datatable.html", method = RequestMethod.POST)
+	public String memberDataTable(@RequestBody String dto, HttpSession session, Model model, Locale locale)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
+		JSONObject jo = new JSONObject(dto);
+		
+		List<ClientListDTO> data = peopleService.getMemberList(jo, jo.getInt("startAge"), jo.getInt("endAge"));
+		model.addAttribute("members", data);
+		return "people/member-list-table";
 	}
 	
 	@RequestMapping(value = "/activity-details/{formName}/{id}", method = RequestMethod.GET)

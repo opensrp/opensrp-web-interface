@@ -13,7 +13,7 @@
 	
 	
 
-<c:url var="get_url" value="/rest/api/v1/people/household/list" />
+<c:url var="get_url" value="/people/households-datatable.html" />
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -34,76 +34,26 @@
 					</div>					
 					<div class="portlet-body">
 						<div class="form-group">
-							
-							<jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" />
-							
-							
-							<div class="row">
-								
-								<div class="col-lg-3 form-group">
-								    <label for="designation"></label>
-									<input name="search" class="form-control"id="search" placeholder="Search Key"/> 
-								</div>
-								
-								
-							</div>
-							<div class="row">
-								<div class="col-lg-12 form-group text-right">
-									<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
-								</div>
-     						</div>
-     						
-     						
+							<jsp:include page="/WEB-INF/views/full-location-search-options.jsp" />
 						</div>
+						<div class="row" style="margin: 0px">
+                            <div class="col-sm-12" id="content" style="overflow-x: auto;">
+                                
+                                <div id="report"></div>
+
+                            </div>
+                        </div>
+                        
 						
 						<div class="row" style="margin: 0px">
 		                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
 		                   
 		                        <div id="report">
-		                        	<table class="table table-striped table-bordered " id="householdTable" style="width: 100%;">
-							<thead>
-								<tr>
-								 	<th>HH ID</th>
-									<th>HH head name</th>
-									<th>#Members</th>
-									<th>Registration date</th>
-									<th>Last visit date</th>
-									<th>Village</th>
-									<th>Branch(code)</th>
-									<th>Contact</th>
-									<th>Action</th>
-								</tr>
-								
-							</thead>
-							<tbody>
-								<c:forEach items="${households}" var="household">
-									<tr>
-										<%-- <c:forEach items='${households.get("exampleMap ").entrySet()}' var="category">
-										      <a:dropdownOption value="${category.key}">${category.key} </a:dropdownOption>
-										</c:forEach> --%>
-										<td> ${household.getHouseholdId() }</td>
-										<td> ${household.getHouseholdHead() }</td>
-										<td> ${household.getNumberOfMember() }</td>
-										<td> ${household.getRegistrationDate() }</td>
-										<td> ${household.getLastVisitDate() }</td>
-										<td> ${household.getVillage() }</td>
-										<td> ${household.getBranchName() }(${ household.getBranchCode()})</td>
-										<td> ${household.getContact() }</td>
-										<td> <a href="<c:url value="/people/household-details/${household.getBaseEntityId()}/${household.getId() }.html?lang=${locale}"/>">Details</a></td>
-									</tr>
-								</c:forEach>
-							</tbody>
-							
-						</table>
+		                        	
 		                        </div>
 		                        
 		                    </div>
 		                </div>
-						
-						
-						
-						
-						
 						
 					</div>
 					
@@ -125,7 +75,8 @@
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
-		
+		$('#villageList').select2({dropdownAutoWidth : true});
+    	//$('#unionList').select2({dropdownAutoWidth : true});
 });
 
 
@@ -135,18 +86,73 @@ jQuery(document).ready(function() {
 <script>
     let stockList;
     
-    $(document).ready(function() {
-    	$('#householdTable').DataTable({
-    		scrollY:        "300px",
-    	    scrollX:        true,
-    	    scrollCollapse: true,                
-    		 fixedColumns:   {
-    	         leftColumns: 2
-    	     }
-    	})
-    });
+    function filter(){
+
+    var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	let village = $("#villageList option:selected").text();
+	let villageId = $("#villageList option:selected").val();
+	let searchKey = $("#search").val();
+	
+	if(villageId ==0 && searchKey==''){
+		 $('#errorMsg').show();
+		return 
+	}
+	/* if(searchKey !=''){
+		searchKey = "%"+$("#search").val()+"%";
+	} */
+	
+	$('#errorMsg').hide();
+	
+	let formData = 
+		{
+		 	village:village,		 	
+		 	searchKey:searchKey
+        }
+	 console.log(formData);
+	
+	 $.ajax({
+         type : "POST",
+         contentType : "application/json",
+         url : "${get_url}",
+         dataType : 'html',
+         timeout : 100000,
+         data:  JSON.stringify(formData),
+
+         beforeSend: function(xhr) {
+             xhr.setRequestHeader(header, token);
+             $('#loading').show();
+             $('#search-button').attr("disabled", true);
+         },
+         success : function(data) {
+             
+
+             $('#loading').hide();
+             $("#report").html(data);
+             $('#search-button').attr("disabled", false);
+             let reportType =$("input[name='time-period']:checked").val();
 
 
+             $('#dataTable').DataTable({
+                 scrollY:        "300px",
+                 scrollX:        true,
+                 scrollCollapse: true,
+                 fixedColumns:   {
+                     leftColumns: 2/* ,
+                  rightColumns: 1 */
+                 }
+             });
+         },
+         error : function(e) {
+             $('#loading').hide();
+             $('#search-button').attr("disabled", false);
+         },
+         complete : function(e) {
+             $('#loading').hide();
+             $('#search-button').attr("disabled", false);
+         }
+     });
+}
 </script>
 
 

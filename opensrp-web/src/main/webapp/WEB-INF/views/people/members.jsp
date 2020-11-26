@@ -10,18 +10,14 @@
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <title>Members</title>
-	
-	
-
-<c:url var="get_url" value="/rest/api/v1/people/member/list" />
-
-
+<c:url var="get_url" value="/people/members-datatable.html" />
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
-	
-
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
+            <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
+        </div>
 		<div class="row">
 			<div class="col-md-12">
 
@@ -35,55 +31,58 @@
 					<div class="portlet-body">
 						<div class="form-group">
 							
-							<jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" />
+							<jsp:include page="/WEB-INF/views/full-location-search-options.jsp" />
 							
 							
 							<div class="row">
 								<div class="col-lg-3 form-group">
 								   
 									<select
-										name="type" class="form-control" id="type">
-										<option value="">Select Type</option>
-										<option value="child">Child</option>
-										<option value="member">Member</option>										
+										name="gender" class="form-control" id="gender">
+										<option value="">Select gender</option>
+										<option value="M">Male</option>
+										<option value="F">Female</option>
+										<option value="O">Others</option>											
 									</select>
 								</div>
 								<div class="col-lg-3 form-group">
-								    <label for="designation"></label>
+								   
+									<select
+										name="age" class="form-control" id="age">
+										<option value="404-404">Select age range</option>
+										<option value="0-1">0-1</option>
+										<option value="2-5">2-5</option>
+										<option value="6-13">6-13</option>	
+										<option value="14-19">14-19</option>	
+										<option value="20-35">20-35</option>
+										<option value="36-49">36-49</option>									
+									</select>
+								</div>
+								<div class="col-lg-3 form-group">
+								    
 									<input name="search" class="form-control"id="search" placeholder="Search Key"/> 
 								</div>
 								
-								
-							</div>
-							<div class="row">
-								<div class="col-lg-12 form-group text-right">
-									<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
+								<div class="col-lg-3 form-group" style="padding-top: 0px">
+								    <button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
 								</div>
-     						</div>
-     						
-     						
+							</div>
+							<div class="row" id="errorMsg" style="display: none">
+								<div class="col-lg-12 form-group">
+									<span style="color:red" >Please select village OR types something on search key</span>
+								</div>
+							</div>
 						</div>
 						
-						<div class="table-scrollable">
 						
-						<table class="table table-striped table-bordered " id="memberTable">
-							<thead>
-								<tr>
-								 	<th>Member name</th>
-									<th>Member ID</th>
-									<th>Household ID</th>
-									<th>Relation with <br/>household head</th>
-									<th>Age</th>
-									<th>Gender</th>
-									<th>Status</th>
-									<th>Village</th>
-									<th>Branch(code)</th>									
-									<th>Action</th>
-								</tr>
-							</thead>
-							
-						</table>
-						</div>
+						
+						<div class="row" style="margin: 0px">
+                            <div class="col-sm-12" id="content" style="overflow-x: auto;">
+                                
+                                <div id="report"></div>
+
+                            </div>
+                        </div>
 						
 						
 					</div>
@@ -100,123 +99,86 @@
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
-
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
 <script>
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
 		
 });
-
-
-
-
 </script>
 <script>
     let stockList;
     $(document).ready(function() {
-    	
-    	
-    	stockList = $('#memberTable').DataTable({
-            bFilter: false,
-            serverSide: true,
-            processing: true,
-            columnDefs: [
-                
-                { orderable: false, className: 'reorder', width: "10%", targets: 0 },
-                { orderable: false, className: 'reorder',width: "10%", targets: 1 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 2 },
-                { orderable: false, className: 'reorder',width: "10%", targets: 3 },
-                { width: "10%", targets: 4 },
-                { width: "10%", targets: 5},
-                { orderable: false, className: 'reorder',width: "10%", targets: 6},
-                { orderable: false, className: 'reorder', width: "10%", targets: 7},
-                { orderable: false, className: 'reorder', width: "10%", targets: 8},
-                { orderable: false, className: 'reorder', width: "10%", targets: 9}
-                
-            ],
-            ajax: {
-                url: "${get_url}",
-                data: function(data){                	
-                    data.branchId = 0;
-                    data.locationId=0;                    
-                    data.type='';
-                    
-                },
-                dataSrc: function(json){
-                    if(json.data){
-                        return json.data;
-                    }
-                    else {
-                        return [];
-                    }
-                },
-                complete: function() {
-                },
-                type: 'GET'
-            },
-            bInfo: true,
-            destroy: true,
-            language: {
-                searchPlaceholder: ""
-            }
-        });
+    	$('#villageList').select2({dropdownAutoWidth : true});
+    	//$('#unionList').select2({dropdownAutoWidth : true});
     });
 
 function filter(){
-	let locationId = 0;
-	let district = $("#districtList option:selected").val();
-	let division = $("#divisionList option:selected").val();
-	let upazila = $("#upazilaList option:selected").val();
-	if(upazila != 0){
-		locationId = upazila;
-	}else if(district != 0){
-		locationId = district;
-	}else if(division != 0){
-		locationId =division; 
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	let village = $("#villageList option:selected").text();
+	let villageId = $("#villageList option:selected").val();
+	let searchKey = $("#search").val();
+	
+	if(villageId ==0 && searchKey==''){
+		 $('#errorMsg').show();
+		return ;
 	}
-	stockList = $('#memberTable').DataTable({
-         bFilter: false,
-         serverSide: true,
-         processing: true,
-         columnDefs: [
-             { orderable: false, className: 'reorder', width: "10%", targets: 0 },
-                { orderable: false, className: 'reorder',width: "10%", targets: 1 },
-                { orderable: false, className: 'reorder', width: "10%", targets: 2 },
-                { orderable: false, className: 'reorder',width: "10%", targets: 3 },
-                { width: "10%", targets: 4 },
-                { width: "10%", targets: 5},
-                { orderable: false, className: 'reorder',width: "10%", targets: 6},
-                { orderable: false, className: 'reorder', width: "10%", targets: 7},
-                { orderable: false, className: 'reorder', width: "10%", targets: 8},
-                { orderable: false, className: 'reorder', width: "10%", targets: 9}
-         ],
-         ajax: {
-             url: "${get_url}",
-             data: function(data){
-            	
-            	 data.branchId = $("#branchList option:selected").val();
-                 data.locationId=locationId;                    
-                 data.type= $("#type option:selected").val();
-                 data.search = $("#search").val();
-                 
-             },
-             dataSrc: function(json){
-                 if(json.data){
-                     return json.data;
-                 }
-                 else {
-                     return [];
-                 }
-             },
-             complete: function() {
-             },
-             type: 'GET'
+	
+	
+	$('#errorMsg').hide();
+	let agePart = $("#age").val();
+	let age = agePart.split('-');
+	let formData = 
+		{
+		 	village:village,
+		 	gender:$("#gender option:selected").val(),
+		 	startAge:age[0],
+		 	endAge:age[1],
+		 	searchKey:searchKey
+        }
+	 console.log(formData);
+	
+	 $.ajax({
+         type : "POST",
+         contentType : "application/json",
+         url : "${get_url}",
+         dataType : 'html',
+         timeout : 100000,
+         data:  JSON.stringify(formData),
+
+         beforeSend: function(xhr) {
+             xhr.setRequestHeader(header, token);
+             $('#loading').show();
+             $('#search-button').attr("disabled", true);
          },
-         bInfo: true,
-         destroy: true,
-         language: {
-             searchPlaceholder: ""
+         success : function(data) {
+             
+
+             $('#loading').hide();
+             $("#report").html(data);
+             $('#search-button').attr("disabled", false);
+             let reportType =$("input[name='time-period']:checked").val();
+
+
+             $('#dataTable').DataTable({
+                 scrollY:        "300px",
+                 scrollX:        true,
+                 scrollCollapse: true,
+                 fixedColumns:   {
+                     leftColumns: 2/* ,
+                  rightColumns: 1 */
+                 }
+             });
+         },
+         error : function(e) {
+             $('#loading').hide();
+             $('#search-button').attr("disabled", false);
+         },
+         complete : function(e) {
+             $('#loading').hide();
+             $('#search-button').attr("disabled", false);
          }
      });
 }

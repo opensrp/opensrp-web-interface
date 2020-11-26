@@ -87,23 +87,27 @@ public class PeopleService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<ClientListDTO> getMemberData(String baseEntityId) {
+	public List<ClientListDTO> getMemberList(JSONObject jo, Integer startAge, Integer endAge) {
 		Session session = getSessionFactory();
 		
 		List<ClientListDTO> householdList = new ArrayList<ClientListDTO>();
 		
-		String hql = "select  id,member_name memberName,member_id memberId,relation_with_hh relationWithHousehold,member_age age,gender gender"
+		String hql = "select  id,member_name memberName,member_id memberId,relation_with_hh relationWithHousehold,member_age age,age_month ageMonth,age_day ageDay,dob dob,gender gender"
 		        + " ,status status,village,branch_name branchName,branch_code branchCode,"
-		        + " contact contact,base_entity_id baseEntityId from report.household_member_list(:baseEntityId)";
+		        + " contact contact,base_entity_id baseEntityId,relational_id  relationalId from report.member_list('"
+		        + jo
+		        + "',:startAge,:endAge)";
 		
 		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
 		        .addScalar("memberName", StandardBasicTypes.STRING).addScalar("memberId", StandardBasicTypes.STRING)
 		        .addScalar("relationWithHousehold", StandardBasicTypes.STRING).addScalar("age", StandardBasicTypes.STRING)
-		        .addScalar("gender", StandardBasicTypes.STRING).addScalar("status", StandardBasicTypes.STRING)
-		        .addScalar("village", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
-		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("contact", StandardBasicTypes.STRING)
-		        .addScalar("baseEntityId", StandardBasicTypes.STRING).setString("baseEntityId", baseEntityId)
-		        .setResultTransformer(new AliasToBeanResultTransformer(ClientListDTO.class));
+		        .addScalar("ageMonth", StandardBasicTypes.INTEGER).addScalar("ageDay", StandardBasicTypes.INTEGER)
+		        .addScalar("dob", StandardBasicTypes.STRING).addScalar("gender", StandardBasicTypes.STRING)
+		        .addScalar("status", StandardBasicTypes.STRING).addScalar("village", StandardBasicTypes.STRING)
+		        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("branchCode", StandardBasicTypes.STRING)
+		        .addScalar("contact", StandardBasicTypes.STRING).addScalar("baseEntityId", StandardBasicTypes.STRING)
+		        .addScalar("relationalId", StandardBasicTypes.STRING).setInteger("startAge", startAge)
+		        .setInteger("endAge", endAge).setResultTransformer(new AliasToBeanResultTransformer(ClientListDTO.class));
 		householdList = query.list();
 		return householdList;
 	}

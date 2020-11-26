@@ -38,6 +38,10 @@ public class ClientListDTO {
 	
 	private String age;
 	
+	private Integer ageMonth;
+	
+	private Integer ageDay;
+	
 	private String dob;
 	
 	private String gender;
@@ -49,6 +53,8 @@ public class ClientListDTO {
 	private String tableName;
 	
 	private String formSubmissionId;
+	
+	private String relationalId;
 	
 	public Long getId() {
 		return id;
@@ -244,6 +250,30 @@ public class ClientListDTO {
 	
 	public void setFormSubmissionId(String formSubmissionId) {
 		this.formSubmissionId = formSubmissionId;
+	}
+	
+	public String getRelationalId() {
+		return relationalId;
+	}
+	
+	public void setRelationalId(String relationalId) {
+		this.relationalId = relationalId;
+	}
+	
+	public Integer getAgeMonth() {
+		return ageMonth;
+	}
+	
+	public void setAgeMonth(Integer ageMonth) {
+		this.ageMonth = ageMonth;
+	}
+	
+	public Integer getAgeDay() {
+		return ageDay;
+	}
+	
+	public void setAgeDay(Integer ageDay) {
+		this.ageDay = ageDay;
 	}
 	
 }

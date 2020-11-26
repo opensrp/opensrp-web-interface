@@ -100,16 +100,13 @@
 															<thead>
 																<tr>
 																	<th>Member name</th>
-																	<th>Member ID</th>
-																	
-																	<th>Relation with <br />household head
-																	</th>
+																	<th>Member ID</th>				
+																	<th>Relation with <br/>household head</th>
+																	<th>DOB</th>
 																	<th>Age</th>
-																	<th>Gender</th>
-																	<th>Status</th>
+																	<th>Gender</th>									
 																	<th>Village</th>
-																	<th>Branch(code)</th>
-
+																	<th>Branch(code)</th>									
 																	<th>Action</th>
 																</tr>
 															</thead>
@@ -117,19 +114,16 @@
 																<c:forEach var="member" items="${members}"
 																	varStatus="loop">
 																	<tr>
-																		<td>${member.getMemberName() }</td>
-																		<td>${member.getMemberId() }</td>
-																		
-																		<td>${member.getRelationWithHousehold() }</td>
-																		<td>${member.getAge() }</td>
-																		<td>${member.getGender() }</td>
-																		<td>${member.getMemberType() }</td>
-																		<td>${member.getVillage() }</td>
-																		<td>${member.getBranchAndCode() }</td>
-																		<%-- <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_LOCATION_TAG")){ %> --%>
-																		<td><a
-																			href="<c:url value="/people/member-details/${member.getBaseEntityId()}/${member.getId()}.html?lang=${locale}"/>">Details</a>
-																			<%-- <%} %> --%></td>
+																		<td> ${member.getMemberName() }</td>
+																   		<td> ${member.getMemberId() }</td>
+																   		<td> ${member.getRelationWithHousehold() }</td>
+																   		<td> ${member.getDob() }</td>
+																   		<td>${member.getAge() } years,${member.getAgeMonth()} months </td>
+																   		<td> ${member.getGender() }</td>
+																   		<td> ${member.getVillage() }</td>
+																   		<td> ${member.getBranchAndCode() }</td>
+																   		<td>  <a href="<c:url value="/people/member-details/${member.getBaseEntityId()}/${member.getId() }.html?lang=${locale}"/>">Details</a></td>
+	   			
 																	</tr>
 																</c:forEach>
 															</tbody>
