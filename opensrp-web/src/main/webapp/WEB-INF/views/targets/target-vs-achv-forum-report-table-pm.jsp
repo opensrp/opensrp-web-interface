@@ -123,7 +123,7 @@
         console.log(reportData);
         var managers = [];
         var percentages = [];
-        var totalTarget = 0, totalAchv = 0, result = 0;
+        var totalTarget = 0, totalAchv = 0, result = 0,allProviderTarget = 0, allProviderAchv = 0;
         for(var i=0; i < reportData.length; i++) {
             totalSk+=reportData[i].numberOfSK;
             managers.push(reportData[i].fullName);
@@ -141,9 +141,13 @@
 
             result = totalTarget === 0 ? 0 : (totalAchv * 100) / totalTarget;
             console.log("result: ", result, "  totalTarget: ", totalTarget,  " totalAchv: ", totalAchv);
+            allProviderTarget+=totalTarget;
+            allProviderAchv+=totalAchv;
             percentages.push(result);
         }
         reloadChart(managers, percentages);
+        $('#totalSK').html(totalSk);
+        $('#skAvgTva').html((allProviderTarget === 0 ? 0 : (allProviderAchv * 100) / allProviderTarget).toFixed(2));
     }
 
 
@@ -207,7 +211,7 @@
         console.log("percentages", percentages, " managers", managers);
         reloadChart(managers, percentages);
     }
-    $('#totalSK').html(totalSk);
+
 </script>
 
 </body>

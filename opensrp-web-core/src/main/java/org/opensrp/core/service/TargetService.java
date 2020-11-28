@@ -504,7 +504,7 @@ public class TargetService extends CommonService {
 		
 		Session session = getSessionFactory();
 		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
-		String hql = "select user_name userName,first_name firstName,last_name lastName ,user_id id,total_am numberOfAm, "
+		String hql = "select user_name userName,first_name firstName,last_name lastName ,user_id id,total_am numberOfAm, total_sk numberOfSK, "
 		        + " anc_target ANCServiceTarget,anc_sell ANCServiceSell,anc_tva ANCServiceAchievement "
 		        + ",pnc_target PNCServiceTarget,pnc_sell PNCServiceSell,pnc_tva PNCServiceAchievement"
 		        + " , women_target WomenServiceTarget,women_sell WomenServiceSell,women_tva WomenServiceAchievement "
@@ -515,6 +515,7 @@ public class TargetService extends CommonService {
 		Query query = session.createSQLQuery(hql).addScalar("userName", StandardBasicTypes.STRING)
 		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
 		        .addScalar("id", StandardBasicTypes.INTEGER).addScalar("numberOfAm", StandardBasicTypes.INTEGER)
+				.addScalar("numberOfSK", StandardBasicTypes.INTEGER)
 		        .addScalar("ANCServiceTarget", StandardBasicTypes.INTEGER)
 		        .addScalar("ANCServiceSell", StandardBasicTypes.INTEGER)
 		        .addScalar("ANCServiceAchievement", StandardBasicTypes.FLOAT)
