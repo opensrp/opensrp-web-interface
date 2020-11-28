@@ -6,6 +6,8 @@ public class ServiceCommonDTO {
 	
 	private String formName;
 	
+	private String serviceName;
+	
 	private String date;
 	
 	public long getId() {
@@ -30,6 +32,14 @@ public class ServiceCommonDTO {
 	
 	public void setDate(String date) {
 		this.date = date;
+	}
+	
+	public String getServiceName() {
+		return serviceName;
+	}
+	
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
 	}
 	
 }

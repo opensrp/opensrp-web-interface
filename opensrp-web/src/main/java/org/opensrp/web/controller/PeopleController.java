@@ -102,7 +102,7 @@ public class PeopleController {
 		JSONObject dataInfos = peopleService.getHouseholdInfor(baseEntityId, id, "household");
 		model.addAttribute("reg_info", dataInfos.get("data"));
 		
-		model.addAttribute("services", peopleService.getHHServiceList(baseEntityId));
+		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "HH"));
 		model.addAttribute("configs",
 		    dataViewConfigurationService.getConfigurationByNameFormName(dataInfos.getString("form_name")));
 		model.addAttribute("members", data);
@@ -115,10 +115,10 @@ public class PeopleController {
 	    throws JSONException {
 		model.addAttribute("locale", locale);
 		
-		JSONObject dataInfos = peopleService.getHouseholdInfor(baseEntityId, id, "household");
+		JSONObject dataInfos = peopleService.getMemberInfo(baseEntityId);
 		model.addAttribute("reg_info", dataInfos.get("data"));
 		
-		model.addAttribute("services", peopleService.getServiceList(baseEntityId));
+		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "Member"));
 		model.addAttribute("configs",
 		    dataViewConfigurationService.getConfigurationByNameFormName(dataInfos.getString("form_name")));
 		

@@ -18,7 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.ClientListDTO;
-import org.opensrp.common.dto.ServiceCommonDTO;
 import org.opensrp.core.mapper.TargetMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -114,14 +113,20 @@ public class PeopleService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<ClientListDTO> getHHServiceList(String baseEntityId) {
+	public List<ClientListDTO> getServiceList(String baseEntityId, String type) {
 		Session session = getSessionFactory();
 		
 		List<ClientListDTO> householdList = new ArrayList<ClientListDTO>();
-		
-		String hql = "select  _id,_form_submission_id formSubmissionId,_event_date eventDate,_service_name serviceName,_table_name tableName "
-		        + "  from report.household_activity_list(:baseEntityId)";
-		
+		String hql = "";
+		if (type.equalsIgnoreCase("HH")) {
+			hql = "select  _id id,_form_submission_id formSubmissionId,_event_date eventDate,_service_name serviceName,_table_name tableName "
+			        + "  from report.household_activity_list(:baseEntityId)";
+		} else if (type.equalsIgnoreCase("Member")) {
+			hql = "select  _id id,_form_submission_id formSubmissionId,_event_date eventDate,_service_name serviceName,_table_name tableName "
+			        + "  from report.memebr_activity_list(:baseEntityId)";
+		} else {
+			
+		}
 		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
 		        .addScalar("formSubmissionId", StandardBasicTypes.STRING).addScalar("eventDate", StandardBasicTypes.STRING)
 		        .addScalar("serviceName", StandardBasicTypes.STRING).addScalar("tableName", StandardBasicTypes.STRING)
@@ -217,18 +222,51 @@ public class PeopleService extends CommonService {
 		});
 		object.put("form_name", tableName);
 		object.put("data", data);
-		System.err.println(rs);
+		
 		return object;
 	}
 	
-	public List<ServiceCommonDTO> getServiceList(String baseEntityId) {
-		List<ServiceCommonDTO> dtos = new ArrayList<ServiceCommonDTO>();
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public JSONObject getMemberInfo(String baseEntityId) throws JSONException {
+		
+		Session session = getSessionFactory();
+		String hql = "select  *  from report.member_info(:baseEntityId)";
+		
+		Query query = session.createSQLQuery(hql).setString("baseEntityId", baseEntityId);
+		String rs = (String) query.uniqueResult();
+		
+		JSONObject jsonObject = new JSONObject(rs);
+		JSONArray data = new JSONArray();
+		JSONObject object = new JSONObject();
+		jsonObject.keys().forEachRemaining(key -> {
+			JSONObject filedValue = new JSONObject();
+			Object value = jsonObject.opt(key + "");
+			try {
+				filedValue.putOpt("value", value);
+				filedValue.putOpt("key", key);
+				data.put(filedValue);
+			}
+			catch (Exception e) {
+				
+			}
+			
+			System.err.println(key + ":" + value);
+		});
+		object.put("form_name", "member");
+		object.put("data", data);
+		
+		return object;
+	}
+	
+	public List<ClientListDTO> getServiceList(String baseEntityId) {
+		List<ClientListDTO> dtos = new ArrayList<ClientListDTO>();
 		for (int i = 0; i < 50; i++) {
 			
-			ServiceCommonDTO dto = new ServiceCommonDTO();
-			dto.setDate("2020-03-20");
-			dto.setId(i);
-			dto.setFormName("HH_Visit" + 1);
+			ClientListDTO dto = new ClientListDTO();
+			dto.setEventDate("2020-03-20");
+			dto.setId(Long.parseLong(i + ""));
+			dto.setServiceName("HH_Visit" + 1);
 			dtos.add(dto);
 		}
 		
