@@ -194,9 +194,8 @@ public class PeopleService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public JSONObject getHouseholdInfor(String baseEntityId, Long id, String tableName) throws JSONException {
-		String response = "{\"form_name\":\"HH_Registration\",\"data\":[{\"value\":2,\"key\":\"id\"},{\"value\":\"json roy\",\"key\":\"name\"},{\"value\":\"naNDID GR\",\"key\":\"village\"},{\"value\":\"23453453535\",\"key\":\"householdId\"},{\"value\":\"VO\",\"key\":\"khnanaType\"},{\"value\":\"Farmer\",\"key\":\"occupation\"},{\"value\":\"2345\",\"key\":\"montlyIncome\"},{\"value\":\"TV\",\"key\":\"asset\"}]}";
-		JSONObject responseObj = new JSONObject(response);
+	public JSONObject getServiceInfo(String baseEntityId, Long id, String tableName) throws JSONException {
+		
 		Session session = getSessionFactory();
 		String hql = "select  *  from report.get_details_data(:id,:tableName)";
 		

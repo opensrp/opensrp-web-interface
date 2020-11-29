@@ -23,7 +23,7 @@
 					<td>${service.getEventDate() }</td>
 					<td>${service.getServiceName() }</td>
 					<td><div class="btn btn-primary"
-						onclick="loadContent('${service.getId()}','${service.getServiceName()}','${get_service_url}')">Details</div>
+						onclick="loadContent('${service.getId()}','${service.getTableName()}','${get_service_url}')">Details</div>
 
 
 					</td>

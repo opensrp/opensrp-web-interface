@@ -99,7 +99,7 @@ public class PeopleController {
 		JSONObject jo = new JSONObject();
 		jo.put("relation_id", baseEntityId);
 		List<ClientListDTO> data = peopleService.getMemberList(jo, 404, 404);
-		JSONObject dataInfos = peopleService.getHouseholdInfor(baseEntityId, id, "household");
+		JSONObject dataInfos = peopleService.getServiceInfo(baseEntityId, id, "household");
 		model.addAttribute("reg_info", dataInfos.get("data"));
 		
 		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "HH"));
@@ -151,11 +151,10 @@ public class PeopleController {
 	    throws JSONException {
 		model.addAttribute("locale", locale);
 		
-		JSONObject service = peopleService.getServiceDetails(formName, id);
+		JSONObject service = peopleService.getServiceInfo("", id, formName);
 		model.addAttribute("reg_info", service.get("data"));
 		
-		model.addAttribute("configs",
-		    dataViewConfigurationService.getConfigurationByNameFormName(service.getString("form_name")));
+		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName(formName));
 		
 		return "dynamic_content";
 	}
