@@ -3,21 +3,20 @@ package org.opensrp.core.service;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.transform.AliasToBeanResultTransformer;
+import org.hibernate.type.StandardBasicTypes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.common.dto.AggregatedBiometricDTO;
-import org.opensrp.common.dto.AggregatedReportDTO;
-import org.opensrp.common.dto.COVID19ReportDTO;
-import org.opensrp.common.dto.ChildNutritionReportDTO;
-import org.opensrp.common.dto.ElcoReportDTO;
-import org.opensrp.common.dto.ForumIndividualReportDTO;
-import org.opensrp.common.dto.ForumReportDTO;
-import org.opensrp.common.dto.IndividualBiometricReportDTO;
-import org.opensrp.common.dto.PregnancyReportDTO;
+import org.opensrp.common.dto.*;
 import org.opensrp.common.interfaces.DatabaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 @Service
 public class ReportService {

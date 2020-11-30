@@ -871,5 +871,40 @@ public class ReportController {
 		return element.getAsJsonArray();
 
 	}
+
+	@RequestMapping(value = "/referral-report", method = RequestMethod.GET)
+	public String referralReport(HttpSession session) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String endDate = formatter.format(new Date());
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		searchUtil.setDivisionAttribute(session);
+		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
+		session.setAttribute("startDate", startDate);
+		session.setAttribute("endDate", endDate);
+		return "/report/referral";
+	}
+
+	@RequestMapping(value = "/referral-report-table", method = RequestMethod.GET)
+	public String referralReportTable(HttpSession session,
+									  @RequestParam(value = "startDate", required = false) String startDate,
+									  @RequestParam(value = "endDate", required = false) String endDate,
+									  @RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
+									  @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+									  @RequestParam(value = "branch", required = false, defaultValue = "") String branchId,
+									  @RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<ReferralReportDTO> report;
+
+		Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
+		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
+		String parentLocationName = parentLocation.getName().split(":")[0];
+
+		report = targetService.getReferralReport(startDate, endDate, parentLocationTag, searchedValueId,
+				parentLocationName, locationTag);
+
+		session.setAttribute("referralReport", report);
+		return "report/referral-table";
+	}
 	
 }
