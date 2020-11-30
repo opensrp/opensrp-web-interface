@@ -36,7 +36,7 @@ public class DataViewConfigurationService extends CommonService {
 		for (DataViewConfiguration dataViewConfiguration : configurations) {
 			
 			config.put(dataViewConfiguration.getKeyName(), dataViewConfiguration.getValue());
-			System.err.println(config);
+			
 		}
 		
 		return config;

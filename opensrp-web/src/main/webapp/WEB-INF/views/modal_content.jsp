@@ -29,14 +29,14 @@
 <script>
 
 
-function loadContent(id, formName ,url) {
+function loadContent(serviceName,id, formName ,url) {
 	
 	 var token = $("meta[name='_csrf']").attr("content");
      var header = $("meta[name='_csrf_header']").attr("content");
 	$.ajax({
 		type : "GET",
 		contentType : "application/json",
-	    url: url+"/"+formName+"/"+id,	    
+	    url: url+"/"+formName+"/"+id+"/"+serviceName,	    
 	    dataType : 'html',
 	    timeout : 100000,
 	    beforeSend: function(xhr) {

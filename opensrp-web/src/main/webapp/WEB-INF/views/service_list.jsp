@@ -23,7 +23,7 @@
 					<td>${service.getEventDate() }</td>
 					<td>${service.getServiceName() }</td>
 					<td><div class="btn btn-primary"
-						onclick="loadContent('${service.getId()}','${service.getTableName()}','${get_service_url}')">Details</div>
+						onclick="loadContent('${service.getServiceName() }','${service.getId()}','${service.getTableName()}','${get_service_url}')">Details</div>
 
 
 					</td>
@@ -38,35 +38,12 @@
 	$(document).ready(function() {
 
 		$('#serviceTable').DataTable({
-			bFilter : false,
-
-			columnDefs : [
-
-			{
-				orderable : false,
-				className : 'reorder',
-				width : "10%",
-				targets : 0
-			}, {
-				orderable : false,
-				className : 'reorder',
-				width : "10%",
-				targets : 1
-			}, {
-				orderable : false,
-				className : 'reorder',
-				width : "10%",
-				targets : 2
-			}
-
-			],
-
-			bInfo : true,
-			destroy : true,
-			language : {
-				searchPlaceholder : ""
-			}
-		});
+           
+           
+            scrollCollapse: true,
+           
+        }
+		);
 	});
 	
 	

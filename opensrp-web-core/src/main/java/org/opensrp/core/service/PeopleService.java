@@ -212,16 +212,29 @@ public class PeopleService extends CommonService {
 				filedValue.putOpt("value", value);
 				filedValue.putOpt("key", key);
 				data.put(filedValue);
+				
 			}
 			catch (Exception e) {
 				
 			}
-			
-			System.err.println(key + ":" + value);
 		});
-		object.put("form_name", tableName);
+		if (tableName.equalsIgnoreCase("pnc_home_visit")) {
+			String formName = "";
+			if (jsonObject.has("number_of_pnc")) {
+				formName = "PNC" + " " + jsonObject.getString("number_of_pnc") + " Service";
+				object.put("form_name", formName);
+			}
+		} else if (tableName.equalsIgnoreCase("anc_home_visit")) {
+			if (jsonObject.has("form_name")) {
+				String formName = jsonObject.getString("form_name");
+				formName = formName.replaceAll("hnpp", "");
+				formName = formName.replaceAll("_", " ");
+				object.put("form_name", formName);
+			}
+		} else {
+			object.put("form_name", "");
+		}
 		object.put("data", data);
-		
 		return object;
 	}
 	

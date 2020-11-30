@@ -145,13 +145,19 @@ public class PeopleController {
 		return "people/member-list-table";
 	}
 	
-	@RequestMapping(value = "/activity-details/{formName}/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/activity-details/{formName}/{id}/{serviceName}", method = RequestMethod.GET)
 	public String activityDetails(HttpServletRequest request, @PathVariable("formName") String formName,
-	                              @PathVariable("id") long id, HttpSession session, Model model, Locale locale)
-	    throws JSONException {
+	                              @PathVariable("id") long id, @PathVariable("serviceName") String serviceName,
+	                              HttpSession session, Model model, Locale locale) throws JSONException {
 		model.addAttribute("locale", locale);
 		
 		JSONObject service = peopleService.getServiceInfo("", id, formName);
+		String ancPNCServiceName = service.getString("form_name");
+		if (!ancPNCServiceName.isEmpty()) {
+			serviceName = ancPNCServiceName;
+			
+		}
+		model.addAttribute("serviceName", serviceName);
 		model.addAttribute("reg_info", service.get("data"));
 		
 		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName(formName));
