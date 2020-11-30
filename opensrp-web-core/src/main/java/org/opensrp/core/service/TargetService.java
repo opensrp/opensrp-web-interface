@@ -24,10 +24,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.common.dto.ForumTargetReportDTO;
-import org.opensrp.common.dto.HrReportDTO;
-import org.opensrp.common.dto.TargetCommontDTO;
-import org.opensrp.common.dto.TargetReportDTO;
+import org.opensrp.common.dto.*;
 import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.Status;
@@ -504,7 +501,7 @@ public class TargetService extends CommonService {
 		
 		Session session = getSessionFactory();
 		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
-		String hql = "select user_name userName,first_name firstName,last_name lastName ,user_id id,total_am numberOfAm, "
+		String hql = "select user_name userName,first_name firstName,last_name lastName ,user_id id,total_am numberOfAm, total_sk numberOfSK, "
 		        + " anc_target ANCServiceTarget,anc_sell ANCServiceSell,anc_tva ANCServiceAchievement "
 		        + ",pnc_target PNCServiceTarget,pnc_sell PNCServiceSell,pnc_tva PNCServiceAchievement"
 		        + " , women_target WomenServiceTarget,women_sell WomenServiceSell,women_tva WomenServiceAchievement "
@@ -515,6 +512,7 @@ public class TargetService extends CommonService {
 		Query query = session.createSQLQuery(hql).addScalar("userName", StandardBasicTypes.STRING)
 		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
 		        .addScalar("id", StandardBasicTypes.INTEGER).addScalar("numberOfAm", StandardBasicTypes.INTEGER)
+				.addScalar("numberOfSK", StandardBasicTypes.INTEGER)
 		        .addScalar("ANCServiceTarget", StandardBasicTypes.INTEGER)
 		        .addScalar("ANCServiceSell", StandardBasicTypes.INTEGER)
 		        .addScalar("ANCServiceAchievement", StandardBasicTypes.FLOAT)
@@ -1182,6 +1180,90 @@ public class TargetService extends CommonService {
 				.setResultTransformer(new AliasToBeanResultTransformer(HrReportDTO.class));
 		dtos = query.list();
 
+		return dtos;
+	}
+
+	@Transactional
+	public List<TimestamReportDTO> getPMTimestapmReportDMWise(JSONObject params) throws JSONException {
+
+		Session session = getSessionFactory();
+		List<TimestamReportDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.pm_timestamp_report_dm_wise('"+  params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("providerUserName", StandardBasicTypes.STRING)
+				.addScalar("fullName", StandardBasicTypes.STRING)
+				.addScalar("iycfTime", StandardBasicTypes.INTEGER)
+				.addScalar("ancTime", StandardBasicTypes.INTEGER)
+				.addScalar("ncdTime", StandardBasicTypes.INTEGER)
+				.addScalar("womenTime", StandardBasicTypes.INTEGER)
+				.addScalar("adolescentTime", StandardBasicTypes.INTEGER)
+				.addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
+				.setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
+		dtos = query.list();
+		return dtos;
+	}
+
+	@Transactional
+	public List<TimestamReportDTO> getDMTimestapmReportAMWise(JSONObject params) throws JSONException {
+
+		Session session = getSessionFactory();
+		List<TimestamReportDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.dm_timestamp_report_am_wise('"+  params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("providerUserName", StandardBasicTypes.STRING)
+				.addScalar("fullName", StandardBasicTypes.STRING)
+				.addScalar("iycfTime", StandardBasicTypes.INTEGER)
+				.addScalar("ancTime", StandardBasicTypes.INTEGER)
+				.addScalar("ncdTime", StandardBasicTypes.INTEGER)
+				.addScalar("womenTime", StandardBasicTypes.INTEGER)
+				.addScalar("adolescentTime", StandardBasicTypes.INTEGER)
+				.addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
+				.setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
+		dtos = query.list();
+		return dtos;
+	}
+
+	@Transactional
+	public List<TimestamReportDTO> getAMTimestapmReportBranchWise(JSONObject params) throws JSONException {
+
+		Session session = getSessionFactory();
+		List<TimestamReportDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.am_timestamp_report_branch_wise('"+  params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("branchName", StandardBasicTypes.STRING)
+				.addScalar("iycfTime", StandardBasicTypes.INTEGER)
+				.addScalar("ancTime", StandardBasicTypes.INTEGER)
+				.addScalar("ncdTime", StandardBasicTypes.INTEGER)
+				.addScalar("womenTime", StandardBasicTypes.INTEGER)
+				.addScalar("adolescentTime", StandardBasicTypes.INTEGER)
+				.addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
+				.setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
+		dtos = query.list();
+		return dtos;
+	}
+
+	@Transactional
+	public List<TimestamReportDTO> getAMTimestapmReportProviderWise(JSONObject params) throws JSONException {
+
+		Session session = getSessionFactory();
+		List<TimestamReportDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.am_timestamp_report_provider_wise('"+  params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("providerUserName", StandardBasicTypes.STRING)
+				.addScalar("fullName", StandardBasicTypes.STRING)
+				.addScalar("branchName", StandardBasicTypes.STRING)
+				.addScalar("iycfTime", StandardBasicTypes.INTEGER)
+				.addScalar("ancTime", StandardBasicTypes.INTEGER)
+				.addScalar("ncdTime", StandardBasicTypes.INTEGER)
+				.addScalar("womenTime", StandardBasicTypes.INTEGER)
+				.addScalar("adolescentTime", StandardBasicTypes.INTEGER)
+				.addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
+				.setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
+		dtos = query.list();
 		return dtos;
 	}
 }

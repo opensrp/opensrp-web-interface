@@ -16,10 +16,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.common.dto.ForumTargetReportDTO;
-import org.opensrp.common.dto.TargetCommontDTO;
-import org.opensrp.common.dto.TargetReportDTO;
-import org.opensrp.common.dto.UserDTO;
+import org.opensrp.common.dto.*;
 import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.ProductType;
 import org.opensrp.common.util.Roles;
@@ -543,6 +540,94 @@ public class TargetController {
 		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
 		return "targets/target-vs-achv-forum-report-table-am-by-sk";
 	}
+
+	@RequestMapping(value = "/report/pm-timestamp-report-dm--wise.html", method = RequestMethod.GET)
+	public String pmTimestampReportDMWise( Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+		model.addAttribute("branches", branches);
+		return "report/timestamp-report/pm-report-dm-wise";
+	}
+
+	@RequestMapping(value = "/report/pm-timestamp-report-dm-wise", method = RequestMethod.POST)
+	public String pmTimestampReportDMWiseTable( @RequestBody String dto, Model model) throws JSONException {
+		JSONObject params = new JSONObject(dto);
+
+		List<TimestamReportDTO> totalList;
+
+		totalList = targetService.getPMTimestapmReportDMWise(params);
+
+		model.addAttribute("reportDatas", totalList);
+		return "report/timestamp-report/pm-report-dm-table";
+	}
+
+	@RequestMapping(value = "/report/dm-timestamp-report-am-wise.html", method = RequestMethod.GET)
+	public String dmTimestampReportAmWise(Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
+		model.addAttribute("users", users);
+		return "report/timestamp-report/dm-report-am-wise";
+	}
+
+	@RequestMapping(value = "/report/dm-timestamp-report-am-wise", method = RequestMethod.POST)
+	public String dmTimestampReportAmWiseTable(@RequestBody String dto, Model model) throws JSONException {
+		JSONObject params = new JSONObject(dto);
+		String managerOrLocation = params.getString("managerOrLocation");
+
+		List<TimestamReportDTO> totalList =  targetService.getDMTimestapmReportAMWise(params);
+
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("type", managerOrLocation);
+		return "report/timestamp-report/dm-report-am-table";
+	}
+
+	@RequestMapping(value = "/report/am-timestamp-report-branch-wise.html", method = RequestMethod.GET)
+	public String amTimestampReportBranchWise(Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		return "report/timestamp-report/am-report-branch-wise";
+	}
+
+	@RequestMapping(value = "/report/am-timestamp-report-branch-wise", method = RequestMethod.POST)
+	public String amTimestampReportBranchTable(@RequestBody String dto, Model model)
+			throws JSONException {
+
+		JSONObject params = new JSONObject(dto);
+
+		List<TimestamReportDTO> totalList =  targetService.getAMTimestapmReportBranchWise(params);
+
+		model.addAttribute("reportDatas", totalList);
+		return "report/timestamp-report/am-report-branch-table";
+	}
+
+	@RequestMapping(value = "/report/am-timestamp-report-provider-wise.html", method = RequestMethod.GET)
+	public String amTimestampReportProviderWise(Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		return "report/timestamp-report/am-report-provider-wise";
+	}
+
+	@RequestMapping(value = "/report/am-timestamp-report-provider-wise", method = RequestMethod.POST)
+	public String amTimestampReportProviderTable(@RequestBody String dto, Model model) throws JSONException {
+
+		JSONObject params = new JSONObject(dto);
+
+		List<TimestamReportDTO> totalList = targetService.getAMTimestapmReportProviderWise(params);
+
+		model.addAttribute("reportDatas", totalList);
+		return "report/timestamp-report/am-report-provider-table";
+	}
+
 
 	private JsonArray getTargetsAsJson(List<TargetReportDTO> targetList){
 

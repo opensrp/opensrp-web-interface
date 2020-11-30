@@ -176,11 +176,12 @@
 			percentages.push(reportData[i][visitCategory]);
 		}
 		loadChart(skList, percentages);
+		$('#totalSK').html(reportData.length);
 	}
 
 	function loadAvgVisitChart(reportData) {
 		var skList = [];
-		var percentages = [], cnt = 0, sum = 0, result;
+		var percentages = [], cnt = 0, sum = 0, result, totalSum = 0, totalCount = 0 ;
 		var avgFields = ['hhVisitAchievementInPercentage','elcoVisitAchievementInPercentage','methodsUsersVisitAchievementInPercentage','adolescentMethodsUsersVisitAchievementInPercentage','pregnancydentifiedVisitAchievementInPercentage','deliveryVisitAchievementInPercentage','institutionalizedDeliveryVisitAchievementInPercentage','Child06VisitAchievementInPercentage','Child724VisitAchievementInPercentage','Child1836VisitAchievementInPercentage','immunizationVisitAchievementInPercentage','pregnantVisitAchievementInPercentage'];
 		for (var i = 0; i < reportData.length; i++) {
 			skList.push(reportData[i].firstName + ' ' + reportData[i].lastName);
@@ -191,10 +192,14 @@
 				if(reportData[i][avgFields[i]] > 0) cnt++;
 				sum += reportData[i][avgFields[i]];
 			}
+			totalSum+=sum;
+			totalCount+=cnt;
 			result = cnt === 0 ? 0 : parseFloat((sum / cnt).toFixed(2));
 			percentages.push(result);
 		}
 		loadChart(skList, percentages);
+		$('#totalSK').html(reportData.length);
+		$('#skAvgTva').html(totalCount === 0 ? 0 : parseFloat((totalSum / totalCount).toFixed(2)));
 	}
 
 	function loadChart(skList,  percentages){
@@ -250,8 +255,6 @@
 	}
 
 	loadAvgVisitChart(<%= targets%>);
-	$('#totalSK').html(reportData.length);
-	// $('#skAvgTva').html( skAchvAvailable === 0 ? 0 : (skTva / skAchvAvailable).toFixed(2));
 
 </script>
 </body>

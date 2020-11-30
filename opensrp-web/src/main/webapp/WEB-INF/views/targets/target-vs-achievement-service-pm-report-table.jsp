@@ -48,7 +48,7 @@
 		    <tr>
 		        <th rowspan="2">DM name</th>
 		        <th rowspan="2">Number of AM</th>
-		        
+				<th rowspan="2">Number of SK</th>
 		        <th colspan="2">ANC package</th>
 		        <th colspan="2">PNC package</th>
 		        <th colspan="2">NCD package</th>
@@ -79,7 +79,7 @@
 	 		 <tr>
 		        <th rowspan="2">Location name</th>
 		        <th rowspan="2">Number of AM</th>
-		        
+				 <th rowspan="2">Number of SK</th>
 		        <th colspan="2">ANC package</th>
 		        <th colspan="2">PNC package</th>
 		        <th colspan="2">NCD package</th>
@@ -118,7 +118,7 @@
 				<c:when test="${type =='managerWise'}">
 		   			<td> ${reportData.getFullName() }</td>
 		   			<td> ${reportData.getNumberOfAm() }</td>
-		   			
+					<td> ${reportData.getNumberOfSK() }</td>
 		   			<td> ${reportData.getANCServiceTarget() }/${reportData.getANCServiceSell() }</td>
 		   			<td> 
 		   			<c:choose>
@@ -221,7 +221,7 @@
 	 		<c:otherwise>
 	 				<td> ${reportData.getLocationName() }</td>		   			
 		   			<td> ${reportData.getNumberOfAm() }</td>
-		   			
+					<td> ${reportData.getNumberOfSK() }</td>
 		   			<td> ${reportData.getANCServiceTarget() }/${reportData.getANCServiceSell() }</td>
 		   			<td> 
 		   			<c:choose>
@@ -334,7 +334,8 @@
 		console.log(reportData);
 		var managers = [];
 		var percentages = [];
-		var totalTarget = 0, totalAchv = 0, result = 0 ;
+		var totalTarget = 0, totalSell = 0, result = 0, allProviderTarget = 0, allProviderSell = 0;
+		totalSk=0;
 		for(var i=0; i < reportData.length; i++) {
 			managers.push(reportData[i].firstName + ' '+ reportData[i].lastName);
 			totalSk+=reportData[i].numberOfSK;
@@ -354,8 +355,13 @@
 
 			result = totalTarget === 0 ? 0 : (totalSell * 100) / totalTarget;
 
+			allProviderTarget+=totalTarget;
+			allProviderSell+=totalSell;
 			percentages.push(result);
+
 		}
+		$('#totalSK').html(totalSk);
+		$('#skAvgTva').html((allProviderTarget === 0 ? 0 : (allProviderSell * 100) / allProviderTarget).toFixed(2));
 		reloadChart(managers, percentages);
 	}
 
@@ -420,9 +426,6 @@
 		console.log("percentages", percentages, " managers", managers);
 		reloadChart(managers, percentages);
 	}
-
-	$('#totalSK').html(totalSk);
-	// $('#skAvgTva').html( skAchvAvailable === 0 ? 0 : (skTva / skAchvAvailable).toFixed(2));
 </script>
 
 </body>

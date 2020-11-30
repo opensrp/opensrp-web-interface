@@ -192,7 +192,7 @@
 		console.log(reportData);
 		var managers = [];
 		var percentages = [];
-		var totalTarget = 0, totalAchv = 0, result = 0;
+		var totalTarget = 0, totalSell = 0, result = 0, allProviderTarget = 0, allProviderSell = 0;
 		for(var i=0; i < reportData.length; i++) {
 			totalSk+=reportData[i].numberOfSK;
 			managers.push(reportData[i].branchName);
@@ -211,9 +211,12 @@
 					+ reportData[i].WomenServiceSell;
 
 			result = totalTarget === 0 ? 0 : (totalSell * 100) / totalTarget;
-
+			allProviderTarget+=totalTarget;
+			allProviderSell+=totalSell;
 			percentages.push(result);
 		}
+		$('#totalSK').html(totalSk);
+		$('#skAvgTva').html((allProviderTarget === 0 ? 0 : (allProviderSell * 100) / allProviderTarget).toFixed(2));
 		reloadChart(managers, percentages);
 	}
 
@@ -278,8 +281,6 @@
 		console.log("percentages", percentages, " managers", managers);
 		reloadChart(managers, percentages);
 	}
-
-	$('#totalSK').html(totalSk);
 
 </script>
 
