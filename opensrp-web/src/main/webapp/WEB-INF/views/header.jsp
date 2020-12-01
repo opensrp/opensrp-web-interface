@@ -120,7 +120,7 @@ License: You must have a valid license purchased only from themeforest(the above
 
 	boolean PEOPLE = AuthenticationManagerUtil.isPermitted("PEOPLE");
 	boolean REFERRAL_REPORT = AuthenticationManagerUtil.isPermitted("REFERRAL_REPORT");
-
+	boolean REFERRAL_FOLLOWUP_REPORT = AuthenticationManagerUtil.isPermitted("REFERRAL_FOLLOWUP_REPORT");
 
    %>
   
@@ -643,7 +643,13 @@ License: You must have a valid license purchased only from themeforest(the above
 						</a>
 						</li>
 						<% }%>
+						<% if( REFERRAL_FOLLOWUP_REPORT){ %>
 
+						<li><a href="<c:url value="/report/referral-followup-report?lang=${locale}"/>">
+							Referral Followup Report
+						</a>
+						</li>
+						<% }%>
 
 
 					</ul>

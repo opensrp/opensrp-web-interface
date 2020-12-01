@@ -906,5 +906,42 @@ public class ReportController {
 		session.setAttribute("referralReport", report);
 		return "report/referral-table";
 	}
+
+	@RequestMapping(value = "/referral-followup-report", method = RequestMethod.GET)
+	public String referralFollowupReport(HttpSession session) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String endDate = formatter.format(new Date());
+		User user = AuthenticationManagerUtil.getLoggedInUser();
+		searchUtil.setDivisionAttribute(session);
+		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
+		session.setAttribute("startDate", startDate);
+		session.setAttribute("endDate", endDate);
+		return "/report/referral-followup-report";
+	}
+
+
+
+	@RequestMapping(value = "/referral-followup-report-table", method = RequestMethod.GET)
+	public String referralFollowupReportTable(HttpSession session,
+									  @RequestParam(value = "startDate", required = false) String startDate,
+									  @RequestParam(value = "endDate", required = false) String endDate,
+									  @RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
+									  @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+									  @RequestParam(value = "branch", required = false, defaultValue = "") String branchId,
+									  @RequestParam(value = "referralReason", required = false, defaultValue = "all") String referralReason,
+									  @RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
+		List<ReferralFollowupReportDTO> report;
+
+		Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
+		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
+		String parentLocationName = parentLocation.getName().split(":")[0];
+
+		report = targetService.getReferralFollowupReport(startDate, endDate, parentLocationTag, searchedValueId,
+				parentLocationName, locationTag, referralReason);
+
+		session.setAttribute("referralFollowupReport", report);
+		return "report/referral-followup-table";
+	}
 	
 }
