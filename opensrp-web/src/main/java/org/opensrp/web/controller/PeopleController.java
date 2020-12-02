@@ -103,8 +103,7 @@ public class PeopleController {
 		model.addAttribute("reg_info", dataInfos.get("data"));
 		
 		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "HH"));
-		model.addAttribute("configs",
-		    dataViewConfigurationService.getConfigurationByNameFormName(dataInfos.getString("form_name")));
+		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName("household"));
 		model.addAttribute("members", data);
 		return "people/household_details";
 	}

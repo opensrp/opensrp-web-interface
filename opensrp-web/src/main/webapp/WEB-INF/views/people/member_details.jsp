@@ -29,7 +29,7 @@
 		<ul class="page-breadcrumb breadcrumb">
 			<li><a href="<c:url value="/"/>">Home</a> <i
 				class="fa fa-circle"></i></li>
-			<li><a href="<c:url value="/people/members.html"/>">Members</a>
+			<li><a href="<c:url value="/people/members.html"/>">Back</a>
 
 			</li>
 
