@@ -932,6 +932,7 @@ public class ReportController {
 									  @RequestParam(value = "referralReason", required = false, defaultValue = "all") String referralReason,
 									  @RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
 		List<ReferralFollowupReportDTO> report;
+		Gson gson = new Gson();
 
 		Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
 		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
@@ -940,8 +941,12 @@ public class ReportController {
 		report = targetService.getReferralFollowupReport(startDate, endDate, parentLocationTag, searchedValueId,
 				parentLocationName, locationTag, referralReason);
 
+		JsonElement element = gson.toJsonTree(report, new TypeToken<List<ReferralFollowupReportDTO>>() {}.getType());
 		session.setAttribute("referralFollowupReport", report);
+		session.setAttribute("jsonReportData", element.getAsJsonArray());
 		return "report/referral-followup-table";
 	}
+
+
 	
 }

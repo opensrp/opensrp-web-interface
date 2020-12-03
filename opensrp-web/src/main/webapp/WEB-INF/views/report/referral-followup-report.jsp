@@ -28,7 +28,37 @@
 
 <div class="page-content-wrapper">
     <div class="page-content">
-        <jsp:include page="/WEB-INF/views/report-search-panel.jsp" />
+<%--        <div class="row">--%>
+<%--            <div class="col-sm-6">--%>
+<%--                <div class="dashboard-stat blue-madison">--%>
+<%--                    <div class="visual">--%>
+<%--                    </div>--%>
+<%--                    <div class="details">--%>
+<%--                        <div class="number" id="totalFollowup">--%>
+<%--                            0--%>
+<%--                        </div>--%>
+<%--                        <div class="desc">--%>
+<%--                            Total Followup--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </div>--%>
+<%--            <div class="col-sm-6">--%>
+<%--                <div class="dashboard-stat blue-madison">--%>
+<%--                    <div class="visual">--%>
+<%--                    </div>--%>
+<%--                    <div class="details">--%>
+<%--                        <div class="number" id="skAvgTva">--%>
+<%--                            0--%>
+<%--                        </div>--%>
+<%--                        <div class="desc">--%>
+
+<%--                        </div>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+<%--            </div>--%>
+<%--        </div>--%>
+        <jsp:include page="/WEB-INF/views/report/referral-followup-search-panel.jsp" />
         <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
             <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
         </div>
@@ -171,7 +201,8 @@
                 startDate: $("#start").val(),
                 endDate: $("#end").val(),
                 branch: $("#branchaggregate").val(),
-                locationValue: $("#locationoptions").val()
+                locationValue: $("#locationoptions").val(),
+                referralReason: $("#referralReason").val()
             },
             beforeSend: function() {
                 $('#loading').show();

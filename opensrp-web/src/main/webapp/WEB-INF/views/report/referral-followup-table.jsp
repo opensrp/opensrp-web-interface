@@ -1,6 +1,4 @@
 <%@page import="java.util.List"%>
-<%@ page import="org.opensrp.common.dto.AggregatedBiometricDTO" %>
-<%@ page import="org.opensrp.common.dto.ReferralReportDTO" %>
 <%@ page import="org.opensrp.common.dto.ReferralFollowupReportDTO" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="ISO-8859-1"%>
@@ -13,6 +11,8 @@
            uri="http://www.springframework.org/security/tags"%>
 <%
     List<ReferralFollowupReportDTO> report = (List<ReferralFollowupReportDTO>) session.getAttribute("referralFollowupReport");
+    Object reportJson = session.getAttribute("jsonReportData");
+
 %>
 
 <head>
@@ -73,4 +73,15 @@
     <% } %>
     </tbody>
 </table>
+
+<script>
+
+    var reportData = <%= reportJson %>;
+    var totalFollowup = 0;
+    console.log(reportData);
+    for(var i=0; i<reportData.length; i++) {
+        totalFollowup+=reportData[i].totalFollowup;
+    }
+    $("#totalFollowup").html(totalFollowup);
+</script>
 </body>
