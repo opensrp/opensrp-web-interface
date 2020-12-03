@@ -52,9 +52,9 @@
 				</select>
 			</div>
 			<c:if test="${isHousehold }">
-				<div class="col-lg-3 form-group" style="padding-top: 22px">
-									    
-					<input name="search" class="form-control"id="search" placeholder="Search Key"/> 
+				<div class="col-lg-3 form-group" style="padding-top: 0px">
+					 <label for="cars">Search key </label> 				    
+					<input name="search" class="form-control"id="search" placeholder="Household ID,contact number"/> 
 				</div>
 				
 				<div class="col-lg-3 form-group" style="padding-top: 22px">

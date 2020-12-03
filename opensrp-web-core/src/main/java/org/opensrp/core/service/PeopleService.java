@@ -235,6 +235,7 @@ public class PeopleService extends CommonService {
 			object.put("form_name", "");
 		}
 		object.put("data", data);
+		object.put("rawData", jsonObject);
 		return object;
 	}
 	
@@ -267,7 +268,7 @@ public class PeopleService extends CommonService {
 		});
 		object.put("form_name", "member");
 		object.put("data", data);
-		
+		object.put("rawData", jsonObject);
 		return object;
 	}
 	
