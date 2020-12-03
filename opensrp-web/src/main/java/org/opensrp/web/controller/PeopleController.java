@@ -82,10 +82,9 @@ public class PeopleController {
 	
 	@RequestMapping(value = "/households-datatable.html", method = RequestMethod.POST)
 	public String householdsDataTable(@RequestBody String dto, HttpSession session, Model model, Locale locale)
-	    throws JSONException, JsonProcessingException {
+	    throws JSONException, JsonProcessingException, InterruptedException {
 		model.addAttribute("locale", locale);
 		JSONObject jo = new JSONObject(dto);
-		
 		List<ClientListDTO> data = peopleService.getHouseholdData(jo);
 		model.addAttribute("households", data);
 		return "people/household-list-table";
