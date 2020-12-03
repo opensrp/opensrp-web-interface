@@ -145,7 +145,7 @@ function filter(){
          contentType : "application/json",
          url : "${get_url}",
          dataType : 'html',
-         timeout : 100000,
+         timeout : 300000,
          data:  JSON.stringify(formData),
 
          beforeSend: function(xhr) {
