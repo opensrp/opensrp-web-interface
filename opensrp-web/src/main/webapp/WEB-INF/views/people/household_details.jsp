@@ -45,6 +45,14 @@
 					<div class="portlet-body">
 
 						<div class="tabbable tabbable-custom tabbable-noborder">
+						<div class="col-md-12 form-group">
+							<div class="row">
+								<h4><strong>Household ID</strong>: ${rawData.getString("unique_id")}, <strong>Household head name:</strong> ${rawData.getString("first_name")}
+								 </h4>
+								
+							</div>
+							
+						</div>
 							<ul class="nav nav-tabs">
 
 								<li data-target="#hh_info" role="tab" data-toggle="tab"

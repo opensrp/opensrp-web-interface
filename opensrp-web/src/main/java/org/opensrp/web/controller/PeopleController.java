@@ -101,6 +101,7 @@ public class PeopleController {
 		List<ClientListDTO> data = peopleService.getMemberList(jo, 404, 404);
 		JSONObject dataInfos = peopleService.getServiceInfo(baseEntityId, id, "household");
 		model.addAttribute("reg_info", dataInfos.get("data"));
+		model.addAttribute("rawData", dataInfos.get("rawData"));
 		
 		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "HH"));
 		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName("household"));
@@ -116,7 +117,7 @@ public class PeopleController {
 		
 		JSONObject dataInfos = peopleService.getMemberInfo(baseEntityId);
 		model.addAttribute("reg_info", dataInfos.get("data"));
-		
+		model.addAttribute("rawData", dataInfos.get("rawData"));
 		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "Member"));
 		model.addAttribute("configs",
 		    dataViewConfigurationService.getConfigurationByNameFormName(dataInfos.getString("form_name")));

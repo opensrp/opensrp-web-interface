@@ -45,8 +45,18 @@
 						</div>
 					</div>
 					<div class="portlet-body">
-
+						
+						
 						<div class="tabbable tabbable-custom tabbable-noborder">
+						
+						<div class="col-md-12 form-group">
+							<div class="row">
+								<h4><strong>Member ID</strong>: ${rawData.getString("member_id")}, <strong>Name:</strong> ${rawData.getString("first_name")},
+								 <strong>Age</strong>: ${rawData.getString("member_age")},<strong>Gender</strong>: ${rawData.getString("gender")} </h4>
+								
+							</div>
+							
+						</div>
 							<ul class="nav nav-tabs">
 
 								<li data-target="#member_info" role="tab" data-toggle="tab"

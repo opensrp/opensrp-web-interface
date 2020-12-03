@@ -36,7 +36,7 @@
 							
 							<div class="row">
 								<div class="col-lg-3 form-group">
-								   
+								    <label for="cars">Select gender </label> 	
 									<select
 										name="gender" class="form-control" id="gender">
 										<option value="">Select gender</option>
@@ -46,7 +46,7 @@
 									</select>
 								</div>
 								<div class="col-lg-3 form-group">
-								   
+								    <label for="cars">Select Age </label> 	
 									<select
 										name="age" class="form-control" id="age">
 										<option value="404-404">Select age range</option>
@@ -59,12 +59,12 @@
 									</select>
 								</div>
 								<div class="col-lg-3 form-group">
-								    
-									<input name="search" class="form-control"id="search" placeholder="Search Key"/> 
+								     <label for="cars">Search key </label> 	
+									<input name="search" class="form-control"id="search" placeholder="member ID,NID,BRID"/> 
 								</div>
 								
-								<div class="col-lg-3 form-group" style="padding-top: 0px">
-								    <button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
+								<div class="col-lg-3 form-group" style="padding-top: 22px">
+								    <button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">Search</button>
 								</div>
 							</div>
 							<div class="row" id="errorMsg" style="display: none">
