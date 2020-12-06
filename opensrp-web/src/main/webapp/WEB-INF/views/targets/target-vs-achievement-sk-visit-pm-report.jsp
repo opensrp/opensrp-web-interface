@@ -227,7 +227,7 @@ function getReportData(url,title){
         contentType : "application/json",
         url : url,
         dataType : 'html',
-        timeout : 100000,
+        timeout : 300000,
         data:  JSON.stringify(getParamsData()),
        
         beforeSend: function(xhr) {
@@ -396,7 +396,7 @@ function getAm(userId,divId) {
 			contentType : "application/json",
 			url : url+"?id="+userId+"&roleId=32",
 			dataType : 'html',
-			timeout : 100000,
+			timeout : 300000,
 			beforeSend: function() {},
 			success : function(data) {
 				$("#"+divId).html(data);
@@ -438,7 +438,7 @@ function getBranchByuserIds(userId){
         url : url+"?id="+userId,
 
         dataType : 'html',
-        timeout : 100000,
+        timeout : 300000,
         beforeSend: function() {},
         success : function(data) {
             $("#branchList").html(data);
@@ -463,7 +463,7 @@ function getAllBranch() {
         contentType : "application/json",
         url : url,
         dataType : 'html',
-        timeout : 100000,
+        timeout : 300000,
         beforeSend: function() {},
         success : function(data) {
             $("#branchList").html(data);
