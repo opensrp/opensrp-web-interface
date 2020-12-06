@@ -122,6 +122,10 @@ License: You must have a valid license purchased only from themeforest(the above
 	boolean REFERRAL_REPORT = AuthenticationManagerUtil.isPermitted("REFERRAL_REPORT");
 	boolean REFERRAL_FOLLOWUP_REPORT = AuthenticationManagerUtil.isPermitted("REFERRAL_FOLLOWUP_REPORT");
 
+	boolean TIMESTAMP_REPORT_PM = AuthenticationManagerUtil.isPermitted("TIMESTAMP_REPORT_PM");
+	boolean TIMESTAMP_REPORT_DM = AuthenticationManagerUtil.isPermitted("TIMESTAMP_REPORT_DM");
+	boolean TIMESTAMP_REPORT_AM = AuthenticationManagerUtil.isPermitted("TIMESTAMP_REPORT_AM");
+
    %>
   
 <body>
@@ -647,6 +651,27 @@ License: You must have a valid license purchased only from themeforest(the above
 
 						<li><a href="<c:url value="/report/referral-followup-report?lang=${locale}"/>">
 							Referral Followup Report
+						</a>
+						</li>
+						<% }%>
+						<% if( TIMESTAMP_REPORT_PM){ %>
+
+						<li><a href="<c:url value="/report/pm-timestamp-report-dm-wise.html?lang=${locale}"/>">
+							Timestamp Report
+						</a>
+						</li>
+						<% }%>
+						<% if( TIMESTAMP_REPORT_DM){ %>
+
+						<li><a href="<c:url value="/report/dm-timestamp-report-am-wise.html?lang=${locale}"/>">
+							Timestamp Report
+						</a>
+						</li>
+						<% }%>
+						<% if( TIMESTAMP_REPORT_AM){ %>
+
+						<li><a href="<c:url value="/report/am-timestamp-report-provider-wise.html?lang=${locale}"/>">
+							Timestamp Report
 						</a>
 						</li>
 						<% }%>

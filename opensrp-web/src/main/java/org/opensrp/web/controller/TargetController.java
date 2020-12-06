@@ -541,7 +541,7 @@ public class TargetController {
 		return "targets/target-vs-achv-forum-report-table-am-by-sk";
 	}
 
-	@RequestMapping(value = "/report/pm-timestamp-report-dm--wise.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/report/pm-timestamp-report-dm-wise.html", method = RequestMethod.GET)
 	public String pmTimestampReportDMWise( Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
