@@ -151,6 +151,7 @@ $(function() {
             ],
             ajax: {
                 url: "${stock_in_list}",
+                timeout : 300000,
                 data: function(data){
                 	data.branchId =${branchId};
                     data.userId=${userId};
@@ -194,6 +195,7 @@ function filter(){
          ],
          ajax: {
              url: "${stock_in_list}",
+             timeout : 300000,
              data: function(data){
             	 /* let dateFieldvalue = $("#dateRange").val();  
             	 if(dateFieldvalue != '' && dateFieldvalue != undefined){

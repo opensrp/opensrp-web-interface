@@ -134,6 +134,7 @@ jQuery(function() {
             columnDefs: [ ],
             ajax: {
                 url: "${sell_to_ss_list}",
+                timeout : 300000,
                 data: function(data){
                 	data.year = currentYear;
                     data.month =currentMonth;
@@ -208,6 +209,7 @@ function filter(){
          ],
          ajax: {
              url: "${sell_to_ss_list}",
+             timeout : 300000,
              data: function(data){
             	
             	//let dateFieldvalue = $("#dateRange").val();            	
@@ -257,7 +259,7 @@ $("#branchList").change(function (event) {
 		url : url,
 
 		dataType : 'html',
-		timeout : 100000,
+		timeout : 300000,
 		beforeSend: function() {},
 		success : function(data) {
 			$("#selectsk").html(data);

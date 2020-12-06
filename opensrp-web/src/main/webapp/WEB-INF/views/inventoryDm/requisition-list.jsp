@@ -191,6 +191,7 @@ jQuery(document).ready(function() {
            ],
            ajax: {
                url: "${requisition_list_url}",
+               timeout : 300000,
                data: function(data){
 					data.division = 0;
 					data.district = 0;

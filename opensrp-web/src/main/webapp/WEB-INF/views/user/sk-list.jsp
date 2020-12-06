@@ -301,7 +301,7 @@
             contentType : "application/json",
             url: url,
             dataType : 'html',
-            timeout : 100000,
+            timeout : 300000,
             beforeSend: function(xhr) {
             },
             success : function(data) {
@@ -354,7 +354,7 @@
             url: url,
             dataType : 'json',
 
-            timeout : 100000,
+            timeout : 300000,
             beforeSend: function(xhr) {
                 xhr.setRequestHeader(header, token);
             },
@@ -467,7 +467,7 @@
             url: url,
             dataType : 'json',
 
-            timeout : 100000,
+            timeout : 300000,
             beforeSend: function(xhr) {
                 xhr.setRequestHeader(header, token);
             },
@@ -511,7 +511,7 @@
             url: url,
             dataType : 'json',
             data: JSON.stringify(skWithLocation),
-            timeout : 100000,
+            timeout : 300000,
             beforeSend: function(xhr) {
                 xhr.setRequestHeader(header, token);
             },
@@ -593,6 +593,7 @@
             type: "POST",
             url: url,
             data: JSON.stringify(formData),
+            timeout : 300000,
             dataType : 'json',
 
             timeout : 100000,

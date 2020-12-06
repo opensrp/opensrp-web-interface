@@ -162,6 +162,7 @@
 			],
 			ajax: {
 				url: "/opensrp-dashboard/rest/api/v1/user/user-with-catchment-area",
+				timeout : 300000,
 				data: function(data){
 					data.division = $('#division').val();
 					data.district = $('#district').val();
@@ -208,6 +209,7 @@
 			],
 			ajax: {
 				url: "/opensrp-dashboard/rest/api/v1/user/user-without-catchment-area",
+				timeout : 300000,
 				data: function(data){
 					data.division = $('#division').val();
 					data.district = $('#district').val();

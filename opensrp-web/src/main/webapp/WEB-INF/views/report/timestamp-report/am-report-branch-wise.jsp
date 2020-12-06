@@ -146,7 +146,7 @@
                 contentType : "application/json",
                 url : '${report_url}',
                 dataType : 'html',
-                timeout : 100000,
+                timeout : 300000,
                 data:  JSON.stringify(getParamsData()),
 
                 beforeSend: function(xhr) {
@@ -265,7 +265,7 @@
                 url : url+"?id="+userId,
 
                 dataType : 'html',
-                timeout : 100000,
+                timeout : 300000,
                 beforeSend: function() {},
                 success : function(data) {
                     $("#branchList").html(data);
@@ -290,7 +290,7 @@
                 contentType : "application/json",
                 url : url,
                 dataType : 'html',
-                timeout : 100000,
+                timeout : 300000,
                 beforeSend: function() {},
                 success : function(data) {
                     $("#branchList").html(data);

@@ -172,7 +172,7 @@ function getStockReport() {
 		contentType : "application/json",
 		url : url,
 		dataType : 'html',
-		timeout : 100000,
+		timeout : 300000,
 		data: {
 			branchIds: ($('#branchList').val() || []).join(','),
 			month: new Date($('#monthlyDate').val()).getMonth() + 1,

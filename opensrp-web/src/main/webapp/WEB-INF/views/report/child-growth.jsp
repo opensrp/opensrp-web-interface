@@ -171,7 +171,7 @@
 				contentType : "application/json",				
 				url : "/opensrp-dashboard/report/child-growth-ajax.html?"+params,				 
 				dataType : 'html',
-				timeout : 100000,
+				timeout : 300000,
 				beforeSend: function() {
 				    
 				   

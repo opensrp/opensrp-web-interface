@@ -491,6 +491,7 @@
 			}],
 			ajax : {
 				url : "${sell_to_ss_list}",
+				timeout : 300000,
 				data : function(data) {
 					data.year = currentYear;
 					data.month = currentMonth;
@@ -550,6 +551,7 @@
 			}],
 			ajax : {
 				url : "${sell_to_ss_list}",
+				timeout : 300000,
 				data : function(data) {
 
 					//let dateFieldvalue = $("#dateRange").val();            	
@@ -824,7 +826,7 @@ $('#sellToManySSList th input:checkbox').click(
 	        data: JSON.stringify(formData), 
 	        dataType : 'json',
 	        
-			timeout : 100000,
+	        timeout : 300000,
 			beforeSend: function(xhr) {				    
 				 xhr.setRequestHeader(header, token);
 			},

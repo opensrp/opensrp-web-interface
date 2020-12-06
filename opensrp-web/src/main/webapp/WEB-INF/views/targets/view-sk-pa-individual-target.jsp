@@ -206,7 +206,7 @@
             changeYear: true,
             showButtonPanel: true,
             dateFormat: 'MM yy',
-            minDate: new Date,
+            maxDate: new Date,
             onClose: function(dateText, inst) { 
                 var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
                 $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
@@ -224,7 +224,7 @@
     	jQuery('#dateFieldInput').datepicker({
     		showButtonPanel: true,
     		dateFormat: 'dd-MM-yy',
-    		minDate: new Date,
+    		maxDate: new Date,
     		onClose: function(dateText, inst) {
     			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
     			$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));

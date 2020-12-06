@@ -155,6 +155,7 @@ var dateToday = new Date();
             ],
             ajax: {
                 url: "${stock_in_list}",
+                timeout : 300000,
                 data: function(data){
                 	let startDate = $("#from").val();   
                 	let endDate = $("#to").val(); 
@@ -207,6 +208,7 @@ function filter(){
          ],
          ajax: {
              url: "${stock_in_list}",
+             timeout : 300000,
              data: function(data){
             	
             	let startDate = $("#from").val();   

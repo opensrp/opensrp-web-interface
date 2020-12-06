@@ -336,7 +336,7 @@ $('#addProductTemporaryList').delegate('select', 'change', function() {
 		url : url,
 
 		dataType : 'html',
-		timeout : 100000,
+		timeout : 300000,
 		beforeSend: function() {},
 		success : function(data) {
 			inputContext.val(data);
@@ -401,7 +401,7 @@ function saveStockData() {
         data: JSON.stringify(formData), 
         dataType : 'json',
         
-		timeout : 100000,
+        timeout : 300000,
 		beforeSend: function(xhr) {				    
 			 xhr.setRequestHeader(header, token);
 		},

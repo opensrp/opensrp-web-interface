@@ -196,7 +196,7 @@
             contentType : "application/json",
             url : url,
             dataType : 'html',
-            timeout : 100000,
+            timeout : 300000,
             data:  JSON.stringify(getParamsData()),
 
             beforeSend: function(xhr) {
