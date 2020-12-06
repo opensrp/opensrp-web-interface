@@ -32,7 +32,7 @@
             <option value="PNCService">PNC Package</option>
             <option value="NCDService">NCD Package</option>
             <option value="IYCFService">IYCF Package</option>
-            <option value="WOMENService">Women Package</option>
+            <option value="WomenService">Women Package</option>
             <option value="AdolescentService">Adolescent Package</option>
         </select>
     </div>
@@ -47,7 +47,7 @@
 		    <tr>
 		        <th rowspan="2">Branch name</th>		        
 		        <th rowspan="2">SK name</th>
-		        <th rowspan="2">ID</th>
+		        <th rowspan="2">Mobile</th>
 		        <th colspan="2">ANC package</th>
 		        <th colspan="2">PNC package</th>
 		        

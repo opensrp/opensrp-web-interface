@@ -54,7 +54,7 @@
 		     <th rowspan="2">SK name</th>
 		        <th rowspan="2">Branch name</th>		        
 		       
-		        <th rowspan="2">ID</th>
+		        <th rowspan="2">Mobile</th>
 		        <th colspan="2">Household Visit</th>
 		        <th colspan="2">ELCO Visit</th>
 		        <th colspan="2">Methods Users</th>
