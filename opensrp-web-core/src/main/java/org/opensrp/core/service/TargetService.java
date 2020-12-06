@@ -1266,4 +1266,71 @@ public class TargetService extends CommonService {
 		dtos = query.list();
 		return dtos;
 	}
+
+	@Transactional
+	public List<ReferralReportDTO> getReferralReport(
+			String startDate,
+			String endDate,
+			String parentLocationTag,
+			Integer parentLocationId,
+			String parentLocationName,
+			String locationTag)  {
+
+		Session session = getSessionFactory();
+		List<ReferralReportDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.get_referral_report_by_location( '"+startDate+"' ,  '"+endDate+"', '"+  parentLocationTag
+				+ "', " + parentLocationId + ", '" + parentLocationName + "', '" + locationTag + "')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("locName", StandardBasicTypes.STRING)
+				.addScalar("pregnancyProblems", StandardBasicTypes.INTEGER)
+				.addScalar("deliveryProblems", StandardBasicTypes.INTEGER)
+				.addScalar("pncProblems", StandardBasicTypes.INTEGER)
+				.addScalar("childProblems", StandardBasicTypes.INTEGER)
+				.addScalar("eyeProblems", StandardBasicTypes.INTEGER)
+				.addScalar("diabetes", StandardBasicTypes.INTEGER)
+				.addScalar("bp", StandardBasicTypes.INTEGER)
+				.addScalar("birthControlProblems", StandardBasicTypes.INTEGER)
+				.addScalar("otherProblems", StandardBasicTypes.INTEGER)
+				.setResultTransformer(new AliasToBeanResultTransformer(ReferralReportDTO.class));
+		dtos = query.list();
+		return dtos;
+	}
+
+	@Transactional
+	public List<ReferralFollowupReportDTO> getReferralFollowupReport(
+			String startDate,
+			String endDate,
+			String parentLocationTag,
+			Integer parentLocationId,
+			String parentLocationName,
+			String locationTag,
+			String referralReason)  {
+
+		Session session = getSessionFactory();
+		List<ReferralFollowupReportDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.get_referral_followup_report( '"+startDate+"' ,  '"+endDate+"', '"+  parentLocationTag
+				+ "', " + parentLocationId + ", '" + parentLocationName + "', '" + locationTag + "', '"+referralReason+"')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("locName", StandardBasicTypes.STRING)
+				.addScalar("didNotVisit", StandardBasicTypes.INTEGER)
+				.addScalar("referralReason", StandardBasicTypes.INTEGER)
+				.addScalar("totalFollowup", StandardBasicTypes.INTEGER)
+				.addScalar("bracMaternityCenter", StandardBasicTypes.INTEGER)
+				.addScalar("unionHealthCenter", StandardBasicTypes.INTEGER)
+				.addScalar("upazilaHealthComplex", StandardBasicTypes.INTEGER)
+				.addScalar("unionFamilyKollanCenter", StandardBasicTypes.INTEGER)
+				.addScalar("unionHealthAndFamilyKollanCenter", StandardBasicTypes.INTEGER)
+				.addScalar("motherChildKollanCenter", StandardBasicTypes.INTEGER)
+				.addScalar("centerHospital", StandardBasicTypes.INTEGER)
+				.addScalar("medicalCollageHospital", StandardBasicTypes.INTEGER)
+				.addScalar("privateClinic", StandardBasicTypes.INTEGER)
+				.addScalar("specialHospital", StandardBasicTypes.INTEGER)
+				.addScalar("otherOption", StandardBasicTypes.INTEGER)
+
+				.setResultTransformer(new AliasToBeanResultTransformer(ReferralFollowupReportDTO.class));
+		dtos = query.list();
+		return dtos;
+	}
 }
