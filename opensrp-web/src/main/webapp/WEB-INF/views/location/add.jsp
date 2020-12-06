@@ -234,7 +234,7 @@
 			url : url,
 
 			dataType : 'html',
-			timeout : 100000,
+			timeout : 300000,
 			beforeSend: function() {},
 			success : function(data) {
 				$("#"+id).html(data);

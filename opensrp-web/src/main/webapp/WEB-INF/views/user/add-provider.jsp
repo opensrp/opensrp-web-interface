@@ -320,7 +320,7 @@ List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
 		        data: JSON.stringify(formData), 
 		        dataType : 'json',
 		        
-				timeout : 100000,
+		        timeout : 300000,
 				beforeSend: function(xhr) {				    
 					 xhr.setRequestHeader(header, token);
 				},
@@ -451,7 +451,8 @@ List<Object[]> wards = (List<Object[]>) session.getAttribute("wards");
     	  $.ajax({
               type: "GET",
               dataType: 'html',
-              url: "/opensrp-dashboard/user/user.html?name="+request.term,            
+              url: "/opensrp-dashboard/user/user.html?name="+request.term,
+              timeout : 300000,
               success: function(res)
               {
               

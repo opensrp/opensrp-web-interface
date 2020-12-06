@@ -136,6 +136,7 @@ jQuery(document).ready(function() {
                 { width: "20%", targets: 3 }
             ],
             ajax: {
+            	timeout : 300000,
                 url: "${pass_stock_list}",
                 data: function(data){                	
                     data.branchId = ${id} ;
@@ -177,6 +178,7 @@ function filter(){
              { width: "20%", targets: 3 }
          ],
          ajax: {
+        	 timeout : 300000,
              url: "${pass_stock_list}",
              data: function(data){           	
      	      	data.search = $('#search').val();            	

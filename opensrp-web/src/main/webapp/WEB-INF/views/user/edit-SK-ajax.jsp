@@ -299,6 +299,7 @@
 					type: "GET",
 					dataType: 'html',
 					url: "/opensrp-dashboard/user/user.html?name="+request.term,
+					timeout : 300000,
 					success: function(res)
 					{
 

@@ -133,7 +133,10 @@ $(".date-picker-year").focus(function () {
 $(".ui-datepicker-calendar").hide();
 $(".ui-datepicker-current").hide();
 });
-dates.datepicker('setDate', new Date()); 
+var d = new Date();
+var startDate =  $.datepicker.formatDate('yy-mm-dd', new Date(d.getFullYear(), d.getMonth(), 1));
+$("#from").datepicker('setDate', startDate); 
+$("#to").datepicker('setDate', new Date()); 
 let trainingList;
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
@@ -161,13 +164,14 @@ jQuery(document).ready(function() {
            ],
            ajax: {
                url: '${get_url}',
+               timeout : 300000,
                data: function(data){
 					data.locationId = 0;
 					data.branchId = 0;
 					data.roleId = 0;
 					data.trainingTitle = '';
-					data.startDate = '',
-					data.endDate = ''
+					data.startDate = startDate,
+					data.endDate = endDate
 					
                },
                dataSrc: function(json){
@@ -196,7 +200,7 @@ jQuery(document).ready(function() {
 
 
 function filter(){
-	debugger;
+	
 	var role = +$('#multipleRle').val();
 	var division = +$('#divisionList').val();
 	var district = +$('#districtList').val();
@@ -233,6 +237,7 @@ function filter(){
         ],
         ajax: {
             url: '${get_url}',
+            timeout : 300000,
             data: function(data){
 					data.locationId = locationId;
 					data.branchId = branch;
@@ -272,7 +277,7 @@ $("#branchList").change(function (event) {
 		url : url,
 
 		dataType : 'html',
-		timeout : 100000,
+		timeout : 300000,
 		beforeSend: function() {},
 		success : function(data) {
 			$("#selectRequisitionBy").html(data);

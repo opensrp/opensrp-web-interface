@@ -107,6 +107,7 @@ jQuery(document).ready(function() {
 			],
 			ajax: {
 				url: "/opensrp-dashboard/rest/api/v1/location/list-ajax",
+				timeout : 300000,
 				dataSrc: function(json){
 					if(json.data){
 						return json.data;

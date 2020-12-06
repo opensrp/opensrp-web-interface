@@ -135,6 +135,7 @@ jQuery(document).ready(function() {
            ],
            ajax: {
                url: "${searchUrl}",
+               timeout : 300000,
                data: function(data){
 					data.division = 0;
 					data.district = 0;
@@ -201,6 +202,7 @@ function filter(){
         ],
         ajax: {
             url: "${searchUrl}",
+            timeout : 300000,
             data: function(data){
 					data.division = 0;
 					data.district = 0;

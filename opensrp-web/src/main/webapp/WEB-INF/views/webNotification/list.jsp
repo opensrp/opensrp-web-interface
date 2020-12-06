@@ -218,6 +218,7 @@ $("#to").datepicker('setDate', new Date());
             ],
             ajax: {
                 url: "${get_url}",
+                timeout : 300000,
                 data: function(data){  
                 	var branchIds =  $("#branchList").val();
                   	if( branchIds ==null || typeof branchIds == 'undefined'){
@@ -318,6 +319,7 @@ function filter(){
          ],
          ajax: {
              url: "${get_url}",
+             timeout : 300000,
              data: function(data){
             	 
           		 data.startDate = $('#from').val();

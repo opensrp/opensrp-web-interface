@@ -809,7 +809,7 @@ function deleteWorker(facilityId,workerId) {
         data: JSON.stringify(formData), 
         dataType : 'json',
         
-		timeout : 100000,
+		timeout : 300000,
 		beforeSend: function(xhr) {				    
 			 xhr.setRequestHeader(header, token);
 		},

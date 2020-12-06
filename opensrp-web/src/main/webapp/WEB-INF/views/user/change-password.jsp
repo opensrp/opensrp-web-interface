@@ -162,7 +162,7 @@
             data: JSON.stringify(formData),
             dataType : 'json',
 
-            timeout : 100000,
+            timeout : 300000,
             beforeSend: function(xhr) {
                 $("#loading").show();
                 xhr.setRequestHeader(header, token);

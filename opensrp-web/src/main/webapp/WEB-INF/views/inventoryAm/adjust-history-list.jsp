@@ -184,7 +184,11 @@ let stockAdjustList;
 		       ],
 		       ajax: {
 		           url: "${adjust_list_url}",
+		           timeout : 300000,
 		           data: function(data){
+		        	   var startDate = $('#from').val();
+		        		var endDate = $('#to').val();
+		        		
 		        	   var branchIds =  $("#branchSelect").val();
 	                  	if( branchIds ==null || typeof branchIds == 'undefined'){
 	                  		branchIds = ''
@@ -192,8 +196,8 @@ let stockAdjustList;
 	                  		branchIds = $("#branchSelect").val().join();
 	                  	}
 						data.branchId = branchIds;
-						data.startDate = '',
-						data.endDate = ''
+						data.startDate = startDate,
+						data.endDate = endDate
 						
 		           },
 		           dataSrc: function(json){
@@ -273,6 +277,7 @@ function filter(){
     ],
     ajax: {
     	url: "${adjust_list_url}",
+    	timeout : 300000,
         data: function(data){
         	
 			data.branchId = branchIds;

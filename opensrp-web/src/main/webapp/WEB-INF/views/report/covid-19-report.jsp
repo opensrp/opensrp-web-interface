@@ -199,6 +199,7 @@
             ],
             ajax: {
                 url: "/opensrp-dashboard/rest/api/v1/report/covid-19",
+                timeout : 300000,
                 data: function (data) {
                     data.startDate = $("#start").val();
                     data.endDate = $("#end").val();
@@ -228,7 +229,7 @@
             contentType : "application/json",
             url : url,
             dataType : 'html',
-            timeout : 100000,
+            timeout : 300000,
             beforeSend: function() {},
             success : function(data) {
                 console.log(data);
@@ -273,7 +274,7 @@
             contentType : "application/json",
             url : url,
             dataType : 'html',
-            timeout : 100000,
+            timeout : 300000,
             data: {
                 startDate: $("#start").val(),
                 endDate: $("#end").val(),
@@ -335,7 +336,7 @@
             contentType : "application/json",
             url : url,
             dataType : 'html',
-            timeout : 100000,
+            timeout : 300000,
             data: {
                 startDate: $("#start").val(),
                 endDate: $("#end").val(),
@@ -369,7 +370,7 @@
             contentType : "application/json",
             url : url,
             dataType : 'html',
-            timeout : 100000,
+            timeout : 300000,
             data: {
                 formName: 'covid19'
             },

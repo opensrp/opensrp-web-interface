@@ -515,6 +515,7 @@ function openAttendaceModal() {
         ],
         ajax: {
             url: '${attendencae_list_url}',
+            timeout : 300000,
             data: function(data){
 					data.branchId = 0;
 					data.roleId = 0;
@@ -656,6 +657,7 @@ $('#addAttendanceList tbody input[type=checkbox]:checked').each(function(index, 
 	        ],
 	        ajax: {
 	            url: '${attendencae_list_url}',
+	            timeout : 300000,
 	            data: function(data){
 						data.branchId = branchId;
 						data.roleId = roleId;
@@ -756,7 +758,7 @@ $("#addTraining").submit(function(event) {
 	        data: JSON.stringify(formData), 
 	        dataType : 'json',
 	        
-			timeout : 100000,
+	        timeout : 300000,
 			beforeSend: function(xhr) {				    
 				 xhr.setRequestHeader(header, token);
 			},

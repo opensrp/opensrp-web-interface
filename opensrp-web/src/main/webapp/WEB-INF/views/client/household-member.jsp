@@ -265,7 +265,7 @@
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader(header, token);
                 },
-                timeout : 100000,
+                timeout : 300000,
                 success : function(data) {
                     modal.style.display = "none";
                     window.location.replace("/opensrp-dashboard/client/household-member-list.html");
