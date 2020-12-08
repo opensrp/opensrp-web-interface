@@ -99,6 +99,14 @@ public class BranchController {
 		String errorMessage = "";
 		return "/make-select-option";
 	}
+
+	@RequestMapping(value = "/sk-list-by-branch", method = RequestMethod.GET)
+	public String getskListByBranch(HttpServletRequest request, HttpSession session, @RequestParam("branchIds") String branchList) {
+		List<Object[]> sks = databaseServiceImpl.getSKByBranch(branchList);
+		session.setAttribute("data", sks);
+		String errorMessage = "";
+		return "/make-select-option";
+	}
 	
 	@RequestMapping(value = "/branches/change-sk", method = RequestMethod.GET)
 	public String getBranchListForChangeSK(HttpServletRequest request, HttpSession session,

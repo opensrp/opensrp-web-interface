@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.common.dto.MapMovement;
 import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.util.ProductType;
 import org.opensrp.common.util.TaregtSettingsType;
@@ -161,6 +162,14 @@ public class TargetRestController {
 		
 		JSONObject response = targetService.getPositionalTargetDataOfDataTable(draw, total, totalList);
 		return new ResponseEntity<>(response.toString(), OK);
+	}
+
+	@RequestMapping(value = "/movements", method = RequestMethod.GET, produces = { "application/json" })
+	public List<MapMovement> getProvidersMovement(
+			@RequestParam("username") String username,
+			@RequestParam("startDate") String startDate,
+			@RequestParam("endDate") String endDate) {
+		return targetService.getMapMovement(username, startDate, endDate);
 	}
 	
 	@RequestMapping(value = "/pk-user-list-for-population-target-setting", method = RequestMethod.GET)

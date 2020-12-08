@@ -3,7 +3,9 @@
  */
 package org.opensrp.web.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -17,10 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.*;
-import org.opensrp.common.util.LocationTags;
-import org.opensrp.common.util.ProductType;
-import org.opensrp.common.util.Roles;
-import org.opensrp.common.util.SearchBuilder;
+import org.opensrp.common.util.*;
 import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
@@ -31,10 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author proshanto
@@ -626,6 +622,52 @@ public class TargetController {
 
 		model.addAttribute("reportDatas", totalList);
 		return "report/timestamp-report/am-report-provider-table";
+	}
+
+	@RequestMapping(value = "/pm-map-movement", method = RequestMethod.GET)
+	public String movementsForPM(Model model, Locale locale, HttpSession session) {
+		model.addAttribute("locale", locale);
+		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+		model.addAttribute("branches", branches);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String endDate = formatter.format(new Date());
+		session.setAttribute("startDate", startDate);
+		session.setAttribute("endDate", endDate);
+		return "targets/movements/pm-map-movement";
+	}
+
+	@RequestMapping(value = "/dm-map-movement", method = RequestMethod.GET)
+	public String movementsForDM(Model model, Locale locale, HttpSession session) {
+		model.addAttribute("locale", locale);
+
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
+		model.addAttribute("users", users);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String endDate = formatter.format(new Date());
+		session.setAttribute("startDate", startDate);
+		session.setAttribute("endDate", endDate);
+		return "targets/movements/dm-map-movement";
+	}
+
+	@RequestMapping(value = "/am-map-movement", method = RequestMethod.GET)
+	public String movementsForAM(Model model, Locale locale, HttpSession session) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String endDate = formatter.format(new Date());
+		session.setAttribute("startDate", startDate);
+		session.setAttribute("endDate", endDate);
+		return "targets/movements/am-map-movement";
 	}
 
 
