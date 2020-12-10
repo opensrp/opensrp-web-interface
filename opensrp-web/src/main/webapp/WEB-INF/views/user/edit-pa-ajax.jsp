@@ -26,7 +26,7 @@
     padding: 0 /* 10px */ 0 0 20px;
 }
 </style>
-<c:url var="cancelUrl" value="/user/pk-list.html" />
+<c:url var="cancelUrl" value="/user/pa-list.html" />
 
 <c:url var="saveUrl" value="/user/${id}/edit-SK.html" />
 <%

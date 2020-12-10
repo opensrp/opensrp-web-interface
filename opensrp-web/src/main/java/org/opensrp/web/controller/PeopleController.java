@@ -60,22 +60,6 @@ public class PeopleController {
 	    throws JSONException {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
-		
-		List<ClientListDTO> households = new ArrayList<ClientListDTO>();
-		JSONObject jo = new JSONObject();
-		jo.put("branch_id", 2);
-		jo.put("division", "DHAKA");
-		jo.put("offset", 0);
-		jo.put("limit", 10);
-		try {
-			households = peopleService.getHouseholdData(jo);
-			
-		}
-		catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		model.addAttribute("households", households);
 		model.addAttribute("isHousehold", true);
 		return "people/households";
 	}
