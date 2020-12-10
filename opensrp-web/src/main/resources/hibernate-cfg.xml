@@ -69,6 +69,7 @@
 				<value>org.opensrp.core.entity.DataViewConfiguration</value>
 				<value>org.opensrp.core.entity.TrainingTitle</value>
 				<value>org.opensrp.core.entity.WebNotificationBranch</value>
+				<value>org.opensrp.core.entity.Migration</value>
 
 			</list>
 		</property>
