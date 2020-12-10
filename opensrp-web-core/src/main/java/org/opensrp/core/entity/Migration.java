@@ -159,6 +159,26 @@ public class Migration implements Serializable {
 	@UpdateTimestamp
 	private Date updated = new Date();
 	
+	@Column(name = "base_entity_id")
+	private String baseEntityId;
+	
+	@Column(name = "district_id_out")
+	private String districtIdOut;
+	
+	@Column(name = "district_id_in")
+	private String districtIdIn;
+	
+	@Column(name = "mother_id")
+	private String motherId;
+	
+	@Column(name = "division_id_out")
+	private String divisionIdOut;
+	
+	@Column(name = "division_id_in")
+	private String divisionIdIn;
+	
+	private Long timestamp;
+	
 	public int getId() {
 		return id;
 	}
@@ -485,6 +505,62 @@ public class Migration implements Serializable {
 	
 	public void setRelationalIdOut(String relationalIdOut) {
 		this.relationalIdOut = relationalIdOut;
+	}
+	
+	public String getBaseEntityId() {
+		return baseEntityId;
+	}
+	
+	public void setBaseEntityId(String baseEntityId) {
+		this.baseEntityId = baseEntityId;
+	}
+	
+	public String getDistrictIdOut() {
+		return districtIdOut;
+	}
+	
+	public void setDistrictIdOut(String districtIdOut) {
+		this.districtIdOut = districtIdOut;
+	}
+	
+	public String getDistrictIdIn() {
+		return districtIdIn;
+	}
+	
+	public void setDistrictIdIn(String districtIdIn) {
+		this.districtIdIn = districtIdIn;
+	}
+	
+	public String getMotherId() {
+		return motherId;
+	}
+	
+	public void setMotherId(String motherId) {
+		this.motherId = motherId;
+	}
+	
+	public String getDivisionIdOut() {
+		return divisionIdOut;
+	}
+	
+	public void setDivisionIdOut(String divisionIdOut) {
+		this.divisionIdOut = divisionIdOut;
+	}
+	
+	public String getDivisionIdIn() {
+		return divisionIdIn;
+	}
+	
+	public void setDivisionIdIn(String divisionIdIn) {
+		this.divisionIdIn = divisionIdIn;
+	}
+	
+	public Long getTimestamp() {
+		return timestamp;
+	}
+	
+	public void setTimestamp(Long timestamp) {
+		this.timestamp = timestamp;
 	}
 	
 }
