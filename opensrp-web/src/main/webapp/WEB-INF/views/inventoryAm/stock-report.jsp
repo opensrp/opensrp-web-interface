@@ -84,13 +84,11 @@
 									<input type="text"
 										   class="form-control date-picker-year" id="monthlyDate">
 								</div>
-								
-							</div>
-							<div class="row">
-								<div class="col-lg-12 form-group text-right">
-									<span id="validationMessage"></span>
+								<div class="col-sm-3" style="margin-top: 24px;">
 									<button type="submit" onclick="getStockReport()" class="btn btn-primary" value="confirm">Submit</button>
+									<span id="validationMessage"></span>
 								</div>
+								
 							</div>
 							<br/>
 						<h3>Stock Report : </h3>

@@ -24,14 +24,14 @@
 <body>
 <% Object targets = request.getAttribute("jsonReportData"); %>
 <div class="row">
-	<div class="col-sm-offset-10 col-sm-2">
-		<select class="custom-select" id="visitCategory" style="width: 95%" onclick="reloadSkChart()">
+	<div class="col-sm-offset-9 col-sm-3">
+		<select class="custom-select form-control" id="visitCategory" style="width: 95%" onclick="reloadSkChart()">
 			<option value="initial">Please Select </option>
 			<option value="ANCService">ANC Package</option>
 			<option value="PNCService">PNC Package</option>
 			<option value="NCDService">NCD Package</option>
 			<option value="IYCFService">IYCF Package</option>
-			<option value="WOMENService">Women Package</option>
+			<option value="WomenService">Women Package</option>
 			<option value="AdolescentService">Adolescent Package</option>
 		</select>
 	</div>

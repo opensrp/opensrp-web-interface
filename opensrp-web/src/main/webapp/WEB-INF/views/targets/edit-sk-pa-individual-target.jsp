@@ -195,7 +195,7 @@
             type: "GET",
             url: url,
             dataType : 'html',
-            timeout : 100000,
+            timeout : 300000,
             beforeSend: function(xhr) {
                 $("#loading").show();
             },
@@ -282,7 +282,7 @@
             data: JSON.stringify(formData),
             dataType : 'json',
 
-            timeout : 100000,
+            timeout : 300000,
             beforeSend: function(xhr) {
                 xhr.setRequestHeader(header, token);
                 $("#loading").show();

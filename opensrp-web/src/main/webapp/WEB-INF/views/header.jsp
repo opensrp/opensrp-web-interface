@@ -125,6 +125,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	boolean TIMESTAMP_REPORT_PM = AuthenticationManagerUtil.isPermitted("TIMESTAMP_REPORT_PM");
 	boolean TIMESTAMP_REPORT_DM = AuthenticationManagerUtil.isPermitted("TIMESTAMP_REPORT_DM");
 	boolean TIMESTAMP_REPORT_AM = AuthenticationManagerUtil.isPermitted("TIMESTAMP_REPORT_AM");
+	boolean MAP_MOVEMENTS = AuthenticationManagerUtil.isPermitted("MAP_MOVEMENTS");
 
    %>
   
@@ -672,6 +673,27 @@ License: You must have a valid license purchased only from themeforest(the above
 
 						<li><a href="<c:url value="/report/am-timestamp-report-provider-wise.html?lang=${locale}"/>">
 							Timestamp Report
+						</a>
+						</li>
+						<% }%>
+						<% if( MAP_MOVEMENTS && AuthenticationManagerUtil.isAdmin()){ %>
+
+						<li><a href="<c:url value="/pm-map-movement?lang=${locale}"/>">
+							Map Movements
+						</a>
+						</li>
+						<% }%>
+						<% if( MAP_MOVEMENTS && AuthenticationManagerUtil.isDivM()){ %>
+
+						<li><a href="<c:url value="/dm-map-movement?lang=${locale}"/>">
+							Map Movements
+						</a>
+						</li>
+						<% }%>
+						<% if( MAP_MOVEMENTS && AuthenticationManagerUtil.isAM()){ %>
+
+						<li><a href="<c:url value="/am-map-movement?lang=${locale}"/>">
+							Map Movements
 						</a>
 						</li>
 						<% }%>

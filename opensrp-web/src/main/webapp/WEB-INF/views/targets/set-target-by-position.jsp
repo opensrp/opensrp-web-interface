@@ -198,7 +198,7 @@ function getTargetInfo(){
         type: "GET",
         url: url,        
         dataType : 'html',
-        timeout : 100000,
+        timeout : 300000,
         beforeSend: function(xhr) {            
             $("#loading").show();
         },
@@ -286,7 +286,7 @@ $('#targetInfo').submit(function(event) {
         data: JSON.stringify(formData),
         dataType : 'json',
 
-        timeout : 100000,
+        timeout : 300000,
         beforeSend: function(xhr) {
             xhr.setRequestHeader(header, token);
             $("#errormessageContent").html("Please wait.........") 
@@ -396,7 +396,7 @@ function fetchTargetInfo() {
 			url: '/opensrp-dashboard/rest/api/v1/target/target-availability',
 			data: data,
 			dataType : 'json',
-			timeout : 100000,
+			timeout : 300000,
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader(header, token);
 				$("#loading").show();

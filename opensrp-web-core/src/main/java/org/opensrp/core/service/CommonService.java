@@ -19,6 +19,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.type.StandardBasicTypes;
+import org.opensrp.common.dto.MapMovement;
 import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.interfaces.DatabaseRepository;
@@ -318,5 +319,21 @@ public abstract class CommonService {
 		result = (UserDTO) query.uniqueResult();
 		
 		return result.getRoleId();
+	}
+
+	@Transactional
+	public List<MapMovement> getMapMovement(String username, String startDate, String endDate) {
+		Session session = getSessionFactory();
+		List<MapMovement> result = new ArrayList<>();
+		String hql = "select * from report.get_map_movements('"+username+"', '"+startDate+"', '"+endDate+"')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("latitude", StandardBasicTypes.STRING)
+				.addScalar("longitude", StandardBasicTypes.STRING)
+				.addScalar("username", StandardBasicTypes.STRING)
+				.setResultTransformer(new AliasToBeanResultTransformer(MapMovement.class));
+
+		result =  query.list();
+
+		return result;
 	}
 }

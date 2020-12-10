@@ -80,6 +80,16 @@ public class AuthenticationManagerUtil {
 		logger.info("\nIsAM :" + "False\n");
 		return false;
 	}
+
+	public static boolean isDivM() {
+		List<String> roleList = getLoggedInUserRoles();
+		if (roleList.contains("DivM")) {
+			logger.info("\nIs DivM :" + "True\n");
+			return true;
+		}
+		logger.info("\nIsDivM :" + "False\n");
+		return false;
+	}
 	
 	public static void showRoleAndStatus() {
 		logger.info("\nIsAdmin : " + isAdmin() + "\nIsCHCP : " + isAM() + "\nIsCHCP : " + isSK() + "\nIsCHCP : " + isSS()
