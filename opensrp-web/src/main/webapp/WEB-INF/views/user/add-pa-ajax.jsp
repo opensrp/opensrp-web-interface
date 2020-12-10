@@ -15,7 +15,7 @@
 <meta name="_csrf" content="${_csrf.token}"/>
 <!-- default header name is X-CSRF-TOKEN -->
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
-<c:url var="cancelUrl" value="/user/pk-list.html" />
+<c:url var="cancelUrl" value="/user/pa-list.html" />
 <style>
 .page-content-wrapper .page-content {
     margin-left: 0px; 
