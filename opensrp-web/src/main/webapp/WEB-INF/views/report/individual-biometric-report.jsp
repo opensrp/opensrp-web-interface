@@ -162,7 +162,7 @@
             contentType : "application/json",
             url : url,
             dataType : 'html',
-            timeout : 100000,
+            timeout : 420000,
             data: {
                 searched_value: $("#searched_value").val(),
                 searched_value_id: $("#searched_value_id").val(),

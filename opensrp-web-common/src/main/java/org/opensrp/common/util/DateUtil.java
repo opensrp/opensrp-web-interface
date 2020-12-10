@@ -93,6 +93,14 @@ public class DateUtil {
 		return calendar.getTime();
 	}
 
+	public static Date getPreviousDay(Date date) {
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.DAY_OF_MONTH, -1);
+		return cal.getTime();
+	}
+
 	public static Date getDateTFromString(JSONObject doc, String key) throws ParseException, JSONException {
 		Date date = null;
 		if (doc.has(key) && !"null".equalsIgnoreCase(doc.getString(key)) && !doc.getString(key).isEmpty()) {

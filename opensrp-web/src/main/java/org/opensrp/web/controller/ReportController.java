@@ -239,7 +239,7 @@ public class ReportController {
 	public String getAggregatedReportPage(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String startDate = formatter.format(DateUtil.getPreviousDay(new Date()));
 		String endDate = formatter.format(new Date());
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		searchUtil.setDivisionAttribute(session);
@@ -294,7 +294,7 @@ public class ReportController {
 	public String getFamilyPlanningReportPage(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String startDate = formatter.format(DateUtil.getPreviousDay(new Date()));
 		String endDate = formatter.format(new Date());
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		searchUtil.setDivisionAttribute(session);
@@ -345,7 +345,7 @@ public class ReportController {
 	public String getPregnancyReportPage(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String startDate = formatter.format(DateUtil.getPreviousDay(new Date()));
 		String endDate = formatter.format(new Date());
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		searchUtil.setDivisionAttribute(session);
@@ -395,7 +395,7 @@ public class ReportController {
 	public String getChildNutritionReportPage(HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String startDate = formatter.format(DateUtil.getPreviousDay(new Date()));
 		String endDate = formatter.format(new Date());
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		searchUtil.setDivisionAttribute(session);
@@ -446,7 +446,7 @@ public class ReportController {
 		model.addAttribute("locale", locale);
 		String branchId = request.getParameterMap().containsKey("branch")?request.getParameter("branch") : "";
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String startDate = formatter.format(DateUtil.getPreviousDay(new Date()));
 		String endDate = formatter.format(new Date());
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		List<Object[]> skList = new ArrayList<>();
@@ -591,7 +591,7 @@ public class ReportController {
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		searchUtil.setDivisionAttribute(session);
 		session.setAttribute("branchList",new ArrayList<>(user.getBranches()));
-		session.setAttribute("startDate", formatter.format(DateUtil.getFirstDayOfMonth(new Date())));
+		session.setAttribute("startDate", formatter.format(DateUtil.getPreviousDay(new Date())));
 	    session.setAttribute("endDate", formatter.format(new Date()));
 	    return modelAndView;
     }
@@ -673,7 +673,7 @@ public class ReportController {
 			HttpSession session
 	) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String startDate = formatter.format(DateUtil.getPreviousDay(new Date()));
 		String endDate = formatter.format(new Date());
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		searchUtil.setDivisionAttribute(session);
@@ -740,7 +740,7 @@ public class ReportController {
 			HttpSession session
 	) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String startDate = formatter.format(DateUtil.getPreviousDay(new Date()));
 		String endDate = formatter.format(new Date());
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		searchUtil.setDivisionAttribute(session);
