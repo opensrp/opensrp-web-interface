@@ -732,6 +732,27 @@ License: You must have a valid license purchased only from themeforest(the above
 					<%
 						}
 					%>
+					
+					<% if(PEOPLE){ %>
+					<li><a href="javascript:;"> <i class="fa fa-bullseye"></i> <span
+							class="title">Migration</span> <span class="arrow "></span>
+					</a>
+						<ul class="sub-menu">
+
+
+
+							<li><a href="<c:url value="/migration/households-in.html"/>">
+									Household In
+							</a></li>
+							<li><a href="<c:url value="/people/members.html"/>">
+									Member
+							</a></li>
+
+
+						</ul></li>
+					<%
+						}
+					%>
 				<!-- <li>
 					<a href="javascript:;">
 					<i class="icon-diamond"></i>
