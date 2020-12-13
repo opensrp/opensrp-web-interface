@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 @RequestMapping("rest/api/v1/migration")
 @RestController
 public class MigrationRestController {
@@ -25,7 +27,8 @@ public class MigrationRestController {
 	private MigrationService migrationService;
 	
 	@RequestMapping(value = "/household-in/list", method = RequestMethod.GET)
-	public ResponseEntity<String> householdList(HttpServletRequest request, HttpSession session) throws JSONException {
+	public ResponseEntity<String> householdList(HttpServletRequest request, HttpSession session) throws JSONException,
+	    JsonProcessingException {
 		Integer start = Integer.valueOf(request.getParameter("start"));
 		Integer length = Integer.valueOf(request.getParameter("length"));
 		//String name = request.getParameter("search[value]");
@@ -45,9 +48,11 @@ public class MigrationRestController {
 			
 		}
 		
-		JSONObject response = migrationService.drawMigratedInHouseholdDataTable(draw, 10, households);
+		JSONObject response = migrationService.drawMigratedInHouseholdDataTable(draw,
+		    migrationService.getMigratedHouseholdCount(jo, request.getParameter("branchId"), ""), households);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
+	
 	/*@RequestMapping(value = "/member/list", method = RequestMethod.GET)
 	public ResponseEntity<String> memberList(HttpServletRequest request, HttpSession session) throws JSONException {
 		Integer start = Integer.valueOf(request.getParameter("start"));

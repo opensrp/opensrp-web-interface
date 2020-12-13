@@ -63,7 +63,7 @@
 					<div class="portlet-body">
 						
 						<div class="row" style="margin: 0px">
-                            <div class="col-sm-12" id="content" style="overflow-x: auto;">
+                            
                                 
                                 <div id="report">
                                 <table  style="width: 100%;" class="display table table-bordered table-striped" id="dataTableId">
@@ -91,7 +91,7 @@
 									</table>
                                 </div>
 
-                            </div>
+                           
                         </div>
                         
 						
