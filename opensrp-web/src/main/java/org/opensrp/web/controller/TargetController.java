@@ -670,6 +670,15 @@ public class TargetController {
 		return "targets/movements/am-map-movement";
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/")
+	public String perfomanceMap(Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("branches", branches);
+		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
+		return "report/";
+	}
+
 
 	private JsonArray getTargetsAsJson(List<TargetReportDTO> targetList){
 
