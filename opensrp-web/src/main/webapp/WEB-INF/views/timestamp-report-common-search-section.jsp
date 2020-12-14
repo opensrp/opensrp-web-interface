@@ -11,8 +11,8 @@
         <label>Designation</label>
         <select
                 name="roleList" class="form-control" id="roleList">
-            <option value="SK">SK</option>
-            <option value="PA">PA</option>
+            <option value="28">SK</option>
+            <option value="36">PA</option>
         </select>
     </div>
 
