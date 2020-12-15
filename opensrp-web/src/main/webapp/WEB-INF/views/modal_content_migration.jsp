@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
-
+<c:url var="url" value="/migration/details-data" />
 <!--Modal start-->
 <div
 	style="overflow: unset; display: none; top: 30px; min-height: 300px; max-width: none; position: relative; z-index: 1050"
@@ -30,25 +30,18 @@
 <script>
 
 
-function loadContent() {
+function loadContent(id) {
 	
-	$('#content').modal({
-        escapeClose: false,
-        clickClose: true,
-        showClose: false,
-        show: true,
-        closeExisting: false
-    });
-	$('#modal-body').html("ON  ON   ON");
+	
 	
 	 var token = $("meta[name='_csrf']").attr("content");
      var header = $("meta[name='_csrf_header']").attr("content");
-	/* $.ajax({
+		$.ajax({
 		type : "GET",
 		contentType : "application/json",
-	    url: url+"/"+formName+"/"+id+"/"+serviceName,	    
+	    url: "${url}"+"/"+id,	    
 	    dataType : 'html',
-	    timeout : 100000,
+	    timeout : 300000,
 	    beforeSend: function(xhr) {
 	        xhr.setRequestHeader(header, token);
 	        $('#content').modal({
@@ -73,7 +66,7 @@ function loadContent() {
 	    done : function(e) {
 	      
 	    }
-	}); */
+	});
 	
 } 
 
