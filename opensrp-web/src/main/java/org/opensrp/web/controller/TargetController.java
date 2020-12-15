@@ -26,6 +26,7 @@ import org.opensrp.core.entity.User;
 import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.TargetService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
+import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -52,6 +53,9 @@ public class TargetController {
 	
 	@Value("#{opensrp['divm.role.id']}")
 	private String divMRoleId;
+
+	@Autowired
+	private SearchUtil searchUtil;
 	
 	@RequestMapping(value = "/target/target-by-individual.html", method = RequestMethod.GET)
 	public String targetByIndividual(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
@@ -668,6 +672,19 @@ public class TargetController {
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
 		return "targets/movements/am-map-movement";
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/performance-map")
+	public String perfomanceMap(Model model, Locale locale, HttpSession session) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
+		String endDate = formatter.format(new Date());
+		session.setAttribute("startDate", startDate);
+		session.setAttribute("endDate", endDate);
+
+		model.addAttribute("locale", locale);
+		searchUtil.setDivisionAttribute(session);
+		return "report/performance-map/index";
 	}
 
 
