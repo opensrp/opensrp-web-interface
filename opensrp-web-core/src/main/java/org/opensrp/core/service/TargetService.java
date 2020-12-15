@@ -1335,7 +1335,7 @@ public class TargetService extends CommonService {
 	}
 
 	@Transactional
-	public List<PerformanceMapDTO> getLocationBasedPerformance(
+	public List<PerformanceMapDTO> getLocationBasedPerformanceMap(
 			String startDate,
 			String endDate,
 			String parentLocationTag,
@@ -1350,6 +1350,54 @@ public class TargetService extends CommonService {
 				+ "', " + parentLocationId + ", '" + parentLocationName + "', '" + locationTag + "')";
 		Query query = session.createSQLQuery(hql)
 				.addScalar("locName", StandardBasicTypes.STRING)
+				.addScalar("hhVisit", StandardBasicTypes.INTEGER)
+				.addScalar("elcoRegistration", StandardBasicTypes.INTEGER)
+				.addScalar("methodUsers", StandardBasicTypes.INTEGER)
+				.addScalar("adolescentMethodUser", StandardBasicTypes.INTEGER)
+				.addScalar("pregnancy", StandardBasicTypes.INTEGER)
+				.addScalar("delivery", StandardBasicTypes.INTEGER)
+				.addScalar("instituteDelivery", StandardBasicTypes.INTEGER)
+				.addScalar("child0To6", StandardBasicTypes.INTEGER)
+				.addScalar("child7To24", StandardBasicTypes.INTEGER)
+				.addScalar("child18To36", StandardBasicTypes.INTEGER)
+				.addScalar("immunization", StandardBasicTypes.INTEGER)
+				.addScalar("anc", StandardBasicTypes.INTEGER)
+				.addScalar("pnc", StandardBasicTypes.INTEGER)
+				.addScalar("adolescent", StandardBasicTypes.INTEGER)
+				.addScalar("women", StandardBasicTypes.INTEGER)
+				.addScalar("ncd", StandardBasicTypes.INTEGER)
+				.addScalar("iycf", StandardBasicTypes.INTEGER)
+				.addScalar("forumIycf", StandardBasicTypes.INTEGER)
+				.addScalar("forumIycfParticipant", StandardBasicTypes.INTEGER)
+				.addScalar("forumAdolescent", StandardBasicTypes.INTEGER)
+				.addScalar("forumAdolescentParticipant", StandardBasicTypes.INTEGER)
+				.addScalar("forumWomen", StandardBasicTypes.INTEGER)
+				.addScalar("forumWomenParticipant", StandardBasicTypes.INTEGER)
+				.addScalar("forumAdult", StandardBasicTypes.INTEGER)
+				.addScalar("forumAdultParticipant", StandardBasicTypes.INTEGER)
+				.addScalar("forumNcd", StandardBasicTypes.INTEGER)
+				.addScalar("forumNcdParticipant", StandardBasicTypes.INTEGER)
+				.setResultTransformer(new AliasToBeanResultTransformer(PerformanceMapDTO.class));
+		dtos = query.list();
+		return dtos;
+	}
+
+	@Transactional
+	public List<PerformanceMapDTO> getLocationBasedPerformanceChart(
+			String startDate,
+			String endDate,
+			String parentLocationTag,
+			Integer parentLocationId,
+			String parentLocationName,
+			String locationTag)  {
+
+		Session session = getSessionFactory();
+		List<PerformanceMapDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.get_performance_chart_report( '"+startDate+"' ,  '"+endDate+"', '"+  parentLocationTag
+				+ "', " + parentLocationId + ", '" + parentLocationName + "', '" + locationTag + "')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("monthValue", StandardBasicTypes.INTEGER)
 				.addScalar("hhVisit", StandardBasicTypes.INTEGER)
 				.addScalar("elcoRegistration", StandardBasicTypes.INTEGER)
 				.addScalar("methodUsers", StandardBasicTypes.INTEGER)

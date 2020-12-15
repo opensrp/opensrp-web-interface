@@ -204,7 +204,7 @@ public class TargetRestController {
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 
-	@RequestMapping(value = "/location-based-performance", method = RequestMethod.GET)
+	@RequestMapping(value = "/location-based-performance-map", method = RequestMethod.GET)
 	public List<PerformanceMapDTO> getPerfomance(
 			@RequestParam(value = "startDate", required = false) String startDate,
 			@RequestParam(value = "endDate", required = false) String endDate,
@@ -216,7 +216,23 @@ public class TargetRestController {
 		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
 		String parentLocationName = parentLocation.getName().split(":")[0];
 
-		return targetService.getLocationBasedPerformance(startDate, endDate, parentLocationTag, searchedValueId,
+		return targetService.getLocationBasedPerformanceMap(startDate, endDate, parentLocationTag, searchedValueId,
+				parentLocationName, locationTag);
+	}
+
+	@RequestMapping(value = "/location-based-performance-chart", method = RequestMethod.GET)
+	public List<PerformanceMapDTO> getPerfomanceChart(
+			@RequestParam(value = "startDate", required = false) String startDate,
+			@RequestParam(value = "endDate", required = false) String endDate,
+			@RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
+			@RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+			@RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
+
+		Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
+		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
+		String parentLocationName = parentLocation.getName().split(":")[0];
+
+		return targetService.getLocationBasedPerformanceChart(startDate, endDate, parentLocationTag, searchedValueId,
 				parentLocationName, locationTag);
 	}
 	

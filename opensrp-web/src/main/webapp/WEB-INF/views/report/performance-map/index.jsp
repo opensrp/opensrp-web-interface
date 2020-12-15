@@ -86,6 +86,7 @@
     }
 
     function reloadCharts(lineChartData) {
+        console.log(lineChartData);
         // Line Chart
         Highcharts.chart('line-chart', {
 
@@ -143,42 +144,23 @@
 
     function lineChartData(data) {
 
-        var services = [];
+        console.log('chart data', data);
+        var serviceData = [];
         var xLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         for(var i=0; i<data.length; i++) {
-
-            var serviceData = Object.values(data[i]);
-            var locIndex = serviceData.indexOf(data[i].locName);
-            if(locIndex > -1) serviceData.splice(locIndex, 1);
-            services.push({
-               name: data[i].locName,
-               data: serviceData
-            });
+            serviceData.push(data[i][$("#serviceItem").val()]);
         }
 
-        console.log('chart data', services);
+        console.log('chart data', serviceData);
         console.log(xLabels);
 
         return {
-            services: services,
+            services: [{
+                name: $("#serviceItem").val(),
+                data: serviceData
+            }],
             xLabels: xLabels
         };
-        // [{
-        //     name: 'Installation',
-        //     data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-        // }, {
-        //     name: 'Manufacturing',
-        //     data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
-        // }, {
-        //     name: 'Sales & Distribution',
-        //     data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
-        // }, {
-        //     name: 'Project Development',
-        //     data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
-        // }, {
-        //     name: 'Other',
-        //     data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-        // }]
     }
 
     function mapData(geo, tableData) {
@@ -429,6 +411,7 @@
             success : function(data) {
                 // lineChartData();
                 getPerformanceMap(JSON.parse(data));
+                getPerformanceChart(JSON.parse(data));
             },
             error : function(e) {
                 console.log(e);
@@ -443,9 +426,9 @@
     function getPerformanceMap(geoData) {
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
-        var url = "/opensrp-dashboard/rest/api/v1/target/location-based-performance";
+        var url = "/opensrp-dashboard/rest/api/v1/target/location-based-performance-map";
         $.ajax({
-            contentType : "application/json",
+            contentType: "application/json",
             type: "GET",
             data: {
                 geoLevel: 'division',
@@ -457,20 +440,53 @@
                 locationValue: $("#locationoptions").val(),
             },
             url: url,
-            timeout : 100000,
-            beforeSend: function(xhr) {
+            timeout: 100000,
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader(header, token);
 
             },
-            success : function(data) {
+            success: function (data) {
                 bdMap(mapData(geoData, data));
-                reloadCharts(lineChartData(data));
-                console.log("performance data", data);
+                console.log("performance map data", data);
             },
-            error : function(e) {
+            error: function (e) {
                 console.log(e);
             },
-            done : function(e) {
+            done: function (e) {
+                console.log("DONE");
+            }
+        });
+    }
+
+    function getPerformanceChart(geoData) {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        var url = "/opensrp-dashboard/rest/api/v1/target/location-based-performance-chart";
+        $.ajax({
+            contentType: "application/json",
+            type: "GET",
+            data: {
+                geoLevel: 'division',
+                searched_value: $("#searched_value").val(),
+                searched_value_id: $("#searched_value_id").val(),
+                address_field: $("#address_field").val(),
+                startDate: $("#start").val(),
+                endDate: $("#end").val(),
+                locationValue: $("#locationoptions").val(),
+            },
+            url: url,
+            timeout: 100000,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header, token);
+
+            },
+            success: function (data) {
+                reloadCharts(lineChartData(data));
+            },
+            error: function (e) {
+                console.log(e);
+            },
+            done: function (e) {
                 console.log("DONE");
             }
         });

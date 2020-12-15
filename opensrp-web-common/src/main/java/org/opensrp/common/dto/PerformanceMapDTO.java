@@ -29,6 +29,7 @@ public class PerformanceMapDTO {
     private  Integer forumAdultParticipant;
     private  Integer forumNcd;
     private  Integer forumNcdParticipant;
+    private  Integer monthValue;
 
     public String getLocName() {
         return locName;
@@ -252,5 +253,13 @@ public class PerformanceMapDTO {
 
     public void setForumNcdParticipant(Integer forumNcdParticipant) {
         this.forumNcdParticipant = forumNcdParticipant;
+    }
+
+    public Integer getMonthValue() {
+        return monthValue;
+    }
+
+    public void setMonthValue(Integer monthValue) {
+        this.monthValue = monthValue;
     }
 }
