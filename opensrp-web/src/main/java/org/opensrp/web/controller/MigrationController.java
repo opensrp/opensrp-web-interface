@@ -10,8 +10,8 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.core.service.BranchService;
 import org.opensrp.core.service.MigrationService;
+import org.opensrp.web.util.BranchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -33,7 +33,7 @@ public class MigrationController {
 	private MigrationService migrationService;
 	
 	@Autowired
-	private BranchService branchService;
+	public BranchUtil branchUtil;
 	
 	@Value("#{opensrp['division.tag.id']}")
 	private int divisionTagId;
@@ -42,7 +42,7 @@ public class MigrationController {
 	public String householdList(HttpServletRequest request, HttpSession session, Model model, Locale locale)
 	    throws JSONException {
 		model.addAttribute("locale", locale);
-		
+		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("isHousehold", true);
 		return "migration/households-in";
 	}

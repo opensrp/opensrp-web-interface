@@ -42,7 +42,8 @@ public class MigrationRestController {
 		jo.put("limit", length);
 		List<String> households = new ArrayList<>();
 		try {
-			households = migrationService.getMigratedHousehold(jo, request.getParameter("branchId"), "");
+			households = migrationService.getMigratedHousehold(jo, request.getParameter("branchIdIn"),
+			    request.getParameter("branchIdOut"));
 		}
 		catch (Exception e) {
 			
