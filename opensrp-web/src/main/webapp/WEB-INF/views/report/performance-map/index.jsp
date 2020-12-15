@@ -78,6 +78,8 @@
 
     var map = L.map('leaflet-map').setView(L.latLng(23.777176, 90.399452),6);
     var mapSampleData = [{code: '10', label: 'Barisal', value: '855'}, {code: '20', label: 'Chittagong', value: '389'}, {code: '30', label: 'Dhaka', value: '25'}, {code: '40', label: 'Khulna', value: '589'}, {code: '45', label: 'Mymensingh', value: '969'}, {code: '50', label: 'Rajshahi', value: '1078'},{code: '55', label: 'Rangpur', value: '55'}, {code: '60', label: 'Sylhet', value: '59'}];
+    var initLocationHoverDiv = false;
+    var initLegendDiv = false;
 
     function loadNewData() {
         reloadCharts(lineChartData());
@@ -102,9 +104,7 @@
             },
 
             xAxis: {
-                accessibility: {
-                    rangeDescription: 'Range: 2010 to 2017'
-                }
+                categories: lineChartData.xLabels
             },
 
             legend: {
@@ -117,12 +117,11 @@
                 series: {
                     label: {
                         connectorAllowed: false
-                    },
-                    pointStart: 2010
+                    }
                 }
             },
 
-            series: lineChartData,
+            series: lineChartData.services,
 
             responsive: {
                 rules: [{
@@ -142,32 +141,53 @@
         });
     }
 
-    function lineChartData() {
-        return [{
-            name: 'Installation',
-            data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-        }, {
-            name: 'Manufacturing',
-            data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
-        }, {
-            name: 'Sales & Distribution',
-            data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
-        }, {
-            name: 'Project Development',
-            data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
-        }, {
-            name: 'Other',
-            data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-        }]
+    function lineChartData(data) {
+
+        var services = [];
+        var xLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        for(var i=0; i<data.length; i++) {
+
+            var serviceData = Object.values(data[i]);
+            var locIndex = serviceData.indexOf(data[i].locName);
+            if(locIndex > -1) serviceData.splice(locIndex, 1);
+            services.push({
+               name: data[i].locName,
+               data: serviceData
+            });
+        }
+
+        console.log('chart data', services);
+        console.log(xLabels);
+
+        return {
+            services: services,
+            xLabels: xLabels
+        };
+        // [{
+        //     name: 'Installation',
+        //     data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+        // }, {
+        //     name: 'Manufacturing',
+        //     data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+        // }, {
+        //     name: 'Sales & Distribution',
+        //     data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
+        // }, {
+        //     name: 'Project Development',
+        //     data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
+        // }, {
+        //     name: 'Other',
+        //     data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
+        // }]
     }
 
     function mapData(geo, tableData) {
         console.log(geo, tableData);
         for(var i=0; i<geo.features.length; i++) {
             for(var j=0; j<tableData.length; j++) {
-                if(geo.features[i].properties.ADM1_PCODE == tableData[j].code) {
-                    geo.features[i].properties['value'] = tableData[j].value;
-                    geo.features[i].properties['label'] = tableData[j].label;
+                if(geo.features[i].properties.ADM1_EN.toLowerCase() == tableData[j].locName.toLowerCase()) {
+                    geo.features[i].properties['value'] = tableData[j][$("#serviceItem").val()];
+                    geo.features[i].properties['label'] = tableData[j].locName;
                     break;
                 }
             }
@@ -186,8 +206,10 @@
         }).addTo(map);
 
         // control that shows state info on hover
-        var info = L.control();
 
+
+        var info = L.control();
+        $("div.info").remove();
         info.onAdd = function (map) {
             this._div = L.DomUtil.create('div', 'info');
             this.update();
@@ -195,7 +217,7 @@
         };
 
         info.update = function (props) {
-            this._div.innerHTML = '<h4>Bangladesh</h4>' +  (props ?
+            this._div.innerHTML = '<h4>Bangladesh</h4>' + (props ?
                 '<b>' + props.label + '</b><br />' + props.value + ' people / mi<sup>2</sup>'
                 : 'Hover over a state');
         };
@@ -203,16 +225,18 @@
         info.addTo(map);
 
 
+
+
         // get color depending on population density value
         function getColor(d) {
             console.log('color value', d);
-            return d > 1000 ? '#800026' :
-                d > 500  ? '#BD0026' :
-                    d > 200  ? '#E31A1C' :
-                        d > 100  ? '#FC4E2A' :
-                            d > 50   ? '#FD8D3C' :
-                                d > 20   ? '#FEB24C' :
-                                    d > 10   ? '#FED976' :
+            return d > 100 ? '#800026' :
+                d > 50  ? '#BD0026' :
+                    d > 40  ? '#E31A1C' :
+                        d > 30  ? '#FC4E2A' :
+                            d > 20   ? '#FD8D3C' :
+                                d > 10   ? '#FEB24C' :
+                                    d > 1   ? '#FED976' :
                                         '#FFEDA0';
         }
 
@@ -277,7 +301,7 @@
         legend.onAdd = function (map) {
 
             var div = L.DomUtil.create('div', 'info legend'),
-                grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+                grades = [1, 10, 20, 30, 40, 50, 100],
                 labels = [],
                 from, to;
 
@@ -294,6 +318,7 @@
             return div;
         };
         legend.addTo(map);
+
 
 
     }
@@ -438,8 +463,8 @@
 
             },
             success : function(data) {
-                bdMap(mapData(geoData, []));
-                reloadCharts(lineChartData());
+                bdMap(mapData(geoData, data));
+                reloadCharts(lineChartData(data));
                 console.log("performance data", data);
             },
             error : function(e) {

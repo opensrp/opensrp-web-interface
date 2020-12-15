@@ -98,9 +98,8 @@
         <br/>
         <div class="row">
             <div class="col-md-3">
-                <label> Services </label>
-                <div class="col-sm-3">
-                    <select class="custom-select form-control" id="visitCategory" style="width: 95%" >
+                <label> Services </label><br>
+                    <select class="custom-select form-control" id="serviceItem" style="width: 95%" >
                         <option value="hhVisit"> household visit</option>
                         <option value="elcoRegistration"> Elco Registration</option>
                         <option value="methodUsers"> Method Users</option>
@@ -129,7 +128,7 @@
                         <option value="forumNcd"> NCD Forum</option>
                         <option value="forumNcdParticipant"> NCD Forum Participant </option>
                     </select>
-                </div>
+
             </div>
         </div>
         <br/>
