@@ -39,12 +39,12 @@
 </style>
 
 
-<c:url var="get_url" value="/rest/api/v1/migration/household-in/list" />
+<c:url var="get_url" value="/rest/api/v1/migration/member/list" />
 
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 <jsp:include page="/WEB-INF/views/header.jsp" />
 
-<jsp:include page="/WEB-INF/views/modal_content_migration.jsp" />
+<jsp:include page="/WEB-INF/views/modal_content_member_migration.jsp" />
 <div class="page-content-wrapper">
 	<div class="page-content">
 		<div class="row">
@@ -54,7 +54,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>Migrated household list(in)
+							<i class="fa fa-list"></i>Migrated member list(in)
 						</div>
 					</div>
 					<div class="portlet-body">
@@ -105,18 +105,18 @@
 									<thead>
 										<tr>
 											<th rowspan="2">Date of migration</th>
-											<th rowspan="2">HH head</th>
-											<th rowspan="2">HH ID</th>
-											<th rowspan="2">HH head contact</th>
-											<th rowspan="2">#member</th>
-											<th colspan="2">To</th>
+											<th rowspan="2">Beneficiary name</th>
+											<th rowspan="2">Beneficiary ID</th>
+											<th rowspan="2">Beneficiary contact</th>											
+											<th colspan="3">To</th>
 											<th colspan="2">From</th>
 
 											<th rowspan="2">Status</th>
 											<th rowspan="2">Action</th>
 										</tr>
 										<tr>
-											<th>SS</th>
+											<th>HH head name</th>
+											<th>HH head contact</th>
 											<th>Village</th>
 											<th>Branch</th>
 											<th>District</th>

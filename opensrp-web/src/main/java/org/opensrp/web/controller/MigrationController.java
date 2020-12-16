@@ -39,7 +39,7 @@ public class MigrationController {
 	private int divisionTagId;
 	
 	@RequestMapping(value = "/households-in.html", method = RequestMethod.GET)
-	public String householdList(HttpServletRequest request, HttpSession session, Model model, Locale locale)
+	public String householdListIn(HttpServletRequest request, HttpSession session, Model model, Locale locale)
 	    throws JSONException {
 		model.addAttribute("locale", locale);
 		model.addAttribute("branches", branchUtil.getBranches());
@@ -47,9 +47,27 @@ public class MigrationController {
 		return "migration/households-in";
 	}
 	
+	@RequestMapping(value = "/households-out.html", method = RequestMethod.GET)
+	public String householdListOut(HttpServletRequest request, HttpSession session, Model model, Locale locale)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
+		model.addAttribute("branches", branchUtil.getBranches());
+		model.addAttribute("isHousehold", true);
+		return "migration/households-out";
+	}
+	
+	@RequestMapping(value = "/members-in.html", method = RequestMethod.GET)
+	public String memberListIn(HttpServletRequest request, HttpSession session, Model model, Locale locale)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
+		model.addAttribute("branches", branchUtil.getBranches());
+		model.addAttribute("isHousehold", true);
+		return "migration/member-in";
+	}
+	
 	@RequestMapping(value = "/details-data/{id}", method = RequestMethod.GET)
-	public String activityDetails(HttpServletRequest request, @PathVariable("id") long id, HttpSession session, Model model,
-	                              Locale locale) throws JSONException, JsonProcessingException {
+	public String migrationDetails(HttpServletRequest request, @PathVariable("id") long id, HttpSession session,
+	                               Model model, Locale locale) throws JSONException, JsonProcessingException {
 		model.addAttribute("locale", locale);
 		
 		JSONObject data = migrationService.getMigratedData(id);
@@ -57,5 +75,17 @@ public class MigrationController {
 		model.addAttribute("data", data);
 		
 		return "migration/details";
+	}
+	
+	@RequestMapping(value = "/member-details-data/{id}", method = RequestMethod.GET)
+	public String migratedMemberDetails(HttpServletRequest request, @PathVariable("id") long id, HttpSession session,
+	                                    Model model, Locale locale) throws JSONException, JsonProcessingException {
+		model.addAttribute("locale", locale);
+		
+		JSONObject data = migrationService.getMigratedData(id);
+		
+		model.addAttribute("data", data);
+		
+		return "migration/member-details";
 	}
 }

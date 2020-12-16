@@ -54,7 +54,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>Migrated household list(in)
+							<i class="fa fa-list"></i>Migrated household list(out)
 						</div>
 					</div>
 					<div class="portlet-body">
@@ -212,8 +212,8 @@
 					} else {
 						branchIds = $("#branchList").val().join();
 					}
-					data.branchIdIn = branchIds;
-					data.branchIdOut="",
+					data.branchIdIn ="";
+					data.branchIdOut=branchIds,
 					data.searchKeyOut = "";
 					data.searchKeyIn = "";
 					data.startDate = $('#from').val();
@@ -290,10 +290,10 @@
 				url : "${get_url}",
 				timeout : 300000,
 				data : function(data) {
-					data.branchIdIn = branchIds;
-					data.branchIdOut="",
-					data.searchKeyIn = $('#search').val();
-					data.searchKeyOut = "";
+					data.branchIdIn = "",
+					data.branchIdOut=branchIds,
+					data.searchKeyIn = "",
+					data.searchKeyOut= $('#search').val(),
 					data.startDate = $('#from').val();
 					data.endDate = $('#to').val();				},
 				dataSrc : function(json) {

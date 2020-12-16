@@ -38,6 +38,8 @@ public class MigrationRestController {
 		jo.put("end_date", request.getParameter("endDate"));
 		jo.put("start_date", request.getParameter("startDate"));
 		jo.put("searchKeyIn", request.getParameter("searchKeyIn"));
+		jo.put("searchKeyOut", request.getParameter("searchKeyOut"));
+		jo.put("member_type", "HH");
 		jo.put("offset", start);
 		jo.put("limit", length);
 		List<String> households = new ArrayList<>();
@@ -50,7 +52,37 @@ public class MigrationRestController {
 		}
 		
 		JSONObject response = migrationService.drawMigratedInHouseholdDataTable(draw,
-		    migrationService.getMigratedHouseholdCount(jo, request.getParameter("branchId"), ""), households);
+		    migrationService.getMigratedHouseholdCount(jo, request.getParameter("branchIdIn"), ""), households);
+		return new ResponseEntity<>(response.toString(), OK);
+	}
+	
+	@RequestMapping(value = "/member/list", method = RequestMethod.GET)
+	public ResponseEntity<String> memberList(HttpServletRequest request, HttpSession session) throws JSONException,
+	    JsonProcessingException {
+		Integer start = Integer.valueOf(request.getParameter("start"));
+		Integer length = Integer.valueOf(request.getParameter("length"));
+		//String name = request.getParameter("search[value]");
+		Integer draw = Integer.valueOf(request.getParameter("draw"));
+		
+		JSONObject jo = new JSONObject();
+		jo.put("end_date", request.getParameter("endDate"));
+		jo.put("start_date", request.getParameter("startDate"));
+		jo.put("searchKeyIn", request.getParameter("searchKeyIn"));
+		jo.put("searchKeyOut", request.getParameter("searchKeyOut"));
+		jo.put("member_type", "Member");
+		jo.put("offset", start);
+		jo.put("limit", length);
+		List<String> households = new ArrayList<>();
+		try {
+			households = migrationService.getMigratedHousehold(jo, request.getParameter("branchIdIn"),
+			    request.getParameter("branchIdOut"));
+		}
+		catch (Exception e) {
+			
+		}
+		
+		JSONObject response = migrationService.drawMigratedInHouseholdDataTable(draw,
+		    migrationService.getMigratedHouseholdCount(jo, request.getParameter("branchIdIn"), ""), households);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	
