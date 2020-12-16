@@ -298,7 +298,7 @@
                 startDate:startDate,
                 endDate:endDate,
                 managerOrLocation:managerOrLocation,
-                roleName:$("#roleList option:selected").val()
+                roleId:$("#roleList option:selected").val()
             }
             return formData;
         }

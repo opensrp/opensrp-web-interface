@@ -10,11 +10,15 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.MapMovement;
+import org.opensrp.common.dto.PerformanceMapDTO;
+import org.opensrp.common.dto.ReferralFollowupReportDTO;
 import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.util.ProductType;
 import org.opensrp.common.util.TaregtSettingsType;
 import org.opensrp.common.util.UserColumn;
 import org.opensrp.core.dto.TargetDTO;
+import org.opensrp.core.entity.Location;
+import org.opensrp.core.service.LocationService;
 import org.opensrp.core.service.TargetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -34,6 +38,9 @@ public class TargetRestController {
 	
 	@Autowired
 	private TargetService targetService;
+
+	@Autowired
+	private LocationService locationService;
 	
 	@RequestMapping(value = "/save-update", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> newPatient(@RequestBody TargetDTO dto) throws Exception {
@@ -195,6 +202,38 @@ public class TargetRestController {
 		
 		JSONObject response = targetService.getUnionWisePopulationSetOfDataTable(draw, userCount, userList);
 		return new ResponseEntity<>(response.toString(), OK);
+	}
+
+	@RequestMapping(value = "/location-based-performance-map", method = RequestMethod.GET)
+	public List<PerformanceMapDTO> getPerfomance(
+			@RequestParam(value = "startDate", required = false) String startDate,
+			@RequestParam(value = "endDate", required = false) String endDate,
+			@RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
+			@RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+			@RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
+
+		Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
+		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
+		String parentLocationName = parentLocation.getName().split(":")[0];
+
+		return targetService.getLocationBasedPerformanceMap(startDate, endDate, parentLocationTag, searchedValueId,
+				parentLocationName, locationTag);
+	}
+
+	@RequestMapping(value = "/location-based-performance-chart", method = RequestMethod.GET)
+	public List<PerformanceMapDTO> getPerfomanceChart(
+			@RequestParam(value = "startDate", required = false) String startDate,
+			@RequestParam(value = "endDate", required = false) String endDate,
+			@RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
+			@RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+			@RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
+
+		Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
+		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
+		String parentLocationName = parentLocation.getName().split(":")[0];
+
+		return targetService.getLocationBasedPerformanceChart(startDate, endDate, parentLocationTag, searchedValueId,
+				parentLocationName, locationTag);
 	}
 	
 }
