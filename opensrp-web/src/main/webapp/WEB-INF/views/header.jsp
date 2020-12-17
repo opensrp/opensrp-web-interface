@@ -744,11 +744,15 @@ License: You must have a valid license purchased only from themeforest(the above
 							<li><a href="<c:url value="/migration/households-in.html"/>">
 									Household In
 							</a></li>
+							
+							<li><a href="<c:url value="/migration/households-out.html"/>">
+									Household Out
+							</a></li>
 							<li><a href="<c:url value="/migration/members-in.html"/>">
 									Member In
 							</a></li>
-							<li><a href="<c:url value="/migration/households-out.html"/>">
-									Household Out
+							<li><a href="<c:url value="/migration/members-out.html"/>">
+									Member Out
 							</a></li>
 
 

@@ -9,7 +9,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Migrated in member list</title>
+<title>Migrated out member list</title>
 <style>
 .select2-results__option .wrap:before {
 	font-family: fontAwesome;
@@ -54,7 +54,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>Migrated member list(in)
+							<i class="fa fa-list"></i>Migrated member list(Out)
 						</div>
 					</div>
 					<div class="portlet-body">
@@ -108,8 +108,8 @@
 											<th rowspan="2">Beneficiary name</th>
 											<th rowspan="2">Beneficiary ID</th>
 											<th rowspan="2">Beneficiary contact</th>											
-											<th colspan="3">To</th>
-											<th colspan="2">From</th>
+											<th colspan="3">From</th>
+											<th colspan="2">To</th>
 
 											<th rowspan="2">Status</th>
 											<th rowspan="2">Action</th>
@@ -218,7 +218,7 @@
 					data.searchKeyIn = "";
 					data.startDate = $('#from').val();
 					data.endDate = $('#to').val();
-					data.migrateType='in';
+					data.migrateType='out';
 
 				},
 				dataSrc : function(json) {
@@ -296,9 +296,9 @@
 					data.searchKeyIn = $('#search').val();
 					data.searchKeyOut = "";
 					data.startDate = $('#from').val();
-					data.endDate = $('#to').val();
-					data.migrateType='in';
-				},
+					data.endDate = $('#to').val();	
+					data.migrateType='out';
+					},
 				dataSrc : function(json) {
 					if (json.data) {
 						

@@ -30,7 +30,7 @@
 <script>
 
 
-function loadContent(id) {
+function loadContent(id,migratedType) {
 	
 	
 	
@@ -39,7 +39,7 @@ function loadContent(id) {
 		$.ajax({
 		type : "GET",
 		contentType : "application/json",
-	    url: "${url}"+"/"+id,	    
+	    url: "${url}"+"/"+id+"?migratedType="+migratedType,		    
 	    dataType : 'html',
 	    timeout : 300000,
 	    beforeSend: function(xhr) {

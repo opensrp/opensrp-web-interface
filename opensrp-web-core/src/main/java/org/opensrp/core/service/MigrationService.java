@@ -80,62 +80,110 @@ public class MigrationService extends CommonService {
 		
 	}
 	
-	public JSONObject drawMigratedInHouseholdDataTable(Integer draw, int total, List<String> datas) throws JSONException {
+	public JSONObject drawMigratedInmemberDataTable(Integer draw, int total, List<String> datas, String migrateType)
+	    throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", total);
 		response.put("recordsFiltered", total);
 		JSONArray array = new JSONArray();
-		
-		for (String string : datas) {
-			JSONArray tableData = new JSONArray();
-			JSONObject row = new JSONObject(string);
-			tableData.put(row.get("migration_date"));
-			tableData.put(row.get("member_name"));
-			tableData.put(row.get("member_id_in"));
-			tableData.put(row.get("member_contact"));
-			tableData.put(row.get("hh_name_in"));
-			tableData.put(row.get("hh_contact_in"));
-			tableData.put(row.get("village_in"));
-			tableData.put(row.get("bout_name") + "-" + row.get("bout_code"));
-			tableData.put(row.get("district_out"));
-			tableData.put(row.get("status"));
+		if (migrateType.equalsIgnoreCase("out")) {
+			for (String string : datas) {
+				JSONArray tableData = new JSONArray();
+				JSONObject row = new JSONObject(string);
+				tableData.put(row.get("migration_date"));
+				tableData.put(row.get("member_name"));
+				tableData.put(row.get("member_id_in"));
+				tableData.put(row.get("member_contact"));
+				tableData.put(row.get("hh_name_out"));
+				tableData.put(row.get("hh_contact_out"));
+				tableData.put(row.get("village_out"));
+				tableData.put(row.get("bin_name") + "-" + row.get("bin_code"));
+				tableData.put(row.get("district_in"));
+				tableData.put(row.get("status"));
+				
+				String view = "<div class='btn btn-primary' onclick='loadContent(" + row.get("id") + ",\"" + migrateType
+				        + "\")'>Details </div>";
+				tableData.put(view);
+				array.put(tableData);
+			}
+		} else if (migrateType.equalsIgnoreCase("in")) {
+			for (String string : datas) {
+				JSONArray tableData = new JSONArray();
+				JSONObject row = new JSONObject(string);
+				tableData.put(row.get("migration_date"));
+				tableData.put(row.get("member_name"));
+				tableData.put(row.get("member_id_in"));
+				tableData.put(row.get("member_contact"));
+				tableData.put(row.get("hh_name_in"));
+				tableData.put(row.get("hh_contact_in"));
+				tableData.put(row.get("village_in"));
+				tableData.put(row.get("bout_name") + "-" + row.get("bout_code"));
+				tableData.put(row.get("district_out"));
+				tableData.put(row.get("status"));
+				
+				String view = "<div class='btn btn-primary' onclick='loadContent(" + row.get("id") + ",\"" + migrateType
+				        + "\")'>Details </div>";
+				tableData.put(view);
+				array.put(tableData);
+			}
+		} else {
 			
-			String view = "<div class='btn btn-primary' onclick='loadContent(" + row.get("id") + ")'>Details </div>";
-			tableData.put(view);
-			array.put(tableData);
 		}
-		
 		response.put("data", array);
 		return response;
 	}
 	
-	public JSONObject drawMigratedInmemberDataTable(Integer draw, int total, List<String> datas) throws JSONException {
+	public JSONObject drawMigratedInHouseholdDataTable(Integer draw, int total, List<String> datas, String migrateType)
+	    throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", total);
 		response.put("recordsFiltered", total);
 		JSONArray array = new JSONArray();
-		
-		for (String string : datas) {
-			JSONArray tableData = new JSONArray();
-			JSONObject row = new JSONObject(string);
-			tableData.put(row.get("migration_date"));
-			tableData.put(row.get("member_name"));
-			tableData.put(row.get("member_id_in"));
-			tableData.put(row.get("hh_contact_in"));
-			tableData.put(row.get("number_of_member_in"));
-			tableData.put(row.get("ss_in"));
-			tableData.put(row.get("village_in"));
-			tableData.put(row.get("bout_name") + "-" + row.get("bout_code"));
-			tableData.put(row.get("district_out"));
-			tableData.put(row.get("status"));
-			
-			String view = "<div class='btn btn-primary' onclick='loadContent(" + row.get("id") + ")'>Details </div>";
-			tableData.put(view);
-			array.put(tableData);
-		}
-		
+		if (migrateType.equalsIgnoreCase("out")) {
+			for (String string : datas) {
+				JSONArray tableData = new JSONArray();
+				JSONObject row = new JSONObject(string);
+				tableData.put(row.get("migration_date"));
+				tableData.put(row.get("member_name"));
+				tableData.put(row.get("member_id_out"));
+				tableData.put(row.get("hh_contact_out"));
+				tableData.put(row.get("number_of_member_out"));
+				tableData.put(row.get("ss_out"));
+				tableData.put(row.get("village_out"));
+				tableData.put(row.get("bin_name") + "-" + row.get("bin_code"));
+				tableData.put(row.get("district_in"));
+				tableData.put(row.get("status"));
+				
+				String view = "<div class='btn btn-primary' onclick='loadContent(" + row.get("id") + ",\"" + migrateType
+				        + "\")'>Details </div>";
+				tableData.put(view);
+				array.put(tableData);
+			}
+		} else if (migrateType.equalsIgnoreCase("in")) {
+			for (String string : datas) {
+				JSONArray tableData = new JSONArray();
+				JSONObject row = new JSONObject(string);
+				tableData.put(row.get("migration_date"));
+				tableData.put(row.get("member_name"));
+				tableData.put(row.get("member_id_in"));
+				tableData.put(row.get("hh_contact_in"));
+				tableData.put(row.get("number_of_member_in"));
+				tableData.put(row.get("ss_in"));
+				tableData.put(row.get("village_in"));
+				
+				tableData.put(row.get("bout_name") + "-" + row.get("bout_code"));
+				tableData.put(row.get("district_out"));
+				
+				tableData.put(row.get("status"));
+				
+				String view = "<div class='btn btn-primary' onclick='loadContent(" + row.get("id") + ",\"" + migrateType
+				        + "\")'>Details </div>";
+				tableData.put(view);
+				array.put(tableData);
+			}
+		} else {}
 		response.put("data", array);
 		return response;
 	}

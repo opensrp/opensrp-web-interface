@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -65,27 +66,40 @@ public class MigrationController {
 		return "migration/member-in";
 	}
 	
+	@RequestMapping(value = "/members-out.html", method = RequestMethod.GET)
+	public String memberListOut(HttpServletRequest request, HttpSession session, Model model, Locale locale)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
+		model.addAttribute("branches", branchUtil.getBranches());
+		model.addAttribute("isHousehold", true);
+		
+		return "migration/member-out";
+	}
+	
 	@RequestMapping(value = "/details-data/{id}", method = RequestMethod.GET)
 	public String migrationDetails(HttpServletRequest request, @PathVariable("id") long id, HttpSession session,
-	                               Model model, Locale locale) throws JSONException, JsonProcessingException {
+	                               Model model, Locale locale, @RequestParam("migratedType") String migratedType)
+	    throws JSONException, JsonProcessingException {
 		model.addAttribute("locale", locale);
 		
 		JSONObject data = migrationService.getMigratedData(id);
 		
 		model.addAttribute("data", data);
-		
+		model.addAttribute("migratedType", migratedType);
 		return "migration/details";
 	}
 	
 	@RequestMapping(value = "/member-details-data/{id}", method = RequestMethod.GET)
 	public String migratedMemberDetails(HttpServletRequest request, @PathVariable("id") long id, HttpSession session,
-	                                    Model model, Locale locale) throws JSONException, JsonProcessingException {
+	                                    Model model, Locale locale, @RequestParam("migratedType") String migratedType)
+	    throws JSONException, JsonProcessingException {
 		model.addAttribute("locale", locale);
 		
 		JSONObject data = migrationService.getMigratedData(id);
 		
 		model.addAttribute("data", data);
 		
+		model.addAttribute("migratedType", migratedType);
 		return "migration/member-details";
 	}
 }

@@ -109,8 +109,8 @@
 											<th rowspan="2">HH ID</th>
 											<th rowspan="2">HH head contact</th>
 											<th rowspan="2">#member</th>
-											<th colspan="2">To</th>
 											<th colspan="2">From</th>
+											<th colspan="2">To</th>
 
 											<th rowspan="2">Status</th>
 											<th rowspan="2">Action</th>
@@ -218,6 +218,7 @@
 					data.searchKeyIn = "";
 					data.startDate = $('#from').val();
 					data.endDate = $('#to').val();
+					data.migrateType='out';
 
 				},
 				dataSrc : function(json) {
@@ -267,25 +268,7 @@
 				leftColumns : 2
 			},
 			"ordering" : false,
-			columnDefs : [ {
-				targets : [ 0, 1, 2, 3, 4 ],
-				orderable : false
-			}, {
-				width : "10%",
-				targets : 0
-			}, {
-				width : "5%",
-				targets : 1
-			}, {
-				width : "10%",
-				targets : 2
-			}, {
-				width : "10%",
-				targets : 3
-			}, {
-				width : "10%",
-				targets : 4
-			} ],
+			
 			ajax : {
 				url : "${get_url}",
 				timeout : 300000,
@@ -295,7 +278,8 @@
 					data.searchKeyIn = "",
 					data.searchKeyOut= $('#search').val(),
 					data.startDate = $('#from').val();
-					data.endDate = $('#to').val();				},
+					data.endDate = $('#to').val();	
+					data.migrateType='out';},
 				dataSrc : function(json) {
 					if (json.data) {
 						

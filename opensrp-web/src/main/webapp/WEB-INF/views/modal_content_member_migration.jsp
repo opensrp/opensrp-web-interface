@@ -6,6 +6,14 @@
 <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
 <c:url var="url" value="/migration/member-details-data" />
 <!--Modal start-->
+<div class="card-body">
+	<div id="loading"
+		style="display: none; position: absolute; z-index: 1000; margin-left: 35%">
+		<img width="50px" height="50px"
+			src="<c:url value="/resources/images/ajax-loading.gif"/>">
+	</div>
+
+</div>
 <div
 	style="overflow: unset; display: none; top: 30px; min-height: 300px; max-width: none; position: relative; z-index: 1050"
 	id="content" class="modal modal-margin">
@@ -30,7 +38,7 @@
 <script>
 
 
-function loadContent(id) {
+function loadContent(id,migratedType) {
 	
 	
 	
@@ -39,7 +47,7 @@ function loadContent(id) {
 		$.ajax({
 		type : "GET",
 		contentType : "application/json",
-	    url: "${url}"+"/"+id,	    
+	    url: "${url}"+"/"+id+"?migratedType="+migratedType,	    
 	    dataType : 'html',
 	    timeout : 300000,
 	    beforeSend: function(xhr) {
