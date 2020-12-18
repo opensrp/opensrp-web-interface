@@ -59,17 +59,7 @@
 					</div>
 					<div class="portlet-body">
 						<div class="row">
-							<div class="col-lg-3 form-group">
-								<label for="cars"><spring:message code="lbl.branch"></spring:message></label>
-								<select name="branchList" class="form-control" id="branchList">
-									
-									<c:forEach items="${branches}" var="branch">
-
-										<option value="${branch.id}">${branch.name}</option>
-
-									</c:forEach>
-								</select>
-							</div>
+							<jsp:include page="/WEB-INF/views/migration-search-option.jsp" />
 							<div class="col-lg-2 form-group">
 								<label for="from"><spring:message code="lbl.from"></spring:message><span
 									class="text-danger"> </span> </label> <input readonly="readonly"
@@ -85,7 +75,7 @@
 							<div class="col-lg-3 form-group" style="padding-top: 0px">
 								<label for="cars">Search key </label> <input name="search"
 									class="form-control" id="search"
-									placeholder="Household ID,contact number" />
+									placeholder="Member ID,contact number, name"  />
 							</div>
 
 							<div class="col-lg-2 form-group" style="padding-top: 22px">

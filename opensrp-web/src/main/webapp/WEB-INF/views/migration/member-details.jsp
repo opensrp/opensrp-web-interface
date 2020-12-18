@@ -57,6 +57,11 @@
 			<th>${data.getString("union_in")}</th>			
 		</tr>
 		<tr>
+			<th>Pourasava</th>
+			<th>${data.getString("pourasava_out")}</th>
+			<th>${data.getString("pourasava_in")}</th>			
+		</tr>
+		<tr>
 			<th>Upazila</th>
 			<th>${data.getString("upazila_out")}</th>
 			<th>${data.getString("upazila_in")}</th>			
@@ -65,6 +70,11 @@
 			<th>District</th>
 			<th>${data.getString("district_out")}</th>
 			<th>${data.getString("district_in")}</th>			
+		</tr>
+		<tr>
+			<th>Division</th>
+			<th>${data.getString("division_out")}</th>
+			<th>${data.getString("division_in")}</th>			
 		</tr>
 	</tbody>
 

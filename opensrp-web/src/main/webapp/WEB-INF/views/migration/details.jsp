@@ -3,11 +3,11 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<h3>
-	<strong>Household migration details</strong>
-</h3>
-<hr />
 <c:url var="url" value="/rest/api/v1/migration/accept-reject" />
+
+
+<h3> <strong>HH head name :</strong> ${data.getString("member_name")}, <strong>Contact : </strong> ${data.getString("hh_contact_in")}, 
+<strong>HH ID : </strong> ${data.getString("member_id_in")}, <strong>#Member : </strong> ${data.getString("number_of_member_in")}</h3>
 
 <table style="width: 100%;"
 	class="display table table-bordered table-striped">
@@ -47,6 +47,12 @@
 			<th>${data.getString("union_out")}</th>
 			<th>${data.getString("union_in")}</th>			
 		</tr>
+		
+		<tr>
+			<th>Pourasava</th>
+			<th>${data.getString("pourasava_out")}</th>
+			<th>${data.getString("pourasava_in")}</th>			
+		</tr>
 		<tr>
 			<th>Upazila</th>
 			<th>${data.getString("upazila_out")}</th>
@@ -56,6 +62,11 @@
 			<th>District</th>
 			<th>${data.getString("district_out")}</th>
 			<th>${data.getString("district_in")}</th>			
+		</tr>
+		<tr>
+			<th>Division</th>
+			<th>${data.getString("division_out")}</th>
+			<th>${data.getString("division_in")}</th>			
 		</tr>
 	</tbody>
 

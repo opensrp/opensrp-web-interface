@@ -126,7 +126,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	boolean TIMESTAMP_REPORT_DM = AuthenticationManagerUtil.isPermitted("TIMESTAMP_REPORT_DM");
 	boolean TIMESTAMP_REPORT_AM = AuthenticationManagerUtil.isPermitted("TIMESTAMP_REPORT_AM");
 	boolean MAP_MOVEMENTS = AuthenticationManagerUtil.isPermitted("MAP_MOVEMENTS");
-
+	boolean MIGRATION =AuthenticationManagerUtil.isPermitted("MIGRATION");
    %>
   
 <body>
@@ -733,7 +733,7 @@ License: You must have a valid license purchased only from themeforest(the above
 						}
 					%>
 					
-					<% if(PEOPLE){ %>
+					<% if(MIGRATION){ %>
 					<li><a href="javascript:;"> <i class="fa fa-bullseye"></i> <span
 							class="title">Migration</span> <span class="arrow "></span>
 					</a>

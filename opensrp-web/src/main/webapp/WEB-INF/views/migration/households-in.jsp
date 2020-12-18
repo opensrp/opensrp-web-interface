@@ -9,7 +9,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Households</title>
+<title>Migrated household list(In)</title>
 <style>
 .select2-results__option .wrap:before {
 	font-family: fontAwesome;
@@ -41,6 +41,8 @@
 
 <c:url var="get_url" value="/rest/api/v1/migration/household-in/list" />
 
+
+
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 <jsp:include page="/WEB-INF/views/header.jsp" />
 
@@ -54,22 +56,15 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>Migrated household list(in)
+							<i class="fa fa-list"></i>Migrated household list(In)
 						</div>
 					</div>
+					
 					<div class="portlet-body">
 						<div class="row">
-							<div class="col-lg-3 form-group">
-								<label for="cars"><spring:message code="lbl.branch"></spring:message></label>
-								<select name="branchList" class="form-control" id="branchList">
-									
-									<c:forEach items="${branches}" var="branch">
-
-										<option value="${branch.id}">${branch.name}</option>
-
-									</c:forEach>
-								</select>
-							</div>
+							<jsp:include page="/WEB-INF/views/migration-search-option.jsp" />
+							
+							
 							<div class="col-lg-2 form-group">
 								<label for="from"><spring:message code="lbl.from"></spring:message><span
 									class="text-danger"> </span> </label> <input readonly="readonly"
@@ -108,7 +103,7 @@
 											<th rowspan="2">HH head</th>
 											<th rowspan="2">HH ID</th>
 											<th rowspan="2">HH head contact</th>
-											<th rowspan="2">#member</th>
+											<th rowspan="2">#Member</th>
 											<th colspan="2">To</th>
 											<th colspan="2">From</th>
 

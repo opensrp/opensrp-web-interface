@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.core.service.MigrationService;
+import org.opensrp.core.service.TargetService;
+import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.BranchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +36,13 @@ public class MigrationController {
 	private MigrationService migrationService;
 	
 	@Autowired
+	private TargetService targetService;
+	
+	@Autowired
 	public BranchUtil branchUtil;
+	
+	@Value("#{opensrp['divm.role.id']}")
+	private String divMRoleId;
 	
 	@Value("#{opensrp['division.tag.id']}")
 	private int divisionTagId;
@@ -45,6 +53,9 @@ public class MigrationController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("isHousehold", true);
+		
+		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
+		
 		return "migration/households-in";
 	}
 	
@@ -54,6 +65,7 @@ public class MigrationController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("isHousehold", true);
+		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
 		return "migration/households-out";
 	}
 	
@@ -63,6 +75,7 @@ public class MigrationController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("isHousehold", true);
+		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
 		return "migration/member-in";
 	}
 	
@@ -72,7 +85,7 @@ public class MigrationController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("isHousehold", true);
-		
+		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
 		return "migration/member-out";
 	}
 	

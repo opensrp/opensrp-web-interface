@@ -6,10 +6,13 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.opensrp.acl.permission.CustomPermissionEvaluator;
+import org.opensrp.common.dto.UserDTO;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
+import org.opensrp.core.service.TargetService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
 
 public class AuthenticationManagerUtil {
 	
@@ -80,7 +83,7 @@ public class AuthenticationManagerUtil {
 		logger.info("\nIsAM :" + "False\n");
 		return false;
 	}
-
+	
 	public static boolean isDivM() {
 		List<String> roleList = getLoggedInUserRoles();
 		if (roleList.contains("DivM")) {
@@ -104,5 +107,27 @@ public class AuthenticationManagerUtil {
 		}
 		logger.info("\nIsSS :" + "False\n");
 		return false;
+	}
+	
+	public static Model setLoggedInUserRoleNameAtModel(Model model, TargetService targetService, String divMRoleId) {
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String roleName = "";
+		for (Role role : loggedInUser.getRoles()) {
+			roleName = role.getName();
+			
+		}
+		
+		if (roleName.equalsIgnoreCase("Admin")) {
+			model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+			
+		} else if (roleName.equalsIgnoreCase("DivM")) {
+			List<UserDTO> users = targetService.getUserByUserIds(loggedInUser.getId() + "", 32);
+			model.addAttribute("users", users);
+		} else if (roleName.equalsIgnoreCase("AM")) {
+			
+		}
+		
+		model.addAttribute("roleName", roleName);
+		return model;
 	}
 }
