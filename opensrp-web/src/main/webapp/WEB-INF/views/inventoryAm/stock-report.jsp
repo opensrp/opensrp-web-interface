@@ -84,6 +84,13 @@
 									<input type="text"
 										   class="form-control date-picker-year" id="monthlyDate">
 								</div>
+								<div class="col-lg-3 form-group">
+									<label> Designation:</label>
+									<select class="form-control" id="designation">
+										<option value="SK"> SK</option>
+										<option value="PA"> PA </option>
+									</select>
+								</div>
 								<div class="col-sm-3" style="margin-top: 24px;">
 									<button type="submit" onclick="getStockReport()" class="btn btn-primary" value="confirm">Submit</button>
 									<span id="validationMessage"></span>
@@ -110,7 +117,6 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
-
 <script>
 
 
@@ -175,6 +181,7 @@ function getStockReport() {
 			branchIds: ($('#branchList').val() || []).join(','),
 			month: new Date($('#monthlyDate').val()).getMonth() + 1,
 			year: new Date($('#monthlyDate').val()).getFullYear(),
+			userRole: $('#designation').val(),
 		},
 		beforeSend: function() {
 			$('#loading').show();
