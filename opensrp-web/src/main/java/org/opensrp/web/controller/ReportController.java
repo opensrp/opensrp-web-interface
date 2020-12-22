@@ -900,7 +900,7 @@ public class ReportController {
 		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
 		String parentLocationName = parentLocation.getName().split(":")[0];
 
-		report = targetService.getReferralReport(startDate, endDate, parentLocationTag, searchedValueId,
+		report = targetService.getReferralReport(startDate, endDate, parentLocationTag.replaceAll(" ", "_"), searchedValueId,
 				parentLocationName, locationTag);
 
 		session.setAttribute("referralReport", report);
@@ -938,7 +938,7 @@ public class ReportController {
 		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
 		String parentLocationName = parentLocation.getName().split(":")[0];
 
-		report = targetService.getReferralFollowupReport(startDate, endDate, parentLocationTag, searchedValueId,
+		report = targetService.getReferralFollowupReport(startDate, endDate, parentLocationTag.replaceAll(" ", "_"), searchedValueId,
 				parentLocationName, locationTag, referralReason);
 
 		JsonElement element = gson.toJsonTree(report, new TypeToken<List<ReferralFollowupReportDTO>>() {}.getType());
