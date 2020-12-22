@@ -76,7 +76,7 @@
 								0
 							</div>
 							<div class="desc">
-								Active provider
+								Active Provider
 							</div>
 						</div>
 					</div>

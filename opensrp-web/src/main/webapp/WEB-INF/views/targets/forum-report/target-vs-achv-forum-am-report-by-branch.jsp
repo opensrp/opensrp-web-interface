@@ -9,22 +9,14 @@
            uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Target vs achievement forum pm report</title>
+<title>Target vs achievement forum am report branch wise</title>
 
 <c:url var="branch_url" value="/branch-list-options-by-user-ids" />
 <c:url var="all_branch_url" value="/all-branch-list-options" />
 
 <c:url var="user_list_url" value="/user-list-options-by-parent-user-ids" />
 
-<c:url var="report_url" value="/target/report/pm-wise-forum-report" />
-
-<c:url var="branch_wise_am_report_url" value="/target/target-vs-achv-forum-report-am-by-branch" />
-
-<c:url var="sk_wise_am_visit_report_url" value="/target/target-vs-achv-forum-report-am-by-provider" />
-<c:url var="branch_wise_dm_visit_report_url" value="/target/target-vs-achv-forum-report-dm" />
-<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
-
-
+<c:url var="report_url" value="/target/target-vs-achv-forum-report-am-by-branch" />
 <style>
     .select2-results__option .wrap:before {
         font-family: fontAwesome;
@@ -76,7 +68,7 @@
                             0
                         </div>
                         <div class="desc">
-                            Active SK
+                            Active Provider
                         </div>
                     </div>
                 </div>
@@ -96,7 +88,6 @@
                 </div>
             </div>
         </div>
-
         <div class="row">
             <div class="col-md-12">
 
@@ -104,50 +95,18 @@
                 <div class="portlet box blue-madison">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-list"></i>Target vs achievement forum report
+                            <i class="fa fa-list"></i>Target vs achievement forum report branch wise
                         </div>
                     </div>
                     <div class="portlet-body">
-                        <div class="form-group">
-
-                            <!-- <div class="row col-lg-12 form-group">
-
-                                <div  class="col-lg-3 form-group">
-                                  <input type="radio"  id="managerWise"  onclick="reportType('manager')"  value="managerWise" name="managerOrLocation"
-                                         checked>
-                                  <label for="managerWise">Manager wise</label>
-                                </div>
-
-                                <div  class=" col-lg-3 form-group">
-                                  <input type="radio"  id="locationWise" onclick="reportType('location')" value="locationWise" name="managerOrLocation">
-                                  <label for="locationWise">Location wise</label>
-                                </div>
-                              </div> -->
-
-
+                        <div class="row">
                             <div class="row" id="manager">
-                                <div class="col-lg-3 form-group">
-                                    <label for="cars">Divisional manager </label>
-                                    <select	onclick="getAm(this.value,'AM')" name="divM" class="form-control" id="divM">
-                                        <option value="0">Please select</option>
-                                        <c:forEach items="${divms}" var="divm">
-                                            <option value="${divm.getId()}">${divm.getFullName()}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                                <div class="col-lg-3 form-group">
-                                    <label for="cars">Area manager </label>
-                                    <select	onclick="getBranchListByUserId(this.value,'branchList')" name="AM"  id="AM" class="form-control">
-                                        <option value="0">Please select </option>
-                                    </select>
-                                </div>
+
 
                                 <div class="col-lg-3 form-group">
                                     <label ><spring:message code="lbl.branch"></spring:message></label>
                                     <select	name="branchList" class="form-control" id="branchList">
-                                        <%-- <c:forEach items="${branches}" var="branch">
-                                            <option value="${branch.id}" selected>${branch.name}</option>
-                                        </c:forEach> --%>
+
                                     </select>
                                 </div>
 
@@ -164,7 +123,7 @@
 
                         <div class="row" style="margin: 0px">
                             <div class="col-sm-12" id="content" style="overflow-x: auto;">
-                                <h3 id="reportTile" style="font-weight: bold;">Divisional manager wise forum report</h3>
+                                <h3 id="reportTile" style="font-weight: bold;">Branch wise forum report</h3>
                                 <div id="report"></div>
 
                             </div>
@@ -178,23 +137,21 @@
 
             </div>
         </div>
-        </br>
         <jsp:include page="/WEB-INF/views/footer.jsp" />
     </div>
 </div>
 <!-- END CONTENT -->
+
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
-<script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
-
-<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
 <script src="<c:url value='/resources/chart/highcharts.js'/>"></script>
+
 <script>
     jQuery(document).ready(function() {
         Metronic.init(); // init metronic core components
         Layout.init(); // init current layout
-        getAllBranch();
+        getBranchByuserIds('${userIds}')
         $('#branchList').select2MultiCheckboxes({
             placeholder: "Select branch",
             width: "auto",
@@ -203,25 +160,20 @@
             }
         });
         var timePeriod = 'monthly';
-        reportType('manager');
-        $('#locationWiseDiv').hide();
 
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
-
-        getReportData('${report_url}',"Divisional manager wise forum report");
+        getReportData();
 
     });
 
-
-
-    function getReportData(url,title){
+    function getReportData(){
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
         $.ajax({
             type : "POST",
             contentType : "application/json",
-            url : url,
+            url : '${report_url}',
             dataType : 'html',
             timeout : 300000,
             data:  JSON.stringify(getParamsData()),
@@ -232,28 +184,16 @@
                 $('#search-button').attr("disabled", true);
             },
             success : function(data) {
-                //let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
-                let managerOrLocation ="managerWise";
+                let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
 
                 $('#loading').hide();
                 $("#report").html(data);
                 $('#search-button').attr("disabled", false);
                 let reportType =$("input[name='time-period']:checked").val();
-                if(managerOrLocation =='managerWise'){
-
-                    $("#reportTile").html(title);
-                }else{
-                    $("#reportTile").html("Location Wise report");
-                }
 
 
                 $('#reportDataTable').DataTable({
-                    scrollY:        "300px",
-                    scrollX:        true,
-                    scrollCollapse: true,
-                    fixedColumns:   {
-                        leftColumns: 1
-                    }
+
                 });
             },
             error : function(e) {
@@ -301,19 +241,11 @@
         let upazila = $("#upazilaList option:selected").val();
 
         let divM = $("#divM option:selected").val();
-        let AM = $("#AM option:selected").val();
+        let AM = '${userIds}';
 
-        //let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
-        let managerOrLocation ="managerWise";
+        let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
         let reportType =$("input[name='time-period']:checked").val();
-        /* if(managerOrLocation =='managerWise'){
-            district=0;
-            division=0;
-            upazila=0;
-        }else{
-            divM=0;
-            AM=0;
-        } */
+
 
         var from = getFromTime();
         var to = getToTime();
@@ -336,7 +268,7 @@
             division:division,
             upazila:upazila,
             am:AM,
-            dm:divM,
+            divM:divM,
             reportType:reportType,
             startDate:startDate,
             endDate:endDate,
@@ -346,83 +278,13 @@
         return formData;
     }
     function filter(){
-        let divM = $("#divM option:selected").val();
-        let AM = $("#AM option:selected").val();
-        var branchIds =  $("#branchList").val();
-        var title = "Divisional manager wise forum report";
-        let url = '${report_url}';
-        if( branchIds ==null || typeof branchIds == 'undefined'){
-            branchIds = ''
-        }else{
-            branchIds = $("#branchList").val().join();
-        }
-        /* if(managerOrLocation =='managerWise'){
-          $("#reportTile").html("Manager Wise visit report");
-      }else{
-          $("#reportTile").html("Location Wise report");
-      } */
 
-        if(divM !=0 && AM==0 && branchIds=='' ){
-            url = '${branch_wise_dm_visit_report_url}';
-            title= "Area manager Wise forum report";
-        }else if(divM!=0 && AM!=0 && branchIds==''){
-            url = '${branch_wise_am_report_url}';
-            title ="Branch wise forum report";
-        }else if(divM!=0 && AM!=0 && branchIds!='' ){
-            url = '${sk_wise_am_visit_report_url}';
-            title ="SK wise forum report";
-        }
-        getReportData(url,title);
-
-
+        getReportData();
 
     }
 </script>
 
 <script>
-    function getAm(userId,divId) {
-
-        let url = '${user_list_url}';
-        if(userId != 0){
-            getBranchListByUserId(userId,'branchList');
-            $.ajax({
-                type : "GET",
-                contentType : "application/json",
-                url : url+"?id="+userId+"&roleId=32",
-                dataType : 'html',
-                timeout : 300000,
-                beforeSend: function() {},
-                success : function(data) {
-                    $("#"+divId).html(data);
-                },
-                error : function(e) {
-                    console.log("ERROR: ", e);
-                    display(e);
-                },
-                done : function(e) {
-                    console.log("DONE");
-                }
-            });
-        }else{
-            getAllBranch();
-            $("#AM").html('<option value="0">Please select </option>');
-        }
-
-    }
-
-
-    function getBranchListByUserId(userId,divId) {
-        if(userId!=0){
-            getBranchByuserIds(userId);
-        }else{
-            userId= $("#divM option:selected").val();
-            if(userId!=0){
-                getBranchByuserIds(userId);
-            }else{
-                getAllBranch();
-            }
-        }
-    }
 
     function getBranchByuserIds(userId){
         let url = '${branch_url}';
@@ -436,8 +298,8 @@
             beforeSend: function() {},
             success : function(data) {
                 $("#branchList").html(data);
-                /* $("#branchList > option").prop("selected","selected");
-                $("#branchList").trigger("change"); */
+                $("#branchList > option").prop("selected","selected");
+                $("#branchList").trigger("change");
             },
             error : function(e) {
                 console.log("ERROR: ", e);
@@ -461,8 +323,8 @@
             beforeSend: function() {},
             success : function(data) {
                 $("#branchList").html(data);
-                /* $("#branchList > option").prop("selected","selected");
-                $("#branchList").trigger("change"); */
+                $("#branchList > option").prop("selected","selected");
+                $("#branchList").trigger("change");
             },
             error : function(e) {
                 console.log("ERROR: ", e);
@@ -478,16 +340,7 @@
     }
 
 
+
+
 </script>
-
-
-
-
-
-
-
-
-
-
-
 
