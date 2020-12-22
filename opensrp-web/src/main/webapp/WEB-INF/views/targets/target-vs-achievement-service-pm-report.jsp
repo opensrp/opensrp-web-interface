@@ -22,6 +22,11 @@
 <c:url var="dm_service_report_url" value="/target/report/dm-service-target-report" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 
+<c:url var="am_pa_report_url" value="/target/report/am-service-report-pa-wise-table" />
+<c:url var="branch_report_url_pa" value="/target/report/am-branch-wise-pa-service-target-report" />
+<c:url var="dm_pa_report_url" value="/target/report/dm-pa-service-target-report" />
+<c:url var="pm_pa_report_url" value="/target/report/pm-pa-service-target-report" />
+
 
 <style>
 	.select2-results__option .wrap:before {
@@ -88,7 +93,7 @@
 								0
 							</div>
 							<div class="desc">
-								SK Aggregated Perfomance
+								 Aggregated Performance
 							</div>
 						</div>
 					</div>
@@ -344,22 +349,39 @@ function filter(){
 	let url = '${report_url}';
 	let AM = $("#AM option:selected").val();
 	var branchIds =  $("#branchList").val();
+	
+	var roleName = $("#roleList").val();
+	
 	var title = "Divisional manager wise service report";
   	if( branchIds ==null || typeof branchIds == 'undefined'){
   		branchIds = '';
   	}else{
   		branchIds = $("#branchList").val().join();
   	}
-  	
-  	if( branchIds !=''){
-  		url = '${am_sk_wise_service_report_url}';
-  		title ="SK wise service report";
-  	} else if(AM!=0 && branchIds==''){
-  		url = '${am_branch_wise_service_report_url}';
-  		title ="Branch wise service report";
-  	}else if(divM !=0 && AM==0 && branchIds=='' ){
-		url = '${dm_service_report_url}'
-		title= "Area manager service report";
+  	if(roleName=='SK'){
+  		
+	  	if( branchIds !=''){
+	  		url = '${am_sk_wise_service_report_url}';
+	  		title ="SK wise service report";
+	  	} else if(AM!=0 && branchIds==''){
+	  		url = '${am_branch_wise_service_report_url}';
+	  		title ="Branch wise service report";
+	  	}else if(divM !=0 && AM==0 && branchIds=='' ){
+			url = '${dm_service_report_url}'
+			title= "Area manager service report";
+	  	}
+  	}else if(roleName=='PA'){
+  		url = '${pm_pa_report_url}'
+  		if( branchIds !=''){
+	  		url = '${am_pa_report_url}';
+	  		title ="SK wise service report";
+	  	} else if(AM!=0 && branchIds==''){
+	  		url = '${branch_report_url_pa}';
+	  		title ="Branch wise service report";
+	  	}else if(divM !=0 && AM==0 && branchIds=='' ){
+			url = '${dm_pa_report_url}'
+			title= "Area manager service report";
+	  	}
   	}
 	
   	getReportData(url,title);

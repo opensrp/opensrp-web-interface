@@ -24,7 +24,14 @@ import org.hibernate.type.StandardBasicTypes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.common.dto.*;
+import org.opensrp.common.dto.ForumTargetReportDTO;
+import org.opensrp.common.dto.HrReportDTO;
+import org.opensrp.common.dto.PerformanceMapDTO;
+import org.opensrp.common.dto.ReferralFollowupReportDTO;
+import org.opensrp.common.dto.ReferralReportDTO;
+import org.opensrp.common.dto.TargetCommontDTO;
+import org.opensrp.common.dto.TargetReportDTO;
+import org.opensrp.common.dto.TimestamReportDTO;
 import org.opensrp.common.util.LocationTags;
 import org.opensrp.common.util.Roles;
 import org.opensrp.common.util.Status;
@@ -425,6 +432,44 @@ public class TargetService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
+	public List<TargetReportDTO> getPMVisitReportOFPA(JSONObject params) throws JSONException {
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		String hql = "select user_name userName,first_name firstName,last_name lastName,user_id id,total_branch numberOfBranch,total_am numberOfAm,total_sk numberOfSK,total_pa numberOfPA,target_vs_achv achievementInPercentage from report.pm_visit_report_dm_wise_PA('"
+		        + params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("userName", StandardBasicTypes.STRING)
+		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
+		        .addScalar("id", StandardBasicTypes.INTEGER).addScalar("numberOfBranch", StandardBasicTypes.INTEGER)
+		        .addScalar("numberOfAm", StandardBasicTypes.INTEGER).addScalar("numberOfSK", StandardBasicTypes.INTEGER)
+		        .addScalar("numberOfPA", StandardBasicTypes.INTEGER)
+		        .addScalar("achievementInPercentage", StandardBasicTypes.FLOAT)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetReportDTO.class));
+		dtos = query.list();
+		
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetReportDTO> getPMVisitReportOfPA(JSONObject params) throws JSONException {
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		String hql = "select user_name userName,first_name firstName,last_name lastName,user_id id,total_branch numberOfBranch,total_am numberOfAm,total_sk numberOfSK,total_pa numberOfPA,target_vs_achv achievementInPercentage from report.pm_visit_report_dm_wise_PA('"
+		        + params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("userName", StandardBasicTypes.STRING)
+		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
+		        .addScalar("id", StandardBasicTypes.INTEGER).addScalar("numberOfBranch", StandardBasicTypes.INTEGER)
+		        .addScalar("numberOfAm", StandardBasicTypes.INTEGER).addScalar("numberOfSK", StandardBasicTypes.INTEGER)
+		        .addScalar("numberOfPA", StandardBasicTypes.INTEGER)
+		        .addScalar("achievementInPercentage", StandardBasicTypes.FLOAT)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetReportDTO.class));
+		dtos = query.list();
+		
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<TargetReportDTO> getPMVisitReportByLocation(JSONObject params) {
 		
 		Session session = getSessionFactory();
@@ -456,6 +501,24 @@ public class TargetService extends CommonService {
 		Session session = getSessionFactory();
 		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
 		String hql = "select user_name userName,first_name firstName,last_name lastName,user_id id,total_branch numberOfBranch,total_sk numberOfSK,total_pa numberOfPA,target_vs_achv achievementInPercentage from report.dm_visit_report_am_wise('"
+		        + params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("userName", StandardBasicTypes.STRING)
+		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
+		        .addScalar("id", StandardBasicTypes.INTEGER).addScalar("numberOfBranch", StandardBasicTypes.INTEGER)
+		        .addScalar("numberOfSK", StandardBasicTypes.INTEGER).addScalar("numberOfPA", StandardBasicTypes.INTEGER)
+		        .addScalar("achievementInPercentage", StandardBasicTypes.FLOAT)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetReportDTO.class));
+		dtos = query.list();
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetReportDTO> getDMPAVisitReportByManager(JSONObject params) throws JSONException {
+		
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		String hql = "select user_name userName,first_name firstName,last_name lastName,user_id id,total_branch numberOfBranch,total_sk numberOfSK,total_pa numberOfPA,target_vs_achv achievementInPercentage from report.dm_visit_report_am_wise_pa('"
 		        + params + "','{" + params.getString("branchIds") + "}')";
 		Query query = session.createSQLQuery(hql).addScalar("userName", StandardBasicTypes.STRING)
 		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
@@ -512,7 +575,7 @@ public class TargetService extends CommonService {
 		Query query = session.createSQLQuery(hql).addScalar("userName", StandardBasicTypes.STRING)
 		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
 		        .addScalar("id", StandardBasicTypes.INTEGER).addScalar("numberOfAm", StandardBasicTypes.INTEGER)
-				.addScalar("numberOfSK", StandardBasicTypes.INTEGER)
+		        .addScalar("numberOfSK", StandardBasicTypes.INTEGER)
 		        .addScalar("ANCServiceTarget", StandardBasicTypes.INTEGER)
 		        .addScalar("ANCServiceSell", StandardBasicTypes.INTEGER)
 		        .addScalar("ANCServiceAchievement", StandardBasicTypes.FLOAT)
@@ -531,6 +594,33 @@ public class TargetService extends CommonService {
 		        .addScalar("IYCFServiceTarget", StandardBasicTypes.INTEGER)
 		        .addScalar("IYCFServiceSell", StandardBasicTypes.INTEGER)
 		        .addScalar("IYCFServiceAchievement", StandardBasicTypes.FLOAT)
+		        
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetReportDTO.class));
+		dtos = query.list();
+		
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetReportDTO> getPMPAServiceReportByManager(JSONObject params) throws JSONException {
+		
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		String hql = "select user_name userName,first_name firstName,last_name lastName ,user_id id,total_am numberOfAm, total_pa numberOfPA "
+		        
+		        + " , ncd_target NCDServiceTarget,ncd_sell NCDServiceSell  "
+		        
+		        + ", glass_target glassTarget , glass_sell  glassSell from report.pm_service_report_dm_wise_pa('"
+		        + params
+		        + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("userName", StandardBasicTypes.STRING)
+		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
+		        .addScalar("id", StandardBasicTypes.INTEGER).addScalar("numberOfAm", StandardBasicTypes.INTEGER)
+		        .addScalar("numberOfPA", StandardBasicTypes.INTEGER)
+		        .addScalar("NCDServiceTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("NCDServiceSell", StandardBasicTypes.INTEGER)
+		        .addScalar("glassTarget", StandardBasicTypes.INTEGER).addScalar("glassSell", StandardBasicTypes.INTEGER)
 		        
 		        .setResultTransformer(new AliasToBeanResultTransformer(TargetReportDTO.class));
 		dtos = query.list();
@@ -631,6 +721,31 @@ public class TargetService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
+	public List<TargetReportDTO> getDMPAServiceReportByManager(JSONObject params) throws JSONException {
+		
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		String hql = "select user_name userName,first_name firstName,last_name lastName ,user_id id,total_pa numberOfPA,number_of_branch numberOfBranch "
+		        + " , ncd_target NCDServiceTarget,ncd_sell NCDServiceSell "
+		        + ", glass_target glassTarget , glass_sell  glassSell from report.dm_service_report_am_wise_pa('"
+		        + params
+		        + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("userName", StandardBasicTypes.STRING)
+		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
+		        .addScalar("id", StandardBasicTypes.INTEGER).addScalar("numberOfPA", StandardBasicTypes.INTEGER)
+		        .addScalar("numberOfBranch", StandardBasicTypes.INTEGER)
+		        .addScalar("NCDServiceTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("NCDServiceSell", StandardBasicTypes.INTEGER)
+		        .addScalar("glassTarget", StandardBasicTypes.INTEGER).addScalar("glassSell", StandardBasicTypes.INTEGER)
+		        
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetReportDTO.class));
+		dtos = query.list();
+		
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<TargetReportDTO> getDMServiceReportByLocation(JSONObject params) throws JSONException {
 		
 		Session session = getSessionFactory();
@@ -716,11 +831,50 @@ public class TargetService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
+	public List<TargetReportDTO> getAMPAServiceReportByBranch(JSONObject params) throws JSONException {
+		
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		String hql = "select branch_name branchName,number_of_pa numberOfPA "
+		        + " , ncd_target NCDServiceTarget,ncd_sell NCDServiceSell "
+		        + ", glass_target glassTarget , glass_sell  glassSell from report.am_service_report_branch_wise_pa('"
+		        + params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("branchName", StandardBasicTypes.STRING)
+		        .addScalar("numberOfPA", StandardBasicTypes.INTEGER)
+		        .addScalar("NCDServiceTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("NCDServiceSell", StandardBasicTypes.INTEGER)
+		        .addScalar("glassTarget", StandardBasicTypes.INTEGER).addScalar("glassSell", StandardBasicTypes.INTEGER)
+		        
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetReportDTO.class));
+		dtos = query.list();
+		
+		return dtos;
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<TargetReportDTO> getAMVisitReportByBranch(JSONObject params) throws JSONException {
 		
 		Session session = getSessionFactory();
 		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
 		String hql = "select branch_name branchName,total_sk numberOfSK,total_pa numberOfPA,target_vs_achv achievementInPercentage from report.am_visit_report_branch_wise('"
+		        + params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("branchName", StandardBasicTypes.STRING)
+		        .addScalar("numberOfSK", StandardBasicTypes.INTEGER).addScalar("numberOfPA", StandardBasicTypes.INTEGER)
+		        .addScalar("achievementInPercentage", StandardBasicTypes.FLOAT)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetReportDTO.class));
+		dtos = query.list();
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetReportDTO> getAMPAVisitReportByBranch(JSONObject params) throws JSONException {
+		
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		String hql = "select branch_name branchName,total_sk numberOfSK,total_pa numberOfPA,target_vs_achv achievementInPercentage from report.am_visit_report_branch_wise_pa('"
 		        + params + "','{" + params.getString("branchIds") + "}')";
 		Query query = session.createSQLQuery(hql).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("numberOfSK", StandardBasicTypes.INTEGER).addScalar("numberOfPA", StandardBasicTypes.INTEGER)
@@ -824,6 +978,31 @@ public class TargetService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
+	public List<TargetReportDTO> getAMPAServiceReportByProvider(JSONObject params) throws JSONException {
+		
+		Session session = getSessionFactory();
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		String hql = "select user_name userName,branch_name branchName,first_name firstName,last_name lastName,mobile mobile "
+		        + " , ncd_target NCDServiceTarget,ncd_sell NCDServiceSell "
+		        + ", glass_target glassTarget , glass_sell  glassSell from report.am_service_report_pa_wise('"
+		        + params
+		        + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("userName", StandardBasicTypes.STRING)
+		        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
+		        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("mobile", StandardBasicTypes.STRING)
+		        
+		        .addScalar("NCDServiceTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("NCDServiceSell", StandardBasicTypes.INTEGER)
+		        .addScalar("glassTarget", StandardBasicTypes.INTEGER).addScalar("glassSell", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetReportDTO.class));
+		dtos = query.list();
+		
+		return dtos;
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<TargetReportDTO> getAMVisitReportByProvider(JSONObject params) throws JSONException {
 		
 		Session session = getSessionFactory();
@@ -841,7 +1020,7 @@ public class TargetService extends CommonService {
 		        + " , child_7_24_months_target Child724VisitTarget,child_7_24_months_achv Child724VisitAchievement,child_7_24_months_target_vs_achv Child724VisitAchievementInPercentage "
 		        + " , child_18_36_months_target Child1836VisitTarget,child_18_36_months_achv Child1836VisitAchievement,child_18_36_months_target_vs_achv Child1836VisitAchievementInPercentage "
 		        + " , pregnant_target pregnantVisitTarget ,pregnant_achv pregnantVisitAchievement,pregnant_target_vs_achv pregnantVisitAchievementInPercentage "
-				+ " , immu_0_59_months_target immunizationVisitTarget, immu_0_59_months_achv immunizationVisitAchievement, sk_immu_0_59_months_target_vs_achv immunizationVisitAchievementInPercentage from report.am_visit_report_sk_wise('"
+		        + " , immu_0_59_months_target immunizationVisitTarget, immu_0_59_months_achv immunizationVisitAchievement, sk_immu_0_59_months_target_vs_achv immunizationVisitAchievementInPercentage from report.am_visit_report_sk_wise('"
 		        + params + "','{" + params.getString("branchIds") + "}')";
 		Query query = session.createSQLQuery(hql).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("userName", StandardBasicTypes.STRING).addScalar("mobile", StandardBasicTypes.STRING)
@@ -879,9 +1058,42 @@ public class TargetService extends CommonService {
 		        .addScalar("pregnantVisitTarget", StandardBasicTypes.INTEGER)
 		        .addScalar("pregnantVisitAchievement", StandardBasicTypes.INTEGER)
 		        .addScalar("pregnantVisitAchievementInPercentage", StandardBasicTypes.FLOAT)
-				.addScalar("immunizationVisitTarget", StandardBasicTypes.INTEGER)
-				.addScalar("immunizationVisitAchievement", StandardBasicTypes.INTEGER)
-				.addScalar("immunizationVisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+		        .addScalar("immunizationVisitTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("immunizationVisitAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("immunizationVisitAchievementInPercentage", StandardBasicTypes.FLOAT)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetReportDTO.class));
+		dtos = query.list();
+		
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<TargetReportDTO> getAMPAVisitReportByProvider(JSONObject params) throws JSONException {
+		
+		Session session = getSessionFactory();
+		
+		List<TargetReportDTO> dtos = new ArrayList<TargetReportDTO>();
+		
+		String hql = "select branch_name branchName ,user_name userName,mobile mobile,first_name firstName,last_name lastName,presbyopia_target presbyopiaTarget,presbyopia_ach presbyopiaAchievement ,presbyopia_correction_target presbyopiaCorrectionTarget "
+		        + " ,presbyopia_correction_achv presbyopiaCorrectionAchievement,diabetes_target diabetesTarget,diabetes_target_achv diabetesAchievement "
+		        + " ,  hbp_target hbpTarget,hbp_target_achv hbpAchievement,cataract_target cataractTarget "
+		        + " ,cataract_achv cataractAchievement,cataract_surgery_target cataractSurgeryTarget,cataract_surgery_achv cataractSurgeryAchievement "
+		        + "  from report.am_visit_report_pa_wise('" + params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("branchName", StandardBasicTypes.STRING)
+		        .addScalar("userName", StandardBasicTypes.STRING).addScalar("mobile", StandardBasicTypes.STRING)
+		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
+		        .addScalar("presbyopiaTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("presbyopiaAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("presbyopiaCorrectionTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("presbyopiaCorrectionAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("diabetesTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("diabetesAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("hbpTarget", StandardBasicTypes.INTEGER).addScalar("hbpAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("cataractTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("cataractAchievement", StandardBasicTypes.INTEGER)
+		        .addScalar("cataractSurgeryTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("cataractSurgeryAchievement", StandardBasicTypes.INTEGER)
 		        .setResultTransformer(new AliasToBeanResultTransformer(TargetReportDTO.class));
 		dtos = query.list();
 		
@@ -972,47 +1184,41 @@ public class TargetService extends CommonService {
 		
 		return dtos;
 	}
-
+	
 	@Transactional
 	public List<ForumTargetReportDTO> getForumReportForPMByManager(JSONObject params) throws JSONException {
-
+		
 		Session session = getSessionFactory();
 		List<ForumTargetReportDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.pm_forum_report_by_dm('"+  params + "','{" + params.getString("branchIds") + "}')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("username", StandardBasicTypes.STRING)
-				.addScalar("fullName", StandardBasicTypes.STRING)
-				.addScalar("numberOfAM", StandardBasicTypes.INTEGER)
-				.addScalar("numberOfSK", StandardBasicTypes.INTEGER)
-				.addScalar("numberOfBranch", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentTarget", StandardBasicTypes.INTEGER)
-				.addScalar("adolescnetAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adolescnetAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("ncdAchv", StandardBasicTypes.INTEGER)
-				.addScalar("ncdTarget", StandardBasicTypes.INTEGER)
-				.addScalar("ncdAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("ncdAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("iycfAchv", StandardBasicTypes.INTEGER)
-				.addScalar("iycfTarget", StandardBasicTypes.INTEGER)
-				.addScalar("iycfAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("iycfAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("womenAchv", StandardBasicTypes.INTEGER)
-				.addScalar("womenTarget", StandardBasicTypes.INTEGER)
-				.addScalar("womenAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("womenAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("adultAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adultTarget", StandardBasicTypes.INTEGER)
-				.addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adultAvgParticipantTarget", StandardBasicTypes.INTEGER)
-
-				.setResultTransformer(new AliasToBeanResultTransformer(ForumTargetReportDTO.class));
+		
+		String hql = "select * from report.pm_forum_report_by_dm('" + params + "','{" + params.getString("branchIds")
+		        + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("username", StandardBasicTypes.STRING)
+		        .addScalar("fullName", StandardBasicTypes.STRING).addScalar("numberOfAM", StandardBasicTypes.INTEGER)
+		        .addScalar("numberOfSK", StandardBasicTypes.INTEGER).addScalar("numberOfBranch", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescnetAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescnetAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdAchv", StandardBasicTypes.INTEGER).addScalar("ncdTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfAchv", StandardBasicTypes.INTEGER).addScalar("iycfTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("womenAchv", StandardBasicTypes.INTEGER).addScalar("womenTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("womenAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("womenAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("adultAchv", StandardBasicTypes.INTEGER).addScalar("adultTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("adultAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        
+		        .setResultTransformer(new AliasToBeanResultTransformer(ForumTargetReportDTO.class));
 		dtos = query.list();
-
+		
 		return dtos;
 	}
-
+	
 	@Transactional
 	public List<ForumTargetReportDTO> getPAForumReportForPMByManager(JSONObject params) throws JSONException {
 
@@ -1038,43 +1244,38 @@ public class TargetService extends CommonService {
 
 	@Transactional
 	public List<ForumTargetReportDTO> getForumReportForDMByAM(JSONObject params) throws JSONException {
-
+		
 		Session session = getSessionFactory();
 		List<ForumTargetReportDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.dm_forum_report_by_am('"+  params + "','{" + params.getString("branchIds") + "}')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("username", StandardBasicTypes.STRING)
-				.addScalar("fullName", StandardBasicTypes.STRING)
-				.addScalar("numberOfSK", StandardBasicTypes.INTEGER)
-				.addScalar("numberOfBranch", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentTarget", StandardBasicTypes.INTEGER)
-				.addScalar("adolescnetAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adolescnetAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("ncdAchv", StandardBasicTypes.INTEGER)
-				.addScalar("ncdTarget", StandardBasicTypes.INTEGER)
-				.addScalar("ncdAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("ncdAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("iycfAchv", StandardBasicTypes.INTEGER)
-				.addScalar("iycfTarget", StandardBasicTypes.INTEGER)
-				.addScalar("iycfAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("iycfAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("womenAchv", StandardBasicTypes.INTEGER)
-				.addScalar("womenTarget", StandardBasicTypes.INTEGER)
-				.addScalar("womenAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("womenAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("adultAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adultTarget", StandardBasicTypes.INTEGER)
-				.addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adultAvgParticipantTarget", StandardBasicTypes.INTEGER)
-
-				.setResultTransformer(new AliasToBeanResultTransformer(ForumTargetReportDTO.class));
+		
+		String hql = "select * from report.dm_forum_report_by_am('" + params + "','{" + params.getString("branchIds")
+		        + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("username", StandardBasicTypes.STRING)
+		        .addScalar("fullName", StandardBasicTypes.STRING).addScalar("numberOfSK", StandardBasicTypes.INTEGER)
+		        .addScalar("numberOfBranch", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescnetAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescnetAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdAchv", StandardBasicTypes.INTEGER).addScalar("ncdTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfAchv", StandardBasicTypes.INTEGER).addScalar("iycfTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("womenAchv", StandardBasicTypes.INTEGER).addScalar("womenTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("womenAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("womenAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("adultAchv", StandardBasicTypes.INTEGER).addScalar("adultTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("adultAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        
+		        .setResultTransformer(new AliasToBeanResultTransformer(ForumTargetReportDTO.class));
 		dtos = query.list();
-
+		
 		return dtos;
 	}
-
+	
 	@Transactional
 	public List<ForumTargetReportDTO> getForumPAReportForDMByAM(JSONObject params) throws JSONException {
 
@@ -1120,78 +1321,68 @@ public class TargetService extends CommonService {
 
 	@Transactional
 	public List<ForumTargetReportDTO> getForumReportForAMByBranch(JSONObject params) throws JSONException {
-
+		
 		Session session = getSessionFactory();
 		List<ForumTargetReportDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.am_forum_report_by_branch('"+  params + "','{" + params.getString("branchIds") + "}')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("branchName", StandardBasicTypes.STRING)
-				.addScalar("numberOfSK", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentTarget", StandardBasicTypes.INTEGER)
-				.addScalar("adolescnetAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adolescnetAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("ncdAchv", StandardBasicTypes.INTEGER)
-				.addScalar("ncdTarget", StandardBasicTypes.INTEGER)
-				.addScalar("ncdAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("ncdAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("iycfAchv", StandardBasicTypes.INTEGER)
-				.addScalar("iycfTarget", StandardBasicTypes.INTEGER)
-				.addScalar("iycfAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("iycfAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("womenAchv", StandardBasicTypes.INTEGER)
-				.addScalar("womenTarget", StandardBasicTypes.INTEGER)
-				.addScalar("womenAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("womenAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("adultAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adultTarget", StandardBasicTypes.INTEGER)
-				.addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adultAvgParticipantTarget", StandardBasicTypes.INTEGER)
-
-				.setResultTransformer(new AliasToBeanResultTransformer(ForumTargetReportDTO.class));
+		
+		String hql = "select * from report.am_forum_report_by_branch('" + params + "','{" + params.getString("branchIds")
+		        + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("branchName", StandardBasicTypes.STRING)
+		        .addScalar("numberOfSK", StandardBasicTypes.INTEGER).addScalar("adolescentAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescnetAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescnetAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdAchv", StandardBasicTypes.INTEGER).addScalar("ncdTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfAchv", StandardBasicTypes.INTEGER).addScalar("iycfTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("womenAchv", StandardBasicTypes.INTEGER).addScalar("womenTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("womenAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("womenAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("adultAchv", StandardBasicTypes.INTEGER).addScalar("adultTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("adultAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        
+		        .setResultTransformer(new AliasToBeanResultTransformer(ForumTargetReportDTO.class));
 		dtos = query.list();
-
+		
 		return dtos;
 	}
-
+	
 	@Transactional
 	public List<ForumTargetReportDTO> getForumReportForAMBySK(JSONObject params) throws JSONException {
-
+		
 		Session session = getSessionFactory();
 		List<ForumTargetReportDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.am_forum_report_by_sk('"+  params + "','{" + params.getString("branchIds") + "}')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("branchName", StandardBasicTypes.STRING)
-				.addScalar("fullName", StandardBasicTypes.STRING)
-				.addScalar("adolescentAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentTarget", StandardBasicTypes.INTEGER)
-				.addScalar("adolescnetAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adolescnetAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("ncdAchv", StandardBasicTypes.INTEGER)
-				.addScalar("ncdTarget", StandardBasicTypes.INTEGER)
-				.addScalar("ncdAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("ncdAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("iycfAchv", StandardBasicTypes.INTEGER)
-				.addScalar("iycfTarget", StandardBasicTypes.INTEGER)
-				.addScalar("iycfAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("iycfAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("womenAchv", StandardBasicTypes.INTEGER)
-				.addScalar("womenTarget", StandardBasicTypes.INTEGER)
-				.addScalar("womenAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("womenAvgParticipantTarget", StandardBasicTypes.INTEGER)
-				.addScalar("adultAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adultTarget", StandardBasicTypes.INTEGER)
-				.addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)
-				.addScalar("adultAvgParticipantTarget", StandardBasicTypes.INTEGER)
-
-				.setResultTransformer(new AliasToBeanResultTransformer(ForumTargetReportDTO.class));
+		
+		String hql = "select * from report.am_forum_report_by_sk('" + params + "','{" + params.getString("branchIds")
+		        + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("branchName", StandardBasicTypes.STRING)
+		        .addScalar("fullName", StandardBasicTypes.STRING).addScalar("adolescentAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescnetAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescnetAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdAchv", StandardBasicTypes.INTEGER).addScalar("ncdTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfAchv", StandardBasicTypes.INTEGER).addScalar("iycfTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("womenAchv", StandardBasicTypes.INTEGER).addScalar("womenTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("womenAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("womenAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("adultAchv", StandardBasicTypes.INTEGER).addScalar("adultTarget", StandardBasicTypes.INTEGER)
+		        .addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)
+		        .addScalar("adultAvgParticipantTarget", StandardBasicTypes.INTEGER)
+		        
+		        .setResultTransformer(new AliasToBeanResultTransformer(ForumTargetReportDTO.class));
 		dtos = query.list();
-
+		
 		return dtos;
 	}
-
+	
 	@Transactional
 	public List<ForumTargetReportDTO> getForumPAReportForAMBySK(JSONObject params) throws JSONException {
 
@@ -1215,307 +1406,250 @@ public class TargetService extends CommonService {
 
 	@Transactional
 	public List<HrReportDTO> getHRReportDMWise(JSONObject params) throws JSONException {
-
+		
 		Session session = getSessionFactory();
 		List<HrReportDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.pm_hr_report_dm_wise('"+  params + "')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("dmName", StandardBasicTypes.STRING)
-				.addScalar("totalAm", StandardBasicTypes.INTEGER)
-				.addScalar("totalBranch", StandardBasicTypes.INTEGER)
-				.addScalar("positions", StandardBasicTypes.INTEGER)
-				.addScalar("activeUsers", StandardBasicTypes.INTEGER)
-				.addScalar("onLeaveUsers", StandardBasicTypes.INTEGER)
-				.setResultTransformer(new AliasToBeanResultTransformer(HrReportDTO.class));
+		
+		String hql = "select * from report.pm_hr_report_dm_wise('" + params + "')";
+		Query query = session.createSQLQuery(hql).addScalar("dmName", StandardBasicTypes.STRING)
+		        .addScalar("totalAm", StandardBasicTypes.INTEGER).addScalar("totalBranch", StandardBasicTypes.INTEGER)
+		        .addScalar("positions", StandardBasicTypes.INTEGER).addScalar("activeUsers", StandardBasicTypes.INTEGER)
+		        .addScalar("onLeaveUsers", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(HrReportDTO.class));
 		dtos = query.list();
-
+		
 		return dtos;
 	}
-
+	
 	@Transactional
 	public List<HrReportDTO> getHRReportAMWise(JSONObject params) throws JSONException {
-
+		
 		Session session = getSessionFactory();
 		List<HrReportDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.dm_hr_report_am_wise('"+  params + "')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("amName", StandardBasicTypes.STRING)
-				.addScalar("totalBranch", StandardBasicTypes.INTEGER)
-				.addScalar("positions", StandardBasicTypes.INTEGER)
-				.addScalar("activeUsers", StandardBasicTypes.INTEGER)
-				.addScalar("onLeaveUsers", StandardBasicTypes.INTEGER)
-				.setResultTransformer(new AliasToBeanResultTransformer(HrReportDTO.class));
+		
+		String hql = "select * from report.dm_hr_report_am_wise('" + params + "')";
+		Query query = session.createSQLQuery(hql).addScalar("amName", StandardBasicTypes.STRING)
+		        .addScalar("totalBranch", StandardBasicTypes.INTEGER).addScalar("positions", StandardBasicTypes.INTEGER)
+		        .addScalar("activeUsers", StandardBasicTypes.INTEGER).addScalar("onLeaveUsers", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(HrReportDTO.class));
 		dtos = query.list();
-
+		
 		return dtos;
 	}
-
+	
 	@Transactional
 	public List<HrReportDTO> getHRReportBranchWise(JSONObject params) throws JSONException {
-
+		
 		Session session = getSessionFactory();
 		List<HrReportDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.am_hr_report_branch_wise('"+  params + "')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("branchName", StandardBasicTypes.STRING)
-				.addScalar("positions", StandardBasicTypes.INTEGER)
-				.addScalar("activeUsers", StandardBasicTypes.INTEGER)
-				.addScalar("onLeaveUsers", StandardBasicTypes.INTEGER)
-				.setResultTransformer(new AliasToBeanResultTransformer(HrReportDTO.class));
+		
+		String hql = "select * from report.am_hr_report_branch_wise('" + params + "')";
+		Query query = session.createSQLQuery(hql).addScalar("branchName", StandardBasicTypes.STRING)
+		        .addScalar("positions", StandardBasicTypes.INTEGER).addScalar("activeUsers", StandardBasicTypes.INTEGER)
+		        .addScalar("onLeaveUsers", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(HrReportDTO.class));
 		dtos = query.list();
-
+		
 		return dtos;
 	}
-
+	
 	@Transactional
 	public List<TimestamReportDTO> getPMTimestapmReportDMWise(JSONObject params) throws JSONException {
-
+		
 		Session session = getSessionFactory();
 		List<TimestamReportDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.pm_timestamp_report_dm_wise('"+  params + "','{" + params.getString("branchIds") + "}')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("providerUserName", StandardBasicTypes.STRING)
-				.addScalar("fullName", StandardBasicTypes.STRING)
-				.addScalar("iycfTime", StandardBasicTypes.INTEGER)
-				.addScalar("ancTime", StandardBasicTypes.INTEGER)
-				.addScalar("ncdTime", StandardBasicTypes.INTEGER)
-				.addScalar("womenTime", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentTime", StandardBasicTypes.INTEGER)
-				.addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
-				.setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
+		
+		String hql = "select * from report.pm_timestamp_report_dm_wise('" + params + "','{" + params.getString("branchIds")
+		        + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("providerUserName", StandardBasicTypes.STRING)
+		        .addScalar("fullName", StandardBasicTypes.STRING).addScalar("iycfTime", StandardBasicTypes.INTEGER)
+		        .addScalar("ancTime", StandardBasicTypes.INTEGER).addScalar("ncdTime", StandardBasicTypes.INTEGER)
+		        .addScalar("womenTime", StandardBasicTypes.INTEGER).addScalar("adolescentTime", StandardBasicTypes.INTEGER)
+		        .addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
 		dtos = query.list();
 		return dtos;
 	}
-
+	
 	@Transactional
 	public List<TimestamReportDTO> getDMTimestapmReportAMWise(JSONObject params) throws JSONException {
-
+		
 		Session session = getSessionFactory();
 		List<TimestamReportDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.dm_timestamp_report_am_wise('"+  params + "','{" + params.getString("branchIds") + "}')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("providerUserName", StandardBasicTypes.STRING)
-				.addScalar("fullName", StandardBasicTypes.STRING)
-				.addScalar("iycfTime", StandardBasicTypes.INTEGER)
-				.addScalar("ancTime", StandardBasicTypes.INTEGER)
-				.addScalar("ncdTime", StandardBasicTypes.INTEGER)
-				.addScalar("womenTime", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentTime", StandardBasicTypes.INTEGER)
-				.addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
-				.setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
+		
+		String hql = "select * from report.dm_timestamp_report_am_wise('" + params + "','{" + params.getString("branchIds")
+		        + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("providerUserName", StandardBasicTypes.STRING)
+		        .addScalar("fullName", StandardBasicTypes.STRING).addScalar("iycfTime", StandardBasicTypes.INTEGER)
+		        .addScalar("ancTime", StandardBasicTypes.INTEGER).addScalar("ncdTime", StandardBasicTypes.INTEGER)
+		        .addScalar("womenTime", StandardBasicTypes.INTEGER).addScalar("adolescentTime", StandardBasicTypes.INTEGER)
+		        .addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
 		dtos = query.list();
 		return dtos;
 	}
-
+	
 	@Transactional
 	public List<TimestamReportDTO> getAMTimestapmReportBranchWise(JSONObject params) throws JSONException {
-
+		
 		Session session = getSessionFactory();
 		List<TimestamReportDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.am_timestamp_report_branch_wise('"+  params + "','{" + params.getString("branchIds") + "}')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("branchName", StandardBasicTypes.STRING)
-				.addScalar("iycfTime", StandardBasicTypes.INTEGER)
-				.addScalar("ancTime", StandardBasicTypes.INTEGER)
-				.addScalar("ncdTime", StandardBasicTypes.INTEGER)
-				.addScalar("womenTime", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentTime", StandardBasicTypes.INTEGER)
-				.addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
-				.setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
+		
+		String hql = "select * from report.am_timestamp_report_branch_wise('" + params + "','{"
+		        + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("branchName", StandardBasicTypes.STRING)
+		        .addScalar("iycfTime", StandardBasicTypes.INTEGER).addScalar("ancTime", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdTime", StandardBasicTypes.INTEGER).addScalar("womenTime", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentTime", StandardBasicTypes.INTEGER)
+		        .addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
 		dtos = query.list();
 		return dtos;
 	}
-
+	
 	@Transactional
 	public List<TimestamReportDTO> getAMTimestapmReportProviderWise(JSONObject params) throws JSONException {
-
+		
 		Session session = getSessionFactory();
 		List<TimestamReportDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.am_timestamp_report_provider_wise('"+  params + "','{" + params.getString("branchIds") + "}')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("providerUserName", StandardBasicTypes.STRING)
-				.addScalar("fullName", StandardBasicTypes.STRING)
-				.addScalar("branchName", StandardBasicTypes.STRING)
-				.addScalar("iycfTime", StandardBasicTypes.INTEGER)
-				.addScalar("ancTime", StandardBasicTypes.INTEGER)
-				.addScalar("ncdTime", StandardBasicTypes.INTEGER)
-				.addScalar("womenTime", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentTime", StandardBasicTypes.INTEGER)
-				.addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
-				.setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
+		
+		String hql = "select * from report.am_timestamp_report_provider_wise('" + params + "','{"
+		        + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql).addScalar("providerUserName", StandardBasicTypes.STRING)
+		        .addScalar("fullName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
+		        .addScalar("iycfTime", StandardBasicTypes.INTEGER).addScalar("ancTime", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdTime", StandardBasicTypes.INTEGER).addScalar("womenTime", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentTime", StandardBasicTypes.INTEGER)
+		        .addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
 		dtos = query.list();
 		return dtos;
 	}
-
+	
 	@Transactional
-	public List<ReferralReportDTO> getReferralReport(
-			String startDate,
-			String endDate,
-			String parentLocationTag,
-			Integer parentLocationId,
-			String parentLocationName,
-			String locationTag)  {
-
+	public List<ReferralReportDTO> getReferralReport(String startDate, String endDate, String parentLocationTag,
+	                                                 Integer parentLocationId, String parentLocationName, String locationTag) {
+		
 		Session session = getSessionFactory();
 		List<ReferralReportDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.get_referral_report_by_location( '"+startDate+"' ,  '"+endDate+"', '"+  parentLocationTag
-				+ "', " + parentLocationId + ", '" + parentLocationName + "', '" + locationTag + "')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("locName", StandardBasicTypes.STRING)
-				.addScalar("pregnancyProblems", StandardBasicTypes.INTEGER)
-				.addScalar("deliveryProblems", StandardBasicTypes.INTEGER)
-				.addScalar("pncProblems", StandardBasicTypes.INTEGER)
-				.addScalar("childProblems", StandardBasicTypes.INTEGER)
-				.addScalar("eyeProblems", StandardBasicTypes.INTEGER)
-				.addScalar("diabetes", StandardBasicTypes.INTEGER)
-				.addScalar("bp", StandardBasicTypes.INTEGER)
-				.addScalar("birthControlProblems", StandardBasicTypes.INTEGER)
-				.addScalar("otherProblems", StandardBasicTypes.INTEGER)
-				.setResultTransformer(new AliasToBeanResultTransformer(ReferralReportDTO.class));
+		
+		String hql = "select * from report.get_referral_report_by_location( '" + startDate + "' ,  '" + endDate + "', '"
+		        + parentLocationTag + "', " + parentLocationId + ", '" + parentLocationName + "', '" + locationTag + "')";
+		Query query = session.createSQLQuery(hql).addScalar("locName", StandardBasicTypes.STRING)
+		        .addScalar("pregnancyProblems", StandardBasicTypes.INTEGER)
+		        .addScalar("deliveryProblems", StandardBasicTypes.INTEGER)
+		        .addScalar("pncProblems", StandardBasicTypes.INTEGER).addScalar("childProblems", StandardBasicTypes.INTEGER)
+		        .addScalar("eyeProblems", StandardBasicTypes.INTEGER).addScalar("diabetes", StandardBasicTypes.INTEGER)
+		        .addScalar("bp", StandardBasicTypes.INTEGER).addScalar("birthControlProblems", StandardBasicTypes.INTEGER)
+		        .addScalar("otherProblems", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(ReferralReportDTO.class));
 		dtos = query.list();
 		return dtos;
 	}
-
+	
 	@Transactional
-	public List<ReferralFollowupReportDTO> getReferralFollowupReport(
-			String startDate,
-			String endDate,
-			String parentLocationTag,
-			Integer parentLocationId,
-			String parentLocationName,
-			String locationTag,
-			String referralReason)  {
-
+	public List<ReferralFollowupReportDTO> getReferralFollowupReport(String startDate, String endDate,
+	                                                                 String parentLocationTag, Integer parentLocationId,
+	                                                                 String parentLocationName, String locationTag,
+	                                                                 String referralReason) {
+		
 		Session session = getSessionFactory();
 		List<ReferralFollowupReportDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.get_referral_followup_report( '"+startDate+"' ,  '"+endDate+"', '"+  parentLocationTag
-				+ "', " + parentLocationId + ", '" + parentLocationName + "', '" + locationTag + "', '"+referralReason+"')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("locName", StandardBasicTypes.STRING)
-				.addScalar("didNotVisit", StandardBasicTypes.INTEGER)
-				.addScalar("referralReason", StandardBasicTypes.INTEGER)
-				.addScalar("totalFollowup", StandardBasicTypes.INTEGER)
-				.addScalar("bracMaternityCenter", StandardBasicTypes.INTEGER)
-				.addScalar("unionHealthCenter", StandardBasicTypes.INTEGER)
-				.addScalar("upazilaHealthComplex", StandardBasicTypes.INTEGER)
-				.addScalar("unionFamilyKollanCenter", StandardBasicTypes.INTEGER)
-				.addScalar("unionHealthAndFamilyKollanCenter", StandardBasicTypes.INTEGER)
-				.addScalar("motherChildKollanCenter", StandardBasicTypes.INTEGER)
-				.addScalar("centerHospital", StandardBasicTypes.INTEGER)
-				.addScalar("medicalCollageHospital", StandardBasicTypes.INTEGER)
-				.addScalar("privateClinic", StandardBasicTypes.INTEGER)
-				.addScalar("specialHospital", StandardBasicTypes.INTEGER)
-				.addScalar("otherOption", StandardBasicTypes.INTEGER)
-
-				.setResultTransformer(new AliasToBeanResultTransformer(ReferralFollowupReportDTO.class));
+		
+		String hql = "select * from report.get_referral_followup_report( '" + startDate + "' ,  '" + endDate + "', '"
+		        + parentLocationTag + "', " + parentLocationId + ", '" + parentLocationName + "', '" + locationTag + "', '"
+		        + referralReason + "')";
+		Query query = session.createSQLQuery(hql).addScalar("locName", StandardBasicTypes.STRING)
+		        .addScalar("didNotVisit", StandardBasicTypes.INTEGER)
+		        .addScalar("referralReason", StandardBasicTypes.INTEGER)
+		        .addScalar("totalFollowup", StandardBasicTypes.INTEGER)
+		        .addScalar("bracMaternityCenter", StandardBasicTypes.INTEGER)
+		        .addScalar("unionHealthCenter", StandardBasicTypes.INTEGER)
+		        .addScalar("upazilaHealthComplex", StandardBasicTypes.INTEGER)
+		        .addScalar("unionFamilyKollanCenter", StandardBasicTypes.INTEGER)
+		        .addScalar("unionHealthAndFamilyKollanCenter", StandardBasicTypes.INTEGER)
+		        .addScalar("motherChildKollanCenter", StandardBasicTypes.INTEGER)
+		        .addScalar("centerHospital", StandardBasicTypes.INTEGER)
+		        .addScalar("medicalCollageHospital", StandardBasicTypes.INTEGER)
+		        .addScalar("privateClinic", StandardBasicTypes.INTEGER)
+		        .addScalar("specialHospital", StandardBasicTypes.INTEGER)
+		        .addScalar("otherOption", StandardBasicTypes.INTEGER)
+		        
+		        .setResultTransformer(new AliasToBeanResultTransformer(ReferralFollowupReportDTO.class));
 		dtos = query.list();
 		return dtos;
 	}
-
+	
 	@Transactional
-	public List<PerformanceMapDTO> getLocationBasedPerformanceMap(
-			String startDate,
-			String endDate,
-			String parentLocationTag,
-			Integer parentLocationId,
-			String parentLocationName,
-			String locationTag)  {
-
+	public List<PerformanceMapDTO> getLocationBasedPerformanceMap(String startDate, String endDate,
+	                                                              String parentLocationTag, Integer parentLocationId,
+	                                                              String parentLocationName, String locationTag) {
+		
 		Session session = getSessionFactory();
 		List<PerformanceMapDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.get_performance_report( '"+startDate+"' ,  '"+endDate+"', '"+  parentLocationTag
-				+ "', " + parentLocationId + ", '" + parentLocationName + "', '" + locationTag + "')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("locName", StandardBasicTypes.STRING)
-				.addScalar("hhVisit", StandardBasicTypes.INTEGER)
-				.addScalar("elcoRegistration", StandardBasicTypes.INTEGER)
-				.addScalar("methodUsers", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentMethodUser", StandardBasicTypes.INTEGER)
-				.addScalar("pregnancy", StandardBasicTypes.INTEGER)
-				.addScalar("delivery", StandardBasicTypes.INTEGER)
-				.addScalar("instituteDelivery", StandardBasicTypes.INTEGER)
-				.addScalar("child0To6", StandardBasicTypes.INTEGER)
-				.addScalar("child7To24", StandardBasicTypes.INTEGER)
-				.addScalar("child18To36", StandardBasicTypes.INTEGER)
-				.addScalar("immunization", StandardBasicTypes.INTEGER)
-				.addScalar("anc", StandardBasicTypes.INTEGER)
-				.addScalar("pnc", StandardBasicTypes.INTEGER)
-				.addScalar("adolescent", StandardBasicTypes.INTEGER)
-				.addScalar("women", StandardBasicTypes.INTEGER)
-				.addScalar("ncd", StandardBasicTypes.INTEGER)
-				.addScalar("iycf", StandardBasicTypes.INTEGER)
-				.addScalar("forumIycf", StandardBasicTypes.INTEGER)
-				.addScalar("forumIycfParticipant", StandardBasicTypes.INTEGER)
-				.addScalar("forumAdolescent", StandardBasicTypes.INTEGER)
-				.addScalar("forumAdolescentParticipant", StandardBasicTypes.INTEGER)
-				.addScalar("forumWomen", StandardBasicTypes.INTEGER)
-				.addScalar("forumWomenParticipant", StandardBasicTypes.INTEGER)
-				.addScalar("forumAdult", StandardBasicTypes.INTEGER)
-				.addScalar("forumAdultParticipant", StandardBasicTypes.INTEGER)
-				.addScalar("forumNcd", StandardBasicTypes.INTEGER)
-				.addScalar("forumNcdParticipant", StandardBasicTypes.INTEGER)
-				.setResultTransformer(new AliasToBeanResultTransformer(PerformanceMapDTO.class));
+		
+		String hql = "select * from report.get_performance_report( '" + startDate + "' ,  '" + endDate + "', '"
+		        + parentLocationTag + "', " + parentLocationId + ", '" + parentLocationName + "', '" + locationTag + "')";
+		Query query = session.createSQLQuery(hql).addScalar("locName", StandardBasicTypes.STRING)
+		        .addScalar("hhVisit", StandardBasicTypes.INTEGER).addScalar("elcoRegistration", StandardBasicTypes.INTEGER)
+		        .addScalar("methodUsers", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentMethodUser", StandardBasicTypes.INTEGER)
+		        .addScalar("pregnancy", StandardBasicTypes.INTEGER).addScalar("delivery", StandardBasicTypes.INTEGER)
+		        .addScalar("instituteDelivery", StandardBasicTypes.INTEGER)
+		        .addScalar("child0To6", StandardBasicTypes.INTEGER).addScalar("child7To24", StandardBasicTypes.INTEGER)
+		        .addScalar("child18To36", StandardBasicTypes.INTEGER).addScalar("immunization", StandardBasicTypes.INTEGER)
+		        .addScalar("anc", StandardBasicTypes.INTEGER).addScalar("pnc", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescent", StandardBasicTypes.INTEGER).addScalar("women", StandardBasicTypes.INTEGER)
+		        .addScalar("ncd", StandardBasicTypes.INTEGER).addScalar("iycf", StandardBasicTypes.INTEGER)
+		        .addScalar("forumIycf", StandardBasicTypes.INTEGER)
+		        .addScalar("forumIycfParticipant", StandardBasicTypes.INTEGER)
+		        .addScalar("forumAdolescent", StandardBasicTypes.INTEGER)
+		        .addScalar("forumAdolescentParticipant", StandardBasicTypes.INTEGER)
+		        .addScalar("forumWomen", StandardBasicTypes.INTEGER)
+		        .addScalar("forumWomenParticipant", StandardBasicTypes.INTEGER)
+		        .addScalar("forumAdult", StandardBasicTypes.INTEGER)
+		        .addScalar("forumAdultParticipant", StandardBasicTypes.INTEGER)
+		        .addScalar("forumNcd", StandardBasicTypes.INTEGER)
+		        .addScalar("forumNcdParticipant", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(PerformanceMapDTO.class));
 		dtos = query.list();
 		return dtos;
 	}
-
+	
 	@Transactional
-	public List<PerformanceMapDTO> getLocationBasedPerformanceChart(
-			String startDate,
-			String endDate,
-			String parentLocationTag,
-			Integer parentLocationId,
-			String parentLocationName,
-			String locationTag)  {
-
+	public List<PerformanceMapDTO> getLocationBasedPerformanceChart(String startDate, String endDate,
+	                                                                String parentLocationTag, Integer parentLocationId,
+	                                                                String parentLocationName, String locationTag) {
+		
 		Session session = getSessionFactory();
 		List<PerformanceMapDTO> dtos = new ArrayList<>();
-
-		String hql = "select * from report.get_performance_chart_report( '"+startDate+"' ,  '"+endDate+"', '"+  parentLocationTag
-				+ "', " + parentLocationId + ", '" + parentLocationName + "', '" + locationTag + "')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("monthValue", StandardBasicTypes.INTEGER)
-				.addScalar("hhVisit", StandardBasicTypes.INTEGER)
-				.addScalar("elcoRegistration", StandardBasicTypes.INTEGER)
-				.addScalar("methodUsers", StandardBasicTypes.INTEGER)
-				.addScalar("adolescentMethodUser", StandardBasicTypes.INTEGER)
-				.addScalar("pregnancy", StandardBasicTypes.INTEGER)
-				.addScalar("delivery", StandardBasicTypes.INTEGER)
-				.addScalar("instituteDelivery", StandardBasicTypes.INTEGER)
-				.addScalar("child0To6", StandardBasicTypes.INTEGER)
-				.addScalar("child7To24", StandardBasicTypes.INTEGER)
-				.addScalar("child18To36", StandardBasicTypes.INTEGER)
-				.addScalar("immunization", StandardBasicTypes.INTEGER)
-				.addScalar("anc", StandardBasicTypes.INTEGER)
-				.addScalar("pnc", StandardBasicTypes.INTEGER)
-				.addScalar("adolescent", StandardBasicTypes.INTEGER)
-				.addScalar("women", StandardBasicTypes.INTEGER)
-				.addScalar("ncd", StandardBasicTypes.INTEGER)
-				.addScalar("iycf", StandardBasicTypes.INTEGER)
-				.addScalar("forumIycf", StandardBasicTypes.INTEGER)
-				.addScalar("forumIycfParticipant", StandardBasicTypes.INTEGER)
-				.addScalar("forumAdolescent", StandardBasicTypes.INTEGER)
-				.addScalar("forumAdolescentParticipant", StandardBasicTypes.INTEGER)
-				.addScalar("forumWomen", StandardBasicTypes.INTEGER)
-				.addScalar("forumWomenParticipant", StandardBasicTypes.INTEGER)
-				.addScalar("forumAdult", StandardBasicTypes.INTEGER)
-				.addScalar("forumAdultParticipant", StandardBasicTypes.INTEGER)
-				.addScalar("forumNcd", StandardBasicTypes.INTEGER)
-				.addScalar("forumNcdParticipant", StandardBasicTypes.INTEGER)
-				.setResultTransformer(new AliasToBeanResultTransformer(PerformanceMapDTO.class));
+		
+		String hql = "select * from report.get_performance_chart_report( '" + startDate + "' ,  '" + endDate + "', '"
+		        + parentLocationTag + "', " + parentLocationId + ", '" + parentLocationName + "', '" + locationTag + "')";
+		Query query = session.createSQLQuery(hql).addScalar("monthValue", StandardBasicTypes.INTEGER)
+		        .addScalar("hhVisit", StandardBasicTypes.INTEGER).addScalar("elcoRegistration", StandardBasicTypes.INTEGER)
+		        .addScalar("methodUsers", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescentMethodUser", StandardBasicTypes.INTEGER)
+		        .addScalar("pregnancy", StandardBasicTypes.INTEGER).addScalar("delivery", StandardBasicTypes.INTEGER)
+		        .addScalar("instituteDelivery", StandardBasicTypes.INTEGER)
+		        .addScalar("child0To6", StandardBasicTypes.INTEGER).addScalar("child7To24", StandardBasicTypes.INTEGER)
+		        .addScalar("child18To36", StandardBasicTypes.INTEGER).addScalar("immunization", StandardBasicTypes.INTEGER)
+		        .addScalar("anc", StandardBasicTypes.INTEGER).addScalar("pnc", StandardBasicTypes.INTEGER)
+		        .addScalar("adolescent", StandardBasicTypes.INTEGER).addScalar("women", StandardBasicTypes.INTEGER)
+		        .addScalar("ncd", StandardBasicTypes.INTEGER).addScalar("iycf", StandardBasicTypes.INTEGER)
+		        .addScalar("forumIycf", StandardBasicTypes.INTEGER)
+		        .addScalar("forumIycfParticipant", StandardBasicTypes.INTEGER)
+		        .addScalar("forumAdolescent", StandardBasicTypes.INTEGER)
+		        .addScalar("forumAdolescentParticipant", StandardBasicTypes.INTEGER)
+		        .addScalar("forumWomen", StandardBasicTypes.INTEGER)
+		        .addScalar("forumWomenParticipant", StandardBasicTypes.INTEGER)
+		        .addScalar("forumAdult", StandardBasicTypes.INTEGER)
+		        .addScalar("forumAdultParticipant", StandardBasicTypes.INTEGER)
+		        .addScalar("forumNcd", StandardBasicTypes.INTEGER)
+		        .addScalar("forumNcdParticipant", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(PerformanceMapDTO.class));
 		dtos = query.list();
 		return dtos;
 	}
-
-
+	
 }

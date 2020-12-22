@@ -140,6 +140,130 @@ public class TargetReportDTO {
 	
 	private Integer NCDServiceSell;
 	
+	private Integer glassTarget;
+	
+	private Integer glassSell;
+	
+	private Integer presbyopiaTarget;
+	
+	private Integer presbyopiaAchievement;
+	
+	private Integer presbyopiaCorrectionTarget;
+	
+	private Integer presbyopiaCorrectionAchievement;
+	
+	private Integer diabetesTarget;
+	
+	private Integer diabetesAchievement;
+	
+	private Integer hbpTarget;
+	
+	private Integer hbpAchievement;
+	
+	private Integer cataractTarget;
+	
+	private Integer cataractAchievement;
+	
+	private Integer cataractSurgeryTarget;
+	
+	private Integer cataractSurgeryAchievement;
+	
+	public Integer getPresbyopiaTarget() {
+		return presbyopiaTarget;
+	}
+	
+	public void setPresbyopiaTarget(Integer presbyopiaTarget) {
+		this.presbyopiaTarget = presbyopiaTarget;
+	}
+	
+	public Integer getPresbyopiaAchievement() {
+		return presbyopiaAchievement;
+	}
+	
+	public void setPresbyopiaAchievement(Integer presbyopiaAchievement) {
+		this.presbyopiaAchievement = presbyopiaAchievement;
+	}
+	
+	public Integer getPresbyopiaCorrectionTarget() {
+		return presbyopiaCorrectionTarget;
+	}
+	
+	public void setPresbyopiaCorrectionTarget(Integer presbyopiaCorrectionTarget) {
+		this.presbyopiaCorrectionTarget = presbyopiaCorrectionTarget;
+	}
+	
+	public Integer getPresbyopiaCorrectionAchievement() {
+		return presbyopiaCorrectionAchievement;
+	}
+	
+	public void setPresbyopiaCorrectionAchievement(Integer presbyopiaCorrectionAchievement) {
+		this.presbyopiaCorrectionAchievement = presbyopiaCorrectionAchievement;
+	}
+	
+	public Integer getDiabetesTarget() {
+		return diabetesTarget;
+	}
+	
+	public void setDiabetesTarget(Integer diabetesTarget) {
+		this.diabetesTarget = diabetesTarget;
+	}
+	
+	public Integer getDiabetesAchievement() {
+		return diabetesAchievement;
+	}
+	
+	public void setDiabetesAchievement(Integer diabetesAchievement) {
+		this.diabetesAchievement = diabetesAchievement;
+	}
+	
+	public Integer getHbpTarget() {
+		return hbpTarget;
+	}
+	
+	public void setHbpTarget(Integer hbpTarget) {
+		this.hbpTarget = hbpTarget;
+	}
+	
+	public Integer getHbpAchievement() {
+		return hbpAchievement;
+	}
+	
+	public void setHbpAchievement(Integer hbpAchievement) {
+		this.hbpAchievement = hbpAchievement;
+	}
+	
+	public Integer getCataractTarget() {
+		return cataractTarget;
+	}
+	
+	public void setCataractTarget(Integer cataractTarget) {
+		this.cataractTarget = cataractTarget;
+	}
+	
+	public Integer getCataractAchievement() {
+		return cataractAchievement;
+	}
+	
+	public void setCataractAchievement(Integer cataractAchievement) {
+		this.cataractAchievement = cataractAchievement;
+	}
+	
+	public Integer getCataractSurgeryTarget() {
+		return cataractSurgeryTarget;
+	}
+	
+	public void setCataractSurgeryTarget(Integer cataractSurgeryTarget) {
+		this.cataractSurgeryTarget = cataractSurgeryTarget;
+	}
+	
+	public Integer getCataractSurgeryAchievement() {
+		return cataractSurgeryAchievement;
+	}
+	
+	public void setCataractSurgeryAchievement(Integer cataractSurgeryAchievement) {
+		this.cataractSurgeryAchievement = cataractSurgeryAchievement;
+	}
+	
 	public String getFullName() {
 		return this.firstName + " " + (this.lastName.equalsIgnoreCase(".") ? "" : this.lastName);
 	}
@@ -690,6 +814,22 @@ public class TargetReportDTO {
 	
 	public void setNCDServiceSell(Integer nCDServiceSell) {
 		NCDServiceSell = nCDServiceSell;
+	}
+	
+	public Integer getGlassTarget() {
+		return glassTarget;
+	}
+	
+	public void setGlassTarget(Integer glassTarget) {
+		this.glassTarget = glassTarget;
+	}
+	
+	public Integer getGlassSell() {
+		return glassSell;
+	}
+	
+	public void setGlassSell(Integer glassSell) {
+		this.glassSell = glassSell;
 	}
 	
 	@Override

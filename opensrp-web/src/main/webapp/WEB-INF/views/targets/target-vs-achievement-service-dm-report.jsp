@@ -22,6 +22,10 @@
 <c:url var="am_branch_wise_service_report_url" value="/target/report/am-branch-wise-service-target-report" />
 <c:url var="am_sk_wise_service_report_url" value="/target/report/am-provider-wise-service-target-report" />
 
+<c:url var="am_pa_report_url" value="/target/report/am-service-report-pa-wise-table" />
+<c:url var="branch_report_url_pa" value="/target/report/am-branch-wise-pa-service-target-report" />
+<c:url var="dm_pa_report_url" value="/target/report/dm-pa-service-target-report" />
+
 <style>
 	.select2-results__option .wrap:before {
 		font-family: fontAwesome;
@@ -86,7 +90,7 @@
 								0
 							</div>
 							<div class="desc">
-								SK Aggregated Perfomance
+								 Aggregated Perfomance
 							</div>
 						</div>
 					</div>
@@ -331,7 +335,7 @@ function getParamsData(){
 }
 function filter(){
 	
-	
+	var roleName = $("#roleList").val();
 	let url = '${report_url}';
 	let AM = $("#AM option:selected").val();
 	var branchIds =  $("#branchList").val();
@@ -340,15 +344,32 @@ function filter(){
   	}else{
   		branchIds = $("#branchList").val().join();
   	}
-  	var title = "Area manager wise service report";
-  	if( branchIds!=''){
-  		url = '${am_sk_wise_service_report_url}';
-  		title ="SK wise service report";
-  	}else if(AM !=0 && branchIds ==''){
-  		url = '${am_branch_wise_service_report_url}';
-  		title ="Branch wise service report";
+  	
+  	if(roleName=='SK'){
+  		
+  		var title = "Area manager wise service report";
+	  	if( branchIds!=''){
+	  		url = '${am_sk_wise_service_report_url}';
+	  		title ="SK wise service report";
+	  	}else if(AM !=0 && branchIds ==''){
+	  		url = '${am_branch_wise_service_report_url}';
+	  		title ="Branch wise service report";
+	  	}
+  	}else if(roleName=='PA'){
+  		alert(roleName);
+  		url = '${dm_pa_report_url}';  		
+  		var title = "Area manager wise service report";
+  		if( branchIds!=''){
+	  		url = '${am_pa_report_url}';
+	  		title ="SK wise service report";
+	  	}else if(AM !=0 && branchIds ==''){
+	  		url = '${branch_report_url_pa}';	  		
+	  		title ="Branch wise service report";
+	  	}
+  		
+  	}else{
+  		
   	}
-	
   	getReportData(url,title);
 	 
 }

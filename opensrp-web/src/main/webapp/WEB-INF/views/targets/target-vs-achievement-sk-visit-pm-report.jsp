@@ -24,7 +24,11 @@
 <c:url var="branch_wise_dm_visit_report_url" value="/target/report/dm-visit-target-report" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 
-
+<c:url var="branch_wise_report_url_pa" value="/target/report/am-visit-target-branch-wise-report-pa" />
+	
+<c:url var="provider_report_url_pa" value="/target/report/am-provider-wise-pa-visit-target-report" />
+<c:url var="dm_report_url_pa" value="/target/report/dm-visit-target-report-pa" />
+<c:url var="pm_report_url_pa" value="/target/report/pm-visit-target-report-pa" />
 <style>
 	.select2-results__option .wrap:before {
 		font-family: fontAwesome;
@@ -220,6 +224,7 @@ jQuery(document).ready(function() {
 
 
 function getReportData(url,title){
+	
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	$.ajax({
@@ -352,6 +357,8 @@ function getParamsData(){
 function filter(){
 	let divM = $("#divM option:selected").val();
 	let AM = $("#AM option:selected").val();
+	var roleName = $("#roleList").val();
+	
 	var branchIds =  $("#branchList").val();
 	var title = "Divisional manager wise visit report";
 	let url = '${report_url}';
@@ -365,18 +372,32 @@ function filter(){
 	}else{
 		$("#reportTile").html("Location Wise report");
 	} */
-  
-  	if( branchIds !=''){
-  		 url = '${sk_wise_am_visit_report_url}';
-   		title ="SK wise visit report";
-  	} else if(AM!=0 && branchIds==''){
-  		url = '${branch_wise_am_report_url}';
-  		title ="Branch wise visit report";
-  	}else if(divM !=0 && AM==0 && branchIds=='' ){
-  		url = '${branch_wise_dm_visit_report_url}';
-  		title= "Area manager Wise visit report";
-  	}
-	
+	if(roleName=='SK'){
+	  	if( branchIds !=''){
+	  		 url = '${sk_wise_am_visit_report_url}';
+	   		title ="SK wise visit report";
+	  	} else if(AM!=0 && branchIds==''){
+	  		url = '${branch_wise_am_report_url}';
+	  		title ="Branch wise visit report";
+	  	}else if(divM !=0 && AM==0 && branchIds=='' ){
+	  		url = '${branch_wise_dm_visit_report_url}';
+	  		title= "Area manager Wise visit report";
+	  	}
+	}else if(roleName=='PA'){
+		url ="${pm_report_url_pa}";
+		if( branchIds !=''){
+	  		 url = '${provider_report_url_pa}';
+	   		title ="SK wise visit report";
+	  	} else if(AM!=0 && branchIds==''){
+	  		url = '${branch_wise_report_url_pa}';
+	  		title ="Branch wise visit report";
+	  	}else if(divM !=0 && AM==0 && branchIds=='' ){
+	  		url = '${dm_report_url_pa}';
+	  		title= "Area manager Wise visit report";
+	  	}
+	}else {
+		
+	}
   	
   	getReportData(url,title);
   	
