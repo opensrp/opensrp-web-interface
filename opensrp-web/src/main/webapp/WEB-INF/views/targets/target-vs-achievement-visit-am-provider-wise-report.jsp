@@ -19,6 +19,11 @@
 <c:url var="branch_wise_report_url" value="/target/report/am-visit-target-branch-wise-report" />
 	
 <c:url var="report_url" value="/target/report/am-provider-wise-visit-target-report" />
+
+
+<c:url var="branch_wise_report_url_pa" value="/target/report/am-visit-target-branch-wise-report-pa" />
+	
+<c:url var="provider_report_url_pa" value="/target/report/am-provider-wise-pa-visit-target-report" />
 <style>
 	.select2-results__option .wrap:before {
 		font-family: fontAwesome;
@@ -261,17 +266,26 @@ function getParamsData(){
 }
 function filter(){
 	let url = '${branch_wise_report_url}'
-		
+	var roleName = $("#roleList").val();
 	var branchIds =  $("#branchList").val();
   	if( branchIds ==null || typeof branchIds == 'undefined'){
   		branchIds = ''
   	}else{
   		branchIds = $("#branchList").val().join();
   	}
-  	if(branchIds !=''){
-  		url= '${report_url}'
+  	
+  	if(roleName=='PA'){
+  		 url = '${branch_wise_report_url_pa}';
+  		if(branchIds !=''){
+  	  		url= '${provider_report_url_pa}';
+  	  	}
   		
+  	}else if(roleName=='SK'){
+  		if(branchIds !=''){
+  	  		url= '${report_url}';
+  	  	}
   	}
+  	
 	getReportData(url);
 	 
 }

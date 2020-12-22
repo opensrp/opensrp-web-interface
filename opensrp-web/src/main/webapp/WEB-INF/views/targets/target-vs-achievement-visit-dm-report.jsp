@@ -22,6 +22,13 @@
 
 <c:url var="sk_wise_am_visit_report_url" value="/target/report/am-provider-wise-visit-target-report" />
 
+
+
+<c:url var="branch_wise_report_url_pa" value="/target/report/am-visit-target-branch-wise-report-pa" />
+	
+<c:url var="provider_report_url_pa" value="/target/report/am-provider-wise-pa-visit-target-report" />
+<c:url var="dm_report_url_pa" value="/target/report/dm-visit-target-report-pa" />
+
 <style>
 	.select2-results__option .wrap:before {
 		font-family: fontAwesome;
@@ -73,7 +80,7 @@
 								0
 							</div>
 							<div class="desc">
-								Active SK
+								Active provider
 							</div>
 						</div>
 					</div>
@@ -87,7 +94,7 @@
 								0
 							</div>
 							<div class="desc">
-								SK Avg. Target vs Achievement
+								 Avg. Target vs Achievement
 							</div>
 						</div>
 					</div>
@@ -332,7 +339,7 @@ function getParamsData(){
 }
 function filter(){
 	
-	
+	var roleName = $("#roleList").val();
 	let AM = $("#AM option:selected").val();
 	var branchIds =  $("#branchList").val();
 	let url = '${report_url}';
@@ -341,15 +348,26 @@ function filter(){
   	}else{
   		branchIds = $("#branchList").val().join();
   	}
-  	var title = "Area manager wise visit report";
-  	if(branchIds!='' ){
-  		url = '${sk_wise_am_visit_report_url}';
-  		title ="SK wise visit report";
-  	}else if(AM !=0 && branchIds==''){
-  		 url = '${branch_wise_am_report_url}';
-   		title ="Branch wise visit report";
+  	if(roleName=='PA'){
+  		url = "${dm_report_url_pa}";
+  		var title = "Area manager wise visit report";
+	  	if(branchIds!='' ){
+	  		url = '${provider_report_url_pa}';
+	  		title ="SK wise visit report";
+	  	}else if(AM !=0 && branchIds==''){
+	  		 url = '${branch_wise_report_url_pa}';
+	   		title ="Branch wise visit report";
+	  	}
+  	}else if(roleName =='SK'){
+	  	var title = "Area manager wise visit report";
+	  	if(branchIds!='' ){
+	  		url = '${sk_wise_am_visit_report_url}';
+	  		title ="SK wise visit report";
+	  	}else if(AM !=0 && branchIds==''){
+	  		 url = '${branch_wise_am_report_url}';
+	   		title ="Branch wise visit report";
+	  	}
   	}
-  	
   	getReportData(url,title);
 	 
 }

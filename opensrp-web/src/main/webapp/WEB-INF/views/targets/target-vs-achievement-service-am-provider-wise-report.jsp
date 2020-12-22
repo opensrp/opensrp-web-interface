@@ -18,6 +18,10 @@
 	<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 <c:url var="barnch_report_url" value="/target/report/am-branch-wise-service-target-report" />	
 <c:url var="report_url" value="/target/report/am-provider-wise-service-target-report" />
+
+<c:url var="pa_report_url" value="/target/report/am-service-report-pa-wise-table" />
+<c:url var="branch_report_url_pa" value="/target/report/am-branch-wise-pa-service-target-report" />
+
 <style>
 	.select2-results__option .wrap:before {
 		font-family: fontAwesome;
@@ -135,17 +139,19 @@ jQuery(document).ready(function() {
 		
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
-		getReportDataBranchWise();
+		getReportDataBranchWise('${barnch_report_url}');
+		
 		 
 });
 
-function getReportData(){
+function getReportData(url){
+	
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	$.ajax({
         type : "POST",
         contentType : "application/json",
-        url : '${report_url}',
+        url : url,
         dataType : 'html',
         timeout : 300000,
         data:  JSON.stringify(getParamsData()),
@@ -185,13 +191,13 @@ function getReportData(){
     }); 
 }
 
-function getReportDataBranchWise(){
+function getReportDataBranchWise(url){
 	var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
 	$.ajax({
         type : "POST",
         contentType : "application/json",
-        url : '${barnch_report_url}',
+        url : url,
         dataType : 'html',
         timeout : 300000,
         data:  JSON.stringify(getParamsData()),
@@ -241,6 +247,7 @@ function reportType(value) {
 		$('#manager').hide();
 		$('#location').show();
 	}
+	
 }
 
 
@@ -302,17 +309,37 @@ function getParamsData(){
      return formData;
 }
 function filter(){
+	
 	var branchIds =  $("#branchList").val();
   	if( branchIds ==null || typeof branchIds == 'undefined'){
   		branchIds = ''
   	}else{
   		branchIds = $("#branchList").val().join();
   	}
-  	if(branchIds ==''){
-  		getReportDataBranchWise();
-  	}else{
-		getReportData();
-	}
+  	
+  	var roleName = $("#roleList").val();
+  	
+  	var url ="";
+  	if(roleName=='PA'){
+  		
+  		if(branchIds ==''){
+  			url = "${branch_report_url_pa}";
+  	  		getReportDataBranchWise(url);
+  	  	}else{
+  	  		url = "${pa_report_url}";
+  			getReportData(url);
+  		}
+  	}else if(roleName=='SK'){
+  		
+  		if(branchIds ==''){
+  			url='${barnch_report_url}';
+  	  		getReportDataBranchWise(url);
+  	  	}else{
+  	  		url='${report_url}';
+  			getReportData(url);
+  		}
+  	}
+  	
 	 
 }
 </script>

@@ -244,6 +244,27 @@ public class TargetController {
 		return "targets/target-vs-achievement-visit-pm-report";
 	}
 	
+	@RequestMapping(value = "/target/report/pm-visit-target-report-pa", method = RequestMethod.POST)
+	public String pmVisitTargetReportOfPA(@RequestBody String dto, HttpServletRequest request, HttpSession session,
+	                                      Model model) throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		String managerOrLocation = params.getString("managerOrLocation");
+		
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
+			totalList = targetService.getPMVisitReportOFPA(params);
+			
+		} else {
+			totalList = targetService.getPMVisitReportByLocation(params);
+		}
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
+		model.addAttribute("type", managerOrLocation);
+		
+		return "targets/target-vs-achievement-pa-visit-pm-report";
+	}
+	
 	@RequestMapping(value = "/target/target-vs-achievement-service-report-pm.html", method = RequestMethod.GET)
 	public String targetVsAchievementSKServicePMReport(HttpServletRequest request, HttpSession session, Model model,
 	                                                   Locale locale) {
@@ -274,6 +295,27 @@ public class TargetController {
 		model.addAttribute("type", managerOrLocation);
 		
 		return "targets/target-vs-achievement-service-pm-report-table";
+	}
+	
+	@RequestMapping(value = "/target/report/pm-pa-service-target-report", method = RequestMethod.POST)
+	public String pmPAServiceTargetReport(@RequestBody String dto, HttpServletRequest request, HttpSession session,
+	                                      Model model) throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		String managerOrLocation = params.getString("managerOrLocation");
+		
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
+			totalList = targetService.getPMPAServiceReportByManager(params);
+			System.err.println("totalList::" + totalList);
+		} else {
+			totalList = targetService.getPMServiceReportByLocation(params);
+		}
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
+		model.addAttribute("type", managerOrLocation);
+		
+		return "targets/target-vs-achievement-service-pm-pa-report-table";
 	}
 	
 	@RequestMapping(value = "/target/target-vs-achievement-service-report-dm.html", method = RequestMethod.GET)
@@ -313,6 +355,26 @@ public class TargetController {
 		return "targets/target-vs-achievement-service-dm-report-table";
 	}
 	
+	@RequestMapping(value = "/target/report/dm-pa-service-target-report", method = RequestMethod.POST)
+	public String dmPAServiceTargetReport(@RequestBody String dto, HttpServletRequest request, HttpSession session,
+	                                      Model model) throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		String managerOrLocation = params.getString("managerOrLocation");
+		
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
+			totalList = targetService.getDMPAServiceReportByManager(params);
+		} else {
+			totalList = targetService.getDMServiceReportByLocation(params);
+		}
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
+		model.addAttribute("type", managerOrLocation);
+		
+		return "targets/target-vs-achievement-pa-service-dm-report-table";
+	}
+	
 	@RequestMapping(value = "/target/target-vs-achievement-visit-report-dm.html", method = RequestMethod.GET)
 	public String targetVsAchievementVisitDMReport(HttpServletRequest request, HttpSession session, Model model,
 	                                               Locale locale) {
@@ -349,6 +411,26 @@ public class TargetController {
 		return "targets/target-vs-achievement-visit-dm-report-table";
 	}
 	
+	@RequestMapping(value = "/target/report/dm-visit-target-report-pa", method = RequestMethod.POST)
+	public String dmVisitTargetReportPA(@RequestBody String dto, HttpServletRequest request, HttpSession session, Model model)
+	    throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		String managerOrLocation = params.getString("managerOrLocation");
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		if (managerOrLocation.equalsIgnoreCase("managerWise")) {
+			totalList = targetService.getDMPAVisitReportByManager(params);
+			System.err.println("totalList" + totalList);
+		} else {
+			totalList = targetService.getDMVisitReportByLocation(params);
+		}
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
+		model.addAttribute("type", managerOrLocation);
+		
+		return "targets/pa-dm-visit-report-table";
+	}
+	
 	@RequestMapping(value = "/target/target-vs-achievement-service-report-am-branch-wise.html", method = RequestMethod.GET)
 	public String targetVsAchievementServiceAMReport(HttpServletRequest request, HttpSession session, Model model,
 	                                                 Locale locale) {
@@ -372,6 +454,21 @@ public class TargetController {
 		model.addAttribute("reportDatas", totalList);
 		
 		return "targets/target-vs-achievement-service-am-branch-wise-report-table";
+	}
+	
+	@RequestMapping(value = "/target/report/am-branch-wise-pa-service-target-report", method = RequestMethod.POST)
+	public String amPAServiceReportTargetReport(@RequestBody String dto, HttpServletRequest request, HttpSession session,
+	                                            Model model) throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		
+		totalList = targetService.getAMPAServiceReportByBranch(params);
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
+		model.addAttribute("reportDatas", totalList);
+		
+		return "targets/am-branch-wise-pa-service-target-report-table";
 	}
 	
 	@RequestMapping(value = "/target/target-vs-achievement-service-report-am-provider-wise.html", method = RequestMethod.GET)
@@ -424,6 +521,21 @@ public class TargetController {
 		return "targets/target-vs-achievement-visit-am-report-branch-wise-table";
 	}
 	
+	@RequestMapping(value = "/target/report/am-visit-target-branch-wise-report-pa", method = RequestMethod.POST)
+	public String amPAVisitTargetReport(@RequestBody String dto, HttpServletRequest request, HttpSession session, Model model)
+	    throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		
+		totalList = targetService.getAMPAVisitReportByBranch(params);
+		
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
+		return "targets/target-vs-achievement-pa-visit-am-report-branch-wise-table";
+	}
+	
 	@RequestMapping(value = "/target/target-vs-achievement-visit-report-am-provider-wise.html", method = RequestMethod.GET)
 	public String targetVsAchievementVisitProviderWiseAMReport(HttpServletRequest request, HttpSession session, Model model,
 	                                                           Locale locale) {
@@ -447,6 +559,36 @@ public class TargetController {
 		model.addAttribute("reportDatas", totalList);
 		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
 		return "targets/target-vs-achievement-visit-am-provider-wise-report-table";
+	}
+	
+	@RequestMapping(value = "/target/report/am-provider-wise-pa-visit-target-report", method = RequestMethod.POST)
+	public String providerWisePAVisitTargetReportAM(@RequestBody String dto, HttpServletRequest request,
+	                                                HttpSession session, Model model) throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		
+		totalList = targetService.getAMPAVisitReportByProvider(params);
+		
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
+		return "targets/target-vs-achievement-visit-am-provider-wise-pa-report-table";
+	}
+	
+	@RequestMapping(value = "/target/report/am-service-report-pa-wise-table", method = RequestMethod.POST)
+	public String providerWiseAMServiceTargetReportTabale(@RequestBody String dto, HttpServletRequest request,
+	                                                      HttpSession session, Model model) throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		
+		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
+		
+		totalList = targetService.getAMPAServiceReportByProvider(params);
+		
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
+		return "targets/am-service-report-pa-wise-table";
 	}
 	
 	@RequestMapping(value = "/target/target-vs-achv-forum-report-pm.html", method = RequestMethod.GET)
@@ -711,30 +853,6 @@ public class TargetController {
 		System.out.println(element.getAsJsonArray());
 		return element.getAsJsonArray();
 		
-	}
-	
-	@RequestMapping(value = "/target/am-service-report-pa-wise.html", method = RequestMethod.GET)
-	public String amServiceReportPaWise(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
-		model.addAttribute("locale", locale);
-		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-		String userIds = loggedInUser.getId() + "";
-		model.addAttribute("userIds", userIds);
-		return "targets/target-vs-achievement-service-am-provider-wise-report";
-	}
-	
-	@RequestMapping(value = "/target/report/am-service-report-pa-wise-table", method = RequestMethod.POST)
-	public String providerWiseAMServiceTargetReportTabale(@RequestBody String dto, HttpServletRequest request,
-	                                                      HttpSession session, Model model) throws JSONException {
-		
-		JSONObject params = new JSONObject(dto);
-		
-		List<TargetReportDTO> totalList = new ArrayList<TargetReportDTO>();
-		
-		totalList = targetService.getAMServiceReportByProvider(params);
-		
-		model.addAttribute("reportDatas", totalList);
-		model.addAttribute("jsonReportData", getTargetsAsJson(totalList).toString());
-		return "targets/target-vs-achievement-service-am-provider-wise-report-table";
 	}
 	
 }
