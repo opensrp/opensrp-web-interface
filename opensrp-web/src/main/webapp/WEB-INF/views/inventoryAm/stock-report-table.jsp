@@ -10,7 +10,7 @@
 <%@ taglib prefix="security"
            uri="http://www.springframework.org/security/tags"%>
 <%
-    List<StockReportDTO> amStockReport = (List<StockReportDTO>) session.getAttribute("amStockReport");
+    List<StockReportDTO> amStockReport = (List<StockReportDTO>) session.getAttribute("stockReport");
 %>
 
 

@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.opensrp.common.dto.PAStockReportDTO;
 import org.opensrp.common.dto.StockReportDTO;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.dto.RequisitionQueryDto;
@@ -259,8 +260,11 @@ public class InventoryAmController {
 			@RequestParam(value="year") String year,
 			@RequestParam(value="month") String month,
 			@RequestParam(value="branchIds", required = false) String branchIds,
+			@RequestParam(value="userRole", required = false, defaultValue = "SK") String userRole,
 			HttpSession session) {
-		String skIds;
+		String skIds, reportTable;
+		List<StockReportDTO> report = new ArrayList<>();
+		List<PAStockReportDTO> paReport = new ArrayList<>();
 
 		System.out.println("branchIds: "+ branchIds);
 		if (StringUtils.isBlank(branchIds)) {
@@ -269,9 +273,16 @@ public class InventoryAmController {
 		} else {
 			skIds = userService.findSKByBranchSeparatedByComma("'{" + branchIds + "}'");
 		}
-		List<StockReportDTO> report = stockService.getStockReportForAM(year, month, skIds);
-		session.setAttribute("amStockReport", report);
-		return "inventoryAm/stock-report-table";
+		if(userRole.equals("SK")) {
+			report = stockService.getStockReportForSK(year, month, skIds);
+			reportTable = "inventoryAm/stock-report-table";
+		}
+		else {
+			paReport = stockService.getStockReportForPA(year, month, skIds);
+			reportTable = "inventoryAm/pa-stock-report-table";
+		}
+		session.setAttribute("stockReport", userRole.equals("SK") ? report : paReport);
+		return reportTable;
 	}
 	
 	@RequestMapping(value = "inventoryam/stock-list/view/{id}.html", method = RequestMethod.GET)
