@@ -12,6 +12,8 @@ public class ForumTargetReportDTO {
 
     private Integer numberOfSK;
 
+    private Integer numberOfPA;
+
     private Integer numberOfBranch;
 
     private Integer adolescentAchv;
@@ -260,5 +262,13 @@ public class ForumTargetReportDTO {
 
     public void setBranchName(String branchName) {
         this.branchName = branchName;
+    }
+
+    public Integer getNumberOfPA() {
+        return numberOfPA;
+    }
+
+    public void setNumberOfPA(Integer numberOfPA) {
+        this.numberOfPA = numberOfPA;
     }
 }

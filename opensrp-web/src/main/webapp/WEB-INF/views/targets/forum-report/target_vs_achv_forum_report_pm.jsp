@@ -9,18 +9,19 @@
            uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Target vs achievement visit pm report</title>
+<title>Target vs achievement forum pm report</title>
 
 <c:url var="branch_url" value="/branch-list-options-by-user-ids" />
 <c:url var="all_branch_url" value="/all-branch-list-options" />
 
 <c:url var="user_list_url" value="/user-list-options-by-parent-user-ids" />
 
-<c:url var="report_url" value="/target/target-vs-achv-forum-report-dm" />
-<jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
+<c:url var="report_url" value="/target/report/pm-wise-forum-report" />
 
-<c:url var="am_branch_wise_service_report_url" value="/target/target-vs-achv-forum-report-am-by-branch" />
-<c:url var="am_sk_wise_service_report_url" value="/target/target-vs-achv-forum-report-am-by-provider" />
+<c:url var="branch_wise_am_report_url" value="/target/target-vs-achv-forum-report-am-by-branch" />
+
+<c:url var="sk_wise_am_visit_report_url" value="/target/target-vs-achv-forum-report-am-by-provider" />
+<c:url var="branch_wise_dm_visit_report_url" value="/target/target-vs-achv-forum-report-dm" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 
 
@@ -75,7 +76,7 @@
                             0
                         </div>
                         <div class="desc">
-                            Active SK
+                            Active Provider
                         </div>
                     </div>
                 </div>
@@ -95,6 +96,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-md-12">
 
@@ -125,12 +127,18 @@
 
                             <div class="row" id="manager">
                                 <div class="col-lg-3 form-group">
+                                    <label for="cars">Divisional manager </label>
+                                    <select	onclick="getAm(this.value,'AM')" name="divM" class="form-control" id="divM">
+                                        <option value="0">Please select</option>
+                                        <c:forEach items="${divms}" var="divm">
+                                            <option value="${divm.getId()}">${divm.getFullName()}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 form-group">
                                     <label for="cars">Area manager </label>
                                     <select	onclick="getBranchListByUserId(this.value,'branchList')" name="AM"  id="AM" class="form-control">
                                         <option value="0">Please select </option>
-                                        <c:forEach items="${users}" var="user">
-                                            <option value="${user.getId()}">${user.getFullName()}</option>
-                                        </c:forEach>
                                     </select>
                                 </div>
 
@@ -179,13 +187,14 @@
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
-<script src="<c:url value='/resources/chart/highcharts.js'/>"></script>
+
 <script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
+<script src="<c:url value='/resources/chart/highcharts.js'/>"></script>
 <script>
     jQuery(document).ready(function() {
         Metronic.init(); // init metronic core components
         Layout.init(); // init current layout
-        getBranchByuserIds('${userIds}')
+        getAllBranch();
         $('#branchList').select2MultiCheckboxes({
             placeholder: "Select branch",
             width: "auto",
@@ -199,9 +208,12 @@
 
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
-        getReportData('${report_url}',"Area manager wise forum report");
+
+        getReportData('${report_url}',"Divisional manager wise forum report");
 
     });
+
+
 
     function getReportData(url,title){
         var token = $("meta[name='_csrf']").attr("content");
@@ -221,23 +233,26 @@
             },
             success : function(data) {
                 //let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
-                let managerOrLocation ='managerWise';
+                let managerOrLocation ="managerWise";
+
                 $('#loading').hide();
                 $("#report").html(data);
                 $('#search-button').attr("disabled", false);
                 let reportType =$("input[name='time-period']:checked").val();
                 if(managerOrLocation =='managerWise'){
+
                     $("#reportTile").html(title);
                 }else{
                     $("#reportTile").html("Location Wise report");
                 }
+
 
                 $('#reportDataTable').DataTable({
                     scrollY:        "300px",
                     scrollX:        true,
                     scrollCollapse: true,
                     fixedColumns:   {
-                        leftColumns: 2
+                        leftColumns: 1
                     }
                 });
             },
@@ -285,15 +300,15 @@
         let division = $("#divisionList option:selected").val();
         let upazila = $("#upazilaList option:selected").val();
 
-        let divM = '${userIds}';
+        let divM = $("#divM option:selected").val();
         let AM = $("#AM option:selected").val();
 
         //let managerOrLocation =$("input[name='managerOrLocation']:checked").val();
-        let managerOrLocation ='managerWise';
+        let managerOrLocation ="managerWise";
         let reportType =$("input[name='time-period']:checked").val();
         /* if(managerOrLocation =='managerWise'){
-            division=0;
             district=0;
+            division=0;
             upazila=0;
         }else{
             divM=0;
@@ -331,26 +346,35 @@
         return formData;
     }
     function filter(){
-
-
-        let url = '${report_url}';
+        let divM = $("#divM option:selected").val();
         let AM = $("#AM option:selected").val();
         var branchIds =  $("#branchList").val();
+        var title = "Divisional manager wise forum report";
+        let url = '${report_url}';
         if( branchIds ==null || typeof branchIds == 'undefined'){
-            branchIds = '';
+            branchIds = ''
         }else{
             branchIds = $("#branchList").val().join();
         }
-        var title = "Area manager wise forum report";
-        if( branchIds!=''){
-            url = '${am_sk_wise_service_report_url}';
-            title ="SK wise forum report";
-        }else if(AM !=0 && branchIds ==''){
-            url = '${am_branch_wise_service_report_url}';
-            title ="Branch wise forum report";
-        }
+        /* if(managerOrLocation =='managerWise'){
+          $("#reportTile").html("Manager Wise visit report");
+      }else{
+          $("#reportTile").html("Location Wise report");
+      } */
 
+        if(divM !=0 && AM==0 && branchIds=='' ){
+            url = '${branch_wise_dm_visit_report_url}';
+            title= "Area manager Wise forum report";
+        }else if(divM!=0 && AM!=0 && branchIds==''){
+            url = '${branch_wise_am_report_url}';
+            title ="Branch wise forum report";
+        }else if(divM!=0 && AM!=0 && branchIds!='' ){
+            url = '${sk_wise_am_visit_report_url}';
+            title ="Provider wise forum report";
+        }
         getReportData(url,title);
+
+
 
     }
 </script>
@@ -388,16 +412,14 @@
 
 
     function getBranchListByUserId(userId,divId) {
-
         if(userId!=0){
             getBranchByuserIds(userId);
         }else{
-            userId= $("#AM option:selected").val();
-
+            userId= $("#divM option:selected").val();
             if(userId!=0){
                 getBranchByuserIds(userId);
             }else{
-                getBranchByuserIds('${userIds}')
+                getAllBranch();
             }
         }
     }
@@ -414,8 +436,8 @@
             beforeSend: function() {},
             success : function(data) {
                 $("#branchList").html(data);
-                /*  $("#branchList > option").prop("selected","selected");
-                 $("#branchList").trigger("change"); */
+                /* $("#branchList > option").prop("selected","selected");
+                $("#branchList").trigger("change"); */
             },
             error : function(e) {
                 console.log("ERROR: ", e);
@@ -457,4 +479,15 @@
 
 
 </script>
+
+
+
+
+
+
+
+
+
+
+
 

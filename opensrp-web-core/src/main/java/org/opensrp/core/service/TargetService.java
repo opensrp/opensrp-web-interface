@@ -1014,6 +1014,29 @@ public class TargetService extends CommonService {
 	}
 
 	@Transactional
+	public List<ForumTargetReportDTO> getPAForumReportForPMByManager(JSONObject params) throws JSONException {
+
+		Session session = getSessionFactory();
+		List<ForumTargetReportDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.pm_forum_pa_report_by_dm('"+  params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("username", StandardBasicTypes.STRING)
+				.addScalar("fullName", StandardBasicTypes.STRING)
+				.addScalar("numberOfAM", StandardBasicTypes.INTEGER)
+				.addScalar("numberOfPA", StandardBasicTypes.INTEGER)
+				.addScalar("numberOfBranch", StandardBasicTypes.INTEGER)
+				.addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)
+				.addScalar("adultAvgParticipantTarget", StandardBasicTypes.INTEGER)
+				.addScalar("adultAchv", StandardBasicTypes.INTEGER)
+				.addScalar("adultTarget", StandardBasicTypes.INTEGER)
+				.setResultTransformer(new AliasToBeanResultTransformer(ForumTargetReportDTO.class));
+		dtos = query.list();
+
+		return dtos;
+	}
+
+	@Transactional
 	public List<ForumTargetReportDTO> getForumReportForDMByAM(JSONObject params) throws JSONException {
 
 		Session session = getSessionFactory();
@@ -1041,6 +1064,49 @@ public class TargetService extends CommonService {
 				.addScalar("womenTarget", StandardBasicTypes.INTEGER)
 				.addScalar("womenAvgParticipantAchv", StandardBasicTypes.INTEGER)
 				.addScalar("womenAvgParticipantTarget", StandardBasicTypes.INTEGER)
+				.addScalar("adultAchv", StandardBasicTypes.INTEGER)
+				.addScalar("adultTarget", StandardBasicTypes.INTEGER)
+				.addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)
+				.addScalar("adultAvgParticipantTarget", StandardBasicTypes.INTEGER)
+
+				.setResultTransformer(new AliasToBeanResultTransformer(ForumTargetReportDTO.class));
+		dtos = query.list();
+
+		return dtos;
+	}
+
+	@Transactional
+	public List<ForumTargetReportDTO> getForumPAReportForDMByAM(JSONObject params) throws JSONException {
+
+		Session session = getSessionFactory();
+		List<ForumTargetReportDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.dm_forum_pa_report_by_am('"+  params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("username", StandardBasicTypes.STRING)
+				.addScalar("fullName", StandardBasicTypes.STRING)
+				.addScalar("numberOfPA", StandardBasicTypes.INTEGER)
+				.addScalar("numberOfBranch", StandardBasicTypes.INTEGER)
+				.addScalar("adultAchv", StandardBasicTypes.INTEGER)
+				.addScalar("adultTarget", StandardBasicTypes.INTEGER)
+				.addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)
+				.addScalar("adultAvgParticipantTarget", StandardBasicTypes.INTEGER)
+				.setResultTransformer(new AliasToBeanResultTransformer(ForumTargetReportDTO.class));
+		dtos = query.list();
+
+		return dtos;
+	}
+
+	@Transactional
+	public List<ForumTargetReportDTO> getForumPAReportForAMByBranch(JSONObject params) throws JSONException {
+
+		Session session = getSessionFactory();
+		List<ForumTargetReportDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.am_forum_pa_report_by_branch('"+  params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("branchName", StandardBasicTypes.STRING)
+				.addScalar("numberOfPA", StandardBasicTypes.INTEGER)
 				.addScalar("adultAchv", StandardBasicTypes.INTEGER)
 				.addScalar("adultTarget", StandardBasicTypes.INTEGER)
 				.addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)
@@ -1115,6 +1181,27 @@ public class TargetService extends CommonService {
 				.addScalar("womenTarget", StandardBasicTypes.INTEGER)
 				.addScalar("womenAvgParticipantAchv", StandardBasicTypes.INTEGER)
 				.addScalar("womenAvgParticipantTarget", StandardBasicTypes.INTEGER)
+				.addScalar("adultAchv", StandardBasicTypes.INTEGER)
+				.addScalar("adultTarget", StandardBasicTypes.INTEGER)
+				.addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)
+				.addScalar("adultAvgParticipantTarget", StandardBasicTypes.INTEGER)
+
+				.setResultTransformer(new AliasToBeanResultTransformer(ForumTargetReportDTO.class));
+		dtos = query.list();
+
+		return dtos;
+	}
+
+	@Transactional
+	public List<ForumTargetReportDTO> getForumPAReportForAMBySK(JSONObject params) throws JSONException {
+
+		Session session = getSessionFactory();
+		List<ForumTargetReportDTO> dtos = new ArrayList<>();
+
+		String hql = "select * from report.am_forum_report_by_pa('"+  params + "','{" + params.getString("branchIds") + "}')";
+		Query query = session.createSQLQuery(hql)
+				.addScalar("branchName", StandardBasicTypes.STRING)
+				.addScalar("fullName", StandardBasicTypes.STRING)
 				.addScalar("adultAchv", StandardBasicTypes.INTEGER)
 				.addScalar("adultTarget", StandardBasicTypes.INTEGER)
 				.addScalar("adultAvgParticipantAchv", StandardBasicTypes.INTEGER)

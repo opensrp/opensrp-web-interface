@@ -446,17 +446,25 @@ public class TargetController {
 		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
 		model.addAttribute("branches", branches);
 
-		return "targets/target_vs_achv_forum_report_pm";
+		return "targets/forum-report/target_vs_achv_forum_report_pm";
 	}
 
 	@RequestMapping(value = "/target/report/pm-wise-forum-report", method = RequestMethod.POST)
 	public String forumReportTableForPM(@RequestBody String dto, Model model) throws JSONException {
         JSONObject params = new JSONObject(dto);
+        String reportTable = "";
         String managerOrLocation = params.getString("managerOrLocation");
 
         List<ForumTargetReportDTO> totalList;
         if (managerOrLocation.equalsIgnoreCase("managerWise")) {
-            totalList = targetService.getForumReportForPMByManager(params);
+        	if(params.get("roleName").equals("SK")) {
+				totalList = targetService.getForumReportForPMByManager(params);
+				reportTable = "targets/forum-report/target-vs-achv-forum-report-table-pm";
+			}
+        	else {
+				totalList = targetService.getPAForumReportForPMByManager(params);
+        		reportTable = "targets/forum-report/target-vs-pa-forum-report-table-pm";
+			}
         } else {
             totalList = targetService.getForumReportForPMByManager(params);
         }
@@ -464,7 +472,7 @@ public class TargetController {
 		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
         model.addAttribute("type", managerOrLocation);
 
-		return "targets/target-vs-achv-forum-report-table-pm";
+		return reportTable;
 	}
 
 	@RequestMapping(value = "/target/target-vs-achv-forum-report-dm.html", method = RequestMethod.GET)
@@ -477,22 +485,30 @@ public class TargetController {
 		model.addAttribute("userIds", userIds);
 		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
 		model.addAttribute("users", users);
-		return "targets/target_vs_achv_forum_report_dm";
+		return "targets/forum-report/target_vs_achv_forum_report_dm";
 	}
 
 	@RequestMapping(value = "/target/target-vs-achv-forum-report-dm", method = RequestMethod.POST)
 	public String targetVsAchievementForumDMReportTable(@RequestBody String dto, Model model) throws JSONException {
         JSONObject params = new JSONObject(dto);
+        String reportUrl = "";
         String managerOrLocation = params.getString("managerOrLocation");
 
         List<ForumTargetReportDTO> totalList = new ArrayList<>();
         if (managerOrLocation.equalsIgnoreCase("managerWise")) {
-            totalList = targetService.getForumReportForDMByAM(params);
+			if(params.get("roleName").equals("SK")) {
+				totalList = targetService.getForumReportForDMByAM(params);
+				reportUrl = "targets/forum-report/target-vs-achv-forum-report-table-dm";
+			}
+			else {
+				totalList = targetService.getForumPAReportForDMByAM(params);
+				reportUrl = "targets/forum-report/target-vs-achv-pa-forum-report-table-dm";
+			}
         }
         model.addAttribute("reportDatas", totalList);
 		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
         model.addAttribute("type", managerOrLocation);
-		return "targets/target-vs-achv-forum-report-table-dm";
+		return reportUrl;
 	}
 
 	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-branch-wise.html", method = RequestMethod.GET)
@@ -502,20 +518,27 @@ public class TargetController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		String userIds = loggedInUser.getId() + "";
 		model.addAttribute("userIds", userIds);
-		return "targets/target-vs-achv-forum-am-report-by-branch";
+		return "targets/forum-report/target-vs-achv-forum-am-report-by-branch";
 	}
 
 	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-by-branch", method = RequestMethod.POST)
 	public String targetVsAchievementForumAMReportForBranchTable( @RequestBody String dto, Model model) throws JSONException {
         JSONObject params = new JSONObject(dto);
+        String reportUrl = "";
 
         List<ForumTargetReportDTO> totalList = new ArrayList<>();
-
-        totalList = targetService.getForumReportForAMByBranch(params);
+		if(params.get("roleName").equals("SK")) {
+			totalList = targetService.getForumReportForAMByBranch(params);
+			reportUrl = "targets/forum-report/target-vs-achv-forum-report-table-am-by-branch";
+		}
+		else {
+			totalList = targetService.getForumPAReportForAMByBranch(params);
+			reportUrl = "targets/forum-report/target-vs-achv-forum-pa-report-table-branch";
+		}
 
         model.addAttribute("reportDatas", totalList);
 		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
-		return "targets/target-vs-achv-forum-report-table-am-by-branch";
+		return reportUrl;
 	}
 
 	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-provider-wise.html", method = RequestMethod.GET)
@@ -525,20 +548,26 @@ public class TargetController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		String userIds = loggedInUser.getId() + "";
 		model.addAttribute("userIds", userIds);
-		return "targets/target-vs-achv-forum-am-report-by-provider";
+		return "targets/forum-report/target-vs-achv-forum-am-report-by-provider";
 	}
 
 	@RequestMapping(value = "/target/target-vs-achv-forum-report-am-by-provider", method = RequestMethod.POST)
 	public String targetVsAchievementForumAMReportForSKTable( @RequestBody String dto, Model model) throws JSONException {
         JSONObject params = new JSONObject(dto);
-
+		String reportUrl = "";
         List<ForumTargetReportDTO> totalList;
 
-        totalList = targetService.getForumReportForAMBySK(params);
+		if(params.get("roleName").equals("SK")) {
+			totalList = targetService.getForumReportForAMBySK(params);
+			reportUrl = "targets/forum-report/target-vs-achv-forum-report-table-am-by-sk";
+		} else {
+			totalList = targetService.getForumPAReportForAMBySK(params);
+			reportUrl = "targets/forum-report/target-vs-achv-pa-report-provider-table-am";
+		}
 
         model.addAttribute("reportDatas", totalList);
 		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
-		return "targets/target-vs-achv-forum-report-table-am-by-sk";
+		return reportUrl;
 	}
 
 	@RequestMapping(value = "/report/pm-timestamp-report-dm-wise.html", method = RequestMethod.GET)
