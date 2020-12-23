@@ -8,10 +8,10 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.opensrp.common.dto.PAStockReportDTO;
-import org.opensrp.common.dto.StockReportDTO;
 import org.opensrp.common.dto.InventoryDTO;
+import org.opensrp.common.dto.PAStockReportDTO;
 import org.opensrp.common.dto.RequisitionQueryDto;
+import org.opensrp.common.dto.StockReportDTO;
 import org.opensrp.common.util.Roles;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.dto.StockAdjustDTO;
@@ -55,7 +55,7 @@ public class InventoryAmController {
 	
 	@Autowired
 	public BranchUtil branchUtil;
-
+	
 	@Autowired
 	private UserService userService;
 	
@@ -220,7 +220,7 @@ public class InventoryAmController {
 		List<InventoryDTO> getSkList = stockService.getUserListByBranchWithRole(id, Roles.SK.getId());
 		List<InventoryDTO> getProductList = stockService.getProductListByBranchWithRole(id, Roles.SS.getId(), 0);
 		model.addAttribute("skList", getSkList);
-
+		
 		model.addAttribute("ssLists", stockService.getsellToSSList(0, id, 0, 0, 0, 0, 0, 0, 200, 0, "", ""));
 		model.addAttribute("productList", getProductList);
 		model.addAttribute("branchInfo", branchInfo);
@@ -228,6 +228,16 @@ public class InventoryAmController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("manager", loggedInUser.getId());
 		return "inventoryAm/sell-to-ss-list";
+	}
+	
+	@RequestMapping(value = "inventoryam/ss-list/{id}/{branchId}", method = RequestMethod.GET)
+	public String ssListBySK(Model model, Locale locale, @PathVariable("id") int id, @PathVariable("branchId") int branchId) {
+		if (id == 0) {
+			model.addAttribute("ssLists", stockService.getsellToSSList(0, branchId, 0, 0, 0, 0, 0, 0, 200, 0, "", ""));
+		} else {
+			model.addAttribute("ssLists", stockService.getsellToSSList(0, 0, id, 0, 0, 0, 0, 0, 200, 0, "", ""));
+		}
+		return "inventoryAm/ss-list-by-sk";
 	}
 	
 	@RequestMapping(value = "inventoryam/individual-ss-sell/{id}/{ssid}.html", method = RequestMethod.GET)
@@ -254,30 +264,28 @@ public class InventoryAmController {
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		return "inventoryAm/stock-report";
 	}
-
+	
 	@RequestMapping(value = "inventoryam/stock-report-table", method = RequestMethod.GET)
-	public String stockReportTable(
-			@RequestParam(value="year") String year,
-			@RequestParam(value="month") String month,
-			@RequestParam(value="branchIds", required = false) String branchIds,
-			@RequestParam(value="userRole", required = false, defaultValue = "SK") String userRole,
-			HttpSession session) {
+	public String stockReportTable(@RequestParam(value = "year") String year, @RequestParam(value = "month") String month,
+	                               @RequestParam(value = "branchIds", required = false) String branchIds,
+	                               @RequestParam(value = "userRole", required = false, defaultValue = "SK") String userRole,
+	                               HttpSession session) {
 		String skIds, reportTable;
 		List<StockReportDTO> report = new ArrayList<>();
 		List<PAStockReportDTO> paReport = new ArrayList<>();
-
-		System.out.println("branchIds: "+ branchIds);
+		
+		System.out.println("branchIds: " + branchIds);
 		if (StringUtils.isBlank(branchIds)) {
-			String branches = branchService.commaSeparatedBranch(new ArrayList<>(AuthenticationManagerUtil.getLoggedInUser().getBranches()));
+			String branches = branchService.commaSeparatedBranch(new ArrayList<>(AuthenticationManagerUtil.getLoggedInUser()
+			        .getBranches()));
 			skIds = userService.findSKByBranchSeparatedByComma("'{" + branches + "}'");
 		} else {
 			skIds = userService.findSKByBranchSeparatedByComma("'{" + branchIds + "}'");
 		}
-		if(userRole.equals("SK")) {
+		if (userRole.equals("SK")) {
 			report = stockService.getStockReportForSK(year, month, skIds);
 			reportTable = "inventoryAm/stock-report-table";
-		}
-		else {
+		} else {
 			paReport = stockService.getStockReportForPA(year, month, skIds);
 			reportTable = "inventoryAm/pa-stock-report-table";
 		}

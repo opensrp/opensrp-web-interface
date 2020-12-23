@@ -166,8 +166,8 @@ public class WebNotificationService extends CommonService {
 					        + ".html\">Details</a> </div>";
 				}
 			} else if (dto.getType().equalsIgnoreCase(WebNotificationType.DRAFT.name())) {
-				//patient.put(dto.getCreatedTime());
-				patient.put("");
+				patient.put(dto.getSendDate() + " " + dto.getSendTimeHour() + ":" + dto.getSendTimeMinute());
+				
 				view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"details/" + dto.getId()
 				        + ".html\">Details</a> " + " | <a class='text-primary' \" href=\"edit/" + dto.getId()
 				        + ".html\">Edit</a> " + "</div>";

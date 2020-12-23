@@ -305,7 +305,7 @@ function getBranchByuserIds(userId){
         beforeSend: function() {},
         success : function(data) {
             $("#branchList").html(data);
-           /*  $("#branchList > option").prop("selected","selected");
+           /*$("#branchList > option").prop("selected","selected");
             $("#branchList").trigger("change"); */
         },
         error : function(e) {
