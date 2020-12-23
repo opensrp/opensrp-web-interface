@@ -981,6 +981,10 @@ public class UserService {
 	public String findSKByBranchSeparatedByComma(String branchIds) {
 		return repository.findSKByBranchSeparatedByComma(branchIds);
 	}
+
+	public String findPAByBranchSeparatedByComma(String branchIds) {
+		return repository.findPAByBranchSeparatedByComma(branchIds);
+	}
 	
 	public String findSKByLocationSeparatedByComma(Integer locationId, Integer roleId) {
 		return repository.findSKByLocationSeparatedByComma(locationId, roleId);

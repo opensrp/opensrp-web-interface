@@ -1485,10 +1485,10 @@ public class TargetService extends CommonService {
 		String hql = "select * from report.dm_timestamp_report_am_wise('" + params + "','{" + params.getString("branchIds")
 		        + "}')";
 		Query query = session.createSQLQuery(hql).addScalar("providerUserName", StandardBasicTypes.STRING)
-		        .addScalar("fullName", StandardBasicTypes.STRING).addScalar("iycfTime", StandardBasicTypes.INTEGER)
-		        .addScalar("ancTime", StandardBasicTypes.INTEGER).addScalar("ncdTime", StandardBasicTypes.INTEGER)
-		        .addScalar("womenTime", StandardBasicTypes.INTEGER).addScalar("adolescentTime", StandardBasicTypes.INTEGER)
-		        .addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
+		        .addScalar("fullName", StandardBasicTypes.STRING).addScalar("iycfTime", StandardBasicTypes.FLOAT)
+		        .addScalar("ancTime", StandardBasicTypes.FLOAT).addScalar("ncdTime", StandardBasicTypes.FLOAT)
+		        .addScalar("womenTime", StandardBasicTypes.FLOAT).addScalar("adolescentTime", StandardBasicTypes.FLOAT)
+		        .addScalar("hhVisitTime", StandardBasicTypes.FLOAT)
 		        .setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
 		dtos = query.list();
 		return dtos;
@@ -1503,10 +1503,10 @@ public class TargetService extends CommonService {
 		String hql = "select * from report.am_timestamp_report_branch_wise('" + params + "','{"
 		        + params.getString("branchIds") + "}')";
 		Query query = session.createSQLQuery(hql).addScalar("branchName", StandardBasicTypes.STRING)
-		        .addScalar("iycfTime", StandardBasicTypes.INTEGER).addScalar("ancTime", StandardBasicTypes.INTEGER)
-		        .addScalar("ncdTime", StandardBasicTypes.INTEGER).addScalar("womenTime", StandardBasicTypes.INTEGER)
-		        .addScalar("adolescentTime", StandardBasicTypes.INTEGER)
-		        .addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfTime", StandardBasicTypes.FLOAT).addScalar("ancTime", StandardBasicTypes.FLOAT)
+		        .addScalar("ncdTime", StandardBasicTypes.FLOAT).addScalar("womenTime", StandardBasicTypes.FLOAT)
+		        .addScalar("adolescentTime", StandardBasicTypes.FLOAT)
+		        .addScalar("hhVisitTime", StandardBasicTypes.FLOAT)
 		        .setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
 		dtos = query.list();
 		return dtos;
@@ -1522,10 +1522,10 @@ public class TargetService extends CommonService {
 		        + params.getString("branchIds") + "}')";
 		Query query = session.createSQLQuery(hql).addScalar("providerUserName", StandardBasicTypes.STRING)
 		        .addScalar("fullName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
-		        .addScalar("iycfTime", StandardBasicTypes.INTEGER).addScalar("ancTime", StandardBasicTypes.INTEGER)
-		        .addScalar("ncdTime", StandardBasicTypes.INTEGER).addScalar("womenTime", StandardBasicTypes.INTEGER)
-		        .addScalar("adolescentTime", StandardBasicTypes.INTEGER)
-		        .addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
+		        .addScalar("iycfTime", StandardBasicTypes.FLOAT).addScalar("ancTime", StandardBasicTypes.FLOAT)
+		        .addScalar("ncdTime", StandardBasicTypes.FLOAT).addScalar("womenTime", StandardBasicTypes.FLOAT)
+		        .addScalar("adolescentTime", StandardBasicTypes.FLOAT)
+		        .addScalar("hhVisitTime", StandardBasicTypes.FLOAT)
 		        .setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
 		dtos = query.list();
 		return dtos;

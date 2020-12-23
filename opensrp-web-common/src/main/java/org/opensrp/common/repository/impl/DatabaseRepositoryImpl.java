@@ -1275,6 +1275,21 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
 		
 		return skIds.get(0);
 	}
+
+	@Override
+	@Transactional
+	public <T> T findPAByBranchSeparatedByComma(String branchIds) {
+		Session session = getSessionFactory();
+		List<T> paIds = null;
+
+		String hql = "select string_agg(u.username, ', ') paIds from core.users u join core.user_branch ub "
+				+ "on u.id = ub.user_id join core.user_role ur on ur.user_id = u.id where ub.branch_id = any(" + branchIds
+				+ ") " + "and ur.role_id = " + Roles.PA.getId() + ";";
+		Query query = session.createSQLQuery(hql).addScalar("paIds", StandardBasicTypes.STRING);
+		paIds = query.list();
+
+		return paIds.get(0);
+	}
 	
 	@Override
 	@Transactional

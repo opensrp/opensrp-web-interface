@@ -173,6 +173,8 @@ public interface DatabaseRepository {
 
 	public <T> T findSKByBranchSeparatedByComma(String branchIds);
 
+	public <T> T findPAByBranchSeparatedByComma(String branchIds);
+
 	public Integer updateParentForSS(Integer ssId, Integer parentId);
 
 	public <T> List<T> getUniqueLocation(String village, String ward);
