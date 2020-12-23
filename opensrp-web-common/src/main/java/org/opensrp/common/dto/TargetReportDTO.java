@@ -168,6 +168,66 @@ public class TargetReportDTO {
 	
 	private Integer cataractSurgeryAchievement;
 	
+	private Float presbyopiaTargetVsAchievement;
+	
+	private Float presbyopiaCorrectionTargetVsAchievement;
+	
+	private Float diabetesTargetVsAchievement;
+	
+	private Float hbpTargetVsAchievement;
+	
+	private Float cataractTargetVsAchievement;
+	
+	private Float cataractSurgeryTargetVsAchievement;
+	
+	public Float getPresbyopiaTargetVsAchievement() {
+		return presbyopiaTargetVsAchievement;
+	}
+	
+	public void setPresbyopiaTargetVsAchievement(Float presbyopiaTargetVsAchievement) {
+		this.presbyopiaTargetVsAchievement = presbyopiaTargetVsAchievement;
+	}
+	
+	public Float getPresbyopiaCorrectionTargetVsAchievement() {
+		return presbyopiaCorrectionTargetVsAchievement;
+	}
+	
+	public void setPresbyopiaCorrectionTargetVsAchievement(Float presbyopiaCorrectionTargetVsAchievement) {
+		this.presbyopiaCorrectionTargetVsAchievement = presbyopiaCorrectionTargetVsAchievement;
+	}
+	
+	public Float getDiabetesTargetVsAchievement() {
+		return diabetesTargetVsAchievement;
+	}
+	
+	public void setDiabetesTargetVsAchievement(Float diabetesTargetVsAchievement) {
+		this.diabetesTargetVsAchievement = diabetesTargetVsAchievement;
+	}
+	
+	public Float getHbpTargetVsAchievement() {
+		return hbpTargetVsAchievement;
+	}
+	
+	public void setHbpTargetVsAchievement(Float hbpTargetVsAchievement) {
+		this.hbpTargetVsAchievement = hbpTargetVsAchievement;
+	}
+	
+	public Float getCataractTargetVsAchievement() {
+		return cataractTargetVsAchievement;
+	}
+	
+	public void setCataractTargetVsAchievement(Float cataractTargetVsAchievement) {
+		this.cataractTargetVsAchievement = cataractTargetVsAchievement;
+	}
+	
+	public Float getCataractSurgeryTargetVsAchievement() {
+		return cataractSurgeryTargetVsAchievement;
+	}
+	
+	public void setCataractSurgeryTargetVsAchievement(Float cataractSurgeryTargetVsAchievement) {
+		this.cataractSurgeryTargetVsAchievement = cataractSurgeryTargetVsAchievement;
+	}
+	
 	public Integer getPresbyopiaTarget() {
 		return presbyopiaTarget;
 	}

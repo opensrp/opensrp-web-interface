@@ -124,7 +124,8 @@ public class WebNotificationController {
 		model.addAttribute("districts", districts);
 		model.addAttribute("Upazilas", Upazilas);
 		model.addAttribute("id", id);
-		String dateTime = "";
+		String dateTime = webNotification.getSendDate() + " " + webNotification.getSendTimeHour() + ":"
+		        + webNotification.getSendTimeMinute();
 		List<Integer> branchIds = new ArrayList<Integer>();
 		Set<WebNotificationBranch> branchlist = webNotification.getWebNotificationBranchs();
 		

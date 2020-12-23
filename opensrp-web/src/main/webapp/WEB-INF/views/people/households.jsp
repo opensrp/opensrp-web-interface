@@ -36,6 +36,11 @@
 						<div class="form-group">
 							<jsp:include page="/WEB-INF/views/full-location-search-options.jsp" />
 						</div>
+						<div class="row" id="errorMsg" style="display: none">
+								<div class="col-lg-12 form-group">
+									<span style="color:red" >Please select village OR types something on search key</span>
+								</div>
+							</div>
 						<div class="row" style="margin: 0px">
                             <div class="col-sm-12" id="content" style="overflow-x: auto;">
                                 

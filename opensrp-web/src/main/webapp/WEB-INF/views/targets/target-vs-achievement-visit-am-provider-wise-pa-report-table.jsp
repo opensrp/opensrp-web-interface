@@ -26,21 +26,16 @@
 <% Object targets = request.getAttribute("jsonReportData"); %>
 
 <div class="row">
-	<div class="col-sm-offset-10 col-sm-2">
-		<select class="custom-select" id="visitCategory" style="width: 95%" onclick="reloadSkChart()">
-			<option value="avg_visit">Average Visit</option>
-			<option value="hhVisitAchievementInPercentage">Household Visit</option>
-			<option value="elcoVisitAchievementInPercentage">ELCO Visit</option>
-			<option value="methodsUsersVisitAchievementInPercentage">Methods Users</option>
-			<option value="adolescentMethodsUsersVisitAchievementInPercentage">Adolescent Methods Users</option>
-			<option value="pregnancydentifiedVisitAchievementInPercentage">Pregnancy Identified</option>
-			<option value="deliveryVisitAchievementInPercentage">Delivery</option>
-			<option value="institutionalizedDeliveryVisitAchievementInPercentage">Institutionalized Delivery</option>
-			<option value="Child06VisitAchievementInPercentage">Child Visit(0-6 months)</option>
-			<option value="Child724VisitAchievementInPercentage">Child Visit(7-24 months)</option>
-			<option value="Child1836VisitAchievementInPercentage">Child Visit(18-36 months)</option>
-			<option value="immunizationVisitAchievementInPercentage">Immunization(0-59 months)</option>
-			<option value="pregnantVisitAchievementInPercentage">Pregnant Visit</option>
+	<div class=" form-group  col-sm-6">
+		<select  class="form-control" class="custom-select" id="visitCategory" style="width: 95%" onclick="reloadSkChart()">
+			<option value="0">Please select</option>
+			<option value="presbyopiaTargetVsAchievement">Marked as presbyopia</option>
+			<option value="presbyopiaCorrectionTargetVsAchievement">Presbyopia correction</option>
+			<option value="diabetesTargetVsAchievement">Estimate diabetes</option>
+			<option value="hbpTargetVsAchievement">Estimate HBP</option>
+			<option value="cataractSurgeryTargetVsAchievement">Cataract surgery refer</option>
+			<option value="cataractTargetVsAchievement">Cataract surgery</option>
+			
 		</select>
 	</div>
 </div>
@@ -205,7 +200,8 @@
 	function loadAvgVisitChart(reportData) {
 		var skList = [];
 		var percentages = [], cnt = 0, sum = 0, result, totalSum = 0, totalCount = 0 ;
-		var avgFields = ['hhVisitAchievementInPercentage','elcoVisitAchievementInPercentage','methodsUsersVisitAchievementInPercentage','adolescentMethodsUsersVisitAchievementInPercentage','pregnancydentifiedVisitAchievementInPercentage','deliveryVisitAchievementInPercentage','institutionalizedDeliveryVisitAchievementInPercentage','Child06VisitAchievementInPercentage','Child724VisitAchievementInPercentage','Child1836VisitAchievementInPercentage','immunizationVisitAchievementInPercentage','pregnantVisitAchievementInPercentage'];
+		var avgFields = ['presbyopiaTargetVsAchievement','presbyopiaCorrectionTargetVsAchievement','diabetesTargetVsAchievement','hbpTargetVsAchievement','cataractTargetVsAchievement','cataractSurgeryTargetVsAchievement'];
+		
 		for (var i = 0; i < reportData.length; i++) {
 			skList.push(reportData[i].firstName + ' ' + reportData[i].lastName);
 
@@ -215,6 +211,8 @@
 				if(reportData[i][avgFields[i]] > 0) cnt++;
 				sum += reportData[i][avgFields[i]];
 			}
+			
+			
 			totalSum+=sum;
 			totalCount+=cnt;
 			result = cnt === 0 ? 0 : parseFloat((sum / cnt).toFixed(2));
@@ -268,9 +266,9 @@
 	function reloadSkChart() {
 
 		var reportData = <%= targets%>;
-		console.log(reportData);
+		//console.log(reportData);
 		var category = $('#visitCategory').val();
-		if(category === 'avg_visit') {
+		if(category === 0) {
 			loadAvgVisitChart(reportData);
 			return;
 		}

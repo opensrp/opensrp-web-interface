@@ -18,6 +18,8 @@
 <c:url var="redirect_url" value="/inventoryam/sell-to-ss-list" />
 <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
 
+<c:url var="ssListBySK" value="/inventoryam/ss-list/" />
+
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 
@@ -126,7 +128,8 @@
 							<div id="validationSelectOne" style="display: none" class="alert alert-danger text-center" role="alert">
 											Please select one to proceed
 										</div>
-							<table class="table table-striped table-bordered record_table"
+										<div id="ssListBySK"></div>
+							<%-- <table class="table table-striped table-bordered record_table"
 											id="sellToManySSList">
 											<thead>
 												<tr>
@@ -151,7 +154,7 @@
 													</tr>
 												</c:forEach>
 											</tbody>
-										</table>
+										</table> --%>
 							<div class="text-center" id="proceedDiv">
 								<button id="proceeddProductButton" type="button"
 									class="btn btn-primary" onclick="proceedToChooseProduct()">Proceed</button>
@@ -585,8 +588,8 @@
 	}
 
 	function sellToMany() {
-		//$('.checked').removeClass('checked').addClass('');
-        $('#sellToManyModal').modal({
+		//$('.checked').removeClass('checked').addClass('');ssListBySK
+        /* $('#sellToManyModal').modal({
             escapeClose: false,
             clickClose: false,
             closeExisting: false,
@@ -605,7 +608,53 @@
                       { 'bSortable': false, 'aTargets': [0] }
                     ]
                    }
-		);
+		); */
+		
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		var id=$("#skList").val();
+		var branchId = "${id}";
+		 $.ajax({
+	         type : "GET",
+	         
+	         url : "${ssListBySK}/"+id+"/"+branchId,
+	         dataType : 'html',
+	         timeout : 300000,  
+
+	         beforeSend: function(xhr) {
+	             xhr.setRequestHeader(header, token);
+	             $('#sellToManyModal').modal({
+	                 escapeClose: false,
+	                 clickClose: false,
+	                 closeExisting: false,
+	                 showClose: false,
+	                 show: true
+	             });
+	            
+	         },
+	         success : function(data) {
+	             $('#loading').hide();
+	             $("#ssListBySK").html(data); 
+	             
+	             $('#sellToManySSList').DataTable({
+	                 scrollY:        "300px",
+	                 scrollX:        true,
+	                 scrollCollapse: true,
+	                 fixedColumns:   {
+	                  leftColumns: 2/* ,
+	                  rightColumns: 1 */
+	                 }
+	             });
+	         },
+	         error : function(e) {
+	             $('#loading').hide();
+	             $('#search-button').attr("disabled", false);
+	         },
+	         complete : function(e) {
+	             $('#loading').hide();
+	             $('#search-button').attr("disabled", false);
+	         }
+	     });
 		
 		
 	}

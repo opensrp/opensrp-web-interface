@@ -88,7 +88,7 @@
 
 		<div class="portlet box blue-madison">
 			<div class="portlet-title">
-				<div class="center-caption">Edit web notification</div>
+				<div class="center-caption">Edit web notification </div>
 
 
 			</div>
@@ -137,7 +137,7 @@
 					</div>
 					<div class="col-lg-12">
 						<div class="form-group">
-						<jsp:include page="/WEB-INF/views/search-option-for-notification.jsp" />
+						<jsp:include page="/WEB-INF/views/edit-search-option-for-notification.jsp" />
 						</div>
 					</div>
 					
@@ -192,8 +192,8 @@ jQuery(document).ready(function() {
 	'</c:forEach>'
 
 	
-   // $(".5").trigger("change");
-   // $("#branchList").trigger("change");
+  // $(".5").trigger("change");
+  // $("#branchList").trigger("change");
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
   
@@ -233,11 +233,11 @@ $(function(){
 		  "default":null,
 
 	  });
-	  if('${webNotification.getType()}'=='SCHEDULE'){
+	  /* if('${webNotification.getType()}'=='SCHEDULE'){
 	  	
 	  }else{
-		  $("#date").val("");
-	  }
+		  //$("#date").val("");
+	  } */
 });
 
 
