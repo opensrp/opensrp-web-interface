@@ -1462,10 +1462,13 @@ public class TargetService extends CommonService {
 		String hql = "select * from report.pm_timestamp_report_dm_wise('" + params + "','{" + params.getString("branchIds")
 		        + "}')";
 		Query query = session.createSQLQuery(hql).addScalar("providerUserName", StandardBasicTypes.STRING)
-		        .addScalar("fullName", StandardBasicTypes.STRING).addScalar("iycfTime", StandardBasicTypes.INTEGER)
-		        .addScalar("ancTime", StandardBasicTypes.INTEGER).addScalar("ncdTime", StandardBasicTypes.INTEGER)
-		        .addScalar("womenTime", StandardBasicTypes.INTEGER).addScalar("adolescentTime", StandardBasicTypes.INTEGER)
-		        .addScalar("hhVisitTime", StandardBasicTypes.INTEGER)
+		        .addScalar("fullName", StandardBasicTypes.STRING)
+				.addScalar("iycfTime", StandardBasicTypes.FLOAT)
+		        .addScalar("ancTime", StandardBasicTypes.FLOAT)
+				.addScalar("ncdTime", StandardBasicTypes.FLOAT)
+		        .addScalar("womenTime", StandardBasicTypes.FLOAT)
+				.addScalar("adolescentTime", StandardBasicTypes.FLOAT)
+		        .addScalar("hhVisitTime", StandardBasicTypes.FLOAT)
 		        .setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
 		dtos = query.list();
 		return dtos;

@@ -32,7 +32,7 @@
 
         <tr>
             <th rowspan="2">DM name</th>
-            <th colspan="7"> Average Submission Duration per Form by SK</th>
+            <th colspan="7"> Average Submission Duration per form by provider</th>
         </tr>
         <tr>
             <th>All</th>

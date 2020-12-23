@@ -39,7 +39,7 @@
         <th> PNC Problems </th>
         <th> Child Problems </th>
         <th> Eye Problems</th>
-        <th> Daibetes </th>
+        <th> Diabetes </th>
         <th> Blood Pressure </th>
         <th> Birth Control Related Problems </th>
         <th> Others </th>
