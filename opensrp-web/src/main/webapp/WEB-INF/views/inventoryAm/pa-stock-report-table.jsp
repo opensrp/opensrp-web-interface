@@ -28,7 +28,7 @@
     <thead>
     <tr>
         <%--        <th rowspan="2"><spring:message code="lbl.slNo"/></th>--%>
-        <th rowspan="2"><spring:message code="lbl.skId"/></th>
+        <th rowspan="2">PA Id</th>
         <th colspan="4">NCD</th>
         <th colspan="4">Sun Glass</th>
         <th colspan="4">SV 1</th>

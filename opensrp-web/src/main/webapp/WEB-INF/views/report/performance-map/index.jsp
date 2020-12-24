@@ -492,6 +492,8 @@
         });
     }
 
+    loadPerformanceMap();
+
 
 
 </script>
