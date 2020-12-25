@@ -127,6 +127,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	boolean TIMESTAMP_REPORT_AM = AuthenticationManagerUtil.isPermitted("TIMESTAMP_REPORT_AM");
 	boolean MAP_MOVEMENTS = AuthenticationManagerUtil.isPermitted("MAP_MOVEMENTS");
 	boolean MIGRATION =AuthenticationManagerUtil.isPermitted("MIGRATION");
+	boolean PERFORMANCE_CHART_AND_MAP = AuthenticationManagerUtil.isPermitted("PERFORMANCE_CHART_AND_MAP");
    %>
   
 <body>
@@ -694,6 +695,13 @@ License: You must have a valid license purchased only from themeforest(the above
 
 						<li><a href="<c:url value="/am-map-movement?lang=${locale}"/>">
 							Map Movements
+						</a>
+						</li>
+						<% }%>
+						<% if( PERFORMANCE_CHART_AND_MAP){ %>
+
+						<li><a href="<c:url value="/performance-map?lang=${locale}"/>">
+							Performance
 						</a>
 						</li>
 						<% }%>

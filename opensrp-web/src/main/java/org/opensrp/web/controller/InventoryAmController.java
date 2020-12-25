@@ -270,7 +270,7 @@ public class InventoryAmController {
 	                               @RequestParam(value = "branchIds", required = false) String branchIds,
 	                               @RequestParam(value = "userRole", required = false, defaultValue = "SK") String userRole,
 	                               HttpSession session) {
-		String skIds, reportTable;
+		String providerIds = "", reportTable;
 		List<StockReportDTO> report = new ArrayList<>();
 		List<PAStockReportDTO> paReport = new ArrayList<>();
 		
@@ -278,15 +278,20 @@ public class InventoryAmController {
 		if (StringUtils.isBlank(branchIds)) {
 			String branches = branchService.commaSeparatedBranch(new ArrayList<>(AuthenticationManagerUtil.getLoggedInUser()
 			        .getBranches()));
-			skIds = userService.findSKByBranchSeparatedByComma("'{" + branches + "}'");
+			providerIds = userRole.equals("SK")
+						? userService.findSKByBranchSeparatedByComma("'{" + branches + "}'")
+					    : userService.findPAByBranchSeparatedByComma("'{" + branches + "}'");
 		} else {
-			skIds = userService.findSKByBranchSeparatedByComma("'{" + branchIds + "}'");
+			providerIds = userRole.equals("SK")
+						? userService.findSKByBranchSeparatedByComma("'{" + branchIds + "}'")
+					    : userService.findPAByBranchSeparatedByComma("'{" + branchIds + "}'");
 		}
+		System.out.println("=====> providerIds"+  providerIds);
 		if (userRole.equals("SK")) {
-			report = stockService.getStockReportForSK(year, month, skIds);
+			report = stockService.getStockReportForSK(year, month, providerIds);
 			reportTable = "inventoryAm/stock-report-table";
 		} else {
-			paReport = stockService.getStockReportForPA(year, month, skIds);
+			paReport = stockService.getStockReportForPA(year, month, providerIds);
 			reportTable = "inventoryAm/pa-stock-report-table";
 		}
 		session.setAttribute("stockReport", userRole.equals("SK") ? report : paReport);

@@ -212,6 +212,7 @@
                 $('#loading').hide();
                 $("#referral-followup-report").html(data);
                 $('#search-button').attr("disabled", false);
+                $('#specificReason').html( getFollowupTitle($('#referralReason').val()) );
             },
             error : function(e) {
                 $('#loading').hide();
@@ -222,6 +223,23 @@
                 $('#search-button').attr("disabled", false);
             }
         });
+    }
+
+    function getFollowupTitle(reason) {
+
+        var ob = {
+            all: 'All Followup',
+            child_problems: 'Child Followup',
+            pregnancy_problems: 'Pregnancy Followup',
+            delivery_problems: 'Delivery Followup',
+            pnc_problem: 'PNC Followup',
+            problems_eyes: 'Eye Problem Followup',
+            diabetes: 'Diabetes Followup',
+            high_blood_pressure: 'Blood Pressure Followup',
+            problems_with_birth_control: 'Birth Control Followup',
+            other: 'Other Followup'
+        };
+        return ob[reason];
     }
 </script>
 </html>

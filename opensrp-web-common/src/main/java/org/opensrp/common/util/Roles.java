@@ -5,6 +5,7 @@ public enum Roles {
     SK(28, "SK"),
     SS(29, "SS"),
     PK(30, "PK"),
+    PA(36, "PA"),
     AM(32, "AM"),
     OTS(33, "OTS"),
     DIV_M(34, "DivM");

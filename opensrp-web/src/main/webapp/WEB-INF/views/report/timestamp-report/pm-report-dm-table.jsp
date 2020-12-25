@@ -32,7 +32,7 @@
 
         <tr>
             <th rowspan="2">DM name</th>
-            <th colspan="7"> Average Submission Duration per Form by SK</th>
+            <th colspan="7"> Average Submission Duration per form by provider</th>
         </tr>
         <tr>
             <th>All</th>
@@ -50,7 +50,8 @@
     <c:forEach items="${reportDatas}" var="reportData">
         <tr>
             <td> ${reportData.getFullName() }</td>
-            <td> ${reportData.getAncTime() + reportData.getIycfTime() + reportData.getNcdTime() + reportData.getWomenTime() + reportData.getAdolescentTime() + reportData.getHhVisitTime()}</td>
+            <td> <fmt:formatNumber type = "number"
+                                   maxFractionDigits = "2" value = "${reportData.getAncTime() + reportData.getIycfTime() + reportData.getNcdTime() + reportData.getWomenTime() + reportData.getAdolescentTime() + reportData.getHhVisitTime()}" /> </td>
             <td> ${reportData.getAncTime() }</td>
             <td> ${reportData.getIycfTime() }</td>
             <td> ${reportData.getNcdTime() }</td>

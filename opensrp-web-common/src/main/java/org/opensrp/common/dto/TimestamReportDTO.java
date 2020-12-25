@@ -8,17 +8,17 @@ public class TimestamReportDTO {
 
     private String branchName;
 
-    private Integer iycfTime;
+    private Float iycfTime;
 
-    private Integer ancTime;
+    private Float ancTime;
 
-    private Integer ncdTime;
+    private Float ncdTime;
 
-    private Integer womenTime;
+    private Float womenTime;
 
-    private Integer adolescentTime;
+    private Float adolescentTime;
 
-    private Integer hhVisitTime;
+    private Float hhVisitTime;
 
     public String getFullName() {
         return fullName;
@@ -44,51 +44,51 @@ public class TimestamReportDTO {
         this.branchName = branchName;
     }
 
-    public Integer getIycfTime() {
+    public Float getIycfTime() {
         return iycfTime;
     }
 
-    public void setIycfTime(Integer iycfTime) {
+    public void setIycfTime(Float iycfTime) {
         this.iycfTime = iycfTime;
     }
 
-    public Integer getAncTime() {
+    public Float getAncTime() {
         return ancTime;
     }
 
-    public void setAncTime(Integer ancTime) {
+    public void setAncTime(Float ancTime) {
         this.ancTime = ancTime;
     }
 
-    public Integer getNcdTime() {
+    public Float getNcdTime() {
         return ncdTime;
     }
 
-    public void setNcdTime(Integer ncdTime) {
+    public void setNcdTime(Float ncdTime) {
         this.ncdTime = ncdTime;
     }
 
-    public Integer getWomenTime() {
+    public Float getWomenTime() {
         return womenTime;
     }
 
-    public void setWomenTime(Integer womenTime) {
+    public void setWomenTime(Float womenTime) {
         this.womenTime = womenTime;
     }
 
-    public Integer getAdolescentTime() {
+    public Float getAdolescentTime() {
         return adolescentTime;
     }
 
-    public void setAdolescentTime(Integer adolescentTime) {
+    public void setAdolescentTime(Float adolescentTime) {
         this.adolescentTime = adolescentTime;
     }
 
-    public Integer getHhVisitTime() {
+    public Float getHhVisitTime() {
         return hhVisitTime;
     }
 
-    public void setHhVisitTime(Integer hhVisitTime) {
+    public void setHhVisitTime(Float hhVisitTime) {
         this.hhVisitTime = hhVisitTime;
     }
 }

@@ -567,11 +567,11 @@ public class StockService extends CommonService {
 	}
 
 	@Transactional
-	public List<PAStockReportDTO> getStockReportForPA(String year, String month, String skList) {
+	public List<PAStockReportDTO> getStockReportForPA(String year, String month, String paList) {
 		Session session = getSessionFactory();
 		List<PAStockReportDTO> result = null;
 
-		String rawSql = "select * from report.get_pa_stock_report('" + month + "', '" + year + "', '{" + skList + "}')";
+		String rawSql = "select * from report.get_pa_stock_report('" + month + "', '" + year + "', '{" + paList + "}')";
 		Query query = session.createSQLQuery(rawSql)
 				.addScalar("username", StandardBasicTypes.STRING)
 				.addScalar("ncdStartingBalance", StandardBasicTypes.INTEGER)

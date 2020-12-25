@@ -108,7 +108,7 @@
                     <option value="pnc_problem"> PNC problem</option>
                     <option value="problems_eyes"> Eye problems</option>
                     <option value="diabetes"> Diabetes </option>
-                    <option value="high_blood_pressure"> Blood Pressure problems </option>
+                    <option value="high_blood_pressure"> High Blood Pressure problems </option>
                     <option value="problems_with_birth_control"> Birth Control problems </option>
                     <option value="other"> Other problems </option>
     
