@@ -17,6 +17,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.common.dto.ActivityListDTO;
 import org.opensrp.common.dto.ClientListDTO;
 import org.opensrp.core.mapper.TargetMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -194,14 +195,20 @@ public class PeopleService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public JSONObject getServiceInfo(String baseEntityId, Long id, String tableName) throws JSONException {
+	public List<ActivityListDTO> getServiceInfo(String baseEntityId, Long id, String tableName) throws JSONException {
 		
 		Session session = getSessionFactory();
-		String hql = "select  *  from report.get_details_data(:id,:tableName)";
+		List<ActivityListDTO> activityList = new ArrayList<ActivityListDTO>();
+		String hql = "select  r_no serialNo,_qs question,_val answer from report.get_details_data(:id,:tableName)";
 		
-		Query query = session.createSQLQuery(hql).setLong("id", id).setString("tableName", tableName);
-		String rs = (String) query.uniqueResult();
-		
+		/* Query query = session.createSQLQuery(hql).setLong("id", id).setString("tableName", tableName);
+		String rs = (String) query.uniqueResult();*/
+		Query query = session.createSQLQuery(hql).addScalar("serialNo", StandardBasicTypes.INTEGER)
+		        .addScalar("question", StandardBasicTypes.STRING).addScalar("answer", StandardBasicTypes.STRING)
+		        .setLong("id", id).setString("tableName", tableName)
+		        .setResultTransformer(new AliasToBeanResultTransformer(ActivityListDTO.class));
+		activityList = query.list();
+		/*
 		JSONObject jsonObject = new JSONObject(rs);
 		JSONArray data = new JSONArray();
 		JSONObject object = new JSONObject();
@@ -235,19 +242,25 @@ public class PeopleService extends CommonService {
 			object.put("form_name", "");
 		}
 		object.put("data", data);
-		object.put("rawData", jsonObject);
-		return object;
+		object.put("rawData", jsonObject);*/
+		return activityList;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public JSONObject getMemberInfo(String baseEntityId) throws JSONException {
+	public List<ActivityListDTO> getMemberInfo(String baseEntityId) throws JSONException {
 		
 		Session session = getSessionFactory();
-		String hql = "select  *  from report.member_info(:baseEntityId)";
+		List<ActivityListDTO> activityList = new ArrayList<ActivityListDTO>();
+		String hql = "select  r_no serialNo,_qs question,_val answer  from report.member_info(:baseEntityId)";
 		
-		Query query = session.createSQLQuery(hql).setString("baseEntityId", baseEntityId);
-		String rs = (String) query.uniqueResult();
+		//Query query = session.createSQLQuery(hql).setString("baseEntityId", baseEntityId);
+		Query query = session.createSQLQuery(hql).addScalar("serialNo", StandardBasicTypes.INTEGER)
+		        .addScalar("question", StandardBasicTypes.STRING).addScalar("answer", StandardBasicTypes.STRING)
+		        .setString("baseEntityId", baseEntityId)
+		        .setResultTransformer(new AliasToBeanResultTransformer(ActivityListDTO.class));
+		activityList = query.list();
+		/*String rs = (String) query.uniqueResult();
 		
 		JSONObject jsonObject = new JSONObject(rs);
 		JSONArray data = new JSONArray();
@@ -268,8 +281,8 @@ public class PeopleService extends CommonService {
 		});
 		object.put("form_name", "member");
 		object.put("data", data);
-		object.put("rawData", jsonObject);
-		return object;
+		object.put("rawData", jsonObject);*/
+		return activityList;
 	}
 	
 	public List<ClientListDTO> getServiceList(String baseEntityId) {

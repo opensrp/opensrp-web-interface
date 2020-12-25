@@ -5,7 +5,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <h3><strong>${serviceName }</strong></h3>
 <hr/>
-<c:forEach begin="0" end="${reg_info.length() -1}" var="index">
+<%-- <c:forEach begin="0" end="${reg_info.length() -1}" var="index">
 	<c:choose>
 		<c:when
 			test="${configs.has(reg_info.getJSONObject(index).getString('key')) ==true && reg_info.getJSONObject(index).getString('value')!='null'}">
@@ -16,4 +16,18 @@
 			</div>
 		</c:when>
 	</c:choose>
+</c:forEach> --%>
+<c:forEach items="${infos }" var="info">
+	<c:choose>
+		<c:when
+				test="${configs.has(info.getQuestion()) ==true && info.getAnswer() !=''}">
+				
+		<div class="col-lg-12 form-group">
+					<label class="control-label"><strong>${configs.getString(info.getQuestion())}
+							: </strong> ${info.getAnswer() } </label>
+	
+		</div>
+		</c:when>
+	</c:choose>
+
 </c:forEach>

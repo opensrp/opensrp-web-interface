@@ -3,7 +3,6 @@
  */
 package org.opensrp.web.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -12,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opensrp.common.dto.ActivityListDTO;
 import org.opensrp.common.dto.ClientListDTO;
 import org.opensrp.common.util.SearchBuilder;
 import org.opensrp.core.entity.Branch;
@@ -82,9 +82,9 @@ public class PeopleController {
 		JSONObject jo = new JSONObject();
 		jo.put("relation_id", baseEntityId);
 		List<ClientListDTO> data = peopleService.getMemberList(jo, 404, 404);
-		JSONObject dataInfos = peopleService.getServiceInfo(baseEntityId, id, "household");
-		model.addAttribute("reg_info", dataInfos.get("data"));
-		model.addAttribute("rawData", dataInfos.get("rawData"));
+		List<ActivityListDTO> dataInfos = peopleService.getServiceInfo(baseEntityId, id, "household");
+		model.addAttribute("infos", dataInfos);
+		//model.addAttribute("rawData", dataInfos.get("rawData"));
 		
 		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "HH"));
 		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName("household"));
@@ -98,12 +98,11 @@ public class PeopleController {
 	    throws JSONException {
 		model.addAttribute("locale", locale);
 		
-		JSONObject dataInfos = peopleService.getMemberInfo(baseEntityId);
-		model.addAttribute("reg_info", dataInfos.get("data"));
-		model.addAttribute("rawData", dataInfos.get("rawData"));
+		List<ActivityListDTO> dataInfos = peopleService.getMemberInfo(baseEntityId);
+		model.addAttribute("infos", dataInfos);
+		//model.addAttribute("rawData", dataInfos.get("rawData"));
 		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "Member"));
-		model.addAttribute("configs",
-		    dataViewConfigurationService.getConfigurationByNameFormName(dataInfos.getString("form_name")));
+		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName("member"));
 		
 		return "people/member_details";
 	}
@@ -134,14 +133,14 @@ public class PeopleController {
 	                              HttpSession session, Model model, Locale locale) throws JSONException {
 		model.addAttribute("locale", locale);
 		
-		JSONObject service = peopleService.getServiceInfo("", id, formName);
-		String ancPNCServiceName = service.getString("form_name");
+		List<ActivityListDTO> service = peopleService.getServiceInfo("", id, formName);
+		/*String ancPNCServiceName = service.getString("form_name");
 		if (!ancPNCServiceName.isEmpty()) {
 			serviceName = ancPNCServiceName;
 			
-		}
+		}*/
 		model.addAttribute("serviceName", serviceName);
-		model.addAttribute("reg_info", service.get("data"));
+		model.addAttribute("infos", service);
 		
 		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName(formName));
 		
