@@ -70,6 +70,7 @@ public class PeopleController {
 		model.addAttribute("locale", locale);
 		JSONObject jo = new JSONObject(dto);
 		List<ClientListDTO> data = peopleService.getHouseholdData(jo);
+		
 		model.addAttribute("households", data);
 		return "people/household-list-table";
 	}
@@ -83,8 +84,19 @@ public class PeopleController {
 		jo.put("relation_id", baseEntityId);
 		List<ClientListDTO> data = peopleService.getMemberList(jo, 404, 404);
 		List<ActivityListDTO> dataInfos = peopleService.getServiceInfo(baseEntityId, id, "household");
+		
+		JSONObject details = new JSONObject();
+		for (ActivityListDTO activityListDTO : dataInfos) {
+			
+			if (activityListDTO.getQuestion().equalsIgnoreCase("unique_id")) {
+				details.put("unique_id", activityListDTO.getAnswer());
+			} else if (activityListDTO.getQuestion().equalsIgnoreCase("first_name")) {
+				details.put("first_name", activityListDTO.getAnswer());
+			}
+		}
+		
 		model.addAttribute("infos", dataInfos);
-		//model.addAttribute("rawData", dataInfos.get("rawData"));
+		model.addAttribute("rawData", details);
 		
 		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "HH"));
 		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName("household"));
@@ -99,8 +111,22 @@ public class PeopleController {
 		model.addAttribute("locale", locale);
 		
 		List<ActivityListDTO> dataInfos = peopleService.getMemberInfo(baseEntityId);
+		JSONObject details = new JSONObject();
+		for (ActivityListDTO activityListDTO : dataInfos) {
+			
+			if (activityListDTO.getQuestion().equalsIgnoreCase("member_id")) {
+				details.put("member_id", activityListDTO.getAnswer());
+			} else if (activityListDTO.getQuestion().equalsIgnoreCase("first_name")) {
+				details.put("first_name", activityListDTO.getAnswer());
+			} else if (activityListDTO.getQuestion().equalsIgnoreCase("member_age")) {
+				details.put("member_age", activityListDTO.getAnswer());
+			} else if (activityListDTO.getQuestion().equalsIgnoreCase("gender")) {
+				details.put("gender", activityListDTO.getAnswer());
+			}
+		}
+		
 		model.addAttribute("infos", dataInfos);
-		//model.addAttribute("rawData", dataInfos.get("rawData"));
+		model.addAttribute("rawData", details);
 		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "Member"));
 		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName("member"));
 		
