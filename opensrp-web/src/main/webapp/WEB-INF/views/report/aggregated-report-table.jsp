@@ -43,8 +43,6 @@
         <th colspan="3"><spring:message code="lbl.agedNineteenToThirtyFive"/></th>
         <th colspan="3"><spring:message code="lbl.numberOfPopulationThirtyFiveDivideThirtyFivePlusYearsOld"/></th>
         <th rowspan="2"><spring:message code="lbl.numberOfHHWithSanitaryLatrine"/></th>
-        <th rowspan="2"><spring:message code="lbl.memberWithFingerprint"/></th>
-        <th rowspan="2"><spring:message code="lbl.reproductiveAgeGroup"/></th>
         <% if (isSKList == null || isSKList == false) {%>
         <th rowspan="2"><spring:message code="lbl.activeSK"/></th>
         <%}%>
@@ -101,8 +99,6 @@
         <td><%=report.getFrom420AndPlusFemale()%></td>
         <td><%=report.getFrom420AndPlusTotal()%></td>
         <td><%=report.getLatrineCount()%></td>
-        <td><%=report.getFingerPrintTaken()%></td>
-        <td><%=report.getReproductiveAgeGroup()%></td>
         <% if (isSKList == null || isSKList == false) {%>
         <td><%=report.getActiveSk()%></td>
         <%}%>

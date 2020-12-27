@@ -157,7 +157,7 @@
                             <%-- <jsp:include page="/WEB-INF/views/location-search-options.jsp" />
                              --%>
 
-                            <jsp:include page="/WEB-INF/views/target-report-common-search-section.jsp" />
+                            <jsp:include page="/WEB-INF/views/targets/forum-report/forum-target-search-option.jsp" />
 
 
                         </div>
