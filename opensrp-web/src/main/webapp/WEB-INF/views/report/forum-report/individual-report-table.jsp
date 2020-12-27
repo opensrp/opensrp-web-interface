@@ -40,7 +40,7 @@
 
     </tr>
     <tr>
-        <th><spring:message code="lbl.target"/></th>
+<%--        <th><spring:message code="lbl.target"/></th>--%>
         <th><spring:message code="lbl.acvMnt"/></th>
         <th><spring:message code="lbl.totalParticipant"/></th>
         <th><spring:message code="lbl.avgParticipantPerForum"/></th>
@@ -52,7 +52,7 @@
     <% for ( ForumIndividualReportDTO report: forumIndividualReport) { %>
     <tr>
         <td><%= report.getLocationOrProvider() %></td>
-        <td><%= report.getTarget() %></td>
+<%--        <td><%= report.getTarget() %></td>--%>
         <td><%= report.getAchievement() %></td>
         <td><%= report.getTotalParticipant() %> </td>
         <td><%= ArithmeticUtil.getForumAvg(report.getTotalParticipant(), report.getAchievement()) %> </td>

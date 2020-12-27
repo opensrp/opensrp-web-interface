@@ -53,19 +53,19 @@
             </tr>
             <tr>
                 <th>Achievement/Target (#)</th>
-                <th>Avg articipant/Target avg participant</th>
+                <th>Avg participant/Target avg participant</th>
 
                 <th>Achievement/Target (#)</th>
-                <th>Avg articipant/Target avg participant</th>
+                <th>Avg participant/Target avg participant</th>
 
                 <th>Achievement/Target (#)</th>
-                <th>Avg articipant/Target avg participant</th>
+                <th>Avg participant/Target avg participant</th>
 
                 <th>Achievement/Target (#)</th>
-                <th>Avg articipant/Target avg participant</th>
+                <th>Avg participant/Target avg participant</th>
 
                 <th>Achievement/Target (#)</th>
-                <th>Avg articipant/Target avg participant</th>
+                <th>Avg participant/Target avg participant</th>
             </tr>
 
     </thead>

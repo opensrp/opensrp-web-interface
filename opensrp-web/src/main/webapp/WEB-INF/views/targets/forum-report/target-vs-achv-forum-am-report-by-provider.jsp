@@ -92,7 +92,7 @@
 
                         <div class="row" style="margin: 0px">
                             <div class="col-sm-12" id="content" style="overflow-x: auto;">
-                                <h3 id="reportTile" style="font-weight: bold;">Provider wise visit report</h3>
+                                <h3 id="reportTile" style="font-weight: bold;">Provider wise forum report</h3>
                                 <div id="report"></div>
 
                             </div>
