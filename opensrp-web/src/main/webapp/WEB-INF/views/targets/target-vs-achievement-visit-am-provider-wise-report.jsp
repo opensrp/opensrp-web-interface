@@ -71,7 +71,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>Target vs achievement visit report provider wise
+							<i class="fa fa-list"></i>Target vs achievement visit report
 						</div>
 					</div>					
 					<div class="portlet-body">
@@ -99,7 +99,7 @@
 						
 		                <div class="row" style="margin: 0px">
 		                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
-		                    <h3 id="reportTile" style="font-weight: bold;">Provider wise visit report</h3>
+		                    <h3 id="reportTile" style="font-weight: bold;">Visit report</h3>
 		                        <div id="report"></div>
 		                        
 		                    </div>

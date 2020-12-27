@@ -32,7 +32,7 @@
 
     <tr>
         <th rowspan="2">Branch name</th>
-        <th colspan="4">SK</th>
+        <th colspan="4">Provider</th>
 
     </tr>
     <tr>

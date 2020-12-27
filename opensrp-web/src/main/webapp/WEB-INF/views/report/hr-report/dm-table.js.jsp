@@ -34,7 +34,7 @@
         <th rowspan="2">DM name</th>
         <th rowspan="2">Total AM</th>
         <th rowspan="2">Total Branch</th>
-        <th colspan="4">SK</th>
+        <th colspan="4">Provider</th>
 
     </tr>
     <tr>
