@@ -128,6 +128,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	boolean MAP_MOVEMENTS = AuthenticationManagerUtil.isPermitted("MAP_MOVEMENTS");
 	boolean MIGRATION =AuthenticationManagerUtil.isPermitted("MIGRATION");
 	boolean PERFORMANCE_CHART_AND_MAP = AuthenticationManagerUtil.isPermitted("PERFORMANCE_CHART_AND_MAP");
+	boolean DFS_REPORT = AuthenticationManagerUtil.isPermitted("DFS_REPORT");
    %>
   
 <body>
@@ -702,6 +703,27 @@ License: You must have a valid license purchased only from themeforest(the above
 
 						<li><a href="<c:url value="/performance-map?lang=${locale}"/>">
 							Performance
+						</a>
+						</li>
+						<% }%>
+						<% if( DFS_REPORT && AuthenticationManagerUtil.isAdmin()){ %>
+
+						<li><a href="<c:url value="/pm-dfs-report.html?lang=${locale}"/>">
+							DFS Report
+						</a>
+						</li>
+						<% }%>
+						<% if( DFS_REPORT && AuthenticationManagerUtil.isDivM()){ %>
+
+						<li><a href="<c:url value="/dm-dfs-report.html?lang=${locale}"/>">
+							DFS Report
+						</a>
+						</li>
+						<% }%>
+						<% if( DFS_REPORT && AuthenticationManagerUtil.isDivM()){ %>
+
+						<li><a href="<c:url value="/am-dfs-report-by-sk.html?lang=${locale}"/>">
+							DFS Report
 						</a>
 						</li>
 						<% }%>

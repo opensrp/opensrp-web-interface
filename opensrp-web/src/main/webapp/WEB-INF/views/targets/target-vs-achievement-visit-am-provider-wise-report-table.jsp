@@ -25,94 +25,21 @@
 
 <% Object targets = request.getAttribute("jsonReportData"); %>
 
-<div class="row">
-	<div class="col-sm-offset-10 col-sm-2">
-		<select class="custom-select" id="visitCategory" style="width: 95%" onclick="reloadSkChart()">
-			<option value="avg_visit">Average Visit</option>
-			<option value="hhVisitAchievementInPercentage">Household Visit</option>
-			<option value="elcoVisitAchievementInPercentage">ELCO Visit</option>
-			<option value="methodsUsersVisitAchievementInPercentage">Methods Users</option>
-			<option value="adolescentMethodsUsersVisitAchievementInPercentage">Adolescent Methods Users</option>
-			<option value="pregnancydentifiedVisitAchievementInPercentage">Pregnancy Identified</option>
-			<option value="deliveryVisitAchievementInPercentage">Delivery</option>
-			<option value="institutionalizedDeliveryVisitAchievementInPercentage">Institutionalized Delivery</option>
-			<option value="Child06VisitAchievementInPercentage">Child Visit(0-6 months)</option>
-			<option value="Child724VisitAchievementInPercentage">Child Visit(7-24 months)</option>
-			<option value="Child1836VisitAchievementInPercentage">Child Visit(18-36 months)</option>
-			<option value="immunizationVisitAchievementInPercentage">Immunization(0-59 months)</option>
-			<option value="pregnantVisitAchievementInPercentage">Pregnant Visit</option>
-		</select>
-	</div>
-</div>
-<div id="column-chart"></div>
-
 <table class="stripe display table table-bordered table-striped" id="reportDataTable"
        style="width: 100%;">
     <thead>
-    
-		    <tr>
-		     <th rowspan="2">SK name</th>
-		        <th rowspan="2">Branch name</th>		        
-		       
-		        <th rowspan="2">Mobile</th>
-		        <th colspan="2">Household Visit</th>
-		        <th colspan="2">ELCO Visit</th>
-		        <th colspan="2">Methods Users</th>
-		        <th colspan="2">Adolescent Methods Users</th>
-		        <th colspan="2">Pregnancy Identified</th>
-		        <th colspan="2">Delivery</th>
-		        
-		        <th colspan="2">Institutionalized Delivery</th>
-		        <th colspan="2">Child Visit(0-6 months)</th>
-		        <th colspan="2">Child Visit(7-24 months)</th>
-		        
-		        <th colspan="2">Child Visit(18-36 months)</th>
-		        <th colspan="2">Immunization(0-59 months)</th>
-		        <th colspan="2">Pregnant Visit</th>
-		        
-		        
+			<tr>
+		     	<th rowspan="2">SK name</th>
+		        <th rowspan="2">Branch name</th>
+		        <th rowspan="2">Total</th>
+		        <th colspan="2">Amount From ANC Service</th>
+		        <th colspan="2">Amount From PNC Service</th>
+		        <th colspan="2">Amount From IYCF Service</th>
+		        <th colspan="2">Amount From NCD Service</th>
+		        <th colspan="2">Amount From Women Service</th>
+		        <th colspan="2">Amount From Adolescent Service</th>
 		    </tr>
-		    <tr>
-		        <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		         <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		         <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		         <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		         <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		        <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		        <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		        <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		        <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		        <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		        <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		        <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		        
-		        
-		    </tr>
-	 	
+
     </thead>
    
     <tbody id="t-body">

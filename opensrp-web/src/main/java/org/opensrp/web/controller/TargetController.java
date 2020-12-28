@@ -864,6 +864,90 @@ public class TargetController {
 		searchUtil.setDivisionAttribute(session);
 		return "report/performance-map/index";
 	}
+
+    @RequestMapping(value = "/pm-dfs-report.html", method = RequestMethod.GET)
+    public String pmDFSReport(Model model, Locale locale) {
+
+        model.addAttribute("locale", locale);
+        model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+        List<Branch> branches = branchService.findAll("Branch");
+        model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+        model.addAttribute("branches", branches);
+
+        return "report/dfs/pm-report-by-dm";
+    }
+
+    @RequestMapping(value = "/pm-dfs-report-table", method = RequestMethod.POST)
+    public String pmDFSReportTable(@RequestBody String dto, Model model) throws JSONException {
+
+        JSONObject params = new JSONObject(dto);
+        String managerOrLocation = params.getString("managerOrLocation");
+
+        List<ForumTargetReportDTO> totalList = new ArrayList<>();
+
+        model.addAttribute("reportDatas", totalList);
+        model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
+        model.addAttribute("type", managerOrLocation);
+
+        return "report/dfs/pm-report-table-by-dm";
+    }
+
+    @RequestMapping(value = "/dm-dfs-report.html", method = RequestMethod.GET)
+    public String dmDFSReport(Model model, Locale locale) {
+        model.addAttribute("locale", locale);
+
+        User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+        String userIds = loggedInUser.getId() + "";
+        model.addAttribute("userIds", userIds);
+        List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
+        model.addAttribute("users", users);
+        return "report/dfs/dm-report-by-am";
+    }
+
+    @RequestMapping(value = "/dm-dfs-report-table", method = RequestMethod.POST)
+    public String dmDFSReportTable(@RequestBody String dto, Model model) throws JSONException {
+
+        JSONObject params = new JSONObject(dto);
+        String managerOrLocation = params.getString("managerOrLocation");
+
+        List<ForumTargetReportDTO> totalList = new ArrayList<>();
+
+        model.addAttribute("reportDatas", totalList);
+        model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
+        model.addAttribute("type", managerOrLocation);
+        return "report/dfs/dm-report-table-by-am";
+    }
+
+    @RequestMapping(value = "/am-dfs-report-by-branch-table", method = RequestMethod.POST)
+    public String amDFSReportBYBranchTable(@RequestBody String dto, Model model) throws JSONException {
+        JSONObject params = new JSONObject(dto);
+
+        List<ForumTargetReportDTO> totalList = new ArrayList<>();
+
+
+        model.addAttribute("reportDatas", totalList);
+        model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
+        return "report/dfs/am-report-table-by-branch";
+    }
+
+    @RequestMapping(value = "/am-dfs-report-by-sk.html", method = RequestMethod.GET)
+    public String amDFSReportBySK(Model model, Locale locale) {
+        model.addAttribute("locale", locale);
+        User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+        String userIds = loggedInUser.getId() + "";
+        model.addAttribute("userIds", userIds);
+        return "report/dfs/am-report-by-sk";
+    }
+
+    @RequestMapping(value = "/am-dfs-report-by-sk-table", method = RequestMethod.POST)
+    public String amDFSReportBySKTable(@RequestBody String dto, Model model) throws JSONException {
+        JSONObject params = new JSONObject(dto);
+        List<ForumTargetReportDTO> totalList = new ArrayList<>();
+//        totalList = targetService.getForumReportForAMBySK(params);
+        model.addAttribute("reportDatas", totalList);
+        model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
+        return "report/dfs/am-report-table-by-sk";
+    }
 	
 	private JsonArray getTargetsAsJson(List<TargetReportDTO> targetList) {
 		
