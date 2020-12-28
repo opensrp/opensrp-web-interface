@@ -159,6 +159,8 @@
                             </div>
                             <div class="col-lg-2 form-group "><br />
                                 <button type="submit" onclick="getMovements()" class="btn btn-primary" value="confirm">View</button>
+                                <br>
+                                <span id="errorMsg"></span>
                             </div>
                         </div>
 
@@ -423,6 +425,12 @@
             },
             beforeSend: function() {},
             success : function(data) {
+                if(data.length === 0) {
+                    $("#errorMsg").html('No coordinates found');
+                }
+                else {
+                    $("#errorMsg").html('');
+                }
                 data = JSON.parse(data);
                console.log("providers coordinate", data);
 

@@ -138,6 +138,8 @@
                             </div>
                             <div class="col-lg-2 form-group "><br />
                                 <button type="submit" onclick="getMovements()" class="btn btn-primary" value="confirm">View</button>
+                                <br>
+                                <span id="errorMsg"></span>
                             </div>
                         </div>
 
@@ -210,7 +212,7 @@
         container : 'map',
         style : 'mapbox://styles/mapbox/streets-v9',
         center : [ 90.399452, 23.777176 ],
-        zoom : 8
+        zoom : 6
     });
 
     // code from the next step will go here!
@@ -408,11 +410,20 @@
             timeout : 300000,
             data: {
                 username: $("#providerList").val(),
+                startDate: startDate,
+                endDate: endDate
             },
             beforeSend: function() {},
             success : function(data) {
                 data = JSON.parse(data);
                 console.log("providers coordinate", data);
+                if(data.length === 0) {
+                    $("#errorMsg").html('No coordinates found');
+
+                }
+                else {
+                    $("#errorMsg").html('');
+                }
 
                 var movements = [];
 
