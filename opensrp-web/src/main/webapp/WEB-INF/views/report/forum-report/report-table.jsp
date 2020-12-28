@@ -35,7 +35,7 @@
     <tr>
         <th rowspan="2"><spring:message code="lbl.provider"/></th>
         <th colspan="1"><spring:message code="lbl.adolescentForum"/></th>
-        <th colspan="1"><spring:message code="lbl.childForum"/></th>
+        <th colspan="1"><spring:message code="lbl.iycfForum"/></th>
         <th colspan="1"><spring:message code="lbl.womenHealthForum"/></th>
         <th colspan="1"><spring:message code="lbl.ncdForum"/></th>
         <th colspan="1"><spring:message code="lbl.adultForum"/></th>

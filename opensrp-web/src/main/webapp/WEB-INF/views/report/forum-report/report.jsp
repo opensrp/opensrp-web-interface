@@ -34,7 +34,7 @@
                         <select class="custom-select" id="forumType" style="width: 95%" onchange="generateForumReport()">
                             <option value="">All </option>
                             <option value="Adolescent Forum">Adolescent forum</option>
-                            <option value="Child Forum">Child forum</option>
+                            <option value="Child Forum">IYCF forum</option>
                             <option value="WOMEN Forum">Women health forum</option>
                             <option value="NCD Forum">NCD forum</option>
                             <option value="ADULT Forum">Adult forum</option>

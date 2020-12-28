@@ -36,7 +36,7 @@
     <thead>
     <tr>
         <th rowspan="2"><spring:message code="lbl.provider"/></th>
-        <th colspan="5"><%= session.getAttribute("forumType") %></th>
+        <th colspan="5"><%= ((String)session.getAttribute("forumType")).equalsIgnoreCase("child forum") ? "IYCF Forum" : session.getAttribute("forumType") %></th>
 
     </tr>
     <tr>
