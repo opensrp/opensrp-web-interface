@@ -40,7 +40,7 @@
         <th>Position</th>
         <th>Active</th>
 
-        <th>Dropout(Inactive)</th>
+        <th>Vacant Position</th>
         <th>Maternity Leave</th>
     </tr>
 
