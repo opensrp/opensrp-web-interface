@@ -46,16 +46,16 @@
         <form autocomplete="off">
             <div class="row">
                 <div class="col-md-2">
-                    <label><spring:message code="lbl.startDate"/></label>
+                    <label>Start Month</label>
                     <input class="form-control custom-select custom-select-lg" type=text
-                           name="start" id="start" value="<%=startDate%>">
+                           name="start" id="startDate" value="<%=startDate%>">
                     <label style="display: none;" class="text-danger" id="startDateValidation"><small>Input is not valid for date</small></label>
                 </div>
                 <div class="col-md-2">
-                    <label><spring:message code="lbl.endDate"/></label>
+                    <label>End Month</label>
                     <input class="form-control custom-select custom-select-lg" type="text"
-                           name="end" id="end" value="<%=endDate%>">
-                    <label style="display: none;" class="text-danger" id="endDateValidation"><small>Input is not valid for date</small></label>
+                           name="end" id="endDate" value="<%=endDate%>">
+                    <label style="display: none;" class="text-danger" id="endDateValidation"><small>end month must be in the same year as start month</small></label>
                 </div>
                 <div class="col-md-2" id="divisionHide">
                     <label><spring:message code="lbl.division"/></label>
@@ -81,15 +81,15 @@
                         <option value=""></option>
                     </select>
                 </div>
-                <div class="col-md-3" id="upazilaHide">
-                    <label><spring:message code="lbl.upazila"/></label>
-                    <select class="custom-select custom-select-lg mb-3" id="upazila"
-                            name="upazila">
-                        <option value="0?"><spring:message code="lbl.selectUpazila"/></option>
-                        <option value=""></option>
+<%--                <div class="col-md-3" id="upazilaHide">--%>
+<%--                    <label><spring:message code="lbl.upazila"/></label>--%>
+<%--                    <select class="custom-select custom-select-lg mb-3" id="upazila"--%>
+<%--                            name="upazila">--%>
+<%--                        <option value="0?"><spring:message code="lbl.selectUpazila"/></option>--%>
+<%--                        <option value=""></option>--%>
 
-                    </select>
-                </div>
+<%--                    </select>--%>
+<%--                </div>--%>
             </div>
         </form>
         <input type="hidden" id ="address_field" name="address_field"/>
@@ -100,7 +100,7 @@
             <div class="col-md-3">
                 <label> Services </label><br>
                     <select class="custom-select form-control" id="serviceItem" style="width: 95%" >
-                        <option value="hhVisit"> household visit</option>
+                        <option value="hhVisit"> Household Visit</option>
                         <option value="elcoRegistration"> Elco Registration</option>
                         <option value="methodUsers"> Method Users</option>
                         <option value="adolescentMethodUser"> Adolescent Method User</option>
@@ -146,3 +146,43 @@
     </div>
     <div class="card-footer small text-muted"></div>
 </div>
+<script>
+
+    var dtPickerTo = $('#startDate').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'MM yy',
+        maxDate: new Date(),
+        onClose: function(dateText, inst)
+        {
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $('#startDate').datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+            $(".date-picker-year").focus(function () {
+                $(".ui-datepicker-calendar").hide();
+                $(".ui-datepicker-current").hide();
+            });
+
+        }
+    });
+
+    dtPickerTo.datepicker('setDate', new Date());
+    var dtPicker = $('#endDate').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'MM yy',
+        maxDate: new Date(),
+
+        onClose: function(dateText, inst)
+        {
+            $('#endDate').datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+            $(".date-picker-year").focus(function () {
+                $(".ui-datepicker-calendar").hide();
+                $(".ui-datepicker-current").hide();
+            });
+
+        }
+    });
+    dtPicker.datepicker('setDate', new Date());
+</script>

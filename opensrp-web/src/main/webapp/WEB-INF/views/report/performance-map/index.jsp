@@ -72,11 +72,17 @@
 <!-- /.container-fluid-->
 <!-- /.content-wrapper-->
 </div>
+<style>
+    .ui-datepicker-calendar {
+        display: none;
+    }
+</style>
 <script src="<c:url value='/resources/chart/highcharts.js'/>"></script>
 <script>
 
 
     var map = L.map('leaflet-map').setView(L.latLng(23.777176, 90.399452),6);
+    var linesFeatureLayer = '';
     var mapSampleData = [{code: '10', label: 'Barisal', value: '855'}, {code: '20', label: 'Chittagong', value: '389'}, {code: '30', label: 'Dhaka', value: '25'}, {code: '40', label: 'Khulna', value: '589'}, {code: '45', label: 'Mymensingh', value: '969'}, {code: '50', label: 'Rajshahi', value: '1078'},{code: '55', label: 'Rangpur', value: '55'}, {code: '60', label: 'Sylhet', value: '59'}];
     var initLocationHoverDiv = false;
     var initLegendDiv = false;
@@ -91,11 +97,11 @@
         Highcharts.chart('line-chart', {
 
             title: {
-                text: 'Solar Employment Growth by Sector, 2010-2016'
+                text: $( "#serviceItem option:selected" ).text(),
             },
 
             subtitle: {
-                text: 'Source: thesolarfoundation.com'
+                text: ''
             },
 
             yAxis: {
@@ -165,9 +171,15 @@
 
     function mapData(geo, tableData) {
         console.log(geo, tableData);
+        var level = getGeoLevel(), adm = '';
+
+        if(level == 'division') adm = 'ADM1_EN';
+        if(level == 'district') adm = 'ADM2_EN';
+        if(level == 'upazila') adm = 'ADM3_EN';
+
         for(var i=0; i<geo.features.length; i++) {
             for(var j=0; j<tableData.length; j++) {
-                if(geo.features[i].properties.ADM1_EN.toLowerCase() == tableData[j].locName.toLowerCase()) {
+                if(geo.features[i].properties[adm].toLowerCase() == tableData[j].locName.toLowerCase()) {
                     geo.features[i].properties['value'] = tableData[j][$("#serviceItem").val()];
                     geo.features[i].properties['label'] = tableData[j].locName;
                     break;
@@ -200,7 +212,7 @@
 
         info.update = function (props) {
             this._div.innerHTML = '<h4>Bangladesh</h4>' + (props ?
-                '<b>' + props.label + '</b><br />' + props.value + ' people / mi<sup>2</sup>'
+                ('<b>' + (props.label === undefined ? '' : props.label) + '</b><br />' + (props.value === undefined ? '' : props.value))
                 : 'Hover over a state');
         };
 
@@ -211,7 +223,9 @@
 
         // get color depending on population density value
         function getColor(d) {
+            if(d === undefined)d=0;
             console.log('color value', d);
+
             return d > 100 ? '#800026' :
                 d > 50  ? '#BD0026' :
                     d > 40  ? '#E31A1C' :
@@ -236,6 +250,7 @@
         function highlightFeature(e) {
             var layer = e.target;
 
+            console.log("layer", layer.feature.properties);
             layer.setStyle({
                 weight: 2,
                 color: '#666',
@@ -270,12 +285,14 @@
         }
 
         var layerRef = L.layerGroup().addTo(map);
-        geojson = L.geoJson(statesData, {
+        linesFeatureLayer = L.geoJson(statesData, {
             style: style,
             onEachFeature: onEachFeature
-        }).addTo(layerRef);
+        });
 
-        map.attributionControl.addAttribution('Population data &copy; <a href="http://census.gov/">mpower-social.com</a>');
+        geojson = linesFeatureLayer.addTo(layerRef);
+
+        map.attributionControl.addAttribution(' &copy; <a href="http://census.gov/">mpower-social.com</a>');
 
 
         var legend = L.control({position: 'bottomright'});
@@ -313,23 +330,7 @@
 
     function loadPerformanceMap() {
 
-        let flagS = true;
-        let flagE = true;
-        if (!checkDate($('#start').val())) {
-            $('#startDateValidation').show();
-            flagS = false;
-        } else {
-            $('#startDateValidation').hide();
-            flagS = true;
-        }
-        if (!checkDate($('#end').val())) {
-            $('#endDateValidation').show();
-            flagE = false;
-        } else {
-            $('#endDateValidation').hide();
-            flagE = true;
-        }
-        if (!flagE || !flagS) return false;
+
 
         $("#startDate").html("");
         $("#endDate").html("");
@@ -345,22 +346,6 @@
         let divisionA = division == null?division:division.split("?")[1];
         let districtA = district == null?district:district.split("?")[1];
         let upazilaA = upazila == null?upazila:upazila.split("?")[1];
-
-        $("#startDate").append("<b>START DATE: </b> <span>"+ $("#start").val()+"</span>");
-        $("#endDate").append("<b>END DATE: </b> <span>"+ $("#end").val()+"</span>");
-        if (location != 'catchmentArea') {
-            if (divisionA != null && divisionA != undefined && divisionA != '') {
-                $("#divisionS").append("<b>DIVISION: </b> <span>" + divisionA.split(":")[0] + "</span>");
-            }
-            if (districtA != null && districtA != undefined && districtA != '') {
-                $("#districtS").append("<b>DISTRICT: </b> <span>" + districtA.split(":")[0] + "</span>");
-            }
-            if (upazilaA != null && upazilaA != undefined && upazilaA != '') {
-                $("#upazilaS").append("<b>UPAZILA/CITY CORPORATION: </b> <span>" + upazilaA.split(":")[0] + "</span>");
-            }
-        }
-
-        $("#referral-followup-report").html("");
 
         let searchedValueId = $('#searched_value_id').val();
 
@@ -391,6 +376,18 @@
         getGeoJson();
     }
 
+    function getGeoLevel() {
+        var geo = "division";
+
+        if ($('#division').val() != null && $('#division').val() != undefined && $('#division').val() != '')
+            geo = 'district';
+
+        if ($('#district').val() != null && $('#district').val() != undefined && $('#district').val() != '' && $('#district').val() !='0?')
+            geo = 'upazila';
+
+           return geo;
+    }
+
     function getGeoJson() {
 
         var token = $("meta[name='_csrf']").attr("content");
@@ -400,7 +397,7 @@
             contentType : "application/json",
             type: "GET",
             data: {
-                geoLevel: 'division',
+                geoLevel: getGeoLevel(),
             },
             url: url,
             timeout : 100000,
@@ -410,6 +407,7 @@
             },
             success : function(data) {
                 // lineChartData();
+                if(linesFeatureLayer != '') map.removeLayer( linesFeatureLayer );
                 getPerformanceMap(JSON.parse(data));
                 getPerformanceChart(JSON.parse(data));
             },
@@ -427,6 +425,19 @@
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
         var url = "/opensrp-dashboard/rest/api/v1/target/location-based-performance-map";
+
+        var startDate = new Date($("#startDate").val());
+        var endDate = new Date($("#endDate").val());
+        if(startDate.getFullYear() !== endDate.getFullYear()) {
+            $("#endDateValidation").show();
+            return;
+        }
+        else{
+            $("#endDateValidation").hide();
+        }
+        startDate = $.datepicker.formatDate('yy-mm-dd', new Date(startDate.getFullYear(), startDate.getMonth(), 1));
+        endDate = $.datepicker.formatDate('yy-mm-dd', new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0));
+
         $.ajax({
             contentType: "application/json",
             type: "GET",
@@ -435,8 +446,8 @@
                 searched_value: $("#searched_value").val(),
                 searched_value_id: $("#searched_value_id").val(),
                 address_field: $("#address_field").val(),
-                startDate: $("#start").val(),
-                endDate: $("#end").val(),
+                startDate: startDate,
+                endDate: endDate,
                 locationValue: $("#locationoptions").val(),
             },
             url: url,
@@ -462,6 +473,17 @@
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
         var url = "/opensrp-dashboard/rest/api/v1/target/location-based-performance-chart";
+
+        var startDate = new Date($("#startDate").val());
+        var endDate = new Date($("#endDate").val());
+        if(startDate.getFullYear() !== endDate.getFullYear()) {
+            return;
+        }
+
+        startDate = $.datepicker.formatDate('yy-mm-dd', new Date(startDate.getFullYear(), startDate.getMonth(), 1));
+        endDate = $.datepicker.formatDate('yy-mm-dd', new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0));
+
+
         $.ajax({
             contentType: "application/json",
             type: "GET",
@@ -470,8 +492,8 @@
                 searched_value: $("#searched_value").val(),
                 searched_value_id: $("#searched_value_id").val(),
                 address_field: $("#address_field").val(),
-                startDate: $("#start").val(),
-                endDate: $("#end").val(),
+                startDate: startDate,
+                endDate: endDate,
                 locationValue: $("#locationoptions").val(),
             },
             url: url,
