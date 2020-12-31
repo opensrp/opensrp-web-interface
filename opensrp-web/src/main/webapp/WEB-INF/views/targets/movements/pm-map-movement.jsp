@@ -231,7 +231,7 @@
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
-            dateFormat: 'dd-mm-yy',
+            dateFormat: 'yy-mm-dd',
             maxDate: new Date,
             onClose: function(dateText, inst) {
                 var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
@@ -248,7 +248,7 @@
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
-            dateFormat: 'dd-mm-yy',
+            dateFormat: 'yy-mm-dd',
             maxDate: new Date,
             onClose: function(dateText, inst) {
                 var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
@@ -425,13 +425,14 @@
             },
             beforeSend: function() {},
             success : function(data) {
-                if(data.length === 0) {
+                data = JSON.parse(data);
+                if(data.length == 0) {
                     $("#errorMsg").html('No coordinates found');
                 }
                 else {
                     $("#errorMsg").html('');
                 }
-                data = JSON.parse(data);
+
                console.log("providers coordinate", data);
 
                var movements = [];

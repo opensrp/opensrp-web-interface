@@ -70,7 +70,7 @@
 				<value>org.opensrp.core.entity.TrainingTitle</value>
 				<value>org.opensrp.core.entity.WebNotificationBranch</value>
 				<value>org.opensrp.core.entity.Migration</value>
-
+				<value>org.opensrp.core.entity.BkashPayments</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
