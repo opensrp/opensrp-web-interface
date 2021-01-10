@@ -17,6 +17,36 @@
 <c:url var="backUrl" value="/inventoryam/stock-in.html" />
 <c:url var="viewUrl" value="/inventoryam/stock-list/view" />
 
+<style>
+.ui-datepicker-trigger {
+    margin-left : 5px;
+    vertical-align : top;
+}
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    /* cursor: not-allowed; */
+    background-color: #eeeeee;
+}
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    /* cursor: not-allowed; */
+    background-color: #eee;
+    opacity: 1;
+}
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    /* cursor: not-allowed; */
+    background-color: #eee;
+    opacity: 1;
+}
+input[readonly] {
+     cursor: text;
+}
+ #from,#to{
+        background: url("<c:url value='/resources/img/icon-calender.png'/>") no-repeat right;
+        border:1px solid #ccc; 
+       
+         
+    }
+</style>
+
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
@@ -44,35 +74,43 @@
 		</div>
 		<div class="form-group">
 			<div class="row">								 	
-				<div class="col-lg-2 form-group">
+				<div class="col-lg-3 form-group">
 				<label for="from"><spring:message code="lbl.from"></spring:message><span
 					class="text-danger"> *</span> </label> <input type="text"
-					class="form-control date" id="from" readonly="readonly"> <span class="text-danger"
+					class="form-control col-lg-2 date" id="from" readonly="readonly"> 
+					
+					<span class="text-danger"
 					id="startDateValidation"></span>
 				</div>
-			<div class="col-lg-2 form-group">
+			<div class="col-lg-3 form-group">
 				<label for="to"><spring:message code="lbl.to"></spring:message><span
-					class="text-danger"> *</span> </label> <input type="text" readonly="readonly"
-					class="form-control date" id="to"> <span class="text-danger"
+					class="text-danger"> *</span> </label> 
+					<input type="text" readonly	class="form-control date" id="to"> 
+					
+					<span class="text-danger"
 					id="endDateValidation"></span>
 			</div> 
-				<div class="col-lg-4 form-group ">
+				<div class="col-lg-2 form-group ">
 					<label class="control-label">Invoice number </label> 
 				 		<input class="form-control" type="text" id="invoiceNumber" placeholder="Invoice number"> 
 				</div>
 				<div class="col-lg-4" style="padding-top: 20px">
 				
-					<div  onclick="filter()"  class="btn btn-primary btn-lg">Search</div>
+					<div  onclick="filter()"  class="btn btn-primary">Search</div>
+					<a class="btn btn-primary" id="newInvoice" href="<c:url value="/inventoryam/stock-add/${id}.html?lang=${locale}"/>">
+					<strong>
+					New Invoice
+				</strong></a>
 				</div>
 			
 			</div>
 		</div>
-		<div class="col-lg-12 form-group requisition-add">
+		<%-- <div class="col-lg-12 form-group requisition-add">
 	                <a class="btn btn-primary" id="newInvoice" href="<c:url value="/inventoryam/stock-add/${id}.html?lang=${locale}"/>">
 					<strong>
 					New Invoice
 				</strong></a>
-	            </div>
+	            </div> --%>
 					<div class="portlet-body">
 						<table class="table table-striped table-bordered" id="stockListOfAm">
 							<thead>
@@ -108,6 +146,8 @@ jQuery(document).ready(function() {
    //TableAdvanced.init();
 		//$('#stockListOfAm').DataTable();
 });
+
+
 </script>
 
 
@@ -117,6 +157,10 @@ var dateToday = new Date();
 var dateToday = new Date();
 	var dates = $(".date").datepicker({
     dateFormat: 'yy-mm-dd',
+   /*  showOn: "button",
+    buttonImage: "<c:url value='/resources/img/calendar.gif'/>",
+    buttonImageOnly: true,
+    buttonText: "Select date", */
     maxDate: dateToday,
     onSelect: function(selectedDate) {
         var option = this.id == "from" ? "minDate" : "maxDate",

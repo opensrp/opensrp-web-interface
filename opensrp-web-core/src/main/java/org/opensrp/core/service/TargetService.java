@@ -1167,6 +1167,29 @@ public class TargetService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
+	public List<TargetCommontDTO> getTargetOfprevoiusMonth(JSONObject params, String branchIds) throws JSONException {
+		
+		Session session = getSessionFactory();
+		List<TargetCommontDTO> dtos = new ArrayList<>();
+		int day = params.getInt("day");
+		String hql = "";
+		if (day == 0) {
+			hql = "select  pr_id productId ,product_name productName,qty quantity from core.target_prevoiuos_month('{"
+			        + branchIds + "}','" + params + "')";
+		} else {
+			hql = "select  pr_id productId ,product_name productName,qty quantity from core.target_prevoiuos_day('{"
+			        + branchIds + "}','" + params + "')";
+		}
+		Query query = session.createSQLQuery(hql).addScalar("productId", StandardBasicTypes.INTEGER)
+		        .addScalar("productName", StandardBasicTypes.STRING).addScalar("quantity", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		dtos = query.list();
+		
+		return dtos;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
 	public List<TargetCommontDTO> getTargetInfoForPopulationWise(int roleId, int locationTagId, int month, int year) {
 		
 		Session session = getSessionFactory();
@@ -1464,12 +1487,9 @@ public class TargetService extends CommonService {
 		String hql = "select * from report.pm_timestamp_report_dm_wise('" + params + "','{" + params.getString("branchIds")
 		        + "}')";
 		Query query = session.createSQLQuery(hql).addScalar("providerUserName", StandardBasicTypes.STRING)
-		        .addScalar("fullName", StandardBasicTypes.STRING)
-				.addScalar("iycfTime", StandardBasicTypes.FLOAT)
-		        .addScalar("ancTime", StandardBasicTypes.FLOAT)
-				.addScalar("ncdTime", StandardBasicTypes.FLOAT)
-		        .addScalar("womenTime", StandardBasicTypes.FLOAT)
-				.addScalar("adolescentTime", StandardBasicTypes.FLOAT)
+		        .addScalar("fullName", StandardBasicTypes.STRING).addScalar("iycfTime", StandardBasicTypes.FLOAT)
+		        .addScalar("ancTime", StandardBasicTypes.FLOAT).addScalar("ncdTime", StandardBasicTypes.FLOAT)
+		        .addScalar("womenTime", StandardBasicTypes.FLOAT).addScalar("adolescentTime", StandardBasicTypes.FLOAT)
 		        .addScalar("hhVisitTime", StandardBasicTypes.FLOAT)
 		        .setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
 		dtos = query.list();
@@ -1505,8 +1525,7 @@ public class TargetService extends CommonService {
 		Query query = session.createSQLQuery(hql).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("iycfTime", StandardBasicTypes.FLOAT).addScalar("ancTime", StandardBasicTypes.FLOAT)
 		        .addScalar("ncdTime", StandardBasicTypes.FLOAT).addScalar("womenTime", StandardBasicTypes.FLOAT)
-		        .addScalar("adolescentTime", StandardBasicTypes.FLOAT)
-		        .addScalar("hhVisitTime", StandardBasicTypes.FLOAT)
+		        .addScalar("adolescentTime", StandardBasicTypes.FLOAT).addScalar("hhVisitTime", StandardBasicTypes.FLOAT)
 		        .setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
 		dtos = query.list();
 		return dtos;
@@ -1524,8 +1543,7 @@ public class TargetService extends CommonService {
 		        .addScalar("fullName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("iycfTime", StandardBasicTypes.FLOAT).addScalar("ancTime", StandardBasicTypes.FLOAT)
 		        .addScalar("ncdTime", StandardBasicTypes.FLOAT).addScalar("womenTime", StandardBasicTypes.FLOAT)
-		        .addScalar("adolescentTime", StandardBasicTypes.FLOAT)
-		        .addScalar("hhVisitTime", StandardBasicTypes.FLOAT)
+		        .addScalar("adolescentTime", StandardBasicTypes.FLOAT).addScalar("hhVisitTime", StandardBasicTypes.FLOAT)
 		        .setResultTransformer(new AliasToBeanResultTransformer(TimestamReportDTO.class));
 		dtos = query.list();
 		return dtos;

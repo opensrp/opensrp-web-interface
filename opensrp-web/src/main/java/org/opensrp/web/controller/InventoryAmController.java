@@ -65,6 +65,8 @@ public class InventoryAmController {
 		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
+		
 		return "inventoryAm/my-inventory";
 	}
 	
@@ -78,6 +80,7 @@ public class InventoryAmController {
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/my-inventory-list";
 	}
 	
@@ -87,6 +90,7 @@ public class InventoryAmController {
 		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/requisition-am";
 	}
 	
@@ -96,6 +100,7 @@ public class InventoryAmController {
 		List<Object[]> branchInfo = branchService.getBranchByUser(id, loggedInUser);
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/requisition-list-am";
 	}
 	
@@ -111,6 +116,7 @@ public class InventoryAmController {
 		model.addAttribute("requisitionList", requisitionList);
 		model.addAttribute("requisitionId", requisitionList.get(0).getRequisition_id());
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/requisition-details";
 	}
 	
@@ -122,6 +128,7 @@ public class InventoryAmController {
 		model.addAttribute("productList", productListForRequisition);
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/requisition-add-am";
 	}
 	
@@ -131,6 +138,7 @@ public class InventoryAmController {
 		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/stock-in";
 	}
 	
@@ -141,6 +149,7 @@ public class InventoryAmController {
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/stock-list";
 	}
 	
@@ -153,6 +162,7 @@ public class InventoryAmController {
 		
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/stock-add";
 	}
 	
@@ -163,6 +173,7 @@ public class InventoryAmController {
 		ProductDTO productStock = stockService
 		        .getProductDetailsById(Integer.parseInt(branchid), Integer.parseInt(productid));
 		String stockAvailable = String.valueOf(productStock.getStock());
+		model.addAttribute("show", "block");
 		return stockAvailable;
 	}
 	
@@ -172,6 +183,7 @@ public class InventoryAmController {
 		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/pass-stock";
 	}
 	
@@ -184,6 +196,7 @@ public class InventoryAmController {
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/pass-stock-inventory-list";
 	}
 	
@@ -201,6 +214,7 @@ public class InventoryAmController {
 		model.addAttribute("id", id);
 		model.addAttribute("skid", skid);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/pass-stock-individual-inventory-list";
 	}
 	
@@ -210,6 +224,7 @@ public class InventoryAmController {
 		List<Branch> branches = branchService.getBranchByUser(loggedInUser.getId());
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/sell-to-ss";
 	}
 	
@@ -227,6 +242,7 @@ public class InventoryAmController {
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
 		model.addAttribute("manager", loggedInUser.getId());
+		model.addAttribute("show", "block");
 		return "inventoryAm/sell-to-ss-list";
 	}
 	
@@ -237,6 +253,7 @@ public class InventoryAmController {
 		} else {
 			model.addAttribute("ssLists", stockService.getsellToSSList(0, 0, id, 0, 0, 0, 0, 0, 200, 0, "", ""));
 		}
+		model.addAttribute("show", "block");
 		return "inventoryAm/ss-list-by-sk";
 	}
 	
@@ -254,6 +271,7 @@ public class InventoryAmController {
 		model.addAttribute("id", id);
 		model.addAttribute("ssid", ssid);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/sell-to-ss-individual";
 	}
 	
@@ -262,11 +280,13 @@ public class InventoryAmController {
 		model.addAttribute("locale", locale);
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
+		model.addAttribute("show", "block");
 		return "inventoryAm/stock-report";
 	}
 	
 	@RequestMapping(value = "inventoryam/stock-report-table", method = RequestMethod.GET)
-	public String stockReportTable(@RequestParam(value = "year") String year, @RequestParam(value = "month") String month,
+	public String stockReportTable(Model model, @RequestParam(value = "year") String year,
+	                               @RequestParam(value = "month") String month,
 	                               @RequestParam(value = "branchIds", required = false) String branchIds,
 	                               @RequestParam(value = "userRole", required = false, defaultValue = "SK") String userRole,
 	                               HttpSession session) {
@@ -278,15 +298,13 @@ public class InventoryAmController {
 		if (StringUtils.isBlank(branchIds)) {
 			String branches = branchService.commaSeparatedBranch(new ArrayList<>(AuthenticationManagerUtil.getLoggedInUser()
 			        .getBranches()));
-			providerIds = userRole.equals("SK")
-						? userService.findSKByBranchSeparatedByComma("'{" + branches + "}'")
-					    : userService.findPAByBranchSeparatedByComma("'{" + branches + "}'");
+			providerIds = userRole.equals("SK") ? userService.findSKByBranchSeparatedByComma("'{" + branches + "}'")
+			        : userService.findPAByBranchSeparatedByComma("'{" + branches + "}'");
 		} else {
-			providerIds = userRole.equals("SK")
-						? userService.findSKByBranchSeparatedByComma("'{" + branchIds + "}'")
-					    : userService.findPAByBranchSeparatedByComma("'{" + branchIds + "}'");
+			providerIds = userRole.equals("SK") ? userService.findSKByBranchSeparatedByComma("'{" + branchIds + "}'")
+			        : userService.findPAByBranchSeparatedByComma("'{" + branchIds + "}'");
 		}
-		System.out.println("=====> providerIds"+  providerIds);
+		System.out.println("=====> providerIds" + providerIds);
 		if (userRole.equals("SK")) {
 			report = stockService.getStockReportForSK(year, month, providerIds);
 			reportTable = "inventoryAm/stock-report-table";
@@ -295,6 +313,7 @@ public class InventoryAmController {
 			reportTable = "inventoryAm/pa-stock-report-table";
 		}
 		session.setAttribute("stockReport", userRole.equals("SK") ? report : paReport);
+		model.addAttribute("show", "block");
 		return reportTable;
 	}
 	
@@ -309,6 +328,7 @@ public class InventoryAmController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("branchInfo", branch);
 		model.addAttribute("branchId", branchId);
+		model.addAttribute("show", "block");
 		return "inventoryAm/stock-in-details";
 	}
 	
@@ -321,6 +341,7 @@ public class InventoryAmController {
 		model.addAttribute("titleType", "Pass stock ");
 		model.addAttribute("user", stockService.getUserAndBrachByuserId(userId));
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/user-wise-stock-pass-sell";
 	}
 	
@@ -335,6 +356,7 @@ public class InventoryAmController {
 		model.addAttribute("locale", locale);
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		model.addAttribute("manager", loggedInUser.getId());
+		model.addAttribute("show", "block");
 		return "inventoryAm/user-wise-stock-pass-sell";
 	}
 	
@@ -350,6 +372,7 @@ public class InventoryAmController {
 		}
 		model.addAttribute("roleName", roleName);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/adjust-history-list";
 	}
 	
@@ -359,6 +382,7 @@ public class InventoryAmController {
 		List<StockAdjustDTO> stockAdjustList = stockService.getAdjustHistoryList(id, "", "", "", 0, 10);
 		model.addAttribute("stockAdjustObj", stockAdjustList.get(0));
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryAm/adjust-history-details";
 	}
 	

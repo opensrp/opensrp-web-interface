@@ -41,12 +41,7 @@
 				<input type="hidden" id="selectRequisitionBy" value="<%=AuthenticationManagerUtil.getLoggedInUser().getId() %>">
 				<input type="hidden" id="branchid" value="${branchInfo[0][0]}">
 			<div class="portlet-body">
-				<div class="col-lg-12 form-group requisition-add">
-					<a class="btn btn-primary" id="addRequisition"
-						href="<c:url value="/inventoryam/requisition-add/${branchInfo[0][0]}.html?lang=${locale}"/>">
-						<strong> Add Requisition </strong>
-					</a>
-				</div>
+				
 				<div class="row">
 
 					<div class="col-lg-3 form-group">
@@ -61,13 +56,21 @@
 							class="form-control date" id="to"> <span class="text-danger"
 							id="endDateValidation"></span>
 					</div> 
+					<div class="col-lg-3 form-group text-right" style="padding-top: 24px">
+						<button type="button" onclick="filter()" class="btn btn-primary">Search</button>
+						<a class="btn btn-primary" id="addRequisition"
+						href="<c:url value="/inventoryam/requisition-add/${branchInfo[0][0]}.html?lang=${locale}"/>">
+						<strong> Add Requisition </strong>
+					</a>
+					</div>
 
 				</div>
-				<div class="row">
+				<!-- <div class="row">
 					<div class="col-lg-12 form-group text-right">
 						<button type="button" onclick="filter()" class="btn btn-primary">Search</button>
+						
 					</div>
-				</div>
+				</div> -->
 				<table class="table table-striped table-bordered " id="requisitionListForAm">
 							<thead>
 								<tr>

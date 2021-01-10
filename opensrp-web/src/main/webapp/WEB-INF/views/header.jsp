@@ -335,7 +335,7 @@ License: You must have a valid license purchased only from themeforest(the above
 					<li><a href="javascript:;"> <i class="fa fa-cube"></i> <span
 							class="title"> Inventory</span> <span class="arrow "></span>
 					</a>
-						<ul class="sub-menu">
+						<ul class="sub-menu" style="display: ${show}">
 							<%
 								if (PERM_READ_WRITE_INVENTORY_AM) {
 							%>
