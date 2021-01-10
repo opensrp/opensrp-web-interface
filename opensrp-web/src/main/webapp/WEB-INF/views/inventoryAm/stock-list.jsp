@@ -17,35 +17,7 @@
 <c:url var="backUrl" value="/inventoryam/stock-in.html" />
 <c:url var="viewUrl" value="/inventoryam/stock-list/view" />
 
-<style>
-.ui-datepicker-trigger {
-    margin-left : 5px;
-    vertical-align : top;
-}
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-    /* cursor: not-allowed; */
-    background-color: #eeeeee;
-}
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-    /* cursor: not-allowed; */
-    background-color: #eee;
-    opacity: 1;
-}
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-    /* cursor: not-allowed; */
-    background-color: #eee;
-    opacity: 1;
-}
-input[readonly] {
-     cursor: text;
-}
- #from,#to{
-        background: url("<c:url value='/resources/img/icon-calender.png'/>") no-repeat right;
-        border:1px solid #ccc; 
-       
-         
-    }
-</style>
+
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />

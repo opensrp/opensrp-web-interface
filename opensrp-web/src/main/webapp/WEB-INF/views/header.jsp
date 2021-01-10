@@ -43,7 +43,22 @@ License: You must have a valid license purchased only from themeforest(the above
 <jsp:include page="/WEB-INF/views/css.jsp" />
 <c:url var="sendPrescriptionMessage" value="/rest/api/v1/message/prescription" />
 <c:url var="sendBookingMessage" value="/rest/api/v1/message/booking" />
+<style>
+.ui-datepicker-trigger {
+    margin-left : 5px;
+    vertical-align : top;
+}
 
+#from,#to {
+     cursor: pointer;
+}
+ #from,#to,#mfrom,#mto{
+        background: url("<c:url value='/resources/img/icon-calender.png'/>") no-repeat right;
+        border:1px solid #ccc; 
+       
+         
+    }
+</style>
 
 <jsp:include page="/WEB-INF/views/js.jsp" />
 
