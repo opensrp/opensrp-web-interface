@@ -152,7 +152,10 @@
 											</c:forEach> --%>
 								        </select>
 								    </div>
-								    
+								    <div class="col-lg-3" style="margin-left: -25px;margin-top: 10px;">
+										<br>
+										<input type="checkbox" id="selectAllBranch"> <label> select all</label>
+									</div>
 														
 							</div>
 	
@@ -283,6 +286,17 @@ function reportType(value) {
 </script>
 <script>
 
+	$("#selectAllBranch").click(function() {
+		if($("#selectAllBranch").is(':checked') ) {
+			console.log("select all branch");
+			$("#branchList > option").prop("selected", "selected");
+		}
+		else {
+			$("#branchList > option").removeAttr("selected");
+		}
+		$("#branchList").trigger("change");
+		$('.select2-selection__clear').hide();
+	});
   
 function getFromTime() {
 	

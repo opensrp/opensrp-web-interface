@@ -22,7 +22,9 @@
     </style>
 </head>
 <body>
-<% Object targets = request.getAttribute("jsonReportData"); %>
+<% Object targets = request.getAttribute("jsonReportData");
+ int sl = 0;
+%>
 
 <div class="row">
     <div class="col-sm-offset-9 col-sm-3">
@@ -45,33 +47,41 @@
     <thead>
     
 		    <tr>
-		        <th rowspan="2">Branch name</th>		        
-		        <th rowspan="2">SK name</th>
+				<th rowspan="2"> Sl</th>
+				<th rowspan="2">SK name</th>
+		        <th rowspan="2">Branch name</th>
 		        <th rowspan="2">Mobile</th>
-		        <th colspan="2">ANC package</th>
-		        <th colspan="2">PNC package</th>
+		        <th colspan="3">ANC package</th>
+		        <th colspan="3">PNC package</th>
 		        
-		        <th colspan="2">NCD package</th>
-		        <th colspan="2">IYCF package</th>
-		        <th colspan="2">Women package</th>
-		        <th colspan="2">Adolescent package</th>
+		        <th colspan="3">NCD package</th>
+		        <th colspan="3">IYCF package</th>
+		        <th colspan="3">Women package</th>
+		        <th colspan="3">Adolescent package</th>
 		    </tr>
 		    <tr>
-		        <th>TvA (#)</th>
+				<th>Target</th>
+				<th>Achievement</th>
 		        <th>TvA(%)</th>
-		        
-		         <th>TvA (#)</th>
+
+				<th>Target</th>
+				<th>Achievement</th>
 		        <th>TvA(%)</th>
-		        
-		         <th>TvA (#)</th>
+
+				<th>Target</th>
+				<th>Achievement</th>
 		        <th>TvA(%)</th>
-		        
-		         <th>TvA (#)</th>
+
+				<th>Target</th>
+				<th>Achievement</th>
 		        <th>TvA(%)</th>
-		        
-		        <th>TvA (#)</th>
+
+				<th>Target</th>
+				<th>Achievement</th>
 		        <th>TvA(%)</th>
-		        <th>TvA (#)</th>
+
+				<th>Target</th>
+				<th>Achievement</th>
 		        <th>TvA(%)</th>
 		    </tr>
 	 	
@@ -81,67 +91,72 @@
     	
    		<c:forEach items="${reportDatas}" var="reportData"> 
    			<tr>
-   			
-		   			<td> ${reportData.getBranchName() }</td>		   			
-		   			<td> ${reportData.getFullName() }</td>
+					<td> <%= ++sl %> </td>
+					<td> ${reportData.getFullName() }</td>
+		   			<td> ${reportData.getBranchName() }</td>
 		   			<td> ${reportData.getMobile() }</td>
-		   			<td> ${reportData.getANCServiceTarget() }/${reportData.getANCServiceSell() }</td>
-		   			<td> 
+		   			<td> ${reportData.getANCServiceTarget() }</td>
+		   			<td> ${reportData.getANCServiceSell() }</td>
+		   			<td>
 		   			<c:choose>
 		   				<c:when test="${reportData.getANCServiceTarget()==0}">
 		   				
-		   				N/A
+		   				0.0%
 		   				</c:when>
 		   				<c:otherwise>		   				
 		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getANCServiceSell()*100/reportData.getANCServiceTarget() }" />  
-		   				</c:otherwise>
+		   				%
+						</c:otherwise>
 		   			</c:choose>
 		   			
 		   			 </td>
 		   			
-		   			<td> ${reportData.getPNCServiceTarget() }/${reportData.getPNCServiceSell() }</td>
-		   			
+		   			<td> ${reportData.getPNCServiceTarget() }</td>
+		   			<td> ${reportData.getPNCServiceSell() }</td>
+
 		   			<td> 
 		   			<c:choose>
 		   				<c:when test="${reportData.getPNCServiceTarget()==0}">
 		   				
-		   				N/A
+		   				0.0%
 		   				</c:when>
 		   				<c:otherwise>		   				
 		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getPNCServiceSell()*100/reportData.getPNCServiceTarget() }" /> 
-		   			
+		   				%
 		   				</c:otherwise>
 		   			</c:choose>
 		   			</td>
 		   			
-		   			<td> ${reportData.getNCDServiceTarget() }/${reportData.getNCDServiceSell() }</td>
-		   			
+		   			<td> ${reportData.getNCDServiceTarget() }</td>
+		   			<td> ${reportData.getNCDServiceSell() }</td>
+
 		   			<td> 
 		   			<c:choose>
 		   				<c:when test="${reportData.getPNCServiceTarget()==0}">
 		   				
-		   				N/A
+		   				0.0%
 		   				</c:when>
 		   				<c:otherwise>		   				
 		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getNCDServiceSell()*100/reportData.getNCDServiceTarget() }" /> 
-		   			
+		   				%
 		   				</c:otherwise>
 		   			</c:choose>
 		   			 </td>
 		   			
 		   			
-		   			<td> ${reportData.getIYCFServiceTarget() }/${reportData.getIYCFServiceSell() }</td>
-		   			
+		   			<td> ${reportData.getIYCFServiceTarget() }</td>
+		   			<td> ${reportData.getIYCFServiceSell() }</td>
+
 		   			<td> 
 		   			
 		   			<c:choose>
 		   				<c:when test="${reportData.getPNCServiceTarget()==0}">
 		   				
-		   				N/A
+		   				0.0%
 		   				</c:when>
 		   				<c:otherwise>		   				
 		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getIYCFServiceSell()*100/reportData.getIYCFServiceTarget() }" /> 
-		   			
+		   				%
 		   				</c:otherwise>
 		   			</c:choose>
 		   			 </td>
@@ -149,39 +164,39 @@
 		   			
 		   			
 		   			
-		   			<td> ${reportData.getWomenServiceTarget() }/${reportData.getWomenServiceSell() }</td>
-		   			
+		   			<td> ${reportData.getWomenServiceTarget() }</td>
+		   			<td> ${reportData.getWomenServiceSell() }</td>
+
 		   			<td> 
 		   			
 		   			<c:choose>
 		   				<c:when test="${reportData.getPNCServiceTarget()==0}">
 		   				
-		   				N/A
+		   				0.0%
 		   				</c:when>
 		   				<c:otherwise>		   				
 		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getWomenServiceSell()*100/reportData.getWomenServiceTarget() }" /> 
-		   				</c:otherwise>
+		   				%
+						</c:otherwise>
 		   			</c:choose>
 		   			 </td>
 		   			
 		   			
-		   			<td> ${reportData.getAdolescentServiceTarget() }/${reportData.getAdolescentServiceSell() }</td>
-		   			<td> 
+		   			<td> ${reportData.getAdolescentServiceTarget() }</td>
+		   			<td> ${reportData.getAdolescentServiceSell() }</td>
+		   			<td>
 		   			<c:choose>
 		   				<c:when test="${reportData.getPNCServiceTarget()==0}">
 		   				
-		   				N/A
+		   				0.0%
 		   				</c:when>
 		   				<c:otherwise>		   				
 		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getAdolescentServiceSell()*100/reportData.getAdolescentServiceTarget() }" /> 
-		   				 
+		   				 %
 		   				</c:otherwise>
 		   			</c:choose>
 		   			
 		   			 </td>
-	   			
-		   			
-	   			
 	 		</tr>
 		</c:forEach>
     </tbody>
@@ -284,6 +299,22 @@
         console.log("percentages", percentages, " managers", managers);
         reloadChart(managers, percentages);
     }
+
+    var achvColumn = [7,10,13,16,19,22, 25, 28, 31];
+    for(var i=0; i<achvColumn.length; i++) {
+		$('#t-body tr td:nth-child('+achvColumn[i]+')').each(function ()
+		{
+			if(parseInt($(this).text()) < 80) {
+				$(this).css('color', 'red');
+			}
+			if(parseInt($(this).text()) >= 80 && parseInt($(this).text()) < 100) {
+				$(this).css('color', 'yellow');
+			}
+			if(parseInt($(this).text()) >= 100){
+				$(this).css('color', 'green');
+			}
+		});
+	}
 
 </script>
 

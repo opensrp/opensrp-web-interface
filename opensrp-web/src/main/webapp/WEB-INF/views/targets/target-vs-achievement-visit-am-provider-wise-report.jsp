@@ -79,14 +79,17 @@
 							<div class="row" id="manager">
 									
 									
-									 <div class="col-lg-3 form-group">
-								        <label ><spring:message code="lbl.branch"></spring:message></label>
-								        <select	name="branchList" class="form-control" id="branchList">
-											
-								        </select>
-								    </div>
-								    
-														
+								 <div class="col-lg-3 form-group">
+									<label ><spring:message code="lbl.branch"></spring:message></label>
+									<select	name="branchList" class="form-control" id="branchList">
+
+									</select>
+								</div>
+								<div class="col-lg-3" style="margin-left: -25px;margin-top: 10px;">
+									<br>
+									<input type="checkbox" id="selectAllBranch"> <label> select all</label>
+								</div>
+
 							</div>
 	
 							<%-- <jsp:include page="/WEB-INF/views/location-search-options.jsp" />
@@ -209,6 +212,17 @@ function reportType(value) {
 
 </script>
 <script>
+	$("#selectAllBranch").click(function() {
+		if($("#selectAllBranch").is(':checked') ) {
+			console.log("select all branch");
+			$("#branchList > option").prop("selected", "selected");
+		}
+		else {
+			$("#branchList > option").removeAttr("selected");
+		}
+		$("#branchList").trigger("change");
+		$('.select2-selection__clear').hide();
+	});
 
   
 function getFromTime() {

@@ -22,7 +22,9 @@
     </style>
 </head>
 <body>
-<% Object targets = request.getAttribute("jsonReportData"); %>
+<% Object targets = request.getAttribute("jsonReportData");
+	int sl = 0;
+%>
 
 <div class="row">
     <div class="col-sm-offset-9 col-sm-3">
@@ -42,19 +44,22 @@
     <thead>
     
 		    <tr>
-		        <th rowspan="2">Branch name</th>		        
-		        <th rowspan="2">SK name</th>
+				<th rowspan="2">Sl</th>
+				<th rowspan="2">SK name</th>
+		        <th rowspan="2">Branch name</th>
 		        <th rowspan="2">Mobile</th>
-		        <th colspan="2">Adult service</th>
-		        <th colspan="2">Glass Sales</th>
+		        <th colspan="3">Adult service</th>
+		        <th colspan="3">Glass Sales</th>
 		        
 		       
 		    </tr>
 		    <tr>
-		        <th>TvA (#)</th>
+		        <th>Target</th>
+		        <th>Achievement</th>
 		        <th>TvA(%)</th>
 		        
-		        <th>TvA (#)</th>
+		        <th>Target</th>
+		        <th>Achievement</th>
 		        <th>TvA(%)</th>
 		        
 		    </tr>
@@ -65,13 +70,14 @@
     	
    		<c:forEach items="${reportDatas}" var="reportData"> 
    			<tr>
-   			
+   					<td> <%= ++sl %> </td>
 		   			<td> ${reportData.getBranchName() }</td>		   			
 		   			<td> ${reportData.getFullName() }</td>
 		   			<td> ${reportData.getMobile() }</td>
 		   			
-		   			<td> ${reportData.getNCDServiceTarget() }/${reportData.getNCDServiceSell() }</td>
-		   			
+		   			<td> ${reportData.getNCDServiceTarget() }</td>
+		   			<td> ${reportData.getNCDServiceSell() }</td>
+
 		   			<td> 
 		   			<c:choose>
 		   				<c:when test="${reportData.getNCDServiceTarget()==0}">
@@ -86,8 +92,9 @@
 		   			 </td>
 		   			
 		   			
-		   			<td> ${reportData.getGlassTarget() }/${reportData.getGlassSell() }</td>
-		   			
+		   			<td> ${reportData.getGlassTarget() }</td>
+		   			<td> ${reportData.getGlassSell() }</td>
+
 		   			<td> 
 		   			
 		   			<c:choose>
@@ -101,14 +108,6 @@
 		   				</c:otherwise>
 		   			</c:choose>
 		   			 </td>
-		   			
-		   			
-		   			
-		   			
-		   			
-	   			
-		   			
-	   			
 	 		</tr>
 		</c:forEach>
     </tbody>
@@ -208,6 +207,22 @@
         console.log("percentages", percentages, " managers", managers);
         reloadChart(managers, percentages);
     }
+
+	var achvColumn = [7,10,13,16,19,22, 25, 28, 31, 34, 37, 40, 43];
+	for(var i=0; i<achvColumn.length; i++) {
+		$('#t-body tr td:nth-child('+achvColumn[i]+')').each(function ()
+		{
+			if(parseInt($(this).text()) < 80) {
+				$(this).css('color', 'red');
+			}
+			if(parseInt($(this).text()) >= 80 && parseInt($(this).text()) < 100) {
+				$(this).css('color', 'yellow');
+			}
+			if(parseInt($(this).text()) >= 100){
+				$(this).css('color', 'green');
+			}
+		});
+	}
 
 </script>
 

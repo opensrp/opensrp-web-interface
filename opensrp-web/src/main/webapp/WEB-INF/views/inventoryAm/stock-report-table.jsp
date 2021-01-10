@@ -27,8 +27,8 @@
     <thead>
     <tr>
         <%--        <th rowspan="2"><spring:message code="lbl.slNo"/></th>--%>
-        <th rowspan="2"><spring:message code="lbl.skId"/></th>
         <th rowspan="2"><spring:message code="lbl.skname"/></th>
+        <th rowspan="2"><spring:message code="lbl.skId"/></th>
         <th colspan="4"><spring:message code="lbl.iycfpackage"/></th>
         <th colspan="4"><spring:message code="lbl.adolescentPackage"/></th>
         <th colspan="4"><spring:message code="lbl.womenPackage"/></th>
@@ -66,8 +66,8 @@
     <tbody id="t-body">
     <% for (StockReportDTO report: amStockReport) { %>
     <tr>
-        <td><%=report.getSkusername()%></td>
         <td><%=report.getSkname()%></td>
+        <td><%=report.getSkusername()%></td>
         <td><%=report.getIycfStartingBalance()%></td>
         <td><%=report.getIycfMonthlySupply()%></td>
         <td><%=report.getIycfMonthlySell()%></td>

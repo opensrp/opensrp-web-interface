@@ -23,11 +23,13 @@
 </head>
 <body>
 
-<% Object targets = request.getAttribute("jsonReportData"); %>
+<% Object targets = request.getAttribute("jsonReportData");
+	int sl = 0;
+%>
 
 <div class="row">
-	<div class="col-sm-offset-10 col-sm-2">
-		<select class="custom-select" id="visitCategory" style="width: 95%" onclick="reloadSkChart()">
+	<div class="col-sm-offset-9 col-sm-3">
+		<select class="custom-select form-control" id="visitCategory" style="width: 95%" onclick="reloadSkChart()">
 			<option value="avg_visit">Average Visit</option>
 			<option value="hhVisitAchievementInPercentage">Household Visit</option>
 			<option value="elcoVisitAchievementInPercentage">ELCO Visit</option>
@@ -51,62 +53,75 @@
 	<thead>
 
 	<tr>
+		<th rowspan="2">Sl</th>
 		<th rowspan="2">SK name</th>
 		<th rowspan="2">Branch name</th>
 
 		<th rowspan="2">Mobile</th>
-		<th colspan="2">Household Visit</th>
-		<th colspan="2">ELCO Visit</th>
-		<th colspan="2">Methods Users</th>
-		<th colspan="2">Adolescent Methods Users</th>
-		<th colspan="2">Pregnancy Identified</th>
-		<th colspan="2">Delivery</th>
+		<th colspan="3">Household Visit</th>
+		<th colspan="3">ELCO Visit</th>
+		<th colspan="3">Methods Users</th>
+		<th colspan="3">Adolescent Methods Users</th>
+		<th colspan="3">Pregnancy Identified</th>
+		<th colspan="3">Delivery</th>
 
-		<th colspan="2">Institutionalized Delivery</th>
-		<th colspan="2">Child Visit(0-6 months)</th>
-		<th colspan="2">Child Visit(7-24 months)</th>
+		<th colspan="3">Institutionalized Delivery</th>
+		<th colspan="3">Child Visit(0-6 months)</th>
+		<th colspan="3">Child Visit(7-24 months)</th>
 
-		<th colspan="2">Child Visit(18-36 months)</th>
-		<th colspan="2">Immunization(0-59 months)</th>
-		<th colspan="2">Pregnant Visit</th>
+		<th colspan="3">Child Visit(18-36 months)</th>
+		<th colspan="3">Immunization(0-59 months)</th>
+		<th colspan="3">Pregnant Visit</th>
 
 
 	</tr>
 	<tr>
-		<th>TvA (#)</th>
+		<th>Target</th>
+		<th>Achievement</th>
 		<th>TvA(%)</th>
 
-		<th>TvA (#)</th>
+		<th>Target</th>
+		<th>Achievement</th>
 		<th>TvA(%)</th>
 
-		<th>TvA (#)</th>
+		<th>Target</th>
+		<th>Achievement</th>
 		<th>TvA(%)</th>
 
-		<th>TvA (#)</th>
+		<th>Target</th>
+		<th>Achievement</th>
 		<th>TvA(%)</th>
 
-		<th>TvA (#)</th>
+		<th>Target</th>
+		<th>Achievement</th>
 		<th>TvA(%)</th>
 
-		<th>TvA (#)</th>
+		<th>Target</th>
+		<th>Achievement</th>
 		<th>TvA(%)</th>
 
-		<th>TvA (#)</th>
+		<th>Target</th>
+		<th>Achievement</th>
 		<th>TvA(%)</th>
 
-		<th>TvA (#)</th>
+		<th>Target</th>
+		<th>Achievement</th>
 		<th>TvA(%)</th>
 
-		<th>TvA (#)</th>
+		<th>Target</th>
+		<th>Achievement</th>
 		<th>TvA(%)</th>
 
-		<th>TvA (#)</th>
+		<th>Target</th>
+		<th>Achievement</th>
 		<th>TvA(%)</th>
 
-		<th>TvA (#)</th>
+		<th>Target</th>
+		<th>Achievement</th>
 		<th>TvA(%)</th>
 
-		<th>TvA (#)</th>
+		<th>Target</th>
+		<th>Achievement</th>
 		<th>TvA(%)</th>
 
 
@@ -116,50 +131,62 @@
 	</thead>
 
 	<tbody id="t-body">
-
 	<c:forEach items="${reportDatas}" var="reportData">
 		<tr>
+			<td> <%= ++sl %> </td>
 			<td> ${reportData.getFullName() }</td>
 			<td> ${reportData.getBranchName() }</td>
 
 			<td> ${reportData.getMobile() }</td>
-			<td> ${reportData.getHhVisitTarget() }/${reportData.getHhVisitAchievement() }</td>
+			<td> ${reportData.getHhVisitTarget() }</td>
+			<td> ${reportData.getHhVisitAchievement()}</td>
 			<td> ${reportData.getHhVisitAchievementInPercentage() } %</td>
 
-			<td> ${reportData.getElcoVisitTarget() }/${reportData.getElcoVisitAchievement() }</td>
+			<td> ${reportData.getElcoVisitTarget() }</td>
+			<td> ${reportData.getElcoVisitAchievement() }</td>
 			<td> ${reportData.getElcoVisitAchievementInPercentage() } %</td>
 
-			<td> ${reportData.getMethodsUsersVisitTarget() }/${reportData.getMethodsUsersVisitAchievement() }</td>
+			<td> ${reportData.getMethodsUsersVisitTarget() }</td>
+			<td> ${reportData.getMethodsUsersVisitAchievement() }</td>
 			<td> ${reportData.getMethodsUsersVisitAchievementInPercentage() } %</td>
 
-			<td> ${reportData.getAdolescentMethodsUsersVisitTarget() }/${reportData.getAdolescentMethodsUsersVisitAchievement() }</td>
+			<td> ${reportData.getAdolescentMethodsUsersVisitTarget() }</td>
+			<td> ${reportData.getAdolescentMethodsUsersVisitAchievement() } </td>
 			<td> ${reportData.getAdolescentMethodsUsersVisitAchievementInPercentage() } %</td>
 
-			<td> ${reportData.getPregnancydentifiedVisitTarget() }/${reportData.getPregnancydentifiedVisitAchievement() }</td>
+			<td> ${reportData.getPregnancydentifiedVisitTarget() }</td>
+			<td> ${reportData.getPregnancydentifiedVisitAchievement() }</td>
 			<td> ${reportData.getPregnancydentifiedVisitAchievementInPercentage() } %</td>
 
-			<td> ${reportData.getDeliveryVisitTarget() }/${reportData.getDeliveryVisitAchievement() }</td>
+			<td> ${reportData.getDeliveryVisitTarget() }</td>
+			<td> ${reportData.getDeliveryVisitAchievement() }</td>
 			<td> ${reportData.getDeliveryVisitAchievementInPercentage() } %</td>
 
-			<td> ${reportData.getInstitutionalizedDeliveryVisitTarget() }/${reportData.getInstitutionalizedDeliveryVisitAchievement() }</td>
+			<td> ${reportData.getInstitutionalizedDeliveryVisitTarget() }</td>
+			<td> ${reportData.getInstitutionalizedDeliveryVisitAchievement() }</td>
 			<td> ${reportData.getInstitutionalizedDeliveryVisitAchievementInPercentage() } %</td>
 
-			<td> ${reportData.getChild06VisitTarget() }/${reportData.getChild06VisitAchievement() }</td>
+			<td> ${reportData.getChild06VisitTarget() }</td>
+			<td> ${reportData.getChild06VisitAchievement() }</td>
 			<td> ${reportData.getChild06VisitAchievementInPercentage() }</td>
 
-			<td> ${reportData.getChild724VisitTarget() }/${reportData.getChild724VisitAchievement() }</td>
+			<td> ${reportData.getChild724VisitTarget() }</td>
+			<td> ${reportData.getChild724VisitAchievement() }</td>
 			<td> ${reportData.getChild724VisitAchievementInPercentage() } %</td>
 
-			<td> ${reportData.getChild1836VisitTarget() }/${reportData.getChild1836VisitAchievement() }</td>
+			<td> ${reportData.getChild1836VisitTarget() }</td>
+			<td> ${reportData.getChild1836VisitAchievement() }</td>
 			<td> ${reportData.getChild1836VisitAchievementInPercentage() } %</td>
 
-			<td> ${reportData.getImmunizationVisitTarget() }/${reportData.getImmunizationVisitAchievement() }</td>
+			<td> ${reportData.getImmunizationVisitTarget() }</td>
+			<td> ${reportData.getImmunizationVisitAchievement() }</td>
 			<td> ${reportData.getImmunizationVisitAchievementInPercentage() } %</td>
-			<td> ${reportData.getPregnantVisitTarget() }/${reportData.getPregnantVisitAchievement() }</td>
+
+			<td> ${reportData.getPregnantVisitTarget() }</td>
+			<td> ${reportData.getPregnantVisitAchievement() }</td>
 			<td> ${reportData.getPregnantVisitAchievementInPercentage() } %</td>
-
-
 		</tr>
+
 	</c:forEach>
 	</tbody>
 </table>
@@ -255,6 +282,22 @@
 	}
 
 	loadAvgVisitChart(<%= targets%>);
+
+	var achvColumn = [7,10,13,16,19,22, 25, 28, 31, 34, 37, 40, 43];
+	for(var i=0; i<achvColumn.length; i++) {
+		$('#t-body tr td:nth-child('+achvColumn[i]+')').each(function ()
+		{
+			if(parseInt($(this).text()) < 80) {
+				$(this).css('color', 'red');
+			}
+			if(parseInt($(this).text()) >= 80 && parseInt($(this).text()) < 100) {
+				$(this).css('color', 'yellow');
+			}
+			if(parseInt($(this).text()) >= 100){
+				$(this).css('color', 'green');
+			}
+		});
+	}
 
 </script>
 </body>

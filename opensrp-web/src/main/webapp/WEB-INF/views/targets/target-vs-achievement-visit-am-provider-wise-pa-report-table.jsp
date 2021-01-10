@@ -23,7 +23,9 @@
 </head>
 <body>
 
-<% Object targets = request.getAttribute("jsonReportData"); %>
+<% Object targets = request.getAttribute("jsonReportData");
+int sl =0;
+%>
 
 <div class="row">
 	<div class=" form-group  col-sm-6">
@@ -46,38 +48,45 @@
     <thead>
     
 		    <tr>
-		     <th rowspan="2">SK name</th>
+				<th rowspan="2"> Sl </th>
+		     	<th rowspan="2">SK name</th>
 		        <th rowspan="2">Branch name</th>		        
 		       
 		        <th rowspan="2">Mobile</th>
-		        <th colspan="2">Marked as presbyopia</th>
-		        <th colspan="2">Presbyopia correction</th>
-		        <th colspan="2">Estimate diabetes</th>
-		        <th colspan="2">Estimate HBP</th>
-		        <th colspan="2">Cataract surgery refer</th>
-		        <th colspan="2">Cataract surgery</th>
+		        <th colspan="3">Marked as presbyopia</th>
+		        <th colspan="3">Presbyopia correction</th>
+		        <th colspan="3">Estimate diabetes</th>
+		        <th colspan="3">Estimate HBP</th>
+		        <th colspan="3">Cataract surgery refer</th>
+		        <th colspan="3">Cataract surgery</th>
 		        
 		        
 		        
 		        
 		    </tr>
 		    <tr>
-		        <th>TvA (#)</th>
+				<th>Target</th>
+				<th>Achievement</th>
 		        <th>TvA(%)</th>
-		        
-		         <th>TvA (#)</th>
+
+				<th>Target</th>
+				<th>Achievement</th>
 		        <th>TvA(%)</th>
-		        
-		         <th>TvA (#)</th>
+
+				<th>Target</th>
+				<th>Achievement</th>
 		        <th>TvA(%)</th>
-		        
-		         <th>TvA (#)</th>
+
+				<th>Target</th>
+				<th>Achievement</th>
 		        <th>TvA(%)</th>
-		        
-		         <th>TvA (#)</th>
+
+				<th>Target</th>
+				<th>Achievement</th>
 		        <th>TvA(%)</th>
-		        
-		        <th>TvA (#)</th>
+
+				<th>Target</th>
+				<th>Achievement</th>
 		        <th>TvA(%)</th>
 		        
 		       
@@ -92,12 +101,14 @@
     	
    		<c:forEach items="${reportDatas}" var="reportData"> 
    			<tr>
+					<td> <%= ++sl %> </td>
    					<td> ${reportData.getFullName() }</td>
 		   			<td> ${reportData.getBranchName() }</td>		   			
 		   			
 		   			<td> ${reportData.getMobile() }</td>
-		   			<td> ${reportData.getPresbyopiaTarget() }/${reportData.getPresbyopiaAchievement() }</td>
-		   			<td> 
+		   			<td> ${reportData.getPresbyopiaTarget() }</td>
+		   			<td> ${reportData.getPresbyopiaAchievement() }</td>
+		   			<td>
 		   			<c:choose>
 		   				<c:when test="${reportData.getPresbyopiaTarget()==0}">		   				
 		   				N/A
@@ -109,8 +120,9 @@
 		   			
 		   			 </td>
 		   			
-		   			<td> ${reportData.getPresbyopiaCorrectionTarget() }/${reportData.getPresbyopiaCorrectionAchievement() }</td>
-		   			<td> 
+		   			<td> ${reportData.getPresbyopiaCorrectionTarget() }</td>
+		   			<td> ${reportData.getPresbyopiaCorrectionAchievement() }</td>
+		   			<td>
 		   			<c:choose>
 		   				<c:when test="${reportData.getPresbyopiaCorrectionTarget()==0}">		   				
 		   				N/A
@@ -122,8 +134,9 @@
 		   			
 		   			 </td>
 		   			
-		   			<td> ${reportData.getDiabetesTarget() }/${reportData.getDiabetesAchievement() }</td>
-		   			<td> 
+		   			<td> ${reportData.getDiabetesTarget() }</td>
+		   			<td> ${reportData.getDiabetesAchievement() }</td>
+		   			<td>
 		   			<c:choose>
 		   				<c:when test="${reportData.getDiabetesTarget()==0}">		   				
 		   				N/A
@@ -135,8 +148,9 @@
 		   			
 		   			 </td>
 		   			
-		   			<td> ${reportData.getHbpTarget() }/${reportData.getHbpAchievement() }</td>
-		   			<td> 
+		   			<td> ${reportData.getHbpTarget() }</td>
+		   			<td> ${reportData.getHbpAchievement() }</td>
+		   			<td>
 		   			<c:choose>
 		   				<c:when test="${reportData.getHbpTarget()==0}">		   				
 		   				N/A
@@ -148,8 +162,9 @@
 		   			
 		   			 </td>
 		   			
-		   			<td> ${reportData.getCataractSurgeryTarget() }/${reportData.getCataractSurgeryAchievement() }</td>
-		   			<td> 
+		   			<td> ${reportData.getCataractSurgeryTarget() }</td>
+		   			<td> ${reportData.getCataractSurgeryAchievement() }</td>
+		   			<td>
 		   			<c:choose>
 		   				<c:when test="${reportData.getCataractSurgeryTarget()==0}">		   				
 		   				N/A
@@ -161,8 +176,9 @@
 		   			
 		   			 </td>
 		   			
-		   			<td> ${reportData.getCataractTarget() }/${reportData.getCataractAchievement() }</td>
-		   			<td> 
+		   			<td> ${reportData.getCataractTarget() }</td>
+		   			<td> ${reportData.getCataractAchievement() }</td>
+		   			<td>
 		   			<c:choose>
 		   				<c:when test="${reportData.getCataractTarget()==0}">		   				
 		   				N/A
@@ -276,6 +292,22 @@
 	}
 
 	loadAvgVisitChart(<%= targets%>);
+
+	var achvColumn = [7,10,13,16,19,22, 25, 28, 31, 34, 37, 40, 43];
+	for(var i=0; i<achvColumn.length; i++) {
+		$('#t-body tr td:nth-child('+achvColumn[i]+')').each(function ()
+		{
+			if(parseInt($(this).text()) < 80) {
+				$(this).css('color', 'red');
+			}
+			if(parseInt($(this).text()) >= 80 && parseInt($(this).text()) < 100) {
+				$(this).css('color', 'yellow');
+			}
+			if(parseInt($(this).text()) >= 100){
+				$(this).css('color', 'green');
+			}
+		});
+	}
 
 </script>
 </body>
