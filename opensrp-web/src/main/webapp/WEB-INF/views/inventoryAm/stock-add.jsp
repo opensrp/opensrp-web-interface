@@ -96,7 +96,7 @@
 
 
 								</select></td>
-							<td><input type="text" class="form-control" id="currentStock" placeholder="Stock" readonly></td>
+							<td><input type="text" class=" currentStock form-control" id="currentStock" placeholder="Stock" readonly></td>
 							<td><input type="number" class="form-control" min="1" oninput="this.value = Math.abs(this.value)" id="quantity" placeholder="Quantity"><p class="text-danger" id="amountSelection"></p></td>
 							<td><input type="text" readonly="readonly" class="form-control jqdate"  id="expiryDate" onkeydown="return false" placeholder="Expiry Date"></td>
 							<td></td>
@@ -118,7 +118,7 @@
 
 
 								</select></td>
-							<td><input type="text" class="form-control" id="currentStock" placeholder="Stock" readonly></td>
+							<td><input type="text" class="form-control currentStock" id="currentStock" placeholder="Stock" readonly></td>
 							<td><input type="number" class="form-control" min="1" oninput="this.value = Math.abs(this.value)" id="quantity" placeholder="Quantity"><p class="text-danger" id="amountSelection"></p></td>
 							<td><input type="text"  class="form-control jqdate"  onkeydown="return false" placeholder="Expiry Date"></td>
 							<td><a class="btn btn-xs delete-record" data-id="1"><i
@@ -216,6 +216,7 @@ $(document).on('focus','.jqdate', function(){
     $(this).datepicker({
         dateFormat: 'yy-mm-dd',
         minDate: dateToday,
+        changeYear: true 
     } );
  });
 
@@ -223,6 +224,7 @@ $(document).on('focus','.jqdate', function(){
 var dates = $("#receiveDate").datepicker({
     dateFormat: 'yy-mm-dd',
     maxDate: dateToday,
+    changeYear: true 
    
 });
 

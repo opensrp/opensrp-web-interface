@@ -141,15 +141,16 @@ public class WebNotificationService extends CommonService {
 	}
 	
 	public JSONObject drawDataTableOfWebNotification(Integer draw, int total, List<WebNotificationCommonDTO> dtos,
-	                                                 String type) throws JSONException {
+	                                                 String type, int start) throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", total);
 		response.put("recordsFiltered", total);
 		JSONArray array = new JSONArray();
+		int i = 1;
 		for (WebNotificationCommonDTO dto : dtos) {
 			JSONArray patient = new JSONArray();
-			
+			patient.put(start + i);
 			String view = "";
 			if (dto.getType().equalsIgnoreCase(WebNotificationType.SCHEDULE.name())) {
 				patient.put(dto.getSendDate() + " " + dto.getSendTimeHour() + ":" + dto.getSendTimeMinute());
@@ -183,6 +184,7 @@ public class WebNotificationService extends CommonService {
 			
 			patient.put(view);
 			array.put(patient);
+			i++;
 		}
 		response.put("data", array);
 		return response;

@@ -75,6 +75,7 @@ public class TargetController {
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
+		model.addAttribute("target", "block");
 		return "targets/sk-pa-list-for-individual-target";
 	}
 	
@@ -82,6 +83,7 @@ public class TargetController {
 	public String targetByPosition(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		model.addAttribute("target", "block");
 		return "targets/target-by-position-list";
 	}
 	
@@ -96,6 +98,7 @@ public class TargetController {
 		model.addAttribute("type", request.getParameter("type"));
 		model.addAttribute("locationTag", request.getParameter("locationTag"));
 		model.addAttribute("text", request.getParameter("text"));
+		model.addAttribute("target", "block");
 		return "targets/set-target-by-position";
 	}
 	
@@ -109,6 +112,7 @@ public class TargetController {
 		model.addAttribute("userId", userId);
 		model.addAttribute("roleId", roleId);
 		model.addAttribute("name", request.getParameter("name"));
+		model.addAttribute("target", "block");
 		return "targets/sk-pa-individual-target-set";
 	}
 	
@@ -122,6 +126,7 @@ public class TargetController {
 		model.addAttribute("userId", userId);
 		model.addAttribute("roleId", roleId);
 		model.addAttribute("name", request.getParameter("name"));
+		model.addAttribute("target", "block");
 		return "targets/view-sk-pa-individual-target";
 	}
 	
@@ -135,6 +140,7 @@ public class TargetController {
 		model.addAttribute("userId", userId);
 		model.addAttribute("roleId", roleId);
 		model.addAttribute("name", request.getParameter("name"));
+		model.addAttribute("target", "block");
 		return "targets/edit-sk-pa-individual-target";
 	}
 	
@@ -164,7 +170,7 @@ public class TargetController {
 		
 		model.addAttribute("productList", targetService.allActiveTarget(roleId, ProductType.TARGET.name()));
 		model.addAttribute("targets", targets);
-		
+		model.addAttribute("target", "block");
 		return "targets/get-target-info";
 	}
 	
@@ -180,6 +186,7 @@ public class TargetController {
 		String branchIds = params.getString("branch_ids");
 		List<TargetCommontDTO> targets = targetService.getTargetOfprevoiusMonth(params, branchIds);
 		model.addAttribute("targets", targets);
+		model.addAttribute("target", "block");
 		return "targets/get-target-info";
 	}
 	
@@ -191,7 +198,7 @@ public class TargetController {
 		int month = Integer.parseInt(request.getParameter("month"));
 		int year = Integer.parseInt(request.getParameter("year"));
 		model.addAttribute("targets", targetService.getTargetInfoForPopulationWise(role, locationTag, month, year));
-		
+		model.addAttribute("target", "block");
 		return "targets/get-target-info-for-populationwise-target";
 	}
 	
@@ -201,6 +208,7 @@ public class TargetController {
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
+		model.addAttribute("target", "block");
 		return "targets/target-by-population-list";
 	}
 	
@@ -217,6 +225,7 @@ public class TargetController {
 		model.addAttribute("pkid", request.getParameter("id"));
 		model.addAttribute("pkLocation", request.getParameter("location"));
 		model.addAttribute("population", request.getParameter("population"));
+		model.addAttribute("target", "block");
 		return "targets/individual-target-by-population-pk";
 	}
 	
@@ -224,6 +233,7 @@ public class TargetController {
 	public String populationWiseTargetSet(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("targets", targetService.allActiveTarget(Roles.PK.getId(), ProductType.TARGET.name()));
+		model.addAttribute("target", "block");
 		return "targets/population-wise-target-set";
 	}
 	

@@ -37,6 +37,10 @@
             margin-top: 40%;
         }
     }
+   .ui-datepicker-calendar {
+   		display:none;
+	}
+	
 </style>
 
 <div class="page-content-wrapper">
@@ -100,7 +104,7 @@
 						<table class="table table-striped table-bordered "
 							id="StockSellHistory">
 							<thead>
-								<tr>
+								<tr><th>Id</th>
 									 <%--  <th><spring:message code="lbl.serialNo"></spring:message></th> --%>
 									<th><spring:message code="lbl.ssName"></spring:message></th>
 									<%-- <th><spring:message code="lbl.ssId"></spring:message></th> --%>
@@ -482,16 +486,7 @@
 			bFilter : false,
 			serverSide : true,
 			processing : true,
-			columnDefs : [ {
-				/* targets : [ 0, 1, 2, 3, 4, 5, 6 ],orderable : false}, 
-				{width : "5%",targets : 0,"visible" : false}, 
-				{width : "20%",targets : 1}, 
-				{width : "20%",targets : 2}, 
-				{width : "20%",targets : 3},
-				{width : "5%",targets : 4}, 
-				{width : "5%",targets : 5},
-				{width : "25%",targets : 6 */
-			}],
+			
 			ajax : {
 				url : "${sell_to_ss_list}",
 				timeout : 300000,
@@ -542,16 +537,7 @@
 			bFilter : false,
 			serverSide : true,
 			processing : true,
-			columnDefs : [ {
-				/* targets : [ 0, 1, 2, 3, 4, 5, 6 ],orderable : false}, 
-				{width : "5%",targets : 0,"visible" : false}, 
-				{width : "20%",targets : 1}, 
-				{width : "20%",targets : 2}, 
-				{width : "20%",targets : 3},
-				{width : "5%",targets : 4}, 
-				{width : "5%",targets : 5},
-				{width : "25%",targets : 6 */
-			}],
+			
 			ajax : {
 				url : "${sell_to_ss_list}",
 				timeout : 300000,

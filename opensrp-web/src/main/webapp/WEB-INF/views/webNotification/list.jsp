@@ -128,11 +128,11 @@
 								<span style="color: red" id="errMsg"></span>
 							</div>
 						</div>
-						<div class="table-scrollable">
+						
 						
 						<table class="table table-striped table-bordered " id="webNotificationTable">
 							<thead>
-								<tr>
+								<tr><th> SI</th>
 									<th id="dtime">Sending date & time</th>
 									<th>Notification type</th>
 									<th>Notification title</th>
@@ -142,7 +142,7 @@
 							</thead>
 							
 						</table>
-						</div>
+						
 						
 						
 					</div>
@@ -159,9 +159,11 @@
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
-<script src="<c:url value='/resources/js/moment.min.js' />"></script>
+
  <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
-<script src="<c:url value='/resources/js/daterangepicker.min.js' />"></script>
+
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
+
 <script>
 jQuery(document).ready(function() { 
 	$('#branchList').select2MultiCheckboxes({
@@ -208,14 +210,14 @@ $("#to").datepicker('setDate', new Date());
             bFilter: false,
             serverSide: true,
             processing: true,
-            columnDefs: [
-                { targets: [0, 1, 2, 3,4], orderable: false },
-                { width: "10%", targets: 0 },
-                { width: "5%", targets: 1 },
-                { width: "10%", targets: 2 },
-                { width: "10%", targets: 3 },
-                { width: "10%", targets: 4 }
-            ],
+            scrollY:        "300px",
+            scrollX:        true,
+            scrollCollapse: true,
+            "ordering": false,
+            fixedColumns:   {
+                leftColumns: 2/* ,
+             rightColumns: 1 */
+            },
             ajax: {
                 url: "${get_url}",
                 timeout : 300000,
@@ -309,14 +311,14 @@ function filter(){
          bFilter: false,
          serverSide: true,
          processing: true,
-         columnDefs: [
-              { targets: [0, 1, 2, 3,4], orderable: false },
-              { width: "10%", targets: 0 },
-                { width: "5%", targets: 1 },
-                { width: "10%", targets: 2 },
-                { width: "10%", targets: 3 },
-                { width: "10%", targets: 4 }
-         ],
+         scrollY:        "300px",
+         scrollX:        true,
+         scrollCollapse: true,
+         fixedColumns:   {
+             leftColumns: 2/* ,
+          rightColumns: 1 */
+         },
+         "ordering": false,
          ajax: {
              url: "${get_url}",
              timeout : 300000,

@@ -116,7 +116,7 @@ public class StockRestController {
 		int stockInListCount = stockService.getStockInListCount(branchId, startDate, endDate, invoiceNumber, stockInId,
 		    division, district, upazila, userId);
 		
-		JSONObject response = stockService.getStockInListDataOfDataTable(draw, stockInListCount, stockInList);
+		JSONObject response = stockService.getStockInListDataOfDataTable(draw, stockInListCount, stockInList, start);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	
@@ -146,7 +146,7 @@ public class StockRestController {
 		int stockPassUserListCount = stockService.getPassStockUserListCount(branchId, roleId, name);
 		
 		JSONObject response = stockService.getPassStockUserListDataOfDataTable(draw, stockPassUserListCount,
-		    stockPassUserList, branchId);
+		    stockPassUserList, branchId, start);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	
@@ -186,7 +186,7 @@ public class StockRestController {
 			roleId = role.getId();
 		}
 		JSONObject response = stockService.getSellToSSListDataOfDataTable(draw, stockInListCount, stockInList, roleId,
-		    branchId);
+		    branchId, start);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	

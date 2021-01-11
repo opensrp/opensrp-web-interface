@@ -244,13 +244,14 @@ public class StockService extends CommonService {
 		Session session = getSessionFactory();
 		List<InventoryDTO> dtos = new ArrayList<>();
 		
-		String hql = "select id,role_name roleName,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName  from core.pass_stock_user_list_by_role_branch(:branchId,:roleId,:name,:start,:length)";
+		String hql = "select id,role_name roleName,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName,username  from core.pass_stock_user_list_by_role_branch(:branchId,:roleId,:name,:start,:length)";
 		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
 		        .addScalar("roleName", StandardBasicTypes.STRING).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
-		        .addScalar("lastName", StandardBasicTypes.STRING).setInteger("branchId", branchId)
-		        .setInteger("roleId", roleId).setString("name", name).setInteger("length", length)
-		        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
+		        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("username", StandardBasicTypes.STRING)
+		        .setInteger("branchId", branchId).setInteger("roleId", roleId).setString("name", name)
+		        .setInteger("length", length).setInteger("start", start)
+		        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
 		dtos = query.list();
 		
 		return dtos;
@@ -271,16 +272,17 @@ public class StockService extends CommonService {
 		return total.intValue();
 	}
 	
-	public JSONObject getStockInListDataOfDataTable(Integer draw, int patientCount, List<InventoryDTO> dtos)
+	public JSONObject getStockInListDataOfDataTable(Integer draw, int patientCount, List<InventoryDTO> dtos, int start)
 	    throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", patientCount);
 		response.put("recordsFiltered", patientCount);
 		JSONArray array = new JSONArray();
+		int i = 1;
 		for (InventoryDTO dto : dtos) {
 			JSONArray patient = new JSONArray();
-			patient.put(dto.getId());
+			patient.put(start + i);
 			patient.put(dto.getReceiveDate());
 			patient.put(dto.getInvoiceNumber());
 			patient.put(dto.getStockInId());
@@ -295,21 +297,25 @@ public class StockService extends CommonService {
 			        + "\")'><strong>View details</strong></a> </div>";
 			patient.put(view);
 			array.put(patient);
+			i++;
 		}
 		response.put("data", array);
 		return response;
 	}
 	
 	public JSONObject getPassStockUserListDataOfDataTable(Integer draw, int passStockUserCount, List<InventoryDTO> dtos,
-	                                                      int branchId) throws JSONException {
+	                                                      int branchId, int start) throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", passStockUserCount);
 		response.put("recordsFiltered", passStockUserCount);
 		JSONArray array = new JSONArray();
+		int i = 1;
 		for (InventoryDTO dto : dtos) {
 			JSONArray patient = new JSONArray();
+			patient.put(start + i);
 			patient.put(dto.getFullName());
+			patient.put(dto.getUsername());
 			patient.put(dto.getRoleName());
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
 			
@@ -321,6 +327,7 @@ public class StockService extends CommonService {
 			
 			patient.put(view);
 			array.put(patient);
+			i++;
 		}
 		response.put("data", array);
 		return response;
@@ -368,7 +375,7 @@ public class StockService extends CommonService {
 	}
 	
 	public JSONObject getSellToSSListDataOfDataTable(Integer draw, int sellToSSCount, List<InventoryDTO> dtos, int roleId,
-	                                                 int branchId) throws JSONException {
+	                                                 int branchId, int start) throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", sellToSSCount);
@@ -376,6 +383,7 @@ public class StockService extends CommonService {
 		JSONArray array = new JSONArray();
 		DecimalFormat df = new DecimalFormat();
 		df.setMaximumFractionDigits(2);
+		int i = 1;
 		for (InventoryDTO dto : dtos) {
 			JSONArray patient = new JSONArray();
 			if (roleId == 32) {
@@ -383,6 +391,7 @@ public class StockService extends CommonService {
 				        + dto.getId() + ">";
 				//patient.put("");
 			}
+			patient.put(start + i);
 			patient.put(dto.getFullName());
 			if (roleId == 32) {
 				//patient.put("SS"); // for am
@@ -414,7 +423,7 @@ public class StockService extends CommonService {
 				patient.put(view);
 			}
 			array.put(patient);
-			
+			i++;
 		}
 		response.put("data", array);
 		return response;
@@ -565,76 +574,74 @@ public class StockService extends CommonService {
 		result = query.list();
 		return result;
 	}
-
+	
 	@Transactional
 	public List<PAStockReportDTO> getStockReportForPA(String year, String month, String paList) {
 		Session session = getSessionFactory();
 		List<PAStockReportDTO> result = null;
-
+		
 		String rawSql = "select * from report.get_pa_stock_report('" + month + "', '" + year + "', '{" + paList + "}')";
-		Query query = session.createSQLQuery(rawSql)
-				.addScalar("username", StandardBasicTypes.STRING)
-				.addScalar("ncdStartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("ncdMonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("ncdMonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("ncdEndingBalance", StandardBasicTypes.INTEGER)
-
-				.addScalar("sgStartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("sgMonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("sgMonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("sgEndingBalance", StandardBasicTypes.INTEGER)
-
-				.addScalar("sv1StartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("sv1MonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("sv1MonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("sv1EndingBalance", StandardBasicTypes.INTEGER)
-
-				.addScalar("sv15StartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("sv15MonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("sv15MonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("sv15EndingBalance", StandardBasicTypes.INTEGER)
-
-				.addScalar("sv2StartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("sv2MonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("sv2MonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("sv2EndingBalance", StandardBasicTypes.INTEGER)
-
-				.addScalar("sv25StartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("sv25MonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("sv25MonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("sv25EndingBalance", StandardBasicTypes.INTEGER)
-
-				.addScalar("sv3StartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("sv3MonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("sv3MonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("sv3EndingBalance", StandardBasicTypes.INTEGER)
-
-
-				.addScalar("bf1StartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("bf1MonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("bf1MonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("bf1EndingBalance", StandardBasicTypes.INTEGER)
-
-				.addScalar("bf15StartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("bf15MonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("bf15MonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("bf15EndingBalance", StandardBasicTypes.INTEGER)
-
-				.addScalar("bf2StartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("bf2MonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("bf2MonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("bf2EndingBalance", StandardBasicTypes.INTEGER)
-
-				.addScalar("bf25StartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("bf25MonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("bf25MonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("bf25EndingBalance", StandardBasicTypes.INTEGER)
-
-				.addScalar("bf3StartingBalance", StandardBasicTypes.INTEGER)
-				.addScalar("bf3MonthlySupply", StandardBasicTypes.INTEGER)
-				.addScalar("bf3MonthlySell", StandardBasicTypes.INTEGER)
-				.addScalar("bf3EndingBalance", StandardBasicTypes.INTEGER)
-				.setResultTransformer(new AliasToBeanResultTransformer(PAStockReportDTO.class));
+		Query query = session.createSQLQuery(rawSql).addScalar("username", StandardBasicTypes.STRING)
+		        .addScalar("ncdStartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdMonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdMonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("ncdEndingBalance", StandardBasicTypes.INTEGER)
+		        
+		        .addScalar("sgStartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("sgMonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("sgMonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("sgEndingBalance", StandardBasicTypes.INTEGER)
+		        
+		        .addScalar("sv1StartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("sv1MonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("sv1MonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("sv1EndingBalance", StandardBasicTypes.INTEGER)
+		        
+		        .addScalar("sv15StartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("sv15MonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("sv15MonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("sv15EndingBalance", StandardBasicTypes.INTEGER)
+		        
+		        .addScalar("sv2StartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("sv2MonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("sv2MonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("sv2EndingBalance", StandardBasicTypes.INTEGER)
+		        
+		        .addScalar("sv25StartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("sv25MonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("sv25MonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("sv25EndingBalance", StandardBasicTypes.INTEGER)
+		        
+		        .addScalar("sv3StartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("sv3MonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("sv3MonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("sv3EndingBalance", StandardBasicTypes.INTEGER)
+		        
+		        .addScalar("bf1StartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("bf1MonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("bf1MonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("bf1EndingBalance", StandardBasicTypes.INTEGER)
+		        
+		        .addScalar("bf15StartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("bf15MonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("bf15MonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("bf15EndingBalance", StandardBasicTypes.INTEGER)
+		        
+		        .addScalar("bf2StartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("bf2MonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("bf2MonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("bf2EndingBalance", StandardBasicTypes.INTEGER)
+		        
+		        .addScalar("bf25StartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("bf25MonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("bf25MonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("bf25EndingBalance", StandardBasicTypes.INTEGER)
+		        
+		        .addScalar("bf3StartingBalance", StandardBasicTypes.INTEGER)
+		        .addScalar("bf3MonthlySupply", StandardBasicTypes.INTEGER)
+		        .addScalar("bf3MonthlySell", StandardBasicTypes.INTEGER)
+		        .addScalar("bf3EndingBalance", StandardBasicTypes.INTEGER)
+		        .setResultTransformer(new AliasToBeanResultTransformer(PAStockReportDTO.class));
 		result = query.list();
 		return result;
 	}

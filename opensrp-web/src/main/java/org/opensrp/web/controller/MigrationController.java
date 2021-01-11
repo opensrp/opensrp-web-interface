@@ -55,7 +55,7 @@ public class MigrationController {
 		model.addAttribute("isHousehold", true);
 		
 		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
-		
+		model.addAttribute("migration", "block");
 		return "migration/households-in";
 	}
 	
@@ -66,6 +66,7 @@ public class MigrationController {
 		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("isHousehold", true);
 		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
+		model.addAttribute("migration", "block");
 		return "migration/households-out";
 	}
 	
@@ -76,6 +77,7 @@ public class MigrationController {
 		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("isHousehold", true);
 		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
+		model.addAttribute("migration", "block");
 		return "migration/member-in";
 	}
 	
@@ -86,6 +88,7 @@ public class MigrationController {
 		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("isHousehold", true);
 		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
+		model.addAttribute("migration", "block");
 		return "migration/member-out";
 	}
 	
@@ -99,6 +102,7 @@ public class MigrationController {
 		
 		model.addAttribute("data", data);
 		model.addAttribute("migratedType", migratedType);
+		model.addAttribute("migration", "block");
 		return "migration/details";
 	}
 	
@@ -113,6 +117,7 @@ public class MigrationController {
 		model.addAttribute("data", data);
 		
 		model.addAttribute("migratedType", migratedType);
+		model.addAttribute("migration", "block");
 		return "migration/member-details";
 	}
 }
