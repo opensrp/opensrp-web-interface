@@ -166,6 +166,7 @@
 
 <script>
 jQuery(document).ready(function() { 
+	window.totalRecords = 0;
 	$('#branchList').select2MultiCheckboxes({
 		placeholder: "Select branch",
 		width: "auto",
@@ -235,9 +236,11 @@ $("#to").datepicker('setDate', new Date());
                     data.type="";
                     data.startDate = $('#from').val();
                     data.endDate =$('#to').val();
+                    data.totalRecords = totalRecords;
                     
                 },
                 dataSrc: function(json){
+                	totalRecords = json.recordsTotal;
                     if(json.data){
                         return json.data;
                     }
@@ -331,9 +334,11 @@ function filter(){
                  data.locationId=locationId;                    
                  data.roleId=$("#roleList").val();
                  data.type=$("#nType").val();
+                 data.totalRecords = totalRecords;
                 
              },
              dataSrc: function(json){
+            	 totalRecords = json.recordsTotal;
                  if(json.data){
                 	 $("#dtime").html(dateTimeHeader);
                      return json.data;

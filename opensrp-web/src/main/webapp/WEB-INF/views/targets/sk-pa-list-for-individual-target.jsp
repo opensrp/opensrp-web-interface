@@ -89,15 +89,15 @@
 							
 						</div>
 						<h3>Target </h3>
-						<div class="table-scrollable">
 						
 						<table class="table table-striped table-bordered " id="StockSellHistory">
 							<thead>
 								<tr>
-								   
+								   <th>Si</th>
 									<th><spring:message code="lbl.name"></spring:message></th>
+									<th>Username</th>
 									<th><spring:message code="lbl.designation"></spring:message></th>
-									<th>Id</th>
+									
 									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
 									<th>Location name</th>
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
@@ -107,7 +107,6 @@
 							</thead>
 							
 						</table>
-						</div>
 						
 						
 					</div>
@@ -126,11 +125,13 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
+
 <script>
 jQuery(document).ready(function() {       
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
-
+	window.totalRecords = 0;
 	$('#branchList').select2MultiCheckboxes({
 		placeholder: "Select branch",
 		width: "auto",
@@ -170,25 +171,25 @@ jQuery(function() {
             serverSide: true,
             processing: true,
             ordering:false,
-            columnDefs: [
-                /* { targets: [0, 1, 2, 3,4,5], orderable: false },
-                { width: "20%", targets: 0 },
-                { width: "5%", targets: 1 },
-                { width: "20%", targets: 2 },
-                { width: "20%", targets: 3 },
-                { width: "20%", targets: 4 },
-                { width: "20%", targets: 5 } */
-                
-            ],
+            scrollY:        "300px",
+            scrollX:        true,
+            scrollCollapse: true,
+            "ordering": false,
+            fixedColumns:   {
+                leftColumns: 2/* ,
+             rightColumns: 1 */
+            },
             ajax: {
                 url: "${urlForSKPAList}",
                 data: function(data){                	
                     data.branchId = '';
                     data.locationId=0;                    
                     data.roleName='SK';
+                    data.totalRecords = totalRecords;
                     
                 },
                 dataSrc: function(json){
+                	totalRecords = json.recordsTotal;
                     if(json.data){
                         return json.data;
                     }
@@ -224,15 +225,14 @@ function filter(){
          bFilter: false,
          serverSide: true,
          processing: true,
-         columnDefs: [
-             /* { targets: [0, 1, 2, 3,4,5], orderable: false },
-             { width: "20%", targets: 0 },
-             { width: "5%", targets: 1 },
-             { width: "20%", targets: 2 },
-             { width: "20%", targets: 3 },
-             { width: "20%", targets: 4 },
-             { width: "20%", targets: 5 } */
-         ],
+         scrollY:        "300px",
+         scrollX:        true,
+         scrollCollapse: true,
+         "ordering": false,
+         fixedColumns:   {
+             leftColumns: 2/* ,
+          rightColumns: 1 */
+         },
          ajax: {
              url: "${urlForSKPAList}",
              data: function(data){
@@ -245,8 +245,10 @@ function filter(){
             	 data.branchId = branchIds;
                  data.locationId=locationId;                    
                  data.roleName=$("#roleList option:selected").val();
+                 data.totalRecords = totalRecords;
              },
              dataSrc: function(json){
+            	 totalRecords = json.recordsTotal;
                  if(json.data){
                      return json.data;
                  }

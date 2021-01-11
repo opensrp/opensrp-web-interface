@@ -119,6 +119,7 @@ jQuery(document).ready(function() {
 		Layout.init(); // init current layout
    //TableAdvanced.init();
 		//$('#passStockInventoryList').DataTable();
+		window.totalRecords = 0;
 });
 </script>
 
@@ -145,9 +146,12 @@ jQuery(document).ready(function() {
                     data.branchId = ${id} ;
                     data.roleId =  0;
                     data.name='';
+                    data.totalRecords = totalRecords;
                     
                 },
                 dataSrc: function(json){
+                	console.log(json);
+                	totalRecords = json.recordsTotal;
                     if(json.data){
                         return json.data;
                     }
@@ -189,8 +193,10 @@ function filter(){
 	     	    data.branchId = ${id} ;
 	            data.roleId =  roleId;
 	            data.name=$('#userName').val();
+	            data.totalRecords = totalRecords;
              },
              dataSrc: function(json){
+            	 totalRecords = json.recordsTotal;
                  if(json.data){
                      return json.data;
                  }

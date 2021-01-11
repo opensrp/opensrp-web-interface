@@ -85,6 +85,8 @@ public class WebNotificationRestController {
 		SimpleDateFormat df = new SimpleDateFormat("MMM dd,yyyy");
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
 		
+		int totalRecords = Integer.parseInt(request.getParameter("totalRecords"));
+		
 		List<WebNotificationCommonDTO> list = webNotificationService.getWebNotificationList(locationId, branchId, roleId,
 		    startDate, endDate, type, length, start, orderColumn, orderDirection);
 		/*	String json = new Gson().toJson(list);		
@@ -93,8 +95,15 @@ public class WebNotificationRestController {
 			
 			List<WebNotificationCommonDTO> lst = mapper.readValue(json, new TypeReference<List<WebNotificationCommonDTO>>() {});
 			*/
-		int total = webNotificationService.getWebNotificationListCount(locationId, branchId, roleId, startDate, endDate,
-		    type);
+		int total = 0;
+		if (start == 0) {
+			
+			total = webNotificationService.getWebNotificationListCount(locationId, branchId, roleId, startDate, endDate,
+			    type);
+		} else {
+			
+			total = totalRecords;
+		}
 		
 		JSONObject response = webNotificationService.drawDataTableOfWebNotification(draw, total, list, type, start);
 		

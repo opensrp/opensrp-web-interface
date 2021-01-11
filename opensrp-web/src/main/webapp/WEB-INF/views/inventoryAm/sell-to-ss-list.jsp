@@ -429,6 +429,7 @@
 
 <script>
 	jQuery(document).ready(function() {
+		window.totalRecords = 0;
 		Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
 		//TableAdvanced.init();
@@ -499,9 +500,11 @@
 					data.upazila = 0;
 					data.skId = 0;
 					data.manager="${manager}";
+					 data.totalRecords = totalRecords;
 
 				},
 				dataSrc : function(json) {
+					totalRecords = json.recordsTotal;
 					if (json.data) {
 						return json.data;
 					} else {
@@ -553,8 +556,10 @@
 					data.upazila = 0;
 					data.skId = skId;
 					data.manager="${manager}";
+					 data.totalRecords = totalRecords;
 				},
 				dataSrc : function(json) {
+					totalRecords = json.recordsTotal;
 					if (json.data) {
 						return json.data;
 					} else {

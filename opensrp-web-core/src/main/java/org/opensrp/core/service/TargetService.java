@@ -333,18 +333,21 @@ public class TargetService extends CommonService {
 		return total.intValue();
 	}
 	
-	public JSONObject getUserListForTargetSetOfDataTable(Integer draw, int userCount, List<TargetCommontDTO> dtos)
+	public JSONObject getUserListForTargetSetOfDataTable(Integer draw, int userCount, List<TargetCommontDTO> dtos, int start)
 	    throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", userCount);
 		response.put("recordsFiltered", userCount);
 		JSONArray array = new JSONArray();
+		int i = 1;
 		for (TargetCommontDTO dto : dtos) {
 			JSONArray patient = new JSONArray();
+			patient.put(start + i);
 			patient.put(dto.getFullName());
-			patient.put(dto.getRoleName());
 			patient.put(dto.getUsername());
+			patient.put(dto.getRoleName());
+			
 			patient.put(dto.getBranch());
 			patient.put(dto.getLocationName());
 			String setTarget = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"set-individual/"
@@ -360,6 +363,7 @@ public class TargetService extends CommonService {
 			patient.put(viewTarget);
 			patient.put(editTarget);
 			array.put(patient);
+			i++;
 		}
 		response.put("data", array);
 		return response;
@@ -1123,20 +1127,23 @@ public class TargetService extends CommonService {
 		return total.intValue();
 	}
 	
-	public JSONObject getPositionalTargetDataOfDataTable(Integer draw, int total, List<TargetCommontDTO> dtos)
+	public JSONObject getPositionalTargetDataOfDataTable(Integer draw, int total, List<TargetCommontDTO> dtos, int start)
 	    throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", total);
 		response.put("recordsFiltered", total);
 		JSONArray array = new JSONArray();
+		int i = 1;
 		for (TargetCommontDTO dto : dtos) {
 			JSONArray patient = new JSONArray();
+			patient.put(start + i);
 			patient.put(dto.getBranchName());
 			patient.put(dto.getBranchCode());
 			patient.put(dto.getUpazilaName());
 			patient.put(dto.getUserCount());
 			array.put(patient);
+			i++;
 		}
 		response.put("data", array);
 		return response;
