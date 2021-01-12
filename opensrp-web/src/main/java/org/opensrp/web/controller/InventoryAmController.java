@@ -232,7 +232,7 @@ public class InventoryAmController {
 	public String sellToSsList(Model model, Locale locale, @PathVariable("id") int id) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<Object[]> branchInfo = branchService.getBranchByUser(String.valueOf(id), loggedInUser);
-		List<InventoryDTO> getSkList = stockService.getUserListByBranchWithRole(id, Roles.SK.getId());
+		List<InventoryDTO> getSkList = stockService.getUserListByBranchWithRole(id + "", Roles.SK.getId());
 		List<InventoryDTO> getProductList = stockService.getProductListByBranchWithRole(id, Roles.SS.getId(), 0);
 		model.addAttribute("skList", getSkList);
 		

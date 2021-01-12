@@ -11,36 +11,7 @@
 
 <title>Web notification list</title>
 	
-<style>
-	.select2-results__option .wrap:before {
-		font-family: fontAwesome;
-		color: #999;
-		content: "\f096";
-		width: 25px;
-		height: 25px;
-		padding-right: 10px;
-	}
 
-	.select2-results__option[aria-selected=true] .wrap:before {
-		content: "\f14a";
-	}
-
-
-	/* not required css */
-
-	.row {
-		padding: 10px;
-	}
-
-	.select2-multiple,
-	.select2-multiple2 {
-		width: 50%
-	}
-
-	.select2-results__group .wrap:before {
-		display: none;
-	}
-</style>
 <c:url var="get_url" value="/rest/api/v1/web-notfication/list" />
 <c:url var="add_page" value="/web-notification/add-new.html" />
 

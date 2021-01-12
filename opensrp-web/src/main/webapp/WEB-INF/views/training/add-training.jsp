@@ -70,7 +70,7 @@
 				
 				<div class="col-lg-6">
 					<div class="form-group row">
-						<label for="trainingTitle" class="col-sm-4 col-form-label"><spring:message code="lbl.trainingTitle"></spring:message><span class="text-danger">*</span> :</label>
+						<label for="trainingTitle" class="col-sm-4 col-form-label"><spring:message code="lbl.trainingTitle"></spring:message><span class="text-danger">*</span> </label>
 						<div class="col-sm-6">
 							<select id="trainingTitle"
 									class="form-control"
@@ -91,14 +91,14 @@
 						</div>
 					</div> --%>
 					<div class="form-group row">
-						<label for="trainingStartDate" class="col-sm-4 col-form-label"><spring:message code="lbl.trainingStartDate"></spring:message><span class="text-danger">*</span> :</label>
+						<label for="trainingStartDate" class="col-sm-4 col-form-label"><spring:message code="lbl.trainingStartDate"></spring:message><span class="text-danger">*</span> </label>
 						<div class="col-sm-6">
 						 <input type="text" readonly="readonly" name="trainingStartDate" class="form-control date" id="trainingStartDate" required>
 							
 						</div>
 					</div>
 					<div class="form-group row">
-						<label for="trainingDuration" class="col-sm-4 col-form-label"><spring:message code="lbl.trainingduration"></spring:message> :</label>
+						<label for="trainingDuration" class="col-sm-4 col-form-label"><spring:message code="lbl.trainingduration"></spring:message> </label>
 						<div class="col-sm-6">
 							<input type="number" min="1"  class="form-control" id="trainingDuration" name ="trainingDuration" >
 						</div>
@@ -110,26 +110,26 @@
 						</div>
 					</div> --%>
 					<div class="form-group row">
-						<label for="participantNumber" class="col-sm-4 col-form-label"><spring:message code="lbl.participantNumber"></spring:message><span class="text-danger">*</span>:</label>
+						<label for="participantNumber" class="col-sm-4 col-form-label"><spring:message code="lbl.participantNumber"></spring:message><span class="text-danger">*</span></label>
 						<div class="col-sm-6">
 							<input type="number" min="1"  class="form-control" id="participantNumber" name ="participantNumber" required>
 						</div>
 					</div>
 					<div class="form-group row">
-						<label for="nameOfTrainer" class="col-sm-4 col-form-label"><spring:message code="lbl.nameOfTrainer"></spring:message><span class="text-danger">*</span> :</label>
+						<label for="nameOfTrainer" class="col-sm-4 col-form-label"><spring:message code="lbl.nameOfTrainer"></spring:message><span class="text-danger">*</span> </label>
 						<div class="col-sm-6">
 							<input type="text"  class="form-control" id="nameOfTrainer" name ="nameOfTrainer" required>
 						</div>
 					</div>
 					<div class="form-group row">
-						<label for="designationOfTrainer" class="col-sm-4 col-form-label"><spring:message code="lbl.designationOfTrainer"></spring:message> :</label>
+						<label for="designationOfTrainer" class="col-sm-4 col-form-label"><spring:message code="lbl.designationOfTrainer"></spring:message> </label>
 						<div class="col-sm-6">
 							<input type="text"  class="form-control" id="designationOfTrainer" name ="designationOfTrainer" >
 						</div>
 					</div>
 					
 					<div class="form-group row">
-						<label  class="col-sm-4 col-form-label"><spring:message code="lbl.location"></spring:message><span class="text-danger">*</span> :</label>
+						<label  class="col-sm-4 col-form-label"><spring:message code="lbl.location"></spring:message><span class="text-danger">*</span> </label>
 						
 						 <div class="col-sm-6">
 								<div class="form-check">
@@ -389,7 +389,7 @@
 					<div class="modal-header text-center" style="border-bottom: none;">
 										<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
 										<h4 class="modal-title">
-											<Strong>Trainer List</Strong>
+											<Strong>Trainee List</Strong>
 										</h4>
 									</div>
 									</br>

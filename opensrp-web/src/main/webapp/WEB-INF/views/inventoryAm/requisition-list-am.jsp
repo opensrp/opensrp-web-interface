@@ -56,7 +56,7 @@
 							class="form-control date" id="to"> <span class="text-danger"
 							id="endDateValidation"></span>
 					</div> 
-					<div class="col-lg-3 form-group text-right" style="padding-top: 24px">
+					<div class="col-lg-4 form-group text-right" style="padding-top: 24px">
 						<button type="button" onclick="filter()" class="btn btn-primary">Search</button>
 						<a class="btn btn-primary" id="addRequisition"
 						href="<c:url value="/inventoryam/requisition-add/${branchInfo[0][0]}.html?lang=${locale}"/>">
@@ -93,6 +93,7 @@
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
 
 <script>
 
@@ -114,7 +115,8 @@ var dateToday = new Date();
 
 	
 let requisitionList;
-jQuery(document).ready(function() {       
+jQuery(document).ready(function() {   
+	window.totalRecords = 0;
 	 Metronic.init(); // init metronic core components
 	 Layout.init(); // init current layout
    //TableAdvanced.init();
@@ -127,15 +129,14 @@ jQuery(document).ready(function() {
            bFilter: false,
            serverSide: true,
            processing: true,
-           columnDefs: [
-               { targets: [0], orderable: false },
-               { width: "10%", targets: 0 },
-               { width: "20%", targets: 1 },
-               { width: "20%", targets: 2 },
-               { width: "20%", targets: 3,"visible": false },
-               { width: "20%", targets: 4,"visible": false },
-               { width: "20%", targets: 5 }
-           ],
+           scrollY:        "300px",
+           scrollX:        true,
+           scrollCollapse: true,
+           "ordering": false,
+           fixedColumns:   {
+               leftColumns: 2/* ,
+            rightColumns: 1 */
+           },
            ajax: {
                url: "${searchUrl}",
                timeout : 300000,
@@ -146,10 +147,12 @@ jQuery(document).ready(function() {
 					data.branch = branchId;
 					data.requisitor = requisitor;
 					data.startDate = startDateDm,
-					data.endDate = endDateDm
+					data.endDate = endDateDm,
+					data.totalRecords = totalRecords
 					
                },
                dataSrc: function(json){
+            	   totalRecords = json.recordsTotal;
                    if(json.data){
                        return json.data;
                    }
@@ -194,15 +197,14 @@ function filter(){
         bFilter: false,
         serverSide: true,
         processing: true,
-        columnDefs: [
-             { targets: [0], orderable: false },
-             { width: "10%", targets: 0 },
-             { width: "20%", targets: 1 },
-             { width: "20%", targets: 2 },
-             { width: "20%", targets: 3,"visible": false },
-             { width: "20%", targets: 4,"visible": false },
-             { width: "20%", targets: 5 }
-        ],
+        scrollY:        "300px",
+        scrollX:        true,
+        scrollCollapse: true,
+        "ordering": false,
+        fixedColumns:   {
+            leftColumns: 2/* ,
+         rightColumns: 1 */
+        },
         ajax: {
             url: "${searchUrl}",
             timeout : 300000,
@@ -213,10 +215,12 @@ function filter(){
 					data.branch = branchId;
 					data.requisitor = requisitor;
 					data.startDate = startDate,
-					data.endDate = endDate
+					data.endDate = endDate,
+					data.totalRecords = totalRecords
 					
             },
             dataSrc: function(json){
+            	 totalRecords = json.recordsTotal;
                 if(json.data){
                     return json.data;
                 }

@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.RequisitionQueryDto;
-import org.opensrp.common.util.UserColumn;
 import org.opensrp.core.dto.RequisitionDTO;
 import org.opensrp.core.entity.Requisition;
 import org.opensrp.core.mapper.RequisitionMapper;
@@ -69,23 +68,31 @@ public class RequisitionRestController {
 		String name = request.getParameter("search[value]");
 		String orderColumn = request.getParameter("order[0][column]");
 		String orderDirection = request.getParameter("order[0][dir]");
-		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
+		//orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
 		Integer start = Integer.valueOf(request.getParameter("start"));
 		Integer length = Integer.valueOf(request.getParameter("length"));
-		int branchId = Integer.valueOf(request.getParameter("branch"));
+		String branchId = request.getParameter("branch");
 		int divisionId = Integer.valueOf(request.getParameter("division"));
 		int districtId = Integer.valueOf(request.getParameter("district"));
 		int upazilla = Integer.valueOf(request.getParameter("upazila"));
-		int requisitor = Integer.valueOf(request.getParameter("requisitor"));
+		String requisitor = request.getParameter("requisitor");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
+		long totalRecords = Integer.parseInt(request.getParameter("totalRecords"));
 		
-		Long requisitionCount = requisitionService.getCountOfRequisiton(branchId, startDate, endDate, divisionId,
-		    districtId, upazilla, requisitor);
+		long total = 0;
+		if (start == 0) {
+			
+			total = requisitionService.getCountOfRequisiton(branchId, startDate, endDate, divisionId, districtId, upazilla,
+			    requisitor);
+		} else {
+			
+			total = totalRecords;
+		}
+		
 		List<RequisitionQueryDto> requisitionList = requisitionService.getRequisitonList(branchId, startDate, endDate,
 		    divisionId, districtId, upazilla, requisitor, start, length);
-		JSONObject response = requisitionService.getRequisitionDataOfDataTable(draw, requisitionCount, requisitionList,
-		    start);
+		JSONObject response = requisitionService.getRequisitionDataOfDataTable(draw, total, requisitionList, start);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 }

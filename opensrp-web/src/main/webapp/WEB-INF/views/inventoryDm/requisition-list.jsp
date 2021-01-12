@@ -15,7 +15,7 @@
 	
 	
 <c:url var="requisition_list_url" value="/rest/api/v1/requisition/list" />
-<c:url var="branch_list_url" value="/inventorydm/user-by-branch/" />
+<c:url var="branch_list_url" value="/inventorydm/user-by-branch" />
 
 <c:url var="viewURL" value="/inventory/requisition-details" />
 
@@ -39,84 +39,36 @@
 					
 						<div class="form-group">
 						
-						<jsp:include page="/WEB-INF/views/search-option-for-inventory.jsp" />
-						<%-- <jsp:include page="/WEB-INF/views/search-oprions-with-branch.jsp" /> --%>
-						<%-- <div class="row">
-								<div class="col-lg-3 form-group">
-								    <label for="cars"><spring:message code="lbl.division"></spring:message> :</label> <select class="form-control" id="division" name="division">
-										<option value=""><spring:message
-												code="lbl.selectDivision" />
-										</option>
-										<%
-											for (Object[] objects : divisions) {
-										%>
-										<option value="<%=objects[1]%>?<%=objects[0]%>"><%=objects[0]%></option>
-										<%
-											}
-										%>
-									</select>
-								</div>
-								<div class="col-lg-3 form-group">
-								    <label for="cars"><spring:message code="lbl.district"></spring:message> :</label> <select class="form-control" id="district" name="district">
-										<option value="0?"><spring:message
-												code="lbl.selectDistrict" /></option>
-										<option value=""></option>
-									</select>
-								</div>
-								<div class="col-lg-3 form-group">
-								    <label for="cars"><spring:message code="lbl.upazila"></spring:message> :</label> <select class="form-control" id="upazila" name="upazila">
-										<option value="0?"><spring:message
-												code="lbl.selectUpazila" /></option>
-										<option value=""></option>
-
-									</select>
-								</div>
-								<div class="col-lg-3 form-group">
-								    <label for="cars"><spring:message code="lbl.branch"></spring:message> :</label> 
-								    <select class="form-control js-example-basic-multiple"
-										id="branchDM" name="branchDM">
-										<option value="0"><spring:message
-												code="lbl.selectBranch" /></option>
-										<c:forEach items="${branches}" var="branch">
-										<option value="${branch.id}">${branch.name}</option>
-										</c:forEach>
-
-										
-									</select>
-								</div>
-								
-							</div> --%>
+						<jsp:include page="/WEB-INF/views/search-option-for-requisition.jsp" />					
+						
 							<div class="row">
 								
 								<div class="col-lg-3 form-group">
 								    <label for="designation"><spring:message code="lbl.requisitionBy"></spring:message> :</label>
 									<select class="form-control" id="selectRequisitionBy" name="selectRequisitionBy">
-										<option value="0"><spring:message
-												code="lbl.requisitionBy" /></option>
-										<option value=""></option>
+										
 
 									</select>
 								</div>
 								
-								<div class="col-lg-2 form-group">
+								<div class="col-lg-3 form-group">
 								<label for="from"><spring:message code="lbl.from"></spring:message><span
 									class="text-danger"> </span> </label> <input readonly="readonly" type="text"
 									class="form-control date" id="from"> <span class="text-danger"
 									id="startDateValidation"></span>
 							</div>
-							<div class="col-lg-2 form-group">
+							<div class="col-lg-3 form-group">
 								<label for="to"><spring:message code="lbl.to"></spring:message><span
 									class="text-danger"> </span> </label> <input readonly="readonly" type="text"
 									class="form-control date" id="to"> <span class="text-danger"
 									id="endDateValidation"></span>
 							</div> 
-								
-							</div>
-							<div class="row">
-								<div class="col-lg-12 form-group text-right">
+							<div class="col-lg-3 form-group" style="padding-top: 24px;">
 									<button type="button" onclick="filter()"  class="btn btn-primary">Search</button>
 								</div>
-     							</div>
+								
+							</div>
+							
 							<br/>
 						
 						<table class="table table-striped table-bordered " id="requisitionListForAm">
@@ -146,15 +98,29 @@
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
 
 <script>
 let requisitionList;
-jQuery(document).ready(function() {       
+jQuery(document).ready(function() {    
+	window.totalRecords = 0;
 	 Metronic.init(); // init metronic core components
 	 Layout.init(); // init current layout
    //TableAdvanced.init();
 	//$('.js-example-basic-multiple').select2({dropdownAutoWidth : true});
-	$('#branchList').select2({dropdownAutoWidth : true});
+	$('#branchList').select2MultiCheckboxes({
+			placeholder: "Select branch",
+			width: "auto",
+			templateSelection: function(selected, total) {
+				return "Selected " + selected.length + " of " + total;
+			}
+		});
+	$("#branchList > option").prop("selected","selected");
+    $("#branchList").trigger("change");
+    
+    
+    
+
 	var dateToday = new Date();
 	var dates = $(".date").datepicker({
 	    dateFormat: 'yy-mm-dd',
@@ -180,15 +146,14 @@ jQuery(document).ready(function() {
            bFilter: false,
            serverSide: true,
            processing: true,
-           columnDefs: [
-               { targets: [0,1,2,3,4,5], orderable: false },
-               { width: "20%", targets: 0 },
-               { width: "20%", targets: 1 },
-               { width: "20%", targets: 2 },
-               { width: "20%", targets: 3 },
-               { width: "20%", targets: 4 },
-               { width: "20%", targets: 5 }
-           ],
+           scrollY:        "300px",
+           scrollX:        true,
+           scrollCollapse: true,
+           "ordering": false,
+           fixedColumns:   {
+               leftColumns: 2/* ,
+            rightColumns: 1 */
+           },
            ajax: {
                url: "${requisition_list_url}",
                timeout : 300000,
@@ -196,13 +161,21 @@ jQuery(document).ready(function() {
 					data.division = 0;
 					data.district = 0;
 					data.upazila = 0;
-					data.branch = 0;
+					var branchIds =  $("#branchList").val();
+					if( branchIds ==null || typeof branchIds == 'undefined'){
+				  		branchIds = ''
+				  	}else{
+				  		branchIds = $("#branchList").val().join();
+				  	}
+					data.branch = branchIds;
 					data.requisitor = 0;
 					data.startDate = startDate,
-					data.endDate = endDate
+					data.endDate = endDate,
+					data.totalRecords = totalRecords
 					
                },
                dataSrc: function(json){
+            	   totalRecords = json.recordsTotal;
                    if(json.data){
                        return json.data;
                    }
@@ -223,11 +196,34 @@ jQuery(document).ready(function() {
 });
 
 function filter(){
-	var division = +$('#divisionList').val();
-	var district = +$('#districtList').val();
-	var upazila = +$('#upazilaList').val();
-	var requisitor = +$('#selectRequisitionBy').val();
-	var branch = +$('#branchList').val();
+	var division = $('#divisionList').val();
+	if( division ==null || typeof division == 'undefined'){
+		division = 0
+  	}
+	var district = $('#districtList').val();
+	if( district ==null || typeof district == 'undefined'){
+		district = 0
+  	}
+	var upazila = $('#upazilaList').val();
+	if( upazila ==null || typeof upazila == 'undefined'){
+		upazila = 0
+  	}
+	var requisitor = $('#selectRequisitionBy').val();
+	if( requisitor ==null || typeof requisitor == 'undefined'){
+		requisitor = 0
+  	}else{
+  		requisitor = $("#selectRequisitionBy").val().join();
+  	}
+	
+	
+	var branchIds =  $("#branchList").val();
+	if( branchIds ==null || typeof branchIds == 'undefined'){
+  		branchIds = ''
+  	}else{
+  		branchIds = $("#branchList").val().join();
+  	}
+	
+	console.log(branchIds);
 	var startDate = $('#from').val();
 	var endDate = $('#to').val();
 	if(startDate == "") {
@@ -242,33 +238,34 @@ function filter(){
 		return;
 	}
 	$("#endDateValidation").html("");
-	
+		
  		requisitionList = $('#requisitionListForAm').DataTable({
         bFilter: false,
         serverSide: true,
         processing: true,
-        columnDefs: [
-            { targets: [0,1,2,3,4,5], orderable: false },
-            { width: "20%", targets: 0 },
-            { width: "20%", targets: 1 },
-            { width: "20%", targets: 2 },
-            { width: "20%", targets: 3 },
-            { width: "20%", targets: 4 },
-            { width: "20%", targets: 5 }
-        ],
+        scrollY:        "300px",
+        scrollX:        true,
+        scrollCollapse: true,
+        "ordering": false,
+        fixedColumns:   {
+            leftColumns: 2/* ,
+         rightColumns: 1 */
+        },
         ajax: {
             url: "${requisition_list_url}",
             data: function(data){
 					data.division = division;
 					data.district = district;
 					data.upazila = upazila;
-					data.branch = branch;
+					data.branch = branchIds;
 					data.requisitor = requisitor;
 					data.startDate = startDate,
-					data.endDate = endDate
+					data.endDate = endDate,
+					data.totalRecords = totalRecords;
 					
             },
             dataSrc: function(json){
+            	totalRecords = json.recordsTotal;
                 if(json.data){
                     return json.data;
                 }
@@ -289,8 +286,15 @@ function filter(){
 }
 
 $("#branchList").change(function (event) {
-	let branchId = +$('#branchList').val();
-	var url = "${branch_list_url}/"+branchId;
+	var branchIds =  $("#branchList").val();
+	if( branchIds ==null || typeof branchIds == 'undefined'){
+  		branchIds = ''
+  	}else{
+  		branchIds = $("#branchList").val().join();
+  	}
+	
+	console.log(branchIds);
+	var url = "${branch_list_url}/"+branchIds;
 	$("#selectRequisitionBy").html("");
 	$.ajax({
 		type : "GET",
@@ -300,8 +304,17 @@ $("#branchList").change(function (event) {
 		dataType : 'html',
 		timeout : 100000,
 		beforeSend: function() {},
-		success : function(data) {
+		success : function(data) {			
 			$("#selectRequisitionBy").html(data);
+			$('#selectRequisitionBy').select2MultiCheckboxes({
+				placeholder: "Select requisition by",
+				width: "auto",
+				templateSelection: function(selected, total) {
+					return "Selected " + selected.length + " of " + total;
+				}
+			});
+			$("#selectRequisitionBy > option").prop("selected","selected");
+			$("#selectRequisitionBy").trigger("change");
 		},
 		error : function(e) {
 			console.log("ERROR: ", e);
@@ -312,7 +325,7 @@ $("#branchList").change(function (event) {
 			console.log("DONE");
 			//enableSearchButton(true);
 		}
-	});
+	}); 
 });
 
 function navigateTodetails(requisitionId,branchName,branchCode) {

@@ -17,6 +17,8 @@ public class StockDTO {
 	
 	private String stockId;
 	
+	private String challan;
+	
 	public Long getId() {
 		return id;
 	}
@@ -55,6 +57,14 @@ public class StockDTO {
 	
 	public void setReferenceType(String referenceType) {
 		this.referenceType = referenceType;
+	}
+	
+	public String getChallan() {
+		return challan;
+	}
+	
+	public void setChallan(String challan) {
+		this.challan = challan;
 	}
 	
 }
