@@ -172,18 +172,9 @@ function getReportData(url){
             $('#loading').hide();
             $("#report").html(data);
             $('#search-button').attr("disabled", false);
-            let reportType =$("input[name='time-period']:checked").val(); 
-        	
-            
-            $('#reportDataTable').DataTable({ 
-            	scrollY:        "300px",
-                scrollX:        true,
-                scrollCollapse: true,                
-            	 fixedColumns:   {
-                     leftColumns: 2/* ,
-                     rightColumns: 1 */
-                 }
-            });
+            let reportType =$("input[name='time-period']:checked").val();
+
+
         },
         error : function(e) {
             $('#loading').hide();

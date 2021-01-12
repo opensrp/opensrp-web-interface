@@ -238,14 +238,7 @@ function getReportData(url,title){
         		$("#reportTile").html("Location Wise report");
         	}
             
-        	$('#reportDataTable').DataTable({ 
-             	scrollY:        "300px",
-                 scrollX:        true,
-                 scrollCollapse: true,                
-             	 fixedColumns:   {
-                      leftColumns: 2
-                  }
-             });
+
         },
         error : function(e) {
             $('#loading').hide();

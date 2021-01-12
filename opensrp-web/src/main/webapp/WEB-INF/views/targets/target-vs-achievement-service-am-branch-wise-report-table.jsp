@@ -282,6 +282,14 @@
 		reloadChart(managers, percentages);
 	}
 
+	$('#reportDataTable').DataTable({
+		scrollY:        "300px",
+		scrollX:        true,
+		scrollCollapse: true,
+		fixedColumns:   {
+			leftColumns: 2
+		}
+	});
 </script>
 
 </body>

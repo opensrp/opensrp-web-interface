@@ -174,14 +174,14 @@ function getReportData(url){
             let reportType =$("input[name='time-period']:checked").val(); 
         	
             
-            $('#reportDataTable').DataTable({ 
-             	scrollY:        "300px",
-                 scrollX:        true,
-                 scrollCollapse: true,                
-             	 fixedColumns:   {
-                      leftColumns: 2
-                  }
-             });
+            // $('#reportDataTable').DataTable({
+            //  	scrollY:        "300px",
+            //      scrollX:        true,
+            //      scrollCollapse: true,
+            //  	 fixedColumns:   {
+            //           leftColumns: 2
+            //       }
+            //  });
         },
         error : function(e) {
             $('#loading').hide();
