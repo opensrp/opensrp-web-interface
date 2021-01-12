@@ -75,6 +75,7 @@ public class TargetController {
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
+		model.addAttribute("target", "block");
 		return "targets/sk-pa-list-for-individual-target";
 	}
 	
@@ -82,6 +83,7 @@ public class TargetController {
 	public String targetByPosition(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		model.addAttribute("target", "block");
 		return "targets/target-by-position-list";
 	}
 	
@@ -96,6 +98,7 @@ public class TargetController {
 		model.addAttribute("type", request.getParameter("type"));
 		model.addAttribute("locationTag", request.getParameter("locationTag"));
 		model.addAttribute("text", request.getParameter("text"));
+		model.addAttribute("target", "block");
 		return "targets/set-target-by-position";
 	}
 	
@@ -109,6 +112,7 @@ public class TargetController {
 		model.addAttribute("userId", userId);
 		model.addAttribute("roleId", roleId);
 		model.addAttribute("name", request.getParameter("name"));
+		model.addAttribute("target", "block");
 		return "targets/sk-pa-individual-target-set";
 	}
 	
@@ -122,6 +126,7 @@ public class TargetController {
 		model.addAttribute("userId", userId);
 		model.addAttribute("roleId", roleId);
 		model.addAttribute("name", request.getParameter("name"));
+		model.addAttribute("target", "block");
 		return "targets/view-sk-pa-individual-target";
 	}
 	
@@ -135,6 +140,7 @@ public class TargetController {
 		model.addAttribute("userId", userId);
 		model.addAttribute("roleId", roleId);
 		model.addAttribute("name", request.getParameter("name"));
+		model.addAttribute("target", "block");
 		return "targets/edit-sk-pa-individual-target";
 	}
 	
@@ -164,7 +170,23 @@ public class TargetController {
 		
 		model.addAttribute("productList", targetService.allActiveTarget(roleId, ProductType.TARGET.name()));
 		model.addAttribute("targets", targets);
+		model.addAttribute("target", "block");
+		return "targets/get-target-info";
+	}
+	
+	@RequestMapping(value = "/target/prev-target-info", method = RequestMethod.POST)
+	public String getPreviousTargetInfo(@RequestBody String data, HttpSession session, Model model, Locale locale)
+	    throws JSONException {
+		model.addAttribute("locale", locale);
 		
+		JSONObject params = new JSONObject(data);
+		int roleId = params.getInt("role_id");
+		
+		model.addAttribute("productList", targetService.allActiveTarget(roleId, ProductType.TARGET.name()));
+		String branchIds = params.getString("branch_ids");
+		List<TargetCommontDTO> targets = targetService.getTargetOfprevoiusMonth(params, branchIds);
+		model.addAttribute("targets", targets);
+		model.addAttribute("target", "block");
 		return "targets/get-target-info";
 	}
 	
@@ -176,7 +198,7 @@ public class TargetController {
 		int month = Integer.parseInt(request.getParameter("month"));
 		int year = Integer.parseInt(request.getParameter("year"));
 		model.addAttribute("targets", targetService.getTargetInfoForPopulationWise(role, locationTag, month, year));
-		
+		model.addAttribute("target", "block");
 		return "targets/get-target-info-for-populationwise-target";
 	}
 	
@@ -186,6 +208,7 @@ public class TargetController {
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
+		model.addAttribute("target", "block");
 		return "targets/target-by-population-list";
 	}
 	
@@ -202,6 +225,7 @@ public class TargetController {
 		model.addAttribute("pkid", request.getParameter("id"));
 		model.addAttribute("pkLocation", request.getParameter("location"));
 		model.addAttribute("population", request.getParameter("population"));
+		model.addAttribute("target", "block");
 		return "targets/individual-target-by-population-pk";
 	}
 	
@@ -209,6 +233,7 @@ public class TargetController {
 	public String populationWiseTargetSet(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
 		model.addAttribute("targets", targetService.allActiveTarget(Roles.PK.getId(), ProductType.TARGET.name()));
+		model.addAttribute("target", "block");
 		return "targets/population-wise-target-set";
 	}
 	
@@ -864,90 +889,89 @@ public class TargetController {
 		searchUtil.setDivisionAttribute(session);
 		return "report/performance-map/index";
 	}
-
-    @RequestMapping(value = "/pm-dfs-report.html", method = RequestMethod.GET)
-    public String pmDFSReport(Model model, Locale locale) {
-
-        model.addAttribute("locale", locale);
-        model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
-        List<Branch> branches = branchService.findAll("Branch");
-        model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
-        model.addAttribute("branches", branches);
-
-        return "report/dfs/pm-report-by-dm";
-    }
-
-    @RequestMapping(value = "/pm-dfs-report-table", method = RequestMethod.POST)
-    public String pmDFSReportTable(@RequestBody String dto, Model model) throws JSONException {
-
-        JSONObject params = new JSONObject(dto);
-        String managerOrLocation = params.getString("managerOrLocation");
-
-        List<ForumTargetReportDTO> totalList = new ArrayList<>();
-
-        model.addAttribute("reportDatas", totalList);
-        model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
-        model.addAttribute("type", managerOrLocation);
-
-        return "report/dfs/pm-report-table-by-dm";
-    }
-
-    @RequestMapping(value = "/dm-dfs-report.html", method = RequestMethod.GET)
-    public String dmDFSReport(Model model, Locale locale) {
-        model.addAttribute("locale", locale);
-
-        User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-        String userIds = loggedInUser.getId() + "";
-        model.addAttribute("userIds", userIds);
-        List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
-        model.addAttribute("users", users);
-        return "report/dfs/dm-report-by-am";
-    }
-
-    @RequestMapping(value = "/dm-dfs-report-table", method = RequestMethod.POST)
-    public String dmDFSReportTable(@RequestBody String dto, Model model) throws JSONException {
-
-        JSONObject params = new JSONObject(dto);
-        String managerOrLocation = params.getString("managerOrLocation");
-
-        List<ForumTargetReportDTO> totalList = new ArrayList<>();
-
-        model.addAttribute("reportDatas", totalList);
-        model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
-        model.addAttribute("type", managerOrLocation);
-        return "report/dfs/dm-report-table-by-am";
-    }
-
-    @RequestMapping(value = "/am-dfs-report-by-branch-table", method = RequestMethod.POST)
-    public String amDFSReportBYBranchTable(@RequestBody String dto, Model model) throws JSONException {
-        JSONObject params = new JSONObject(dto);
-
-        List<ForumTargetReportDTO> totalList = new ArrayList<>();
-
-
-        model.addAttribute("reportDatas", totalList);
-        model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
-        return "report/dfs/am-report-table-by-branch";
-    }
-
-    @RequestMapping(value = "/am-dfs-report-by-sk.html", method = RequestMethod.GET)
-    public String amDFSReportBySK(Model model, Locale locale) {
-        model.addAttribute("locale", locale);
-        User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
-        String userIds = loggedInUser.getId() + "";
-        model.addAttribute("userIds", userIds);
-        return "report/dfs/am-report-by-sk";
-    }
-
-    @RequestMapping(value = "/am-dfs-report-by-sk-table", method = RequestMethod.POST)
-    public String amDFSReportBySKTable(@RequestBody String dto, Model model) throws JSONException {
-        JSONObject params = new JSONObject(dto);
-        List<ForumTargetReportDTO> totalList = new ArrayList<>();
-//        totalList = targetService.getForumReportForAMBySK(params);
-        model.addAttribute("reportDatas", totalList);
-        model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
-        return "report/dfs/am-report-table-by-sk";
-    }
+	
+	@RequestMapping(value = "/pm-dfs-report.html", method = RequestMethod.GET)
+	public String pmDFSReport(Model model, Locale locale) {
+		
+		model.addAttribute("locale", locale);
+		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
+		List<Branch> branches = branchService.findAll("Branch");
+		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
+		model.addAttribute("branches", branches);
+		
+		return "report/dfs/pm-report-by-dm";
+	}
+	
+	@RequestMapping(value = "/pm-dfs-report-table", method = RequestMethod.POST)
+	public String pmDFSReportTable(@RequestBody String dto, Model model) throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		String managerOrLocation = params.getString("managerOrLocation");
+		
+		List<ForumTargetReportDTO> totalList = new ArrayList<>();
+		
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
+		model.addAttribute("type", managerOrLocation);
+		
+		return "report/dfs/pm-report-table-by-dm";
+	}
+	
+	@RequestMapping(value = "/dm-dfs-report.html", method = RequestMethod.GET)
+	public String dmDFSReport(Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
+		model.addAttribute("users", users);
+		return "report/dfs/dm-report-by-am";
+	}
+	
+	@RequestMapping(value = "/dm-dfs-report-table", method = RequestMethod.POST)
+	public String dmDFSReportTable(@RequestBody String dto, Model model) throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		String managerOrLocation = params.getString("managerOrLocation");
+		
+		List<ForumTargetReportDTO> totalList = new ArrayList<>();
+		
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
+		model.addAttribute("type", managerOrLocation);
+		return "report/dfs/dm-report-table-by-am";
+	}
+	
+	@RequestMapping(value = "/am-dfs-report-by-branch-table", method = RequestMethod.POST)
+	public String amDFSReportBYBranchTable(@RequestBody String dto, Model model) throws JSONException {
+		JSONObject params = new JSONObject(dto);
+		
+		List<ForumTargetReportDTO> totalList = new ArrayList<>();
+		
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
+		return "report/dfs/am-report-table-by-branch";
+	}
+	
+	@RequestMapping(value = "/am-dfs-report-by-sk.html", method = RequestMethod.GET)
+	public String amDFSReportBySK(Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		String userIds = loggedInUser.getId() + "";
+		model.addAttribute("userIds", userIds);
+		return "report/dfs/am-report-by-sk";
+	}
+	
+	@RequestMapping(value = "/am-dfs-report-by-sk-table", method = RequestMethod.POST)
+	public String amDFSReportBySKTable(@RequestBody String dto, Model model) throws JSONException {
+		JSONObject params = new JSONObject(dto);
+		List<ForumTargetReportDTO> totalList = new ArrayList<>();
+		//        totalList = targetService.getForumReportForAMBySK(params);
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getTargetForumsAsJson(totalList).toString());
+		return "report/dfs/am-report-table-by-sk";
+	}
 	
 	private JsonArray getTargetsAsJson(List<TargetReportDTO> targetList) {
 		

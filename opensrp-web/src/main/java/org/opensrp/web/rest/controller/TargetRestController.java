@@ -11,11 +11,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.MapMovement;
 import org.opensrp.common.dto.PerformanceMapDTO;
-import org.opensrp.common.dto.ReferralFollowupReportDTO;
 import org.opensrp.common.dto.TargetCommontDTO;
 import org.opensrp.common.util.ProductType;
 import org.opensrp.common.util.TaregtSettingsType;
-import org.opensrp.common.util.UserColumn;
 import org.opensrp.core.dto.TargetDTO;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.service.LocationService;
@@ -38,7 +36,7 @@ public class TargetRestController {
 	
 	@Autowired
 	private TargetService targetService;
-
+	
 	@Autowired
 	private LocationService locationService;
 	
@@ -139,10 +137,18 @@ public class TargetRestController {
 		
 		List<TargetCommontDTO> userList = targetService.getUserListForTargetSet(locationId, branchIds, roleName, length,
 		    start, orderColumn, orderDirection);
+		int totalRecords = Integer.parseInt(request.getParameter("totalRecords"));
 		
-		int userCount = targetService.getUserListForTargetSetCount(locationId, branchIds, roleName);
+		int total = 0;
+		if (start == 0) {
+			
+			total = targetService.getUserListForTargetSetCount(locationId, branchIds, roleName);
+		} else {
+			
+			total = totalRecords;
+		}
 		
-		JSONObject response = targetService.getUserListForTargetSetOfDataTable(draw, userCount, userList);
+		JSONObject response = targetService.getUserListForTargetSetOfDataTable(draw, total, userList, start);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	
@@ -155,7 +161,7 @@ public class TargetRestController {
 		Integer draw = Integer.valueOf(request.getParameter("draw"));
 		String orderColumn = request.getParameter("order[0][column]");
 		String orderDirection = request.getParameter("order[0][dir]");
-		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
+		//orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
 		
 		String name = request.getParameter("search");
 		String branchIds = request.getParameter("branchId");
@@ -165,17 +171,24 @@ public class TargetRestController {
 		List<TargetCommontDTO> totalList = targetService.getBranchListForPositionalTarget(locationId, branchIds, roleName,
 		    length, start, orderColumn, orderDirection);
 		
-		int total = targetService.getBranchListForPositionalTargetCount(locationId, branchIds, roleName);
+		int totalRecords = Integer.parseInt(request.getParameter("totalRecords"));
 		
-		JSONObject response = targetService.getPositionalTargetDataOfDataTable(draw, total, totalList);
+		int total = 0;
+		if (start == 0) {
+			total = targetService.getBranchListForPositionalTargetCount(locationId, branchIds, roleName);
+		} else {
+			
+			total = totalRecords;
+		}
+		
+		JSONObject response = targetService.getPositionalTargetDataOfDataTable(draw, total, totalList, start);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
-
+	
 	@RequestMapping(value = "/movements", method = RequestMethod.GET, produces = { "application/json" })
-	public List<MapMovement> getProvidersMovement(
-			@RequestParam("username") String username,
-			@RequestParam("startDate") String startDate,
-			@RequestParam("endDate") String endDate) {
+	public List<MapMovement> getProvidersMovement(@RequestParam("username") String username,
+	                                              @RequestParam("startDate") String startDate,
+	                                              @RequestParam("endDate") String endDate) {
 		return targetService.getMapMovement(username, startDate, endDate);
 	}
 	
@@ -188,7 +201,7 @@ public class TargetRestController {
 		Integer draw = Integer.valueOf(request.getParameter("draw"));
 		String orderColumn = request.getParameter("order[0][column]");
 		String orderDirection = request.getParameter("order[0][dir]");
-		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
+		//orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
 		
 		String name = request.getParameter("search");
 		String branchIds = request.getParameter("branchId");
@@ -203,37 +216,35 @@ public class TargetRestController {
 		JSONObject response = targetService.getUnionWisePopulationSetOfDataTable(draw, userCount, userList);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
-
+	
 	@RequestMapping(value = "/location-based-performance-map", method = RequestMethod.GET)
-	public List<PerformanceMapDTO> getPerfomance(
-			@RequestParam(value = "startDate", required = false) String startDate,
-			@RequestParam(value = "endDate", required = false) String endDate,
-			@RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
-			@RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
-			@RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
-
+	public List<PerformanceMapDTO> getPerfomance(@RequestParam(value = "startDate", required = false) String startDate,
+	                                             @RequestParam(value = "endDate", required = false) String endDate,
+	                                             @RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
+	                                             @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+	                                             @RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
+		
 		Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
 		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
 		String parentLocationName = parentLocation.getName().split(":")[0];
-
+		
 		return targetService.getLocationBasedPerformanceMap(startDate, endDate, parentLocationTag, searchedValueId,
-				parentLocationName, locationTag);
+		    parentLocationName, locationTag);
 	}
-
+	
 	@RequestMapping(value = "/location-based-performance-chart", method = RequestMethod.GET)
-	public List<PerformanceMapDTO> getPerfomanceChart(
-			@RequestParam(value = "startDate", required = false) String startDate,
-			@RequestParam(value = "endDate", required = false) String endDate,
-			@RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
-			@RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
-			@RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
-
+	public List<PerformanceMapDTO> getPerfomanceChart(@RequestParam(value = "startDate", required = false) String startDate,
+	                                                  @RequestParam(value = "endDate", required = false) String endDate,
+	                                                  @RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
+	                                                  @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+	                                                  @RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
+		
 		Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
 		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
 		String parentLocationName = parentLocation.getName().split(":")[0];
-
+		
 		return targetService.getLocationBasedPerformanceChart(startDate, endDate, parentLocationTag, searchedValueId,
-				parentLocationName, locationTag);
+		    parentLocationName, locationTag);
 	}
 	
 }

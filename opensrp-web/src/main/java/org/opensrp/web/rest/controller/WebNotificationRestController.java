@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.WebNotificationCommonDTO;
-import org.opensrp.common.util.UserColumn;
 import org.opensrp.core.dto.WebNotificationDTO;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.service.WebNotificationService;
@@ -72,7 +71,7 @@ public class WebNotificationRestController {
 		Integer draw = Integer.valueOf(request.getParameter("draw"));
 		String orderColumn = request.getParameter("order[0][column]");
 		String orderDirection = request.getParameter("order[0][dir]");
-		orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
+		//orderColumn = UserColumn.valueOf("_" + orderColumn).getValue();
 		
 		String name = request.getParameter("search");
 		
@@ -86,6 +85,8 @@ public class WebNotificationRestController {
 		SimpleDateFormat df = new SimpleDateFormat("MMM dd,yyyy");
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
 		
+		int totalRecords = Integer.parseInt(request.getParameter("totalRecords"));
+		
 		List<WebNotificationCommonDTO> list = webNotificationService.getWebNotificationList(locationId, branchId, roleId,
 		    startDate, endDate, type, length, start, orderColumn, orderDirection);
 		/*	String json = new Gson().toJson(list);		
@@ -94,10 +95,17 @@ public class WebNotificationRestController {
 			
 			List<WebNotificationCommonDTO> lst = mapper.readValue(json, new TypeReference<List<WebNotificationCommonDTO>>() {});
 			*/
-		int total = webNotificationService.getWebNotificationListCount(locationId, branchId, roleId, startDate, endDate,
-		    type);
+		int total = 0;
+		if (start == 0) {
+			
+			total = webNotificationService.getWebNotificationListCount(locationId, branchId, roleId, startDate, endDate,
+			    type);
+		} else {
+			
+			total = totalRecords;
+		}
 		
-		JSONObject response = webNotificationService.drawDataTableOfWebNotification(draw, total, list, type);
+		JSONObject response = webNotificationService.drawDataTableOfWebNotification(draw, total, list, type, start);
 		
 		return new ResponseEntity<>(response.toString(), OK);
 	}

@@ -43,7 +43,26 @@ License: You must have a valid license purchased only from themeforest(the above
 <jsp:include page="/WEB-INF/views/css.jsp" />
 <c:url var="sendPrescriptionMessage" value="/rest/api/v1/message/prescription" />
 <c:url var="sendBookingMessage" value="/rest/api/v1/message/booking" />
+<style>
+.ui-datepicker-trigger {
+    margin-left : 5px;
+    vertical-align : top;
+}
 
+.currentStock{
+     cursor: pointer;
+}
+
+#from,#to,#mfrom,#mto,#receiveDate,.currentStock,#expiryDate,#yearMonth,#startYear{
+     cursor: pointer;
+}
+ #from,#to,#mfrom,#mto,#receiveDate,#expiryDate,.jqdate,#yearMonth,#startYear{
+        background: url("<c:url value='/resources/img/icon-calender.png'/>") no-repeat right;
+        border:1px solid #ccc; 
+       
+         
+    }
+</style>
 
 <jsp:include page="/WEB-INF/views/js.jsp" />
 
@@ -299,7 +318,7 @@ License: You must have a valid license purchased only from themeforest(the above
 					<li><a href="javascript:;"> <i class="fa fa-bullseye"></i> <span
 							class="title"> Set Target</span> <span class="arrow "></span>
 					</a>
-						<ul class="sub-menu">
+						<ul class="sub-menu" style="display: ${target}">
 						<%
 						if (PERM_TARGET_LIST) {
 						%>
@@ -335,7 +354,7 @@ License: You must have a valid license purchased only from themeforest(the above
 					<li><a href="javascript:;"> <i class="fa fa-cube"></i> <span
 							class="title"> Inventory</span> <span class="arrow "></span>
 					</a>
-						<ul class="sub-menu">
+						<ul class="sub-menu" style="display: ${show}">
 							<%
 								if (PERM_READ_WRITE_INVENTORY_AM) {
 							%>
@@ -519,7 +538,7 @@ License: You must have a valid license purchased only from themeforest(the above
 					<span class="title"><spring:message code="lbl.report"/></span>
 					<span class="arrow "></span>
 					</a>
-					<ul class="sub-menu">					
+					<ul class="sub-menu" style="display: ${report}">					
 						<li>
 							<a href="<c:url value="/report/aggregatedReport.html?lang=${locale}"/>">
 							<spring:message code="lbl.aggregatedReport"/>
@@ -746,7 +765,7 @@ License: You must have a valid license purchased only from themeforest(the above
 					<li><a href="javascript:;"> <i class="fa fa-bullseye"></i> <span
 							class="title">People</span> <span class="arrow "></span>
 					</a>
-						<ul class="sub-menu">
+						<ul class="sub-menu" style="display: ${people}">
 
 
 
@@ -767,7 +786,7 @@ License: You must have a valid license purchased only from themeforest(the above
 					<li><a href="javascript:;"> <i class="fa fa-bullseye"></i> <span
 							class="title">Migration</span> <span class="arrow "></span>
 					</a>
-						<ul class="sub-menu">
+						<ul class="sub-menu" style="display: ${migration}">
 
 
 

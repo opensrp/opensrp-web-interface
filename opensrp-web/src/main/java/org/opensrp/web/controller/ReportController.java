@@ -14,15 +14,23 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opensrp.common.dto.*;
+import org.opensrp.common.dto.AggregatedBiometricDTO;
+import org.opensrp.common.dto.AggregatedReportDTO;
+import org.opensrp.common.dto.COVID19ReportDTO;
+import org.opensrp.common.dto.ChildNutritionReportDTO;
+import org.opensrp.common.dto.ElcoReportDTO;
+import org.opensrp.common.dto.ForumIndividualReportDTO;
+import org.opensrp.common.dto.ForumReportDTO;
+import org.opensrp.common.dto.HrReportDTO;
+import org.opensrp.common.dto.IndividualBiometricReportDTO;
+import org.opensrp.common.dto.PregnancyReportDTO;
+import org.opensrp.common.dto.ReferralFollowupReportDTO;
+import org.opensrp.common.dto.ReferralReportDTO;
+import org.opensrp.common.dto.UserDTO;
 import org.opensrp.common.service.impl.DatabaseServiceImpl;
 import org.opensrp.common.util.DateUtil;
 import org.opensrp.common.util.Roles;
@@ -31,7 +39,12 @@ import org.opensrp.core.entity.Branch;
 import org.opensrp.core.entity.Facility;
 import org.opensrp.core.entity.Location;
 import org.opensrp.core.entity.User;
-import org.opensrp.core.service.*;
+import org.opensrp.core.service.BranchService;
+import org.opensrp.core.service.FacilityService;
+import org.opensrp.core.service.LocationService;
+import org.opensrp.core.service.ReportService;
+import org.opensrp.core.service.TargetService;
+import org.opensrp.core.service.UserService;
 import org.opensrp.web.nutrition.service.ChildGrowthService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.ModelConverter;
@@ -48,6 +61,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * @author proshanto
@@ -88,13 +106,13 @@ public class ReportController {
 	
 	@Autowired
 	private LocationService locationService;
-
+	
 	@Value("#{opensrp['division.tag.id']}")
 	private int divisionTagId;
-
+	
 	@Value("#{opensrp['divm.role.id']}")
 	private String divMRoleId;
-
+	
 	@Autowired
 	private TargetService targetService;
 	
@@ -106,7 +124,7 @@ public class ReportController {
 		searchBuilder.clear();
 		List<Object[]> data = childGrowthServiceImpl.getChildFalteredData(searchBuilder);
 		session.setAttribute("data", data);
-		
+		model.addAttribute("report", "block");
 		return "/report/child-growth";
 	}
 	
@@ -115,6 +133,7 @@ public class ReportController {
 		searchBuilder = paginationHelperUtil.setParams(request, session);
 		List<Object[]> data = childGrowthServiceImpl.getChildFalteredData(searchBuilder);
 		session.setAttribute("data", data);
+		model.addAttribute("report", "block");
 		return "/report/child-growth-ajax";
 	}
 	
@@ -126,7 +145,7 @@ public class ReportController {
 		searchBuilder.clear();
 		List<Object[]> data = childGrowthServiceImpl.getSummaryData(searchBuilder);
 		session.setAttribute("data", data);
-		
+		model.addAttribute("report", "block");
 		return "/report/sumamry";
 	}
 	
@@ -135,6 +154,7 @@ public class ReportController {
 		searchBuilder = paginationHelperUtil.setParams(request, session);
 		List<Object[]> data = childGrowthServiceImpl.getSummaryData(searchBuilder);
 		session.setAttribute("data", data);
+		model.addAttribute("report", "block");
 		return "/report/sumamry-ajax";
 	}
 	
@@ -201,12 +221,13 @@ public class ReportController {
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
 		session.setAttribute("startDate", startDate);
+		model.addAttribute("report", "block");
 		return "report/householdDataReport";
 	}
 	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_AGGREGATED_REPORT')")
 	@RequestMapping(value = "/individual-mhv-works.html", method = RequestMethod.GET)
-	public String getIndividualMHVData(HttpServletRequest request, HttpSession session,
+	public String getIndividualMHVData(Model model, HttpServletRequest request, HttpSession session,
 	                                   @RequestParam("mhvUsername") String mhvUsername) {
 		
 		User user = userService.findByKey(mhvUsername, "username", User.class);
@@ -215,6 +236,7 @@ public class ReportController {
 		request.setAttribute("facility", facility);
 		List<Object[]> householdList = databaseServiceImpl.getHouseholdListByMHV(mhvUsername, session);
 		session.setAttribute("householdList", householdList);
+		model.addAttribute("report", "block");
 		return "report/individual-mhv-works";
 	}
 	
@@ -225,6 +247,7 @@ public class ReportController {
 	                                     @RequestParam("mhvId") String mhvId) {
 		List<Object[]> householdMemberList = databaseServiceImpl.getMemberListByHousehold(householdBaseId, mhvId);
 		session.setAttribute("memberList", householdMemberList);
+		model.addAttribute("report", "block");
 		return "report/household-member-list";
 	}
 	
@@ -251,7 +274,7 @@ public class ReportController {
 		
 		//        paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "ec_family");
 		model.addAttribute("locale", locale);
-		
+		model.addAttribute("report", "block");
 		return "report/client-data-report";
 	}
 	
@@ -266,11 +289,13 @@ public class ReportController {
 		session.setAttribute("branchList", branchService.getBranchByUser(user.getId()));
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
+		model.addAttribute("report", "block");
 		return "report/aggregated-report";
 	}
 	
 	@RequestMapping(value = "/aggregated-report", method = RequestMethod.GET)
-	public String generateAggregatedReport(HttpServletRequest request,
+	public String generateAggregatedReport(Model model,
+	                                       HttpServletRequest request,
 	                                       HttpSession session,
 	                                       @RequestParam(value = "address_field", required = false, defaultValue = "division") String addressValue,
 	                                       @RequestParam(value = "searched_value", required = false) String searchedValue,
@@ -308,6 +333,7 @@ public class ReportController {
 			}
 		}
 		session.setAttribute("aggregatedReports", aggregatedReports);
+		model.addAttribute("report", "block");
 		return "report/aggregated-report-table";
 	}
 	
@@ -322,11 +348,13 @@ public class ReportController {
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
+		model.addAttribute("report", "block");
 		return "report/family-planning-report";
 	}
 	
 	@RequestMapping(value = "/family-planning-report", method = RequestMethod.GET)
-	public String generateFamilyPlanningReport(HttpServletRequest request,
+	public String generateFamilyPlanningReport(Model model,
+	                                           HttpServletRequest request,
 	                                           HttpSession session,
 	                                           @RequestParam(value = "address_field", required = false, defaultValue = "division") String addressValue,
 	                                           @RequestParam(value = "searched_value", required = false) String searchedValue,
@@ -360,6 +388,7 @@ public class ReportController {
 			}
 		}
 		session.setAttribute("elcoReports", elcoReports);
+		model.addAttribute("report", "block");
 		return "report/family-planning-report-table";
 	}
 	
@@ -374,11 +403,13 @@ public class ReportController {
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
+		model.addAttribute("report", "block");
 		return "report/pregnancy-report";
 	}
 	
 	@RequestMapping(value = "/pregnancy-report", method = RequestMethod.GET)
-	public String generatePregnancyReport(HttpServletRequest request,
+	public String generatePregnancyReport(Model model,
+	                                      HttpServletRequest request,
 	                                      HttpSession session,
 	                                      @RequestParam(value = "address_field", required = false, defaultValue = "division") String addressValue,
 	                                      @RequestParam(value = "searched_value", required = false) String searchedValue,
@@ -411,6 +442,7 @@ public class ReportController {
 			}
 		}
 		session.setAttribute("pregnancyReports", pregnancyReports);
+		model.addAttribute("report", "block");
 		return "report/pregnancy-report-table";
 	}
 	
@@ -425,11 +457,13 @@ public class ReportController {
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
+		model.addAttribute("report", "block");
 		return "report/child-nutrition-report";
 	}
 	
 	@RequestMapping(value = "/child-nutrition-report", method = RequestMethod.GET)
-	public String generateChildNutritionReport(HttpServletRequest request,
+	public String generateChildNutritionReport(Model model,
+	                                           HttpServletRequest request,
 	                                           HttpSession session,
 	                                           @RequestParam(value = "address_field", required = false, defaultValue = "division") String addressValue,
 	                                           @RequestParam(value = "searched_value", required = false) String searchedValue,
@@ -462,6 +496,7 @@ public class ReportController {
 			}
 		}
 		session.setAttribute("childNutritionReports", childNutritionReports);
+		model.addAttribute("report", "block");
 		return "report/child-nutrition-report-table";
 	}
 	
@@ -488,11 +523,12 @@ public class ReportController {
 		session.setAttribute("skList", skList);
 		model.addAttribute("startDate", startDate);
 		model.addAttribute("endDate", endDate);
+		model.addAttribute("report", "block");
 		return "report/covid-19-report";
 	}
 	
 	@RequestMapping(value = "/covid-19-report", method = RequestMethod.GET)
-	public String generateCOVID19Report(HttpServletRequest request, HttpSession session,
+	public String generateCOVID19Report(Model model, HttpServletRequest request, HttpSession session,
 	                                    @RequestParam(value = "startDate", required = false) String startDate,
 	                                    @RequestParam(value = "endDate", required = false) String endDate) {
 		String branchId = request.getParameterMap().containsKey("branch") ? request.getParameter("branch") : "";
@@ -519,6 +555,7 @@ public class ReportController {
 			}
 		}
 		session.setAttribute("covid19Reports", covid19Reports);
+		model.addAttribute("report", "block");
 		return "report/covid-19-report-table";
 	}
 	
@@ -600,12 +637,12 @@ public class ReportController {
 		session.setAttribute("startTime", startTime);
 		session.setAttribute("endTime", endTime);
 		session.setAttribute("formName", formName);
-		
+		model.addAttribute("report", "block");
 		return "report/client-data-report-table";
 	}
 	
 	@RequestMapping(value = "/forum-report.html", method = RequestMethod.GET)
-	public ModelAndView getForumReport(ModelAndView modelAndView, HttpSession session) {
+	public ModelAndView getForumReport(Model model, ModelAndView modelAndView, HttpSession session) {
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		modelAndView.setViewName("report/forum-report/report");
@@ -614,11 +651,13 @@ public class ReportController {
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		session.setAttribute("startDate", formatter.format(DateUtil.getPreviousDay(new Date())));
 		session.setAttribute("endDate", formatter.format(new Date()));
+		model.addAttribute("report", "block");
 		return modelAndView;
 	}
 	
 	@RequestMapping(value = "/forum-report", method = RequestMethod.GET)
-	public String getForumReportTable(HttpSession session,
+	public String getForumReportTable(Model model,
+	                                  HttpSession session,
 	                                  @RequestParam(value = "startDate", required = false) String startDate,
 	                                  @RequestParam(value = "endDate", required = false) String endDate,
 	                                  @RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
@@ -675,12 +714,13 @@ public class ReportController {
 		session.setAttribute("forumReport", forumReport);
 		session.setAttribute("forumIndividualReport", forumIndividualReport);
 		session.setAttribute("forumType", forumType);
+		model.addAttribute("report", "block");
 		return StringUtils.isBlank(forumType) ? "report/forum-report/report-table"
 		        : "report/forum-report/individual-report-table";
 	}
 	
 	@RequestMapping(value = "/aggregated-biometric-report.html", method = RequestMethod.GET)
-	public String getAggregatedBiometricReport(HttpSession session) {
+	public String getAggregatedBiometricReport(Model model, HttpSession session) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String startDate = formatter.format(DateUtil.getPreviousDay(new Date()));
 		String endDate = formatter.format(new Date());
@@ -689,12 +729,13 @@ public class ReportController {
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
-		
+		model.addAttribute("report", "block");
 		return "report/aggregated-biometric-report";
 	}
 	
 	@RequestMapping(value = "/aggregated-biometric-table", method = RequestMethod.GET)
-	public String getAggregatedBiometricTable(HttpSession session,
+	public String getAggregatedBiometricTable(Model model,
+	                                          HttpSession session,
 	                                          @RequestParam(value = "startDate", required = false) String startDate,
 	                                          @RequestParam(value = "endDate", required = false) String endDate,
 	                                          @RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
@@ -733,11 +774,12 @@ public class ReportController {
 		}
 		
 		session.setAttribute("aggregatedBiometricReport", report);
+		model.addAttribute("report", "block");
 		return "report/aggregated-biometric-table";
 	}
 	
 	@RequestMapping(value = "/individual-biometric-report.html", method = RequestMethod.GET)
-	public String getIndividualBiometricReport(HttpSession session) {
+	public String getIndividualBiometricReport(Model model, HttpSession session) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String startDate = formatter.format(DateUtil.getPreviousDay(new Date()));
 		String endDate = formatter.format(new Date());
@@ -746,11 +788,13 @@ public class ReportController {
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
+		model.addAttribute("report", "block");
 		return "report/individual-biometric-report";
 	}
 	
 	@RequestMapping(value = "/individual-biometric-table", method = RequestMethod.GET)
-	public String getIndividualBiometricTable(HttpSession session,
+	public String getIndividualBiometricTable(Model model,
+	                                          HttpSession session,
 	                                          @RequestParam(value = "address_field", required = false, defaultValue = "") String locationTag,
 	                                          @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
 	                                          @RequestParam(value = "startDate", required = false) String startDate,
@@ -781,64 +825,64 @@ public class ReportController {
 		}
 		
 		session.setAttribute("individualBiometricReport", report);
+		model.addAttribute("report", "block");
 		return "report/individual-biometric-table";
 	}
-
+	
 	@RequestMapping(value = "/pm-hr-report", method = RequestMethod.GET)
 	public String hrReportForPm(Model model, Locale locale) {
-
+		
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
 		model.addAttribute("branches", branches);
+		model.addAttribute("report", "block");
 		return "report/hr-report/by-dm-for-pm";
 	}
-
+	
 	@RequestMapping(value = "/dm-table", method = RequestMethod.POST)
 	public String hrReportDmTable(@RequestBody String dto, Model model, Locale locale) throws JSONException {
-
+		
 		JSONObject params = new JSONObject(dto);
-
+		
 		List<HrReportDTO> totalList = new ArrayList<>();
-
+		
 		totalList = targetService.getHRReportDMWise(params);
-
+		
 		model.addAttribute("reportDatas", totalList);
 		model.addAttribute("jsonReportData", getHrReportAsJson(totalList).toString());
+		model.addAttribute("report", "block");
 		return "report/hr-report/dm-table.js";
 	}
-
-
-
+	
 	@RequestMapping(value = "/dm-hr-report", method = RequestMethod.GET)
 	public String hrReportForDm(Model model, Locale locale) {
 		model.addAttribute("locale", locale);
-
+		
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		String userIds = loggedInUser.getId() + "";
 		model.addAttribute("userIds", userIds);
 		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
 		model.addAttribute("users", users);
-
-
+		model.addAttribute("report", "block");
 		return "report/hr-report/by-am-for-dm";
 	}
-
+	
 	@RequestMapping(value = "/am-table", method = RequestMethod.POST)
-	public String hrReportAmTable(@RequestBody  String dto, Model model, Locale locale) throws JSONException {
-
-        JSONObject params = new JSONObject(dto);
-
-        List<HrReportDTO> totalList = new ArrayList<>();
-
-        totalList = targetService.getHRReportAMWise(params);
-
-        model.addAttribute("reportDatas", totalList);
-        model.addAttribute("jsonReportData", getHrReportAsJson(totalList).toString());
+	public String hrReportAmTable(@RequestBody String dto, Model model, Locale locale) throws JSONException {
+		
+		JSONObject params = new JSONObject(dto);
+		
+		List<HrReportDTO> totalList = new ArrayList<>();
+		
+		totalList = targetService.getHRReportAMWise(params);
+		
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getHrReportAsJson(totalList).toString());
 		return "report/hr-report/am-table";
 	}
-
+	
 	@RequestMapping(value = "/am-hr-report", method = RequestMethod.GET)
 	public String hrReportForAm(Model model, Locale locale) {
 		model.addAttribute("locale", locale);
@@ -847,31 +891,31 @@ public class ReportController {
 		model.addAttribute("userIds", userIds);
 		return "report/hr-report/by-branch-for-am";
 	}
-
+	
 	@RequestMapping(value = "/branch-table", method = RequestMethod.POST)
 	public String hrReportBranchTable(@RequestBody String dto, Model model, Locale locale) throws JSONException {
-
-        JSONObject params = new JSONObject(dto);
-
-        List<HrReportDTO> totalList = new ArrayList<>();
-
-        totalList = targetService.getHRReportBranchWise(params);
-
-        model.addAttribute("reportDatas", totalList);
-        model.addAttribute("jsonReportData", getHrReportAsJson(totalList).toString());
-
+		
+		JSONObject params = new JSONObject(dto);
+		
+		List<HrReportDTO> totalList = new ArrayList<>();
+		
+		totalList = targetService.getHRReportBranchWise(params);
+		
+		model.addAttribute("reportDatas", totalList);
+		model.addAttribute("jsonReportData", getHrReportAsJson(totalList).toString());
+		
 		return "report/hr-report/branch-table";
 	}
-
-	private JsonArray getHrReportAsJson(List<HrReportDTO> targetList){
-
+	
+	private JsonArray getHrReportAsJson(List<HrReportDTO> targetList) {
+		
 		Gson gson = new Gson();
 		JsonElement element = gson.toJsonTree(targetList, new TypeToken<List<HrReportDTO>>() {}.getType());
 		System.out.println(element.getAsJsonArray());
 		return element.getAsJsonArray();
-
+		
 	}
-
+	
 	@RequestMapping(value = "/referral-report", method = RequestMethod.GET)
 	public String referralReport(HttpSession session) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -884,29 +928,29 @@ public class ReportController {
 		session.setAttribute("endDate", endDate);
 		return "/report/referral";
 	}
-
+	
 	@RequestMapping(value = "/referral-report-table", method = RequestMethod.GET)
 	public String referralReportTable(HttpSession session,
-									  @RequestParam(value = "startDate", required = false) String startDate,
-									  @RequestParam(value = "endDate", required = false) String endDate,
-									  @RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
-									  @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
-									  @RequestParam(value = "branch", required = false, defaultValue = "") String branchId,
-									  @RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
+	                                  @RequestParam(value = "startDate", required = false) String startDate,
+	                                  @RequestParam(value = "endDate", required = false) String endDate,
+	                                  @RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
+	                                  @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+	                                  @RequestParam(value = "branch", required = false, defaultValue = "") String branchId,
+	                                  @RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		List<ReferralReportDTO> report;
-
+		
 		Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
 		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
 		String parentLocationName = parentLocation.getName().split(":")[0];
-
-		report = targetService.getReferralReport(startDate, endDate, parentLocationTag.replaceAll(" ", "_"), searchedValueId,
-				parentLocationName, locationTag);
-
+		
+		report = targetService.getReferralReport(startDate, endDate, parentLocationTag.replaceAll(" ", "_"),
+		    searchedValueId, parentLocationName, locationTag);
+		
 		session.setAttribute("referralReport", report);
 		return "report/referral-table";
 	}
-
+	
 	@RequestMapping(value = "/referral-followup-report", method = RequestMethod.GET)
 	public String referralFollowupReport(HttpSession session) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -919,34 +963,30 @@ public class ReportController {
 		session.setAttribute("endDate", endDate);
 		return "/report/referral-followup-report";
 	}
-
-
-
+	
 	@RequestMapping(value = "/referral-followup-report-table", method = RequestMethod.GET)
 	public String referralFollowupReportTable(HttpSession session,
-									  @RequestParam(value = "startDate", required = false) String startDate,
-									  @RequestParam(value = "endDate", required = false) String endDate,
-									  @RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
-									  @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
-									  @RequestParam(value = "branch", required = false, defaultValue = "") String branchId,
-									  @RequestParam(value = "referralReason", required = false, defaultValue = "all") String referralReason,
-									  @RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
+	                                          @RequestParam(value = "startDate", required = false) String startDate,
+	                                          @RequestParam(value = "endDate", required = false) String endDate,
+	                                          @RequestParam(value = "address_field", required = false, defaultValue = "division") String locationTag,
+	                                          @RequestParam(value = "searched_value_id", required = false, defaultValue = "9265") Integer searchedValueId,
+	                                          @RequestParam(value = "branch", required = false, defaultValue = "") String branchId,
+	                                          @RequestParam(value = "referralReason", required = false, defaultValue = "all") String referralReason,
+	                                          @RequestParam(value = "locationValue", required = false, defaultValue = "") String locationValue) {
 		List<ReferralFollowupReportDTO> report;
 		Gson gson = new Gson();
-
+		
 		Location parentLocation = locationService.findById(searchedValueId, "id", Location.class);
 		String parentLocationTag = parentLocation.getLocationTag().getName().toLowerCase();
 		String parentLocationName = parentLocation.getName().split(":")[0];
-
-		report = targetService.getReferralFollowupReport(startDate, endDate, parentLocationTag.replaceAll(" ", "_"), searchedValueId,
-				parentLocationName, locationTag, referralReason);
-
+		
+		report = targetService.getReferralFollowupReport(startDate, endDate, parentLocationTag.replaceAll(" ", "_"),
+		    searchedValueId, parentLocationName, locationTag, referralReason);
+		
 		JsonElement element = gson.toJsonTree(report, new TypeToken<List<ReferralFollowupReportDTO>>() {}.getType());
 		session.setAttribute("referralFollowupReport", report);
 		session.setAttribute("jsonReportData", element.getAsJsonArray());
 		return "report/referral-followup-table";
 	}
-
-
 	
 }

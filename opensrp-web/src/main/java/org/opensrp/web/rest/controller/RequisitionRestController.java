@@ -80,10 +80,12 @@ public class RequisitionRestController {
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
 		
-		
-		Long requisitionCount = requisitionService.getCountOfRequisiton(branchId,startDate,endDate,divisionId,districtId,upazilla,requisitor);
-		List<RequisitionQueryDto> requisitionList = requisitionService.getRequisitonList(branchId,startDate,endDate,divisionId,districtId,upazilla,requisitor,start,length);
-		JSONObject response = requisitionService.getRequisitionDataOfDataTable(draw, requisitionCount, requisitionList);
+		Long requisitionCount = requisitionService.getCountOfRequisiton(branchId, startDate, endDate, divisionId,
+		    districtId, upazilla, requisitor);
+		List<RequisitionQueryDto> requisitionList = requisitionService.getRequisitonList(branchId, startDate, endDate,
+		    divisionId, districtId, upazilla, requisitor, start, length);
+		JSONObject response = requisitionService.getRequisitionDataOfDataTable(draw, requisitionCount, requisitionList,
+		    start);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 }

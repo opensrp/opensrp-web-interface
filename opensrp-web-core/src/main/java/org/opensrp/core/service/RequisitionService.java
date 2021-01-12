@@ -105,16 +105,17 @@ public class RequisitionService extends CommonService {
 		return result;
 	}
 	
-	public JSONObject getRequisitionDataOfDataTable(Integer draw, Long requisitionCount, List<RequisitionQueryDto> dtos)
-	    throws JSONException {
+	public JSONObject getRequisitionDataOfDataTable(Integer draw, Long requisitionCount, List<RequisitionQueryDto> dtos,
+	                                                int start) throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
 		response.put("recordsTotal", requisitionCount);
 		response.put("recordsFiltered", requisitionCount);
 		JSONArray array = new JSONArray();
+		int i = 1;
 		for (RequisitionQueryDto dto : dtos) {
 			JSONArray requisition = new JSONArray();
-			requisition.put(dto.getId());
+			requisition.put(start + i);
 			requisition.put(dto.getRequisition_date());
 			requisition.put(dto.getRequisition_id());
 			requisition.put(dto.getBranch_name() + "(" + dto.getBranch_code() + ")");
@@ -128,6 +129,7 @@ public class RequisitionService extends CommonService {
 			        + "\")'><strong>View details</strong></a> </div>";
 			requisition.put(view);
 			array.put(requisition);
+			i++;
 		}
 		response.put("data", array);
 		return response;

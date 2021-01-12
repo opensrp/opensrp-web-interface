@@ -95,11 +95,11 @@
      						
 						</div>
 						
-						<div class="table-scrollable">
+						
 						
 						<table class="table table-striped table-bordered " id="targetTable">
 							<thead>
-								<tr>
+								<tr><th>SI</th>
 								 <th>Branch name</th>
 									<th>Branch code</th>
 									<th>Upazila</th>
@@ -108,7 +108,7 @@
 							</thead>
 							
 						</table>
-						</div>
+						
 						
 						
 					</div>
@@ -126,11 +126,13 @@
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script src="<c:url value='/resources/assets/global/js/select2-multicheckbox.js'/>"></script>
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
+
 <script>
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
-
+		window.totalRecords = 0;
 
 		$('#branchList').select2MultiCheckboxes({
 			placeholder: "Select branch",
@@ -224,23 +226,25 @@ jQuery(function() {
             bFilter: false,
             serverSide: true,
             processing: true,
-            columnDefs: [
-                { targets: [0, 1, 2, 3], orderable: false },
-                { width: "10%", targets: 0 },
-                { width: "5%", targets: 1 },
-                { width: "10%", targets: 2 },
-                { width: "5%", targets: 3 }
-                
-            ],
+            scrollY:        "300px",
+            scrollX:        true,
+            scrollCollapse: true,
+            "ordering": false,
+            fixedColumns:   {
+                leftColumns: 2/* ,
+             rightColumns: 1 */
+            },
             ajax: {
                 url: "${get_url}",
                 data: function(data){                	
                     data.branchId = '';
                     data.locationId=0;                    
                     data.roleName='SK';
+                    data.totalRecords = totalRecords;
                     
                 },
                 dataSrc: function(json){
+                	totalRecords = json.recordsTotal;
                     if(json.data){
                         return json.data;
                     }
@@ -276,13 +280,14 @@ function filter(){
          bFilter: false,
          serverSide: true,
          processing: true,
-         columnDefs: [
-             { targets: [0, 1, 2, 3], orderable: false },
-             { width: "20%", targets: 0 },
-             { width: "5%", targets: 1 },
-             { width: "10%", targets: 2 },
-             { width: "5%", targets: 3 }
-         ],
+         scrollY:        "300px",
+         scrollX:        true,
+         scrollCollapse: true,
+         "ordering": false,
+         fixedColumns:   {
+             leftColumns: 2/* ,
+          rightColumns: 1 */
+         },
          ajax: {
              url: "${get_url}",
              data: function(data){
@@ -295,8 +300,10 @@ function filter(){
              	 data.branchId = branchIds;
                  data.locationId=locationId;                    
                  data.roleName=$("#roleList option:selected").val();
+                 data.totalRecords = totalRecords;
              },
              dataSrc: function(json){
+            	 totalRecords = json.recordsTotal;
                  if(json.data){
                      return json.data;
                  }

@@ -55,7 +55,9 @@ public class InventoryDmController {
 		List<ProductDTO> productList = productService.getAllProductListDetails(ProductType.PRODUCT.name());
 		model.addAttribute("productList", productList);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryDm/products-list";
+		
 	}
 	
 	@RequestMapping(value = "inventorydm/add-product.html", method = RequestMethod.GET)
@@ -63,6 +65,7 @@ public class InventoryDmController {
 		List<Role> roles = productService.getRoleForProduct();
 		model.addAttribute("roles", roles);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryDm/add-product";
 	}
 	
@@ -83,6 +86,7 @@ public class InventoryDmController {
 		model.addAttribute("roles", roles);
 		model.addAttribute("product", product);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryDm/edit-product";
 	}
 	
@@ -91,6 +95,7 @@ public class InventoryDmController {
 		List<ProductDTO> productList = productService.getAllProductListDetails(ProductType.TARGET.name());
 		model.addAttribute("productList", productList);
 		model.addAttribute("locale", locale);
+		model.addAttribute("target", "block");
 		return "inventoryDm/target-list";
 	}
 	
@@ -99,6 +104,7 @@ public class InventoryDmController {
 		List<Role> roles = productService.getRoleForProduct();
 		model.addAttribute("roles", roles);
 		model.addAttribute("locale", locale);
+		model.addAttribute("target", "block");
 		return "inventoryDm/add-target";
 	}
 	
@@ -119,6 +125,7 @@ public class InventoryDmController {
 		model.addAttribute("roles", roles);
 		model.addAttribute("product", product);
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryDm/edit-target";
 	}
 	
@@ -127,6 +134,7 @@ public class InventoryDmController {
 		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
 		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryDm/requisition-list";
 	}
 	
@@ -135,6 +143,7 @@ public class InventoryDmController {
 		//List<UserDTO> userListByBranch= requisitionService.getUserListByBranch(id);
 		List<InventoryDTO> userListByBranch = stockService.getUserListByBranchWithRole(id, Roles.AM.getId());
 		model.addAttribute("userList", userListByBranch);
+		model.addAttribute("show", "block");
 		return "inventoryDm/user-list";
 	}
 	
@@ -142,12 +151,14 @@ public class InventoryDmController {
 	public String skByBranch(Model model, @PathVariable("id") int id) {
 		List<InventoryDTO> skListByBranch = stockService.getUserListByBranchWithRole(id, Roles.SK.getId());
 		model.addAttribute("skList", skListByBranch);
+		model.addAttribute("show", "block");
 		return "inventoryDm/sk-list";
 	}
 	
 	@RequestMapping(value = "inventorydm/stock-report.html", method = RequestMethod.GET)
 	public String stockReportForDm(Model model, Locale locale) {
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryDm/stock-reports";
 	}
 	
@@ -167,7 +178,7 @@ public class InventoryDmController {
 		model.addAttribute("roleName", roleName);
 		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
 		model.addAttribute("manager", loggedInUser.getId());
-		
+		model.addAttribute("show", "block");
 		return "inventoryDm/ss-sales-report";
 	}
 	
@@ -180,6 +191,7 @@ public class InventoryDmController {
 		model.addAttribute("type", "'SELL'");
 		model.addAttribute("user", stockService.getUserAndBrachByuserId(userId));
 		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
 		return "inventoryDm/user-wise-stock-pass-sell";
 	}
 	

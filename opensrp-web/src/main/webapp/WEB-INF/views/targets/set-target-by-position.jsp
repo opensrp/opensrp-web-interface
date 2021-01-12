@@ -23,6 +23,8 @@
 <c:url var="get_target_url" value="/target/get-target-info" />
 <c:url var="cancelUrl" value="/target/target-by-position-list.html" />
 
+<c:url var="prev_target_url" value="/target/prev-target-info" />
+
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 	
@@ -31,11 +33,11 @@
 		<div class="page-content">
 		<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<a href="<c:url value="/"/>">Home</a>
 					<i class="fa fa-arrow-right"></i>
 				</li>
 				<li>
-					<a class="btn btn-primary" href="${cancelUrl }">Target by position list</a>
+					<a  href="${cancelUrl }">Back</a>
 					
 				</li>
 			
@@ -80,9 +82,9 @@
 									<span  class="text-danger validationMessage"></span>
 								</div>
 								<div class="col-lg-2" style="padding-top: 20px"><span id="targetValidationMsg"></span></div>
-								<!-- <div class="col-lg-5  form-group text-right">
-									<button type="submit" onclick="getTargetInfo()" class="btn btn-primary" value="confirm">Same as previous month</button>
-								</div> -->
+								<div class="col-lg-5  form-group text-right">
+									<button type="submit" onclick="getTargetInfo()" class="btn btn-primary" value="confirm">Same as previous</button>
+								</div> 
 							</div>
 							
 						</div>
@@ -176,30 +178,35 @@ function getTargetInfo(){
 	}
 	$(".validationMessage").html("");
 	var d = new Date(date);
-	var month = (d.getMonth() + 1)-1;
+	var month = timePeriod == "monthly" ? (d.getMonth() + 1)-1 : (d.getMonth() + 1);	
 	var year = d.getFullYear();
-	var day = timePeriod == 'monthly' ? 0 : d.getDate();
-/* 	var monthYearString=$('input#startYear').val();
-	var splitingString = monthYearString.split("-");
-	var month = parseInt(splitingString[0])-1;
-	var year = parseInt(splitingString[1]); */
+	var day = timePeriod == "monthly" ? 0 : d.getDate()-1;
+	let token = $("meta[name='_csrf']").attr("content");
+	let header = $("meta[name='_csrf_header']").attr("content");
 	if(month==0){
 		console.log(month);
 		month = 12;
 		year = year-1;
 	}
+	var formData = {
+	        'role_id': "${role}",
+	        'branch_ids':'${setTargetTo}',
+	        "month":month,
+			"year":year,
+			"day": day	       
+	    };
+	    
 	
-	var url = '${get_target_url}';
-	
-    url = url+"?locationOrBranchOrUserId="+'${setTargetTo}'+"&role="+'${role}'+"&typeName="+'${type}'+"&locationTag="+'${locationTag}'+"&month="+month+"&year="+year+"&day="+day;
-
 	$.ajax({
-        contentType : "application/json",
-        type: "GET",
-        url: url,        
-        dataType : 'html',
-        timeout : 300000,
-        beforeSend: function(xhr) {            
+		 type : "POST",
+         contentType : "application/json",
+         url : "${prev_target_url}",
+         dataType : 'html',
+         timeout : 300000,
+         data:  JSON.stringify(formData),
+         timeout : 300000,
+        beforeSend: function(xhr) {  
+        	  xhr.setRequestHeader(header, token);
             $("#loading").show();
         },
         success : function(data) {
@@ -320,7 +327,7 @@ jQuery(function() {
 		changeYear: true,
 		showButtonPanel: true,
 		dateFormat: 'MM yy',
-		minDate: new Date,
+		//minDate: new Date,
 		onClose: function(dateText, inst) {
 			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
 			$(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));

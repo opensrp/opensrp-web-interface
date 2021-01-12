@@ -61,6 +61,7 @@ public class PeopleController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		model.addAttribute("isHousehold", true);
+		model.addAttribute("people", "block");
 		return "people/households";
 	}
 	
@@ -72,6 +73,7 @@ public class PeopleController {
 		List<ClientListDTO> data = peopleService.getHouseholdData(jo);
 		
 		model.addAttribute("households", data);
+		model.addAttribute("people", "block");
 		return "people/household-list-table";
 	}
 	
@@ -101,6 +103,7 @@ public class PeopleController {
 		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "HH"));
 		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName("household"));
 		model.addAttribute("members", data);
+		model.addAttribute("people", "block");
 		return "people/household_details";
 	}
 	
@@ -129,7 +132,7 @@ public class PeopleController {
 		model.addAttribute("rawData", details);
 		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "Member"));
 		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName("member"));
-		
+		model.addAttribute("people", "block");
 		return "people/member_details";
 	}
 	
@@ -139,6 +142,7 @@ public class PeopleController {
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
+		model.addAttribute("people", "block");
 		return "people/members";
 	}
 	
@@ -150,6 +154,7 @@ public class PeopleController {
 		
 		List<ClientListDTO> data = peopleService.getMemberList(jo, jo.getInt("startAge"), jo.getInt("endAge"));
 		model.addAttribute("members", data);
+		model.addAttribute("people", "block");
 		return "people/member-list-table";
 	}
 	
@@ -169,7 +174,7 @@ public class PeopleController {
 		model.addAttribute("infos", service);
 		
 		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName(formName));
-		
+		model.addAttribute("people", "block");
 		return "dynamic_content";
 	}
 }

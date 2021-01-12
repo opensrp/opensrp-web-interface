@@ -81,7 +81,9 @@
 						<table class="table table-striped table-bordered " id="passStockInventoryList">
 							<thead>
 								<tr>
+									<th> SI </th>
 									<th>Name</th>
+									<th>Username</th>
 									<th>Designation</th>
 									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
 									<th><spring:message code="lbl.actionRequisition"></spring:message></th>
@@ -110,13 +112,14 @@
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
-
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
 <script>
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
 		//$('#passStockInventoryList').DataTable();
+		window.totalRecords = 0;
 });
 </script>
 
@@ -128,13 +131,14 @@ jQuery(document).ready(function() {
             bFilter: false,
             serverSide: true,
             processing: true,
-            columnDefs: [
-                { targets: [0, 1, 2, 3], orderable: false },
-                { width: "20%", targets: 0 },
-                { width: "20%", targets: 1 },
-                { width: "20%", targets: 2 },
-                { width: "20%", targets: 3 }
-            ],
+            scrollY:        "300px",
+            scrollX:        true,
+            scrollCollapse: true,
+            fixedColumns:   {
+                leftColumns: 2/* ,
+             rightColumns: 1 */
+            },
+            
             ajax: {
             	timeout : 300000,
                 url: "${pass_stock_list}",
@@ -142,9 +146,12 @@ jQuery(document).ready(function() {
                     data.branchId = ${id} ;
                     data.roleId =  0;
                     data.name='';
+                    data.totalRecords = totalRecords;
                     
                 },
                 dataSrc: function(json){
+                	console.log(json);
+                	totalRecords = json.recordsTotal;
                     if(json.data){
                         return json.data;
                     }
@@ -170,13 +177,14 @@ function filter(){
          bFilter: false,
          serverSide: true,
          processing: true,
-         columnDefs: [
-             { targets: [0, 1, 2, 3], orderable: false },
-             { width: "20%", targets: 0 },
-             { width: "20%", targets: 1 },
-             { width: "20%", targets: 2 },
-             { width: "20%", targets: 3 }
-         ],
+         scrollY:        "300px",
+         scrollX:        true,
+         scrollCollapse: true,
+         fixedColumns:   {
+             leftColumns: 2/* ,
+          rightColumns: 1 */
+         },
+        
          ajax: {
         	 timeout : 300000,
              url: "${pass_stock_list}",
@@ -185,8 +193,10 @@ function filter(){
 	     	    data.branchId = ${id} ;
 	            data.roleId =  roleId;
 	            data.name=$('#userName').val();
+	            data.totalRecords = totalRecords;
              },
              dataSrc: function(json){
+            	 totalRecords = json.recordsTotal;
                  if(json.data){
                      return json.data;
                  }

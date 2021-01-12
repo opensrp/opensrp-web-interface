@@ -37,13 +37,29 @@
 <jsp:include page="/WEB-INF/views/dataTablejs.jsp" />
 
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
 
 <script>
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
    //TableAdvanced.init();
-		$('#sample_1').DataTable();
+		var table =$('#sample_1').DataTable({
+			  "pageLength": 10,
+			  scrollY:        "300px",
+              scrollX:        true,
+              scrollCollapse: true,
+              fixedColumns:   {
+                  leftColumns: 2/* ,
+               rightColumns: 1 */
+              }
+		});
+		
+		table.on( 'order.dt search.dt', function () {
+	        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+	            cell.innerHTML = i+1;
+	        } );
+	    } ).draw();
 });
 </script>
 

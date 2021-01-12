@@ -116,7 +116,7 @@ public class StockRestController {
 		int stockInListCount = stockService.getStockInListCount(branchId, startDate, endDate, invoiceNumber, stockInId,
 		    division, district, upazila, userId);
 		
-		JSONObject response = stockService.getStockInListDataOfDataTable(draw, stockInListCount, stockInList);
+		JSONObject response = stockService.getStockInListDataOfDataTable(draw, stockInListCount, stockInList, start);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	
@@ -142,11 +142,15 @@ public class StockRestController {
 		}
 		List<InventoryDTO> stockPassUserList = stockService.getPassStockUserList(branchId, name, roleId, length, start,
 		    orderColumn, orderDirection);
-		
-		int stockPassUserListCount = stockService.getPassStockUserListCount(branchId, roleId, name);
-		
+		int totalRecords = Integer.parseInt(request.getParameter("totalRecords"));
+		int stockPassUserListCount = 0;
+		if (start == 0) {
+			stockPassUserListCount = stockService.getPassStockUserListCount(branchId, roleId, name);
+		} else {
+			stockPassUserListCount = totalRecords;
+		}
 		JSONObject response = stockService.getPassStockUserListDataOfDataTable(draw, stockPassUserListCount,
-		    stockPassUserList, branchId);
+		    stockPassUserList, branchId, start);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	
@@ -170,12 +174,19 @@ public class StockRestController {
 		int year = Integer.parseInt(request.getParameter("year"));
 		int month = Integer.parseInt(request.getParameter("month"));
 		int managerId = Integer.parseInt(request.getParameter("manager"));
+		int totalRecords = Integer.parseInt(request.getParameter("totalRecords"));
 		
 		List<InventoryDTO> stockInList = stockService.getsellToSSList(managerId, branchId, skId, division, district,
 		    upazila, year, month, length, start, orderColumn, orderDirection);
-		
-		int stockInListCount = stockService.getsellToSSListCount(managerId, branchId, skId, division, district, upazila,
-		    year, month);
+		int stockInListCount = 0;
+		if (start == 0) {
+			
+			stockInListCount = stockService.getsellToSSListCount(managerId, branchId, skId, division, district, upazila,
+			    year, month);
+		} else {
+			
+			stockInListCount = totalRecords;
+		}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User) auth.getPrincipal();
 		
@@ -186,7 +197,7 @@ public class StockRestController {
 			roleId = role.getId();
 		}
 		JSONObject response = stockService.getSellToSSListDataOfDataTable(draw, stockInListCount, stockInList, roleId,
-		    branchId);
+		    branchId, start);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
 	
