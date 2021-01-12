@@ -23,11 +23,11 @@
 		<div class="page-content">
 		<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<a  href="<c:url value="/"/>">Home</a>
 					<i class="fa fa-arrow-right"></i>
 				</li>
 				<li>
-					<a class="btn btn-primary" href="${back_url }">Training List</a>
+					<a  href="${back_url }">back</a>
 					
 				</li>
 			

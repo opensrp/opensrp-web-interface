@@ -211,7 +211,7 @@ function saveStockData() {
 	$("#validationMessage").html("");
 	var stockListArray = createStockArray();
 	var challanNumber = $("#challan").val();
-	if ($('#challan').is(':empty')) { 
+	if (challanNumber =='') { 
 		 $("#challanNo").html("<strong>* Required</strong>");
 		 return false;
 	}
