@@ -44,13 +44,15 @@
     <thead>
 
     <tr>
+        <th rowspan="2">PA </th>
         <th rowspan="2">Branch name</th>
-        <th rowspan="2">SK </th>
         <th colspan="2">Adult Forum</th>
     </tr>
     <tr>
-        <th>Achievement/Target (#)</th>
-        <th>Avg articipant/Target avg participant</th>
+        <th>Achievement</th>
+        <th>Target</th>
+        <th>Avg participant</th>
+        <th>Target avg participant</th>
     </tr>
 
     </thead>
@@ -59,13 +61,23 @@
 
     <c:forEach items="${reportDatas}" var="reportData">
         <tr>
-            <td> ${reportData.getBranchName() }</td>
             <td> ${reportData.getFullName() }</td>
-            <td> ${reportData.getAdultAchv() } / ${reportData.getAdultTarget()} </td>
-            <td> ${reportData.getAdultAvgParticipantAchv() } / ${reportData.getAdultAvgParticipantTarget()} </td>
+            <td> ${reportData.getBranchName() }</td>
+            <td> ${reportData.getAdultAchv() } </td>
+            <td> ${reportData.getAdultTarget()} </td>
+            <td> ${reportData.getAdultAvgParticipantAchv() }</td>
+            <td> ${reportData.getAdultAvgParticipantTarget()} </td>
         </tr>
     </c:forEach>
     </tbody>
+    <tfoot>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tfoot>
 </table>
 <script>
 
@@ -79,17 +91,10 @@
         var totalTarget = 0, totalAchv = 0, result = 0,allProviderTarget = 0, allProviderAchv = 0;
         for(var i=0; i < reportData.length; i++) {
             managers.push(reportData[i].fullName);
-            totalTarget = reportData[i].adolescentTarget
-                + reportData[i].adultTarget
-                + reportData[i].iycfTarget
-                + reportData[i].ncdTarget
-                + reportData[i].womenTarget;
+            totalTarget = reportData[i].adultTarget
 
-            totalAchv = reportData[i].adolescentAchv
-                + reportData[i].adultAchv
-                + reportData[i].iycfAchv
-                + reportData[i].ncdAchv
-                + reportData[i].womenAchv;
+
+            totalAchv = reportData[i].adultAchv;
 
             result = totalTarget === 0 ? 0 : (totalAchv * 100) / totalTarget;
             console.log("result: ", result, "  totalTarget: ", totalTarget,  " totalAchv: ", totalAchv);
@@ -163,6 +168,42 @@
         console.log("percentages", percentages, " managers", managers);
         reloadChart(managers, percentages);
     }
+
+    $('#reportDataTable').DataTable({
+        scrollY:        "300px",
+        scrollX:        true,
+        scrollCollapse: true,
+        fixedColumns:   {
+            leftColumns: 1
+        },
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data, total=0;
+
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\%,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            // Total over all pages
+            $('.DTFC_LeftFootWrapper').css('margin-top', '-5px');
+            $(api.column(0).footer()).html('Total');
+            console.log("i am getting called in service");
+            for(var i=1; i<6; i++) {
+                total = api
+                    .column(i)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+
+                $(api.column(i).footer()).html(total);
+            }
+        }
+    });
 
 </script>
 </body>

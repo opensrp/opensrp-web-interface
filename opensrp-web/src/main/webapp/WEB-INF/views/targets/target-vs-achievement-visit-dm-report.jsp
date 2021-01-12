@@ -241,15 +241,6 @@ function getReportData(url,title){
         	}else{
         		$("#reportTile").html("Location Wise report");
         	}
-            
-        	$('#reportDataTable').DataTable({ 
-             	scrollY:        "300px",
-                 scrollX:        true,
-                 scrollCollapse: true,                
-             	 fixedColumns:   {
-                      leftColumns: 1
-                  }
-             });
         },
         error : function(e) {
             $('#loading').hide();
@@ -323,10 +314,17 @@ function getParamsData(){
 	
 	var from = getFromTime();
 	var to = getToTime();
-	
-	
-	var fromDate = new Date(from);
-	var toDate = new Date(to);
+
+
+	var fromDate, toDate;
+	if(timePeriod == 'monthly') {
+		var month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		fromDate = new Date(from.split(' ')[1], month.indexOf(from.split(' ')[0]));
+		toDate = new Date(to.split(' ')[1], month.indexOf(to.split(' ')[0]));
+	} else {
+		fromDate = new Date(from);
+		toDate = new Date(to);
+	}
 	var startDate = timePeriod == 'monthly' ?$.datepicker.formatDate('yy-mm-dd', new Date(fromDate.getFullYear(), fromDate.getMonth(), 1)):$.datepicker.formatDate('yy-mm-dd', fromDate);
 	var endDate =  timePeriod == 'monthly' ?$.datepicker.formatDate('yy-mm-dd', new Date(toDate.getFullYear(), toDate.getMonth() + 1, 0)):$.datepicker.formatDate('yy-mm-dd', toDate);
 	

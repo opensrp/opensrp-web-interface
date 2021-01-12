@@ -254,6 +254,15 @@
 		console.log("percentages", percentages, " managers", managers);
 		reloadChart(managers, percentages);
 	}
+
+	$('#reportDataTable').DataTable({
+		scrollY:        "300px",
+		scrollX:        true,
+		scrollCollapse: true,
+		fixedColumns:   {
+			leftColumns: 1
+		}
+	});
 </script>
 
 </body>

@@ -55,20 +55,30 @@
                 <th colspan="2">Adult Forum</th>
             </tr>
             <tr>
-                <th>Achievement/Target (#)</th>
-                <th>Avg participant/Target avg participant</th>
+                <th>Achievement</th>
+                <th>Target</th>
+                <th>Avg participant</th>
+                <th>Target avg participant</th>
 
-                <th>Achievement/Target (#)</th>
-                <th>Avg participant/Target avg participant</th>
+                <th>Achievement</th>
+                <th> Target  </th>
+                <th>Avg participant</th>
+                <th>Target avg participant</th>
 
-                <th>Achievement/Target (#)</th>
-                <th>Avg participant/Target avg participant</th>
+                <th>Achievement</th>
+                <th>Target </th>
+                <th>Avg participant</th>
+                <th>Target avg participant</th>
 
-                <th>Achievement/Target (#)</th>
-                <th>Avg participant/Target avg participant</th>
+                <th>Achievement</th>
+                <th>Target</th>
+                <th>Avg participant</th>
+                <th>Target avg participant</th>
 
-                <th>Achievement/Target (#)</th>
-                <th>Avg participant/Target avg participant</th>
+                <th>Achievement</th>
+                <th>Target </th>
+                <th>Avg participant</th>
+                <th>Target avg participant</th>
             </tr>
         </c:when>
         <c:otherwise>
@@ -86,16 +96,26 @@
                     <td> ${reportData.getFullName() }</td>
                     <td> ${reportData.getNumberOfBranch() }</td>
                     <td> ${reportData.getNumberOfSK() }</td>
-                    <td> ${reportData.getAdolescentAchv() } / ${reportData.getAdolescentTarget()} </td>
-                    <td> ${reportData.getAdolescnetAvgParticipantAchv() } / ${reportData.getAdolescnetAvgParticipantTarget()} </td>
-                    <td> ${reportData.getNcdAchv() } / ${reportData.getNcdTarget()} </td>
-                    <td> ${reportData.getNcdAvgParticipantAchv() } / ${reportData.getNcdAvgParticipantTarget()} </td>
-                    <td> ${reportData.getIycfAchv() } / ${reportData.getIycfTarget()} </td>
-                    <td> ${reportData.getIycfAvgParticipantAchv() } / ${reportData.getIycfAvgParticipantTarget()} </td>
-                    <td> ${reportData.getWomenAchv() } / ${reportData.getWomenTarget()} </td>
-                    <td> ${reportData.getWomenAvgParticipantAchv() } / ${reportData.getWomenAvgParticipantTarget()} </td>
-                    <td> ${reportData.getAdultAchv() } / ${reportData.getAdultTarget()} </td>
-                    <td> ${reportData.getAdultAvgParticipantAchv() } / ${reportData.getAdultAvgParticipantTarget()} </td>
+                    <td> ${reportData.getAdolescentAchv() } </td>
+                    <td> ${reportData.getAdolescentTarget()}  </td>
+                    <td> ${reportData.getAdolescnetAvgParticipantAchv() }  </td>
+                    <td> ${reportData.getAdolescnetAvgParticipantTarget()} </td>
+                    <td> ${reportData.getNcdAchv() }</td>
+                    <td> ${reportData.getNcdTarget()}</td>
+                    <td> ${reportData.getNcdAvgParticipantAchv() } </td>
+                    <td> ${reportData.getNcdAvgParticipantTarget()}</td>
+                    <td> ${reportData.getIycfAchv() }</td>
+                    <td> ${reportData.getIycfTarget()}</td>
+                    <td> ${reportData.getIycfAvgParticipantAchv() } </td>
+                    <td> ${reportData.getIycfAvgParticipantTarget()} </td>
+                    <td> ${reportData.getWomenAchv() }  </td>
+                    <td> ${reportData.getWomenTarget()} </td>
+                    <td> ${reportData.getWomenAvgParticipantAchv() } </td>
+                    <td> ${reportData.getWomenAvgParticipantTarget()} </td>
+                    <td> ${reportData.getAdultAchv() } </td>
+                    <td> ${reportData.getAdultTarget()} </td>
+                    <td> ${reportData.getAdultAvgParticipantAchv() } </td>
+                    <td> ${reportData.getAdultAvgParticipantTarget()} </td>
 
                 </c:when>
 
@@ -107,6 +127,32 @@
         </tr>
     </c:forEach>
     </tbody>
+    <tfoot>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+
+    </tfoot>
 </table>
 
 <script>
@@ -207,6 +253,42 @@
         console.log("percentages", percentages, " managers", managers);
         reloadChart(managers, percentages);
     }
+
+    $('#reportDataTable').DataTable({
+        scrollY:        "300px",
+        scrollX:        true,
+        scrollCollapse: true,
+        fixedColumns:   {
+            leftColumns: 1
+        },
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data, total=0;
+
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\%,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            // Total over all pages
+            $('.DTFC_LeftFootWrapper').css('margin-top', '-5px');
+            $(api.column(0).footer()).html('Total');
+            console.log("i am getting called in service");
+            for(var i=1; i<23; i++) {
+                total = api
+                    .column(i)
+                    .data()
+                    .reduce(function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+
+                $(api.column(i).footer()).html(total);
+            }
+        }
+    });
 
 </script>
 

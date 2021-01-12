@@ -167,7 +167,7 @@ jQuery(function() {
     	
     	
     	stockList = $('#StockSellHistory').DataTable({
-            bFilter: false,
+            bFilter: true,
             serverSide: true,
             processing: true,
             ordering:false,
