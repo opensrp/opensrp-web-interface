@@ -330,9 +330,16 @@ function getParamsData(){
 	
 	var from = getFromTime();
 	var to = getToTime();
-	var month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August','September','October', 'November', 'December'];
-	var fromDate = new Date( from.split(' ')[1], month.indexOf(from.split(' ')[0]));
-	var toDate = new Date(to.split(' ')[1], month.indexOf(to.split(' ')[0]));
+
+	var fromDate, toDate;
+	if(timePeriod == 'monthly') {
+		var month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		fromDate = new Date(from.split(' ')[1], month.indexOf(from.split(' ')[0]));
+		toDate = new Date(to.split(' ')[1], month.indexOf(to.split(' ')[0]));
+	} else {
+		fromDate = new Date(from);
+		toDate = new Date(to);
+	}
 
 	console.log("fromDate", fromDate, "toDate", toDate);
 	var startDate = timePeriod == 'monthly' ?$.datepicker.formatDate('yy-mm-dd', new Date(fromDate.getFullYear(), fromDate.getMonth(), 1)):$.datepicker.formatDate('yy-mm-dd', fromDate);
