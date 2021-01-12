@@ -112,6 +112,7 @@ public class StockService extends CommonService {
 				stockDetails.setStockInId(stockId);
 				stockDetails.setStartDate(stockDetailsDTO.getStartDate());
 				stockDetails.setCreator(user);
+				stockDetails.setChallan(dto.getChallan());
 				_stockDetails.add(stockDetails);
 				if (refType.equalsIgnoreCase("PASS")) {
 					Product product = findById(stockDetailsDTO.getProductId(), "id", Product.class);
@@ -120,6 +121,7 @@ public class StockService extends CommonService {
 				
 			}
 			stock.setStockDetails(_stockDetails);
+			stock.setChallan(dto.getChallan());
 			session.saveOrUpdate(stock);
 			if (refType.equalsIgnoreCase("PASS") && !stockDetailsDTOs.isEmpty()) {
 				WebNotification webNotification = new WebNotification();
@@ -725,18 +727,14 @@ public class StockService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<InventoryDTO> getUserListByBranchWithRole(Integer branchId, Integer roleId) {
+	public List<InventoryDTO> getUserListByBranchWithRole(String branchIds, Integer roleId) {
 		Session session = getSessionFactory();
 		List<InventoryDTO> result = null;
 		
-		String rawSql = "" + "SELECT u.id         id, " + "       u.username   username, "
-		        + "       u.first_name firstName, " + "       u.last_name  lastName, "
-		        + "concat(u.first_name,'',u.last_name) as name " + "FROM   core.users u " + "       JOIN core.user_role ur "
-		        + "         ON u.id = ur.user_id " + "       JOIN core.user_branch ub " + "         ON u.id = ub.user_id "
-		        + "WHERE  ur.role_id = " + roleId + " " + "       AND ub.branch_id = " + branchId + "";
+		String rawSql = "select id id,username,name from core.get_user_by_branches(:roleId,'{" + branchIds + "}')";
 		Query query = session.createSQLQuery(rawSql).addScalar("id", StandardBasicTypes.LONG)
 		        .addScalar("name", StandardBasicTypes.STRING).addScalar("username", StandardBasicTypes.STRING)
-		        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
+		        .setInteger("roleId", roleId).setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
 		result = query.list();
 		
 		return result;

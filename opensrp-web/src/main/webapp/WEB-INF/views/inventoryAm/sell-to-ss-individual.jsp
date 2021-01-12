@@ -67,6 +67,10 @@
 								    <label for="ssName">SS:</label>
 									<input type="text" value="${ssName}" class="form-control" id="ssName" readonly>
 								</div>
+								<div class="col-lg-3 form-group">
+								    <label class="control-label" for="designation">Challan Number <span class="required">* </span></label>
+									<input type="text" name="challan" class="form-control"  id="challan"><p class="text-danger" id="challanNo"></p>
+								</div>
 							</div>
 						</div>
 						<h3>Sell To ${ssName} </h3>
@@ -207,6 +211,12 @@ function saveStockData() {
 	$("#validationMessage").hide();
 	$("#validationMessage").html("");
 	var stockListArray = createStockArray();
+	var challanNumber = $("#challan").val();
+	
+	if ($('#challan').is(':empty')) { 
+		 $("#challanNo").html("<strong>* Required</strong>");
+		 return false;
+	}
 	if(stockListArray.length < 1) {
 		if ($('#validationMessage').is(':empty')) { 
 			 $("#sellAmountSelection").html("<strong>* Atleast one field need to be selected</strong>");
@@ -214,6 +224,8 @@ function saveStockData() {
 		 $(window).scrollTop(0);
 		 return;
 	}
+	
+	
 	$("#loading").show();
 	$("#amountSelection").html("");
 	$("#validationMessage").hide();
@@ -227,6 +239,7 @@ function saveStockData() {
 	var formData;
 		formData = {
 	            'id': 0,
+	            'challan':challanNumber,
 	            "sellTo":[sellToId],
 	            "stockId":branchCode,
 	            'stockDetailsDTOs': stockListArray

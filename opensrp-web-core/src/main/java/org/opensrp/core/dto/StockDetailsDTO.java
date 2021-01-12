@@ -37,6 +37,8 @@ public class StockDetailsDTO {
 	
 	private int year;
 	
+	private String challan;
+	
 	public Long getId() {
 		return id;
 	}
@@ -155,6 +157,14 @@ public class StockDetailsDTO {
 	
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
+	}
+	
+	public String getChallan() {
+		return challan;
+	}
+	
+	public void setChallan(String challan) {
+		this.challan = challan;
 	}
 	
 }

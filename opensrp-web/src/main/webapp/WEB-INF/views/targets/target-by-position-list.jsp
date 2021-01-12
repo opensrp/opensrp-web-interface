@@ -11,36 +11,7 @@
 
 <title>Target by position</title>
 
-<style>
-	.select2-results__option .wrap:before {
-		font-family: fontAwesome;
-		color: #999;
-		content: "\f096";
-		width: 25px;
-		height: 25px;
-		padding-right: 10px;
-	}
 
-	.select2-results__option[aria-selected=true] .wrap:before {
-		content: "\f14a";
-	}
-
-
-	/* not required css */
-
-	.row {
-		padding: 10px;
-	}
-
-	.select2-multiple,
-	.select2-multiple2 {
-		width: 50%
-	}
-
-	.select2-results__group .wrap:before {
-		display: none;
-	}
-</style>
 	
 <c:url var="get_url" value="/rest/api/v1/target/branch-list-for-positional-target" />
 <c:url var="set_target_url" value="/target/set-target-by-position.html" />
@@ -141,6 +112,8 @@ jQuery(document).ready(function() {
 				return "Selected " + selected.length + " of " + total;
 			}
 		});
+		$("#branchList > option").prop("selected","selected");
+	    $("#branchList").trigger("change");
 });
 
 function settTaretForAll(){

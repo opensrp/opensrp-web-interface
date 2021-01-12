@@ -65,6 +65,10 @@
 								    <label for="designation">Sk/PS:</label>
 									<input type="text" class="form-control" value="${fullname}" id="designation" readonly>
 								</div>
+								<div class="col-lg-3 form-group">
+								    <label class="control-label" for="designation">Challan Number <span class="required">* </span></label>
+									<input type="text" name="challan" class="form-control"  id="challan"><p class="text-danger" id="challanNo"></p>
+								</div>
 							</div>
 						</div>
 						<h3>${fullname}'s Inventory : </h3>
@@ -76,6 +80,7 @@
 									<th>${fullname}'s <spring:message code="lbl.currentStock"></spring:message></th>
 									<th><spring:message code="lbl.availableProduct"></spring:message></th>
 									<th><spring:message code="lbl.stockPass"></spring:message><span class="text-danger"> *</span><p style="display: none" class="text-danger" id="validationMessage"></p></th>
+									
 								</tr>
 							</thead>
 							<tbody>
@@ -205,6 +210,12 @@ function saveStockData() {
 	$("#validationMessage").hide();
 	$("#validationMessage").html("");
 	var stockListArray = createStockArray();
+	var challanNumber = $("#challan").val();
+	if ($('#challan').is(':empty')) { 
+		 $("#challanNo").html("<strong>* Required</strong>");
+		 return false;
+	}
+	
 	if(stockListArray.length < 1) {
 		if ($('#validationMessage').is(':empty')) { 
 			 $("#amountSelection").html("<strong>* Atleast one field need to be selected</strong>");
@@ -216,6 +227,8 @@ function saveStockData() {
 	$("#amountSelection").html("");
 	$("#validationMessage").hide();
 	$("#validationMessage").html("");
+	
+	
 	var branchId = parseInt("${id}");
 	var branchCode = "${branchInfo[0][2]}";
 	var sellToId = parseInt("${skid}");
@@ -225,6 +238,7 @@ function saveStockData() {
 	var formData;
 		formData = {
 	            'id': 0,
+	            'challan':challanNumber,
 	            "sellTo":[sellToId],
 	            "stockId":branchCode,
 	            'stockDetailsDTOs': stockListArray

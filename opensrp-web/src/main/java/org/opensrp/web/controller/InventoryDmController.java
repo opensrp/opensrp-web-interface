@@ -135,11 +135,18 @@ public class InventoryDmController {
 		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		Set<Role> roles = loggedInUser.getRoles();
+		String roleName = "";
+		for (Role role : roles) {
+			roleName = role.getName();
+		}
+		model.addAttribute("roleName", roleName);
 		return "inventoryDm/requisition-list";
 	}
 	
 	@RequestMapping(value = "inventorydm/user-by-branch/{id}", method = RequestMethod.GET)
-	public String userByBranch(Model model, @PathVariable("id") int id) {
+	public String userByBranch(Model model, @PathVariable("id") String id) {
 		//List<UserDTO> userListByBranch= requisitionService.getUserListByBranch(id);
 		List<InventoryDTO> userListByBranch = stockService.getUserListByBranchWithRole(id, Roles.AM.getId());
 		model.addAttribute("userList", userListByBranch);
@@ -148,7 +155,7 @@ public class InventoryDmController {
 	}
 	
 	@RequestMapping(value = "inventorydm/sk-by-branch/{id}", method = RequestMethod.GET)
-	public String skByBranch(Model model, @PathVariable("id") int id) {
+	public String skByBranch(Model model, @PathVariable("id") String id) {
 		List<InventoryDTO> skListByBranch = stockService.getUserListByBranchWithRole(id, Roles.SK.getId());
 		model.addAttribute("skList", skListByBranch);
 		model.addAttribute("show", "block");
@@ -172,10 +179,9 @@ public class InventoryDmController {
 		for (Role role : roles) {
 			roleName = role.getName();
 		}
-		
+		model.addAttribute("roleName", roleName);
 		model.addAttribute("branches", branchUtil.getBranches());
 		
-		model.addAttribute("roleName", roleName);
 		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
 		model.addAttribute("manager", loggedInUser.getId());
 		model.addAttribute("show", "block");

@@ -103,6 +103,8 @@ public class StockDetails implements Serializable {
 	@JoinColumn(name = "creator", referencedColumnName = "id")
 	private User creator;
 	
+	private String challan;
+	
 	public Long getId() {
 		return id;
 		
@@ -270,6 +272,14 @@ public class StockDetails implements Serializable {
 	
 	public void setStockInId(String stockInId) {
 		this.stockInId = stockInId;
+	}
+	
+	public String getChallan() {
+		return challan;
+	}
+	
+	public void setChallan(String challan) {
+		this.challan = challan;
 	}
 	
 }

@@ -43,6 +43,37 @@ License: You must have a valid license purchased only from themeforest(the above
 <jsp:include page="/WEB-INF/views/css.jsp" />
 <c:url var="sendPrescriptionMessage" value="/rest/api/v1/message/prescription" />
 <c:url var="sendBookingMessage" value="/rest/api/v1/message/booking" />
+
+<style>
+	.select2-results__option .wrap:before {
+		font-family: fontAwesome;
+		color: #999;
+		content: "\f096";
+		width: 25px;
+		height: 25px;
+		padding-right: 10px;
+	}
+
+	.select2-results__option[aria-selected=true] .wrap:before {
+		content: "\f14a";
+	}
+
+
+	/* not required css */
+
+	.row {
+		padding: 10px;
+	}
+
+	.select2-multiple,
+	.select2-multiple2 {
+		width: 50%
+	}
+
+	.select2-results__group .wrap:before {
+		display: none;
+	}
+</style>
 <style>
 .ui-datepicker-trigger {
     margin-left : 5px;
@@ -53,8 +84,13 @@ License: You must have a valid license purchased only from themeforest(the above
      cursor: pointer;
 }
 
-#from,#to,#mfrom,#mto,#receiveDate,.currentStock,#expiryDate,#yearMonth,#startYear{
+#from,#to,#mfrom,#mto,#receiveDate,.currentStock,#expiryDate,#yearMonth,#startYear,#branch,#designation{
      cursor: pointer;
+}
+#branch,#designation,#skName,#ssName{
+     cursor: pointer;
+      border:1px solid #ccc; 
+      background: #fff;
 }
  #from,#to,#mfrom,#mto,#receiveDate,#expiryDate,.jqdate,#yearMonth,#startYear{
         background: url("<c:url value='/resources/img/icon-calender.png'/>") no-repeat right;

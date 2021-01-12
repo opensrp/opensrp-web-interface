@@ -62,6 +62,8 @@ public class Stock implements Serializable {
 	@JoinColumn(name = "updated_by", referencedColumnName = "id")
 	private User updatedBy;
 	
+	private String challan;
+	
 	public Long getId() {
 		return id;
 		
@@ -117,6 +119,14 @@ public class Stock implements Serializable {
 	
 	public void setUpdatedBy(User updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+	
+	public String getChallan() {
+		return challan;
+	}
+	
+	public void setChallan(String challan) {
+		this.challan = challan;
 	}
 	
 }

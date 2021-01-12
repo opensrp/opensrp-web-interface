@@ -71,13 +71,13 @@ public class RequisitionService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public Long getCountOfRequisiton(Integer branchId, String startDate, String endDate, int divisionId, int distirct,
-	                                 int upazilla, int user_id) {
+	public Long getCountOfRequisiton(String branchIds, String startDate, String endDate, int divisionId, int distirct,
+	                                 int upazilla, String user_id) {
 		Session session = getSessionFactory();
 		List<RequisitionQueryDto> result = null;
 		
-		String hql = "select * from core.requisition_count(" + branchId + ",'" + startDate + "','" + endDate + "',"
-		        + divisionId + "," + distirct + "," + upazilla + "," + user_id + ")";
+		String hql = "select * from core.requisition_count('{" + branchIds + "}','" + startDate + "','" + endDate + "',"
+		        + divisionId + "," + distirct + "," + upazilla + ",'{" + user_id + "}')";
 		Query query = session.createSQLQuery(hql).addScalar("requisition_count", StandardBasicTypes.LONG)
 		        .setResultTransformer(new AliasToBeanResultTransformer(RequisitionQueryDto.class));
 		result = query.list();
@@ -87,13 +87,13 @@ public class RequisitionService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<RequisitionQueryDto> getRequisitonList(Integer branchId, String startDate, String endDate, int divisionId,
-	                                                   int distirct, int upazilla, int user_id, int offSetNo, int limit) {
+	public List<RequisitionQueryDto> getRequisitonList(String branchIds, String startDate, String endDate, int divisionId,
+	                                                   int distirct, int upazilla, String user_id, int offSetNo, int limit) {
 		Session session = getSessionFactory();
 		List<RequisitionQueryDto> result = null;
 		
-		String hql = "select * from core.requisition_list(" + branchId + ",'" + startDate + "','" + endDate + "',"
-		        + divisionId + "," + distirct + "," + upazilla + "," + user_id + "," + offSetNo + "," + limit + ")";
+		String hql = "select * from core.requisition_list('{" + branchIds + "}','" + startDate + "','" + endDate + "',"
+		        + divisionId + "," + distirct + "," + upazilla + ",'{" + user_id + "}'," + offSetNo + "," + limit + ")";
 		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
 		        .addScalar("requisition_date", StandardBasicTypes.STRING)
 		        .addScalar("requisition_id", StandardBasicTypes.STRING).addScalar("branch_name", StandardBasicTypes.STRING)
