@@ -28,11 +28,11 @@
 		<div class="page-content">
 		<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a class="btn btn-primary" href="<c:url value="/"/>">Home</a>
+					<a  href="<c:url value="/"/>">Home</a>
 					<i class="fa fa-arrow-right"></i>
 				</li>
 				<li>
-					<a class="btn btn-primary" href="${cancelUrl }">Back</a>
+					<a  href="${cancelUrl }">Back</a>
 					
 				</li>
 			
@@ -110,7 +110,7 @@
 				                    	<label><strong>${ target.name } </strong></label>
 				                    </div>
 				                     <div class="col-md-6">
-				                    	<input type="number" class="form-control" min="1" id="${target.id }" name ="qty[]">
+				                    	<input type="number" class="form-control" min="0" id="${target.id }" name ="qty[]">
 				                    </div>
 				        		</div>
 				        		</c:forEach>
@@ -273,6 +273,7 @@ $('#targetInfo').submit(function(event) {
         'id': 0,
         'targetTo':'${userId}',
         'type': 'USER',
+        "isIndividual":"Yes",
         'role': '${roleId}',
         "month":month,
 		"year":year,

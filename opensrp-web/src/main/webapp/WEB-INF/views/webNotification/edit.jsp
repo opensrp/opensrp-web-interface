@@ -107,39 +107,52 @@
 				
 				<!-- First Half of Form Starts -->
 				
-				<div class="col-lg-6">
+				<div class="col-lg-12">
 					<div class="form-group row">
 						<label for="trainingTitle" class="col-sm-4 col-form-label">Notification title<span class="text-danger"> </span> </label>
-						<div class="col-sm-12">
+						<div class="col-sm-4">
 							<input type="text" class="form-control" value="${webNotification.notificationTitle}" id="notificationTitle" name ="notificationTitle">
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="notification" class="col-sm-4 col-form-label">Notification<span class="text-danger"> </span> </label>
-						<div class="col-sm-12">
+						<div class="col-sm-4">
 							<textarea id="notification" name="notification" style="margin: 0px -11px 0px 0px; height: 107px; width: 100%;" class="form-control">${webNotification.notification}</textarea>
 						</div>
 					</div>
 					
 					<div class="form-group row">
 						<label for="notification" class="col-sm-4 col-form-label">Recipient types<span class="text-danger"> </span> </label>
-						<div class="col-sm-12">
+						<div class="col-sm-4">
 							<input name="roles"  id="roles" type="text" class="form-control">
 						</div>
-					</div>	
+					</div>
+					<div class="form-group row">
+						<label for="notification" class="col-sm-4 col-form-label">Date & time(Training or meeting)<span class="text-danger"> </span> </label>
+						<div class="col-sm-6">
+							<input readonly="readonly" name="trainingDate"  id="trainingDate" type="text" class="form-control" value="${webNotification.getMeetingOrtrainingDateAndTime() }">
+						</div>
+					</div>
 					<div class="form-group row">
 						<label for="notification" class="col-sm-4 col-form-label">Date & time<span class="text-danger"> </span> </label>
-						<div class="col-sm-12">
+						<div class="col-sm-6">
 							<input readonly="readonly" name="date"  id="date" type="text" class="form-control" value="${dateTime }">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="notification" class="col-sm-4 col-form-label">Branch<span class="text-danger"> </span> </label>
+						<div class="col-sm-6">
+							<select	name="branchList" class="form-control" id="branchList">
+		 	
+					            <c:forEach items="${branches}" var="branch">
+					                <option id="${branch.id}" class="${branch.id}" value="${branch.id}">${branch.name}</option>
+					            </c:forEach>
+					        </select>
 						</div>
 					</div>
 						
 					</div>
-					<div class="col-lg-12">
-						<div class="form-group">
-						<jsp:include page="/WEB-INF/views/edit-search-option-for-notification.jsp" />
-						</div>
-					</div>
+					
 					
 					<div class="col-lg-12">
 						<div class="form-group text-right" id="errorText" style="display: none;">
@@ -238,6 +251,16 @@ $(function(){
 	  }else{
 		  //$("#date").val("");
 	  } */
+	  
+	  $('[name=trainingDate]').appendDtpicker({
+		  "closeOnSelected": true,
+		  "todayButton":false,
+		  "closeButton":false,
+		  "minDate":new Date(),
+		  "default":null,
+
+	  });
+	  
 });
 
 
@@ -271,10 +294,10 @@ $('#addWebNotification').submit(function(event) {
 	    let upazilaId = $('#upazilaList').val();
 	   
 	    
-	    
+	   let trainingDate =  $("#trainingDate").val();
 	   var today = new Date();
 	   let dateTime = $("#date").val();
-	   let sendDate= today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+	   let sendDate= today;
 	   let hour = 0;
 	   let minute=0;
 	   if(dateTime == ""){   
@@ -303,6 +326,7 @@ $('#addWebNotification').submit(function(event) {
 	 	console.log(branchIds);
 	    formData = {
 	    	'id': '${id}',
+	    	"meetingOrtrainingDateAndTime":trainingDate,
 	        'notificationTitle': $('#notificationTitle').val(),
 	        'notification': $('#notification').val(),
 	        'roles': roles,

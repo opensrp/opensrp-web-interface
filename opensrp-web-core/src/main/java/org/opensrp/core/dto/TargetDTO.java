@@ -15,6 +15,8 @@ public class TargetDTO {
 	
 	private String type;
 	
+	private String isIndividual;
+	
 	private Set<TargetDetailsDTO> targetDetailsDTOs;
 	
 	private int month;
@@ -85,6 +87,14 @@ public class TargetDTO {
 	
 	public void setDay(int day) {
 		this.day = day;
+	}
+	
+	public String getIsIndividual() {
+		return isIndividual;
+	}
+	
+	public void setIsIndividual(String isIndividual) {
+		this.isIndividual = isIndividual;
 	}
 	
 }

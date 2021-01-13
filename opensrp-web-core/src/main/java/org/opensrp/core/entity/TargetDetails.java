@@ -66,7 +66,8 @@ public class TargetDetails implements Serializable {
 	
 	private Long timestamp;
 	
-	private String status;
+	@Column(name = "is_personal")
+	private String isIndividual;
 	
 	@Column(name = "user_id")
 	private Integer userId;
@@ -83,6 +84,8 @@ public class TargetDetails implements Serializable {
 	@Column(name = "MODIFIED_DATE", insertable = true, updatable = true)
 	@UpdateTimestamp
 	private Date updated = new Date();
+	
+	private String status;
 	
 	private int creator;
 	
@@ -253,6 +256,14 @@ public class TargetDetails implements Serializable {
 	
 	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;
+	}
+	
+	public String getIsIndividual() {
+		return isIndividual;
+	}
+	
+	public void setIsIndividual(String isIndividual) {
+		this.isIndividual = isIndividual;
 	}
 	
 }

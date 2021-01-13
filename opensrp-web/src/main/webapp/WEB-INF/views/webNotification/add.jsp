@@ -118,41 +118,53 @@
 				
 				<!-- First Half of Form Starts -->
 				
-				<div class="col-lg-6">
+				<div class="col-lg-12">
 					<div class="form-group row">
 						<label for="trainingTitle" class="col-sm-4 col-form-label">Notification title<span class="text-danger"> </span> </label>
-						<div class="col-sm-12">
+						<div class="col-sm-4">
 							<input type="text" class="form-control" id="notificationTitle" name ="notificationTitle">
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="notification" class="col-sm-4 col-form-label">Notification<span class="text-danger"> </span> </label>
-						<div class="col-sm-12">
+						<div class="col-sm-4">
 							<textarea id="notification"    name="notification" style="margin: 0px -11px 0px 0px; height: 107px; width: 100%;" class="form-control"></textarea>
 						</div>
 					</div>
 					
 					<div class="form-group row">
 						<label for="notification" class="col-sm-4 col-form-label">Recipient types<span class="text-danger"> </span> </label>
-						<div class="col-sm-12">
+						<div class="col-sm-4">
 							<input name="roles"  id="roles" type="text" class="form-control">
 						</div>
 					</div>	
 					<div class="form-group row">
-						<label for="notification" class="col-sm-4 col-form-label">Date & time<span class="text-danger"> </span> </label>
-						<div class="col-sm-12">
+						<label for="notification" class="col-sm-4 col-form-label">Date & time(Training or meeting)<span class="text-danger"> </span> </label>
+						<div class="col-sm-6">
+							<input readonly="readonly" name="trainingDate"  id="trainingDate" type="text" class="form-control" value="">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="notification" class="col-sm-4 col-form-label">Date & time(Send,draft or schedule )<span class="text-danger"> </span> </label>
+						<div class="col-sm-6">
 							<input readonly="readonly" name="date"  id="date" type="text" class="form-control" value="">
 						</div>
 					</div>
-						
-					</div>
-					<div class="col-lg-12">
-						<div class="form-group">
-						<%-- <jsp:include page="/WEB-INF/views/select-options-with-branch.jsp" /> --%>
-						<jsp:include page="/WEB-INF/views/search-option-for-notification.jsp" />
-						
+					
+					<div class="form-group row">
+						<label for="notification" class="col-sm-4 col-form-label">Branch<span class="text-danger"> </span> </label>
+						<div class="col-sm-6">
+							<select	name="branchList" class="form-control" id="branchList">
+							 	
+					            <c:forEach items="${branches}" var="branch">
+					                <option id="${branch.id}" class="${branch.id}" value="${branch.id}">${branch.name}</option>
+					            </c:forEach>
+					        </select>
 						</div>
 					</div>
+						
+					</div>
+					
 					
 					
 					<div class="col-lg-12">
@@ -242,6 +254,16 @@ $(function(){
 
 	  });
 	  $("#date").val("");
+	  
+	  $('[name=trainingDate]').appendDtpicker({
+		  "closeOnSelected": true,
+		  "todayButton":false,
+		  "closeButton":false,
+		  "minDate":new Date(),
+		  "default":null,
+
+	  });
+	  $("#trainingDate").val("");
 });
 
 
@@ -270,15 +292,17 @@ $('#addWebNotification').submit(function(event) {
     $('input[name^="roles"]').each(function() {           
     	roles.push($(this).val());
     }); 
-    let divisionId = $('#divisionList').val();
+    /* let divisionId = $('#divisionList').val();
     let districtId = $('#districtList').val();
     let upazilaId = $('#upazilaList').val();
    
-    
+     */
     
    var today = new Date();
    let dateTime = $("#date").val();
-   let sendDate= today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+   let trainingDate =  $("#trainingDate").val();
+   let month = console.log("DONE");
+   let sendDate= today;
    let hour = 0;
    let minute=0;
    if(dateTime == ""){   
@@ -306,6 +330,7 @@ $('#addWebNotification').submit(function(event) {
  	console.log(branchIds);
     formData = {
         'id': 0,
+        "meetingOrtrainingDateAndTime":trainingDate,
         'notificationTitle': $('#notificationTitle').val(),
         'notification': $('#notification').val(),
         'roles': roles,
@@ -314,9 +339,9 @@ $('#addWebNotification').submit(function(event) {
         "sendTimeMinute":minute,
         "sendTimeHour":hour,
         "type":type, 
-        "division":divisionId,
-        "district":districtId,
-        "upazila":upazilaId,
+        "division":0,
+        "district":0,
+        "upazila":0,
         "branch":0,
         "locationType":'',
         "locationTypeId":0,
@@ -354,6 +379,7 @@ $('#addWebNotification').submit(function(event) {
         },
         error : function(e) {
             console.log(e);
+            console.log("Not DONE");
         },
         done : function(e) {
             console.log("DONE");

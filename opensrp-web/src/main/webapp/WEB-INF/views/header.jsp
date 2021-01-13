@@ -84,7 +84,7 @@ License: You must have a valid license purchased only from themeforest(the above
      cursor: pointer;
 }
 
-#from,#to,#mfrom,#mto,#receiveDate,.currentStock,#expiryDate,#yearMonth,#startYear,#branch,#designation{
+#from,#to,#mfrom,#mto,#receiveDate,.currentStock,#expiryDate,#yearMonth,#startYear,#branch,#designation,#date,#trainingDate{
      cursor: pointer;
 }
 #branch,#designation,#skName,#ssName{
@@ -92,7 +92,7 @@ License: You must have a valid license purchased only from themeforest(the above
       border:1px solid #ccc; 
       background: #fff;
 }
- #from,#to,#mfrom,#mto,#receiveDate,#expiryDate,.jqdate,#yearMonth,#startYear{
+ #from,#to,#mfrom,#mto,#receiveDate,#expiryDate,.jqdate,#yearMonth,#startYear,#date,#trainingDate{
         background: url("<c:url value='/resources/img/icon-calender.png'/>") no-repeat right;
         border:1px solid #ccc; 
        

@@ -87,6 +87,9 @@ public class WebNotification implements Serializable {
 	@Column(name = "send_date_and_time")
 	private String sendDateAndTime;
 	
+	@Column(name = "meeting_training_date_and_time")
+	private String meetingOrtrainingDateAndTime;
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATED_DATE", updatable = false)
 	@CreationTimestamp
@@ -311,6 +314,14 @@ public class WebNotification implements Serializable {
 	
 	public void setNotificationType(String notificationType) {
 		this.notificationType = notificationType;
+	}
+	
+	public String getMeetingOrtrainingDateAndTime() {
+		return meetingOrtrainingDateAndTime;
+	}
+	
+	public void setMeetingOrtrainingDateAndTime(String meetingOrtrainingDateAndTime) {
+		this.meetingOrtrainingDateAndTime = meetingOrtrainingDateAndTime;
 	}
 	
 }
