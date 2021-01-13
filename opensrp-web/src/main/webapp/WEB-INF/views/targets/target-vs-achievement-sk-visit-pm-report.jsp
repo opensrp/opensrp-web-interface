@@ -259,6 +259,7 @@ function getReportData(url,title){
         	
             $('#loading').hide();
             $("#report").html(data);
+            $("#exportReport").html($($.parseHTML(data)).filter("#reportDataTable"));
             $('#search-button').attr("disabled", false);
             let reportType =$("input[name='time-period']:checked").val(); 
             if(managerOrLocation =='managerWise'){

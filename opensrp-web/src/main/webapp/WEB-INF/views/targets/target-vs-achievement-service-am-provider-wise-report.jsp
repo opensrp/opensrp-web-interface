@@ -180,6 +180,7 @@ function getReportData(url){
         	
             $('#loading').hide();
             $("#report").html(data);
+			$("#exportReport").html($($.parseHTML(data)).filter("#reportDataTable"));
             $('#search-button').attr("disabled", false);
             let reportType =$("input[name='time-period']:checked").val(); 
         	
@@ -226,18 +227,10 @@ function getReportDataBranchWise(url){
         	
             $('#loading').hide();
             $("#report").html(data);
+			$("#exportReport").html($($.parseHTML(data)).filter("#reportDataTable"));
             $('#search-button').attr("disabled", false);
             let reportType =$("input[name='time-period']:checked").val(); 
-        	
-            
-            $('#reportDataTable').DataTable({ 
-             	scrollY:        "300px",
-                 scrollX:        true,
-                 scrollCollapse: true,                
-             	 fixedColumns:   {
-                      leftColumns: 2
-                  }
-             });
+
         },
         error : function(e) {
             $('#loading').hide();
