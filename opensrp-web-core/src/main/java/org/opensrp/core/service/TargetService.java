@@ -93,7 +93,7 @@ public class TargetService extends CommonService {
 				        + targetDetailsDTO.getProductId() + " product_id, " + targetDetailsDTO.getQuantity() + " quantity, "
 				        + " 'ACTIVE' status," + System.currentTimeMillis() + " \"timestamp\"," + " 'quantity' unit,'"
 				        + UUID.randomUUID() + "' uuid ,'" + dto.getType() + "' target_type , " + user.getId()
-				        + " creator, current_timestamp	 created_date";
+				        + " creator, current_timestamp	 created_date , '" + dto.getIsIndividual() + "' is_personal";
 				if (i < size) {
 					
 					sql += " \n union";
@@ -116,7 +116,7 @@ public class TargetService extends CommonService {
 			}
 			sql += "insert into core.target_details(user_id,branch_id,role_id,end_date,"
 			        + " start_date,\"year\",\"month\",\"day\",percentage,product_id,quantity,status,\"timestamp\",unit,uuid"
-			        + ",target_type,creator,created_date) select  t2.id,t2.branchid,t2.role_id,t.* from t, t2 order by t2.id";
+			        + ",target_type,creator,created_date,is_personal) select  t2.id,t2.branchid,t2.role_id,t.* from t, t2 order by t2.id";
 			
 			Query query = session.createSQLQuery(sql);
 			Integer flag = query.executeUpdate();

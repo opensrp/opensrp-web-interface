@@ -48,6 +48,8 @@ public class WebNotificationDTO {
 	
 	private String sendDateAndTime;
 	
+	private String meetingOrtrainingDateAndTime;
+	
 	public Long getId() {
 		return id;
 	}
@@ -206,6 +208,14 @@ public class WebNotificationDTO {
 	
 	public void setBranchAsString(String branchAsString) {
 		this.branchAsString = branchAsString;
+	}
+	
+	public String getMeetingOrtrainingDateAndTime() {
+		return meetingOrtrainingDateAndTime;
+	}
+	
+	public void setMeetingOrtrainingDateAndTime(String meetingOrtrainingDateAndTime) {
+		this.meetingOrtrainingDateAndTime = meetingOrtrainingDateAndTime;
 	}
 	
 }

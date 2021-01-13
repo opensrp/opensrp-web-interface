@@ -54,7 +54,7 @@ public class WebNotificationMapper {
 		webNotification.setSendTimeHour(dto.getSendTimeHour());
 		webNotification.setSendTimeMinute(dto.getSendTimeMinute());
 		webNotification.setSendDateAndTime(dto.getSendDateAndTime());
-		
+		webNotification.setMeetingOrtrainingDateAndTime(dto.getMeetingOrtrainingDateAndTime());
 		Set<WebNotificationRole> _webNotificationRoles = new HashSet<>();
 		
 		for (Integer roleId : dto.getRoles()) {

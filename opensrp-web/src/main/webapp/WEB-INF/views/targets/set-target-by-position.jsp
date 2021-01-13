@@ -116,7 +116,7 @@
 					                    	<label><strong>${ target.name } </strong></label>
 					                    </div>
 					                     <div class="col-md-6">
-					                    	<input type="number" class="form-control" min="1" id="${target.id }" name ="qty[]">
+					                    	<input type="number" class="form-control" min="0" id="${target.id }" name ="qty[]">
 					                    </div>
 					        		</div>
 					        		</c:forEach>
@@ -280,6 +280,7 @@ $('#targetInfo').submit(function(event) {
         'targetTo':'${setTargetTo}',
         'type': '${type}',
         'role': '${role}',
+        "isIndividual":"No",
         "month":month,
 		"year":year,
 		"day": timePeriod == 'monthly' ? 0 : date,
