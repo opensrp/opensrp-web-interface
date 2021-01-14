@@ -25,8 +25,11 @@
 		<div class="page-content">
 			<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a class="" href="<c:url value="/"/>">Home</a>
-					<i class="fa fa-arrow-right"></i>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Web Notification</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					 /  Web Notification list <b> / Details Web Notification </b> /  
 				</li>
 				<li>
 					<a class="" href="${back}">Back</a>

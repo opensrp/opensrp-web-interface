@@ -23,6 +23,7 @@ import org.opensrp.core.service.TargetService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.BranchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +50,9 @@ public class InventoryDmController {
 	
 	@Autowired
 	public BranchUtil branchUtil;
+	
+	@Value("#{opensrp['submenu.selected.color']}")
+	private String submenuSelectedColor;
 	
 	@RequestMapping(value = "inventorydm/products-list.html", method = RequestMethod.GET)
 	public String productsList(Model model, Locale locale) {
@@ -96,6 +100,7 @@ public class InventoryDmController {
 		model.addAttribute("productList", productList);
 		model.addAttribute("locale", locale);
 		model.addAttribute("target", "block");
+		model.addAttribute("selectTargetListSubMenu", submenuSelectedColor);
 		return "inventoryDm/target-list";
 	}
 	
@@ -105,6 +110,7 @@ public class InventoryDmController {
 		model.addAttribute("roles", roles);
 		model.addAttribute("locale", locale);
 		model.addAttribute("target", "block");
+		model.addAttribute("selectTargetListSubMenu", submenuSelectedColor);
 		return "inventoryDm/add-target";
 	}
 	
@@ -126,6 +132,7 @@ public class InventoryDmController {
 		model.addAttribute("product", product);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectTargetListSubMenu", submenuSelectedColor);
 		return "inventoryDm/edit-target";
 	}
 	
@@ -185,6 +192,7 @@ public class InventoryDmController {
 		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
 		model.addAttribute("manager", loggedInUser.getId());
 		model.addAttribute("show", "block");
+		model.addAttribute("selectSellReportSubMenu", submenuSelectedColor);
 		return "inventoryDm/ss-sales-report";
 	}
 	

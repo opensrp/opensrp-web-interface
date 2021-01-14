@@ -22,8 +22,11 @@
 		<div class="page-content">
 		<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a  href="<c:url value="/"/>">Home</a>
-					<i class="fa fa-arrow-right"></i>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Requisition</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					/ Inventory  / Requisition list / <b> Requisition details</b> /
 				</li>
 				<li>
 					<a  href="${backUrl }">Back</a>
@@ -34,7 +37,7 @@
 						<div class=center-caption>${branchInfo}</div>
 						</div>
 			<div class="portlet-body">
-			<div class="col-sm-12 text-center"><h4><u>Requisition - ${requisitionId}</u></h4></div>
+			<div class="col-sm-12 text-center"><h4> Details of requisition - ${requisitionId}</h4></div>
 				
 				<table class="table table-striped table-bordered"
 					id="requisitionDetails">

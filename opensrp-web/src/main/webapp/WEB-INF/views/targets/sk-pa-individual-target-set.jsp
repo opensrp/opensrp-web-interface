@@ -28,8 +28,11 @@
 		<div class="page-content">
 		<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a  href="<c:url value="/"/>">Home</a>
-					<i class="fa fa-arrow-right"></i>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Set Target Individually</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					/ Target / <b>Add Target Individually</b> / 
 				</li>
 				<li>
 					<a  href="${cancelUrl }">Back</a>
@@ -44,7 +47,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>Individual Target
+							<i class="fa fa-list"></i>Add Target Individually
 						</div>
 					</div>					
 					<div class="portlet-body">

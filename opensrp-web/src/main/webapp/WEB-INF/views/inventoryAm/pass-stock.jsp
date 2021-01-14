@@ -20,15 +20,17 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
-		<%-- <div class="row">
-			<%
-				for (int i = 1; i <= 16; i += 1) {
-			%>
-				<div class="col-sm myinventory-box" onclick=""><a href="<c:url value="/inventoryam/pass-stock-inventory/10.html?lang=${locale}"/>">Branch <%= i %>  </a></div>
-			<%
-				}
-			%>
-		</div> --%>
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<i class="fa fa-star " id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"> <strong> Pass stock</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>				
+				
+				<li>
+					/ Inventory  
+				</li>
+				
+		</ul>
 		<div class="row">
 			<c:forEach items="${branches}" var="branch">
 				<div class="col-sm myinventory-box" onclick="">

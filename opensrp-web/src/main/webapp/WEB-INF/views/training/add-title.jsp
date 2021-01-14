@@ -23,7 +23,21 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
-
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Training title</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					/ Training / Training title list / <b> Add Training title</b> / 
+				</li>
+				<li>
+					<a  href="${back_url }">Back</a>
+					
+				</li>
+				
+			
+			</ul>
 		<div class="portlet box blue-madison">
 			<div class="portlet-title">
 				<div class="center-caption">Add a training title</div>
@@ -45,23 +59,28 @@
 				
 				<!-- First Half of Form Starts -->
 				
-				<div class="col-lg-6">
+				<div class="col-lg-12">
 					<div class="form-group row">
-						<label for="title" class="col-sm-4 col-form-label">Training title<span class="text-danger"> *</span> </label>
-						<div class="col-sm-12">
+						<label for="title" class="col-sm-2 col-form-label">Training title<span class="text-danger"> *</span> </label>
+						<div class="col-sm-3">
 							<input type="text" required="required" class="form-control" id="title" name ="title">
 						</div>
-					</div>
-						
-					</div>
-					<div class="form-group row"></div>
-					<div class="form-group row">
-						<div class="col-lg-12 form-group ">
+						<div class="col-lg-3 form-group ">
 							<a href="${back_url}" class="btn btn-primary">Cancel</a>							
 							<button type="submit"  class="btn btn-primary" value="SEND">Submit</button>
 							      		
 						</div>
 					</div>
+						
+					</div>
+					<div class="form-group row"></div>
+					<%-- <div class="form-group row">
+						<div class="col-lg-12 form-group ">
+							<a href="${back_url}" class="btn btn-primary">Cancel</a>							
+							<button type="submit"  class="btn btn-primary" value="SEND">Submit</button>
+							      		
+						</div>
+					</div> --%>
 				</form>
 				
 			</div>

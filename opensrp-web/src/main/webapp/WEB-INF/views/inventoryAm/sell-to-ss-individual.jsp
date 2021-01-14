@@ -23,8 +23,11 @@
 		<div class="page-content">
 		<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a  href="<c:url value="/"/>">Home</a>
-					<i class="fa fa-arrow-right"></i>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong> Sell to SS </strong> </span>  <a  href="<c:url value="/"/>"> Home </a>
+					 
+				</li>
+				<li>
+					/ Inventory  / Sell to SS list /  <b> Add sell to SS</b> / 
 				</li>
 				<li>
 					<a  href="${backUrl }">Back</a>

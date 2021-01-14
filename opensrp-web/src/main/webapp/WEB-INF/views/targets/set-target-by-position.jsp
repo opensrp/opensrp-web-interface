@@ -33,8 +33,11 @@
 		<div class="page-content">
 		<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a href="<c:url value="/"/>">Home</a>
-					<i class="fa fa-arrow-right"></i>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Set Target by position</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					/ Target  / <b> Add target by position </b> / 
 				</li>
 				<li>
 					<a  href="${cancelUrl }">Back</a>

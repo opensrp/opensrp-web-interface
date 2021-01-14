@@ -15,6 +15,7 @@ import org.opensrp.core.service.TargetService;
 import org.opensrp.core.service.TrainingService;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +38,9 @@ public class TrainingManagementController {
 	@Autowired
 	private SearchUtil searchUtil;
 	
+	@Value("#{opensrp['submenu.selected.color']}")
+	private String submenuSelectedColor;
+	
 	@RequestMapping(value = "/training-list.html", method = RequestMethod.GET)
 	public String myInventory(Model model, Locale locale) {
 		model.addAttribute("divisions", targetService.getLocationByTagId(LocationTags.DIVISION.getId()));
@@ -45,6 +49,8 @@ public class TrainingManagementController {
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
+		model.addAttribute("selectTrainingListSubMenu", submenuSelectedColor);
+		model.addAttribute("traingShow", "block");
 		return "training/training-list";
 	}
 	
@@ -53,6 +59,8 @@ public class TrainingManagementController {
 		
 		model.addAttribute("titles", trainingService.getAllTrainingTitle());
 		model.addAttribute("locale", locale);
+		model.addAttribute("selectTrainingTitleListSubMenu", submenuSelectedColor);
+		model.addAttribute("traingShow", "block");
 		return "training/title-list";
 	}
 	
@@ -69,20 +77,26 @@ public class TrainingManagementController {
 		model.addAttribute("hqUpazilla", DefaultHeadQuarter.UPAZILA_CITY_CORPORATION.getId());
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
+		model.addAttribute("traingShow", "block");
+		model.addAttribute("selectTrainingListSubMenu", submenuSelectedColor);
 		return "training/add-training";
 	}
 	
 	@RequestMapping(value = "/add-training-title.html", method = RequestMethod.GET)
 	public String addTrainingtitle(Model model, Locale locale, HttpSession session) {
 		model.addAttribute("locale", locale);
+		model.addAttribute("traingShow", "block");
+		model.addAttribute("selectTrainingTitleListSubMenu", submenuSelectedColor);
 		return "training/add-title";
 	}
 	
-	@RequestMapping(value = "/{id}/edit-training.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}/edit-training-title.html", method = RequestMethod.GET)
 	public String editTrainingtitle(Model model, Locale locale, HttpSession session, @PathVariable("id") long id) {
 		model.addAttribute("locale", locale);
 		
 		model.addAttribute("trainingTitle", trainingService.findById(id, "id", TrainingTitle.class));
+		model.addAttribute("traingShow", "block");
+		model.addAttribute("selectTrainingTitleListSubMenu", submenuSelectedColor);
 		return "training/edit-title";
 	}
 	
@@ -94,6 +108,8 @@ public class TrainingManagementController {
 		
 		model.addAttribute("trainingObj", trainingList);
 		model.addAttribute("users", trainingService.getTrainingUserListById(id));
+		model.addAttribute("traingShow", "block");
+		model.addAttribute("selectTrainingListSubMenu", submenuSelectedColor);
 		return "training/view-training-details";
 	}
 	

@@ -20,6 +20,17 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Sell to SS </strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>				
+				
+				<li>
+					/ Inventory  
+				</li>
+				
+		</ul>
 		<div class="row">
 			<c:forEach items="${branches}" var="branch">
 				<div class="col-sm myinventory-box" onclick="">

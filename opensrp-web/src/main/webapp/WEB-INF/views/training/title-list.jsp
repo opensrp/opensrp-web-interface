@@ -9,7 +9,7 @@
 		   uri="http://www.springframework.org/security/tags"%>
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
-<title>Product List</title>
+<title>Training title list</title>
 	
 	
 
@@ -20,13 +20,28 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
-
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Training title</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					/ Training / <b> Training title list</b>  
+				</li>
+				
+				
+			
+			</ul>
 		<div class="portlet box blue-madison">
-			<div class="portlet-title"></div>
+			<div class="portlet-title">
+				<div class="center-caption">Training title list</div>
+
+
+			</div>
 
 			<div class="portlet-body">
 				<div class="col-lg-12 form-group requisition-add">
-					<a class="btn btn-primary" id="addRequisition"
+					<a class="btn btn-primary pull-right" id="addRequisition"
 						href="<c:url value="/training/add-training-title.html?lang=${locale}"/>">
 						<strong> Add training title </strong>
 					</a>
@@ -43,7 +58,7 @@
 									<tr>
 										<td>${ title.getTitle() }</td>
 										
-										<td><a href="<c:url value="/training/${title.id}/edit-training.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a></td>
+										<td><a href="<c:url value="/training/${title.id}/edit-training-title.html?lang=${locale}"/>"><spring:message code="lbl.edit"/></a></td>
 									</tr>
 								</c:forEach>
 						</tbody>

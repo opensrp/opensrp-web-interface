@@ -60,6 +60,9 @@ public class WebNotificationController {
 	@Autowired
 	public BranchUtil branchUtil;
 	
+	@Value("#{opensrp['submenu.selected.color']}")
+	private String submenuSelectedColor;
+	
 	@RequestMapping(value = "/list.html", method = RequestMethod.GET)
 	public String targetByIndividual(HttpServletRequest request, HttpSession session, Model model, Locale locale)
 	    throws FirebaseMessagingException {
@@ -101,7 +104,8 @@ public class WebNotificationController {
 		String response = FirebaseMessaging.getInstance().send(message);
 		// Response is a message ID string.
 		System.out.println("Successfully sent message: " + response);*/
-		
+		model.addAttribute("notification", "block");
+		model.addAttribute("selectnotificationMenu", submenuSelectedColor);
 		return "webNotification/list";
 	}
 	
@@ -111,6 +115,7 @@ public class WebNotificationController {
 		model.addAttribute("roles", webNotificationService.getWebNotificationRoles());
 		model.addAttribute("divisions", webNotificationService.getLocationByTagId(divisionTagId));
 		model.addAttribute("branches", branchUtil.getBranches());
+		model.addAttribute("selectnotificationMenu", submenuSelectedColor);
 		return "webNotification/add";
 	}
 	
@@ -138,7 +143,9 @@ public class WebNotificationController {
 		model.addAttribute("dateTime", dateTime);
 		model.addAttribute("webNotification", webNotification);
 		model.addAttribute("divisions", webNotificationService.getLocationByTagId(divisionTagId));
+		model.addAttribute("selectnotificationMenu", submenuSelectedColor);
 		return "webNotification/edit";
+		
 	}
 	
 	@RequestMapping(value = "/details/{id}.html", method = RequestMethod.GET)
@@ -148,7 +155,9 @@ public class WebNotificationController {
 		List<WebNotificationCommonDTO> webNotification = webNotificationService.getWebNotificationDetailsById(id);
 		
 		model.addAttribute("notificationDetails", webNotification.get(0));
+		model.addAttribute("selectnotificationMenu", submenuSelectedColor);
 		return "webNotification/notificationDetails";
+		
 	}
 	
 }

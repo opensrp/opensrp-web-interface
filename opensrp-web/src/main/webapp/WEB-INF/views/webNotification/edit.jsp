@@ -85,6 +85,20 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Web Notification</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					 /  Web Notification list <b> / Edit Web Notification </b> /  
+				</li>
+				<li>
+					<a class="" href="${back}">Back</a>
+					
+				</li>
+			
+			</ul>
 
 		<div class="portlet box blue-madison">
 			<div class="portlet-title">

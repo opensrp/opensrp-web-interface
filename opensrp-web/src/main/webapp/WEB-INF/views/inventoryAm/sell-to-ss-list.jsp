@@ -46,13 +46,18 @@
 <div class="page-content-wrapper">
 	<div class="page-content">
 		<ul class="page-breadcrumb breadcrumb">
+			<li>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong> Sell to SS </strong> </span>  <a  href="<c:url value="/"/>"> Home </a>
+					 
+				</li>
 				<li>
-					<a  href="<c:url value="/"/>">Home</a>
-					<i class="fa fa-arrow-right"></i>
+					/ Inventory  / <b> Sell to SS list</b> / 
 				</li>
 				<li>
 					<a  href="${backUrl }">Back</a>
 				</li>
+				
+				
 		</ul>
 		<div class="row">
 			<div class="col-md-12">

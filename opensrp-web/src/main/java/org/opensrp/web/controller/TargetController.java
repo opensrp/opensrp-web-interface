@@ -69,6 +69,9 @@ public class TargetController {
 	@Autowired
 	private SearchUtil searchUtil;
 	
+	@Value("#{opensrp['submenu.selected.color']}")
+	private String submenuSelectedColor;
+	
 	@RequestMapping(value = "/target/target-by-individual.html", method = RequestMethod.GET)
 	public String targetByIndividual(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);
@@ -76,6 +79,7 @@ public class TargetController {
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
 		model.addAttribute("target", "block");
+		model.addAttribute("selectTargetByIndividualSubMenu", submenuSelectedColor);
 		return "targets/sk-pa-list-for-individual-target";
 	}
 	
@@ -84,6 +88,7 @@ public class TargetController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		model.addAttribute("target", "block");
+		model.addAttribute("selectTargetByPositionSubMenu", submenuSelectedColor);
 		return "targets/target-by-position-list";
 	}
 	
@@ -99,6 +104,7 @@ public class TargetController {
 		model.addAttribute("locationTag", request.getParameter("locationTag"));
 		model.addAttribute("text", request.getParameter("text"));
 		model.addAttribute("target", "block");
+		model.addAttribute("selectTargetByPositionSubMenu", submenuSelectedColor);
 		return "targets/set-target-by-position";
 	}
 	
@@ -113,6 +119,7 @@ public class TargetController {
 		model.addAttribute("roleId", roleId);
 		model.addAttribute("name", request.getParameter("name"));
 		model.addAttribute("target", "block");
+		model.addAttribute("selectTargetByIndividualSubMenu", submenuSelectedColor);
 		return "targets/sk-pa-individual-target-set";
 	}
 	
@@ -127,6 +134,7 @@ public class TargetController {
 		model.addAttribute("roleId", roleId);
 		model.addAttribute("name", request.getParameter("name"));
 		model.addAttribute("target", "block");
+		model.addAttribute("selectTargetByIndividualSubMenu", submenuSelectedColor);
 		return "targets/view-sk-pa-individual-target";
 	}
 	
@@ -141,6 +149,7 @@ public class TargetController {
 		model.addAttribute("roleId", roleId);
 		model.addAttribute("name", request.getParameter("name"));
 		model.addAttribute("target", "block");
+		model.addAttribute("selectTargetByIndividualSubMenu", submenuSelectedColor);
 		return "targets/edit-sk-pa-individual-target";
 	}
 	

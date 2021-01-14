@@ -21,6 +21,17 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>SS sales report </strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>				
+				
+				<li>
+					/ Inventory  
+				</li>
+				
+		</ul>
 		<div class="row">
 			<div class="col-md-12">
 
@@ -91,7 +102,8 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 
 <script>
-jQuery(document).ready(function() {       
+jQuery(document).ready(function() { 
+	window.totalRecords = 0;
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
 		$('#branchList').select2({dropdownAutoWidth : true});
@@ -148,10 +160,12 @@ jQuery(function() {
                     }else{
                     data.manager=0;
                     }
+                    data.totalRecords = totalRecords;
                    
                     
                 },
                 dataSrc: function(json){
+                	 totalRecords = json.recordsTotal;
                     if(json.data){
                         return json.data;
                     }
@@ -227,9 +241,11 @@ function filter(){
                 	data.manager="${manager}";
                 }else{
                 data.manager=0;
-                }
+                };
+                data.totalRecords = totalRecords
              },
              dataSrc: function(json){
+            	 totalRecords = json.recordsTotal;
                  if(json.data){
                      return json.data;
                  }

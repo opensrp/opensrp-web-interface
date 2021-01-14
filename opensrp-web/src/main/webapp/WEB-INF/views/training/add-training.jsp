@@ -41,12 +41,29 @@
 	margin-left: -7px !important;
 }
 </style>	
+
 <c:url var="attendencae_list_url" value="/rest/api/v1/training/training-attendance-list" />
 <c:url var="save_url" value="/rest/api/v1/training/save-update" />
+<c:url var="back_url" value="/training/training-list.html" />
 
 <div class="page-content-wrapper">
 		<div class="page-content">
-
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Training Management</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					/ Training /  Training  list  /  <b> Add training  </b> /
+				</li>
+				<li>
+					<a  href="${back_url }">Back</a>
+					
+				</li>
+				
+				
+			
+			</ul>
 		<div class="portlet box blue-madison">
 			<div class="portlet-title">
 				<div class="center-caption">Add Training</div>

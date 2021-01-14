@@ -27,6 +27,7 @@ import org.opensrp.core.service.UserService;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.BranchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,6 +60,9 @@ public class InventoryAmController {
 	@Autowired
 	private UserService userService;
 	
+	@Value("#{opensrp['submenu.selected.color']}")
+	private String submenuSelectedColor;
+	
 	@RequestMapping(value = "inventoryam/myinventory.html", method = RequestMethod.GET)
 	public String myInventory(Model model, Locale locale) {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
@@ -66,6 +70,7 @@ public class InventoryAmController {
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectInventorySubMenu", submenuSelectedColor);
 		
 		return "inventoryAm/my-inventory";
 	}
@@ -81,6 +86,7 @@ public class InventoryAmController {
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectInventorySubMenu", submenuSelectedColor);
 		return "inventoryAm/my-inventory-list";
 	}
 	
@@ -91,6 +97,7 @@ public class InventoryAmController {
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrequisitionSubMenu", submenuSelectedColor);
 		return "inventoryAm/requisition-am";
 	}
 	
@@ -101,6 +108,7 @@ public class InventoryAmController {
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrequisitionSubMenu", submenuSelectedColor);
 		return "inventoryAm/requisition-list-am";
 	}
 	
@@ -117,6 +125,7 @@ public class InventoryAmController {
 		model.addAttribute("requisitionId", requisitionList.get(0).getRequisition_id());
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrequisitionSubMenu", submenuSelectedColor);
 		return "inventoryAm/requisition-details";
 	}
 	
@@ -129,6 +138,7 @@ public class InventoryAmController {
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrequisitionSubMenu", submenuSelectedColor);
 		return "inventoryAm/requisition-add-am";
 	}
 	
@@ -139,6 +149,7 @@ public class InventoryAmController {
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrStockInSubMenu", submenuSelectedColor);
 		return "inventoryAm/stock-in";
 	}
 	
@@ -150,6 +161,7 @@ public class InventoryAmController {
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrStockInSubMenu", submenuSelectedColor);
 		return "inventoryAm/stock-list";
 	}
 	
@@ -163,6 +175,7 @@ public class InventoryAmController {
 		model.addAttribute("branchInfo", branchInfo);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrStockInSubMenu", submenuSelectedColor);
 		return "inventoryAm/stock-add";
 	}
 	
@@ -174,6 +187,7 @@ public class InventoryAmController {
 		        .getProductDetailsById(Integer.parseInt(branchid), Integer.parseInt(productid));
 		String stockAvailable = String.valueOf(productStock.getStock());
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrPassStockSubMenu", submenuSelectedColor);
 		return stockAvailable;
 	}
 	
@@ -184,6 +198,7 @@ public class InventoryAmController {
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrPassStockSubMenu", submenuSelectedColor);
 		return "inventoryAm/pass-stock";
 	}
 	
@@ -197,6 +212,7 @@ public class InventoryAmController {
 		model.addAttribute("id", id);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrPassStockSubMenu", submenuSelectedColor);
 		return "inventoryAm/pass-stock-inventory-list";
 	}
 	
@@ -215,6 +231,7 @@ public class InventoryAmController {
 		model.addAttribute("skid", skid);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrPassStockSubMenu", submenuSelectedColor);
 		return "inventoryAm/pass-stock-individual-inventory-list";
 	}
 	
@@ -225,6 +242,7 @@ public class InventoryAmController {
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrSellToSSSubMenu", submenuSelectedColor);
 		return "inventoryAm/sell-to-ss";
 	}
 	
@@ -243,6 +261,7 @@ public class InventoryAmController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("manager", loggedInUser.getId());
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrSellToSSSubMenu", submenuSelectedColor);
 		return "inventoryAm/sell-to-ss-list";
 	}
 	
@@ -272,6 +291,7 @@ public class InventoryAmController {
 		model.addAttribute("ssid", ssid);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrSellToSSSubMenu", submenuSelectedColor);
 		return "inventoryAm/sell-to-ss-individual";
 	}
 	
@@ -281,6 +301,7 @@ public class InventoryAmController {
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrStockReportSubMenu", submenuSelectedColor);
 		return "inventoryAm/stock-report";
 	}
 	
@@ -329,6 +350,7 @@ public class InventoryAmController {
 		model.addAttribute("branchInfo", branch);
 		model.addAttribute("branchId", branchId);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrStockInSubMenu", submenuSelectedColor);
 		return "inventoryAm/stock-in-details";
 	}
 	
@@ -357,6 +379,7 @@ public class InventoryAmController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		model.addAttribute("manager", loggedInUser.getId());
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrSellToSSSubMenu", submenuSelectedColor);
 		return "inventoryAm/user-wise-stock-pass-sell";
 	}
 	
@@ -373,6 +396,7 @@ public class InventoryAmController {
 		model.addAttribute("roleName", roleName);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectrAdjustHistorySSubMenu", submenuSelectedColor);
 		return "inventoryAm/adjust-history-list";
 	}
 	

@@ -45,6 +45,22 @@ License: You must have a valid license purchased only from themeforest(the above
 <c:url var="sendBookingMessage" value="/rest/api/v1/message/booking" />
 
 <style>
+.sub-menu-title{
+font-size: 18px;
+}
+.ant-menu-item-selected, .ant-menu-item-selected a, .ant-menu-item-selected a:hover {
+    color: #1890ff;
+}
+#size_star {
+	font-size: 18px;
+	color: #2a649d;
+}
+.breadcrumb {
+    background: none;
+    padding: 0 0 15px 0;
+    margin: 0;
+    color: #41454a;
+}
 	.select2-results__option .wrap:before {
 		font-family: fontAwesome;
 		color: #999;
@@ -352,13 +368,13 @@ License: You must have a valid license purchased only from themeforest(the above
 				
 					<% if(PERM_READ_WRITE_TARGET){ %>
 					<li><a href="javascript:;"> <i class="fa fa-bullseye"></i> <span
-							class="title"> Set Target</span> <span class="arrow "></span>
+							class="title">Target</span> <span class="arrow "></span>
 					</a>
 						<ul class="sub-menu" style="display: ${target}">
 						<%
 						if (PERM_TARGET_LIST) {
 						%>
-						<li><a href="<c:url value="/inventorydm/target-list.html?lang=${locale}"/>"><i
+						<li style="${selectTargetListSubMenu}"><a href="<c:url value="/inventorydm/target-list.html?lang=${locale}"/>"><i
 								 aria-hidden="true"></i> <span class="title">
 									Target Item List
 							</span> </a></li>
@@ -369,10 +385,10 @@ License: You must have a valid license purchased only from themeforest(the above
 								if (PERM_READ_WRITE_TARGET) {
 							%>
 							
-							<li><a href="<c:url value="/target/target-by-individual.html"/>">
+							<li style="${selectTargetByIndividualSubMenu}"><a href="<c:url value="/target/target-by-individual.html"/>">
 									<spring:message code="lbl.setTargetIndividually" />
 							</a></li>
-							<li><a href="<c:url value="/target/target-by-position-list.html"/>">
+							<li style="${selectTargetByPositionSubMenu}"><a href="<c:url value="/target/target-by-position-list.html"/>">
 									<spring:message code="lbl.setTargetByPosition" />
 							</a></li>
 							<%-- <li><a href="<c:url value="/target/target-by-population.html"/>">
@@ -394,19 +410,19 @@ License: You must have a valid license purchased only from themeforest(the above
 							<%
 								if (PERM_READ_WRITE_INVENTORY_AM) {
 							%>
-							<li><a href="<c:url value="/inventoryam/myinventory.html?lang=${locale}"/>">
-									<spring:message code="lbl.myInventoryAm" />
+							<li  style="${selectInventorySubMenu}"><a href="<c:url value="/inventoryam/myinventory.html?lang=${locale}"/>">
+									<spring:message code="lbl.myInventoryAm" /> 
 							</a></li>
-							<li><a href="<c:url value="/inventoryam/requisition.html?lang=${locale}"/>">
+							<li style="${selectrequisitionSubMenu}"><a href="<c:url value="/inventoryam/requisition.html?lang=${locale}"/>">
 									<spring:message code="lbl.requisitionAm" />
 							</a></li>
-							<li><a href="<c:url value="/inventoryam/stock-in.html?lang=${locale}"/>">
+							<li style="${selectrStockInSubMenu}"><a href="<c:url value="/inventoryam/stock-in.html?lang=${locale}"/>">
 									<spring:message code="lbl.stockInAm" />
 							</a></li>
-							<li><a href="<c:url value="/inventoryam/pass-stock.html?lang=${locale}"/>">
+							<li style="${selectrPassStockSubMenu}"><a href="<c:url value="/inventoryam/pass-stock.html?lang=${locale}"/>">
 									<spring:message code="lbl.passStock" />
 							</a></li>
-							<li><a href="<c:url value="/inventoryam/sell-to-ss.html?lang=${locale}"/>">
+							<li  style="${selectrSellToSSSubMenu}"><a href="<c:url value="/inventoryam/sell-to-ss.html?lang=${locale}"/>">
 									<spring:message code="lbl.sellToSs" />
 							</a></li>
 
@@ -450,9 +466,10 @@ License: You must have a valid license purchased only from themeforest(the above
 							</a>
 							</li>
 							<% }%>
+							
 							<% if( STOCK_REPORT_AM){ %>
 
-							<li><a href="<c:url value="/inventory/stock-report.html?lang=${locale}"/>">
+							<li  style="${selectrStockReportSubMenu}"><a href="<c:url value="/inventory/stock-report.html?lang=${locale}"/>">
 								Stock Report
 							</a>
 							</li>
@@ -460,7 +477,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<%
 							if (SELLS_REPORT) {
 							%>
-							<li><a href="<c:url value="/inventorydm/ss-sales-report.html?lang=${locale}"/>">
+							<li style="${selectSellReportSubMenu}"><a href="<c:url value="/inventorydm/ss-sales-report.html?lang=${locale}"/>">
 									<spring:message code="lbl.ssSalesReport" />
 							</a></li>
 							<%
@@ -469,7 +486,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<%
 								if (ADJUST_HISTORY) {
 							%>
-							<li><a href="<c:url value="/inventory/adjust-history-list.html?lang=${locale}"/>">
+							<li style="${selectrAdjustHistorySSubMenu}"><a href="<c:url value="/inventory/adjust-history-list.html?lang=${locale}"/>">
 									<spring:message code="lbl.adjustHistory" />
 							</a></li>
 							<%
@@ -487,12 +504,12 @@ License: You must have a valid license purchased only from themeforest(the above
 					<li><a href="javascript:;"> <i class="fa fa-certificate"></i> <span
 							class="title"> Training</span> <span class="arrow "></span>
 					</a>
-						<ul class="sub-menu">
+						<ul class="sub-menu" style="display: ${traingShow}">
 						<%
 							if (TRAINING_TITLE) {
 							%>
 							
-							<li><a href="<c:url value="/training/training-title-list.html?lang=${locale}"/>"><i
+							<li style="${selectTrainingTitleListSubMenu}"><a href="<c:url value="/training/training-title-list.html?lang=${locale}"/>"><i
 								class="fa fa-tasks" aria-hidden="true"></i> <span class="title">
 								Training title
 								</span> </a></li>
@@ -504,7 +521,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							if (PERM_READ_WRITE_TRAINING) {
 							%>
 							
-							<li><a href="<c:url value="/training/training-list.html?lang=${locale}"/>"><i
+							<li style="${selectTrainingListSubMenu}"><a href="<c:url value="/training/training-list.html?lang=${locale}"/>"><i
 								class="fa fa-tasks" aria-hidden="true"></i> <span class="title">
 								<spring:message code="lbl.trainingManagement" />
 								</span> </a></li>
@@ -789,7 +806,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<% }%>
 				
 				<% if(PERM_READ_WRITE_WEBNOTIFICATION){ %>
-					<li><a href="<c:url value="/web-notification/list.html?lang=${locale}"/>"><i
+					<li ><a  href="<c:url value="/web-notification/list.html?lang=${locale}"/>"><i
 							class="fa fa-bell" aria-hidden="true"></i> <span class="title">
 								Web Notification
 						</span> </a>
