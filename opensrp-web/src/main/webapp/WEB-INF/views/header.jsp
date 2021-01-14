@@ -822,10 +822,10 @@ font-size: 18px;
 
 
 
-							<li><a href="<c:url value="/people/households.html"/>">
+							<li style="${selectHHSubMenu}"><a href="<c:url value="/people/households.html"/>">
 									Household
 							</a></li>
-							<li><a href="<c:url value="/people/members.html"/>">
+							<li style="${selectMemberSubMenu}"><a href="<c:url value="/people/members.html"/>">
 									Member
 							</a></li>
 

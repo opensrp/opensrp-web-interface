@@ -14,7 +14,24 @@
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 <div class="page-content-wrapper">
+
 		<div class="page-content">
+		<div id="loading"
+						style="display: none; position: absolute; z-index: 1000; margin-left: 35%">
+						<img width="50px" height="50px"
+							src="<c:url value="/resources/images/ajax-loading.gif"/>">
+					</div>
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Member</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					 /  People  <b> / Member list </b> 
+				</li>
+				
+			
+			</ul>
 		<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
             <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
         </div>
@@ -25,7 +42,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>Members
+							<i class="fa fa-list"></i>Member list
 						</div>
 					</div>					
 					<div class="portlet-body">

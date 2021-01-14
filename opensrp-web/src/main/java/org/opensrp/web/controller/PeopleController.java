@@ -55,6 +55,9 @@ public class PeopleController {
 	@Value("#{opensrp['division.tag.id']}")
 	private int divisionTagId;
 	
+	@Value("#{opensrp['submenu.selected.color']}")
+	private String submenuSelectedColor;
+	
 	@RequestMapping(value = "/households.html", method = RequestMethod.GET)
 	public String householdList(HttpServletRequest request, HttpSession session, Model model, Locale locale)
 	    throws JSONException {
@@ -62,6 +65,8 @@ public class PeopleController {
 		model.addAttribute("divisions", targetService.getLocationByTagId(divisionTagId));
 		model.addAttribute("isHousehold", true);
 		model.addAttribute("people", "block");
+		
+		model.addAttribute("selectHHSubMenu", submenuSelectedColor);
 		return "people/households";
 	}
 	
@@ -104,6 +109,7 @@ public class PeopleController {
 		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName("household"));
 		model.addAttribute("members", data);
 		model.addAttribute("people", "block");
+		model.addAttribute("selectHHSubMenu", submenuSelectedColor);
 		return "people/household_details";
 	}
 	
@@ -133,6 +139,7 @@ public class PeopleController {
 		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "Member"));
 		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName("member"));
 		model.addAttribute("people", "block");
+		model.addAttribute("selectMemberSubMenu", submenuSelectedColor);
 		return "people/member_details";
 	}
 	
@@ -143,6 +150,7 @@ public class PeopleController {
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
 		model.addAttribute("people", "block");
+		model.addAttribute("selectMemberSubMenu", submenuSelectedColor);
 		return "people/members";
 	}
 	

@@ -27,13 +27,19 @@
 <div class="page-content-wrapper">
 	<div class="page-content">
 		<ul class="page-breadcrumb breadcrumb">
-			<li><a href="<c:url value="/"/>">Home</a> <i
-				class="fa fa-circle"></i></li>
-			<li><a href="<c:url value="${header.referer}"/>">Back</a>
+				<li>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Member</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					 /  People  /  Member list / <b> Member details </b> /
+				</li>
+				<li><a href="<c:url value="${header.referer}"/>">Back</a>
 
 			</li>
-
-		</ul>
+			
+			</ul>
+		
 		<div class="row">
 			<div class="col-md-12">
 

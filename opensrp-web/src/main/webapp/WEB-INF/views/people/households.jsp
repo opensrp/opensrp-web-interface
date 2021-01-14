@@ -22,6 +22,22 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<div id="loading"
+						style="display: none; position: absolute; z-index: 1000; margin-left: 35%">
+						<img width="50px" height="50px"
+							src="<c:url value="/resources/images/ajax-loading.gif"/>">
+					</div>
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Household</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					 /  People  <b> / Household list </b> 
+				</li>
+				
+			
+			</ul>
 		<div class="row">
 			<div class="col-md-12">
 
@@ -29,7 +45,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>Households
+							<i class="fa fa-list"></i>Household list
 						</div>
 					</div>					
 					<div class="portlet-body">

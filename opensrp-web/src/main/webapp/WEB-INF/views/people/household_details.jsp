@@ -20,18 +20,27 @@
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 <c:url var="get_member_url" value="/rest/api/v1/people/member/list" />
 <jsp:include page="/WEB-INF/views/modal_content.jsp" />
+<c:url var="backUrl" value="/people/households.html" />
+
 
 
 <div class="page-content-wrapper">
 	<div class="page-content">
+		
 		<ul class="page-breadcrumb breadcrumb">
-			<li><a href="<c:url value="/"/>">Home</a> <i
-				class="fa fa-circle"></i></li>
-			<li><a href="<c:url value="/people/households.html"/>">Back</a>
-
-			</li>
-
-		</ul>
+				<li>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Household</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					 /  People  /   Household list / <b> Household details </b>  / 
+				</li>
+				<li>
+					<a  href="${backUrl }">Back</a>
+				</li>
+				
+			
+			</ul>
 		<div class="row">
 			<div class="col-md-12">
 
@@ -39,7 +48,7 @@
 				<div class="portlet box blue-madison">
 					<div class="portlet-title">
 						<div class="caption">
-							<i class="fa fa-list"></i>Households
+							<i class="fa fa-list"></i>Household details
 						</div>
 					</div>
 					<div class="portlet-body">
