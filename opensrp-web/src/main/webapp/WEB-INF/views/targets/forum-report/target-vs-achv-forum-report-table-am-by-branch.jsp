@@ -45,11 +45,11 @@
             <tr>
                 <th rowspan="2">Branch name</th>
                 <th rowspan="2">Number of SK</th>
-                <th colspan="2">Adolescent Forum</th>
-                <th colspan="2">NCD Forum</th>
-                <th colspan="2">IYCF Forum</th>
-                <th colspan="2">Women Forum</th>
-                <th colspan="2">Adult Forum</th>
+                <th colspan="4">Adolescent Forum</th>
+                <th colspan="4">NCD Forum</th>
+                <th colspan="4">IYCF Forum</th>
+                <th colspan="4">Women Forum</th>
+                <th colspan="4">Adult Forum</th>
             </tr>
             <tr>
                 <th>Achievement</th>

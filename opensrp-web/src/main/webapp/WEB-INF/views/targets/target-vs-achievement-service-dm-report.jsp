@@ -163,7 +163,7 @@
 		                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
 		                    <h3 id="reportTile" style="font-weight: bold;">Area manager Wise report</h3>
 		                        <div id="report"></div>
-		                        
+								<div id="exportReport" style="display: none">
 		                    </div>
 		                </div>
 				          
@@ -206,6 +206,16 @@ jQuery(document).ready(function() {
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
 		getReportData('${report_url}',"Area manager wise service report");
+
+		$("#btnExport").click(function(e) {
+			$(this).attr({
+				'download': "visit-report.xls",
+				'href': 'data:application/csv;charset=utf-8,' + encodeURIComponent(
+						'<html  xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>W3C Example Table</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--> </head>'
+						+ '<body>'+ $('#exportReport').html() +'</body> </html>'
+				)
+			})
+		});
 		 
 });
 
@@ -230,6 +240,7 @@ function getReportData(url,title){
         	let managerOrLocation ='managerWise';
             $('#loading').hide();
             $("#report").html(data);
+			$("#exportReport").html($($.parseHTML(data)).filter("#reportDataTable"));
             $('#search-button').attr("disabled", false);
             let reportType =$("input[name='time-period']:checked").val(); 
         	if(managerOrLocation =='managerWise'){

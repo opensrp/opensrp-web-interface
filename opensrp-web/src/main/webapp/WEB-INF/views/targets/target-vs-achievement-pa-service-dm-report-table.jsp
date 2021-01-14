@@ -38,59 +38,41 @@
 <table class="display table table-bordered table-striped" id="reportDataTable"
        style="width: 100%;">
     <thead>
-    <c:choose>
-		<c:when test="${type =='managerWise'}">
-		    <tr>
-		        <th rowspan="2">Am name</th>
-		        <th rowspan="2">Number of branch</th>
-		        <th rowspan="2">Number of PA</th>
-		        <th colspan="2">Adult service</th>
-		        <th colspan="2">Glass Sales</th>
-		    </tr>
-		    <tr>
-		      	<th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		        <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		    </tr>
-	 	</c:when>
-	 	<c:otherwise>
-	 		 <tr>
-		        <th rowspan="2">Location name</th>
-		        <th rowspan="2">Number of branch</th>
-		        <th rowspan="2">Number of PA</th>
-		        <th colspan="2">Adult service</th>
-		        <th colspan="2">Glass Sales</th>
-		    </tr>
-		    <tr>
-		         <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		        <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		    </tr>
-	 	</c:otherwise>
-	 
-	 </c:choose>
+
+		<tr>
+			<th rowspan="2">Am name</th>
+			<th rowspan="2">Number of branch</th>
+			<th rowspan="2">Number of PA</th>
+			<th colspan="3">Adult service</th>
+			<th colspan="3">Glass Sales</th>
+		</tr>
+		<tr>
+			<th>Target</th>
+			<th>Achievement</th>
+			<th>TvA(%)</th>
+
+			<th>Target</th>
+			<th>Achievement</th>
+			<th>TvA(%)</th>
+		</tr>
+
     </thead>
    
     <tbody id="t-body">
     	
    		<c:forEach items="${reportDatas}" var="reportData"> 
    			<tr>
-   			<c:choose>
-				<c:when test="${type =='managerWise'}">
 		   			<td> ${reportData.getFullName() }</td>
 		   			<td> ${reportData.getNumberOfBranch() }</td>
 		   			<td> ${reportData.getNumberOfPA() }</td>
-		   			<td> ${reportData.getNCDServiceTarget() }/${reportData.getNCDServiceSell() }</td>
-		   			
+		   			<td> ${reportData.getNCDServiceTarget() }</td>
+		   			<td> ${reportData.getNCDServiceSell() }</td>
+
 		   			<td> 
 		   			<c:choose>
 		   				<c:when test="${reportData.getNCDServiceTarget()==0}">
 		   				
-		   				N/A
+		   				0.0%
 		   				</c:when>
 		   				<c:otherwise>		   				
 		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getNCDServiceSell()*100/reportData.getNCDServiceTarget() }" /> 
@@ -100,14 +82,15 @@
 		   			 </td>
 		   			
 		   			
-		   			<td> ${reportData.getGlassTarget() }/${reportData.getGlassSell() }</td>
-		   			
+		   			<td> ${reportData.getGlassTarget() }</td>
+		   			<td> ${reportData.getGlassSell() } </td>
+
 		   			<td> 
 		   			
 		   			<c:choose>
 		   				<c:when test="${reportData.getGlassTarget()==0}">
 		   				
-		   				N/A
+		   				0.0%
 		   				</c:when>
 		   				<c:otherwise>		   				
 		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getGlassSell()*100/reportData.getGlassTarget() }" /> 
@@ -115,50 +98,6 @@
 		   				</c:otherwise>
 		   			</c:choose>
 		   			 </td>
-		   			
-		   			
-	   			</c:when>
-	 
-	 		
-	 		<c:otherwise>
-	 				<td> ${reportData.getLocationName() }</td>		   			
-		   			<td> ${reportData.getNumberOfBranch() }</td>
-		   			<td> ${reportData.getNumberOfPA() }</td>
-		   			<td> ${reportData.getANCServiceTarget() }/${reportData.getANCServiceSell() }</td>
-		   			<td> 
-		   			<td> ${reportData.getNCDServiceTarget() }/${reportData.getNCDServiceSell() }</td>
-		   			
-		   			<c:choose>
-		   				<c:when test="${reportData.getNCDServiceTarget()==0}">
-		   				
-		   				N/A
-		   				</c:when>
-		   				<c:otherwise>		   				
-		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getNCDServiceSell()*100/reportData.getNCDServiceTarget() }" /> 
-		   			
-		   				</c:otherwise>
-		   			</c:choose>
-		   			 </td>
-		   			
-		   			
-		   			<td> ${reportData.getGlassTarget() }/${reportData.getGlassSell() }</td>
-		   			
-		   			<td> 
-		   			
-		   			<c:choose>
-		   				<c:when test="${reportData.getGlassTarget()==0}">
-		   				
-		   				N/A
-		   				</c:when>
-		   				<c:otherwise>		   				
-		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getGlassSell()*100/reportData.getGlassTarget() }" /> 
-		   			
-		   				</c:otherwise>
-		   			</c:choose>
-		   			 </td>
-		   			
-	 		</c:otherwise>
-	 		</c:choose>
 	 		</tr>
 		</c:forEach>
     </tbody>

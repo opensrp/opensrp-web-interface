@@ -45,8 +45,14 @@
                                                                                                                         id="endDateValidation"></span>
         </div>
     </div>
-    <div class="col-lg-2 form-group "><br />
+    <div class="col-lg-1 form-group " style="margin-top: 7px"><br />
         <button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
+    </div>
+    <div class="col-lg-1 form-group " style="margin-top: 7px">
+        <br />
+        <a href="x" download="down.xls" id="btnExport"  class="btn btn-primary">
+            Export
+        </a>
     </div>
 </div>
 <script>

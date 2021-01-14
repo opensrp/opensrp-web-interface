@@ -43,15 +43,17 @@
 		    <tr>
 		        <th rowspan="2">Branch name</th>		        
 		        <th rowspan="2">Number of PA</th>
-		        <th colspan="2">Adult service</th>
-		        <th colspan="2">Glass Sales</th>
+		        <th colspan="3">Adult service</th>
+		        <th colspan="3">Glass Sales</th>
 		    </tr>
 		    <tr>
-		       <th>TvA (#)</th>
-		        <th>TvA(%)</th>
-		        
-		        <th>TvA (#)</th>
-		        <th>TvA(%)</th>
+				<th>Target</th>
+				<th>Achievement</th>
+				<th>TvA(%)</th>
+
+				<th>Target</th>
+				<th>Achievement</th>
+				<th>TvA(%)</th>
 		    </tr>
 	 	
     </thead>
@@ -64,13 +66,14 @@
 		   			<td> ${reportData.getBranchName() }</td>		   			
 		   			<td> ${reportData.getNumberOfPA() }</td>
 		   			
-		   			<td> ${reportData.getNCDServiceTarget() }/${reportData.getNCDServiceSell() }</td>
-		   			
+		   			<td> ${reportData.getNCDServiceTarget() }</td>
+		   			<td> ${reportData.getNCDServiceSell() } </td>
+
 		   			<td> 
 		   			<c:choose>
 		   				<c:when test="${reportData.getNCDServiceTarget()==0}">
 		   				
-		   				N/A
+		   				0.0%
 		   				</c:when>
 		   				<c:otherwise>		   				
 		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getNCDServiceSell()*100/reportData.getNCDServiceTarget() }" /> 
@@ -80,14 +83,15 @@
 		   			 </td>
 		   			
 		   			
-		   			<td> ${reportData.getGlassTarget() }/${reportData.getGlassSell() }</td>
-		   			
+		   			<td> ${reportData.getGlassTarget() }</td>
+		   			<td> ${reportData.getGlassSell() }</td>
+
 		   			<td> 
 		   			
 		   			<c:choose>
 		   				<c:when test="${reportData.getGlassTarget()==0}">
 		   				
-		   				N/A
+		   				0.0%
 		   				</c:when>
 		   				<c:otherwise>		   				
 		   				<fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${reportData.getGlassSell()*100/reportData.getGlassTarget() }" /> 
@@ -192,6 +196,14 @@
 		console.log("percentages", percentages, " managers", managers);
 		reloadChart(managers, percentages);
 	}
+	$('#reportDataTable').DataTable({
+		scrollY:        "300px",
+		scrollX:        true,
+		scrollCollapse: true,
+		fixedColumns:   {
+			leftColumns: 1
+		}
+	});
 
 </script>
 

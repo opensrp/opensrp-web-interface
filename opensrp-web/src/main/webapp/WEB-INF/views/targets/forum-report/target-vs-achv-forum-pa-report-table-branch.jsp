@@ -45,7 +45,7 @@
     <tr>
         <th rowspan="2">Branch name</th>
         <th rowspan="2">Number of PA</th>
-        <th colspan="2">Adult Forum</th>
+        <th colspan="4">Adult Forum</th>
     </tr>
     <tr>
         <th>Achievement</th>
