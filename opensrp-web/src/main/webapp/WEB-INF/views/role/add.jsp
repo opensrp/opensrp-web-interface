@@ -26,12 +26,15 @@
 			
 			<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a href="<c:url value="/"/>">Home</a>
-					<i class="fa fa-circle"></i>
+				<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Role List </strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+				 
 				</li>
 				<li>
-					<a href="<c:url value="/role.html"/>">Role list</a>
-					<i class="fa fa-circle"></i>
+					  /  Role / Role List /<b> Add New Role</b> / 
+				</li>
+				<li>
+					<a href="${cancelUrl }">Back</a>
+					
 				</li>
 			
 			</ul>

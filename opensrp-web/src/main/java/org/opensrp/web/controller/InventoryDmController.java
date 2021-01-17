@@ -60,6 +60,7 @@ public class InventoryDmController {
 		model.addAttribute("productList", productList);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectProductSubMenu", submenuSelectedColor);
 		return "inventoryDm/products-list";
 		
 	}
@@ -70,6 +71,7 @@ public class InventoryDmController {
 		model.addAttribute("roles", roles);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectProductSubMenu", submenuSelectedColor);
 		return "inventoryDm/add-product";
 	}
 	
@@ -91,6 +93,7 @@ public class InventoryDmController {
 		model.addAttribute("product", product);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
+		model.addAttribute("selectProductSubMenu", submenuSelectedColor);
 		return "inventoryDm/edit-product";
 	}
 	
@@ -149,6 +152,8 @@ public class InventoryDmController {
 			roleName = role.getName();
 		}
 		model.addAttribute("roleName", roleName);
+		model.addAttribute("show", "block");
+		model.addAttribute("selectRequisitionDMSubMenu", submenuSelectedColor);
 		return "inventoryDm/requisition-list";
 	}
 	

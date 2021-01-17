@@ -50,8 +50,19 @@
 	<div class="page-content">
 
 
-		<ul class="page-breadcrumb breadcrumb text-right">
+		<ul class="page-breadcrumb breadcrumb">
 			<li>
+				<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>SS list </strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+				 
+			</li>
+			<li>
+				  /  SK list / <b>SS list</b> / 
+			</li>
+			<li>
+					<a class="" href="${back}">Back</a>
+					
+				</li>
+			<li class="pull-right" style="padding-right: 15px">
 			<a href="${back }"><strong>My SK </strong></a> | 
 				<% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SS")){ %>
 				<a class="btn btn-primary"

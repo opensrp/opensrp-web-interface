@@ -12,6 +12,7 @@ import org.opensrp.core.entity.Role;
 import org.opensrp.core.service.PermissionService;
 import org.opensrp.core.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -70,6 +71,9 @@ public class RoleController {
 	@Autowired
 	private Role role;
 	
+	@Value("#{opensrp['submenu.selected.color']}")
+	private String submenuSelectedColor;
+	
 	/**
 	 * <p>
 	 * showing role list
@@ -85,6 +89,7 @@ public class RoleController {
 		List<Role> roles = roleServiceImpl.findAll("Role");
 		model.addAttribute("roles", roles);
 		model.addAttribute("locale", locale);
+		
 		return "role/index";
 	}
 	

@@ -20,12 +20,16 @@
 		<div class="page-content">
 			
 			
-			<ul class="page-breadcrumb breadcrumb text-right">
+			<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<%-- <a href="<c:url value="/user.html"/>">Home</a> --%>
+				<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Location List </strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+				 
+				</li>
+				<li>
+					  /  Location / <b>Location List</b> 
+				</li>
+				<li class="pull-right" style="padding-right: 15px">
 					
-				
-				
 				
 				<% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_LOCATION")){ %>
 									

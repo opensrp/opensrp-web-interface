@@ -49,6 +49,15 @@
 <jsp:include page="/WEB-INF/views/modal_content_migration.jsp" />
 <div class="page-content-wrapper">
 	<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+			<li>
+				<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Household IN </strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+				 
+			</li>
+			<li>
+				 /  Migration  <b> / Migrated household list(In)</b> 
+			</li>
+		</ul>
 		<div class="row">
 			<div class="col-md-12">
 

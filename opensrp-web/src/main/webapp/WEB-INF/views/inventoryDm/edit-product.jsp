@@ -19,11 +19,28 @@
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
+<c:url var="back" value="/inventorydm/products-list.html" />
 	
 
 <div class="page-content-wrapper">
 		<div class="page-content">
-
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+				<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Product List </strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+				 
+				</li>
+				<li>
+					  <li>
+					  /  Inventory / Product List  / <b>Edit Product</b> / 
+				</li>
+				</li>
+				<li>
+					<a href="${back }">Back</a>
+					
+				</li>
+				
+			
+			</ul>
 		<div class="portlet box blue-madison">
 			<div class="portlet-title">
 				<div class="center-caption">Edit Product</div>

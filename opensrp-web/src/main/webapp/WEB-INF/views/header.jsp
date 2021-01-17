@@ -344,16 +344,16 @@ font-size: 18px;
 					<span class="title"> Location</span>
 					<span class="arrow "></span>
 					</a>
-					<ul class="sub-menu">
+					<ul class="sub-menu" style="display: ${location}">
 					<% if(PERM_READ_LOCATION_LIST){ %>
-						<li>
+						<li style="${selectLocationSubMenu}">
 							<a href="<c:url value="/location/location.html?lang=${locale}"/>">
 							<spring:message code="lbl.manageLocation"/>
 							</a>
 						</li>
 						<%} %>
 					<% if(PERM_UPLOAD_LOCATION){ %>
-						<li>
+						<li style="${selectUploadLocationSubMenu}">
 							<a  href="<c:url value="/location/upload_csv.html?lang=${locale}"/>">
 							
 							<spring:message code="lbl.uploadLocation"/>
@@ -435,7 +435,7 @@ font-size: 18px;
 							<%
 							if (PRODUCT_LIST) {
 							%>
-							<li><a href="<c:url value="/inventorydm/products-list.html?lang=${locale}"/>">
+							<li style="${selectProductSubMenu}"><a href="<c:url value="/inventorydm/products-list.html?lang=${locale}"/>">
 									<spring:message code="lbl.productListDm" />
 							</a></li>
 							<%
@@ -444,7 +444,7 @@ font-size: 18px;
 							<%
 							if (REQUISITION_LIST) {
 							%>
-							<li><a href="<c:url value="/inventorydm/requisition-list.html?lang=${locale}"/>">
+							<li style="${selectRequisitionDMSubMenu}"><a href="<c:url value="/inventorydm/requisition-list.html?lang=${locale}"/>">
 									<spring:message code="lbl.requisitionAm" />
 							</a></li>
 							<%
@@ -453,7 +453,7 @@ font-size: 18px;
 
 							<% if( STOCK_REPORT_PM){ %>
 
-							<li><a href="<c:url value="/inventorypm/stock-report.html?lang=${locale}"/>">
+							<li style="${selectStockPMSubMenu}"><a href="<c:url value="/inventorypm/stock-report.html?lang=${locale}"/>">
 								Stock Report
 							</a>
 							</li>
@@ -601,57 +601,57 @@ font-size: 18px;
 							<spring:message code="lbl.clientDataReport"/>
 							</a>
 						</li>
-						<li><a href="<c:url value="/report/familyPlanningReport.html?lang=${locale}"/>">
+						<li style="${selectrFamilyPlaningReportSubMenu}"><a href="<c:url value="/report/familyPlanningReport.html?lang=${locale}"/>">
 							<spring:message code="lbl.familyPlanningReport"/>
 							</a>
 						</li>
-						<li><a href="<c:url value="/report/pregnancyReport.html?lang=${locale}"/>">
+						<li style="${selectrPregnancyReportSubMenu}"><a href="<c:url value="/report/pregnancyReport.html?lang=${locale}"/>">
 							<spring:message code="lbl.pregnancyReport"/>
 							</a>
 						</li>
-						<li><a href="<c:url value="/report/miscellaneousReport.html?lang=${locale}"/>">
+						<li style="${selectrMiscReportSubMenu}"><a href="<c:url value="/report/miscellaneousReport.html?lang=${locale}"/>">
 							<spring:message code="lbl.childNutritionReport"/>
 							</a>
 						</li>
-						<li><a href="<c:url value="/report/covid-19.html?lang=${locale}"/>">
+						<li style="${selectrCovid19portSubMenu}"><a href="<c:url value="/report/covid-19.html?lang=${locale}"/>">
 							<spring:message code="lbl.covid19"/>
 							</a>
 						</li>
-						<li><a href="<c:url value="/report/forum-report.html?lang=${locale}"/>">
+						<li style="${selectForumportSubMenu}"><a href="<c:url value="/report/forum-report.html?lang=${locale}"/>">
 							<spring:message code="lbl.forumReport"/>
 						</a>
 						</li>
-						<li><a href="<c:url value="/report/aggregated-biometric-report.html?lang=${locale}"/>">
+						<li style="${selectBiometricSubMenu}"><a href="<c:url value="/report/aggregated-biometric-report.html?lang=${locale}"/>">
 							<spring:message code="lbl.aggregatedBiometricReport"/>
 						</a>
 						</li>
-						<li><a href="<c:url value="/report/individual-biometric-report.html?lang=${locale}"/>">
+						<li style="${selectIndvidualBiometricSubMenu}"><a href="<c:url value="/report/individual-biometric-report.html?lang=${locale}"/>">
 							<spring:message code="lbl.individualBiometricReport"/>
 						</a>
 						</li>
 						<% if(SK_VISIT_TARGET_REPORT_PM){ %>
-						<li>
+						<li style="${selectTVsACHVVisitPMSubMenu}">
 							<a href="<c:url value="/target/target-vs-achievement-visit-report-pm.html?lang=${locale}"/>">
 							Target vs achievement visit report
 							</a>
 						</li>
 						<% }%>
 						<% if( SK_SERVICE_TARGET_REPORT_PM){ %>
-						<li><a href="<c:url value="/target/target-vs-achievement-service-report-pm.html?lang=${locale}"/>">
+						<li style="${selectTVsACHVServicePMSubMenu}"><a href="<c:url value="/target/target-vs-achievement-service-report-pm.html?lang=${locale}"/>">
 							Target vs achievement service report
 							</a>
 						</li>
 						<% }%>
 						
 						<% if(SK_VISIT_TARGET_REPORT_DM){ %>
-						<li>
+						<li style="${selectTVsACHVVisitDMSubMenu}">
 							<a href="<c:url value="/target/target-vs-achievement-visit-report-dm.html?lang=${locale}"/>">
 							Target vs achievement visit report
 							</a>
 						</li>
 						<% }%>
 						<% if( SK_SERVICE_TARGET_REPORT_DM){ %>
-						<li><a href="<c:url value="/target/target-vs-achievement-service-report-dm.html?lang=${locale}"/>">
+						<li style="${selectTVsACHVServiceDMSubMenu}"><a href="<c:url value="/target/target-vs-achievement-service-report-dm.html?lang=${locale}"/>">
 							Target vs achievement service report
 							</a>
 						</li>
@@ -659,7 +659,7 @@ font-size: 18px;
 						
 						<% if(SK_VISIT_TARGET_REPORT_AM){ %>
 							
-							<li>
+							<li style="${selectTVsACHVVisiitSubMenu}">
 							<a href="<c:url value="/target/target-vs-achievement-visit-report-am-provider-wise.html?lang=${locale}"/>">
 							Target vs achievement visit report
 							</a>
@@ -667,28 +667,28 @@ font-size: 18px;
 						<% }%>
 						<% if( SK_SERVICE_TARGET_REPORT_AM){ %>
 						
-						<li><a href="<c:url value="/target/target-vs-achievement-service-report-am-provider-wise.html?lang=${locale}"/>">
+						<li style="${selectTVsACHVServiceSubMenu }"><a href="<c:url value="/target/target-vs-achievement-service-report-am-provider-wise.html?lang=${locale}"/>">
 							Target vs achievement service report
 							</a>
 						</li>
 						<% }%>
 						<% if( FORUM_TARGET_REPORT_PM){ %>
 
-						<li><a href="<c:url value="/target/target-vs-achv-forum-report-pm.html?lang=${locale}"/>">
+						<li style="${selectTVsACHVForumPMDMSubMenu}" ><a href="<c:url value="/target/target-vs-achv-forum-report-pm.html?lang=${locale}"/>">
 							Target vs achievement forum report
 						</a>
 						</li>
 						<% }%>
 						<% if( FORUM_TARGET_REPORT_DM){ %>
 
-						<li><a href="<c:url value="/target/target-vs-achv-forum-report-dm.html?lang=${locale}"/>">
+						<li style="${selectTVsACHVForumDMSubMenu}"><a href="<c:url value="/target/target-vs-achv-forum-report-dm.html?lang=${locale}"/>">
 							Target vs achievement forum report
 						</a>
 						</li>
 						<% }%>
 						<% if( FORUM_TARGET_REPORT_AM){ %>
 
-						<li><a href="<c:url value="/target/target-vs-achv-forum-report-am-provider-wise.html?lang=${locale}"/>">
+						<li  style="${selectTVsACHVForumSubMenu}"><a href="<c:url value="/target/target-vs-achv-forum-report-am-provider-wise.html?lang=${locale}"/>">
 							Target vs achievement forum report
 						</a>
 						</li>
@@ -696,84 +696,84 @@ font-size: 18px;
 
 						<% if( HR_REPORT_PM){ %>
 
-						<li><a href="<c:url value="/report/pm-hr-report?lang=${locale}"/>">
+						<li style="${selectHRReportPMSubMenu}"><a href="<c:url value="/report/pm-hr-report?lang=${locale}"/>">
 							HR Report
 						</a>
 						</li>
 						<% }%>
 						<% if( HR_REPORT_DM){ %>
 
-						<li><a href="<c:url value="/report/dm-hr-report?lang=${locale}"/>">
+						<li style="${selectHRReportDMSubMenu}"><a href="<c:url value="/report/dm-hr-report?lang=${locale}"/>">
 							HR Report
 						</a>
 						</li>
 						<% }%>
 						<% if( HR_REPORT_AM){ %>
 
-						<li><a href="<c:url value="/report/am-hr-report?lang=${locale}"/>">
+						<li style="${selectHRReportAMSubMenu}"><a href="<c:url value="/report/am-hr-report?lang=${locale}"/>">
 							HR Report
 						</a>
 						</li>
 						<% }%>
 						<% if( REFERRAL_REPORT){ %>
 
-						<li><a href="<c:url value="/report/referral-report?lang=${locale}"/>">
+						<li style="${selectReferralReportSubMenu}"><a href="<c:url value="/report/referral-report?lang=${locale}"/>">
 							Referral Report
 						</a>
 						</li>
 						<% }%>
 						<% if( REFERRAL_FOLLOWUP_REPORT){ %>
 
-						<li><a href="<c:url value="/report/referral-followup-report?lang=${locale}"/>">
+						<li style="${selectReferralFollowUpSubMenu}"><a href="<c:url value="/report/referral-followup-report?lang=${locale}"/>">
 							Referral Followup Report
 						</a>
 						</li>
 						<% }%>
 						<% if( TIMESTAMP_REPORT_PM){ %>
 
-						<li><a href="<c:url value="/report/pm-timestamp-report-dm-wise.html?lang=${locale}"/>">
+						<li style="${selectTimestampPMSubMenu}"><a href="<c:url value="/report/pm-timestamp-report-dm-wise.html?lang=${locale}"/>">
 							Timestamp Report
 						</a>
 						</li>
 						<% }%>
 						<% if( TIMESTAMP_REPORT_DM){ %>
 
-						<li><a href="<c:url value="/report/dm-timestamp-report-am-wise.html?lang=${locale}"/>">
+						<li style="${selectTimeStampDMSubMenu}"><a href="<c:url value="/report/dm-timestamp-report-am-wise.html?lang=${locale}"/>">
 							Timestamp Report
 						</a>
 						</li>
 						<% }%>
 						<% if( TIMESTAMP_REPORT_AM){ %>
 
-						<li><a href="<c:url value="/report/am-timestamp-report-provider-wise.html?lang=${locale}"/>">
+						<li style="${selectTimeStampAMSubMenu}"><a href="<c:url value="/report/am-timestamp-report-provider-wise.html?lang=${locale}"/>">
 							Timestamp Report
 						</a>
 						</li>
 						<% }%>
 						<% if( MAP_MOVEMENTS && AuthenticationManagerUtil.isAdmin()){ %>
 
-						<li><a href="<c:url value="/pm-map-movement?lang=${locale}"/>">
+						<li style="${selectPMMAPMOVEMENTSubMenu}"><a href="<c:url value="/pm-map-movement?lang=${locale}"/>">
 							Map Movements
 						</a>
 						</li>
 						<% }%>
 						<% if( MAP_MOVEMENTS && AuthenticationManagerUtil.isDivM()){ %>
 
-						<li><a href="<c:url value="/dm-map-movement?lang=${locale}"/>">
+						<li style="${selectDMMAPMOVEMENTSubMenu}"><a href="<c:url value="/dm-map-movement?lang=${locale}"/>">
 							Map Movements
 						</a>
 						</li>
 						<% }%>
 						<% if( MAP_MOVEMENTS && AuthenticationManagerUtil.isAM()){ %>
 
-						<li><a href="<c:url value="/am-map-movement?lang=${locale}"/>">
+						<li style="${selectAMMAPMOVEMENTSubMenu}"><a href="<c:url value="/am-map-movement?lang=${locale}"/>">
 							Map Movements
 						</a>
 						</li>
 						<% }%>
 						<% if( PERFORMANCE_CHART_AND_MAP){ %>
 
-						<li><a href="<c:url value="/performance-map?lang=${locale}"/>">
+						<li style="${selectPerformanceSubMenu}"><a href="<c:url value="/performance-map?lang=${locale}"/>">
 							Performance
 						</a>
 						</li>
@@ -843,17 +843,17 @@ font-size: 18px;
 
 
 
-							<li><a href="<c:url value="/migration/households-in.html"/>">
+							<li style="${selectHHINSubMenu}"><a href="<c:url value="/migration/households-in.html"/>">
 									Household In
 							</a></li>
 							
-							<li><a href="<c:url value="/migration/households-out.html"/>">
+							<li style="${selectHHOutSubMenu}"><a href="<c:url value="/migration/households-out.html"/>">
 									Household Out
 							</a></li>
-							<li><a href="<c:url value="/migration/members-in.html"/>">
+							<li  style="${selectMemberINSubMenu}"><a href="<c:url value="/migration/members-in.html"/>">
 									Member In
 							</a></li>
-							<li><a href="<c:url value="/migration/members-out.html"/>">
+							<li style="${selectMemberOutSubMenu}"><a href="<c:url value="/migration/members-out.html"/>">
 									Member Out
 							</a></li>
 

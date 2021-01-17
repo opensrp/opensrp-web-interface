@@ -25,6 +25,7 @@ import org.opensrp.core.service.LocationTagService;
 import org.opensrp.core.service.TargetService;
 import org.opensrp.web.util.PaginationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,12 +60,17 @@ public class LocationController {
 	@Autowired
 	private PaginationUtil paginationUtil;
 	
+	@Value("#{opensrp['submenu.selected.color']}")
+	private String submenuSelectedColor;
+	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_LOCATION_LIST')")
 	@RequestMapping(value = "location/location.html", method = RequestMethod.GET)
 	public String locationList(HttpServletRequest request, HttpSession session, ModelMap model, Locale locale) {
 		//		Class<Location> entityClassName = Location.class;
 		model.addAttribute("locale", locale);
 		//		paginationUtil.createPagination(request, session, entityClassName);
+		model.addAttribute("location", "block");
+		model.addAttribute("selectLocationSubMenu", submenuSelectedColor);
 		return "location/index";
 	}
 	
@@ -90,6 +96,8 @@ public class LocationController {
 		String parentKey = "parentid";
 		JSONArray data = locationServiceImpl.getLocationDataAsJson(parentIndication, parentKey);
 		session.setAttribute("locatationTreeData", data);
+		model.addAttribute("location", "block");
+		model.addAttribute("selectLocationSubMenu", submenuSelectedColor);
 		return new ModelAndView("location/add", "command", location);
 		
 	}
@@ -220,6 +228,8 @@ public class LocationController {
 	public String csvUpload(ModelMap model, HttpSession session, Locale locale) throws JSONException {
 		model.addAttribute("location", new Location());
 		model.addAttribute("locale", locale);
+		model.addAttribute("location", "block");
+		model.addAttribute("selectUploadLocationSubMenu", submenuSelectedColor);
 		return "/location/upload_csv";
 	}
 	
@@ -264,6 +274,7 @@ public class LocationController {
 			model.put("msg", msg);
 			return new ModelAndView("/location/upload_csv");
 		}
+		
 		return new ModelAndView("redirect:/location/location.html?lang=" + locale);
 	}
 	

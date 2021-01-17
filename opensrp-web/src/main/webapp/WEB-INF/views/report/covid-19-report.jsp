@@ -48,6 +48,15 @@
 
 <div class="page-content-wrapper">
     <div class="page-content">
+    	<ul class="page-breadcrumb breadcrumb">
+			<li>
+				<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>COVID-19 Report</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+				 
+			</li>
+			<li>
+				 /  Report  <b> / COVID-19 Report </b> 
+			</li>
+		</ul>
 
 <%--        Filter section--%>
         <div class="portlet box blue-madison">

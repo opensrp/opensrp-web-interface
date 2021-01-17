@@ -65,6 +65,15 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+			<li>
+				<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Target vs achievement service report</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+				 
+			</li>
+			<li>
+				 /  Report  <b> / Target vs achievement service report(PM) </b> 
+			</li>
+		</ul>
 		<div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
             <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
         </div>

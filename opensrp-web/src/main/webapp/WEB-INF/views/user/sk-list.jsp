@@ -48,10 +48,17 @@
 
 <div class="page-content-wrapper">
 	<div class="page-content">
+		
 
-
-		<ul class="page-breadcrumb breadcrumb text-right">
+		<ul class="page-breadcrumb breadcrumb">
 			<li>
+				<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>SK list </strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+				 
+			</li>
+			<li>
+				  / <b>  SK list </b> 
+			</li>
+			<li class="pull-right" style="padding-right: 15px">
 				<% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SK")){ %>
 				<a class="btn btn-primary" href="#" onclick="addSK()">
                 <strong>

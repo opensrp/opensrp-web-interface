@@ -58,7 +58,7 @@
 		<li>
 			 /  Report  <b> / Client Data report </b> 
 		</li>
-		</ul>
+	</ul>
     <div class="row">
         <div class="col-md-12">
             <div class="portlet box blue-madison">

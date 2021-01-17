@@ -254,6 +254,8 @@ public class TargetController {
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
 		model.addAttribute("branches", branches);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectTVsACHVVisitPMSubMenu", submenuSelectedColor);
 		return "targets/target-vs-achievement-sk-visit-pm-report";
 	}
 	
@@ -307,6 +309,8 @@ public class TargetController {
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
 		model.addAttribute("branches", branches);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectTVsACHVServicePMSubMenu", submenuSelectedColor);
 		return "targets/target-vs-achievement-service-pm-report";
 	}
 	
@@ -366,6 +370,8 @@ public class TargetController {
 		model.addAttribute("userIds", userIds);
 		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
 		model.addAttribute("users", users);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectTVsACHVServiceDMSubMenu", submenuSelectedColor);
 		return "targets/target-vs-achievement-service-dm-report";
 	}
 	
@@ -423,6 +429,8 @@ public class TargetController {
 		model.addAttribute("userIds", userIds);
 		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
 		model.addAttribute("users", users);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectTVsACHVVisitDMSubMenu", submenuSelectedColor);
 		return "targets/target-vs-achievement-visit-dm-report";
 	}
 	
@@ -512,6 +520,8 @@ public class TargetController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		String userIds = loggedInUser.getId() + "";
 		model.addAttribute("userIds", userIds);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectTVsACHVServiceSubMenu", submenuSelectedColor);
 		return "targets/target-vs-achievement-service-am-provider-wise-report";
 	}
 	
@@ -577,6 +587,8 @@ public class TargetController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		String userIds = loggedInUser.getId() + "";
 		model.addAttribute("userIds", userIds);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectTVsACHVVisiitSubMenu", submenuSelectedColor);
 		return "targets/target-vs-achievement-visit-am-provider-wise-report";
 	}
 	
@@ -633,7 +645,8 @@ public class TargetController {
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
 		model.addAttribute("branches", branches);
-		
+		model.addAttribute("report", "block");
+		model.addAttribute("selectTVsACHVForumPMDMSubMenu", submenuSelectedColor);
 		return "targets/forum-report/target_vs_achv_forum_report_pm";
 	}
 	
@@ -672,6 +685,8 @@ public class TargetController {
 		model.addAttribute("userIds", userIds);
 		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
 		model.addAttribute("users", users);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectTVsACHVForumDMSubMenu", submenuSelectedColor);
 		return "targets/forum-report/target_vs_achv_forum_report_dm";
 	}
 	
@@ -732,6 +747,8 @@ public class TargetController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		String userIds = loggedInUser.getId() + "";
 		model.addAttribute("userIds", userIds);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectTVsACHVForumSubMenu", submenuSelectedColor);
 		return "targets/forum-report/target-vs-achv-forum-am-report-by-provider";
 	}
 	
@@ -761,6 +778,8 @@ public class TargetController {
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
 		model.addAttribute("branches", branches);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectTimestampPMSubMenu", submenuSelectedColor);
 		return "report/timestamp-report/pm-report-dm-wise";
 	}
 	
@@ -785,6 +804,8 @@ public class TargetController {
 		model.addAttribute("userIds", userIds);
 		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
 		model.addAttribute("users", users);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectTimeStampDMSubMenu", submenuSelectedColor);
 		return "report/timestamp-report/dm-report-am-wise";
 	}
 	
@@ -797,6 +818,7 @@ public class TargetController {
 		
 		model.addAttribute("reportDatas", totalList);
 		model.addAttribute("type", managerOrLocation);
+		
 		return "report/timestamp-report/dm-report-am-table";
 	}
 	
@@ -806,6 +828,7 @@ public class TargetController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		String userIds = loggedInUser.getId() + "";
 		model.addAttribute("userIds", userIds);
+		
 		return "report/timestamp-report/am-report-branch-wise";
 	}
 	
@@ -826,6 +849,8 @@ public class TargetController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		String userIds = loggedInUser.getId() + "";
 		model.addAttribute("userIds", userIds);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectTimeStampAMSubMenu", submenuSelectedColor);
 		return "report/timestamp-report/am-report-provider-wise";
 	}
 	
@@ -852,6 +877,8 @@ public class TargetController {
 		String endDate = formatter.format(new Date());
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectPMMAPMOVEMENTSubMenu", submenuSelectedColor);
 		return "targets/movements/pm-map-movement";
 	}
 	
@@ -869,6 +896,8 @@ public class TargetController {
 		String endDate = formatter.format(new Date());
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectDMMAPMOVEMENTSubMenu", submenuSelectedColor);
 		return "targets/movements/dm-map-movement";
 	}
 	
@@ -883,6 +912,8 @@ public class TargetController {
 		String endDate = formatter.format(new Date());
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectAMMAPMOVEMENTSubMenu", submenuSelectedColor);
 		return "targets/movements/am-map-movement";
 	}
 	
@@ -896,6 +927,8 @@ public class TargetController {
 		
 		model.addAttribute("locale", locale);
 		searchUtil.setDivisionAttribute(session);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectPerformanceSubMenu", submenuSelectedColor);
 		return "report/performance-map/index";
 	}
 	

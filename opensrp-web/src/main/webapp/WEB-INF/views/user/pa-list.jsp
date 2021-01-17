@@ -50,8 +50,15 @@
 	<div class="page-content">
 
 
-		<ul class="page-breadcrumb breadcrumb text-right">
+		<ul class="page-breadcrumb breadcrumb">
 			<li>
+				<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>PA list </strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+				 
+			</li>
+			<li>
+				  / <b>  PA list </b> 
+			</li>
+			<li class="pull-right" style="padding-right: 15px">
 				<% if(AuthenticationManagerUtil.isPermitted("PERM_ADD_SK")){ %>
 				<a class="btn btn-primary" href="#" onclick="addPA()">
                 <strong>
@@ -210,8 +217,10 @@
                             <td>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_UPDATE_USER")){ %>
                                 <a href="#" onclick="userLoad(${skId})" ><spring:message code="lbl.edit"/></a> <%} %>
-                                <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER") && activeStatus.equalsIgnoreCase("Active")){ %>
+                               <%--  <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER") && activeStatus.equalsIgnoreCase("Active")){ %>
+                                
                                 | <a href="#" onclick="catchmentLoad(${skId}, ${0})" id = "catchment-modal"><spring:message code="lbl.catchmentArea"/></a> <%} %>
+                                 --%>
                                 <% if(AuthenticationManagerUtil.isPermitted("PERM_WRITE_USER") && activeStatus.equalsIgnoreCase("Active")){ %>
                                 | <a href="#" onclick="changePassword(${skId}, '${locale}')"><spring:message code="lbl.changePassword"/></a> <%} %>
                                

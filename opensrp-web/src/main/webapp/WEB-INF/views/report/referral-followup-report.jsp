@@ -27,37 +27,16 @@
 
 
 <div class="page-content-wrapper">
-    <div class="page-content">
-<%--        <div class="row">--%>
-<%--            <div class="col-sm-6">--%>
-<%--                <div class="dashboard-stat blue-madison">--%>
-<%--                    <div class="visual">--%>
-<%--                    </div>--%>
-<%--                    <div class="details">--%>
-<%--                        <div class="number" id="totalFollowup">--%>
-<%--                            0--%>
-<%--                        </div>--%>
-<%--                        <div class="desc">--%>
-<%--                            Total Followup--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--            <div class="col-sm-6">--%>
-<%--                <div class="dashboard-stat blue-madison">--%>
-<%--                    <div class="visual">--%>
-<%--                    </div>--%>
-<%--                    <div class="details">--%>
-<%--                        <div class="number" id="skAvgTva">--%>
-<%--                            0--%>
-<%--                        </div>--%>
-<%--                        <div class="desc">--%>
-
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--        </div>--%>
+    <div class="page-content">    
+		<ul class="page-breadcrumb breadcrumb">
+			<li>
+				<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Referral Followup Report </strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+				 
+			</li>
+			<li>
+				 /  Report  <b> / Referral Followup Report</b> 
+			</li>
+		</ul>
         <jsp:include page="/WEB-INF/views/report/referral-followup-search-panel.jsp" />
         <div id="loading" style="display: none;position: absolute; z-index: 1000;margin-left:45%">
             <img width="50px" height="50px" src="<c:url value="/resources/images/ajax-loading.gif"/>">
@@ -72,10 +51,10 @@
             </div>
             <div class="portlet-body">
                 <div class="row" style="margin-bottom: 10px;">
-                    <div class="col-sm-2" id="startDate">
+                    <div class="col-sm-3" id="startDate">
                         <b>START DATE: </b> <span><%=startDate%></span>
                     </div>
-                    <div class="col-sm-2" id="endDate">
+                    <div class="col-sm-3" id="endDate">
                         <b>END DATE: </b> <span><%=endDate%></span>
                     </div>
                     <div class="col-sm-2" id="divisionS"></div>

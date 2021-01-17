@@ -355,6 +355,7 @@ public class ReportController {
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
 		model.addAttribute("report", "block");
+		model.addAttribute("selectrFamilyPlaningReportSubMenu", submenuSelectedColor);
 		return "report/family-planning-report";
 	}
 	
@@ -410,6 +411,7 @@ public class ReportController {
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
 		model.addAttribute("report", "block");
+		model.addAttribute("selectrPregnancyReportSubMenu", submenuSelectedColor);
 		return "report/pregnancy-report";
 	}
 	
@@ -464,6 +466,7 @@ public class ReportController {
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
 		model.addAttribute("report", "block");
+		model.addAttribute("selectrMiscReportSubMenu", submenuSelectedColor);
 		return "report/child-nutrition-report";
 	}
 	
@@ -530,6 +533,7 @@ public class ReportController {
 		model.addAttribute("startDate", startDate);
 		model.addAttribute("endDate", endDate);
 		model.addAttribute("report", "block");
+		model.addAttribute("selectrCovid19portSubMenu", submenuSelectedColor);
 		return "report/covid-19-report";
 	}
 	
@@ -539,7 +543,7 @@ public class ReportController {
 	                                    @RequestParam(value = "endDate", required = false) String endDate) {
 		String branchId = request.getParameterMap().containsKey("branch") ? request.getParameter("branch") : "";
 		String skIds = request.getParameterMap().containsKey("sk") ? request.getParameter("sk") : "";
-		System.out.println("branch id: " + branchId);
+		
 		List<COVID19ReportDTO> covid19Reports = new ArrayList<>();
 		User user = AuthenticationManagerUtil.getLoggedInUser();
 		if (!StringUtils.isBlank(skIds) && !skIds.equals("0")) {
@@ -657,6 +661,7 @@ public class ReportController {
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		session.setAttribute("startDate", formatter.format(DateUtil.getPreviousDay(new Date())));
 		session.setAttribute("endDate", formatter.format(new Date()));
+		model.addAttribute("selectForumportSubMenu", submenuSelectedColor);
 		model.addAttribute("report", "block");
 		return modelAndView;
 	}
@@ -736,6 +741,7 @@ public class ReportController {
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
 		model.addAttribute("report", "block");
+		model.addAttribute("selectBiometricSubMenu", submenuSelectedColor);
 		return "report/aggregated-biometric-report";
 	}
 	
@@ -795,6 +801,7 @@ public class ReportController {
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
 		model.addAttribute("report", "block");
+		model.addAttribute("selectIndvidualBiometricSubMenu", submenuSelectedColor);
 		return "report/individual-biometric-report";
 	}
 	
@@ -844,6 +851,7 @@ public class ReportController {
 		model.addAttribute("divms", targetService.getUserByRoles(divMRoleId));
 		model.addAttribute("branches", branches);
 		model.addAttribute("report", "block");
+		model.addAttribute("selectHRReportPMSubMenu", submenuSelectedColor);
 		return "report/hr-report/by-dm-for-pm";
 	}
 	
@@ -872,6 +880,8 @@ public class ReportController {
 		List<UserDTO> users = targetService.getUserByUserIds(userIds, 32);
 		model.addAttribute("users", users);
 		model.addAttribute("report", "block");
+		
+		model.addAttribute("selectHRReportDMSubMenu", submenuSelectedColor);
 		return "report/hr-report/by-am-for-dm";
 	}
 	
@@ -895,6 +905,8 @@ public class ReportController {
 		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
 		String userIds = loggedInUser.getId() + "";
 		model.addAttribute("userIds", userIds);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectHRReportAMSubMenu", submenuSelectedColor);
 		return "report/hr-report/by-branch-for-am";
 	}
 	
@@ -923,7 +935,7 @@ public class ReportController {
 	}
 	
 	@RequestMapping(value = "/referral-report", method = RequestMethod.GET)
-	public String referralReport(HttpSession session) {
+	public String referralReport(HttpSession session, Model model) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
 		String endDate = formatter.format(new Date());
@@ -932,6 +944,8 @@ public class ReportController {
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectReferralReportSubMenu", submenuSelectedColor);
 		return "/report/referral";
 	}
 	
@@ -958,7 +972,7 @@ public class ReportController {
 	}
 	
 	@RequestMapping(value = "/referral-followup-report", method = RequestMethod.GET)
-	public String referralFollowupReport(HttpSession session) {
+	public String referralFollowupReport(Model model, HttpSession session) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String startDate = formatter.format(DateUtil.getFirstDayOfMonth(new Date()));
 		String endDate = formatter.format(new Date());
@@ -967,6 +981,8 @@ public class ReportController {
 		session.setAttribute("branchList", new ArrayList<>(user.getBranches()));
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
+		model.addAttribute("report", "block");
+		model.addAttribute("selectReferralFollowUpSubMenu", submenuSelectedColor);
 		return "/report/referral-followup-report";
 	}
 	

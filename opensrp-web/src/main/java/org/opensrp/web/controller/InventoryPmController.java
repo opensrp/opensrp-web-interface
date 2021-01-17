@@ -27,6 +27,9 @@ public class InventoryPmController {
 	@Value("#{opensrp['division.tag.id']}")
 	private int divisionTagId;
 	
+	@Value("#{opensrp['submenu.selected.color']}")
+	private String submenuSelectedColor;
+	
 	@RequestMapping(value = "inventorypm/stock-report.html", method = RequestMethod.GET)
 	public String stockReport(Model model, Locale locale, HttpSession session) {
 		model.addAttribute("locale", locale);
@@ -35,6 +38,8 @@ public class InventoryPmController {
 		List<Branch> branches = branchService.findAll("Branch");
 		model.addAttribute("branches", branches);
 		model.addAttribute("show", "block");
+		
+		model.addAttribute("selectStockPMSubMenu", submenuSelectedColor);
 		return "stock-report-for-pm";
 	}
 	

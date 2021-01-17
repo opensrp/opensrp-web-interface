@@ -34,11 +34,14 @@
 			
 			<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a href="<c:url value="/"/>">Home</a>
-					<i class="fa fa-circle"></i>
+				<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Location List </strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+				 
 				</li>
 				<li>
-					<a href="<c:url value="/location/location.html"/>">Location list</a>
+					  /  Location / Location List  / <b>Add New Location</b> / 
+				</li>
+				<li>
+					<a href="<c:url value="/location/location.html"/>">Back</a>
 					
 				</li>
 			

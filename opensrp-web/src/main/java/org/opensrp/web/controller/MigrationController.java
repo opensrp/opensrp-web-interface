@@ -47,6 +47,9 @@ public class MigrationController {
 	@Value("#{opensrp['division.tag.id']}")
 	private int divisionTagId;
 	
+	@Value("#{opensrp['submenu.selected.color']}")
+	private String submenuSelectedColor;
+	
 	@RequestMapping(value = "/households-in.html", method = RequestMethod.GET)
 	public String householdListIn(HttpServletRequest request, HttpSession session, Model model, Locale locale)
 	    throws JSONException {
@@ -56,6 +59,7 @@ public class MigrationController {
 		
 		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
 		model.addAttribute("migration", "block");
+		model.addAttribute("selectHHINSubMenu", submenuSelectedColor);
 		return "migration/households-in";
 	}
 	
@@ -67,6 +71,7 @@ public class MigrationController {
 		model.addAttribute("isHousehold", true);
 		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
 		model.addAttribute("migration", "block");
+		model.addAttribute("selectHHOutSubMenu", submenuSelectedColor);
 		return "migration/households-out";
 	}
 	
@@ -78,6 +83,7 @@ public class MigrationController {
 		model.addAttribute("isHousehold", true);
 		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
 		model.addAttribute("migration", "block");
+		model.addAttribute("selectMemberINSubMenu", submenuSelectedColor);
 		return "migration/member-in";
 	}
 	
@@ -89,6 +95,7 @@ public class MigrationController {
 		model.addAttribute("isHousehold", true);
 		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
 		model.addAttribute("migration", "block");
+		model.addAttribute("selectMemberOutSubMenu", submenuSelectedColor);
 		return "migration/member-out";
 	}
 	
