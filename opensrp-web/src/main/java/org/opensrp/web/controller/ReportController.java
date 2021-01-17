@@ -116,6 +116,9 @@ public class ReportController {
 	@Autowired
 	private TargetService targetService;
 	
+	@Value("#{opensrp['submenu.selected.color']}")
+	private String submenuSelectedColor;
+	
 	@PostAuthorize("hasPermission(returnObject, 'CHILD_GROWTH_REPORT')")
 	@RequestMapping(value = "/child-growth.html", method = RequestMethod.GET)
 	public String childGrowthReport(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
@@ -275,6 +278,7 @@ public class ReportController {
 		//        paginationUtil.createPagination(request, session, "viewJsonDataConversionOfClient", "ec_family");
 		model.addAttribute("locale", locale);
 		model.addAttribute("report", "block");
+		model.addAttribute("selectrChildReportSubMenu", submenuSelectedColor);
 		return "report/client-data-report";
 	}
 	
@@ -290,6 +294,8 @@ public class ReportController {
 		session.setAttribute("startDate", startDate);
 		session.setAttribute("endDate", endDate);
 		model.addAttribute("report", "block");
+		
+		model.addAttribute("selectrAggregateReportSubMenu", submenuSelectedColor);
 		return "report/aggregated-report";
 	}
 	

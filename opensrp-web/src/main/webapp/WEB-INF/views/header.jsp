@@ -592,12 +592,12 @@ font-size: 18px;
 					<span class="arrow "></span>
 					</a>
 					<ul class="sub-menu" style="display: ${report}">					
-						<li>
+						<li style="${selectrAggregateReportSubMenu}">
 							<a href="<c:url value="/report/aggregatedReport.html?lang=${locale}"/>">
 							<spring:message code="lbl.aggregatedReport"/>
 							</a>
 						</li>
-						<li><a href="<c:url value="/report/clientDataReport.html?lang=${locale}"/>">
+						<li style="${selectrChildReportSubMenu}"><a href="<c:url value="/report/clientDataReport.html?lang=${locale}"/>">
 							<spring:message code="lbl.clientDataReport"/>
 							</a>
 						</li>
