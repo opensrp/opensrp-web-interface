@@ -14,6 +14,7 @@
 <title><spring:message code="lbl.editBranchTitle"/></title>
 <jsp:include page="/WEB-INF/views/css.jsp" />
 <jsp:include page="/WEB-INF/views/header.jsp" />
+<c:url var="cancelUrl" value="/branch-list.html" />
 
 <style>
 	.row {
@@ -31,7 +32,22 @@
 
 <div class="page-content-wrapper">
 	<div class="page-content">
-
+	<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Branch list</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					 /  Branch / Branch list / Edit branch / 
+				</li>
+				<li>
+					<a href="${cancelUrl }">Back</a>
+					
+				</li>
+				
+				
+			
+			</ul>
 		<div class="portlet box blue-madison">
 			<div class="portlet-title">
 				<div class="caption">
@@ -144,14 +160,22 @@
 						<div class="col-md-2" align="right"><label class="label-width" for="pkPosition"> <spring:message code="lbl.pkPosition"/> </label></div>
 						<div class="col-md-3"><form:input path="pkPosition" value="<%=  branchDTO.getPkPosition() %>" class="form-control mx-sm-3"/></div>
 					</div>
-					<div class="row">
+					<div class="form-group row"></div>
+					<div class="row ">
+						<div class="col-lg-8 form-group pull-right">
+							<a href="${cancelUrl}" class="btn btn-primary">Back</a>
+							<button type="submit"  class="btn btn-primary webNotificationClass" value="DRAFT">Save </button>
+							    		
+						</div>
+					</div>
+					<%-- <div class="row">
 						<div class="col-md-offset-2" style="padding-left: 15px">
 							<div id="errorMessage" style="color: red; font-size: small; display: none; margin-left: 20px; margin-top: 5px;"></div>
 							<div class="form-group">
 								<input type="submit" style="padding:5px" value="<spring:message code="lbl.saveChanges"/>" class="btn btn-primary btn-block btn-center" />
 							</div>
 						</div>
-					</div>
+					</div> --%>
 				</form:form>
 
 			</div>

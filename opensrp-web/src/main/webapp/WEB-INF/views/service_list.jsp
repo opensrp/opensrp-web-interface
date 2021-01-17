@@ -11,6 +11,7 @@
 	<table class="table table-striped table-bordered " id="serviceTable">
 		<thead>
 			<tr>
+				<th>SI</th>
 				<th>Date</th>
 				<th>Activity</th>
 				<th>Action</th>
@@ -20,6 +21,7 @@
 
 			<c:forEach var="service" items="${services}" varStatus="loop">
 				<tr>
+					<td>0</td>
 					<td>${service.getEventDate() }</td>
 					<td>${service.getServiceName() }</td>
 					<td><div class="btn btn-primary"
@@ -37,13 +39,16 @@
 <script>
 	$(document).ready(function() {
 
-		$('#serviceTable').DataTable({
-           
-           
-            scrollCollapse: true,
-           
+		var table = $('#serviceTable').DataTable({     
+           scrollCollapse: true
         }
 		);
+		table.on( 'order.dt search.dt', function () {
+ 	        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+ 	            cell.innerHTML = i+1;
+ 	        } );
+ 	    } ).draw();
+		
 	});
 	
 	

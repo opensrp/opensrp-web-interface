@@ -32,6 +32,7 @@ th, td {
 		<thead>
 
 			<tr>
+				<th> SI</th>
 				<th>HH ID</th>
 				<th>HH head name</th>
 				<th>#Members</th>
@@ -53,6 +54,7 @@ th, td {
 					<%-- <c:forEach items='${households.get("exampleMap ").entrySet()}' var="category">
 								      <a:dropdownOption value="${category.key}">${category.key} </a:dropdownOption>
 								</c:forEach> --%>
+					<td>0</td>
 					<td>${household.getHouseholdId() }</td>
 					<td>${household.getHouseholdHead() }</td>
 					<td>${household.getNumberOfMember() }</td>

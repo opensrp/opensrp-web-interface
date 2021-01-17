@@ -154,7 +154,7 @@ jQuery(document).ready(function() {
              let reportType =$("input[name='time-period']:checked").val();
 
 
-             $('#dataTable').DataTable({
+             var table = $('#dataTable').DataTable({
                  scrollY:        "300px",
                  scrollX:        true,
                  scrollCollapse: true,
@@ -163,6 +163,12 @@ jQuery(document).ready(function() {
                   rightColumns: 1 */
                  }
              });
+             table.on( 'order.dt search.dt', function () {
+     	        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+     	            cell.innerHTML = i+1;
+     	            console.log(i);
+     	        } );
+     	    } ).draw();
          },
          error : function(e) {
              $('#loading').hide();

@@ -19,6 +19,7 @@ import org.opensrp.core.service.mapper.BranchMapper;
 import org.opensrp.web.util.AuthenticationManagerUtil;
 import org.opensrp.web.util.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,6 +51,9 @@ public class BranchController {
 	@Autowired
 	private SearchUtil searchUtil;
 	
+	@Value("#{opensrp['submenu.selected.color']}")
+	private String submenuSelectedColor;
+	
 	@PostAuthorize("hasPermission(returnObject, 'PERM_READ_BRANCH_LIST')")
 	@RequestMapping(value = "/branch-list.html", method = RequestMethod.GET)
 	public String branchList(Model model, Locale locale) {
@@ -57,6 +61,7 @@ public class BranchController {
 		model.addAttribute("branches", branches);
 		model.addAttribute("locale", locale);
 		model.addAttribute("branches", branches);
+		
 		return "branch/index";
 	}
 	
@@ -99,9 +104,10 @@ public class BranchController {
 		String errorMessage = "";
 		return "/make-select-option";
 	}
-
+	
 	@RequestMapping(value = "/sk-list-by-branch", method = RequestMethod.GET)
-	public String getskListByBranch(HttpServletRequest request, HttpSession session, @RequestParam("branchIds") String branchList) {
+	public String getskListByBranch(HttpServletRequest request, HttpSession session,
+	                                @RequestParam("branchIds") String branchList) {
 		List<Object[]> sks = databaseServiceImpl.getSKByBranch(branchList);
 		session.setAttribute("data", sks);
 		String errorMessage = "";

@@ -27,19 +27,15 @@
 %>
 <div class="page-content-wrapper">
     <div class="page-content">
-
-
-        <ul class="page-breadcrumb breadcrumb">
-            <li>
-                <a href="<c:url value="/user.html"/>">Home</a>
-                <i class="fa fa-circle"></i>
-            </li>
-            <li>
-                <a href="<c:url value="/user.html"/>">User list</a>
-                <i class="fa fa-circle"></i>
-            </li>
-
-        </ul>
+       <ul class="page-breadcrumb breadcrumb">
+			<li>
+			<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Add User</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+			</li>
+			<li> /  User list / <b>Add user</b>  / 
+			</li>
+			<li><a  href="${cancelUrl }">Back</a></li>
+			
+		</ul>
         <!-- END PAGE BREADCRUMB -->
         <!-- END PAGE HEADER-->
         <!-- BEGIN PAGE CONTENT-->

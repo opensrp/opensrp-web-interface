@@ -116,6 +116,7 @@
 															id="memberTable">
 															<thead>
 																<tr>
+																  <th> SI</th>
 																	<th>Member name</th>
 																	<th>Member ID</th>				
 																	<th>Relation with <br/>household head</th>
@@ -131,6 +132,7 @@
 																<c:forEach var="member" items="${members}"
 																	varStatus="loop">
 																	<tr>
+																		<td>0</td>
 																		<td> ${member.getMemberName() }</td>
 																   		<td> ${member.getMemberId() }</td>
 																   		<td> ${member.getRelationWithHousehold() }</td>
@@ -189,17 +191,20 @@
 	stockList;
 	$(document).ready(function() {
 
-		stockList = $('#memberTable').DataTable({
+		var table = stockList = $('#memberTable').DataTable({
 			bFilter : false,
-
-			
-
 			bInfo : true,
 			destroy : true,
 			language : {
 				searchPlaceholder : ""
 			}
 		});
+		
+		table.on( 'order.dt search.dt', function () {
+ 	        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+ 	            cell.innerHTML = i+1;
+ 	        } );
+ 	    } ).draw();
 	});
 
 </script>

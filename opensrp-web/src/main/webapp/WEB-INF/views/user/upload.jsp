@@ -24,19 +24,15 @@
 
 <div class="page-content-wrapper">
 		<div class="page-content">
-			
-			
-			<%-- <ul class="page-breadcrumb breadcrumb">
+			<ul class="page-breadcrumb breadcrumb">
 				<li>
-					<a href="<c:url value="/"/>">Home</a>
-					
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Upload user</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
 				</li>
-			
-			</ul> --%>
-			<!-- END PAGE BREADCRUMB -->
-			<!-- END PAGE HEADER-->
-			<!-- BEGIN PAGE CONTENT-->
-			
+				<li>
+					 / <b> Upload user</b>  
+				</li>
+			</ul>
 	
 			<div class="row">
 				<div class="col-md-12">

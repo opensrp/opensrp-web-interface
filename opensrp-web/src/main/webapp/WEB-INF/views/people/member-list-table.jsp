@@ -30,7 +30,7 @@
        style="width: 100%;">
     <thead>
     
-		    <tr>
+		    <tr> <th> SI</th>
 		        <th>Member name</th>
 				<th>Member ID</th>				
 				<th>Relation with <br/>household head</th>
@@ -48,7 +48,7 @@
     <tbody id="t-body">
     	
    		<c:forEach items="${members}" var="member"> 
-   			<tr>
+   			<tr><td>0</td>
    				<td> ${member.getMemberName() }</td>
 		   		<td> ${member.getMemberId() }</td>
 		   		<td> ${member.getRelationWithHousehold() }</td>

@@ -36,6 +36,24 @@
 
 <div class="page-content-wrapper">
 	<div class="page-content">
+		<ul class="page-breadcrumb breadcrumb">
+				<li>
+					<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Branch list</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+					 
+				</li>
+				<li>
+					 / <b> Branch list</b>  
+				</li>
+				<li class="pull-right" style="padding-right: 15px">
+				 <a href="<c:url value="/branch/add.html?lang=${locale}"/>"
+					   class="btn btn-primary btn-sm">
+						<b>Create Branch +</b>
+					</a>
+				</li>
+				
+				
+			
+			</ul>
 		<div class="portlet box blue-madison">
 			<div class="portlet-title">
 				<div class="caption">

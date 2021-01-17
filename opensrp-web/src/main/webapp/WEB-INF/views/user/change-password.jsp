@@ -36,6 +36,15 @@
 
 <div class="page-content-wrapper">
     <div class="page-content">
+    	<ul class="page-breadcrumb breadcrumb">
+			<li>
+			<i class="fa fa-star" id="size_star" aria-hidden="true"></i> <span class="sub-menu-title"><strong>Change password</strong> </span>  <a  href="<c:url value="/"/>">Home</a>
+			</li>
+			<li> /  User list / <b>Change password</b>  / 
+			</li>
+			<li><a  href="${cancelUrl }">Back</a></li>
+			
+		</ul>
         <div class="portlet box blue-madison">
             <div class="portlet-title">
                 <div class="caption">
