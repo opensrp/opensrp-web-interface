@@ -431,6 +431,7 @@
 
 <script
 	src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
+<script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
 
 <script>
 	jQuery(document).ready(function() {
@@ -446,7 +447,8 @@
 				targets : [ 0, 1, 2, 3, 4, 5, 6 ,7],
 				orderable : false,
 				"searchable" : false
-			}]
+			}],
+			
 		});
 	});
 	jQuery(function() {
@@ -492,7 +494,13 @@
 			bFilter : false,
 			serverSide : true,
 			processing : true,
-			
+			scrollY:        "300px",
+            scrollX:        true,
+            scrollCollapse: true,
+            fixedColumns:   {
+                leftColumns: 2/* ,
+             rightColumns: 1 */
+            },
 			ajax : {
 				url : "${sell_to_ss_list}",
 				timeout : 300000,
@@ -545,7 +553,13 @@
 			bFilter : false,
 			serverSide : true,
 			processing : true,
-			
+			scrollY:        "300px",
+            scrollX:        true,
+            scrollCollapse: true,
+            fixedColumns:   {
+                leftColumns: 2/* ,
+             rightColumns: 1 */
+            },
 			ajax : {
 				url : "${sell_to_ss_list}",
 				timeout : 300000,

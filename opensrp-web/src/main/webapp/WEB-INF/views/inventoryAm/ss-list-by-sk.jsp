@@ -17,6 +17,7 @@
 			<th><spring:message code="lbl.name"></spring:message></th>
 			<th><spring:message code="lbl.designation"></spring:message></th>
 			<th><spring:message code="lbl.skname"></spring:message></th>
+			<th>SK mobile</th>
 			<th><spring:message code="lbl.branchNameCode"></spring:message></th>
 
 		</tr>
@@ -27,9 +28,11 @@
 			<tr>
 				<td><input type="checkbox" name="manuf[]" class="sub_chk"
 					id="ss${ssList.getId() }" value="${ssList.getId()}"></td>
-				<td>SS</td>
-				<td>${ssList.getFullName() }</td>
+					<td>${ssList.getFullName() }</td>
+					<td>SS</td>
+				
 				<td>${ssList.getSKName() }</td>
+				<td>${ssList.getUsername() }</td>
 				<td>${ssList.getBranchName() } ${ssList.getBranchCode() }</td>
 			</tr>
 		</c:forEach>

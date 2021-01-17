@@ -344,15 +344,16 @@ public class StockService extends CommonService {
 		Session session = getSessionFactory();
 		List<InventoryDTO> dtos = new ArrayList<>();
 		
-		String hql = "select branch_id branchId, ss_id id,sell_amount salesPrice, purchase_amount purchasePrice, sk_name SKName,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName from core.sell_report(:manager,:branchId,:skId,:division,:district,:upazila,:year,:month,:start,:length)";
+		String hql = "select branch_id branchId, ss_id id,sell_amount salesPrice, purchase_amount purchasePrice, sk_name SKName,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName,username from core.sell_report(:manager,:branchId,:skId,:division,:district,:upazila,:year,:month,:start,:length)";
 		Query query = session.createSQLQuery(hql).addScalar("branchId", StandardBasicTypes.INTEGER)
 		        .addScalar("id", StandardBasicTypes.LONG).addScalar("salesPrice", StandardBasicTypes.FLOAT)
 		        .addScalar("purchasePrice", StandardBasicTypes.FLOAT).addScalar("SKName", StandardBasicTypes.STRING)
 		        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("branchCode", StandardBasicTypes.STRING)
 		        .addScalar("firstName", StandardBasicTypes.STRING).addScalar("lastName", StandardBasicTypes.STRING)
-		        .setInteger("manager", managerId).setInteger("branchId", branchId).setInteger("skId", skId)
-		        .setInteger("division", division).setInteger("district", district).setInteger("upazila", upazila)
-		        .setInteger("year", year).setInteger("month", month).setInteger("length", length).setInteger("start", start)
+		        .addScalar("username", StandardBasicTypes.STRING).setInteger("manager", managerId)
+		        .setInteger("branchId", branchId).setInteger("skId", skId).setInteger("division", division)
+		        .setInteger("district", district).setInteger("upazila", upazila).setInteger("year", year)
+		        .setInteger("month", month).setInteger("length", length).setInteger("start", start)
 		        .setResultTransformer(new AliasToBeanResultTransformer(InventoryDTO.class));
 		dtos = query.list();
 		
