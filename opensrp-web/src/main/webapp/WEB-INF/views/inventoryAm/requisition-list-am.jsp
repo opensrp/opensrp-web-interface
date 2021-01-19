@@ -16,6 +16,7 @@
 <c:url var="backUrl" value="/inventoryam/requisition.html" />
 <c:url var="searchUrl" value="/rest/api/v1/requisition/list" />
 <c:url var="viewURL" value="/inventory/requisition-details" />
+<c:url var="editURL" value="/inventoryam/requisition-edit" />
 
 
 
@@ -247,6 +248,11 @@ function navigateTodetails(requisitionId,branchName,branchCode) {
 	var locale = "${locale}";
 	var branchString= "${branchInfo[0][1]}"+"-"+"${branchInfo[0][2]}";
 	window.location.assign("${viewURL}/"+requisitionId+".html?lang="+locale+"&branch="+branchString+"&branchid="+'${branchInfo[0][0]}');
+}
+
+function navigateToEdit(requisitionId,branchName,branchCode) {
+	
+	window.location.assign("${editURL}/"+requisitionId+"/${branchInfo[0][0]}.html");
 }
 
 </script>

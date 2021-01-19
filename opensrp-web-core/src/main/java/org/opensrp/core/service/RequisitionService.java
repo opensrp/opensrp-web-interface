@@ -115,18 +115,22 @@ public class RequisitionService extends CommonService {
 		int i = 1;
 		for (RequisitionQueryDto dto : dtos) {
 			JSONArray requisition = new JSONArray();
+			
 			requisition.put(start + i);
 			requisition.put(dto.getRequisition_date());
 			requisition.put(dto.getRequisition_id());
 			requisition.put(dto.getBranch_name() + "(" + dto.getBranch_code() + ")");
 			requisition.put(dto.getFirst_name() + dto.getLast_name());
-			String view = "<div class='col-sm-6 form-group'><a class='text-primary' id=\"viewDetails\" class=\" col-sm-12 form-group sm\" href=\"javascript:;\" onclick='navigateTodetails("
+			String view = "<div class='col-sm-12 form-group'><a class='text-primary' id=\"viewDetails\"  \" href=\"javascript:;\" onclick='navigateTodetails("
 			        + dto.getId()
 			        + ",\""
 			        + dto.getBranch_name()
 			        + "\",\""
 			        + dto.getBranch_code()
-			        + "\")'><strong>View details</strong></a> </div>";
+			        + "\")'><strong>View details</strong></a>  ";
+			view += "| <a class='text-primary' id=\"viewDetails\"  href=\"javascript:;\" onclick='navigateToEdit("
+			        + dto.getId() + ",\"" + dto.getBranch_name() + "\",\"" + dto.getBranch_code()
+			        + "\")'><strong>Edit</strong></a> </div>";
 			requisition.put(view);
 			array.put(requisition);
 			i++;

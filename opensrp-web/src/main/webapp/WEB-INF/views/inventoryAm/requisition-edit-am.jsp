@@ -28,7 +28,7 @@
 					 
 				</li>
 				<li>
-					/ Inventory  / Requisition list / <b>Add Requisition </b> / 
+					/ Inventory  / Requisition list / <b>Edit Requisition </b> / 
 				</li>
 				<li>
 					<a  href="${backUrl }">Back</a>
@@ -68,7 +68,19 @@
 										<td class="">${ product.id }</td>
 										<td>${ product.name }</td>
 										<td>${ product.stock }</td>
-										<td><input  class="allProduct" type="number"  min="1" oninput="this.value = Math.abs(this.value)" id="${ product.id }" name ="${ product.id }"><span class="text-danger" id="amountSelection"></span></td>
+										<td>
+										<c:choose>
+											<c:when
+													test="${requisitionDetails.has(product.id) ==true }">
+													
+													<input  class="allProduct" type="number"  min="1" value="${requisitionDetails.getString(product.id) }"  id="${ product.id }" name ="${ product.id }"><span class="text-danger" id="amountSelection"></span>
+											</c:when>
+											<c:otherwise>
+											<input  class="allProduct" type="number"  min="1"   id="${ product.id }" name ="${ product.id }"><span class="text-danger" id="amountSelection"></span>
+											</c:otherwise>
+										</c:choose>
+										
+										</td>
 									</tr>
 							</c:forEach>
 								</tbody>
@@ -103,22 +115,21 @@
 var requisitionTable;
 jQuery(document).ready(function() {       
 	 Metronic.init(); // init metronic core components
-		Layout.init(); // init current layout
-   //TableAdvanced.init();
-		requisitionTable = $('#requisitionAddList').DataTable({
+		Layout.init(); // init current layout	
+  
+		 var oTable = $('#requisitionAddList').DataTable({
 			  "pageLength": 10
 		});
+		
+		 
+		
+
 });
 
-/* $('.identifier').change(function() {
-	var $row = $(this).closest("tr");
-	var quantity = +$(this).val();
-	if(quantity < 1) {
-		$(this).val('');
-		$row.find('span:first').html("<strong>* Quantity Can not be less than 1</strong>");
-	}
-	else $row.find('span:first').html("");
-}); */
+function getValue(id){
+	
+	
+}
 
 function inputValue(name){
 	var oTable = $('#requisitionAddList').DataTable();
@@ -141,8 +152,8 @@ function mapRowData() {
 	
 	
 	var requisitionDetails = [];
+	var oTable = $('#requisitionAddList').DataTable();	
 	 
-	 var oTable = $('#requisitionAddList').DataTable();
 	 var rowcollection =  oTable.$(".allProduct", {"page": "all"});
 	 var form_data  = oTable.rows().data();
 	 var f = form_data;
@@ -161,33 +172,7 @@ function mapRowData() {
 	 }
 	
 	
-	/*  $('#requisitionAddList > tbody > tr').each(function (index, tr) {
-		    console.log(row);
-			var productObject = {};
-		    //get td of each row and insert it into cols array
-		   
-		    $(this).find('td').each(function (colIndex, row) {
-		    	if(colIndex == 0) {
-		    		productObject['productId'] = parseInt(row.textContent);
-		    	}
-		    	if(colIndex == 2) {
-		    		productObject['currentStock'] = parseInt(row.textContent);
-		    	}
-		    	if(colIndex == 3) {
-		    	 $(this).find('input').each(function() {
-		    		 	if(parseInt($(this).val()) == 0) {
-		    		 		$(this).val('');
-		    		 	}
-		    		     productObject['qunatity'] = parseInt($(this).val());
-		    		   })
-		    	}
-		    });
-		    if(!isNaN(productObject["qunatity"])) {
-		    	 if(productObject["qunatity"] > 0) {
-		    		 requisitionDetails.push(productObject);
-		    	 }
-			 }
-		  });  */
+	
 		  
 	 
 	 return requisitionDetails;
@@ -212,7 +197,7 @@ function mapRowData() {
 				formData = {
 			            'branchId': branchId,
 			            'status': "ACTIVE",
-			            'id': 0,
+			            'id': "${requisition.getId()}",
 			            'requisitionId': requisitionId,
 			            'requisitionDetails': requisionDetailsArray
 			        };

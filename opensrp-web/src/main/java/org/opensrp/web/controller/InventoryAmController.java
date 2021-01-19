@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.opensrp.common.dto.InventoryDTO;
 import org.opensrp.common.dto.PAStockReportDTO;
 import org.opensrp.common.dto.RequisitionQueryDto;
@@ -16,6 +18,8 @@ import org.opensrp.common.util.Roles;
 import org.opensrp.core.dto.ProductDTO;
 import org.opensrp.core.dto.StockAdjustDTO;
 import org.opensrp.core.entity.Branch;
+import org.opensrp.core.entity.Requisition;
+import org.opensrp.core.entity.RequisitionDetails;
 import org.opensrp.core.entity.Role;
 import org.opensrp.core.entity.User;
 import org.opensrp.core.service.BranchService;
@@ -140,6 +144,30 @@ public class InventoryAmController {
 		model.addAttribute("show", "block");
 		model.addAttribute("selectrequisitionSubMenu", submenuSelectedColor);
 		return "inventoryAm/requisition-add-am";
+	}
+	
+	@RequestMapping(value = "inventoryam/requisition-edit/{rID}/{id}.html", method = RequestMethod.GET)
+	public String editRequisitionAreaManager(Model model, Locale locale, @PathVariable("id") String id,
+	                                         @PathVariable("rID") Long rID) throws JSONException {
+		User loggedInUser = AuthenticationManagerUtil.getLoggedInUser();
+		List<Object[]> branchInfo = branchService.getBranchByUser(id, loggedInUser);
+		List<ProductDTO> productListForRequisition = requisitionService.productListFortRequisition(Integer.parseInt(id), 0);
+		model.addAttribute("productList", productListForRequisition);
+		model.addAttribute("branchInfo", branchInfo);
+		model.addAttribute("locale", locale);
+		model.addAttribute("show", "block");
+		model.addAttribute("selectrequisitionSubMenu", submenuSelectedColor);
+		Requisition requisition = requisitionService.findById(rID, "id", Requisition.class);
+		model.addAttribute("requisition", requisition);
+		Set<RequisitionDetails> requisitionDetails = requisition.getRequisitionDetails();
+		JSONObject _requisitionDetails = new JSONObject();
+		
+		for (RequisitionDetails requisitionDetails2 : requisitionDetails) {
+			_requisitionDetails.put("" + requisitionDetails2.getProductId() + "", requisitionDetails2.getQunatity());
+		}
+		model.addAttribute("requisitionDetails", _requisitionDetails);
+		System.err.println("" + _requisitionDetails);
+		return "inventoryAm/requisition-edit-am";
 	}
 	
 	@RequestMapping(value = "inventoryam/stock-in.html", method = RequestMethod.GET)
