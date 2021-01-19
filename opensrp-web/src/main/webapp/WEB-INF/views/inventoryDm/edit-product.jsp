@@ -43,7 +43,7 @@
 			</ul>
 		<div class="portlet box blue-madison">
 			<div class="portlet-title">
-				<div class="center-caption">Edit Product</div>
+				<div class="center-caption">Edit Product ${readonly }</div>
 
 
 			</div>
@@ -62,14 +62,14 @@
 					<div class="form-group row">
 						<label for="productName" class="col-sm-3 col-form-label"><spring:message code="lbl.productName"></spring:message><span class="text-danger">*</span> :</label>
 						<div class="col-sm-6">
-							<input type="text" class="form-control" readonly="readonly" id="productName" name ="productName"
+							<input type="text" class="form-control" ${readonly } id="productName" name ="productName"
 								placeholder="Product Name" value="${product.getName() }" required>
 						</div>
 					</div>
 					<div class="form-group row">
 						<label for="description" class="col-sm-3 col-form-label"><spring:message code="lbl.description"></spring:message> :</label>
 						<div class="col-sm-6">
-							<input type="text" class="form-control" id="description" name ="productDescription"
+							<input type="text" ${readonly } class="form-control" id="description" name ="productDescription"
 								placeholder="Description" value="${product.getDescription() }">
 						</div>
 					</div>

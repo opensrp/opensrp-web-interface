@@ -82,14 +82,25 @@ public class InventoryDmController {
 		
 		int i = 0;
 		int[] selectRoles = new int[10];
+		String readonly = "";
 		for (ProductRole pRole : product.getProductRole()) {
 			selectRoles[i] = pRole.getRole();
+			
 			i++;
 		}
-		
+		for (ProductRole pRole : product.getProductRole()) {
+			if (pRole.getRole() == 29) {
+				readonly = "";
+				break;
+			} else {
+				readonly = "readonly";
+			}
+		}
+		System.err.println("SS:" + readonly);
 		session.setAttribute("selectRoles", selectRoles);
 		session.setAttribute("roles", roles);
 		model.addAttribute("roles", roles);
+		model.addAttribute("readonly", readonly);
 		model.addAttribute("product", product);
 		model.addAttribute("locale", locale);
 		model.addAttribute("show", "block");
