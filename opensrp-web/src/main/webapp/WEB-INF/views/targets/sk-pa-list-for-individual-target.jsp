@@ -88,9 +88,15 @@
 										<option value="SK">SK</option>
 										<option value="PA">PA</option>										
 									</select>
+									
 								</div>
-								<div class="col-lg-9 form-group form-group text-right">
-								<br />
+								<div class="col-lg-3 form-group">
+								     <label for="cars">Name /Username </label> 	
+									<input name="search" class="form-control"id="search" placeholder="Name /Username"/> 
+								</div>
+								
+								<div class="col-lg-2 form-group form-group" style="padding-top:24px;">
+								
 								<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
 								</div>
 								
@@ -103,7 +109,7 @@
 						<table class="table table-striped table-bordered " id="StockSellHistory">
 							<thead>
 								<tr>
-								   <th>Si</th>
+								   <th>SI</th>
 									<th><spring:message code="lbl.name"></spring:message></th>
 									<th>Username</th>
 									<th><spring:message code="lbl.designation"></spring:message></th>
@@ -177,7 +183,7 @@ jQuery(function() {
     	
     	
     	stockList = $('#StockSellHistory').DataTable({
-            bFilter: true,
+            bFilter: false,
             serverSide: true,
             processing: true,
             ordering:false,
@@ -196,6 +202,7 @@ jQuery(function() {
                     data.locationId=0;                    
                     data.roleName='SK';
                     data.totalRecords = totalRecords;
+                    data.searchKey="";
                     
                 },
                 dataSrc: function(json){
@@ -231,6 +238,7 @@ function filter(){
 	}else if(division != 0){
 		locationId =division; 
 	}
+	let searchKey = $("#search").val();
 	stockList = $('#StockSellHistory').DataTable({
          bFilter: false,
          serverSide: true,
@@ -255,6 +263,7 @@ function filter(){
             	 data.branchId = branchIds;
                  data.locationId=locationId;                    
                  data.roleName=$("#roleList option:selected").val();
+                 data.searchKey=searchKey;
                  data.totalRecords = totalRecords;
              },
              dataSrc: function(json){

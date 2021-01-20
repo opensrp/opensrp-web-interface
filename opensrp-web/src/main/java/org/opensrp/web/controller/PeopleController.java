@@ -89,7 +89,7 @@ public class PeopleController {
 		model.addAttribute("locale", locale);
 		JSONObject jo = new JSONObject();
 		jo.put("relation_id", baseEntityId);
-		List<ClientListDTO> data = peopleService.getMemberList(jo, 404, 404);
+		List<String> data = peopleService.getMemberList(jo, 404, 404);
 		List<ActivityListDTO> dataInfos = peopleService.getServiceInfo(baseEntityId, id, "household");
 		
 		JSONObject details = new JSONObject();
@@ -154,7 +154,7 @@ public class PeopleController {
 		return "people/members";
 	}
 	
-	@RequestMapping(value = "/members-datatable.html", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/members-datatable.html", method = RequestMethod.POST)
 	public String memberDataTable(@RequestBody String dto, HttpSession session, Model model, Locale locale)
 	    throws JSONException {
 		model.addAttribute("locale", locale);
@@ -164,7 +164,7 @@ public class PeopleController {
 		model.addAttribute("members", data);
 		model.addAttribute("people", "block");
 		return "people/member-list-table";
-	}
+	}*/
 	
 	@RequestMapping(value = "/activity-details/{formName}/{id}/{serviceName}", method = RequestMethod.GET)
 	public String activityDetails(HttpServletRequest request, @PathVariable("formName") String formName,

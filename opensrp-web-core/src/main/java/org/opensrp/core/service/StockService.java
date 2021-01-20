@@ -400,6 +400,7 @@ public class StockService extends CommonService {
 				//patient.put("SS"); // for am
 			}
 			patient.put(dto.getSKName());
+			patient.put(dto.getUsername());
 			patient.put(dto.getBranchName() + "(" + dto.getBranchCode() + ")");
 			/*if (roleId != 32) {
 				patient.put("0"); // target amount for DIvM

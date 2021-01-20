@@ -299,35 +299,33 @@ public class TargetService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<TargetCommontDTO> getUserListForTargetSet(int locationId, String branchIds, String roleName, Integer length,
-	                                                      Integer start, String orderColumn, String orderDirection) {
+	public List<TargetCommontDTO> getUserListForTargetSet(JSONObject jo, String branchIds) {
 		
 		Session session = getSessionFactory();
 		List<TargetCommontDTO> dtos = new ArrayList<>();
 		
-		String hql = "select username,user_id userId,branch_id branchId,role_id roleId,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName,role_name roleName,location_name locationName,population from core.user_list_for_target_set(:locationId,'{"
-		        + branchIds + "}',:roleName,:start,:length)";
+		String hql = "select username,user_id userId,branch_id branchId,role_id roleId,branch_name branchName,branch_code branchCode,first_name firstName,last_name lastName,role_name roleName,location_name locationName,population from core.user_list_for_target_set('"
+		        + jo + "','{" + branchIds + "}')";
 		Query query = session.createSQLQuery(hql).addScalar("username", StandardBasicTypes.STRING)
 		        .addScalar("userId", StandardBasicTypes.INTEGER).addScalar("branchId", StandardBasicTypes.INTEGER)
 		        .addScalar("roleId", StandardBasicTypes.INTEGER).addScalar("branchName", StandardBasicTypes.STRING)
 		        .addScalar("branchCode", StandardBasicTypes.STRING).addScalar("firstName", StandardBasicTypes.STRING)
 		        .addScalar("lastName", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
 		        .addScalar("locationName", StandardBasicTypes.STRING).addScalar("population", StandardBasicTypes.INTEGER)
-		        .setInteger("locationId", locationId).setString("roleName", roleName).setInteger("length", length)
-		        .setInteger("start", start).setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
+		        .setResultTransformer(new AliasToBeanResultTransformer(TargetCommontDTO.class));
 		dtos = query.list();
 		
 		return dtos;
 	}
 	
 	@Transactional
-	public int getUserListForTargetSetCount(int locationId, String branchIds, String roleName) {
+	public int getUserListForTargetSetCount(JSONObject jo, String branchIds) {
 		
 		Session session = getSessionFactory();
 		BigInteger total = null;
 		
-		String hql = "select * from core.user_list_for_target_set_count(:locationId,'{" + branchIds + "}',:roleName)";
-		Query query = session.createSQLQuery(hql).setInteger("locationId", locationId).setString("roleName", roleName);
+		String hql = "select * from core.user_list_for_target_set_count('" + jo + "','{" + branchIds + "}')";
+		Query query = session.createSQLQuery(hql);
 		total = (BigInteger) query.uniqueResult();
 		
 		return total.intValue();

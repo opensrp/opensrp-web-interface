@@ -78,7 +78,7 @@
 										<option value="0"><spring:message
 												code="lbl.selectSk" /></option>
 										<c:forEach items="${skList}" var="sk">
-										<option value="${sk.id}">${sk.name}</option>
+										<option value="${sk.id}">${sk.name}(${sk.getUsername() })</option>
 										</c:forEach>
 
 										
@@ -105,7 +105,7 @@
 							</div>
 							
 						</div>
-						<h3>Inventory :</h3>
+						<h3>SS list </h3>
 						<table class="table table-striped table-bordered "
 							id="StockSellHistory">
 							<thead>
@@ -114,6 +114,7 @@
 									<th><spring:message code="lbl.ssName"></spring:message></th>
 									<%-- <th><spring:message code="lbl.ssId"></spring:message></th> --%>
 									<th><spring:message code="lbl.skName"></spring:message></th>
+									<th>SK Mobile</th>
 									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
 									<%-- <th><spring:message code="lbl.targetAmount"></spring:message></th> --%>
 									<th><spring:message code="lbl.projectedSalesAmount"></spring:message> (BDT)</th>
@@ -498,7 +499,7 @@
             scrollX:        true,
             scrollCollapse: true,
             fixedColumns:   {
-                leftColumns: 2/* ,
+                leftColumns: 3/* ,
              rightColumns: 1 */
             },
 			ajax : {

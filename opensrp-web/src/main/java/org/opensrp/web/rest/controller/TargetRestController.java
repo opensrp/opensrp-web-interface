@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opensrp.common.dto.MapMovement;
@@ -130,19 +131,28 @@ public class TargetRestController {
 		orderColumn = "";
 		//UserColumn.valueOf("_" + orderColumn).getValue();
 		
-		String name = request.getParameter("search");
+		String key = request.getParameter("searchKey");
+		if (!StringUtils.isBlank(key)) {
+			key = "%" + key + "%";
+		}
+		System.err.println("Key:::" + key);
 		String branchIds = request.getParameter("branchId");
 		String roleName = request.getParameter("roleName");
 		int locationId = Integer.parseInt(request.getParameter("locationId"));
+		JSONObject json = new JSONObject();
+		json.put("key", key);
+		json.put("roleName", roleName);
 		
-		List<TargetCommontDTO> userList = targetService.getUserListForTargetSet(locationId, branchIds, roleName, length,
-		    start, orderColumn, orderDirection);
+		json.put("offset", start);
+		json.put("limit", length);
+		
+		List<TargetCommontDTO> userList = targetService.getUserListForTargetSet(json, branchIds);
 		int totalRecords = Integer.parseInt(request.getParameter("totalRecords"));
 		
 		int total = 0;
 		if (start == 0) {
 			
-			total = targetService.getUserListForTargetSetCount(locationId, branchIds, roleName);
+			total = targetService.getUserListForTargetSetCount(json, branchIds);
 		} else {
 			
 			total = totalRecords;
@@ -208,10 +218,9 @@ public class TargetRestController {
 		String roleName = request.getParameter("roleName");
 		int locationId = Integer.parseInt(request.getParameter("locationId"));
 		
-		List<TargetCommontDTO> userList = targetService.getUserListForTargetSet(locationId, branchIds, roleName, length,
-		    start, orderColumn, orderDirection);
+		List<TargetCommontDTO> userList = targetService.getUserListForTargetSet(null, "");
 		
-		int userCount = targetService.getUserListForTargetSetCount(locationId, branchIds, roleName);
+		int userCount = targetService.getUserListForTargetSetCount(null, branchIds);
 		
 		JSONObject response = targetService.getUnionWisePopulationSetOfDataTable(draw, userCount, userList);
 		return new ResponseEntity<>(response.toString(), OK);

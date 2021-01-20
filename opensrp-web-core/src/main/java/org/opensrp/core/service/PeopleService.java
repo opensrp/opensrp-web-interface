@@ -4,6 +4,7 @@
 
 package org.opensrp.core.service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,29 +88,29 @@ public class PeopleService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<ClientListDTO> getMemberList(JSONObject jo, Integer startAge, Integer endAge) {
+	public List<String> getMemberList(JSONObject jo, Integer startAge, Integer endAge) {
 		Session session = getSessionFactory();
 		
-		List<ClientListDTO> householdList = new ArrayList<ClientListDTO>();
+		List<String> householdList = new ArrayList<String>();
 		
-		String hql = "select  id,member_name memberName,member_id memberId,relation_with_hh relationWithHousehold,member_age age,age_month ageMonth,age_day ageDay,dob dob,gender gender"
-		        + " ,status status,village,branch_name branchName,branch_code branchCode,"
-		        + " contact contact,base_entity_id baseEntityId,relational_id  relationalId from report.member_list('"
-		        + jo
-		        + "',:startAge,:endAge)";
+		String hql = "select  * from report.member_list('" + jo + "',:startAge,:endAge)";
 		
-		Query query = session.createSQLQuery(hql).addScalar("id", StandardBasicTypes.LONG)
-		        .addScalar("memberName", StandardBasicTypes.STRING).addScalar("memberId", StandardBasicTypes.STRING)
-		        .addScalar("relationWithHousehold", StandardBasicTypes.STRING).addScalar("age", StandardBasicTypes.STRING)
-		        .addScalar("ageMonth", StandardBasicTypes.INTEGER).addScalar("ageDay", StandardBasicTypes.INTEGER)
-		        .addScalar("dob", StandardBasicTypes.STRING).addScalar("gender", StandardBasicTypes.STRING)
-		        .addScalar("status", StandardBasicTypes.STRING).addScalar("village", StandardBasicTypes.STRING)
-		        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("branchCode", StandardBasicTypes.STRING)
-		        .addScalar("contact", StandardBasicTypes.STRING).addScalar("baseEntityId", StandardBasicTypes.STRING)
-		        .addScalar("relationalId", StandardBasicTypes.STRING).setInteger("startAge", startAge)
-		        .setInteger("endAge", endAge).setResultTransformer(new AliasToBeanResultTransformer(ClientListDTO.class));
+		Query query = session.createSQLQuery(hql).setInteger("startAge", startAge).setInteger("endAge", endAge);
 		householdList = query.list();
 		return householdList;
+	}
+	
+	@Transactional
+	public int getMemberListCount(JSONObject jo, Integer startAge, Integer endAge) {
+		
+		Session session = getSessionFactory();
+		BigInteger total = null;
+		
+		String hql = "select  * from report.member_list_count('" + jo + "',:startAge,:endAge)";
+		Query query = session.createSQLQuery(hql).setInteger("startAge", startAge).setInteger("endAge", endAge);
+		total = (BigInteger) query.uniqueResult();
+		
+		return total.intValue();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -167,31 +168,36 @@ public class PeopleService extends CommonService {
 		return response;
 	}
 	
-	/*public JSONObject drawMemberDataTable(Integer draw, int total, List<ClientListDTO> dtos) throws JSONException {
+	public JSONObject drawMemberDataTable(Integer draw, int total, List<String> dtos, int start) throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
-		response.put("recordsTotal", dtos.getTotalCount());
-		response.put("recordsFiltered", dtos.getTotalCount());
+		response.put("recordsTotal", total);
+		response.put("recordsFiltered", total);
 		JSONArray array = new JSONArray();
-		for (ClientListDTO dto : dtos.getClientDTO()) {
+		int i = 1;
+		for (String string : dtos) {
 			JSONArray tableData = new JSONArray();
-			tableData.put(dto.getMemberName());
-			tableData.put(dto.getMemberId());
-			tableData.put(dto.getHouseholdId());
-			tableData.put(dto.getRelationWithHousehold());
-			tableData.put(dto.getAge());
-			tableData.put(dto.getGender());
-			tableData.put(dto.getMemberType());
-			tableData.put(dto.getVillage());
-			tableData.put(dto.getBranchAndCode());
+			
+			JSONObject json = new JSONObject(string);
+			tableData.put(start + i);
+			tableData.put(json.get("first_name"));
+			tableData.put(json.get("member_id"));
+			tableData.put(json.get("relation_with_household_head"));
+			tableData.put(json.get("birthdate"));
+			tableData.put(json.get("member_age_year"));
+			tableData.put(json.get("gender"));
+			tableData.put(json.get("village"));
+			tableData.put(json.get("branch_name") + " " + json.getString("code"));
 			String view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"member-details/"
-			        + dto.getBaseEntityId() + "/" + dto.getId() + ".html" + "\">Details</a> </div>";
+			        + json.getString("base_entity_id") + "/" + json.getString("id") + ".html" + "\">Details</a> </div>";
 			tableData.put(view);
 			array.put(tableData);
+			i++;
 		}
+		
 		response.put("data", array);
 		return response;
-	}*/
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Transactional

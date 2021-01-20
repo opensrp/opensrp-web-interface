@@ -1,8 +1,19 @@
 package org.opensrp.web.rest.controller;
 
+import static org.springframework.http.HttpStatus.OK;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.opensrp.core.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("rest/api/v1/people")
@@ -45,8 +56,7 @@ public class PeopleRestController {
 		//JSONObject response = peopleService.drawHouseholdDataTable(draw, 0, households);
 		return new ResponseEntity<>(response.toString(), OK);
 	}*/
-	
-	/*@RequestMapping(value = "/member/list", method = RequestMethod.GET)
+	@RequestMapping(headers = { "Accept=application/json;charset=UTF-8" }, value = "/member/list", method = RequestMethod.GET)
 	public ResponseEntity<String> memberList(HttpServletRequest request, HttpSession session) throws JSONException {
 		Integer start = Integer.valueOf(request.getParameter("start"));
 		Integer length = Integer.valueOf(request.getParameter("length"));
@@ -55,18 +65,34 @@ public class PeopleRestController {
 		String orderColumn = request.getParameter("order[0][column]");
 		
 		String orderDirection = request.getParameter("order[0][dir]");
-		orderColumn = MemberColumn.valueOf("_" + orderColumn).getValue();
 		
-		String searchKey = request.getParameter("search");
-		String baseEntityId = request.getParameter("baseEntityId");
-		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		String searchKey = request.getParameter("searchKey");
+		String village = request.getParameter("village");
+		Integer startAge = Integer.valueOf(request.getParameter("startAge"));
+		Integer endAge = Integer.valueOf(request.getParameter("endAge"));
+		String gender = request.getParameter("gender");
+		JSONObject jo = new JSONObject();
+		jo.put("village", village);
+		jo.put("gender", gender);
+		jo.put("startAge", startAge);
+		jo.put("endAge", endAge);
+		jo.put("searchKey", searchKey);
+		jo.put("offset", start);
+		jo.put("limit", length);
+		int totalRecords = Integer.parseInt(request.getParameter("totalRecords"));
+		List<String> data = peopleService.getMemberList(jo, startAge, endAge);
 		
-		String location = request.getParameter("locationId");
+		int total = 0;
+		if (start == 0) {
+			
+			total = peopleService.getMemberListCount(jo, startAge, endAge);
+		} else {
+			
+			total = totalRecords;
+		}
 		
-		List<ClientListDTO> data = peopleService.getMemberData(baseEntityId);
-		
-		JSONObject response = peopleService.drawMemberDataTable(draw, 0, data);
+		JSONObject response = peopleService.drawMemberDataTable(draw, total, data, start);
 		return new ResponseEntity<>(response.toString(), OK);
 	}
-	*/
+	
 }

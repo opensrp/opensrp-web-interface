@@ -96,7 +96,7 @@ public class InventoryDmController {
 				readonly = "readonly";
 			}
 		}
-		System.err.println("SS:" + readonly);
+		
 		session.setAttribute("selectRoles", selectRoles);
 		session.setAttribute("roles", roles);
 		model.addAttribute("roles", roles);

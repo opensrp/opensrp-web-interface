@@ -10,7 +10,7 @@
 <%@page import="org.opensrp.web.util.AuthenticationManagerUtil"%>
 
 <title>Members</title>
-<c:url var="get_url" value="/people/members-datatable.html" />
+<c:url var="get_url" value="/rest/api/v1/people/member/list" />
 <jsp:include page="/WEB-INF/views/header.jsp" />
 <jsp:include page="/WEB-INF/views/dataTablecss.jsp" />
 <div class="page-content-wrapper">
@@ -53,7 +53,7 @@
 							
 							<div class="row">
 								<div class="col-lg-3 form-group">
-								    <label for="cars">Select gender </label> 	
+								    <label for="cars"> gender </label> 	
 									<select
 										name="gender" class="form-control" id="gender">
 										<option value="">Select gender</option>
@@ -63,7 +63,7 @@
 									</select>
 								</div>
 								<div class="col-lg-3 form-group">
-								    <label for="cars">Select Age </label> 	
+								    <label for="cars"> Age </label> 	
 									<select
 										name="age" class="form-control" id="age">
 										<option value="404-404">Select age range</option>
@@ -94,11 +94,27 @@
 						
 						
 						<div class="row" style="margin: 0px">
-                            <div class="col-sm-12" id="content" style="overflow-x: auto;">
-                                
-                                <div id="report"></div>
+                            <div id="report">
+								<table style="width: 100%;"
+									class="display table table-bordered table-striped"
+									id="dataTableId">
+									<thead>
+										<tr> <th>SI</th>
+									        <th>Member name</th>
+											<th>Member ID</th>				
+											<th>Relation with <br/>household head</th>
+											<th>DOB</th>
+											<th>Age</th>
+											<th>Gender</th>									
+											<th>Village</th>
+											<th>Branch(code)</th>									
+											<th>Action</th>
+									    </tr>
+										
+									</thead>
 
-                            </div>
+								</table>
+							</div>
                         </div>
 						
 						
@@ -118,7 +134,8 @@
 <script src="<c:url value='/resources/assets/admin/js/table-advanced.js'/>"></script>
 <script src="<c:url value='/resources/js/dataTables.fixedColumns.min.js'/>"></script>
 <script>
-jQuery(document).ready(function() {       
+jQuery(document).ready(function() { 
+	window.totalRecords = 0;
 	 Metronic.init(); // init metronic core components
 		Layout.init(); // init current layout
 		
@@ -131,9 +148,10 @@ jQuery(document).ready(function() {
     	//$('#unionList').select2({dropdownAutoWidth : true});
     });
 
-function filter(){
-	var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
+
+
+function filter() {	
+
 	let village = $("#villageList option:selected").text();
 	let villageId = $("#villageList option:selected").val();
 	let searchKey = $("#search").val();
@@ -147,62 +165,51 @@ function filter(){
 	$('#errorMsg').hide();
 	let agePart = $("#age").val();
 	let age = agePart.split('-');
-	let formData = 
-		{
-		 	village:village,
-		 	gender:$("#gender option:selected").val(),
-		 	startAge:age[0],
-		 	endAge:age[1],
-		 	searchKey:searchKey
-        }
-	 console.log(formData);
+
 	
-	 $.ajax({
-         type : "POST",
-         contentType : "application/json",
-         url : "${get_url}",
-         dataType : 'html',
-         timeout : 300000,
-         data:  JSON.stringify(formData),
-
-         beforeSend: function(xhr) {
-             xhr.setRequestHeader(header, token);
-             $('#loading').show();
-             $('#search-button').attr("disabled", true);
-         },
-         success : function(data) {
-             
-
-             $('#loading').hide();
-             $("#report").html(data);
-             $('#search-button').attr("disabled", false);
-             let reportType =$("input[name='time-period']:checked").val();
-
-
-             var table = $('#dataTable').DataTable({
-                 scrollY:        "300px",
-                 scrollX:        true,
-                 scrollCollapse: true,
-                 fixedColumns:   {
-                     leftColumns: 2/* ,
-                  rightColumns: 1 */
-                 }
-             });
-             table.on( 'order.dt search.dt', function () {
-     	        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-     	            cell.innerHTML = i+1;
-     	        } );
-     	    } ).draw();
-         },
-         error : function(e) {
-             $('#loading').hide();
-             $('#search-button').attr("disabled", false);
-         },
-         complete : function(e) {
-             $('#loading').hide();
-             $('#search-button').attr("disabled", false);
-         }
-     });
+	stockList = $('#dataTableId').DataTable({
+		bFilter : false,
+		serverSide : true,
+		processing : true,
+		scrollY : "300px",
+		scrollX : true,
+		scrollCollapse : true,
+		fixedColumns : {
+			leftColumns : 2
+		},
+		"ordering" : false,
+		
+		ajax : {
+			url : "${get_url}",
+			timeout : 300000,
+			data : function(data) {
+				data.village=village;
+			 	data.gender=$("#gender option:selected").val();
+			 	data.startAge=age[0];
+			 	data.endAge=age[1];
+			 	data.searchKey=searchKey;
+			 	data.totalRecords = totalRecords;
+				
+			},
+			dataSrc : function(json) {
+				totalRecords = json.recordsTotal;
+				if (json.data) {
+					
+					return json.data;
+				} else {
+					return [];
+				}
+			},
+			complete : function() {
+			},
+			type : 'GET'
+		},
+		bInfo : true,
+		destroy : true,
+		language : {
+			searchPlaceholder : ""
+		}
+	});
 }
 </script>
 
