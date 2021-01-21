@@ -114,6 +114,7 @@ jQuery(document).ready(function() {
 		$('#villageList').select2({dropdownAutoWidth : true});
     	//$('#unionList').select2({dropdownAutoWidth : true});
 		window.totalRecords = 0;
+		$("#dataTableId").hide();
 });
 
 
@@ -123,79 +124,6 @@ jQuery(document).ready(function() {
 <script>
     let stockList;
     
-    function filters(){
-
-    var token = $("meta[name='_csrf']").attr("content");
-	var header = $("meta[name='_csrf_header']").attr("content");
-	let village = $("#villageList option:selected").text();
-	let villageId = $("#villageList option:selected").val();
-	let searchKey = $("#search").val();
-	
-	if(villageId ==0 && searchKey==''){
-		 $('#errorMsg').show();
-		return 
-	}
-	/* if(searchKey !=''){
-		searchKey = "%"+$("#search").val()+"%";
-	} */
-	
-	$('#errorMsg').hide();
-	
-	let formData = 
-		{
-		 	village:village,		 	
-		 	searchKey:searchKey
-        }
-	 console.log(formData);
-	
-	 $.ajax({
-         type : "POST",
-         contentType : "application/json",
-         url : "${get_url}",
-         dataType : 'html',
-         timeout : 300000,
-         data:  JSON.stringify(formData),
-
-         beforeSend: function(xhr) {
-             xhr.setRequestHeader(header, token);
-             $('#loading').show();
-             $('#search-button').attr("disabled", true);
-         },
-         success : function(data) {
-             
-
-             $('#loading').hide();
-             $("#report").html(data);
-             $('#search-button').attr("disabled", false);
-             let reportType =$("input[name='time-period']:checked").val();
-
-
-             var table = $('#dataTable').DataTable({
-                 scrollY:        "300px",
-                 scrollX:        true,
-                 scrollCollapse: true,
-                 fixedColumns:   {
-                     leftColumns: 2/* ,
-                  rightColumns: 1 */
-                 }
-             });
-             table.on( 'order.dt search.dt', function () {
-     	        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-     	            cell.innerHTML = i+1;
-     	            
-     	        } );
-     	    } ).draw();
-         },
-         error : function(e) {
-             $('#loading').hide();
-             $('#search-button').attr("disabled", false);
-         },
-         complete : function(e) {
-             $('#loading').hide();
-             $('#search-button').attr("disabled", false);
-         }
-     });
-}
     
     
     function filter() {	
@@ -213,7 +141,7 @@ jQuery(document).ready(function() {
     	
     	
     	$('#errorMsg').hide();
-    	
+    	$("#dataTableId").show();
     	
     	stockList = $('#dataTableId').DataTable({
     		bFilter : false,

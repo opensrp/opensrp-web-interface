@@ -65,7 +65,7 @@
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
-            dateFormat: 'MM yy',
+            dateFormat: 'yy-mm',
             maxDate: new Date,
             onClose: function(dateText, inst) {
                 var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
@@ -83,7 +83,7 @@
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
-            dateFormat: 'MM yy',
+            dateFormat: 'yy-mm',
             maxDate: new Date,
 
             onClose: function(dateText, inst) {

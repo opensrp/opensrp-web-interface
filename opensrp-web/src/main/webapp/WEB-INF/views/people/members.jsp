@@ -136,8 +136,9 @@
 <script>
 jQuery(document).ready(function() { 
 	window.totalRecords = 0;
-	 Metronic.init(); // init metronic core components
-		Layout.init(); // init current layout
+	Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
+	$("#dataTableId").hide();	
 		
 });
 </script>
@@ -167,7 +168,7 @@ function filter() {
 	$('#errorMsg').hide();
 	let agePart = $("#age").val();
 	let age = agePart.split('-');
-
+	$("#dataTableId").show();
 	
 	stockList = $('#dataTableId').DataTable({
 		bFilter : false,
@@ -194,6 +195,7 @@ function filter() {
 				
 			},
 			dataSrc : function(json) {
+				
 				totalRecords = json.recordsTotal;
 				if (json.data) {
 					

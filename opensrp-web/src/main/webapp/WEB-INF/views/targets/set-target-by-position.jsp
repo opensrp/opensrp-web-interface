@@ -330,7 +330,7 @@ jQuery(function() {
 		changeMonth: true,
 		changeYear: true,
 		showButtonPanel: true,
-		dateFormat: 'MM yy',
+		 dateFormat: 'yy-mm',
 		//minDate: new Date,
 		onClose: function(dateText, inst) {
 			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
@@ -359,7 +359,7 @@ jQuery(function() {
 function forceCall() {
 	jQuery('#dateFieldInput').datepicker({
 		showButtonPanel: true,
-		dateFormat: 'dd-MM-yy',
+		dateFormat: 'yy-mm-dd',
 		minDate: new Date,
 		onClose: function(dateText, inst) {
 			// fetchTargetInfo();

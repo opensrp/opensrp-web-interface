@@ -237,11 +237,12 @@ $('#targetInfo').submit(function(event) {
 		return;
 	}
 	$("#validationMessage").html("");
+	
 	var d = new Date(date);
 	var date = d.getDate();
 	var month = d.getMonth() + 1;
 	var year = d.getFullYear();
-
+	
 	var todayDate = new Date(), y = todayDate.getFullYear(), m = todayDate.getMonth();
 	
 	var startDate = timePeriod == 'monthly' ?$.datepicker.formatDate('yy-mm-dd', new Date(d.getFullYear(), d.getMonth(), 1)):$.datepicker.formatDate('yy-mm-dd', d);
@@ -250,6 +251,8 @@ $('#targetInfo').submit(function(event) {
     var item=[];
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
+    
+    
     $('input[name^="qty"]').each(function() { 
     	var details={
     		"productId":$($(this)).attr("id"),
@@ -283,7 +286,9 @@ $('#targetInfo').submit(function(event) {
 		"day": timePeriod == 'monthly' ? 0 : date,
         "targetDetailsDTOs":item
     };
+   
     console.log(formData);
+    
     $.ajax({
         contentType : "application/json",
         type: "POST",
@@ -325,7 +330,7 @@ jQuery(function() {
         changeMonth: true,
         changeYear: true,
         showButtonPanel: true,
-        dateFormat: 'MM yy',
+        dateFormat: 'yy-mm',
         minDate: new Date,
         onClose: function(dateText, inst) { 
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
@@ -343,7 +348,7 @@ jQuery(function() {
 jQuery(function() {
 	jQuery('#dateFieldInput').datepicker({
 		showButtonPanel: true,
-		dateFormat: 'dd-MM-yy',
+		dateFormat: 'yy-mm-dd',
 		minDate: new Date,
 		onClose: function(dateText, inst) {
 			var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();

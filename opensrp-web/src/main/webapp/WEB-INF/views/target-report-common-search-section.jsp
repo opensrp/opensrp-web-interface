@@ -79,7 +79,7 @@ $(function() {
         changeMonth: true,
         changeYear: true,
         showButtonPanel: true,
-        dateFormat: 'MM yy',
+        dateFormat: 'yy-mm',
         maxDate: new Date,         
         onClose: function(dateText, inst) {         	
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();           
@@ -97,7 +97,7 @@ $(function() {
         changeMonth: true,
         changeYear: true,
         showButtonPanel: true,
-        dateFormat: 'MM yy',
+        dateFormat: 'yy-mm',
         maxDate: new Date,
        
         onClose: function(dateText, inst) {
@@ -126,7 +126,7 @@ $(function() {
 
  	var dateToday = new Date();
   	var dates = $(".date").datepicker({
-        dateFormat: 'yy-mm-dd',
+  		dateFormat: 'yy-mm-dd',
         maxDate: dateToday,
         onSelect: function(selectedDate) {
             var option = this.id == "from" ? "minDate" : "maxDate",

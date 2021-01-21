@@ -100,7 +100,7 @@ font-size: 18px;
      cursor: pointer;
 }
 
-#from,#to,#mfrom,#mto,#receiveDate,.currentStock,#expiryDate,#yearMonth,#startYear,#branch,#designation,#date,#trainingDate{
+#from,#to,#mfrom,#mto,#receiveDate,.currentStock,#expiryDate,#yearMonth,#startYear,#branch,#designation,#date,#trainingDate,#monthFieldInput,#dateFieldInput{
      cursor: pointer;
 }
 #branch,#designation,#skName,#ssName{
@@ -108,7 +108,7 @@ font-size: 18px;
       border:1px solid #ccc; 
       background: #fff;
 }
- #from,#to,#mfrom,#mto,#receiveDate,#expiryDate,.jqdate,#yearMonth,#startYear,#date,#trainingDate{
+ #from,#to,#mfrom,#mto,#receiveDate,#expiryDate,.jqdate,#yearMonth,#startYear,#date,#trainingDate,#monthFieldInput,#dateFieldInput{
         background: url("<c:url value='/resources/img/icon-calender.png'/>") no-repeat right;
         border:1px solid #ccc; 
        
