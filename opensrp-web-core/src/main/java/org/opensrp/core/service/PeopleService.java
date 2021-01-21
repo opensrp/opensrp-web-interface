@@ -88,16 +88,43 @@ public class PeopleService extends CommonService {
 	
 	@SuppressWarnings("unchecked")
 	@Transactional
-	public List<String> getMemberList(JSONObject jo, Integer startAge, Integer endAge) {
+	public List<String> geHHList(JSONObject jo) {
 		Session session = getSessionFactory();
 		
 		List<String> householdList = new ArrayList<String>();
 		
+		String hql = "select  * from report.get_household_list('" + jo + "')";
+		
+		Query query = session.createSQLQuery(hql);
+		householdList = query.list();
+		return householdList;
+	}
+	
+	@Transactional
+	public int getHHListCount(JSONObject jo) {
+		
+		Session session = getSessionFactory();
+		BigInteger total = null;
+		
+		String hql = "select  * from report.get_household_list_count('" + jo + "')";
+		Query query = session.createSQLQuery(hql);
+		total = (BigInteger) query.uniqueResult();
+		
+		return total.intValue();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public List<String> getMemberList(JSONObject jo, Integer startAge, Integer endAge) {
+		Session session = getSessionFactory();
+		
+		List<String> memberList = new ArrayList<String>();
+		
 		String hql = "select  * from report.member_list('" + jo + "',:startAge,:endAge)";
 		
 		Query query = session.createSQLQuery(hql).setInteger("startAge", startAge).setInteger("endAge", endAge);
-		householdList = query.list();
-		return householdList;
+		memberList = query.list();
+		return memberList;
 	}
 	
 	@Transactional
@@ -138,30 +165,34 @@ public class PeopleService extends CommonService {
 		return householdList;
 	}
 	
-	public JSONObject drawHouseholdDataTable(Integer draw, int total, JSONObject datas) throws JSONException {
+	public JSONObject drawHouseholdDataTable(Integer draw, int total, List<String> lists, int start) throws JSONException {
 		JSONObject response = new JSONObject();
 		response.put("draw", draw + 1);
-		response.put("recordsTotal", datas.getInt("totalCount"));
-		response.put("recordsFiltered", datas.getInt("totalCount"));
+		response.put("recordsTotal", total);
+		response.put("recordsFiltered", total);
 		JSONArray array = new JSONArray();
-		JSONArray dataList = datas.getJSONArray("clientDTO");
-		
-		for (int i = 0; i < dataList.length(); i++) {
-			JSONObject row = dataList.getJSONObject(i);
+		int i = 1;
+		for (String string : lists) {
+			JSONObject row = new JSONObject(string);
 			
-			String baseEntityId = row.getString("baseEntityId");
-			String id = row.getString("id") + "";
+			String baseEntityId = row.getString("base_entity_id");
+			String id = row.getString("hid");
 			JSONArray tableData = new JSONArray();
-			
-			for (String key : householdColumnList) {
-				tableData.put(row.get(key));
-			}
+			tableData.put(start + i);
+			tableData.put(row.get("unique_id"));
+			tableData.put(row.get("first_name"));
+			tableData.put(row.get("member_count"));
+			tableData.put(row.get("event_date"));
+			tableData.put(row.get("last_visit_date"));
+			tableData.put(row.get("village"));
+			tableData.put(row.get("branch_name") + " " + row.getString("code"));
+			tableData.put(row.get("contact_phone_number"));
 			
 			String view = "<div class='col-sm-12 form-group'><a class='text-primary' \" href=\"household-details/"
 			        + baseEntityId + "/" + id + ".html" + "\">Details</a> </div>";
 			tableData.put(view);
 			array.put(tableData);
-			
+			i++;
 		}
 		
 		response.put("data", array);
@@ -214,41 +245,7 @@ public class PeopleService extends CommonService {
 		        .setLong("id", id).setString("tableName", tableName)
 		        .setResultTransformer(new AliasToBeanResultTransformer(ActivityListDTO.class));
 		activityList = query.list();
-		/*
-		JSONObject jsonObject = new JSONObject(rs);
-		JSONArray data = new JSONArray();
-		JSONObject object = new JSONObject();
-		jsonObject.keys().forEachRemaining(key -> {
-			JSONObject filedValue = new JSONObject();
-			Object value = jsonObject.opt(key + "");
-			try {
-				filedValue.putOpt("value", value);
-				filedValue.putOpt("key", key);
-				data.put(filedValue);
-				
-			}
-			catch (Exception e) {
-				
-			}
-		});
-		if (tableName.equalsIgnoreCase("pnc_home_visit")) {
-			String formName = "";
-			if (jsonObject.has("number_of_pnc")) {
-				formName = "PNC" + " " + jsonObject.getString("number_of_pnc") + " Service";
-				object.put("form_name", formName);
-			}
-		} else if (tableName.equalsIgnoreCase("anc_home_visit")) {
-			if (jsonObject.has("form_name")) {
-				String formName = jsonObject.getString("form_name");
-				formName = formName.replaceAll("hnpp", "");
-				formName = formName.replaceAll("_", " ");
-				object.put("form_name", formName);
-			}
-		} else {
-			object.put("form_name", "");
-		}
-		object.put("data", data);
-		object.put("rawData", jsonObject);*/
+		
 		return activityList;
 	}
 	
@@ -266,28 +263,7 @@ public class PeopleService extends CommonService {
 		        .setString("baseEntityId", baseEntityId)
 		        .setResultTransformer(new AliasToBeanResultTransformer(ActivityListDTO.class));
 		activityList = query.list();
-		/*String rs = (String) query.uniqueResult();
 		
-		JSONObject jsonObject = new JSONObject(rs);
-		JSONArray data = new JSONArray();
-		JSONObject object = new JSONObject();
-		jsonObject.keys().forEachRemaining(key -> {
-			JSONObject filedValue = new JSONObject();
-			Object value = jsonObject.opt(key + "");
-			try {
-				filedValue.putOpt("value", value);
-				filedValue.putOpt("key", key);
-				data.put(filedValue);
-			}
-			catch (Exception e) {
-				
-			}
-			
-			System.err.println(key + ":" + value);
-		});
-		object.put("form_name", "member");
-		object.put("data", data);
-		object.put("rawData", jsonObject);*/
 		return activityList;
 	}
 	

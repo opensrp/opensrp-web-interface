@@ -23,7 +23,6 @@ public class PeopleRestController {
 	@Autowired
 	private PeopleService peopleService;
 	
-	/*
 	@RequestMapping(value = "/household/list", method = RequestMethod.GET)
 	public ResponseEntity<String> householdList(HttpServletRequest request, HttpSession session) throws JSONException {
 		Integer start = Integer.valueOf(request.getParameter("start"));
@@ -33,29 +32,32 @@ public class PeopleRestController {
 		String orderColumn = request.getParameter("order[0][column]");
 		
 		String orderDirection = request.getParameter("order[0][dir]");
-		orderColumn = HouseholdColumn.valueOf("_" + orderColumn).getValue();
 		
-		String searchKey = request.getParameter("search");
-		int branchId = Integer.parseInt(request.getParameter("branchId"));
+		String searchKey = request.getParameter("searchKey");
+		String village = request.getParameter("village");
 		
-		String location = request.getParameter("locationId");
 		JSONObject jo = new JSONObject();
-		jo.put("branch_id", 2);
-		jo.put("division", "DHAKA");
-		jo.put("offset", 0);
-		jo.put("limit", 10);
-		ClientCommonDTO households = new ClientCommonDTO();
-		try {
-			households = peopleService.getHouseholdData(jo);
-		}
-		catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		jo.put("village", village);
+		
+		jo.put("searchKey", searchKey);
+		jo.put("offset", start);
+		jo.put("limit", length);
+		int totalRecords = Integer.parseInt(request.getParameter("totalRecords"));
+		
+		List<String> data = peopleService.geHHList(jo);
+		int total = 0;
+		if (start == 0) {
+			
+			total = peopleService.getHHListCount(jo);
+		} else {
+			
+			total = totalRecords;
 		}
 		
-		//JSONObject response = peopleService.drawHouseholdDataTable(draw, 0, households);
+		JSONObject response = peopleService.drawHouseholdDataTable(draw, total, data, start);
 		return new ResponseEntity<>(response.toString(), OK);
-	}*/
+	}
+	
 	@RequestMapping(headers = { "Accept=application/json;charset=UTF-8" }, value = "/member/list", method = RequestMethod.GET)
 	public ResponseEntity<String> memberList(HttpServletRequest request, HttpSession session) throws JSONException {
 		Integer start = Integer.valueOf(request.getParameter("start"));

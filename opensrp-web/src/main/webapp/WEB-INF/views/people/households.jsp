@@ -13,7 +13,7 @@
 	
 	
 
-<c:url var="get_url" value="/people/households-datatable.html" />
+<c:url var="get_url" value="/rest/api/v1/people/household/list" />
 
 
 <jsp:include page="/WEB-INF/views/header.jsp" />
@@ -67,13 +67,28 @@
                         
 						
 						<div class="row" style="margin: 0px">
-		                    <div class="col-sm-12" id="content" style="overflow-x: auto;">
-		                   
-		                        <div id="report">
-		                        	
-		                        </div>
-		                        
-		                    </div>
+		                    <div id="report">
+								<table style="width: 100%;"
+									class="display table table-bordered table-striped"
+									id="dataTableId">
+									<thead>
+										<tr>
+										<th> SI</th>
+										<th>HH ID</th>
+										<th>HH head name</th>
+										<th>#Members</th>
+										<th>Registration date</th>
+										<th>Last visit date</th>
+										<th>Village</th>
+										<th>Branch(code)</th>
+										<th>Contact</th>
+										<th>Action</th>
+									    </tr>
+										
+									</thead>
+
+								</table>
+							</div>
 		                </div>
 						
 					</div>
@@ -98,6 +113,7 @@ jQuery(document).ready(function() {
 		Layout.init(); // init current layout
 		$('#villageList').select2({dropdownAutoWidth : true});
     	//$('#unionList').select2({dropdownAutoWidth : true});
+		window.totalRecords = 0;
 });
 
 
@@ -107,7 +123,7 @@ jQuery(document).ready(function() {
 <script>
     let stockList;
     
-    function filter(){
+    function filters(){
 
     var token = $("meta[name='_csrf']").attr("content");
 	var header = $("meta[name='_csrf_header']").attr("content");
@@ -180,6 +196,66 @@ jQuery(document).ready(function() {
          }
      });
 }
+    
+    
+    function filter() {	
+
+    	let village = $("#villageList option:selected").text();
+    	let villageId = $("#villageList option:selected").val();
+    	let searchKey = $("#search").val();
+    	if(villageId ==0){
+    		village = villageId;
+    	}
+    	if(villageId ==0 && searchKey==''){
+    		 $('#errorMsg').show();
+    		return ;
+    	}
+    	
+    	
+    	$('#errorMsg').hide();
+    	
+    	
+    	stockList = $('#dataTableId').DataTable({
+    		bFilter : false,
+    		serverSide : true,
+    		processing : true,
+    		scrollY : "300px",
+    		scrollX : true,
+    		scrollCollapse : true,
+    		fixedColumns : {
+    			leftColumns : 2
+    		},
+    		"ordering" : false,
+    		
+    		ajax : {
+    			url : "${get_url}",
+    			timeout : 300000,
+    			data : function(data) {
+    				data.village=village;    			 	 			 	
+    			 	data.searchKey=searchKey;
+    			 	data.totalRecords = totalRecords;
+    				
+    			},
+    			dataSrc : function(json) {
+    				totalRecords = json.recordsTotal;
+    				if (json.data) {
+    					
+    					return json.data;
+    				} else {
+    					return [];
+    				}
+    			},
+    			complete : function() {
+    			},
+    			type : 'GET'
+    		},
+    		bInfo : true,
+    		destroy : true,
+    		language : {
+    			searchPlaceholder : ""
+    		}
+    	});
+    }
 </script>
 
 

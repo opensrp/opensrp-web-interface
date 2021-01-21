@@ -77,7 +77,7 @@
 								</div>
 								<div class="col-lg-3 form-group">
 								     <label for="cars">Search key </label> 	
-									<input name="search" class="form-control"id="search" placeholder="member ID,NID,BRID"/> 
+									<input name="search" class="form-control"id="search" placeholder="member ID,NID,BRID, mobile"/> 
 								</div>
 								
 								<div class="col-lg-3 form-group" style="padding-top: 22px">
@@ -155,7 +155,9 @@ function filter() {
 	let village = $("#villageList option:selected").text();
 	let villageId = $("#villageList option:selected").val();
 	let searchKey = $("#search").val();
-	
+	if(villageId ==0){
+		village = villageId;
+	}
 	if(villageId ==0 && searchKey==''){
 		 $('#errorMsg').show();
 		return ;
