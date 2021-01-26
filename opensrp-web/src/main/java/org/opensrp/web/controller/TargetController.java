@@ -92,6 +92,36 @@ public class TargetController {
 		return "targets/target-by-position-list";
 	}
 	
+	@RequestMapping(value = "/target/view-target-by-position.html", method = RequestMethod.GET)
+	public String viewtargetByPosition(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		String roleName = request.getParameter("role");
+		Role role = targetService.findByKey(roleName, "name", Role.class);
+		model.addAttribute("targets", targetService.allActiveTarget(role.getId(), ProductType.TARGET.name()));
+		model.addAttribute("setTargetTo", request.getParameter("setTargetTo"));
+		model.addAttribute("role", role.getId());
+		model.addAttribute("type", request.getParameter("type"));
+		model.addAttribute("locationTag", request.getParameter("locationTag"));
+		model.addAttribute("text", request.getParameter("text"));
+		model.addAttribute("target", "block");
+		model.addAttribute("selectTargetByPositionSubMenu", submenuSelectedColor);
+		return "targets/view-target-by-position";
+	}
+	
+	/*@RequestMapping(value = "/target/get-target-info-by-position", method = RequestMethod.POST)
+	public String viewTargetInfoByPosition(@RequestBody String dto, HttpSession session, Model model, Locale locale) {
+		model.addAttribute("locale", locale);
+		JSONObject json = new JSONObject(dto);
+		
+		List<TargetCommontDTO> targets = targetService.getTargetInfoByBranchOrLocationOrUserByRoleByMonth(roleId,
+		    locationOrBranchOrUserId, typeName, locationTag, month, year, day);
+		
+		model.addAttribute("productList", targetService.allActiveTarget(json.getInt("roleId"), ProductType.TARGET.name()));
+		model.addAttribute("targets", targets);
+		model.addAttribute("target", "block");
+		return "targets/get-target-info";
+	}*/
+	
 	@RequestMapping(value = "/target/set-target-by-position.html", method = RequestMethod.GET)
 	public String seTtargetByPosition(HttpServletRequest request, HttpSession session, Model model, Locale locale) {
 		model.addAttribute("locale", locale);

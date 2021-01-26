@@ -14,6 +14,7 @@
 
 	
 <c:url var="get_url" value="/rest/api/v1/target/branch-list-for-positional-target" />
+<c:url var="view_url" value="/target/view-target-by-position.html" />
 <c:url var="set_target_url" value="/target/set-target-by-position.html" />
 
 
@@ -60,13 +61,12 @@
 										<option value="PA">PA</option>										
 									</select>
 								</div>
-								<div class="col-lg-2 form-group form-group text-right">
-								<br />
-								<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">View</button>
-								</div>
-								<div class="col-lg-2 form-group form-group text-right">
-								<br />
-								<button type="submit" onclick="settTaretForAll()" class="btn btn-primary" value="confirm">Set target for all</button>
+								<div class="col-lg-6 form-group form-group" style="padding-top: 24px">
+								
+								<button type="submit" onclick="filter()" class="btn btn-primary" value="confirm">Search</button>
+								<button type="submit" onclick="settTaretForAll('view')" class="btn btn-primary" value="confirm">View target for all</button>
+								<button type="submit" onclick="settTaretForAll('set')" class="btn btn-primary" value="confirm">Set target for all</button>
+								
 									
 								</div>
 								
@@ -126,8 +126,9 @@ jQuery(document).ready(function() {
 	    $("#branchList").trigger("change");
 });
 
-function settTaretForAll(){
-	var url = '${set_target_url}';
+function settTaretForAll(typeOf){
+	var url = "";
+	
 	let district = $("#districtList option:selected").val();
 	let districtText = $("#districtList option:selected").text();
 	let division = $("#divisionList option:selected").val();
@@ -176,9 +177,18 @@ function settTaretForAll(){
 	}else if(division != 0){
 		locationId =division; 
 		type = "LOCATION"
-	}	
+	}
+	
+	if(typeOf =='view'){
+		url = '${view_url}';
+		
+	}else if(typeOf =='set'){
+		url = '${set_target_url}';
+	}
     url = url+"?setTargetTo="+locationId+"&role="+role+"&type="+type+"&text="+targetName+"&locationTag="+locationTag
-	window.location.assign(url);
+	
+    		
+   window.location.assign(url);
 }
 
 jQuery(function() {
