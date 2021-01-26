@@ -17,23 +17,6 @@
     String endDate = (String) session.getAttribute("endDate");
 %>
 
-<style>
-    .custom-select {
-        display: inline-block;
-        width: 100%;
-        height: calc(2.25rem + 2px);
-        padding: .375rem 1.75rem .375rem .75rem;
-        line-height: 1.5;
-        color: #495057;
-        vertical-align: middle;
-        background-size: 8px 10px;
-        border: 1px solid #ced4da;
-        border-radius: .25rem;
-        -webkit-appearance: none;
-        background: #fff;
-    }
-</style>
-
 
 <div class="portlet box blue-madison">
     <div class="portlet-title">
@@ -47,19 +30,19 @@
             <div class="row">
                 <div class="col-md-2">
                     <label><spring:message code="lbl.startDate"/></label>
-                    <input class="form-control custom-select custom-select-lg" type=text
+                    <input class="form-control custom-select-lg" type=text
                            name="start" id="start" value="<%=startDate%>">
                     <label style="display: none;" class="text-danger" id="startDateValidation"><small>Input is not valid for date</small></label>
                 </div>
                 <div class="col-md-2">
                     <label><spring:message code="lbl.endDate"/></label>
-                    <input class="form-control custom-select custom-select-lg" type="text"
+                    <input class="form-control custom-select-lg" type="text"
                            name="end" id="end" value="<%=endDate%>">
                     <label style="display: none;" class="text-danger" id="endDateValidation"><small>Input is not valid for date</small></label>
                 </div>
                 <div class="col-md-2" id="divisionHide">
                     <label><spring:message code="lbl.division"/></label>
-                    <select required class="custom-select custom-select-lg mb-3" id="division"
+                    <select required class="form-control custom-select-lg mb-3" id="division"
                             name="division">
                         <option value=""><spring:message code="lbl.selectDivision"/>
                         </option>
@@ -75,7 +58,7 @@
 
                 <div class="col-md-2" id="districtHide">
                     <label><spring:message code="lbl.district"/></label>
-                    <select class="custom-select custom-select-lg mb-3" id="district"
+                    <select class="form-control custom-select-lg mb-3" id="district"
                             name="district">
                         <option value="0?"><spring:message code="lbl.selectDistrict"/></option>
                         <option value=""></option>
@@ -83,7 +66,7 @@
                 </div>
                 <div class="col-md-3" id="upazilaHide">
                     <label><spring:message code="lbl.upazila"/></label>
-                    <select class="custom-select custom-select-lg mb-3" id="upazila"
+                    <select class="form-control custom-select-lg mb-3" id="upazila"
                             name="upazila">
                         <option value="0?"><spring:message code="lbl.selectUpazila"/></option>
                         <option value=""></option>

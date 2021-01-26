@@ -189,15 +189,15 @@
                 let reportType =$("input[name='time-period']:checked").val();
 
 
-                $('#reportDataTable').DataTable({
-                    scrollY:        "300px",
-                    scrollX:        true,
-                    scrollCollapse: true,
-                    fixedColumns:   {
-                        leftColumns: 2/* ,
-                     rightColumns: 1 */
-                    }
-                });
+                // $('#reportDataTable').DataTable({
+                //     scrollY:        "300px",
+                //     scrollX:        true,
+                //     scrollCollapse: true,
+                //     fixedColumns:   {
+                //         leftColumns: 2/* ,
+                //      rightColumns: 1 */
+                //     }
+                // });
             },
             error : function(e) {
                 $('#loading').hide();
