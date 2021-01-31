@@ -72,10 +72,11 @@
 						<table class="table table-striped table-bordered " id="ssSalesReportForDm">
 							<thead>
 								<tr>
-								   <%--  <th><spring:message code="lbl.serialNo"></spring:message></th> --%>
+								    <th><spring:message code="lbl.serialNo"></spring:message></th> 
 									<th><spring:message code="lbl.ssName"></spring:message></th>
-									<%-- <th><spring:message code="lbl.ssId"></spring:message></th> --%>
+									
 									<th><spring:message code="lbl.skName"></spring:message></th>
+									<th>SK mobile</th> 
 									<th><spring:message code="lbl.branchNameCode"></spring:message></th>
 									<%-- <th><spring:message code="lbl.targetAmount"></spring:message></th> --%>
 									<th><spring:message code="lbl.projectedSalesAmount"></spring:message> (BDT)</th>
