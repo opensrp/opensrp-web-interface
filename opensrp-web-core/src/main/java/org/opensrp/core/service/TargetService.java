@@ -1654,7 +1654,9 @@ public class TargetService extends CommonService {
 		
 		String hql = "select * from report.get_performance_chart_report( '" + startDate + "' ,  '" + endDate + "', '"
 		        + parentLocationTag + "', " + parentLocationId + ", '" + parentLocationName + "', '" + locationTag + "')";
-		Query query = session.createSQLQuery(hql).addScalar("monthValue", StandardBasicTypes.INTEGER)
+		Query query = session.createSQLQuery(hql)
+				.addScalar("monthValue", StandardBasicTypes.INTEGER)
+				.addScalar("yearValue", StandardBasicTypes.INTEGER)
 		        .addScalar("hhVisit", StandardBasicTypes.INTEGER).addScalar("elcoRegistration", StandardBasicTypes.INTEGER)
 		        .addScalar("methodUsers", StandardBasicTypes.INTEGER)
 		        .addScalar("adolescentMethodUser", StandardBasicTypes.INTEGER)
