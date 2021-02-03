@@ -133,7 +133,7 @@
 																	varStatus="loop">
 																	<tr>
 																		<td>0</td>
-																		<td> ${member.getMemberName() }</td>
+																		<td> ${member.getMemberName()}</td>
 																   		<td> ${member.getMemberId() }</td>
 																   		<td> ${member.getRelationWithHousehold() }</td>
 																   		<td> ${member.getDob() }</td>

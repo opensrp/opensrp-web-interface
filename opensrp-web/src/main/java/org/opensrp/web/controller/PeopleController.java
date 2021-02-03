@@ -3,6 +3,7 @@
  */
 package org.opensrp.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -90,6 +91,26 @@ public class PeopleController {
 		JSONObject jo = new JSONObject();
 		jo.put("relation_id", baseEntityId);
 		List<String> data = peopleService.getMemberList(jo, 404, 404);
+		List<ClientListDTO> members = new ArrayList<>();
+		for (String string : data) {
+			ClientListDTO cl = new ClientListDTO();
+			
+			JSONObject json = new JSONObject(string);
+			cl.setMemberName(json.get("first_name") + "");
+			cl.setMemberId(json.get("member_id") + "");
+			cl.setRelationWithHousehold(json.get("relation_with_household_head") + "");
+			cl.setDob(json.get("birthdate") + "");
+			cl.setAge(json.get("member_age_year") + "");
+			cl.setGender(json.get("gender") + "");
+			cl.setVillage(json.get("village") + "");
+			cl.setBranchCode(json.getString("code") + "");
+			cl.setBranchName(json.get("branch_name") + " ");
+			cl.setId(json.getLong("id"));
+			cl.setBaseEntityId(json.getString("base_entity_id"));
+			
+			members.add(cl);
+		}
+		
 		List<ActivityListDTO> dataInfos = peopleService.getServiceInfo(baseEntityId, id, "household");
 		
 		JSONObject details = new JSONObject();
@@ -107,7 +128,7 @@ public class PeopleController {
 		
 		model.addAttribute("services", peopleService.getServiceList(baseEntityId, "HH"));
 		model.addAttribute("configs", dataViewConfigurationService.getConfigurationByNameFormName("household"));
-		model.addAttribute("members", data);
+		model.addAttribute("members", members);
 		model.addAttribute("people", "block");
 		model.addAttribute("selectHHSubMenu", submenuSelectedColor);
 		return "people/household_details";
