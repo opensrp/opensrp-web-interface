@@ -66,7 +66,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <%--                    <div id="bar-chart"></div>--%>
-                    <div id="leaflet-map" style="height: 300px"></div>`
+                    <div id="leaflet-map" style="height: 360px"></div>`
                 </div>
                 <div class="col-sm-6">
                     <div id="line-chart"></div>
@@ -161,9 +161,11 @@
 
         console.log('chart data', data);
         var serviceData = [];
-        var xLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var xLabels = [];
         for(var i=0; i<data.length; i++) {
             serviceData.push(data[i][$("#serviceItem").val()]);
+            xLabels.push( month[data[i].monthValue - 1] + "'" + data[i].yearValue.toString().slice(-2) )
         }
 
         console.log('chart data', serviceData);
@@ -430,6 +432,14 @@
 
     }
 
+    function monthDiff(d1, d2) {
+        var months;
+        months = (d2.getFullYear() - d1.getFullYear()) * 12;
+        months -= d1.getMonth();
+        months += d2.getMonth();
+        return months <= 0 ? 0 : months;
+    }
+
     function getPerformanceMap(geoData) {
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
@@ -437,11 +447,11 @@
 
         var startDate = new Date($("#startDate").val());
         var endDate = new Date($("#endDate").val());
-        if(startDate.getFullYear() !== endDate.getFullYear()) {
+        if( monthDiff(startDate, endDate) > 12) {
             $("#endDateValidation").show();
             return;
         }
-        else{
+        else {
             $("#endDateValidation").hide();
         }
         startDate = $.datepicker.formatDate('yy-mm-dd', new Date(startDate.getFullYear(), startDate.getMonth(), 1));
@@ -485,9 +495,10 @@
 
         var startDate = new Date($("#startDate").val());
         var endDate = new Date($("#endDate").val());
-        if(startDate.getFullYear() !== endDate.getFullYear()) {
+        if( monthDiff(startDate, endDate) > 12) {
             return;
         }
+
 
         startDate = $.datepicker.formatDate('yy-mm-dd', new Date(startDate.getFullYear(), startDate.getMonth(), 1));
         endDate = $.datepicker.formatDate('yy-mm-dd', new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0));
