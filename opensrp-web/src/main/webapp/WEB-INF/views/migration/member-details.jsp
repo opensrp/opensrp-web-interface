@@ -41,11 +41,11 @@
 			<th>${data.getString("sk_out")}</th>
 			<th>${data.getString("sk_in")}</th>			
 		</tr>
-		<tr>
+		<%-- <tr>
 			<th>SS</th>
 			<th>${data.getString("ss_out")}</th>
 			<th>${data.getString("ss_in")}</th>			
-		</tr>
+		</tr> --%>
 		<tr>
 			<th>Village</th>
 			<th>${data.getString("village_out")}</th>
@@ -125,6 +125,7 @@ $(".ACCEPTREJECT").on('click', function() {
         timeout : 300000,
 		beforeSend: function(xhr) {				    
 			 xhr.setRequestHeader(header, token);
+			 return confirm("Are you sure?");
 			 $("#loading").show();
 		},
 		success : function(data) {

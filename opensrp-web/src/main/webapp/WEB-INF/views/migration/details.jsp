@@ -118,6 +118,7 @@ $(".ACCEPTREJECT").on('click', function() {
         timeout : 300000,
 		beforeSend: function(xhr) {				    
 			 xhr.setRequestHeader(header, token);
+			 return confirm("Are you sure?");
 			 $("#loading").show();
 		},
 		success : function(data) {

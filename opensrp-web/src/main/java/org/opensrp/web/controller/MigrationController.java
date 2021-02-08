@@ -56,7 +56,7 @@ public class MigrationController {
 		model.addAttribute("locale", locale);
 		model.addAttribute("branches", branchUtil.getBranches());
 		model.addAttribute("isHousehold", true);
-		
+		model.addAttribute("hhType", "in");
 		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
 		model.addAttribute("migration", "block");
 		model.addAttribute("selectHHINSubMenu", submenuSelectedColor);
@@ -71,6 +71,7 @@ public class MigrationController {
 		model.addAttribute("isHousehold", true);
 		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
 		model.addAttribute("migration", "block");
+		model.addAttribute("hhType", "out");
 		model.addAttribute("selectHHOutSubMenu", submenuSelectedColor);
 		return "migration/households-out";
 	}
@@ -83,6 +84,8 @@ public class MigrationController {
 		model.addAttribute("isHousehold", true);
 		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
 		model.addAttribute("migration", "block");
+		model.addAttribute("memberType", "in");
+		
 		model.addAttribute("selectMemberINSubMenu", submenuSelectedColor);
 		return "migration/member-in";
 	}
@@ -96,6 +99,7 @@ public class MigrationController {
 		AuthenticationManagerUtil.setLoggedInUserRoleNameAtModel(model, targetService, divMRoleId);
 		model.addAttribute("migration", "block");
 		model.addAttribute("selectMemberOutSubMenu", submenuSelectedColor);
+		model.addAttribute("memberType", "out");
 		return "migration/member-out";
 	}
 	
