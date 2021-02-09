@@ -75,6 +75,12 @@
 	 		</tr>
 		</c:forEach>
     </tbody>
+	<tfoot>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tfoot>
 </table>
 
 
@@ -141,7 +147,35 @@
 		scrollCollapse: true,
 		fixedColumns:   {
 			leftColumns: 1
+		},
+		"footerCallback": function ( row, data, start, end, display ) {
+			var api = this.api(), data, total=0;
+
+			// Remove the formatting to get integer data for summation
+			var intVal = function ( i ) {
+				return typeof i === 'string' ?
+						i.replace(/[\%,]/g, '')*1 :
+						typeof i === 'number' ?
+								i : 0;
+			};
+
+			// Total over all pages
+			$('.DTFC_LeftFootWrapper').css('margin-top', '-5px');
+			$(api.column(0).footer()).html('Total');
+			console.log("i am getting called in service");
+			for(var i=1; i<4; i++) {
+				total = api
+						.column(i)
+						.data()
+						.reduce(function (a, b) {
+							return intVal(a) + intVal(b);
+						}, 0);
+
+
+				$(api.column(i).footer()).html(total);
+			}
 		}
+
 	});
 
 </script>
