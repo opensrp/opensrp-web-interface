@@ -183,7 +183,7 @@ public abstract class CommonService {
 	@Transactional
 	public List<Location> getLocationByParentId(int parentId) {
 		String sqlQuery = "SELECT location.id id, split_part(location.name, ':', 1) as name from core.location "
-		        + " WHERE parent_location_id=:parentId";
+		        + " WHERE parent_location_id=:parentId order by split_part(location.name, ':', 1) asc ";
 		
 		Session session = getSessionFactory();
 		
@@ -320,20 +320,18 @@ public abstract class CommonService {
 		
 		return result.getRoleId();
 	}
-
+	
 	@Transactional
 	public List<MapMovement> getMapMovement(String username, String startDate, String endDate) {
 		Session session = getSessionFactory();
 		List<MapMovement> result = new ArrayList<>();
-		String hql = "select * from report.get_map_movements('"+username+"', '"+startDate+"', '"+endDate+"')";
-		Query query = session.createSQLQuery(hql)
-				.addScalar("latitude", StandardBasicTypes.STRING)
-				.addScalar("longitude", StandardBasicTypes.STRING)
-				.addScalar("username", StandardBasicTypes.STRING)
-				.setResultTransformer(new AliasToBeanResultTransformer(MapMovement.class));
-
-		result =  query.list();
-
+		String hql = "select * from report.get_map_movements('" + username + "', '" + startDate + "', '" + endDate + "')";
+		Query query = session.createSQLQuery(hql).addScalar("latitude", StandardBasicTypes.STRING)
+		        .addScalar("longitude", StandardBasicTypes.STRING).addScalar("username", StandardBasicTypes.STRING)
+		        .setResultTransformer(new AliasToBeanResultTransformer(MapMovement.class));
+		
+		result = query.list();
+		
 		return result;
 	}
 }

@@ -101,6 +101,8 @@ public class PeopleController {
 			cl.setRelationWithHousehold(json.get("relation_with_household_head") + "");
 			cl.setDob(json.get("birthdate") + "");
 			cl.setAge(json.get("member_age_year") + "");
+			cl.setAgeMonth(json.getInt("member_age_month"));
+			
 			cl.setGender(json.get("gender") + "");
 			cl.setVillage(json.get("village") + "");
 			cl.setBranchCode(json.getString("code") + "");

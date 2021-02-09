@@ -211,8 +211,8 @@
 					} else {
 						branchIds = $("#branchList").val().join();
 					}
-					data.branchIdIn = branchIds;
-					data.branchIdOut="",
+					data.branchIdIn = "";
+					data.branchIdOut=branchIds,
 					data.searchKeyOut = "";
 					data.searchKeyIn = "";
 					data.startDate = $('#from').val();
@@ -290,8 +290,8 @@
 				url : "${get_url}",
 				timeout : 300000,
 				data : function(data) {
-					data.branchIdIn = branchIds;
-					data.branchIdOut="",
+					data.branchIdIn = "";
+					data.branchIdOut=branchIds,
 					data.searchKeyIn = $('#search').val();
 					data.searchKeyOut = "";
 					data.startDate = $('#from').val();

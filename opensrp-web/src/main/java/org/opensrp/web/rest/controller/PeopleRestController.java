@@ -38,13 +38,18 @@ public class PeopleRestController {
 		
 		JSONObject jo = new JSONObject();
 		jo.put("village", village);
-		
+		jo.put("division", request.getParameter("division"));
+		jo.put("district", request.getParameter("district"));
+		jo.put("upazila", request.getParameter("upazila"));
+		jo.put("pourasava", request.getParameter("pourasava"));
+		jo.put("union", request.getParameter("union"));
 		jo.put("searchKey", searchKey);
 		jo.put("offset", start);
 		jo.put("limit", length);
 		int totalRecords = Integer.parseInt(request.getParameter("totalRecords"));
 		
 		List<String> data = peopleService.geHHList(jo);
+		System.err.println(data);
 		int total = 0;
 		if (start == 0) {
 			
@@ -75,6 +80,11 @@ public class PeopleRestController {
 		String gender = request.getParameter("gender");
 		JSONObject jo = new JSONObject();
 		jo.put("village", village);
+		jo.put("division", request.getParameter("division"));
+		jo.put("district", request.getParameter("district"));
+		jo.put("upazila", request.getParameter("upazila"));
+		jo.put("pourasava", request.getParameter("pourasava"));
+		jo.put("union", request.getParameter("union"));
 		jo.put("gender", gender);
 		jo.put("startAge", startAge);
 		jo.put("endAge", endAge);

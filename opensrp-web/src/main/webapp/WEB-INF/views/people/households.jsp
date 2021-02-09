@@ -54,7 +54,7 @@
 						</div>
 						<div class="row" id="errorMsg" style="display: none">
 								<div class="col-lg-12 form-group">
-									<span style="color:red" >Please select village OR types something on search key</span>
+									<span style="color:red" >Please select division</span>
 								</div>
 							</div>
 						<div class="row" style="margin: 0px">
@@ -130,18 +130,23 @@ jQuery(document).ready(function() {
 
     	let village = $("#villageList option:selected").text();
     	let villageId = $("#villageList option:selected").val();
+    	
+    	let division = $("#divisionList option:selected").text();
+    	let district = $("#districtList option:selected").text();
+    	let upazila = $("#upazilaList option:selected").text();
+    	let pourasava = $("#pourasavaList option:selected").text();
+    	let union = $("#unionList option:selected").text();
+    	
     	let searchKey = $("#search").val();
-    	if(villageId ==0){
-    		village = villageId;
-    	}
-    	if(villageId ==0 && searchKey==''){
+    	let divisionId = $("#divisionList option:selected").val();
+    	if(divisionId ==0){
     		 $('#errorMsg').show();
     		return ;
     	}
     	
     	
     	$('#errorMsg').hide();
-    	$("#dataTableId").show();
+    	$("#dataTableId").show(); 
     	
     	stockList = $('#dataTableId').DataTable({
     		bFilter : false,
@@ -159,7 +164,12 @@ jQuery(document).ready(function() {
     			url : "${get_url}",
     			timeout : 300000,
     			data : function(data) {
-    				data.village=village;    			 	 			 	
+    				data.village=village;  
+    				data.division=division;
+    				data.district=district;
+    				data.upazila=upazila;
+    				data.pourasava=pourasava;
+    				data.union=union;
     			 	data.searchKey=searchKey;
     			 	data.totalRecords = totalRecords;
     				

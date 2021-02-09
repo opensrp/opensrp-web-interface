@@ -5,12 +5,16 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <link type="text/css" href="<c:url value="/resources/css/jquery.modal.min.css"/>" rel="stylesheet">
 <c:url var="url" value="/migration/details-data" />
+<c:url var="hhIn" value="/migration/households-in.html" />
+<c:url var="hhOut" value="/migration/households-out.html" />
+
+
 <!--Modal start-->
 <div
 	style="overflow: unset; display: none; top: 30px; min-height: 300px; max-width: none; position: relative; z-index: 1050"
 	id="content" class="modal modal-margin">
 	<a class="btn btn-sm btn-dark text-right"
-		style="float: right; bottom: 0px" href="#" rel="modal:close"><strong>X</strong></a>
+		style="float: right; bottom: 0px" href=""><strong>X</strong></a>
 	<div id="user-info-body" class="row"></div>
 
 	<div class="form-group row" id="modal-body">
@@ -25,16 +29,14 @@
 	<div id="table-body" class="row"
 		style="overflow-x: auto; margin-bottom: 10px;"></div>
 	<a class="btn btn-sm btn-dark text-right"
-		style="float: right; bottom: 0px" href="#" rel="modal:close"><strong>X</strong></a>
+		style="float: right; bottom: 0px" href=""><strong>X</strong></a>
 </div>
 <script>
 
 
 function loadContent(id,migratedType) {
 	
-	
-	
-	 var token = $("meta[name='_csrf']").attr("content");
+	var token = $("meta[name='_csrf']").attr("content");
      var header = $("meta[name='_csrf_header']").attr("content");
 		$.ajax({
 		type : "GET",

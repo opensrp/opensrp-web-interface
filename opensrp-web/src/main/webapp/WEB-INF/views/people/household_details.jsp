@@ -70,7 +70,7 @@
 								<li data-target="#member_info" role="tab" data-toggle="tab"
 									class="btn btn-success btn-sm">Member information</li>
 								<li data-target="#reg_visit" role="tab" data-toggle="tab"
-									class="btn btn-success btn-sm">Registration & visits</li>
+									class="btn btn-success btn-sm">Visits</li>
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane active" id="hh_info">
@@ -111,7 +111,7 @@
 											<div class="form-group">
 
 												<div class="row">
-													<div class="table-scrollable">
+													
 														<table class="table table-striped table-bordered "
 															id="memberTable">
 															<thead>
@@ -148,7 +148,7 @@
 															</tbody>
 
 														</table>
-													</div>
+													
 
 												</div>
 											</div>
@@ -191,10 +191,11 @@
 	stockList;
 	$(document).ready(function() {
 
-		var table = stockList = $('#memberTable').DataTable({
-			bFilter : false,
+		var table = $('#memberTable').DataTable({
+			bFilter : true,
 			bInfo : true,
 			destroy : true,
+			"ordering" : false,
 			language : {
 				searchPlaceholder : ""
 			}
