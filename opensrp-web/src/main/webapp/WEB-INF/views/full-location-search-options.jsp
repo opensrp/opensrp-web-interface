@@ -69,24 +69,24 @@ function getChildLocation(locationId,divId) {
 	console.log(locationId)
 	$("#"+divId).html("");	
 	if(divId=='districtList'){
-		$("#districtList").html('<option value="0">Please select </option>');
-		$("#upazilaList").html('<option value="0">Please select </option>');
-		$("#pourasavaList").html('<option value="0">Please select </option>');
-		$("#unionList").html('<option value="0">Please select </option>');
+		$("#districtList").html('<option value="0">Please select</option>');
+		$("#upazilaList").html('<option value="0">Please select</option>');
+		$("#pourasavaList").html('<option value="0">Please select</option>');
+		$("#unionList").html('<option value="0">Please select</option>');
 		$("#villageList").html('<option value="0">Please select</option>');
 	}else if(divId=='upazilaList'){
-		$("#upazilaList").html('<option value="0">Please select </option>');
-		$("#pourasavaList").html('<option value="0">Please select </option>');
-		$("#unionList").html('<option value="0">Please select </option>');
+		$("#upazilaList").html('<option value="0">Please select</option>');
+		$("#pourasavaList").html('<option value="0">Please select</option>');
+		$("#unionList").html('<option value="0">Please select</option>');
 		$("#villageList").html('<option value="0">Please select</option>');
 	}else if(divId=='pourasavaList'){
-		$("#pourasavaList").html('<option value="0">Please select </option>');
-		$("#unionList").html('<option value="0">Please select </option>');
+		$("#pourasavaList").html('<option value="0">Please select</option>');
+		$("#unionList").html('<option value="0">Please select</option>');
 		$("#villageList").html('<option value="0">Please select</option>');
 	}
 	else if(divId=='unionList'){		
-		$("#unionList").html('<option value="0">Please select </option>');
-		$("#villageList").html('<option value="0">Please select </option>');
+		$("#unionList").html('<option value="0">Please select</option>');
+		$("#villageList").html('<option value="0">Please select</option>');
 	}
 	let url = '${location_url}';	
 	$.ajax({

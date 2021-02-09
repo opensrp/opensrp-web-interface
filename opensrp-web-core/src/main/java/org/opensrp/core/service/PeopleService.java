@@ -172,6 +172,7 @@ public class PeopleService extends CommonService {
 		response.put("recordsFiltered", total);
 		JSONArray array = new JSONArray();
 		int i = 1;
+		
 		for (String string : lists) {
 			JSONObject row = new JSONObject(string);
 			

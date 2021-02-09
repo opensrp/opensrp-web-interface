@@ -53,7 +53,7 @@
 							
 							<div class="row">
 								<div class="col-lg-3 form-group">
-								    <label for="cars"> gender </label> 	
+								    <label for="cars"> Gender </label> 	
 									<select
 										name="gender" class="form-control" id="gender">
 										<option value="">Select gender</option>
@@ -86,7 +86,7 @@
 							</div>
 							<div class="row" id="errorMsg" style="display: none">
 								<div class="col-lg-12 form-group">
-									<span style="color:red" >Please select village OR types something on search key</span>
+									<span style="color:red" >Please select division</span>
 								</div>
 							</div>
 						</div>
@@ -155,11 +155,17 @@ function filter() {
 
 	let village = $("#villageList option:selected").text();
 	let villageId = $("#villageList option:selected").val();
+	
+	
+	let division = $("#divisionList option:selected").text();
+	let district = $("#districtList option:selected").text();
+	let upazila = $("#upazilaList option:selected").text();
+	let pourasava = $("#pourasavaList option:selected").text();
+	let union = $("#unionList option:selected").text();
+	
 	let searchKey = $("#search").val();
-	if(villageId ==0){
-		village = villageId;
-	}
-	if(villageId ==0 && searchKey==''){
+	let divisionId = $("#divisionList option:selected").val();
+	if(divisionId ==0){
 		 $('#errorMsg').show();
 		return ;
 	}
@@ -186,7 +192,12 @@ function filter() {
 			url : "${get_url}",
 			timeout : 300000,
 			data : function(data) {
-				data.village=village;
+				data.village=village;  
+				data.division=division;
+				data.district=district;
+				data.upazila=upazila;
+				data.pourasava=pourasava;
+				data.union=union;
 			 	data.gender=$("#gender option:selected").val();
 			 	data.startAge=age[0];
 			 	data.endAge=age[1];
