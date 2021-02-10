@@ -100,10 +100,13 @@ font-size: 18px;
      cursor: pointer;
 }
 
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #fff;
+}
 #from,#to,#mfrom,#mto,#receiveDate,.currentStock,#expiryDate,#yearMonth,#startYear,#branch,#designation,#date,#trainingDate,#monthFieldInput,#dateFieldInput{
      cursor: pointer;
 }
-#branch,#designation,#skName,#ssName{
+#branch,#designation,#skName,#ssName,#currentStock{
      cursor: pointer;
       border:1px solid #ccc; 
       background: #fff;

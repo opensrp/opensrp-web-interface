@@ -136,7 +136,7 @@
 			changeMonth: true,
 			changeYear: true,
 			showButtonPanel: true,
-			dateFormat: 'MM yy',
+			dateFormat: 'yy-mm',
 			maxDate: new Date,
 
 			onClose: function(dateText, inst) {
