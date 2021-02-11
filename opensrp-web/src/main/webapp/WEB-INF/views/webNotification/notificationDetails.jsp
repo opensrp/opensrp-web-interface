@@ -77,6 +77,13 @@
 							<label for="trainingTitle" class=" col-form-label">${notificationDetails.getCreatedTime()}</label>
 						</div>
 					</div>
+					
+					<div class="form-group row">
+						<label for="trainingDuration" class="col-sm-2 col-form-label">Date & time(Training or meeting) :</label>
+						<div class="col-sm-6">
+							<label for="trainingTitle" class=" col-form-label">${notificationDetails.getMeetingOrtrainingDateAndTime()}</label>
+						</div>
+					</div>
 					<div class="form-group row">
 						<label for="trainingDuration" class="col-sm-2 col-form-label">Receiver Role:</label>
 						<div class="col-sm-6">
@@ -90,7 +97,7 @@
 						</div>
 					</div>
 					
-					<div class="form-group row">
+					<%-- <div class="form-group row">
 						<label for="trainingAudience" class="col-sm-2 col-form-label">Division Name:</label>
 						<div class="col-sm-6">
 							<label for="trainingTitle" class=" col-form-label">${notificationDetails.getDivisionName()}</label>
@@ -108,7 +115,7 @@
 						<div class="col-sm-6">
 							<label for="trainingTitle" class=" col-form-label">${notificationDetails.getUpazillaName()}</label>
 						</div>
-					</div>
+					</div> --%>
 			</div>
 		</div>
 		

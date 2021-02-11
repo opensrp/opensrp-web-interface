@@ -211,13 +211,14 @@ public class WebNotificationService extends CommonService {
 		Session session = getSessionFactory();
 		List<WebNotificationCommonDTO> dtos = new ArrayList<>();
 		
-		String hql = "select title,notification,status,notification_type as type,send_date_and_time createdTime,branch_name as branchName,division_name divisionName,district_name districtName,upazilla_name upazillaName,role_name as roleName from core.web_notification_details(:notificationId)";
+		String hql = "select title,notification,status,notification_type as type,send_date_and_time createdTime,branch_name as branchName,division_name divisionName,district_name districtName,upazilla_name upazillaName,role_name as roleName,meeting_training_date_and_time meetingOrtrainingDateAndTime from core.web_notification_details(:notificationId)";
 		Query query = session.createSQLQuery(hql).addScalar("title", StandardBasicTypes.STRING)
 		        .addScalar("notification", StandardBasicTypes.STRING).addScalar("status", StandardBasicTypes.STRING)
 		        .addScalar("type", StandardBasicTypes.STRING).addScalar("createdTime", StandardBasicTypes.STRING)
 		        .addScalar("branchName", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
 		        .addScalar("divisionName", StandardBasicTypes.STRING).addScalar("districtName", StandardBasicTypes.STRING)
 		        .addScalar("upazillaName", StandardBasicTypes.STRING).addScalar("roleName", StandardBasicTypes.STRING)
+		        .addScalar("meetingOrtrainingDateAndTime", StandardBasicTypes.STRING)
 		        .setLong("notificationId", notificationId)
 		        
 		        .setResultTransformer(new AliasToBeanResultTransformer(WebNotificationCommonDTO.class));

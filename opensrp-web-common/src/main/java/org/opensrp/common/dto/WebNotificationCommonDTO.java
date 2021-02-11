@@ -36,6 +36,8 @@ public class WebNotificationCommonDTO {
 	
 	private String status;
 	
+	private String meetingOrtrainingDateAndTime;
+	
 	public long getId() {
 		return id;
 	}
@@ -162,6 +164,14 @@ public class WebNotificationCommonDTO {
 	
 	public void setSendTime(String sendTime) {
 		this.sendTime = sendTime;
+	}
+	
+	public String getMeetingOrtrainingDateAndTime() {
+		return meetingOrtrainingDateAndTime;
+	}
+	
+	public void setMeetingOrtrainingDateAndTime(String meetingOrtrainingDateAndTime) {
+		this.meetingOrtrainingDateAndTime = meetingOrtrainingDateAndTime;
 	}
 	
 }
