@@ -8,11 +8,8 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +38,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
 import com.ibatis.common.jdbc.ScriptRunner;
 
@@ -118,23 +114,23 @@ public class DefaultApplicationSettingService {
 			logger.error("error saving roles:" + e.getMessage());
 		}
 		
-//		/** create OpenMRS Role role */
-//		for (DefaultRole defaultRole : DefaultRole.values()) {
-//
-//			Role openmrsRole = new Role();
-//			openmrsRole.setName(defaultRole.name());
-//			Role findProviderRole = roleServiceImpl.findByKey(openmrsRole.getName(), "name", Role.class);
-//			try {
-//				if (findProviderRole == null) {
-//					roleServiceImpl.save(openmrsRole);
-//				} else {
-//					logger.info("Role Provider exists");
-//				}
-//			}
-//			catch (Exception e1) {
-//				logger.error("problem occured of saving role provder cause:" + e1.getMessage());
-//			}
-//		}
+		//		/** create OpenMRS Role role */
+		//		for (DefaultRole defaultRole : DefaultRole.values()) {
+		//
+		//			Role openmrsRole = new Role();
+		//			openmrsRole.setName(defaultRole.name());
+		//			Role findProviderRole = roleServiceImpl.findByKey(openmrsRole.getName(), "name", Role.class);
+		//			try {
+		//				if (findProviderRole == null) {
+		//					roleServiceImpl.save(openmrsRole);
+		//				} else {
+		//					logger.info("Role Provider exists");
+		//				}
+		//			}
+		//			catch (Exception e1) {
+		//				logger.error("problem occured of saving role provder cause:" + e1.getMessage());
+		//			}
+		//		}
 		
 		User account = userServiceImpl.findByKey(userName, "username", User.class);
 		User acc = new User();
@@ -165,24 +161,29 @@ public class DefaultApplicationSettingService {
 		similarRecordService.getMatchingCriteriaForAllViews();
 		similarRecordService.getCloumnNameListForAllViewsWithSimilarRecord();
 		
-		/*Connection con = sessionFactory.getSessionFactoryOptions().getServiceRegistry().getService(ConnectionProvider.class)
-				.getConnection();
+		Connection con = sessionFactory.getSessionFactoryOptions().getServiceRegistry().getService(ConnectionProvider.class)
+		        .getConnection();
 		
 		//Execute some location, form and provider SQL script automatically
-		String rootPath = "";
 		try {
-			rootPath = new File(".").getCanonicalPath();
+			ClassLoader classLoader = getClass().getClassLoader();
+			File file = new File(classLoader.getResource("scripts/webnotificatioDetails.sql").getFile());
+			BufferedReader in = new BufferedReader(new FileReader(file));
+			LineNumberReader fileReader = new LineNumberReader(in);
+			String query = ScriptUtils.readScript(fileReader, ScriptUtils.DEFAULT_COMMENT_PREFIX,
+			    ScriptUtils.DEFAULT_STATEMENT_SEPARATOR);
+			
+			Statement stmt = null;
+			stmt = con.createStatement();
+			stmt.execute(query);
+			
 		}
-		catch (IOException e) {
-			logger.error("error getting rootPath: " + e);
+		catch (Exception e) {
+			e.printStackTrace();
 		}
-		BufferedReader in = new BufferedReader(new FileReader(rootPath + "/src/main/resources/scripts/script_for_grow_plus.sql"));
-		LineNumberReader fileReader = new LineNumberReader(in);
-		String query = ScriptUtils.readScript(fileReader, ScriptUtils.DEFAULT_COMMENT_PREFIX, ScriptUtils.DEFAULT_STATEMENT_SEPARATOR);
-
-		Statement stmt = null;
-		stmt = con.createStatement();
-		stmt.execute(query);*/
+		finally {
+			con.close();
+		}
 	}
 	
 	public void runScript(String aSQLScriptFilePath, ScriptRunner sr) throws FileNotFoundException, IOException,
